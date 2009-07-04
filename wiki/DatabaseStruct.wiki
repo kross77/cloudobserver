@@ -1,18 +1,18 @@
  = Описание структуры базы данных =
 *содержание:*
- * [DatabaseStruct#Описание Описание]
- * [DatabaseStruct#Структуратаблиц Структура таблиц]
+ * [DatabaseStruct#Description Description]
+ * [DatabaseStruct#Structure Structure]
      * [DatabaseStruct#User User]
      * [DatabaseStruct#Group Group]
      * [DatabaseStruct#Camera Camera]
      * [DatabaseStruct#Fragment Fragment]
- * [DatabaseStruct#Описаниеработысбазой Описание работы с базой]
+ * [DatabaseStruct#Algorithms Algorithms ]
 
- == Описание ==
+ == Description==
 Наша база имеет структуру изображенную на диаграмме
 http://groups.google.com/group/cloudobserver/web/database?hl=ru
 
- == Структура таблиц ==
+ == Structure ==
 Представлены следующие таблицы:
  * [#User User]- таблица описывает данные пользователя
  * [#Group Group] - таблица описывающая группу пользователей у каждого пользователя есть хотя бы одна группа в которую входит только он
@@ -21,27 +21,27 @@ http://groups.google.com/group/cloudobserver/web/database?hl=ru
 
  === User ===
   содержит следующие поля:
-  * UserId -
-  * Email -
-  * FristName -
-  * SecondName -
-  * LastName -
-  * RegistrationDate
+  * !UserId -
+  * !Email -
+  * !FristName -
+  * !SecondName -
+  * !LastName -
+  * !RegistrationDate
 
  === Group ===
-  * GroupId
-  * UserId
-  * Description
-  * RegistrationDate
+  * !GroupId
+  * !UserId
+  * !Description
+  * !RegistrationDate
 
  === Camera ===
-  * CameraId
-  * GroupId
-  * RegistrationDate
+  * !CameraId
+  * !GroupId
+  * !RegistrationDate
 
  === Fragment ===
-  * FragmentId
-  * CameraId
-  * Marker
+  * !FragmentId
+  * !CameraId
+  * !Marker
 
- == Описание работы с базой ==
+ == Algorithms ==
