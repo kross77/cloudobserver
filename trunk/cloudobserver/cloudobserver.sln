@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserverUI", "CloudObserverUI\CloudObserverUI.csproj", "{10DEBF15-5982-450E-8A44-C77E5E0FA410}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "CloudObserverUI.Web", "CloudObserverUI.Web\", "{8A4679FA-4D35-4F9E-B726-6295224BF6D3}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFramework = "3.5"
+		Debug.AspNetCompiler.VirtualPath = "/CloudObserverUI.Web"
+		Debug.AspNetCompiler.PhysicalPath = "CloudObserverUI.Web\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\CloudObserverUI.Web\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/CloudObserverUI.Web"
+		Release.AspNetCompiler.PhysicalPath = "CloudObserverUI.Web\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\CloudObserverUI.Web\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "1665"
+		DefaultWebSiteLanguage = "Visual C#"
+		ProjOutputReferences = "{10DEBF15-5982-450E-8A44-C77E5E0FA410}|ClientBin|false;"
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{10DEBF15-5982-450E-8A44-C77E5E0FA410}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10DEBF15-5982-450E-8A44-C77E5E0FA410}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10DEBF15-5982-450E-8A44-C77E5E0FA410}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10DEBF15-5982-450E-8A44-C77E5E0FA410}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A4679FA-4D35-4F9E-B726-6295224BF6D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A4679FA-4D35-4F9E-B726-6295224BF6D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A4679FA-4D35-4F9E-B726-6295224BF6D3}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A4679FA-4D35-4F9E-B726-6295224BF6D3}.Release|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
