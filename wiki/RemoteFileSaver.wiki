@@ -1,8 +1,7 @@
-#summary One-sentence summary of this page.
 
 = Introduction =
 
-Das machen..
+Das machen nicht..
 
 
 = Details =
@@ -10,7 +9,7 @@ Das machen..
 Das ist..
 Das ist..
 Das ist..
-Fantastisch!!))
+Fantastisch nicht!!))
 
 Add your content here.  Format your content with:
   * Text in *bold* or _italic_
