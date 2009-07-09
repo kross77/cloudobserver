@@ -1,28 +1,45 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserverUI", "CloudObserverUI\CloudObserverUI.csproj", "{10DEBF15-5982-450E-8A44-C77E5E0FA410}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserverDatabaseLibrary", "CloudObserverDatabaseLibrary\CloudObserverDatabaseLibrary.csproj", "{D8967BBE-DA2D-4ADB-B804-7C60F0BD8CD4}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "CloudObserverUI.Web", "CloudObserverUI.Web\", "{8A4679FA-4D35-4F9E-B726-6295224BF6D3}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestProjects", "TestProjects", "{6937BAF3-70DB-42A2-9272-F8DE0BE96FD7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WcfServiceTest", "WcfServiceTest\WcfServiceTest.csproj", "{A0F27A7F-7AD5-4779-950E-334DB76294CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WcfClientTest", "WcfClientTest\WcfClientTest.csproj", "{DAC46254-90D7-4562-B543-960510A77336}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A0F27A7F-7AD5-4779-950E-334DB76294CF} = {A0F27A7F-7AD5-4779-950E-334DB76294CF}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DebugProjects", "DebugProjects", "{12D90619-4DAD-4960-9B36-51F912677C6F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseManagementTool", "DatabaseManagementTool\DatabaseManagementTool.csproj", "{2FA4EECF-8B8A-44CC-86AA-55C4FA2957CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserverDataClasses", "CloudObserverDataClasses\CloudObserverDataClasses.csproj", "{AA1EFD2A-9647-4DD2-AA3D-D380D3330CEA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserverUserInterface", "CloudObserverUserInterface\CloudObserverUserInterface.csproj", "{CEA1561C-1E90-4CE6-9350-CB42A0F4C6C6}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "CloudObserverUserInterface.Web", "CloudObserverUserInterface.Web\", "{AEFD6103-4451-4F77-8693-37C7949E7068}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFramework = "3.5"
-		Debug.AspNetCompiler.VirtualPath = "/CloudObserverUI.Web"
-		Debug.AspNetCompiler.PhysicalPath = "CloudObserverUI.Web\"
-		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\CloudObserverUI.Web\"
+		Debug.AspNetCompiler.VirtualPath = "/CloudObserverUserInterface.Web"
+		Debug.AspNetCompiler.PhysicalPath = "CloudObserverUserInterface.Web\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\CloudObserverUserInterface.Web\"
 		Debug.AspNetCompiler.Updateable = "true"
 		Debug.AspNetCompiler.ForceOverwrite = "true"
 		Debug.AspNetCompiler.FixedNames = "false"
 		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.VirtualPath = "/CloudObserverUI.Web"
-		Release.AspNetCompiler.PhysicalPath = "CloudObserverUI.Web\"
-		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\CloudObserverUI.Web\"
+		Release.AspNetCompiler.VirtualPath = "/CloudObserverUserInterface.Web"
+		Release.AspNetCompiler.PhysicalPath = "CloudObserverUserInterface.Web\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\CloudObserverUserInterface.Web\"
 		Release.AspNetCompiler.Updateable = "true"
 		Release.AspNetCompiler.ForceOverwrite = "true"
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
-		VWDPort = "1665"
+		VWDPort = "34845"
 		DefaultWebSiteLanguage = "Visual C#"
-		ProjOutputReferences = "{10DEBF15-5982-450E-8A44-C77E5E0FA410}|ClientBin|false;"
+		ProjOutputReferences = "{CEA1561C-1E90-4CE6-9350-CB42A0F4C6C6}|ClientBin|false;"
 	EndProjectSection
 EndProject
 Global
@@ -31,16 +48,41 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{10DEBF15-5982-450E-8A44-C77E5E0FA410}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{10DEBF15-5982-450E-8A44-C77E5E0FA410}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{10DEBF15-5982-450E-8A44-C77E5E0FA410}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{10DEBF15-5982-450E-8A44-C77E5E0FA410}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8A4679FA-4D35-4F9E-B726-6295224BF6D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8A4679FA-4D35-4F9E-B726-6295224BF6D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8A4679FA-4D35-4F9E-B726-6295224BF6D3}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{8A4679FA-4D35-4F9E-B726-6295224BF6D3}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{D8967BBE-DA2D-4ADB-B804-7C60F0BD8CD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8967BBE-DA2D-4ADB-B804-7C60F0BD8CD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8967BBE-DA2D-4ADB-B804-7C60F0BD8CD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8967BBE-DA2D-4ADB-B804-7C60F0BD8CD4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0F27A7F-7AD5-4779-950E-334DB76294CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0F27A7F-7AD5-4779-950E-334DB76294CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0F27A7F-7AD5-4779-950E-334DB76294CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0F27A7F-7AD5-4779-950E-334DB76294CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAC46254-90D7-4562-B543-960510A77336}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAC46254-90D7-4562-B543-960510A77336}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAC46254-90D7-4562-B543-960510A77336}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAC46254-90D7-4562-B543-960510A77336}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FA4EECF-8B8A-44CC-86AA-55C4FA2957CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FA4EECF-8B8A-44CC-86AA-55C4FA2957CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FA4EECF-8B8A-44CC-86AA-55C4FA2957CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FA4EECF-8B8A-44CC-86AA-55C4FA2957CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA1EFD2A-9647-4DD2-AA3D-D380D3330CEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA1EFD2A-9647-4DD2-AA3D-D380D3330CEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA1EFD2A-9647-4DD2-AA3D-D380D3330CEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA1EFD2A-9647-4DD2-AA3D-D380D3330CEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEA1561C-1E90-4CE6-9350-CB42A0F4C6C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEA1561C-1E90-4CE6-9350-CB42A0F4C6C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEA1561C-1E90-4CE6-9350-CB42A0F4C6C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEA1561C-1E90-4CE6-9350-CB42A0F4C6C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEFD6103-4451-4F77-8693-37C7949E7068}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEFD6103-4451-4F77-8693-37C7949E7068}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEFD6103-4451-4F77-8693-37C7949E7068}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEFD6103-4451-4F77-8693-37C7949E7068}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A0F27A7F-7AD5-4779-950E-334DB76294CF} = {6937BAF3-70DB-42A2-9272-F8DE0BE96FD7}
+		{DAC46254-90D7-4562-B543-960510A77336} = {6937BAF3-70DB-42A2-9272-F8DE0BE96FD7}
+		{2FA4EECF-8B8A-44CC-86AA-55C4FA2957CA} = {12D90619-4DAD-4960-9B36-51F912677C6F}
 	EndGlobalSection
 EndGlobal
