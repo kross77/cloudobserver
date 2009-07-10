@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:s="library://ns.adobe.com/flex/spark" xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:components="components.*" xmlns:d="http://ns.adobe.com/fxg/2008/dt" xmlns:th="http://ns.adobe.com/thermo/2009">
+	<s:states>
+		<s:State name="State1" th:color="0xcc0000"/>
+	</s:states>
+	<components:CustomComponent2 x="0.75" y="0.65" d:userLabel="LogedOut">
+	</components:CustomComponent2>
+</s:Group>

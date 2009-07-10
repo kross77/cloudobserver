@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<Graphic xmlns:ai="http://ns.adobe.com/ai/2008" xmlns:d="http://ns.adobe.com/fxg/2008/dt" xmlns:fc="http://ns.adobe.com/thermo/2009" xmlns="http://ns.adobe.com/fxg/2008" version="1">
+	<Path winding="nonZero" ai:knockout="0" x="0.35" y="0.345" data="M 8.81 15.361 C 5.531 15.361 2.863 12.607 2.863 9.223 C 2.863 5.837 5.531 3.083 8.81 3.083 C 10.217 3.083 11.508 3.594 12.526 4.44 L 9.577 7.072 L 17.344 8.256 L 17.329 0.154 L 14.601 2.588 C 13.067 1.161 11.038 0.29 8.81 0.29 C 4.031 0.29 0.156 4.29 0.156 9.223 C 0.156 14.155 4.031 18.154 8.81 18.154 C 12.559 18.154 15.751 15.694 16.953 12.253 L 14.187 11.831 C 13.234 13.913 11.186 15.361 8.81 15.361 Z">
+		<fill>
+			<SolidColor color="#949494"/>
+		</fill>
+		<stroke>
+			<SolidColorStroke caps="none" color="#cccccc" joints="miter" miterLimit="4" weight="1"/>
+		</stroke>
+	</Path>
+</Graphic>

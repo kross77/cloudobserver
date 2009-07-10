@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Skin xmlns:s="library://ns.adobe.com/flex/spark" xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:ai="http://ns.adobe.com/ai/2008" xmlns:d="http://ns.adobe.com/fxg/2008/dt">
+	<s:states>
+		<s:State name="up"/>
+		<s:State name="over"/>
+		<s:State name="down"/>
+		<s:State name="disabled"/>
+	</s:states>
+	<fx:Metadata>[HostComponent("spark.components.Button")]</fx:Metadata>
+	<s:Path winding="nonZero" ai:knockout="0" data="M 115.276 16.201 C 115.276 18.962 113.038 21.201 110.276 21.201 L 5.5 21.201 C 2.739 21.201 0.5 18.962 0.5 16.201 L 0.5 5.498 C 0.5 2.736 2.739 0.498 5.5 0.498 L 110.276 0.498 C 113.038 0.498 115.276 2.736 115.276 5.498 L 115.276 16.201 Z">
+		<s:fill>
+			<s:SolidColor color="0xe8e8e8"/>
+		</s:fill>
+		<s:stroke>
+			<s:SolidColorStroke color="0x949494" caps="none" weight="1" joints="miter" miterLimit="4"/>
+		</s:stroke>
+	</s:Path>
+	<s:Path winding="nonZero" ai:knockout="0" data="M 21.702 16.698 C 21.702 19.459 19.463 21.698 16.702 21.698 L 5.504 21.698 C 2.742 21.698 0.504 19.459 0.504 16.698 L 0.504 5.5 C 0.504 2.738 2.742 0.5 5.504 0.5 L 16.702 0.5 C 19.463 0.5 21.702 2.738 21.702 5.5 L 21.702 16.698 Z">
+		<s:fill>
+			<s:SolidColor color="0xe8e8e8"/>
+		</s:fill>
+		<s:stroke>
+			<s:SolidColorStroke color="0x949494" caps="none" weight="1" joints="miter" miterLimit="4"/>
+		</s:stroke>
+	</s:Path>
+	<s:RichText textAlign="center" fontFamily="Myriad Pro" lineHeight="120%" whiteSpaceCollapse="preserve" kerning="on" x="26" y="6" ai:knockout="0" color="0x000000" d:userLabel="Status: LogedOut">
+		<s:content><s:p><s:span>Status: LogedOut</s:span></s:p></s:content>				</s:RichText>
+	<s:Group x="4" d:userLabel="User - Grey">
+		<s:Group x="2" y="4" alpha="0.8" blendMode="multiply" ai:knockout="0">
+			<s:Group x="3" d:id="174">
+				<s:Path alpha="0.8" blendMode="multiply" winding="nonZero" ai:knockout="0" data="M 4.083 0 C 1.828 0 0 1.829 0 4.086 C 0 5.852 1.128 7.343 2.697 7.912 C 3.888 5.532 5.077 3.152 6.752 1.014 C 6.034 0.391 5.108 0 4.083 0 Z">
+					<s:fill>
+						<s:LinearGradient x="3.37598" y="16.6191" scaleX="17.8353" rotation="-90">
+							<s:GradientEntry color="0xffffff" ratio="0"/>
+							<s:GradientEntry color="0xb7c6ce" ratio="1"/>
+						</s:LinearGradient>
+					</s:fill>
+				</s:Path>
+			</s:Group>
+			<s:Group x="6" y="1" d:id="175">
+				<s:Path alpha="0.8" blendMode="multiply" winding="nonZero" ai:knockout="0" data="M 4.055 0 C 2.38 2.139 1.19 4.519 0 6.898 C 0.435 7.057 0.896 7.156 1.386 7.156 C 3.644 7.156 5.473 5.327 5.473 3.072 C 5.473 1.84 4.916 0.749 4.055 0 Z">
+					<s:fill>
+						<s:LinearGradient x="2.73633" y="15.0313" scaleX="16.1315" rotation="-90">
+							<s:GradientEntry color="0xffffff" ratio="0"/>
+							<s:GradientEntry color="0xb7c6ce" ratio="1"/>
+						</s:LinearGradient>
+					</s:fill>
+				</s:Path>
+			</s:Group>
+			<s:Group y="8" d:id="176">
+				<s:Path alpha="0.8" blendMode="multiply" winding="nonZero" ai:knockout="0" data="M 4.029 0 C 1.65 1.264 0.018 3.836 0 6.811 L 2.01 6.811 C 3.447 4.98 4.53 2.975 5.557 0.939 C 4.991 0.719 4.475 0.398 4.029 0 Z">
+					<s:fill>
+						<s:LinearGradient x="2.77832" y="9.34961" scaleX="18.4186" rotation="-90">
+							<s:GradientEntry color="0xffffff" ratio="0"/>
+							<s:GradientEntry color="0xb7c6ce" ratio="1"/>
+						</s:LinearGradient>
+					</s:fill>
+				</s:Path>
+			</s:Group>
+			<s:Group x="2" y="8" d:id="177">
+				<s:Path alpha="0.8" blendMode="multiply" winding="nonZero" ai:knockout="0" data="M 8.692 0 C 7.807 0.795 6.636 1.278 5.354 1.278 C 4.717 1.278 4.107 1.158 3.547 0.939 C 2.521 2.975 1.438 4.98 0 6.811 L 12.723 6.811 C 12.705 3.836 11.071 1.264 8.692 0 Z">
+					<s:fill>
+						<s:LinearGradient x="6.36133" y="9.34961" scaleX="18.4186" rotation="-90">
+							<s:GradientEntry color="0xffffff" ratio="0"/>
+							<s:GradientEntry color="0xb7c6ce" ratio="1"/>
+						</s:LinearGradient>
+					</s:fill>
+				</s:Path>
+			</s:Group>
+		</s:Group>
+		<s:Path winding="nonZero" ai:knockout="0" data="M 4.141 0.004 C 1.886 -0.039 0.024 1.756 -0.019 4.012 C -0.056 6.014 1.355 7.699 3.25 8.084 C 4.429 5.832 5.628 3.591 7.265 1.578 C 6.532 0.646 5.419 0.028 4.141 0.004 Z" x="4" y="2">
+			<s:fill>
+				<s:SolidColor/>
+			</s:fill>
+		</s:Path>
+		<s:Path winding="nonZero" ai:knockout="0" data="M -0.024 6.59 C 0.216 6.635 0.461 6.664 0.715 6.664 C 2.973 6.664 4.801 4.836 4.801 2.58 C 4.801 1.601 4.442 0.713 3.868 0.01 C 2.27 2.053 1.114 4.316 -0.024 6.59 Z" x="9" y="6">
+			<s:fill>
+				<s:SolidColor/>
+			</s:fill>
+		</s:Path>
+		<s:Path winding="nonZero" ai:knockout="0" data="M 4.03 0.007 C 1.651 1.272 0.018 3.844 0 6.817 L 2.879 6.817 C 4.202 5.03 5.22 3.09 6.203 1.133 C 5.385 0.935 4.637 0.552 4.03 0.007 Z" y="10">
+			<s:fill>
+				<s:SolidColor/>
+			</s:fill>
+		</s:Path>
+		<s:Path winding="nonZero" ai:knockout="0" data="M 7.803 0.007 C 6.916 0.802 5.746 1.286 4.465 1.286 C 4.063 1.286 3.678 1.223 3.303 1.133 C 2.32 3.09 1.302 5.03 -0.021 6.817 L 11.832 6.817 C 11.815 3.844 10.181 1.271 7.803 0.007 Z" x="4" y="12">
+			<s:fill>
+				<s:SolidColor/>
+			</s:fill>
+		</s:Path>
+		<s:Path winding="nonZero" ai:knockout="0" data="M 12.128 0 L 12.902 0.482 L 0.771 19.615 L -0.003 19.133 L 12.128 0 Z" x="2">
+			<s:fill>
+				<s:SolidColor/>
+			</s:fill>
+		</s:Path>
+	</s:Group>
+</s:Skin>

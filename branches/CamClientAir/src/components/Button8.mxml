@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Skin xmlns:s="library://ns.adobe.com/flex/spark" xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:ai="http://ns.adobe.com/ai/2008" xmlns:d="http://ns.adobe.com/fxg/2008/dt">
+	<s:states>
+		<s:State name="up"/>
+		<s:State name="over"/>
+		<s:State name="down"/>
+		<s:State name="disabled"/>
+	</s:states>
+	<fx:Metadata>[HostComponent("spark.components.Button")]</fx:Metadata>
+	<s:Path winding="nonZero" ai:knockout="0" data="M 70.501 16.203 C 70.501 18.964 68.263 21.203 65.501 21.203 L 5.5 21.203 C 2.74 21.203 0.5 18.964 0.5 16.203 L 0.5 5.5 C 0.5 2.739 2.74 0.5 5.5 0.5 L 65.501 0.5 C 68.263 0.5 70.501 2.739 70.501 5.5 L 70.501 16.203 Z">
+		<s:fill>
+			<s:SolidColor color="0xe8e8e8"/>
+		</s:fill>
+		<s:stroke>
+			<s:SolidColorStroke color="0x949494" caps="none" weight="1" joints="miter" miterLimit="4"/>
+		</s:stroke>
+	</s:Path>
+	<s:RichText textAlign="center" fontFamily="Myriad Pro" lineHeight="120%" whiteSpaceCollapse="preserve" kerning="on" ai:knockout="0" color="0x000000" d:userLabel="LogIn" x="23" y="6">
+		<s:content><s:p><s:span>LogIn</s:span></s:p></s:content>					</s:RichText>
+</s:Skin>
