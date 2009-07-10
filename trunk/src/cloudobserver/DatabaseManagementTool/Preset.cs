@@ -8,11 +8,16 @@ namespace DatabaseManagementTool
 {
     class Preset
     {
+        private UserItem[] users;
+        private GroupItem[] groups;
+        private CameraItem[] cameras;
+        private FrameItem[] frames;
+        private GroupMemberItem[] groupMembers;
+        private GroupCameraItem[] groupCameras;
+
         public Preset()
         {
             //
         }
-
-
     }
 }

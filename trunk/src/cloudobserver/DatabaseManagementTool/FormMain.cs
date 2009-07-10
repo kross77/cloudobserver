@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using CloudObserverDatabaseLibrary;
 
 namespace DatabaseManagementTool
@@ -29,14 +30,14 @@ namespace DatabaseManagementTool
                     comboBoxDatabaseName.Enabled = false;
                     buttonSetupDefaultValues.Enabled = true;
                     buttonClearDatabase.Enabled = true;
-                    databaseName = comboBoxServerName.Text + "." + comboBoxDatabaseName.Text;
+                    databaseName = "'" + comboBoxServerName.Text + "." + comboBoxDatabaseName.Text + "'";
                     connection = "Data Source=" + comboBoxServerName.Text + ";Initial Catalog=" + comboBoxDatabaseName.Text + ";Integrated Security=True";
                     database = new CloudObserverDatabase(connection);
-                    listBoxActionsLog.Items.Add("Database '" + databaseName + "' connected.");
+                    AddLog("Database " + databaseName + " connected.");
                     buttonConnect.Text = "Disconnect";
                     break;
                 case "Disconnect":
-                    listBoxActionsLog.Items.Add("Database '" + databaseName + "' disconnected.");
+                    AddLog("Database " + databaseName + " disconnected.");
                     database = null;
                     databaseName = "";
                     connection = "";
@@ -51,37 +52,65 @@ namespace DatabaseManagementTool
 
         private void buttonSetupDefaultValues_Click(object sender, EventArgs e)
         {
+            AddLog("Setting default values into " + databaseName + "...");
             //users
-            int user1 = database.RegisterUser("user1@mail.ru", "1", "User 1 Name");
-            listBoxActionsLog.Items.Add("User 1 registered.");
-            int user2 = database.RegisterUser("user2@mail.ru", "2", "User 2 Name");
-            listBoxActionsLog.Items.Add("User 2 registered.");
-            listBoxActionsLog.Items.Add("User creation finished.");
-            listBoxActionsLog.Items.Add("");
+            AddLog("  creating users...");
+            int user1 = database.RegisterUser("user1@mail.ru", "1", "User 1");
+            AddLog("  'User 1' registered (email: 'user1@mail.ru', password: '1').");
+            int user2 = database.RegisterUser("user2@mail.ru", "2", "User 2");
+            AddLog("  'User 2' registered (email: 'user2@mail.ru', password: '2').");
+            AddLog("  creating users compelete.");
 
             //groups
-            int administrationGroup = database.RegisterGroup("Administration Group", false);
-            listBoxActionsLog.Items.Add("Private Administration Group registered.");
+            AddLog("  creating groups...");
+            int cloudObserverGroup = database.RegisterGroup("Cloud Observer", false);
+            AddLog("  private 'Cloud Observer' group registered.");
             int testGroup = database.RegisterGroup("Test Group", true);
-            listBoxActionsLog.Items.Add("Public Test Group created.");
-            listBoxActionsLog.Items.Add("Group creation finished.");
-            listBoxActionsLog.Items.Add("");
+            AddLog("  public 'Test Group' group registered.");
+            AddLog("  creating groups complete.");
 
             //group members
-            database.AddGroupMember(user1, administrationGroup, 0);
-            listBoxActionsLog.Items.Add("User 1 entered into Administration Group.");
-            database.AddGroupMember(user2, administrationGroup, 0);
-            listBoxActionsLog.Items.Add("User 2 entered into Administration Group.");
+            AddLog("  adding group members...");
+            database.AddGroupMember(user1, cloudObserverGroup, 0);
+            AddLog("  'User 1' was added into 'Cloud Observer' group.");
+            database.AddGroupMember(user2, cloudObserverGroup, 0);
+            AddLog("  'User 2' was added into 'Cloud Observer' group.");
             database.AddGroupMember(user1, testGroup, 0);
-            listBoxActionsLog.Items.Add("User 1 entered into Test Group.");
-
-            listBoxActionsLog.Items.Add("Default values loaded into '" + databaseName + "'.");
+            AddLog("  'User 1' was added into 'Test Group' group.");
+            AddLog("  adding group members complete.");
 
             //cameras
+            AddLog("  creating cameras...");
+            int defaultCamera = database.RegisterCamera("localhost::52009/defaultCamera", "Default Camera");
+            AddLog("  'Default Camera' camera registered (path: 'localhost').");
+            int testCamera = database.RegisterCamera("localhost::52009/testCamera", "Test Camera");
+            AddLog("  'Test Camera' camera registered (path: 'localhost').");
+            AddLog("  creating cameras complete.");
 
             //group cameras
+            AddLog("  adding group cameras...");
+            database.AddGroupCamera(defaultCamera, cloudObserverGroup);
+            AddLog("  'Default Camera' camera was added into 'Cloud Observer' group.");
+            database.AddGroupCamera(testCamera, testGroup);
+            AddLog("  'Test Camera' camera was added into 'Test Group' group.");
+            AddLog("  adding group cameras complete.");
 
             //frames
+            AddLog("  adding frames...");
+            database.AddFrame(testCamera, new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame001), XElement.Parse(global::DatabaseManagementTool.Properties.Resources.DefaultMarker));
+            database.AddFrame(testCamera, new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame002), XElement.Parse(global::DatabaseManagementTool.Properties.Resources.DefaultMarker));
+            database.AddFrame(testCamera, new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame003), XElement.Parse(global::DatabaseManagementTool.Properties.Resources.DefaultMarker));
+            database.AddFrame(testCamera, new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame004), XElement.Parse(global::DatabaseManagementTool.Properties.Resources.DefaultMarker));
+            database.AddFrame(testCamera, new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame005), XElement.Parse(global::DatabaseManagementTool.Properties.Resources.DefaultMarker));
+            database.AddFrame(testCamera, new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame006), XElement.Parse(global::DatabaseManagementTool.Properties.Resources.DefaultMarker));
+            database.AddFrame(testCamera, new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame007), XElement.Parse(global::DatabaseManagementTool.Properties.Resources.DefaultMarker));
+            database.AddFrame(testCamera, new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame008), XElement.Parse(global::DatabaseManagementTool.Properties.Resources.DefaultMarker));
+            database.AddFrame(testCamera, new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame009), XElement.Parse(global::DatabaseManagementTool.Properties.Resources.DefaultMarker));
+            database.AddFrame(testCamera, new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame010), XElement.Parse(global::DatabaseManagementTool.Properties.Resources.DefaultMarker));
+            AddLog("  10 default frames was added from 'Default Camera' camera.");
+            AddLog("  adding frames complete.");
+
+            AddLog("Setting default values into " + databaseName + " complete.");
         }
 
         private void buttonClearDatabase_Click(object sender, EventArgs e)
@@ -90,9 +119,9 @@ namespace DatabaseManagementTool
             listBoxActionsLog.Items.Add("Database " + databaseName + " is now empty.");
         }
 
-        private void comboBoxPresets_SelectedIndexChanged(object sender, EventArgs e)
+        private void AddLog(string s)
         {
-
+            listBoxActionsLog.Items.Add(s);
         }
     }
 }

@@ -9,7 +9,7 @@ using System.Runtime.Serialization;
 namespace CloudObserverDataClasses
 {
     [DataContract]
-    class FrameItem
+    public class FrameItem
     {
         [DataMember]
         public int FrameID { get; set; }

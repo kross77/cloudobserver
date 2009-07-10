@@ -71,7 +71,7 @@ namespace CloudObserverDatabaseLibrary
         void SetCameraIcon(int cameraID, Bitmap icon);
 
         // frame manipulations functions
-        int SaveFrame(int cameraID, Bitmap content, XElement marker);
+        void AddFrame(int cameraID, Bitmap content, XElement marker);
         void RemoveFrame(int frameID);
         Bitmap GetFrameContent(int frameID);
         XElement GetFrameMarker(int frameID);

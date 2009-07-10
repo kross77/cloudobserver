@@ -388,7 +388,7 @@ namespace CloudObserverDatabaseLibrary
         }
 
         // frame manipulations functions
-        public int SaveFrame(int cameraID, Bitmap content, XElement marker)
+        public void AddFrame(int cameraID, Bitmap content, XElement marker)
         {
             database.Frames.InsertOnSubmit(new Frame
             {
@@ -397,7 +397,6 @@ namespace CloudObserverDatabaseLibrary
                 Marker = marker
             });
             database.SubmitChanges();
-            return (from f in database.Frames where f.Content.Equals(content) select f.FrameID).Single();
         }
 
         public void RemoveFrame(int frameID)

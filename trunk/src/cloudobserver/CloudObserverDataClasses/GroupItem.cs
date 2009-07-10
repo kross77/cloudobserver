@@ -9,7 +9,7 @@ using System.Runtime.Serialization;
 namespace CloudObserverDataClasses
 {
     [DataContract]
-    class GroupItem
+    public class GroupItem
     {
         [DataMember]
         public int GroupID { get; set; }
