@@ -1,6 +1,6 @@
 #summary CloudObserver
 #labels AIR,Silverlight,IIS,WCF,CloudObserver
-
+====== смотрите русскую версию на странице CloudObserver ======
 
 = CloudObserver =
 
