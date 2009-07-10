@@ -1,0 +1,10 @@
+#summary CloudObserver
+#labels Featured,CloudObserver,IIS7.0,AdobaAIR,Silverlight,WCF
+
+= Введение =
+Проект реализующий видео сервер основанный на технологии WCF.
+Продукт осуществляет обработку изображения с помощью технологий WCF. Пользовательский интерфейс реализован с помощью Silverlight 3 и Adoba AIR 1.5.1. Как Http сервер используется  IIS 7.0
+
+= Подробнее о проекте =
+
+Посетите нашу главную сираничку http://code.google.com/p/cloudobserver/
