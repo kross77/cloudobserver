@@ -102,3 +102,11 @@
 
  * Позволяет серверу обрабатывать и хранить данные
  * Осуществляется по HTTPS соединяя приложение с SOAP-based web сервисом классом WebService
+
+= Предпологаемый вид =
+
+[https://cloudobserver.googlecode.com/svn/wiki/AssetsDir/listAiFirstFinal.jpg]
+
+= Предпологаемая схема взаимодействия с облаком =
+
+[https://cloudobserver.googlecode.com/svn/wiki/AssetsDir/Air-WcfScenario.png]
