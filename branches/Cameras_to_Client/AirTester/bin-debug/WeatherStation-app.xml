@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns="http://ns.adobe.com/air/application/1.0">
+	<id>com.adobe.air.examples.flex.WeatherStation</id>
+	<version>1.0</version>
+	<filename>WeatherStation (Flex)</filename>
+	<name>WeatherStation -- Flex-Based AIR Example</name>
+	<installFolder>Adobe/AIR Examples</installFolder>
+	<programMenuFolder>Adobe/AIR Examples</programMenuFolder>
+	<description>An example application for Adobe AIR. Displays data from the Yahoo! Weather service for a U.S. Zip code. Shows how to create a semi-transparent application with its own window chrome.</description>
+    <copyright>Copyright © 2007 Adobe Systems Inc.</copyright>
+	<initialWindow>
+		<title>WeatherStation</title>
+		<content>WeatherStation.swf</content>
+		<systemChrome>none</systemChrome>
+		<transparent>true</transparent>
+		<visible>true</visible>
+	    <minimizable>true</minimizable>
+	    <maximizable>false</maximizable>
+	    <resizable>false</resizable>
+	</initialWindow>
+	<icon>
+      	<image16x16>icons/AIRApp_16.png</image16x16>     
+      	<image32x32>icons/AIRApp_32.png</image32x32>      
+      	<image48x48>icons/AIRApp_48.png</image48x48>      
+      	<image128x128>icons/AIRApp_128.png</image128x128>
+	</icon>
+</application>

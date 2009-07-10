@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" width="600" height="200">
+	<mx:Script>
+        <![CDATA[
+    import flash.media.Camera;
+    import mx.controls.Alert;
+    import mx.events.ListEvent;
+    import mx.utils.ObjectUtil;
+  	import flash.media.Video;
+  	import mx.core.UIComponent; 	
+  	import flash.display.Bitmap;
+    import mx.events.CloseEvent;
+    import flash.display.Sprite;
+    import flash.text.TextField;
+    import flash.text.TextFieldAutoSize;
+    import flash.utils.Timer;
+    import flash.events.TimerEvent;
+    import flash.events.ActivityEvent;
+        
+         	
+ 	 public var videoHolder:UIComponent;
+ 	
+ 	 public var video:Video;
+     
+     private var camera:Camera;
+  
+
+         
+
+            private function list_change(evt:ListEvent):void {
+           
+          
+           var cameraName:String = data.toString();
+          mpavi.title=cameraName;
+            videoHolder = new UIComponent();
+               
+            camera = Camera.getCamera(cameraName);
+                
+            //textArea.text = ObjectUtil.toString(camera);
+           
+            video = new Video(cnvWebcam.width ,cnvWebcam.height); 
+ 	        video.attachCamera(camera);                
+ 	        videoHolder.addChild(video);
+ 	        cnvWebcam.addChild(videoHolder);
+ 	         camera.setMotionLevel(5, 1000);
+ 	         
+            }
+
+        ]]>
+    </mx:Script>
+	
+	<mx:Panel  id="mpavi" width="100%" height="100%" layout="absolute" title="Camera Name">
+		<mx:Panel width="50%" height="100%" layout="absolute" title="Video">
+			<mx:Canvas  id="cnvWebcam" x="0" y="0" width="100%" height="100%">
+				
+				
+				
+			</mx:Canvas>
+		</mx:Panel>
+		<mx:Button x="352" y="73" label="Options"/>
+		<mx:Button x="454" y="73" label="Description"/>
+		<mx:LinkButton x="373" y="30" label="Url is not set yet"/>
+		<mx:Button x="475" y="128" label="Pause video"/>
+	</mx:Panel>
+	
+</mx:HBox>
