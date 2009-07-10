@@ -1,47 +1,63 @@
- = Описание структуры базы данных =
-*содержание:*
- * [DatabaseStruct#Description Description]
- * [DatabaseStruct#Structure Structure]
-     * [DatabaseStruct#User User]
-     * [DatabaseStruct#Group Group]
-     * [DatabaseStruct#Camera Camera]
-     * [DatabaseStruct#Fragment Fragment]
- * [DatabaseStruct#Algorithms Algorithms ]
+#summary Описание структуры базы данных.
 
- == Description==
-Наша база имеет структуру изображенную на диаграмме
-http://groups.google.com/group/cloudobserver/web/database?hl=ru
+= Описание структуры базы данных. =
 
- == Structure ==
-Представлены следующие таблицы:
- * [#User User]- таблица описывает данные пользователя
- * [#Group Group] - таблица описывающая группу пользователей у каждого пользователя есть хотя бы одна группа в которую входит только он
- * [#Camera Camera] - таблица описывающая камеру
- * [#Fragment Fragment] - таблица описывающая фрагмент видео может быть отдельным кадром
+== Структура ==
+База имеет следующую структуру:
 
- === User ===
-  содержит следующие поля:
-  * !UserId -
-  * !Email -
-  * !FristName -
-  * !SecondName -
-  * !LastName -
-  * !RegistrationDate
+[http://cloudobserver.googlegroups.com/web/DatabaseStruct.jpg]
 
- === Group ===
-  * !GroupId
-  * !UserId
-  * !Description
-  * !RegistrationDate
+== Таблицы ==
+Используются таблицы:
+ * *Users* - содержит данные о зарегистрированных пользователях.
+ * *Groups* - содержит данные о зарегистрированных группах.
+ * *Cameras* - содержит данные о зарегистрированных камерах.
+ * *Frames* - содержит данные о сохраненных кадрах.
+ * *GroupMembers* - описывает принадлежности пользователей к группам.
+ * *GroupCameras* - описывает принадлежности камер к группам.
 
- === Camera ===
-  * !CameraId
-  * !GroupId
-  * !RegistrationDate
+== Поля таблиц ==
 
- === Fragment ===
-  * !FragmentId
-  * !CameraId
-  * !Marker
+=== Users ===
+ * *UserID (int)* - идентификатор пользователя, ключевое поле.
+ * *Email (string)* - электронный адрес пользователя.
+ * *Password (string)* - пароль пользователя.
+ * *Name (string)* - отображаемое имя пользователя.
+ * *Description (html)* - описание пользователя в виде html-страницы.
+ * *Icon (bitmap)* - иконка (аватар) пользователя.
+ * *RegistrationDate (datetime)* - дата и время регистрации пользователя.
 
- == Algorithms ==
+=== Groups ===
+ * *GroupID (int)* - идентификатор группы, ключевое поле.
+ * *Name (string)* - имя группы.
+ * *Description (html)* - описание группы в виде html-страницы.
+ * *Icon (bitmap)* - иконка группы.
+ * *Privacy (bool)* - настройки доступа:
+    * _true_ - открытая группа, доступна для поиска по группам и свободна для вступления
+    * _false_ - закрытая группа, недоступна из поиска по группам, добавить участника может только пользователь группы с соответствующими правами
+ * *RegistrationDate (datetime)* - дата и время регистрации группы.
+
+=== Cameras ===
+ * *CameraID (int)* - идентификатор камеры, ключевое поле.
+ * *Path (string)* - сетевой путь для получения данных с камеры.
+ * *Name (string)* - имя камеры.
+ * *Description (html)* - описание камеры в виде html-страницы.
+ * *Icon (bitmap)* - иконка камера (используется когда онлайн трансляция с камеры недоступна).
+ * *RegistrationDate (datetime)* - дата и время регистрации камеры.
+
+=== Frames ===
+ * *FrameID (int)* - идентификатор кадра, ключевое поле.
+ * *CameraID (int)* - идентификатор камеры, с которой был получен кадр.
+ * *Content (bitmap)* - кадр.
+ * *Marker (xml)* - маркер кадра с информацией о времени съемки и обнаруженных событиях.
+
+=== GroupMembers ===
+ * *LinkID (int)* - ключевое поле.
+ * *UserID (int)* - идентификатор пользователя.
+ * *GroupID (int)* - идентификатор группы.
+ * *Privileges (int)* - права пользователя в группе (поле рассматривается по битам).
+
+=== GroupCameras ===
+ * *LinkID (int)* - ключевое поле. 
+ * *CameraID (int)* - идентификатор камеры.
+ * *GroupID (int)* - идентификатор группы.
