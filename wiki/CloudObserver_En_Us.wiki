@@ -1,0 +1,12 @@
+#summary CloudObserver
+
+
+= Introduction =
+
+This project realize video server base on WCF technology/
+This project realize image processing base on wcf technology. User interface is realised on Silverlight 3 and Adoba AIR 1.5.1. As http server is using IIS.
+
+
+= Details =
+See our Main Project Page
+http://code.google.com/p/cloudobserver/
