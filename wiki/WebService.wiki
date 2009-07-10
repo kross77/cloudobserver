@@ -1,0 +1,10 @@
+#summary public dynamic class WebService
+#labels ActionScript,MXML
+
+= public dynamic class WebService =
+
+дает доступ к SOAP веб сервисам
+
+
+= Details =
+смотри описание на Adobe® Flex™ 3.3 Language Reference http://livedocs.adobe.com/flex/3/langref/mx/rpc/soap/mxml/WebService.html
