@@ -1,7 +1,7 @@
 #summary Описание клиента со стороны камер.
 #labels Featured,Adobe,AIR,ActionScript,MXML,Cameras,Client
 ==== Примерный вид дизайна с сильно ограниченной функциональностью ====
- ======*http://superior0.narod.ru/*======
+ ====== * http://superior0.narod.ru/ * ======
 
 = *Описание клиента со стороны камер* =
 
