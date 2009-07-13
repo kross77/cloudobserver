@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml">
-	
-	<mx:Image width="50" height="50" source="{data.link[1].href}"/>
-	<mx:Text width="100%" text="{data.title}"/>
-	
-</mx:HBox>
