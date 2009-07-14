@@ -11,7 +11,7 @@
 
 Клиент со стороны камер занимает важное место в общей структуре проекта.
 Рассмотрим некую абстрактную схему нашего проекта:
-[http://cloudobserver.googlecode.com/svn/wiki/AssetsDir/ObstractCtoCCtoC.png]
+[http://cloudobserver.googlecode.com/svn/wiki/Assets/ObstractCtoCCtoC.png]
 Мы видим что Клиент со стороны камер несет в себе важную задачу - сбор 
 информации с камер и передачу ее на сервера.
 
@@ -173,7 +173,7 @@
 
 == Эскиз. == 
 
-[http://cloudobserver.googlecode.com/svn/wiki/AssetsDir/Air-WcfScenario.png]
+[http://cloudobserver.googlecode.com/svn/wiki/Assets/Air-WcfScenario.png]
 
 = Предпологаемый вид. =
  
@@ -194,4 +194,4 @@
 
 == Эскиз. ==
 
-[http://cloudobserver.googlecode.com/svn/wiki/AssetsDir/listAiFirstFinal.jpg]
+[http://cloudobserver.googlecode.com/svn/wiki/Assets/listAiFirstFinal.jpg]
