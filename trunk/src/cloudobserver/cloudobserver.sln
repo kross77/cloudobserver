@@ -18,9 +18,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseManagementTool", "D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserverDataClasses", "CloudObserverDataClasses\CloudObserverDataClasses.csproj", "{AA1EFD2A-9647-4DD2-AA3D-D380D3330CEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserverUserInterface", "CloudObserverUserInterface\CloudObserverUserInterface.csproj", "{CEA1561C-1E90-4CE6-9350-CB42A0F4C6C6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserverUserInterface", "CloudObserverUserInterface\CloudObserverUserInterface.csproj", "{99E16625-AB71-4FB3-B7DC-E617D1360965}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "CloudObserverUserInterface.Web", "CloudObserverUserInterface.Web\", "{AEFD6103-4451-4F77-8693-37C7949E7068}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "CloudObserverUserInterface.Web", "CloudObserverUserInterface.Web\", "{7AFC61E4-3688-4D83-8D0C-3F84757315BC}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFramework = "3.5"
 		Debug.AspNetCompiler.VirtualPath = "/CloudObserverUserInterface.Web"
@@ -37,9 +37,9 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "CloudObserverUserInterface.
 		Release.AspNetCompiler.ForceOverwrite = "true"
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
-		VWDPort = "34845"
+		VWDPort = "58789"
 		DefaultWebSiteLanguage = "Visual C#"
-		ProjOutputReferences = "{CEA1561C-1E90-4CE6-9350-CB42A0F4C6C6}|ClientBin|false;"
+		ProjOutputReferences = "{99E16625-AB71-4FB3-B7DC-E617D1360965}|ClientBin|false;"
 	EndProjectSection
 EndProject
 Global
@@ -68,14 +68,14 @@ Global
 		{AA1EFD2A-9647-4DD2-AA3D-D380D3330CEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA1EFD2A-9647-4DD2-AA3D-D380D3330CEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA1EFD2A-9647-4DD2-AA3D-D380D3330CEA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CEA1561C-1E90-4CE6-9350-CB42A0F4C6C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CEA1561C-1E90-4CE6-9350-CB42A0F4C6C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CEA1561C-1E90-4CE6-9350-CB42A0F4C6C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CEA1561C-1E90-4CE6-9350-CB42A0F4C6C6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AEFD6103-4451-4F77-8693-37C7949E7068}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AEFD6103-4451-4F77-8693-37C7949E7068}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AEFD6103-4451-4F77-8693-37C7949E7068}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{AEFD6103-4451-4F77-8693-37C7949E7068}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{99E16625-AB71-4FB3-B7DC-E617D1360965}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99E16625-AB71-4FB3-B7DC-E617D1360965}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99E16625-AB71-4FB3-B7DC-E617D1360965}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99E16625-AB71-4FB3-B7DC-E617D1360965}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AFC61E4-3688-4D83-8D0C-3F84757315BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AFC61E4-3688-4D83-8D0C-3F84757315BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AFC61E4-3688-4D83-8D0C-3F84757315BC}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AFC61E4-3688-4D83-8D0C-3F84757315BC}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
