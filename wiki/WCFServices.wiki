@@ -1,12 +1,12 @@
 = WCF Services =
 
-WCF(Windows Communication Foundation) - реализация SOAP протокола от Microsoft (http://ru.wikipedia.org/wiki/SOAP). В нашем случае с его помощью мы будем реализовывать удаленный вызов методов (сервисов) и обращеные к данным через них, которые выполняются на сервере. Суть происходящего состоит в том, чтобы сократить до минимума нагрузку по хранению и поточной обработки информаци со стороны клиента, переложив его на сервер.
-Попутно можно осуществлять ограничения на доступ, шифрование передаваемых данных, сокрытие бизнес-логики проекта.
+WCF(Windows Communication Foundation) - реализация SOAP протокола от Microsoft (http://ru.wikipedia.org/wiki/SOAP). В нашем случае с его помощью мы будем реализовывать удаленный вызов методов (сервисов) и обращеные к данным через них, которые выполняются на сервере. 
 Для нас важно, что WCF сервисы бывают двух видов - IIS hosting и Self-hosting. Первые осуществляют хостинг (т.е. располагаются) на IIS сервере, вторые там, где им будет сказано при обращении к ним. 
 Можно посмотреть (6).
 
 = Using =
 
+Важно понимать, что работа с WCF осуществляется под VS2008. Не столько как удобной средой для работы с WCF, сколько как интерфейс для редактирования непосредственно конфигурации WCF сервиса.
 Для пользователей OC Vista VisualStudio необходимо запускать от имени администратора(соответствующий пункт в сниспадающем с ярлыка меню)
 Для создания сервиса в рамках проекта (File -> new -> project -> c# -> Web -> WCF Service Application), для создания библиотеки сервисов (ile -> new -> project -> c# -> WCF -> WCF Service Library)
 В получившемся проекте для нас ключевыми являются файлы Web.config для IIS(App.Config для self-hostingg), Service.svc, IService.cs. Service.cs. Имена последних двух зависят от имени проекта. Важное замечание состоит в том, что при изменении имен этих файлов необходимо отражать эти изменения в файле .config. Файл Service.svc хранит информацию о хосте и ссылку на файл с метаданными. метаданные это Интерфейс сервиса через который осуществляется доступ к самому сервису.
@@ -19,7 +19,7 @@ WCF(Windows Communication Foundation) - реализация SOAP протоко
 адрес - конечный адрес, по которому можно достучаться до сервиса. Если есть тег <basesddress>, то адреса конкатенируются. Тип биндинга (биндинг - читать это: "there are many possible transport protocols for the messages, such as HTTP (or HTTPS), TCP, IPC, and MSMQ. There are also a few possible message encoding options: you can choose plain text to enable interoperability, binary encoding to optimize performance, or the Message Transport Optimization Mechanism (MTOM) for large payloads. Finally, there are multiple options for securing messages: you can choose not to secure them at all, to provide transport-level security only, or to provide message-level privacy and security, and of course there are numerous ways to authenticate and authorize the clients. Message delivery might be unreliable or reliable end-to-end across intermediaries and dropped connections, and the messages might be processed in the order they were sent or in the order they were received. Your service might need to interoperate with other services or clients that are aware of only the basic web service protocol, or with clients and services capable of using the score of WS-modern protocols, such as WS-Security and WS-Atomic Transactions. To simplify these choices and make them manageable, WCF groups together sets of such communication aspects in bindings") Стандартные Биндинги: BasicHttpBinding, NetTcpBinding, NetNamedPipeBinding, WSHttpBinding, подробнее см. книгу 1. Контракт - описание интерфейса сервеса - хранится в файле с описанием интрефейса, подлежит изменению при переименовании соответствующего файла.
 <dns value="localhost"/> - кто занимается выдачей имен.
 <endpoint address="mex" binding="mexHttpBinding" contract="IMetadataExchange"/> - ендпоинт, с которого клиенты получают мета-информацию.
-Ниже идут описания поведений.
+Ниже идут описания поведений. Суть происходящего состоит в том, чтобы сократить до минимума нагрузку по хранению и поточной обработки информаци со стороны клиента, переложив его на сервер. Попутно можно осуществлять ограничения на доступ, шифрование передаваемых данных, сокрытие бизнес-логики проекта. Этого можно добиться путем описания поведений.
 Ендпоинтов и поведений может быть несколько - читай книги =)
 
 Далее, рассмотрим вопрос реализации сервисов:
