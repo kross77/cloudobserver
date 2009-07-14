@@ -27,7 +27,7 @@
 		}
 		]]>
 	</mx:Script>
-	<mx:List itemRenderer="listItemTest" id="foodItems" left="0" right="0" top="0" bottom="0">
+	<mx:List itemRenderer="listItemTest" id="foodItems" left="269" right="37" top="59" bottom="128">
 		
 	</mx:List>
 	  <mx:Script>
@@ -66,13 +66,13 @@
     />
 
     <mx:List id="list0" 
-        width="431"
+        width="203"
         dataProvider="{myDP}" 
         variableRowHeight="true" 
         fontSize="24" 
         allowMultipleSelection="true" 
         itemsChangeEffect="{myDLE}"
-     height="358"/>
+     height="122" x="10" y="77"/>
 
     <mx:Button 
         label="Delete Item" 
