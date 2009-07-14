@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HDividedBox  xmlns:mx="library://ns.adobe.com/flex/halo"
+	xmlns:ai="http://ns.adobe.com/ai/2008"
+	 xmlns:d="http://ns.adobe.com/fxg/2008/dt"
+	 xmlns:fc="http://ns.adobe.com/thermo/2009"
+	 xmlns:fx="http://ns.adobe.com/mxml/2009"
+	 xmlns:s="library://ns.adobe.com/flex/spark" 
+	 xmlns:lib="Main_library.*"   
+	 xmlns:components="components.*"
+	
+	  currentState="normal">
+	<mx:states>
+		<mx:State name="normal"/>
+		<s:State name="hovered"/>
+		<s:State name="selected"/>
+	</mx:states>
+	
+	
+<s:ItemRenderer  >
+	<components:CustomComponent1>
+	</components:CustomComponent1>
+</s:ItemRenderer>
+</mx:HDividedBox>

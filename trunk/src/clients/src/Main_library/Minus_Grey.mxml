@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<s:Group xmlns:ai="http://ns.adobe.com/ai/2008" xmlns:d="http://ns.adobe.com/fxg/2008/dt" xmlns:fc="http://ns.adobe.com/thermo/2009" xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" xmlns:lib="Main_library.*">
+	<s:Group x="1" y="1" d:id="85">
+		<s:Path alpha="0.8" blendMode="multiply" winding="nonZero" ai:knockout="0" data="M 32 8 L 32 0 L 0 0 L 0 8 L 32 8 Z" height="5" width="15">
+			<s:fill>
+				<s:LinearGradient y="4" scaleX="32" rotation="-0">
+					<s:GradientEntry color="0xffffff" ratio="0"/>
+					<s:GradientEntry color="0xb7c6ce" ratio="1"/>
+				</s:LinearGradient>
+			</s:fill>
+		</s:Path>
+	</s:Group>
+	<s:Path winding="nonZero" ai:knockout="0" data="M 31.999 7.999 L 31.999 -0.001 L -0.001 -0.001 L -0.001 7.999 L 31.999 7.999 Z" width="15" height="5">
+		<s:fill>
+			<s:SolidColor/>
+		</s:fill>
+	</s:Path>
+	<fx:Private>
+		<ai:PrivateElement ai:hashcode="6c5a98a0a50ab0b27368aa6404df9436" d:ref="#85">
+			<ai:Path alpha="0.8" blendMode="1" data="M 16.501 4.501L 16.501 -3.499L -15.499 -3.499L -15.499 4.501L 16.501 4.501Z" knockout="0">
+				<ai:ArtStyle/>
+				<ai:Fill colorType="Gradient">
+					<ai:Gradient gradientType="linear" length="32" originX="0" originY="4">
+						<ai:GradientStops>
+							<ai:GradientStop colorType="ThreeColor" rampPoint="0">
+								<ai:ThreeColor blue="1" green="1" red="1"/>
+							</ai:GradientStop>
+							<ai:GradientStop colorType="ThreeColor" rampPoint="100">
+								<ai:ThreeColor blue="0.808" green="0.776" red="0.718"/>
+							</ai:GradientStop>
+						</ai:GradientStops>
+					</ai:Gradient>
+				</ai:Fill>
+			</ai:Path>
+		</ai:PrivateElement>
+	</fx:Private>
+</s:Group>

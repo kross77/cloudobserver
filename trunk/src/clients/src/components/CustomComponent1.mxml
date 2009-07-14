@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:s="library://ns.adobe.com/flex/spark" xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:ai="http://ns.adobe.com/ai/2008" xmlns:d="http://ns.adobe.com/fxg/2008/dt">
+	<fx:Script>
+		<![CDATA[
+			protected function Button_click():void
+			{
+				var state:String = currentState;
+				if ( state == 'CamDitales' ) {
+					currentState='CamOptions';
+				}
+			}
+
+			protected function Button_click_1():void
+			{
+				var state:String = currentState;
+				if ( state == 'CamDitales' ) {
+					currentState='CamTitle';
+				}
+			}
+
+
+			protected function Button_click_1_1():void
+			{
+				var state:String = currentState;
+				if ( state == 'CamOptions' ) {
+					currentState='CamDitales';
+				}
+			}
+
+
+			protected function Button_click_1_1_1():void
+			{
+				var state:String = currentState;
+				if ( state == 'CamTitle' ) {
+					currentState='CamDitales';
+				}
+			}
+
+
+			protected function Button_click_1_1_1_1():void
+			{
+				var state:String = currentState;
+				if ( state == 'CamTitle' ) {
+					currentState='CamOptions';
+				}
+			}
+
+		]]>
+
+	</fx:Script>
+	<s:transitions>
+		<s:Transition fromState="CamDitales" toState="CamTitle" autoReverse="true">
+			<s:Parallel>
+				<s:Parallel target="{group2}">
+					<s:Move autoCenterTransform="true" duration="0"/>
+					<s:Fade/>
+				</s:Parallel>
+				<s:Parallel target="{group3}">
+					<s:Fade/>
+				</s:Parallel>
+			</s:Parallel>
+		</s:Transition>
+		<s:Transition fromState="CamOptions" toState="CamTitle" autoReverse="true">
+			<s:Parallel>
+				<s:Parallel target="{group2}">
+					<s:Move autoCenterTransform="true" duration="0"/>
+				</s:Parallel>
+				<s:Parallel target="{group1}">
+					<s:Fade/>
+				</s:Parallel>
+				<s:Parallel target="{group3}">
+					<s:Fade/>
+				</s:Parallel>
+			</s:Parallel>
+		</s:Transition>
+		<s:Transition fromState="CamTitle" toState="CamDitales" autoReverse="true">
+			<s:Parallel>
+				<s:Parallel target="{group2}">
+					<s:Move autoCenterTransform="true" duration="0"/>
+					<s:Fade/>
+				</s:Parallel>
+				<s:Parallel target="{group3}">
+					<s:Fade/>
+				</s:Parallel>
+			</s:Parallel>
+		</s:Transition>
+		<s:Transition fromState="CamTitle" toState="CamOptions" autoReverse="true">
+			<s:Parallel>
+				<s:Parallel target="{group2}">
+					<s:Move autoCenterTransform="true" duration="0"/>
+				</s:Parallel>
+				<s:Parallel target="{group1}">
+					<s:Fade/>
+				</s:Parallel>
+				<s:Parallel target="{group3}">
+					<s:Fade/>
+				</s:Parallel>
+			</s:Parallel>
+		</s:Transition>
+	</s:transitions>
+	<s:states>
+		<s:State name="CamTitle"/>
+		<s:State name="CamDitales"/>
+		<s:State name="CamOptions"/>
+	</s:states>
+	<s:Group x="1" visible.CamDitales="false" id="group3" visible.CamOptions="false">
+		<s:Path winding="nonZero" ai:knockout="0" data="M 304.5 82.751 C 304.5 85.512 302.262 87.751 299.5 87.751 L 5.5 87.751 C 2.738 87.751 0.5 85.512 0.5 82.751 L 0.5 5.5 C 0.5 2.738 2.738 0.5 5.5 0.5 L 299.5 0.5 C 302.262 0.5 304.5 2.738 304.5 5.5 L 304.5 82.751 Z">
+			<s:fill>
+				<s:SolidColor color="0xe8e8e8"/>
+			</s:fill>
+			<s:stroke>
+				<s:SolidColorStroke color="0x949494" caps="none" weight="1" joints="miter" miterLimit="4"/>
+			</s:stroke>
+		</s:Path>
+		<s:RichText width="288" height="14" fontFamily="Myriad Pro" fontWeight="bold" lineHeight="120%" whiteSpaceCollapse="preserve" kerning="on" y="8" ai:knockout="0" color="0x000000" d:userLabel="Camera Name Title" text="Camera Name Title" x="10">
+					</s:RichText>
+		<s:RichText width="226" height="11" textAlign="center" fontFamily="Myriad Pro" lineHeight="120%" whiteSpaceCollapse="preserve" kerning="on" y="29" ai:knockout="0" color="0x000000" d:userLabel="Camera URL Is Not set Yet" text="Camera URL Is Not set Yet" x="69">
+					</s:RichText>
+		<s:Group x="12" y="24" d:userLabel="TV">
+			<s:BitmapImage width="49" height="46" source="@Embed('assets/listAiFirstFinalVersionForFCV2/im.png')" ai:knockout="0" resizeMode="scale" x="1" y="2"/>
+			<s:Rect width="50" height="50" ai:knockout="0" x="0.5" y="0.5">
+				<s:stroke>
+					<s:SolidColorStroke color="0x949494" caps="none" weight="1" joints="miter" miterLimit="4"/>
+				</s:stroke>
+			</s:Rect>
+		</s:Group>
+		<s:Button y="51" skinClass="components.Button3" label="Options" click="Button_click_1_1_1_1()" x="191"/>
+		<s:Button y="51" skinClass="components.Button4" label="Details" click="Button_click_1_1_1()" x="111"/>
+		<s:Button y="52" skinClass="components.Button2" x="266"/>
+	</s:Group>
+	<s:Group alpha="0" id="group2" alpha.CamDitales="1" y.CamTitle="1" alpha.CamOptions="1" visible.CamTitle="false" x.CamDitales="1" x.CamOptions="1" visible.CamOptions="false">
+		<s:Path winding="nonZero" ai:knockout="0" data="M 304.5 82.751 C 304.5 85.512 302.262 87.751 299.5 87.751 L 5.5 87.751 C 2.738 87.751 0.5 85.512 0.5 82.751 L 0.5 5.5 C 0.5 2.738 2.738 0.5 5.5 0.5 L 299.5 0.5 C 302.262 0.5 304.5 2.738 304.5 5.5 L 304.5 82.751 Z">
+			<s:fill>
+				<s:SolidColor color="0xe8e8e8"/>
+			</s:fill>
+			<s:stroke>
+				<s:SolidColorStroke color="0x949494" caps="none" weight="1" joints="miter" miterLimit="4"/>
+			</s:stroke>
+		</s:Path>
+		<s:Path winding="nonZero" ai:knockout="0" data="M 61.5 17.098 C 61.5 19.857 59.262 22.098 56.5 22.098 L 5.5 22.098 C 2.738 22.098 0.5 19.857 0.5 17.098 L 0.5 5.5 C 0.5 2.74 2.738 0.5 5.5 0.5 L 56.5 0.5 C 59.262 0.5 61.5 2.74 61.5 5.5 L 61.5 17.098 Z" x="207" y="6">
+			<s:fill>
+				<s:SolidColor color="0xe8e8e8"/>
+			</s:fill>
+			<s:stroke>
+				<s:SolidColorStroke color="0x949494" caps="none" weight="1" joints="miter" miterLimit="4"/>
+			</s:stroke>
+		</s:Path>
+		<s:RichText fontFamily="Myriad Pro" lineHeight="120%" whiteSpaceCollapse="preserve" kerning="on" x="219" y="11" ai:knockout="0" color="0x000000" d:userLabel="Options" text="Options">
+						</s:RichText>
+		<s:Button x="276" y="7" skinClass="components.Button6" click="Button_click_1()"/>
+		<s:RichText width="91" height="12" textAlign="center" fontFamily="Myriad Pro" lineHeight="120%" whiteSpaceCollapse="preserve" kerning="on" x="5" y="40" ai:knockout="0" color="0x000000" d:userLabel="current FPS" text="current FPS">
+					</s:RichText>
+		<s:RichText width="116" height="12" textAlign="center" fontFamily="Myriad Pro" lineHeight="120%" whiteSpaceCollapse="preserve" kerning="on" x="150" y="40" ai:knockout="0" color="0x000000" d:userLabel="Camera Actyvity" text="Camera Actyvity">
+					</s:RichText>
+		<s:RichText width="93" height="23" textAlign="center" fontFamily="Myriad Pro" lineHeight="120%" whiteSpaceCollapse="preserve" kerning="on" x="4" y="65" ai:knockout="0" color="0x000000" d:userLabel="Frames Quality" text="Frames Quality">
+					</s:RichText>
+		<s:RichText width="115" height="20" textAlign="center" fontFamily="Myriad Pro" lineHeight="120%" whiteSpaceCollapse="preserve" kerning="on" x="151" y="65" ai:knockout="0" color="0x000000" d:userLabel="key Frame Interval" text="key Frame Interval">
+					</s:RichText>
+		<s:Line xTo="304" ai:knockout="0" x="1.5" y="30.5">
+			<s:stroke>
+				<s:SolidColorStroke color="0x949494" caps="none" weight="1" joints="miter" miterLimit="4"/>
+			</s:stroke>
+		</s:Line>
+		<s:RichText width="192" height="14" fontFamily="Myriad Pro" fontWeight="bold" lineHeight="120%" whiteSpaceCollapse="preserve" kerning="on" x="9" y="9" ai:knockout="0" color="0x000000" d:userLabel="Details: Camera Name Title" text="Details: Camera Name Title">
+					</s:RichText>
+		<s:Path winding="nonZero" ai:knockout="0" data="M 37.869 14.545 C 37.869 15.648 36.973 16.545 35.869 16.545 L 2.5 16.545 C 1.395 16.545 0.5 15.648 0.5 14.545 L 0.5 2.5 C 0.5 1.396 1.395 0.5 2.5 0.5 L 35.869 0.5 C 36.973 0.5 37.869 1.396 37.869 2.5 L 37.869 14.545 Z" x="96" y="38">
+			<s:fill>
+				<s:SolidColor color="0xe8e8e8"/>
+			</s:fill>
+			<s:stroke>
+				<s:SolidColorStroke color="0x949494" caps="none" weight="1" joints="miter" miterLimit="4"/>
+			</s:stroke>
+		</s:Path>
+		<s:RichText width="24" height="13" textAlign="center" fontFamily="Myriad Pro" lineHeight="120%" whiteSpaceCollapse="preserve" kerning="on" x="104" y="40" ai:knockout="0" color="0x000000" d:userLabel="0200" text="0200">
+						</s:RichText>
+		<s:Path winding="nonZero" ai:knockout="0" data="M 37.869 14.544 C 37.869 15.648 36.973 16.544 35.869 16.544 L 2.5 16.544 C 1.396 16.544 0.5 15.648 0.5 14.544 L 0.5 2.5 C 0.5 1.396 1.396 0.5 2.5 0.5 L 35.869 0.5 C 36.973 0.5 37.869 1.396 37.869 2.5 L 37.869 14.544 Z" x="96" y="63">
+			<s:fill>
+				<s:SolidColor color="0xe8e8e8"/>
+			</s:fill>
+			<s:stroke>
+				<s:SolidColorStroke color="0x949494" caps="none" weight="1" joints="miter" miterLimit="4"/>
+			</s:stroke>
+		</s:Path>
+		<s:RichText width="24" height="13" textAlign="center" fontFamily="Myriad Pro" lineHeight="120%" whiteSpaceCollapse="preserve" kerning="on" x="104" y="64" ai:knockout="0" color="0x000000" d:userLabel="0200" text="0200">
+						</s:RichText>
+		<s:Path winding="nonZero" ai:knockout="0" data="M 37.869 14.545 C 37.869 15.648 36.973 16.545 35.869 16.545 L 2.5 16.545 C 1.395 16.545 0.5 15.648 0.5 14.545 L 0.5 2.5 C 0.5 1.396 1.395 0.5 2.5 0.5 L 35.869 0.5 C 36.973 0.5 37.869 1.396 37.869 2.5 L 37.869 14.545 Z" x="257" y="37">
+			<s:fill>
+				<s:SolidColor color="0xe8e8e8"/>
+			</s:fill>
+			<s:stroke>
+				<s:SolidColorStroke color="0x949494" caps="none" weight="1" joints="miter" miterLimit="4"/>
+			</s:stroke>
+		</s:Path>
+		<s:RichText width="24" height="13" textAlign="center" fontFamily="Myriad Pro" lineHeight="120%" whiteSpaceCollapse="preserve" kerning="on" x="265" y="39" ai:knockout="0" color="0x000000" d:userLabel="0200" text="0200">
+						</s:RichText>
+		<s:Path winding="nonZero" ai:knockout="0" data="M 37.869 14.544 C 37.869 15.649 36.973 16.544 35.869 16.544 L 2.5 16.544 C 1.396 16.544 0.5 15.649 0.5 14.544 L 0.5 2.5 C 0.5 1.396 1.396 0.5 2.5 0.5 L 35.869 0.5 C 36.973 0.5 37.869 1.396 37.869 2.5 L 37.869 14.544 Z" x="257" y="62">
+			<s:fill>
+				<s:SolidColor color="0xe8e8e8"/>
+			</s:fill>
+			<s:stroke>
+				<s:SolidColorStroke color="0x949494" caps="none" weight="1" joints="miter" miterLimit="4"/>
+			</s:stroke>
+		</s:Path>
+		<s:RichText width="24" height="13" textAlign="center" fontFamily="Myriad Pro" lineHeight="120%" whiteSpaceCollapse="preserve" kerning="on" x="265" y="63" ai:knockout="0" color="0x000000" d:userLabel="0200" text="0200">
+						</s:RichText>
+		<s:Button x="208" y="7" skinClass="components.Button5" label="Options" click="Button_click()"/>
+	</s:Group>
+	<s:Group y="1" alpha="0" alpha.CamDitales="0" id="group1" alpha.CamOptions="1" visible.CamTitle="false" x="1" visible.CamDitales="false">
+		<s:Path winding="nonZero" ai:knockout="0" data="M 304.5 82.75 C 304.5 85.512 302.261 87.75 299.5 87.75 L 5.5 87.75 C 2.738 87.75 0.5 85.512 0.5 82.75 L 0.5 5.5 C 0.5 2.738 2.738 0.5 5.5 0.5 L 299.5 0.5 C 302.261 0.5 304.5 2.738 304.5 5.5 L 304.5 82.75 Z">
+			<s:fill>
+				<s:SolidColor color="0xe8e8e8"/>
+			</s:fill>
+			<s:stroke>
+				<s:SolidColorStroke color="0x949494" caps="none" weight="1" joints="miter" miterLimit="4"/>
+			</s:stroke>
+		</s:Path>
+		<s:Line xTo="304" ai:knockout="0" x="1.5" y="27.5">
+			<s:stroke>
+				<s:SolidColorStroke color="0x949494" caps="none" weight="1" joints="miter" miterLimit="4"/>
+			</s:stroke>
+		</s:Line>
+		<s:RichText width="225" height="13" fontFamily="Myriad Pro" fontWeight="bold" lineHeight="120%" whiteSpaceCollapse="preserve" kerning="on" x="6" y="8" ai:knockout="0" color="0x000000" d:userLabel="Options: Camera Name Title" text="Options: Camera Name Title">
+					</s:RichText>
+		<s:Button skinClass="components.Button7" label="Details" x="236" y="3" click="Button_click_1_1()"/>
+		<s:RichText fontFamily="Myriad Pro" lineHeight="120%" whiteSpaceCollapse="preserve" kerning="on" x="9" y="36" ai:knockout="0" color="0x000000" d:userLabel="width" text="width">
+					</s:RichText>
+		<s:RichText fontFamily="Myriad Pro" lineHeight="120%" whiteSpaceCollapse="preserve" kerning="on" x="9" y="61" ai:knockout="0" color="0x000000" d:userLabel="height" text="height">
+					</s:RichText>
+		<s:RichText fontFamily="Myriad Pro" lineHeight="120%" whiteSpaceCollapse="preserve" kerning="on" x="109" y="36" ai:knockout="0" color="0x000000" d:userLabel="fps" text="fps">
+					</s:RichText>
+		<s:RichText fontFamily="Myriad Pro" lineHeight="120%" whiteSpaceCollapse="preserve" kerning="on" x="95" y="61" ai:knockout="0" color="0x000000" d:userLabel=" timeout" text=" timeout">
+					</s:RichText>
+		<s:RichText fontFamily="Myriad Pro" lineHeight="120%" whiteSpaceCollapse="preserve" kerning="on" x="193" y="36" ai:knockout="0" color="0x000000" d:userLabel="bandwidth" text="bandwidth">
+					</s:RichText>
+		<s:RichText fontFamily="Myriad Pro" lineHeight="120%" whiteSpaceCollapse="preserve" kerning="on" x="204" y="61" ai:knockout="0" color="0x000000" d:userLabel="quality" text="quality">
+					</s:RichText>
+		<s:TextInput x="45" y="34" skinClass="components.TextInput5" text="0200"/>
+		<s:TextInput x="45" y="59" skinClass="components.TextInput6" text="0200"/>
+		<s:TextInput skinClass="components.TextInput1" text="0200" x="144" y="33"/>
+		<s:TextInput x="145" y="59" skinClass="components.TextInput2" text="0200"/>
+		<s:TextInput x="255" y="59" skinClass="components.TextInput3" text="0200"/>
+		<s:TextInput x="255" y="34" skinClass="components.TextInput4" text="0200"/>
+		<s:Line yTo="59.797" ai:knockout="0" x="95" y="28"/>
+		<s:Line yTo="60" ai:knockout="0" x="89.5" y="27.5">
+			<s:stroke>
+				<s:SolidColorStroke color="0xcccccc" caps="none" weight="1" joints="miter" miterLimit="4"/>
+			</s:stroke>
+		</s:Line>
+		<s:Line yTo="60" ai:knockout="0" x="188.5" y="27.5">
+			<s:stroke>
+				<s:SolidColorStroke color="0xcccccc" caps="none" weight="1" joints="miter" miterLimit="4"/>
+			</s:stroke>
+		</s:Line>
+	</s:Group>
+</s:Group>

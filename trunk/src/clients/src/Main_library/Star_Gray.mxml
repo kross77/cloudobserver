@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<s:Group xmlns:ai="http://ns.adobe.com/ai/2008" xmlns:d="http://ns.adobe.com/fxg/2008/dt" xmlns:fc="http://ns.adobe.com/thermo/2009" xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" xmlns:lib="Main_library.*">
+	<s:Group d:id="141">
+		<s:Group ai:knockout="0">
+			<s:Path winding="nonZero" ai:knockout="0" data="M 22.95 36.138 L 8.782 43.588 L 11.487 27.81 L 0.024 16.636 L 15.866 14.334 L 22.95 -0.02 L 30.034 14.334 L 45.876 16.636 L 34.413 27.81 L 37.118 43.588 L 22.95 36.138 Z" y="1" x="1">
+				<s:fill>
+					<s:RadialGradient x="28.2495" y="34.6309" scaleX="46.368" scaleY="46.368">
+						<s:GradientEntry color="0xffffff" ratio="0"/>
+						<s:GradientEntry color="0xb1bfc7" ratio="1"/>
+					</s:RadialGradient>
+				</s:fill>
+			</s:Path>
+			<s:Group ai:knockout="0">
+				<s:Path winding="nonZero" ai:knockout="0" data="M 24 2.26 L 30.519 15.47 L 30.752 15.941 L 31.272 16.017 L 45.851 18.136 L 35.302 28.419 L 34.926 28.785 L 35.014 29.304 L 37.504 43.824 L 24.465 36.969 L 24 36.724 L 23.535 36.969 L 10.496 43.824 L 12.986 29.304 L 13.074 28.785 L 12.698 28.419 L 2.149 18.136 L 16.728 16.017 L 17.248 15.941 L 17.481 15.47 L 24 2.26 M 24 0 L 16.584 15.027 L 0 17.438 L 12 29.135 L 9.168 45.652 L 24 37.854 L 38.832 45.652 L 36 29.135 L 48 17.438 L 31.416 15.027 L 24 0 L 24 0 Z">
+					<s:fill>
+						<s:SolidColor color="0x8c98a0"/>
+					</s:fill>
+				</s:Path>
+			</s:Group>
+		</s:Group>
+	</s:Group>
+	<s:Group x="4" y="5" d:id="142">
+		<s:Group blendMode="screen" ai:knockout="0">
+			<s:Path winding="nonZero" ai:knockout="0" data="M 9.851 23.914 L 9.674 24.953 L 9.235 27.508 C 15.04 21.75 24.725 17.965 35.71 17.914 L 39.403 14.315 L 26.829 12.486 L 25.788 12.334 L 25.323 11.391 L 19.702 0 L 14.08 11.391 L 13.614 12.334 L 12.574 12.486 L 0 14.315 L 9.099 23.182 L 9.851 23.914 Z">
+				<s:fill>
+					<s:LinearGradient x="14.583" y="-7.01465" scaleX="41.4264" rotation="76.5046">
+						<s:GradientEntry color="0xffffff" ratio="0"/>
+						<s:GradientEntry ratio="1"/>
+					</s:LinearGradient>
+				</s:fill>
+			</s:Path>
+		</s:Group>
+	</s:Group>
+	<fx:Private>
+		<ai:PrivateElement ai:hashcode="af675d8e18ae5376f4e750ae8bc7dc53" d:ref="#141">
+			<ai:Path data="M 0 -22.826L 7.416 -7.799L 24 -5.389L 12 6.309L 14.832 22.826L 0 15.027L -14.832 22.826L -12 6.309L -24 -5.389L -7.416 -7.799L 0 -22.826Z" knockout="0">
+				<ai:ArtStyle/>
+				<ai:Stroke colorType="ThreeColor" miterLimit="4" weight="1">
+					<ai:ThreeColor blue="0.627" green="0.596" red="0.549"/>
+				</ai:Stroke>
+				<ai:Fill colorType="Gradient">
+					<ai:Gradient gradientType="radial" length="24.271" originX="29.573" originY="36.254">
+						<ai:GradientStops>
+							<ai:GradientStop colorType="ThreeColor" rampPoint="0">
+								<ai:ThreeColor blue="1" green="1" red="1"/>
+							</ai:GradientStop>
+							<ai:GradientStop colorType="ThreeColor" rampPoint="100">
+								<ai:ThreeColor blue="0.78" green="0.749" red="0.694"/>
+							</ai:GradientStop>
+						</ai:GradientStops>
+					</ai:Gradient>
+				</ai:Fill>
+			</ai:Path>
+		</ai:PrivateElement>
+		<ai:PrivateElement ai:hashcode="64379494b259cc3f602b2191925ed176" d:ref="#142">
+			<ai:Path blendMode="2" data="M -9.852 5.609L -10.028 6.648L -10.467 9.203C -4.662 3.445 5.022 -0.34 16.008 -0.391L 19.701 -3.99L 7.127 -5.818L 6.086 -5.971L 5.621 -6.914L 0 -18.305L -5.622 -6.914L -6.088 -5.971L -7.128 -5.818L -19.702 -3.99L -10.604 4.877L -9.852 5.609Z" knockout="0">
+				<ai:ArtStyle/>
+				<ai:Fill colorType="Gradient">
+					<ai:Gradient angle="-76.505" gradientType="linear" length="41.426" originX="14.583" originY="-7.015">
+						<ai:GradientStops>
+							<ai:GradientStop colorType="ThreeColor" rampPoint="0">
+								<ai:ThreeColor blue="1" green="1" red="1"/>
+							</ai:GradientStop>
+							<ai:GradientStop colorType="ThreeColor" rampPoint="100">
+								<ai:ThreeColor/>
+							</ai:GradientStop>
+						</ai:GradientStops>
+					</ai:Gradient>
+				</ai:Fill>
+			</ai:Path>
+		</ai:PrivateElement>
+	</fx:Private>
+</s:Group>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Skin xmlns:s="library://ns.adobe.com/flex/spark" xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:ai="http://ns.adobe.com/ai/2008" xmlns:d="http://ns.adobe.com/fxg/2008/dt">
+	<s:states>
+		<s:State name="up"/>
+		<s:State name="over"/>
+		<s:State name="down"/>
+		<s:State name="disabled"/>
+	</s:states>
+	<fx:Metadata>[HostComponent("spark.components.Button")]</fx:Metadata>
+	<s:Path winding="nonZero" ai:knockout="0" data="M 115.295 16.201 C 115.295 18.962 113.057 21.201 110.295 21.201 L 5.519 21.201 C 2.758 21.201 0.519 18.962 0.519 16.201 L 0.519 5.498 C 0.519 2.736 2.758 0.498 5.519 0.498 L 110.295 0.498 C 113.057 0.498 115.295 2.736 115.295 5.498 L 115.295 16.201 Z" x="-2" y="-1">
+		<s:fill>
+			<s:SolidColor color="0xe8e8e8"/>
+		</s:fill>
+		<s:stroke>
+			<s:SolidColorStroke color="0x949494" caps="none" weight="1" joints="miter" miterLimit="4"/>
+		</s:stroke>
+	</s:Path>
+	<s:Path winding="nonZero" ai:knockout="0" data="M 21.698 16.698 C 21.698 19.46 19.46 21.698 16.698 21.698 L 5.5 21.698 C 2.739 21.698 0.5 19.46 0.5 16.698 L 0.5 5.5 C 0.5 2.739 2.739 0.5 5.5 0.5 L 16.698 0.5 C 19.46 0.5 21.698 2.739 21.698 5.5 L 21.698 16.698 Z" x="-2" y="-1">
+		<s:fill>
+			<s:SolidColor color="0xe8e8e8"/>
+		</s:fill>
+		<s:stroke>
+			<s:SolidColorStroke color="0x949494" caps="none" weight="1" joints="miter" miterLimit="4"/>
+		</s:stroke>
+	</s:Path>
+	<s:RichText textAlign="center" fontFamily="Myriad Pro" lineHeight="120%" whiteSpaceCollapse="preserve" kerning="on" x="30" y="4" ai:knockout="0" color="0x000000" d:userLabel="Status: Online">
+		<s:content><s:p><s:span>Status: Online</s:span></s:p></s:content>				</s:RichText>
+</s:Skin>

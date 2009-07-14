@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Skin xmlns:s="library://ns.adobe.com/flex/spark" xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:ai="http://ns.adobe.com/ai/2008" xmlns:d="http://ns.adobe.com/fxg/2008/dt">
+	<s:states>
+		<s:State name="normal"/>
+		<s:State name="disabled"/>
+	</s:states>
+	<fx:Metadata>[HostComponent("spark.components.TextInput")]</fx:Metadata>
+	<s:Path winding="nonZero" ai:knockout="0" data="M 37.869 14.545 C 37.869 15.648 36.972 16.545 35.869 16.545 L 2.5 16.545 C 1.395 16.545 0.5 15.648 0.5 14.545 L 0.5 2.5 C 0.5 1.396 1.395 0.5 2.5 0.5 L 35.869 0.5 C 36.972 0.5 37.869 1.396 37.869 2.5 L 37.869 14.545 Z">
+		<s:fill>
+			<s:SolidColor color="0xe8e8e8"/>
+		</s:fill>
+		<s:stroke>
+			<s:SolidColorStroke color="0x949494" caps="none" weight="1" joints="miter" miterLimit="4"/>
+		</s:stroke>
+	</s:Path>
+	<s:RichEditableText width="24" height="13" textAlign="center" fontFamily="Myriad Pro" lineHeight="120%" whiteSpaceCollapse="preserve" kerning="on" ai:knockout="0" color="0x000000" d:userLabel="0200" text="(Text)" id="textView" heightInLines="1" x="7.05" y="3.15">
+					</s:RichEditableText>
+</s:Skin>

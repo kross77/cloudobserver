@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<Graphic xmlns:ai="http://ns.adobe.com/ai/2008" xmlns:d="http://ns.adobe.com/fxg/2008/dt" xmlns:fc="http://ns.adobe.com/thermo/2009" xmlns="http://ns.adobe.com/fxg/2008" version="1">
+	<Path winding="nonZero" ai:knockout="0" x="0.359" y="1.359" data="M 15.505 2.777 C 13.748 1.019 11.444 0.141 9.141 0.141 C 6.837 0.141 4.534 1.019 2.777 2.777 C -0.738 6.291 -0.738 11.99 2.777 15.504 C 4.534 17.262 6.837 18.141 9.141 18.141 C 11.444 18.141 13.748 17.262 15.505 15.504 C 19.019 11.99 19.019 6.291 15.505 2.777 Z M 14.511 14.51 C 13.076 15.944 11.169 16.734 9.141 16.734 C 7.112 16.734 5.205 15.944 3.771 14.51 C 0.81 11.549 0.81 6.732 3.771 3.771 C 5.205 2.337 7.112 1.547 9.141 1.547 C 11.169 1.547 13.076 2.337 14.511 3.771 C 17.471 6.732 17.471 11.549 14.511 14.51 Z">
+		<fill>
+			<SolidColor color="#e8e8e8"/>
+		</fill>
+		<stroke>
+			<SolidColorStroke caps="none" color="#949494" joints="miter" miterLimit="4" weight="1"/>
+		</stroke>
+	</Path>
+	<Path winding="nonZero" ai:knockout="0" x="2.298" y="5.297" data="M 5.816 6.182 L 3.145 3.273 L 0.193 6.232 L 0.193 6.232 L 5.755 11.809 L 15.156 2.387 L 13.008 0.197 L 5.816 6.182 Z">
+		<fill>
+			<SolidColor color="#949494"/>
+		</fill>
+		<stroke>
+			<SolidColorStroke caps="none" color="#949494" joints="miter" miterLimit="4" weight="1"/>
+		</stroke>
+	</Path>
+</Graphic>
