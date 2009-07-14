@@ -55,10 +55,10 @@ namespace DatabaseManagementTool
             AddLog("Setting default values into " + databaseName + "...");
             //users
             AddLog("  creating users...");
-            int user1 = database.RegisterUser("user1@mail.ru", "1", "User 1");
-            AddLog("  'User 1' registered (email: 'user1@mail.ru', password: '1').");
-            int user2 = database.RegisterUser("user2@mail.ru", "2", "User 2");
-            AddLog("  'User 2' registered (email: 'user2@mail.ru', password: '2').");
+            int userA = database.RegisterUser("a@mail.ru", "a", "User A");
+            AddLog("  'User A' registered (email: 'a@mail.ru', password: 'a').");
+            int userB = database.RegisterUser("b@mail.ru", "b", "User B");
+            AddLog("  'User B' registered (email: 'b@mail.ru', password: 'b').");
             AddLog("  creating users compelete.");
 
             //groups
@@ -71,12 +71,12 @@ namespace DatabaseManagementTool
 
             //group members
             AddLog("  adding group members...");
-            database.AddGroupMember(user1, cloudObserverGroup, 0);
-            AddLog("  'User 1' was added into 'Cloud Observer' group.");
-            database.AddGroupMember(user2, cloudObserverGroup, 0);
-            AddLog("  'User 2' was added into 'Cloud Observer' group.");
-            database.AddGroupMember(user1, testGroup, 0);
-            AddLog("  'User 1' was added into 'Test Group' group.");
+            database.AddGroupMember(userA, cloudObserverGroup, 0);
+            AddLog("  'User A' was added into 'Cloud Observer' group.");
+            database.AddGroupMember(userB, cloudObserverGroup, 0);
+            AddLog("  'User B' was added into 'Cloud Observer' group.");
+            database.AddGroupMember(userA, testGroup, 0);
+            AddLog("  'User A' was added into 'Test Group' group.");
             AddLog("  adding group members complete.");
 
             //cameras

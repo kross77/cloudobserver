@@ -17,6 +17,9 @@ namespace WcfServiceTest
         [OperationContract]
         CompositeType GetDataUsingDataContract(CompositeType composite);
 
+        [OperationContract]
+        bool IsEmailRegistered(string email);
+
         // TODO: Add your service operations here
     }
 

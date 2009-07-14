@@ -55,6 +55,12 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CloudObserverDatabaseLibrary\CloudObserverDatabaseLibrary.csproj">
+      <Project>{D8967BBE-DA2D-4ADB-B804-7C60F0BD8CD4}</Project>
+      <Name>CloudObserverDatabaseLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

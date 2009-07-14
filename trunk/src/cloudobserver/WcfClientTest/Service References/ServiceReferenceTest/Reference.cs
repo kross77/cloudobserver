@@ -83,6 +83,9 @@ namespace WcfClientTest.ServiceReferenceTest {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IServiceTest/GetDataUsingDataContract", ReplyAction="http://tempuri.org/IServiceTest/GetDataUsingDataContractResponse")]
         WcfClientTest.ServiceReferenceTest.CompositeType GetDataUsingDataContract(WcfClientTest.ServiceReferenceTest.CompositeType composite);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IServiceTest/IsEmailRegistered", ReplyAction="http://tempuri.org/IServiceTest/IsEmailRegisteredResponse")]
+        bool IsEmailRegistered(string email);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
@@ -118,6 +121,10 @@ namespace WcfClientTest.ServiceReferenceTest {
         
         public WcfClientTest.ServiceReferenceTest.CompositeType GetDataUsingDataContract(WcfClientTest.ServiceReferenceTest.CompositeType composite) {
             return base.Channel.GetDataUsingDataContract(composite);
+        }
+        
+        public bool IsEmailRegistered(string email) {
+            return base.Channel.IsEmailRegistered(email);
         }
     }
 }

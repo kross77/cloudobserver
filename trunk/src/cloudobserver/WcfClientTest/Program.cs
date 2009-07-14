@@ -10,7 +10,8 @@ namespace WcfClientTest
         static void Main(string[] args)
         {
             ServiceReferenceTest.ServiceTestClient proxy = new ServiceReferenceTest.ServiceTestClient();
-            Console.WriteLine(proxy.GetData(123));
+            Console.Write("Email: ");
+            Console.WriteLine("This email " + (proxy.IsEmailRegistered(Console.ReadLine()) ? "is" : "is not") + " registered.");
             Console.ReadKey();
         }
     }
