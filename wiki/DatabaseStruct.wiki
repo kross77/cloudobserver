@@ -5,7 +5,6 @@
 
 == Структура ==
 База имеет следующую структуру:
-
 [http://cloudobserver.googlecode.com/svn/wiki/Assets/DatabaseStruct.jpg]
 
 == Таблицы ==
