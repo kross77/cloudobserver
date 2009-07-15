@@ -4,11 +4,12 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
+using CloudObserverDataClasses;
 
-namespace WcfServiceTest
+namespace CloudObserverServiceLibrary
 {
     [ServiceContract]
-    public interface IServiceTest
+    public interface ICloudObserverService
     {
         // user manipulation functions
         [OperationContract]

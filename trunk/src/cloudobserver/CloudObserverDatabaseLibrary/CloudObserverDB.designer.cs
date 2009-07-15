@@ -137,9 +137,9 @@ namespace CloudObserverDatabaseLibrary
 		
 		private string _Name;
 		
-		private System.Xml.Linq.XElement _Description;
+		private string _Description;
 		
-		private System.Data.Linq.Binary _Icon;
+		private string _IconPath;
 		
 		private System.DateTime _RegistrationDate;
 		
@@ -157,10 +157,10 @@ namespace CloudObserverDatabaseLibrary
     partial void OnPasswordChanged();
     partial void OnNameChanging(string value);
     partial void OnNameChanged();
-    partial void OnDescriptionChanging(System.Xml.Linq.XElement value);
+    partial void OnDescriptionChanging(string value);
     partial void OnDescriptionChanged();
-    partial void OnIconChanging(System.Data.Linq.Binary value);
-    partial void OnIconChanged();
+    partial void OnIconPathChanging(string value);
+    partial void OnIconPathChanged();
     partial void OnRegistrationDateChanging(System.DateTime value);
     partial void OnRegistrationDateChanged();
     #endregion
@@ -191,7 +191,7 @@ namespace CloudObserverDatabaseLibrary
 			}
 		}
 		
-		[Column(Storage="_Email", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		[Column(Storage="_Email", DbType="VarChar(32) NOT NULL", CanBeNull=false)]
 		public string Email
 		{
 			get
@@ -211,7 +211,7 @@ namespace CloudObserverDatabaseLibrary
 			}
 		}
 		
-		[Column(Storage="_Password", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		[Column(Storage="_Password", DbType="VarChar(32) NOT NULL", CanBeNull=false)]
 		public string Password
 		{
 			get
@@ -231,7 +231,7 @@ namespace CloudObserverDatabaseLibrary
 			}
 		}
 		
-		[Column(Storage="_Name", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		[Column(Storage="_Name", DbType="VarChar(32) NOT NULL", CanBeNull=false)]
 		public string Name
 		{
 			get
@@ -251,8 +251,8 @@ namespace CloudObserverDatabaseLibrary
 			}
 		}
 		
-		[Column(Storage="_Description", DbType="Xml NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
-		public System.Xml.Linq.XElement Description
+		[Column(Storage="_Description", DbType="VarChar(2048) NOT NULL", CanBeNull=false)]
+		public string Description
 		{
 			get
 			{
@@ -271,22 +271,22 @@ namespace CloudObserverDatabaseLibrary
 			}
 		}
 		
-		[Column(Storage="_Icon", DbType="Image NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
-		public System.Data.Linq.Binary Icon
+		[Column(Storage="_IconPath", DbType="VarChar(256) NOT NULL", CanBeNull=false)]
+		public string IconPath
 		{
 			get
 			{
-				return this._Icon;
+				return this._IconPath;
 			}
 			set
 			{
-				if ((this._Icon != value))
+				if ((this._IconPath != value))
 				{
-					this.OnIconChanging(value);
+					this.OnIconPathChanging(value);
 					this.SendPropertyChanging();
-					this._Icon = value;
-					this.SendPropertyChanged("Icon");
-					this.OnIconChanged();
+					this._IconPath = value;
+					this.SendPropertyChanged("IconPath");
+					this.OnIconPathChanged();
 				}
 			}
 		}
@@ -367,9 +367,9 @@ namespace CloudObserverDatabaseLibrary
 		
 		private int _CameraID;
 		
-		private System.Data.Linq.Binary _Content;
+		private string _ContentPath;
 		
-		private System.Xml.Linq.XElement _Marker;
+		private string _Marker;
 		
 		private EntityRef<Camera> _Camera;
 		
@@ -381,9 +381,9 @@ namespace CloudObserverDatabaseLibrary
     partial void OnFrameIDChanged();
     partial void OnCameraIDChanging(int value);
     partial void OnCameraIDChanged();
-    partial void OnContentChanging(System.Data.Linq.Binary value);
-    partial void OnContentChanged();
-    partial void OnMarkerChanging(System.Xml.Linq.XElement value);
+    partial void OnContentPathChanging(string value);
+    partial void OnContentPathChanged();
+    partial void OnMarkerChanging(string value);
     partial void OnMarkerChanged();
     #endregion
 		
@@ -437,28 +437,28 @@ namespace CloudObserverDatabaseLibrary
 			}
 		}
 		
-		[Column(Storage="_Content", DbType="Image NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
-		public System.Data.Linq.Binary Content
+		[Column(Storage="_ContentPath", DbType="VarChar(256) NOT NULL", CanBeNull=false)]
+		public string ContentPath
 		{
 			get
 			{
-				return this._Content;
+				return this._ContentPath;
 			}
 			set
 			{
-				if ((this._Content != value))
+				if ((this._ContentPath != value))
 				{
-					this.OnContentChanging(value);
+					this.OnContentPathChanging(value);
 					this.SendPropertyChanging();
-					this._Content = value;
-					this.SendPropertyChanged("Content");
-					this.OnContentChanged();
+					this._ContentPath = value;
+					this.SendPropertyChanged("ContentPath");
+					this.OnContentPathChanged();
 				}
 			}
 		}
 		
-		[Column(Storage="_Marker", DbType="Xml NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
-		public System.Xml.Linq.XElement Marker
+		[Column(Storage="_Marker", DbType="VarChar(2048) NOT NULL", CanBeNull=false)]
+		public string Marker
 		{
 			get
 			{
@@ -538,7 +538,7 @@ namespace CloudObserverDatabaseLibrary
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
-		private int _LinkID;
+		private int _ID;
 		
 		private int _UserID;
 		
@@ -554,8 +554,8 @@ namespace CloudObserverDatabaseLibrary
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void OnLinkIDChanging(int value);
-    partial void OnLinkIDChanged();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
     partial void OnUserIDChanging(int value);
     partial void OnUserIDChanged();
     partial void OnGroupIDChanging(int value);
@@ -571,22 +571,22 @@ namespace CloudObserverDatabaseLibrary
 			OnCreated();
 		}
 		
-		[Column(Storage="_LinkID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int LinkID
+		[Column(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
 		{
 			get
 			{
-				return this._LinkID;
+				return this._ID;
 			}
 			set
 			{
-				if ((this._LinkID != value))
+				if ((this._ID != value))
 				{
-					this.OnLinkIDChanging(value);
+					this.OnIDChanging(value);
 					this.SendPropertyChanging();
-					this._LinkID = value;
-					this.SendPropertyChanged("LinkID");
-					this.OnLinkIDChanged();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
 				}
 			}
 		}
@@ -758,11 +758,11 @@ namespace CloudObserverDatabaseLibrary
 		
 		private string _Name;
 		
-		private System.Xml.Linq.XElement _Description;
+		private string _Description;
 		
-		private System.Data.Linq.Binary _Icon;
+		private string _IconPath;
 		
-		private bool _Privacy;
+		private int _Privacy;
 		
 		private System.DateTime _RegistrationDate;
 		
@@ -778,11 +778,11 @@ namespace CloudObserverDatabaseLibrary
     partial void OnGroupIDChanged();
     partial void OnNameChanging(string value);
     partial void OnNameChanged();
-    partial void OnDescriptionChanging(System.Xml.Linq.XElement value);
+    partial void OnDescriptionChanging(string value);
     partial void OnDescriptionChanged();
-    partial void OnIconChanging(System.Data.Linq.Binary value);
-    partial void OnIconChanged();
-    partial void OnPrivacyChanging(bool value);
+    partial void OnIconPathChanging(string value);
+    partial void OnIconPathChanged();
+    partial void OnPrivacyChanging(int value);
     partial void OnPrivacyChanged();
     partial void OnRegistrationDateChanging(System.DateTime value);
     partial void OnRegistrationDateChanged();
@@ -815,7 +815,7 @@ namespace CloudObserverDatabaseLibrary
 			}
 		}
 		
-		[Column(Storage="_Name", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		[Column(Storage="_Name", DbType="VarChar(32) NOT NULL", CanBeNull=false)]
 		public string Name
 		{
 			get
@@ -835,8 +835,8 @@ namespace CloudObserverDatabaseLibrary
 			}
 		}
 		
-		[Column(Storage="_Description", DbType="Xml NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
-		public System.Xml.Linq.XElement Description
+		[Column(Storage="_Description", DbType="VarChar(2048) NOT NULL", CanBeNull=false)]
+		public string Description
 		{
 			get
 			{
@@ -855,28 +855,28 @@ namespace CloudObserverDatabaseLibrary
 			}
 		}
 		
-		[Column(Storage="_Icon", DbType="Image NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
-		public System.Data.Linq.Binary Icon
+		[Column(Storage="_IconPath", DbType="VarChar(256) NOT NULL", CanBeNull=false)]
+		public string IconPath
 		{
 			get
 			{
-				return this._Icon;
+				return this._IconPath;
 			}
 			set
 			{
-				if ((this._Icon != value))
+				if ((this._IconPath != value))
 				{
-					this.OnIconChanging(value);
+					this.OnIconPathChanging(value);
 					this.SendPropertyChanging();
-					this._Icon = value;
-					this.SendPropertyChanged("Icon");
-					this.OnIconChanged();
+					this._IconPath = value;
+					this.SendPropertyChanged("IconPath");
+					this.OnIconPathChanged();
 				}
 			}
 		}
 		
-		[Column(Storage="_Privacy", DbType="Bit NOT NULL")]
-		public bool Privacy
+		[Column(Storage="_Privacy", DbType="Int NOT NULL")]
+		public int Privacy
 		{
 			get
 			{
@@ -998,9 +998,9 @@ namespace CloudObserverDatabaseLibrary
 		
 		private string _Name;
 		
-		private System.Xml.Linq.XElement _Description;
+		private string _Description;
 		
-		private System.Data.Linq.Binary _Icon;
+		private string _IconPath;
 		
 		private System.DateTime _RegistrationDate;
 		
@@ -1018,10 +1018,10 @@ namespace CloudObserverDatabaseLibrary
     partial void OnPathChanged();
     partial void OnNameChanging(string value);
     partial void OnNameChanged();
-    partial void OnDescriptionChanging(System.Xml.Linq.XElement value);
+    partial void OnDescriptionChanging(string value);
     partial void OnDescriptionChanged();
-    partial void OnIconChanging(System.Data.Linq.Binary value);
-    partial void OnIconChanged();
+    partial void OnIconPathChanging(string value);
+    partial void OnIconPathChanged();
     partial void OnRegistrationDateChanging(System.DateTime value);
     partial void OnRegistrationDateChanged();
     #endregion
@@ -1053,7 +1053,7 @@ namespace CloudObserverDatabaseLibrary
 			}
 		}
 		
-		[Column(Storage="_Path", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		[Column(Storage="_Path", DbType="VarChar(256) NOT NULL", CanBeNull=false)]
 		public string Path
 		{
 			get
@@ -1073,7 +1073,7 @@ namespace CloudObserverDatabaseLibrary
 			}
 		}
 		
-		[Column(Storage="_Name", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		[Column(Storage="_Name", DbType="VarChar(32) NOT NULL", CanBeNull=false)]
 		public string Name
 		{
 			get
@@ -1093,8 +1093,8 @@ namespace CloudObserverDatabaseLibrary
 			}
 		}
 		
-		[Column(Storage="_Description", DbType="Xml NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
-		public System.Xml.Linq.XElement Description
+		[Column(Storage="_Description", DbType="VarChar(2048) NOT NULL", CanBeNull=false)]
+		public string Description
 		{
 			get
 			{
@@ -1113,22 +1113,22 @@ namespace CloudObserverDatabaseLibrary
 			}
 		}
 		
-		[Column(Storage="_Icon", DbType="Image NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
-		public System.Data.Linq.Binary Icon
+		[Column(Storage="_IconPath", DbType="VarChar(256) NOT NULL", CanBeNull=false)]
+		public string IconPath
 		{
 			get
 			{
-				return this._Icon;
+				return this._IconPath;
 			}
 			set
 			{
-				if ((this._Icon != value))
+				if ((this._IconPath != value))
 				{
-					this.OnIconChanging(value);
+					this.OnIconPathChanging(value);
 					this.SendPropertyChanging();
-					this._Icon = value;
-					this.SendPropertyChanged("Icon");
-					this.OnIconChanged();
+					this._IconPath = value;
+					this.SendPropertyChanged("IconPath");
+					this.OnIconPathChanged();
 				}
 			}
 		}
@@ -1230,7 +1230,7 @@ namespace CloudObserverDatabaseLibrary
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
-		private int _LinkID;
+		private int _ID;
 		
 		private int _CameraID;
 		
@@ -1244,8 +1244,8 @@ namespace CloudObserverDatabaseLibrary
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void OnLinkIDChanging(int value);
-    partial void OnLinkIDChanged();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
     partial void OnCameraIDChanging(int value);
     partial void OnCameraIDChanged();
     partial void OnGroupIDChanging(int value);
@@ -1259,22 +1259,22 @@ namespace CloudObserverDatabaseLibrary
 			OnCreated();
 		}
 		
-		[Column(Storage="_LinkID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int LinkID
+		[Column(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
 		{
 			get
 			{
-				return this._LinkID;
+				return this._ID;
 			}
 			set
 			{
-				if ((this._LinkID != value))
+				if ((this._ID != value))
 				{
-					this.OnLinkIDChanging(value);
+					this.OnIDChanging(value);
 					this.SendPropertyChanging();
-					this._LinkID = value;
-					this.SendPropertyChanged("LinkID");
-					this.OnLinkIDChanged();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
 				}
 			}
 		}

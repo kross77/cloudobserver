@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Xml.Linq;
-using System.Drawing;
 using System.Runtime.Serialization;
 
 namespace CloudObserverDataClasses
@@ -18,9 +16,9 @@ namespace CloudObserverDataClasses
         public int CameraID { get; set; }
 
         [DataMember]
-        public Bitmap Content { get; set; }
+        public byte[] ContentPath { get; set; }
 
         [DataMember]
-        public XElement Marker { get; set; }
+        public string Marker { get; set; }
     }
 }

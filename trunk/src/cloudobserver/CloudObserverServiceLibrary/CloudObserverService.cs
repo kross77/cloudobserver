@@ -4,13 +4,11 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
-using System.Drawing;
-using System.Xml.Linq;
 using CloudObserverDatabaseLibrary;
 
-namespace WcfServiceTest
-{   
-    public class ServiceTest : IServiceTest
+namespace CloudObserverServiceLibrary
+{
+    public class CloudObserverService : ICloudObserverService
     {
         CloudObserverDatabase database;
 

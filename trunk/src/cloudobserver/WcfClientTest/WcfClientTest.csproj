@@ -64,10 +64,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Service References\ServiceReferenceTest\Arrays.xsd" />
     <None Include="Service References\ServiceReferenceTest\service.wsdl" />
     <None Include="Service References\ServiceReferenceTest\service.xsd" />
     <None Include="Service References\ServiceReferenceTest\service1.xsd" />
-    <None Include="Service References\ServiceReferenceTest\WcfServiceTest.xsd" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\ServiceReferenceTest\" />
@@ -79,12 +79,10 @@
     <None Include="Service References\ServiceReferenceTest\configuration.svcinfo" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Service References\ServiceReferenceTest\Arrays1.xsd" />
     <None Include="Service References\ServiceReferenceTest\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Service References\ServiceReferenceTest\WcfClientTest.ServiceReferenceTest.CompositeType.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

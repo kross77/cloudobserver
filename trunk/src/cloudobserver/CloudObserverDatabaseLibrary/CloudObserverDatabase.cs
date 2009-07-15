@@ -9,21 +9,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml;
-using System.Xml.Linq;
 
 namespace CloudObserverDatabaseLibrary
 {
     public class CloudObserverDatabase : ICloudObserverDatabase
     {
         private readonly CloudObserverDBDataContext database;
-
-        public readonly XElement DefaultUserDescription = XElement.Parse(global::CloudObserverDatabaseLibrary.Properties.Resources.DefaultUserDescription);
-        public readonly XElement DefaultGroupDescription = XElement.Parse(global::CloudObserverDatabaseLibrary.Properties.Resources.DefaultGroupDescription);
-        public readonly XElement DefaultCameraDescription = XElement.Parse(global::CloudObserverDatabaseLibrary.Properties.Resources.DefaultCameraDescription);
-
-        public readonly Bitmap DefaultUserIcon = global::CloudObserverDatabaseLibrary.Properties.Resources.DefaultUserIcon;
-        public readonly Bitmap DefaultGroupIcon = global::CloudObserverDatabaseLibrary.Properties.Resources.DefaultGroupIcon;
-        public readonly Bitmap DefaultCameraIcon = global::CloudObserverDatabaseLibrary.Properties.Resources.DefaultCameraIcon;
 
         // constructors
         public CloudObserverDatabase()
@@ -68,24 +59,9 @@ namespace CloudObserverDatabaseLibrary
                 Email = email,
                 Password = password,
                 Name = name,
-                RegistrationDate = DateTime.Now,
-                Description = DefaultUserDescription,
-                Icon = BitmapToBinary(DefaultUserIcon)
-            });
-            database.SubmitChanges();
-            return (from u in database.Users where u.Email.Equals(email) select u.UserID).Single();
-        }
-
-        public int RegisterUser(string email, string password, string name, XElement description, Bitmap icon)
-        {
-            database.Users.InsertOnSubmit(new User
-            {
-                Email = email,
-                Password = password,
-                Name = name,
-                RegistrationDate = DateTime.Now,
-                Description = description,
-                Icon = BitmapToBinary(icon)
+                Description = "DefaultUserDescription",
+                IconPath = "DefaultUserIconPath",
+                RegistrationDate = DateTime.Now
             });
             database.SubmitChanges();
             return (from u in database.Users where u.Email.Equals(email) select u.UserID).Single();
@@ -117,14 +93,14 @@ namespace CloudObserverDatabaseLibrary
             return (from u in database.Users where u.UserID.Equals(userID) select u.Name).Single();
         }
 
-        public XElement GetUserDescription(int userID)
+        public string GetUserDescription(int userID)
         {
             return (from u in database.Users where u.UserID.Equals(userID) select u.Description).Single();
         }
 
-        public Bitmap GetUserIcon(int userID)
+        public byte[] GetUserIcon(int userID)
         {
-            return BinaryToBitmap((from u in database.Users where u.UserID.Equals(userID) select u.Icon).Single());
+            return null; // read from local storage
         }
 
         public DateTime GetUserRegistrationDate(int userID)
@@ -149,16 +125,15 @@ namespace CloudObserverDatabaseLibrary
             database.SubmitChanges();
         }
 
-        public void SetUserDescription(int userID, XElement description)
+        public void SetUserDescription(int userID, string description)
         {
             (from u in database.Users where u.UserID.Equals(userID) select u).Single().Description = description;
             database.SubmitChanges();
         }
 
-        public void SetUserIcon(int userID, Bitmap icon)
+        public void SetUserIcon(int userID, byte[] icon)
         {
-            (from u in database.Users where u.UserID.Equals(userID) select u).Single().Icon = BitmapToBinary(icon);
-            database.SubmitChanges();
+            // save or replace icon in local storage
         }
 
         // group manipulation functions
@@ -167,27 +142,13 @@ namespace CloudObserverDatabaseLibrary
             return ((from g in database.Groups where g.Name.Equals(name) select g).Count() > 0);
         }
 
-        public int RegisterGroup(string name, bool privacy)
+        public int RegisterGroup(string name, int privacy)
         {
             database.Groups.InsertOnSubmit(new Group
             {
                 Name = name,
-                Description = DefaultGroupDescription,
-                Icon = BitmapToBinary(DefaultGroupIcon),
-                Privacy = privacy,
-                RegistrationDate = DateTime.Now
-            });
-            database.SubmitChanges();
-            return (from g in database.Groups where g.Name.Equals(name) select g.GroupID).Single();
-        }
-
-        public int RegisterGroup(string name, XElement description, Bitmap icon, bool privacy)
-        {
-            database.Groups.InsertOnSubmit(new Group
-            {
-                Name = name,
-                Description = description,
-                Icon = BitmapToBinary(icon),
+                Description = "DefaultGroupDescription",
+                IconPath = "DefaultGroupIconPath",
                 Privacy = privacy,
                 RegistrationDate = DateTime.Now
             });
@@ -211,17 +172,17 @@ namespace CloudObserverDatabaseLibrary
             return (from g in database.Groups where g.GroupID.Equals(groupID) select g.Name).Single();
         }
 
-        public XElement GetGroupDescription(int groupID)
+        public string GetGroupDescription(int groupID)
         {
             return (from g in database.Groups where g.GroupID.Equals(groupID) select g.Description).Single();
         }
 
-        public Bitmap GetGroupIcon(int groupID)
+        public byte[] GetGroupIcon(int groupID)
         {
-            return BinaryToBitmap((from g in database.Groups where g.GroupID.Equals(groupID) select g.Icon).Single());
+            return null; // read from local storage
         }
 
-        public bool GetGroupPrivacy(int groupID)
+        public int GetGroupPrivacy(int groupID)
         {
             return (from g in database.Groups where g.GroupID.Equals(groupID) select g.Privacy).Single();
         }
@@ -247,19 +208,18 @@ namespace CloudObserverDatabaseLibrary
             database.SubmitChanges();
         }
 
-        public void SetGroupDescription(int groupID, XElement description)
+        public void SetGroupDescription(int groupID, string description)
         {
             (from g in database.Groups where g.GroupID.Equals(groupID) select g).Single().Description = description;
             database.SubmitChanges();
         }
 
-        public void SetGroupIcon(int groupID, Bitmap icon)
+        public void SetGroupIcon(int groupID, byte[] icon)
         {
-            (from g in database.Groups where g.GroupID.Equals(groupID) select g).Single().Icon = BitmapToBinary(icon);
-            database.SubmitChanges();
+            // save or replace icon in local storage
         }
 
-        public void SetGroupPrivacy(int groupID, bool privacy)
+        public void SetGroupPrivacy(int groupID, int privacy)
         {
             (from g in database.Groups where g.GroupID.Equals(groupID) select g).Single().Privacy = privacy;
             database.SubmitChanges();
@@ -268,6 +228,12 @@ namespace CloudObserverDatabaseLibrary
         public void AddGroupMember(int userID, int groupID, int privileges)
         {
             database.GroupMembers.InsertOnSubmit(new GroupMember { UserID = userID, GroupID = groupID, Privileges = privileges });
+            database.SubmitChanges();
+        }
+
+        public void SetGroupMemberPrivileges(int userID, int groupID, int privileges)
+        {
+            (from gm in database.GroupMembers where gm.UserID.Equals(userID) && gm.GroupID.Equals(groupID) select gm).Single().Privileges = privileges;
             database.SubmitChanges();
         }
 
@@ -295,30 +261,20 @@ namespace CloudObserverDatabaseLibrary
             return ((from c in database.Cameras where c.Path.Equals(path) select c).Count() > 0);
         }
 
-        public int RegisterCamera(string path, string name)
+        public int RegisterCamera(string name)
         {
             database.Cameras.InsertOnSubmit(new Camera
             {
-                Path = path,
+                Path = "TempPath",
                 Name = name,
-                Description = DefaultCameraDescription,
-                Icon = BitmapToBinary(DefaultCameraIcon),
+                Description = "DefaultCameraDescription",
+                IconPath = "DefaultCameraIconPath",
                 RegistrationDate = DateTime.Now
             });
             database.SubmitChanges();
-            return (from c in database.Cameras where c.Path.Equals(path) select c.CameraID).Single();
-        }
-
-        public int RegisterCamera(string path, string name, XElement description, Bitmap icon)
-        {
-            database.Cameras.InsertOnSubmit(new Camera
-            {
-                Path = path,
-                Name = name,
-                Description = description,
-                Icon = BitmapToBinary(icon),
-                RegistrationDate = DateTime.Now
-            });
+            Camera camera = (from c in database.Cameras where c.Path.Equals("TempPath") select c).Single();
+            string path = camera.Name + camera.CameraID;
+            camera.Path = path;
             database.SubmitChanges();
             return (from c in database.Cameras where c.Path.Equals(path) select c.CameraID).Single();
         }
@@ -344,14 +300,14 @@ namespace CloudObserverDatabaseLibrary
             return (from c in database.Cameras where c.CameraID.Equals(cameraID) select c.Name).Single();
         }
 
-        public XElement GetCameraDescription(int cameraID)
+        public string GetCameraDescription(int cameraID)
         {
             return (from c in database.Cameras where c.CameraID.Equals(cameraID) select c.Description).Single();
         }
 
-        public Bitmap GetCameraIcon(int cameraID)
+        public byte[] GetCameraIcon(int cameraID)
         {
-            return BinaryToBitmap((from c in database.Cameras where c.CameraID.Equals(cameraID) select c.Icon).Single());
+            return null; // read from local storage
         }
 
         public DateTime GetCameraRegistrationDate(int cameraID)
@@ -375,25 +331,24 @@ namespace CloudObserverDatabaseLibrary
             database.SubmitChanges();
         }
 
-        public void SetCameraDescription(int cameraID, XElement description)
+        public void SetCameraDescription(int cameraID, string description)
         {
             (from c in database.Cameras where c.CameraID.Equals(cameraID) select c).Single().Description = description;
             database.SubmitChanges();
         }
 
-        public void SetCameraIcon(int cameraID, Bitmap icon)
+        public void SetCameraIcon(int cameraID, byte[] icon)
         {
-            (from c in database.Cameras where c.CameraID.Equals(cameraID) select c).Single().Icon = BitmapToBinary(icon);
-            database.SubmitChanges();
+            // save or replace icon in local storage
         }
 
         // frame manipulations functions
-        public void AddFrame(int cameraID, Bitmap content, XElement marker)
+        public void AddFrame(int cameraID, byte[] content, string marker)
         {
             database.Frames.InsertOnSubmit(new Frame
             {
                 CameraID = cameraID,
-                Content = BitmapToBinary(content),
+                ContentPath = "", // save frame in local storage
                 Marker = marker
             });
             database.SubmitChanges();
@@ -405,31 +360,14 @@ namespace CloudObserverDatabaseLibrary
             database.SubmitChanges();
         }
 
-        public Bitmap GetFrameContent(int frameID)
+        public byte[] GetFrameContent(int frameID)
         {
-            return BinaryToBitmap((from f in database.Frames where f.FrameID.Equals(frameID) select f.Content).Single());
+            return null; // read from local storage
         }
 
-        public XElement GetFrameMarker(int frameID)
+        public string GetFrameMarker(int frameID)
         {
             return (from f in database.Frames where f.FrameID.Equals(frameID) select f.Marker).Single();
-        }
-
-        // auxiliary functions
-        private static Binary BitmapToBinary(Bitmap bitmap)
-        {
-            var memoryStream = new MemoryStream();
-            bitmap.Save(memoryStream, ImageFormat.Jpeg);
-            byte[] bitmapData = memoryStream.ToArray();
-            return new Binary(bitmapData);
-        }
-
-        private static Bitmap BinaryToBitmap(Binary binary)
-        {
-            var memoryStream = new MemoryStream();
-            var bitmapData = binary.ToArray();
-            memoryStream.Write(bitmapData, 0, bitmapData.Count());
-            return new Bitmap(Image.FromStream(memoryStream));
         }
     }
 }

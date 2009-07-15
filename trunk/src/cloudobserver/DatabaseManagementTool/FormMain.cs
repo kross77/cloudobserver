@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using System.Xml.Linq;
+using System.IO;
 using CloudObserverDatabaseLibrary;
 
 namespace DatabaseManagementTool
@@ -19,6 +20,13 @@ namespace DatabaseManagementTool
         public FormMain()
         {
             InitializeComponent();
+        }
+
+        public static byte[] BitmapToByteArray(Bitmap bitmap)
+        {
+            MemoryStream memoryStream = new MemoryStream();
+            bitmap.Save(memoryStream, ImageFormat.Jpeg);
+            return memoryStream.ToArray();
         }
 
         private void buttonConnect_Click(object sender, EventArgs e)
@@ -63,9 +71,9 @@ namespace DatabaseManagementTool
 
             //groups
             AddLog("  creating groups...");
-            int cloudObserverGroup = database.RegisterGroup("Cloud Observer", false);
+            int cloudObserverGroup = database.RegisterGroup("Cloud Observer", 2);
             AddLog("  private 'Cloud Observer' group registered.");
-            int testGroup = database.RegisterGroup("Test Group", true);
+            int testGroup = database.RegisterGroup("Test Group", 1);
             AddLog("  public 'Test Group' group registered.");
             AddLog("  creating groups complete.");
 
@@ -81,9 +89,9 @@ namespace DatabaseManagementTool
 
             //cameras
             AddLog("  creating cameras...");
-            int defaultCamera = database.RegisterCamera("localhost::52009/defaultCamera", "Default Camera");
+            int defaultCamera = database.RegisterCamera("Default Camera");
             AddLog("  'Default Camera' camera registered (path: 'localhost').");
-            int testCamera = database.RegisterCamera("localhost::52009/testCamera", "Test Camera");
+            int testCamera = database.RegisterCamera("Test Camera");
             AddLog("  'Test Camera' camera registered (path: 'localhost').");
             AddLog("  creating cameras complete.");
 
@@ -97,16 +105,16 @@ namespace DatabaseManagementTool
 
             //frames
             AddLog("  adding frames...");
-            database.AddFrame(testCamera, new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame001), XElement.Parse(global::DatabaseManagementTool.Properties.Resources.DefaultMarker));
-            database.AddFrame(testCamera, new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame002), XElement.Parse(global::DatabaseManagementTool.Properties.Resources.DefaultMarker));
-            database.AddFrame(testCamera, new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame003), XElement.Parse(global::DatabaseManagementTool.Properties.Resources.DefaultMarker));
-            database.AddFrame(testCamera, new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame004), XElement.Parse(global::DatabaseManagementTool.Properties.Resources.DefaultMarker));
-            database.AddFrame(testCamera, new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame005), XElement.Parse(global::DatabaseManagementTool.Properties.Resources.DefaultMarker));
-            database.AddFrame(testCamera, new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame006), XElement.Parse(global::DatabaseManagementTool.Properties.Resources.DefaultMarker));
-            database.AddFrame(testCamera, new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame007), XElement.Parse(global::DatabaseManagementTool.Properties.Resources.DefaultMarker));
-            database.AddFrame(testCamera, new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame008), XElement.Parse(global::DatabaseManagementTool.Properties.Resources.DefaultMarker));
-            database.AddFrame(testCamera, new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame009), XElement.Parse(global::DatabaseManagementTool.Properties.Resources.DefaultMarker));
-            database.AddFrame(testCamera, new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame010), XElement.Parse(global::DatabaseManagementTool.Properties.Resources.DefaultMarker));
+            database.AddFrame(testCamera, BitmapToByteArray(new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame001)), "Default Marker");
+            database.AddFrame(testCamera, BitmapToByteArray(new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame002)), "Default Marker");
+            database.AddFrame(testCamera, BitmapToByteArray(new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame003)), "Default Marker");
+            database.AddFrame(testCamera, BitmapToByteArray(new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame004)), "Default Marker");
+            database.AddFrame(testCamera, BitmapToByteArray(new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame005)), "Default Marker");
+            database.AddFrame(testCamera, BitmapToByteArray(new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame006)), "Default Marker");
+            database.AddFrame(testCamera, BitmapToByteArray(new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame007)), "Default Marker");
+            database.AddFrame(testCamera, BitmapToByteArray(new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame008)), "Default Marker");
+            database.AddFrame(testCamera, BitmapToByteArray(new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame009)), "Default Marker");
+            database.AddFrame(testCamera, BitmapToByteArray(new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame010)), "Default Marker");
             AddLog("  10 default frames was added from 'Default Camera' camera.");
             AddLog("  adding frames complete.");
 

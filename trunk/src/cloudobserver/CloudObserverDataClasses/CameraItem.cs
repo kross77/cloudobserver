@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Xml.Linq;
-using System.Drawing;
 using System.Runtime.Serialization;
 
 namespace CloudObserverDataClasses
@@ -21,10 +19,10 @@ namespace CloudObserverDataClasses
         public string Name { get; set; }
 
         [DataMember]
-        public XElement Description { get; set; }
+        public string Description { get; set; }
 
         [DataMember]
-        public Bitmap Icon { get; set; }
+        public byte[] IconPath { get; set; }
 
         [DataMember]
         public DateTime RegistrationDate { get; set; }

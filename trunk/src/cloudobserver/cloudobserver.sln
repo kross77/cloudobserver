@@ -42,6 +42,8 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "CloudObserverUserInterface.
 		ProjOutputReferences = "{99E16625-AB71-4FB3-B7DC-E617D1360965}|ClientBin|false;"
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserverServiceLibrary", "CloudObserverServiceLibrary\CloudObserverServiceLibrary.csproj", "{EFC8D180-781D-4EA6-B2B8-541A454BB8C1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -76,6 +78,10 @@ Global
 		{7AFC61E4-3688-4D83-8D0C-3F84757315BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7AFC61E4-3688-4D83-8D0C-3F84757315BC}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{7AFC61E4-3688-4D83-8D0C-3F84757315BC}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{EFC8D180-781D-4EA6-B2B8-541A454BB8C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFC8D180-781D-4EA6-B2B8-541A454BB8C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFC8D180-781D-4EA6-B2B8-541A454BB8C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFC8D180-781D-4EA6-B2B8-541A454BB8C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
