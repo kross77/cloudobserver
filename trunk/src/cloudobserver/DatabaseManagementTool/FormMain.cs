@@ -60,6 +60,7 @@ namespace DatabaseManagementTool
 
         private void buttonSetupDefaultValues_Click(object sender, EventArgs e)
         {
+            buttonClearDatabase_Click(sender, e);
             AddLog("Setting default values into " + databaseName + "...");
             //users
             AddLog("  creating users...");
@@ -90,9 +91,9 @@ namespace DatabaseManagementTool
             //cameras
             AddLog("  creating cameras...");
             int defaultCamera = database.RegisterCamera("Default Camera");
-            AddLog("  'Default Camera' camera registered (path: 'localhost').");
+            AddLog("  'Default Camera' camera registered (path: '" + database.GetCameraPath(defaultCamera) + "').");
             int testCamera = database.RegisterCamera("Test Camera");
-            AddLog("  'Test Camera' camera registered (path: 'localhost').");
+            AddLog("  'Test Camera' camera registered (path: '" + database.GetCameraPath(testCamera) + "').");
             AddLog("  creating cameras complete.");
 
             //group cameras

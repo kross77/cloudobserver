@@ -17,16 +17,13 @@ namespace CloudObserverDatabaseLibrary
         private readonly CloudObserverDBDataContext database;
 
         // constructors
-        public CloudObserverDatabase()
-        {
-             database = new CloudObserverDBDataContext(global::CloudObserverDatabaseLibrary.Properties.Settings.Default.CloudObserverDatabaseConnectionString);
-            if (!database.DatabaseExists())
-                database.CreateDatabase();
-        }
+        public CloudObserverDatabase() : this(global::CloudObserverDatabaseLibrary.Properties.Settings.Default.CloudObserverDatabaseConnectionString) { }
 
         public CloudObserverDatabase(string connection)
         {
             database = new CloudObserverDBDataContext(connection);
+            if (!database.DatabaseExists())
+                database.CreateDatabase();
         }
 
         // database management functions
