@@ -5,10 +5,10 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d"
 	xmlns:local="clr-namespace:sf2Screens"
-	x:Class="sf2Screens.Screen_5"
-	Width="200" Height="200">
+	x:Class="sf2Screens.Screen_1_11"
+	Width="640" Height="480">
 
 	<Grid x:Name="LayoutRoot" Background="White">
-		<local:Screen_1_10 d:IsPrototypingComposition="True"/>
+		<local:Screen_5 HorizontalAlignment="Left" VerticalAlignment="Top" d:IsPrototypingComposition="True"/>
 	</Grid>
 </UserControl>

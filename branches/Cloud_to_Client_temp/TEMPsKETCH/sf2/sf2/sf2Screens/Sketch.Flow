@@ -22,8 +22,8 @@
       <FileName>Screen 1_3.xaml</FileName>
       <Annotations />
       <Position>
-        <X>592</X>
-        <Y>280</Y>
+        <X>578</X>
+        <Y>298</Y>
       </Position>
       <VisualTag>2</VisualTag>
     </Screen>
@@ -58,8 +58,8 @@
       <FileName>Screen 3.xaml</FileName>
       <Annotations />
       <Position>
-        <X>440</X>
-        <Y>112</Y>
+        <X>371</X>
+        <Y>-29</Y>
       </Position>
       <VisualTag>4</VisualTag>
     </Screen>
@@ -94,8 +94,8 @@
       <FileName>Screen 1_5.xaml</FileName>
       <Annotations />
       <Position>
-        <X>672</X>
-        <Y>74</Y>
+        <X>535</X>
+        <Y>45</Y>
       </Position>
       <VisualTag>4</VisualTag>
     </Screen>
@@ -142,10 +142,34 @@
       <FileName>Screen 1_9.xaml</FileName>
       <Annotations />
       <Position>
-        <X>584</X>
-        <Y>128</Y>
+        <X>522</X>
+        <Y>-51</Y>
       </Position>
       <VisualTag>4</VisualTag>
+    </Screen>
+    <Screen>
+      <Type>Composition</Type>
+      <ClassName>sf2Screens.Screen_1_10</ClassName>
+      <DisplayName>Register</DisplayName>
+      <FileName>Screen 1_10.xaml</FileName>
+      <Annotations />
+      <Position>
+        <X>62</X>
+        <Y>311</Y>
+      </Position>
+      <VisualTag>1</VisualTag>
+    </Screen>
+    <Screen>
+      <Type>Navigation</Type>
+      <ClassName>sf2Screens.Screen_1_11</ClassName>
+      <DisplayName>MainPage</DisplayName>
+      <FileName>Screen 1_11.xaml</FileName>
+      <Annotations />
+      <Position>
+        <X>28</X>
+        <Y>238</Y>
+      </Position>
+      <VisualTag>0</VisualTag>
     </Screen>
   </Screens>
   <Connections>
@@ -275,6 +299,27 @@
       <TransitionType>Fade</TransitionType>
       <VisualTag>5</VisualTag>
     </Connection>
+    <Connection>
+      <Source>sf2Screens.Screen_5</Source>
+      <Target>sf2Screens.Screen_1_10</Target>
+      <Type>Composition</Type>
+      <TransitionType>None</TransitionType>
+      <VisualTag>1</VisualTag>
+    </Connection>
+    <Connection>
+      <Source>sf2Screens.Screen_1_11</Source>
+      <Target>sf2Screens.Screen_5</Target>
+      <Type>Composition</Type>
+      <TransitionType>None</TransitionType>
+      <VisualTag>1</VisualTag>
+    </Connection>
+    <Connection>
+      <Source>sf2Screens.Screen_1_11</Source>
+      <Target>sf2Screens.Screen_1_1</Target>
+      <Type>Navigation</Type>
+      <TransitionType>Fade</TransitionType>
+      <VisualTag>0</VisualTag>
+    </Connection>
   </Connections>
   <BrandingText>Microsoft SketchFlow Prototype</BrandingText>
   <RuntimeOptions>
@@ -319,10 +364,10 @@
     </VisualTag>
   </VisualTags>
   <ViewState>
-    <Zoom>1.75</Zoom>
+    <Zoom>1.25</Zoom>
     <Center>
-      <X>423.69006231868792</X>
-      <Y>150.39282750354869</Y>
+      <X>418.639149627427</X>
+      <Y>96.215239890249578</Y>
     </Center>
   </ViewState>
 </Data>
