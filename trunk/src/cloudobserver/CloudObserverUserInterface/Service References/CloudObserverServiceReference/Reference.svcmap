@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="6eb1d544-ff02-4c64-b8dc-1b9ef58983ee" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>true</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings>
+      <CollectionMapping TypeName="System.Collections.ObjectModel.ObservableCollection`1" Category="List" />
+    </CollectionMappings>
+    <GenerateSerializableTypes>false</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:8731/CloudObserverService/mex" Protocol="mex" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="3edaa477-cf5d-4fdd-bcce-9360fc0ff959" SourceId="1" SourceUrl="http://localhost:8731/CloudObserverService/mex" />
+    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="30e9c834-c58c-42fe-8ff5-ac666a4e699c" SourceId="1" SourceUrl="http://localhost:8731/CloudObserverService/mex" />
+    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="80a1c178-0560-4287-a021-d8f446a47179" SourceId="1" SourceUrl="http://localhost:8731/CloudObserverService/mex" />
+    <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="98aee138-74bf-4dfd-956a-f0cb27cb0fa4" SourceId="1" SourceUrl="http://localhost:8731/CloudObserverService/mex" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>
