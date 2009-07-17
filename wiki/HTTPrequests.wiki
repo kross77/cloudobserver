@@ -10,6 +10,7 @@
 address="http://localhost:2101/CloudObserverWebsite/CloudObserverService.svc"
 
 В первой статье стоит обратить внимание на пример:
+то что написано ниже лучше смотреть в режиме редактирования страницы.
 [ServiceContract]
 public interface IPictureService
 {
