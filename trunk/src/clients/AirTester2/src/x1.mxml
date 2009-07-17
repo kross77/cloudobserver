@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="542" height="264" >
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:myService="generated.webservices.*"  width="542" height="264">  
 		<mx:Script>
 			<![CDATA[
 				   	import mx.collections.ArrayCollection;
@@ -22,7 +22,7 @@
                import mx.rpc.events.FaultEvent;
             import mx.rpc.events.ResultEvent;
             import mx.rpc.xml.SimpleXMLDecoder;
-            
+             import generated.webservices.*;
 	public var cameraName:String = new String;
          	
  	 public var videoHolder:UIComponent = new UIComponent;
@@ -31,14 +31,14 @@
 
      private var camera:Camera = new Camera;
    
-         	
+
+
 //		[Bindable]
 //	private var lcd:Array = new Array;//	lcd = tutu.dataProvider.toString().split(/,/);
 	
 
-	
    private function inita(evt:ListEvent):void {
-           
+      
             var tList:List = tutu.selectedIndex  as List;
              var cameraName:String = tList.selectedIndex.toString();
           
@@ -55,7 +55,11 @@
 	
 				]]>
 		</mx:Script>
-<mx:List id="tutu"  change="inita(event);"  selectedIndex="0" dataProvider="{data}" backgroundColor="#33D426" x="241" y="24">
+		<myService:UserAdd_request>
+		
+		</myService:UserAdd_request>
+		
+<mx:List id="tutu"  change="inita(event);"   dataProvider="{data}" backgroundColor="#33D426" x="241" y="24">
 	
 	</mx:List>
 	<!--	<mx:List dataProvider="{lcd}" x="170" backgroundColor="#E81A1A">
@@ -70,5 +74,6 @@
 		    id="cnvWebcam" visible="true" left="10" right="10" top="10" bottom="15">
 		    </mx:Canvas>
 		</mx:Panel>
+	
 	
 </mx:Canvas>

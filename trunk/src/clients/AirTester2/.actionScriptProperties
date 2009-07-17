@@ -31,6 +31,7 @@
 </compiler>
 <applications>
 <application path="AirTester2.mxml"/>
+<application path="AIRSERVTEST.mxml"/>
 </applications>
 <modules/>
 <buildCSSFiles/>
