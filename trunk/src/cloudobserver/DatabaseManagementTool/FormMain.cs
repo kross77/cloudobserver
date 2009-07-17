@@ -62,60 +62,60 @@ namespace DatabaseManagementTool
         {
             buttonClearDatabase_Click(sender, e);
             AddLog("Setting default values into " + databaseName + "...");
-            //users
+            // users
             AddLog("  creating users...");
-            int userA = database.RegisterUser("a@mail.ru", "a", "User A");
+            int userA = database.UserAdd("a@mail.ru", "a", "User A", "User A Description", BitmapToByteArray(new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultUserIcon)));
             AddLog("  'User A' registered (email: 'a@mail.ru', password: 'a').");
-            int userB = database.RegisterUser("b@mail.ru", "b", "User B");
+            int userB = database.UserAdd("b@mail.ru", "b", "User B", "User B Description", BitmapToByteArray(new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultUserIcon)));
             AddLog("  'User B' registered (email: 'b@mail.ru', password: 'b').");
             AddLog("  creating users compelete.");
 
+            // cameras
+            AddLog("  creating cameras...");
+            int defaultCamera = database.CameraAdd("Default Camera", "Default Camera Description", BitmapToByteArray(new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultCameraIcon)));
+            AddLog("  'Default Camera' camera registered (path: '" + database.CameraGetPath(defaultCamera) + "').");
+            int testCamera = database.CameraAdd("Test Camera", "Test Camera Description", BitmapToByteArray(new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultGroupIcon)));
+            AddLog("  'Test Camera' camera registered (path: '" + database.CameraGetPath(testCamera) + "').");
+            AddLog("  creating cameras complete.");
+
             //groups
             AddLog("  creating groups...");
-            int cloudObserverGroup = database.RegisterGroup("Cloud Observer", 2);
+            int cloudObserverGroup = database.GroupAdd("Cloud Observer", "Cloud Observer Group Description", BitmapToByteArray(new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultGroupIcon)), 2);
             AddLog("  private 'Cloud Observer' group registered.");
-            int testGroup = database.RegisterGroup("Test Group", 1);
+            int testGroup = database.GroupAdd("Test Group", "Test Group Description", BitmapToByteArray(new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultGroupIcon)), 1);
             AddLog("  public 'Test Group' group registered.");
             AddLog("  creating groups complete.");
 
             //group members
             AddLog("  adding group members...");
-            database.AddGroupMember(userA, cloudObserverGroup, 0);
+            database.GroupMemberAdd(userA, cloudObserverGroup, 0);
             AddLog("  'User A' was added into 'Cloud Observer' group.");
-            database.AddGroupMember(userB, cloudObserverGroup, 0);
+            database.GroupMemberAdd(userB, cloudObserverGroup, 0);
             AddLog("  'User B' was added into 'Cloud Observer' group.");
-            database.AddGroupMember(userA, testGroup, 0);
+            database.GroupMemberAdd(userA, testGroup, 0);
             AddLog("  'User A' was added into 'Test Group' group.");
             AddLog("  adding group members complete.");
 
-            //cameras
-            AddLog("  creating cameras...");
-            int defaultCamera = database.RegisterCamera("Default Camera");
-            AddLog("  'Default Camera' camera registered (path: '" + database.GetCameraPath(defaultCamera) + "').");
-            int testCamera = database.RegisterCamera("Test Camera");
-            AddLog("  'Test Camera' camera registered (path: '" + database.GetCameraPath(testCamera) + "').");
-            AddLog("  creating cameras complete.");
-
             //group cameras
             AddLog("  adding group cameras...");
-            database.AddGroupCamera(defaultCamera, cloudObserverGroup);
+            database.GroupCameraAdd(defaultCamera, cloudObserverGroup);
             AddLog("  'Default Camera' camera was added into 'Cloud Observer' group.");
-            database.AddGroupCamera(testCamera, testGroup);
+            database.GroupCameraAdd(testCamera, testGroup);
             AddLog("  'Test Camera' camera was added into 'Test Group' group.");
             AddLog("  adding group cameras complete.");
 
             //frames
             AddLog("  adding frames...");
-            database.AddFrame(testCamera, BitmapToByteArray(new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame001)), "Default Marker");
-            database.AddFrame(testCamera, BitmapToByteArray(new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame002)), "Default Marker");
-            database.AddFrame(testCamera, BitmapToByteArray(new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame003)), "Default Marker");
-            database.AddFrame(testCamera, BitmapToByteArray(new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame004)), "Default Marker");
-            database.AddFrame(testCamera, BitmapToByteArray(new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame005)), "Default Marker");
-            database.AddFrame(testCamera, BitmapToByteArray(new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame006)), "Default Marker");
-            database.AddFrame(testCamera, BitmapToByteArray(new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame007)), "Default Marker");
-            database.AddFrame(testCamera, BitmapToByteArray(new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame008)), "Default Marker");
-            database.AddFrame(testCamera, BitmapToByteArray(new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame009)), "Default Marker");
-            database.AddFrame(testCamera, BitmapToByteArray(new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame010)), "Default Marker");
+            database.FrameAdd(testCamera, BitmapToByteArray(new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame001)), "Default Marker");
+            database.FrameAdd(testCamera, BitmapToByteArray(new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame002)), "Default Marker");
+            database.FrameAdd(testCamera, BitmapToByteArray(new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame003)), "Default Marker");
+            database.FrameAdd(testCamera, BitmapToByteArray(new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame004)), "Default Marker");
+            database.FrameAdd(testCamera, BitmapToByteArray(new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame005)), "Default Marker");
+            database.FrameAdd(testCamera, BitmapToByteArray(new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame006)), "Default Marker");
+            database.FrameAdd(testCamera, BitmapToByteArray(new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame007)), "Default Marker");
+            database.FrameAdd(testCamera, BitmapToByteArray(new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame008)), "Default Marker");
+            database.FrameAdd(testCamera, BitmapToByteArray(new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame009)), "Default Marker");
+            database.FrameAdd(testCamera, BitmapToByteArray(new Bitmap(global::DatabaseManagementTool.Properties.Resources.DefaultFrame010)), "Default Marker");
             AddLog("  10 default frames was added from 'Default Camera' camera.");
             AddLog("  adding frames complete.");
 
@@ -124,7 +124,7 @@ namespace DatabaseManagementTool
 
         private void buttonClearDatabase_Click(object sender, EventArgs e)
         {
-            database.ClearDatabase();
+            database.DatabaseClear();
             listBoxActionsLog.Items.Add("Database " + databaseName + " is now empty.");
         }
 

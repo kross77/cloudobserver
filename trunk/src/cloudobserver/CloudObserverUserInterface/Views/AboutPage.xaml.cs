@@ -10,35 +10,19 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using CloudObserverUserInterface.Views;
 
 namespace CloudObserverUserInterface
 {
-    public partial class Home : Page
+    public partial class AboutPage : Page
     {
-        private regitstry RegistryWindow;
-
-        public Home()
+        public AboutPage()
         {
             InitializeComponent();
-            //создать подключение к сервису
         }
 
         // Executes when the user navigates to this page.
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-        }
-
-        private void LoginButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void RegisterButton_Click(object sender, RoutedEventArgs e)
-        {
-            RegistryWindow = new regitstry();
-            RegistryWindow.Title = "Регистрация";
-            RegistryWindow.Show();
         }
     }
 }

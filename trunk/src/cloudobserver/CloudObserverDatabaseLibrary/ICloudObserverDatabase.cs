@@ -7,69 +7,73 @@ namespace CloudObserverDatabaseLibrary
 {
     interface ICloudObserverDatabase
     {
-        // database management functions
-        void ClearDatabase();
+        // users
+        bool UserIsEmailAvailable(string email);
+        bool UserLogin(string email, string password);
+        int UserAdd(string email, string password, string name, string description, byte[] icon);
+        void UserRemove(int userID);
+        int UserGetID(string email);
+        string UserGetEmail(int userID);
+        string UserGetPassword(int userID);
+        string UserGetName(int userID);
+        string UserGetDescription(int userID);
+        byte[] UserGetIcon(int userID);
+        DateTime UserGetRegistrationDate(int userID);
+        int[] UserGetGroups(int userID);
+        void UserSetPassword(int userID, string password);
+        void UserSetName(int userID, string name);
+        void UserSetDescription(int userID, string description);
+        void UserSetIcon(int userID, byte[] icon);
 
-        // user manipulation functions
-        bool IsEmailRegistered(string email);
-        bool IsUserRegistered(string email, string password);
-        int RegisterUser(string email, string password, string name);
-        void RemoveUser(int userID);
-        int GetUserID(string email);
-        string GetUserEmail(int userID);
-        string GetUserPassword(int userID);
-        string GetUserName(int userID);
-        string GetUserDescription(int userID);
-        byte[] GetUserIcon(int userID);
-        DateTime GetUserRegistrationDate(int userID);
-        int[] GetUserGroups(int userID);
-        void SetUserPassword(int userID, string password);
-        void SetUserName(int userID, string name);
-        void SetUserDescription(int userID, string description);
-        void SetUserIcon(int userID, byte[] icon);
+        // cameras
+        bool CameraIsPathAvailable(string path);
+        int CameraAdd(string name, string description, byte[] icon);
+        void CameraRemove(int cameraID);
+        int CameraGetID(string path);
+        string CameraGetPath(int cameraID);
+        string CameraGetName(int cameraID);
+        string CameraGetDescription(int cameraID);
+        byte[] CameraGetIcon(int cameraID);
+        DateTime CameraGetRegistrationDate(int cameraID);
+        int[] CameraGetGroups(int cameraID);
+        int[] CameraGetFrames(int cameraID);
+        void CameraSetName(int cameraID, string name);
+        void CameraSetDescription(int cameraID, string description);
+        void CameraSetIcon(int cameraID, byte[] icon);
 
-        // group manipulation functions
-        bool IsGroupRegistered(string name);
-        int RegisterGroup(string name, int privacy);
-        void RemoveGroup(int groupID);
-        int GetGroupID(string name);
-        string GetGroupName(int groupID);
-        string GetGroupDescription(int groupID);
-        byte[] GetGroupIcon(int groupID);
-        int GetGroupPrivacy(int groupID);
-        DateTime GetGroupRegistrationDate(int groupID);
-        int[] GetGroupMembers(int groupID);
-        int[] GetGroupCameras(int groupID);
-        void SetGroupName(int groupID, string name);
-        void SetGroupDescription(int groupID, string description);
-        void SetGroupIcon(int groupID, byte[] icon);
-        void SetGroupPrivacy(int groupID, int privacy);        
-        void AddGroupMember(int userID, int groupID, int privileges);
-        void SetGroupMemberPrivileges(int userID, int groupID, int privileges);
-        void RemoveGroupMember(int userID, int groupID);
-        void AddGroupCamera(int cameraID, int groupID);
-        void RemoveGroupCamera(int cameraID, int groupID);
+        // groups
+        int GroupAdd(string name, string description, byte[] icon, int privacy);
+        void GroupRemove(int groupID);
+        int GroupGetID(string name);
+        string GroupGetName(int groupID);
+        string GroupGetDescription(int groupID);
+        byte[] GroupGetIcon(int groupID);
+        int GroupGetPrivacy(int groupID);
+        DateTime GroupGetRegistrationDate(int groupID);
+        int[] GroupGetMembers(int groupID);
+        int[] GroupGetCameras(int groupID);
+        void GroupSetName(int groupID, string name);
+        void GroupSetDescription(int groupID, string description);
+        void GroupSetIcon(int groupID, byte[] icon);
+        void GroupSetPrivacy(int groupID, int privacy);
 
-        // camera manipulations functions
-        bool IsCameraRegistered(string path);
-        int RegisterCamera(string name);
-        void RemoveCamera(int cameraID);
-        int GetCameraID(string path);
-        string GetCameraPath(int cameraID);
-        string GetCameraName(int cameraID);
-        string GetCameraDescription(int cameraID);
-        byte[] GetCameraIcon(int cameraID);
-        DateTime GetCameraRegistrationDate(int cameraID);
-        int[] GetCameraGroups(int cameraID);
-        int[] GetCameraFrames(int cameraID);
-        void SetCameraName(int cameraID, string name);
-        void SetCameraDescription(int cameraID, string description);
-        void SetCameraIcon(int cameraID, byte[] icon);
+        // group members
+        void GroupMemberAdd(int userID, int groupID, int privileges);
+        void GroupMemberRemove(int userID, int groupID);
+        int GroupMemberGetPrivileges(int userID, int groupID);
+        void GroupMemberSetPrivileges(int userID, int groupID, int privileges);
 
-        // frame manipulations functions
-        void AddFrame(int cameraID, byte[] content, string marker);
-        void RemoveFrame(int frameID);
-        byte[] GetFrameContent(int frameID);
-        string GetFrameMarker(int frameID);
+        // group cameras
+        void GroupCameraAdd(int cameraID, int groupID);
+        void GroupCameraRemove(int cameraID, int groupID);
+
+        // frames
+        int FrameAdd(int cameraID, byte[] content, string marker);
+        void FrameRemove(int frameID);
+        byte[] FrameGetContent(int frameID);
+        string FrameGetMarker(int frameID);
+
+        // database management
+        void DatabaseClear();
     }
 }

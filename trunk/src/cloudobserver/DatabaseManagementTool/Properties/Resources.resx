@@ -118,6 +118,9 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="DefaultCameraIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\assets\defaultcameraicon.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="DefaultFrame001" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Assets\DefaultFrame001.jpg;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -148,7 +151,10 @@
   <data name="DefaultFrame010" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Assets\DefaultFrame010.jpg;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="DefaultMarker" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Assets\DefaultMarker.xml;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  <data name="DefaultGroupIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\assets\defaultgroupicon.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DefaultUserIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\assets\defaultusericon.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

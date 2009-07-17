@@ -1,7 +1,171 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-  <xs:element name="SetGroupMemberPrivileges">
+  <xs:import schemaLocation="http://localhost:2101/CloudObserverWebsite/CloudObserverService.svc?xsd=xsd2" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:element name="GroupGetID">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GroupGetIDResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GroupGetIDResult" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GroupGetName">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="groupID" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GroupGetNameResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GroupGetNameResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GroupGetDescription">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="groupID" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GroupGetDescriptionResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GroupGetDescriptionResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GroupGetIcon">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="groupID" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GroupGetIconResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GroupGetIconResult" nillable="true" type="xs:base64Binary" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GroupGetPrivacy">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="groupID" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GroupGetPrivacyResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GroupGetPrivacyResult" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GroupGetRegistrationDate">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="groupID" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GroupGetRegistrationDateResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GroupGetRegistrationDateResult" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GroupGetMembers">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="groupID" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GroupGetMembersResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GroupGetMembersResult" nillable="true" type="q1:ArrayOfint" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GroupGetCameras">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="groupID" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GroupGetCamerasResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GroupGetCamerasResult" nillable="true" type="q2:ArrayOfint" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GroupSetName">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="groupID" type="xs:int" />
+        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GroupSetNameResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GroupSetDescription">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="groupID" type="xs:int" />
+        <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GroupSetDescriptionResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GroupSetIcon">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="groupID" type="xs:int" />
+        <xs:element minOccurs="0" name="icon" nillable="true" type="xs:base64Binary" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GroupSetIconResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GroupSetPrivacy">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="groupID" type="xs:int" />
+        <xs:element minOccurs="0" name="privacy" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GroupSetPrivacyResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GroupMemberAdd">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="userID" type="xs:int" />
@@ -10,12 +174,12 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="SetGroupMemberPrivilegesResponse">
+  <xs:element name="GroupMemberAddResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="RemoveGroupMember">
+  <xs:element name="GroupMemberRemove">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="userID" type="xs:int" />
@@ -23,12 +187,41 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="RemoveGroupMemberResponse">
+  <xs:element name="GroupMemberRemoveResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="AddGroupCamera">
+  <xs:element name="GroupMemberGetPrivileges">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="userID" type="xs:int" />
+        <xs:element minOccurs="0" name="groupID" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GroupMemberGetPrivilegesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GroupMemberGetPrivilegesResult" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GroupMemberSetPrivileges">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="userID" type="xs:int" />
+        <xs:element minOccurs="0" name="groupID" type="xs:int" />
+        <xs:element minOccurs="0" name="privileges" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GroupMemberSetPrivilegesResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GroupCameraAdd">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="cameraID" type="xs:int" />
@@ -36,12 +229,12 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="AddGroupCameraResponse">
+  <xs:element name="GroupCameraAddResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="RemoveGroupCamera">
+  <xs:element name="GroupCameraRemove">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="cameraID" type="xs:int" />
@@ -49,203 +242,12 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="RemoveGroupCameraResponse">
+  <xs:element name="GroupCameraRemoveResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="IsCameraRegistered">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="path" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="IsCameraRegisteredResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="IsCameraRegisteredResult" type="xs:boolean" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="RegisterCamera">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="RegisterCameraResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="RegisterCameraResult" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="RemoveCamera">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="cameraID" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="RemoveCameraResponse">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetCameraID">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="path" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetCameraIDResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="GetCameraIDResult" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetCameraPath">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="cameraID" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetCameraPathResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="GetCameraPathResult" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetCameraName">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="cameraID" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetCameraNameResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="GetCameraNameResult" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetCameraDescription">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="cameraID" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetCameraDescriptionResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="GetCameraDescriptionResult" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetCameraIcon">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="cameraID" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetCameraIconResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="GetCameraIconResult" nillable="true" type="xs:base64Binary" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetCameraRegistrationDate">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="cameraID" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetCameraRegistrationDateResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="GetCameraRegistrationDateResult" type="xs:dateTime" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetCameraGroups">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="cameraID" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetCameraGroupsResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetCameraGroupsResult" nillable="true" type="q1:ArrayOfint" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetCameraFrames">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="cameraID" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetCameraFramesResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetCameraFramesResult" nillable="true" type="q2:ArrayOfint" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="SetCameraName">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="cameraID" type="xs:int" />
-        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="SetCameraNameResponse">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="SetCameraDescription">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="cameraID" type="xs:int" />
-        <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="SetCameraDescriptionResponse">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="SetCameraIcon">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="cameraID" type="xs:int" />
-        <xs:element minOccurs="0" name="icon" nillable="true" type="xs:base64Binary" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="SetCameraIconResponse">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="AddFrame">
+  <xs:element name="FrameAdd">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="cameraID" type="xs:int" />
@@ -254,66 +256,68 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="AddFrameResponse">
+  <xs:element name="FrameAddResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="FrameAddResult" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="FrameRemove">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="frameID" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="FrameRemoveResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="RemoveFrame">
+  <xs:element name="FrameGetContent">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="frameID" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="RemoveFrameResponse">
+  <xs:element name="FrameGetContentResponse">
     <xs:complexType>
-      <xs:sequence />
+      <xs:sequence>
+        <xs:element minOccurs="0" name="FrameGetContentResult" nillable="true" type="xs:base64Binary" />
+      </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetFrameContent">
+  <xs:element name="FrameGetMarker">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="frameID" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetFrameContentResponse">
+  <xs:element name="FrameGetMarkerResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="GetFrameContentResult" nillable="true" type="xs:base64Binary" />
+        <xs:element minOccurs="0" name="FrameGetMarkerResult" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetFrameMarker">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="frameID" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetFrameMarkerResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="GetFrameMarkerResult" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="IsEmailRegistered">
+  <xs:element name="UserIsEmailAvailable">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="email" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="IsEmailRegisteredResponse">
+  <xs:element name="UserIsEmailAvailableResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="IsEmailRegisteredResult" type="xs:boolean" />
+        <xs:element minOccurs="0" name="UserIsEmailAvailableResult" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="IsUserRegistered">
+  <xs:element name="UserLogin">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="email" nillable="true" type="xs:string" />
@@ -321,154 +325,156 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="IsUserRegisteredResponse">
+  <xs:element name="UserLoginResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="IsUserRegisteredResult" type="xs:boolean" />
+        <xs:element minOccurs="0" name="UserLoginResult" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="RegisterUser">
+  <xs:element name="UserAdd">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="email" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="password" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="icon" nillable="true" type="xs:base64Binary" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="RegisterUserResponse">
+  <xs:element name="UserAddResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="RegisterUserResult" type="xs:int" />
+        <xs:element minOccurs="0" name="UserAddResult" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="RemoveUser">
+  <xs:element name="UserRemove">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="userID" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="RemoveUserResponse">
+  <xs:element name="UserRemoveResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetUserID">
+  <xs:element name="UserGetID">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="email" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetUserIDResponse">
+  <xs:element name="UserGetIDResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="GetUserIDResult" type="xs:int" />
+        <xs:element minOccurs="0" name="UserGetIDResult" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetUserEmail">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="userID" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetUserEmailResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="GetUserEmailResult" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetUserPassword">
+  <xs:element name="UserGetEmail">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="userID" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetUserPasswordResponse">
+  <xs:element name="UserGetEmailResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="GetUserPasswordResult" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="UserGetEmailResult" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetUserName">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="userID" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetUserNameResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="GetUserNameResult" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetUserDescription">
+  <xs:element name="UserGetPassword">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="userID" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetUserDescriptionResponse">
+  <xs:element name="UserGetPasswordResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="GetUserDescriptionResult" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="UserGetPasswordResult" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetUserIcon">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="userID" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetUserIconResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="GetUserIconResult" nillable="true" type="xs:base64Binary" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetUserRegistrationDate">
+  <xs:element name="UserGetName">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="userID" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetUserRegistrationDateResponse">
+  <xs:element name="UserGetNameResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="GetUserRegistrationDateResult" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="UserGetNameResult" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetUserGroups">
+  <xs:element name="UserGetDescription">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="userID" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetUserGroupsResponse">
+  <xs:element name="UserGetDescriptionResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q3="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetUserGroupsResult" nillable="true" type="q3:ArrayOfint" />
+        <xs:element minOccurs="0" name="UserGetDescriptionResult" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="SetUserPassword">
+  <xs:element name="UserGetIcon">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="userID" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UserGetIconResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserGetIconResult" nillable="true" type="xs:base64Binary" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UserGetRegistrationDate">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="userID" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UserGetRegistrationDateResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserGetRegistrationDateResult" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UserGetGroups">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="userID" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UserGetGroupsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q3="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="UserGetGroupsResult" nillable="true" type="q3:ArrayOfint" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UserSetPassword">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="userID" type="xs:int" />
@@ -476,12 +482,12 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="SetUserPasswordResponse">
+  <xs:element name="UserSetPasswordResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="SetUserName">
+  <xs:element name="UserSetName">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="userID" type="xs:int" />
@@ -489,12 +495,12 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="SetUserNameResponse">
+  <xs:element name="UserSetNameResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="SetUserDescription">
+  <xs:element name="UserSetDescription">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="userID" type="xs:int" />
@@ -502,12 +508,12 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="SetUserDescriptionResponse">
+  <xs:element name="UserSetDescriptionResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="SetUserIcon">
+  <xs:element name="UserSetIcon">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="userID" type="xs:int" />
@@ -515,226 +521,229 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="SetUserIconResponse">
+  <xs:element name="UserSetIconResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="IsGroupRegistered">
+  <xs:element name="CameraIsPathAvailable">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="path" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CameraIsPathAvailableResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CameraIsPathAvailableResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CameraAdd">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="icon" nillable="true" type="xs:base64Binary" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="IsGroupRegisteredResponse">
+  <xs:element name="CameraAddResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="IsGroupRegisteredResult" type="xs:boolean" />
+        <xs:element minOccurs="0" name="CameraAddResult" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="RegisterGroup">
+  <xs:element name="CameraRemove">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="privacy" type="xs:int" />
+        <xs:element minOccurs="0" name="cameraID" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="RegisterGroupResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="RegisterGroupResult" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="RemoveGroup">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="groupID" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="RemoveGroupResponse">
+  <xs:element name="CameraRemoveResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetGroupID">
+  <xs:element name="CameraGetID">
     <xs:complexType>
       <xs:sequence>
+        <xs:element minOccurs="0" name="path" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CameraGetIDResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CameraGetIDResult" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CameraGetPath">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="cameraID" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CameraGetPathResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CameraGetPathResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CameraGetName">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="cameraID" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CameraGetNameResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CameraGetNameResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CameraGetDescription">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="cameraID" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CameraGetDescriptionResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CameraGetDescriptionResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CameraGetIcon">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="cameraID" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CameraGetIconResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CameraGetIconResult" nillable="true" type="xs:base64Binary" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CameraGetRegistrationDate">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="cameraID" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CameraGetRegistrationDateResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CameraGetRegistrationDateResult" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CameraGetGroups">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="cameraID" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CameraGetGroupsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="CameraGetGroupsResult" nillable="true" type="q4:ArrayOfint" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CameraGetFrames">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="cameraID" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CameraGetFramesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q5="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="CameraGetFramesResult" nillable="true" type="q5:ArrayOfint" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CameraSetName">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="cameraID" type="xs:int" />
         <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetGroupIDResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="GetGroupIDResult" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetGroupName">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="groupID" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetGroupNameResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="GetGroupNameResult" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetGroupDescription">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="groupID" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetGroupDescriptionResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="GetGroupDescriptionResult" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetGroupIcon">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="groupID" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetGroupIconResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="GetGroupIconResult" nillable="true" type="xs:base64Binary" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetGroupPrivacy">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="groupID" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetGroupPrivacyResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="GetGroupPrivacyResult" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetGroupRegistrationDate">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="groupID" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetGroupRegistrationDateResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="GetGroupRegistrationDateResult" type="xs:dateTime" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetGroupMembers">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="groupID" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetGroupMembersResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q4="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetGroupMembersResult" nillable="true" type="q4:ArrayOfint" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetGroupCameras">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="groupID" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetGroupCamerasResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q5="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetGroupCamerasResult" nillable="true" type="q5:ArrayOfint" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="SetGroupName">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="groupID" type="xs:int" />
-        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="SetGroupNameResponse">
+  <xs:element name="CameraSetNameResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="SetGroupDescription">
+  <xs:element name="CameraSetDescription">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="groupID" type="xs:int" />
+        <xs:element minOccurs="0" name="cameraID" type="xs:int" />
         <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="SetGroupDescriptionResponse">
+  <xs:element name="CameraSetDescriptionResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="SetGroupIcon">
+  <xs:element name="CameraSetIcon">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="groupID" type="xs:int" />
+        <xs:element minOccurs="0" name="cameraID" type="xs:int" />
         <xs:element minOccurs="0" name="icon" nillable="true" type="xs:base64Binary" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="SetGroupIconResponse">
+  <xs:element name="CameraSetIconResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="SetGroupPrivacy">
+  <xs:element name="GroupAdd">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="groupID" type="xs:int" />
+        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="icon" nillable="true" type="xs:base64Binary" />
         <xs:element minOccurs="0" name="privacy" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="SetGroupPrivacyResponse">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="AddGroupMember">
+  <xs:element name="GroupAddResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="userID" type="xs:int" />
-        <xs:element minOccurs="0" name="groupID" type="xs:int" />
-        <xs:element minOccurs="0" name="privileges" type="xs:int" />
+        <xs:element minOccurs="0" name="GroupAddResult" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="AddGroupMemberResponse">
+  <xs:element name="GroupRemove">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="groupID" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GroupRemoveResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>

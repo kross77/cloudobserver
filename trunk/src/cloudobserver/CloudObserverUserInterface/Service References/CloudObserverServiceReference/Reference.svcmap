@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="6eb1d544-ff02-4c64-b8dc-1b9ef58983ee" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="01ad02a5-239f-4b0d-8a05-37e6df5e88e7" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>true</GenerateAsynchronousMethods>
     <EnableDataBinding>true</EnableDataBinding>
@@ -19,13 +19,14 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://localhost:8731/CloudObserverService/mex" Protocol="mex" SourceId="1" />
+    <MetadataSource Address="http://localhost:2101/CloudObserverWebsite/CloudObserverService.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="3edaa477-cf5d-4fdd-bcce-9360fc0ff959" SourceId="1" SourceUrl="http://localhost:8731/CloudObserverService/mex" />
-    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="30e9c834-c58c-42fe-8ff5-ac666a4e699c" SourceId="1" SourceUrl="http://localhost:8731/CloudObserverService/mex" />
-    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="80a1c178-0560-4287-a021-d8f446a47179" SourceId="1" SourceUrl="http://localhost:8731/CloudObserverService/mex" />
-    <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="98aee138-74bf-4dfd-956a-f0cb27cb0fa4" SourceId="1" SourceUrl="http://localhost:8731/CloudObserverService/mex" />
+    <MetadataFile FileName="CloudObserverService.xsd" MetadataType="Schema" ID="e7c1df78-c113-42ab-b58b-bce2dfe758d5" SourceId="1" SourceUrl="http://localhost:2101/CloudObserverWebsite/CloudObserverService.svc?xsd=xsd1" />
+    <MetadataFile FileName="CloudObserverService.wsdl" MetadataType="Wsdl" ID="796f29bc-a557-4d7c-a98a-ccf5c1684cf3" SourceId="1" SourceUrl="http://localhost:2101/CloudObserverWebsite/CloudObserverService.svc?wsdl" />
+    <MetadataFile FileName="CloudObserverService1.xsd" MetadataType="Schema" ID="03b374eb-2a2f-4feb-9c8e-ab2b7c6a48cd" SourceId="1" SourceUrl="http://localhost:2101/CloudObserverWebsite/CloudObserverService.svc?xsd=xsd0" />
+    <MetadataFile FileName="CloudObserverService2.xsd" MetadataType="Schema" ID="bb319920-49ed-4f9d-a88d-213e9a39d874" SourceId="1" SourceUrl="http://localhost:2101/CloudObserverWebsite/CloudObserverService.svc?xsd=xsd2" />
+    <MetadataFile FileName="CloudObserverService.disco" MetadataType="Disco" ID="c2ed54a8-ac24-4e50-96ae-c3a0b9e94926" SourceId="1" SourceUrl="http://localhost:2101/CloudObserverWebsite/CloudObserverService.svc?disco" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

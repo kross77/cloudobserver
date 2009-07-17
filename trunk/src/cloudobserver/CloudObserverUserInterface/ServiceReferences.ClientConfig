@@ -1,1 +1,18 @@
-﻿<configuration />
+﻿<configuration>
+    <system.serviceModel>
+        <bindings>
+            <basicHttpBinding>
+                <binding name="BasicHttpBinding_ICloudObserverService" maxBufferSize="2147483647"
+                    maxReceivedMessageSize="2147483647">
+                    <security mode="None" />
+                </binding>
+            </basicHttpBinding>
+        </bindings>
+        <client>
+            <endpoint address="http://localhost:2101/CloudObserverWebsite/CloudObserverService.svc"
+                binding="basicHttpBinding" bindingConfiguration="BasicHttpBinding_ICloudObserverService"
+                contract="CloudObserverServiceReference.ICloudObserverService"
+                name="BasicHttpBinding_ICloudObserverService" />
+        </client>
+    </system.serviceModel>
+</configuration>

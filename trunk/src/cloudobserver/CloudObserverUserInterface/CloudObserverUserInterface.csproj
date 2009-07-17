@@ -4,7 +4,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{99E16625-AB71-4FB3-B7DC-E617D1360965}</ProjectGuid>
+    <ProjectGuid>{49804C62-B5E8-4E05-8FCD-A3FF8B25F64E}</ProjectGuid>
     <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -61,8 +61,6 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Net" />
     <Reference Include="System.Windows.Controls.Data.Input, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
-    <Reference Include="System.Windows.Controls.Input.Toolkit, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
-    <Reference Include="System.Windows.Controls.Toolkit, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Windows.Browser" />
     <Reference Include="System.Windows.Controls" />
@@ -80,18 +78,18 @@
     <Compile Include="Views\ErrorWindow.xaml.cs">
       <DependentUpon>ErrorWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\About.xaml.cs">
-      <DependentUpon>About.xaml</DependentUpon>
+    <Compile Include="Views\AboutPage.xaml.cs">
+      <DependentUpon>AboutPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Home.xaml.cs">
-      <DependentUpon>Home.xaml</DependentUpon>
+    <Compile Include="Views\HomePage.xaml.cs">
+      <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Views\regitstry.xaml.cs">
-      <DependentUpon>regitstry.xaml</DependentUpon>
+    <Compile Include="Views\RegistrationWindow.xaml.cs">
+      <DependentUpon>RegistrationWindow.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -107,11 +105,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:MarkupCompilePass1</Generator>
     </Page>
-    <Page Include="Views\About.xaml">
+    <Page Include="Views\AboutPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:MarkupCompilePass1</Generator>
     </Page>
-    <Page Include="Views\Home.xaml">
+    <Page Include="Views\HomePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:MarkupCompilePass1</Generator>
     </Page>
@@ -119,36 +117,34 @@
       <Generator>MSBuild:MarkupCompilePass1</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\regitstry.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Views\RegistrationWindow.xaml">
       <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AppManifest.xml" />
-    <None Include="Service References\CloudObserverServiceReference\Arrays.xsd" />
-    <None Include="Service References\CloudObserverServiceReference\service.wsdl" />
-    <None Include="Service References\CloudObserverServiceReference\service.xsd" />
-    <None Include="Service References\CloudObserverServiceReference\service1.xsd" />
+    <None Include="Service References\CloudObserverServiceReference\CloudObserverService.wsdl" />
+    <None Include="Service References\CloudObserverServiceReference\CloudObserverService.xsd" />
+    <None Include="Service References\CloudObserverServiceReference\CloudObserverService1.xsd" />
+    <None Include="Service References\CloudObserverServiceReference\CloudObserverService2.xsd" />
+    <None Include="Service References\CloudObserverServiceReference\CloudObserverService.disco" />
+    <None Include="Service References\CloudObserverServiceReference\configuration91.svcinfo" />
+    <None Include="Service References\CloudObserverServiceReference\configuration.svcinfo" />
+    <None Include="Service References\CloudObserverServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="ServiceReferences.ClientConfig" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Assets\DefaultUserIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
     <WCFMetadataStorage Include="Service References\CloudObserverServiceReference\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\CloudObserverServiceReference\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\CloudObserverServiceReference\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\CloudObserverServiceReference\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\v3.0\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

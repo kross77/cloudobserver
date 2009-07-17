@@ -60,6 +60,13 @@ namespace DatabaseManagementTool.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap DefaultCameraIcon {
+            get {
+                object obj = ResourceManager.GetObject("DefaultCameraIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap DefaultFrame001 {
             get {
                 object obj = ResourceManager.GetObject("DefaultFrame001", resourceCulture);
@@ -130,12 +137,17 @@ namespace DatabaseManagementTool.Properties {
             }
         }
         
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;Marker Time=&quot;00:00:00.0000000&quot; /&gt;.
-        /// </summary>
-        internal static string DefaultMarker {
+        internal static System.Drawing.Bitmap DefaultGroupIcon {
             get {
-                return ResourceManager.GetString("DefaultMarker", resourceCulture);
+                object obj = ResourceManager.GetObject("DefaultGroupIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap DefaultUserIcon {
+            get {
+                object obj = ResourceManager.GetObject("DefaultUserIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

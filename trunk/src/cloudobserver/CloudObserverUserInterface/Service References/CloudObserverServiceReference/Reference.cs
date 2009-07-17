@@ -18,275 +18,275 @@ namespace CloudObserverUserInterface.CloudObserverServiceReference {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="CloudObserverServiceReference.ICloudObserverService")]
     public interface ICloudObserverService {
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/SetGroupMemberPrivileges", ReplyAction="http://tempuri.org/ICloudObserverService/SetGroupMemberPrivilegesResponse")]
-        System.IAsyncResult BeginSetGroupMemberPrivileges(int userID, int groupID, int privileges, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GroupGetID", ReplyAction="http://tempuri.org/ICloudObserverService/GroupGetIDResponse")]
+        System.IAsyncResult BeginGroupGetID(string name, System.AsyncCallback callback, object asyncState);
         
-        void EndSetGroupMemberPrivileges(System.IAsyncResult result);
+        int EndGroupGetID(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/RemoveGroupMember", ReplyAction="http://tempuri.org/ICloudObserverService/RemoveGroupMemberResponse")]
-        System.IAsyncResult BeginRemoveGroupMember(int userID, int groupID, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GroupGetName", ReplyAction="http://tempuri.org/ICloudObserverService/GroupGetNameResponse")]
+        System.IAsyncResult BeginGroupGetName(int groupID, System.AsyncCallback callback, object asyncState);
         
-        void EndRemoveGroupMember(System.IAsyncResult result);
+        string EndGroupGetName(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/AddGroupCamera", ReplyAction="http://tempuri.org/ICloudObserverService/AddGroupCameraResponse")]
-        System.IAsyncResult BeginAddGroupCamera(int cameraID, int groupID, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GroupGetDescription", ReplyAction="http://tempuri.org/ICloudObserverService/GroupGetDescriptionResponse")]
+        System.IAsyncResult BeginGroupGetDescription(int groupID, System.AsyncCallback callback, object asyncState);
         
-        void EndAddGroupCamera(System.IAsyncResult result);
+        string EndGroupGetDescription(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/RemoveGroupCamera", ReplyAction="http://tempuri.org/ICloudObserverService/RemoveGroupCameraResponse")]
-        System.IAsyncResult BeginRemoveGroupCamera(int cameraID, int groupID, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GroupGetIcon", ReplyAction="http://tempuri.org/ICloudObserverService/GroupGetIconResponse")]
+        System.IAsyncResult BeginGroupGetIcon(int groupID, System.AsyncCallback callback, object asyncState);
         
-        void EndRemoveGroupCamera(System.IAsyncResult result);
+        byte[] EndGroupGetIcon(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/IsCameraRegistered", ReplyAction="http://tempuri.org/ICloudObserverService/IsCameraRegisteredResponse")]
-        System.IAsyncResult BeginIsCameraRegistered(string path, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GroupGetPrivacy", ReplyAction="http://tempuri.org/ICloudObserverService/GroupGetPrivacyResponse")]
+        System.IAsyncResult BeginGroupGetPrivacy(int groupID, System.AsyncCallback callback, object asyncState);
         
-        bool EndIsCameraRegistered(System.IAsyncResult result);
+        int EndGroupGetPrivacy(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/RegisterCamera", ReplyAction="http://tempuri.org/ICloudObserverService/RegisterCameraResponse")]
-        System.IAsyncResult BeginRegisterCamera(string name, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GroupGetRegistrationDate", ReplyAction="http://tempuri.org/ICloudObserverService/GroupGetRegistrationDateResponse")]
+        System.IAsyncResult BeginGroupGetRegistrationDate(int groupID, System.AsyncCallback callback, object asyncState);
         
-        int EndRegisterCamera(System.IAsyncResult result);
+        System.DateTime EndGroupGetRegistrationDate(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/RemoveCamera", ReplyAction="http://tempuri.org/ICloudObserverService/RemoveCameraResponse")]
-        System.IAsyncResult BeginRemoveCamera(int cameraID, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GroupGetMembers", ReplyAction="http://tempuri.org/ICloudObserverService/GroupGetMembersResponse")]
+        System.IAsyncResult BeginGroupGetMembers(int groupID, System.AsyncCallback callback, object asyncState);
         
-        void EndRemoveCamera(System.IAsyncResult result);
+        System.Collections.ObjectModel.ObservableCollection<int> EndGroupGetMembers(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GetCameraID", ReplyAction="http://tempuri.org/ICloudObserverService/GetCameraIDResponse")]
-        System.IAsyncResult BeginGetCameraID(string path, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GroupGetCameras", ReplyAction="http://tempuri.org/ICloudObserverService/GroupGetCamerasResponse")]
+        System.IAsyncResult BeginGroupGetCameras(int groupID, System.AsyncCallback callback, object asyncState);
         
-        int EndGetCameraID(System.IAsyncResult result);
+        System.Collections.ObjectModel.ObservableCollection<int> EndGroupGetCameras(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GetCameraPath", ReplyAction="http://tempuri.org/ICloudObserverService/GetCameraPathResponse")]
-        System.IAsyncResult BeginGetCameraPath(int cameraID, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GroupSetName", ReplyAction="http://tempuri.org/ICloudObserverService/GroupSetNameResponse")]
+        System.IAsyncResult BeginGroupSetName(int groupID, string name, System.AsyncCallback callback, object asyncState);
         
-        string EndGetCameraPath(System.IAsyncResult result);
+        void EndGroupSetName(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GetCameraName", ReplyAction="http://tempuri.org/ICloudObserverService/GetCameraNameResponse")]
-        System.IAsyncResult BeginGetCameraName(int cameraID, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GroupSetDescription", ReplyAction="http://tempuri.org/ICloudObserverService/GroupSetDescriptionResponse")]
+        System.IAsyncResult BeginGroupSetDescription(int groupID, string description, System.AsyncCallback callback, object asyncState);
         
-        string EndGetCameraName(System.IAsyncResult result);
+        void EndGroupSetDescription(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GetCameraDescription", ReplyAction="http://tempuri.org/ICloudObserverService/GetCameraDescriptionResponse")]
-        System.IAsyncResult BeginGetCameraDescription(int cameraID, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GroupSetIcon", ReplyAction="http://tempuri.org/ICloudObserverService/GroupSetIconResponse")]
+        System.IAsyncResult BeginGroupSetIcon(int groupID, byte[] icon, System.AsyncCallback callback, object asyncState);
         
-        string EndGetCameraDescription(System.IAsyncResult result);
+        void EndGroupSetIcon(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GetCameraIcon", ReplyAction="http://tempuri.org/ICloudObserverService/GetCameraIconResponse")]
-        System.IAsyncResult BeginGetCameraIcon(int cameraID, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GroupSetPrivacy", ReplyAction="http://tempuri.org/ICloudObserverService/GroupSetPrivacyResponse")]
+        System.IAsyncResult BeginGroupSetPrivacy(int groupID, int privacy, System.AsyncCallback callback, object asyncState);
         
-        byte[] EndGetCameraIcon(System.IAsyncResult result);
+        void EndGroupSetPrivacy(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GetCameraRegistrationDate", ReplyAction="http://tempuri.org/ICloudObserverService/GetCameraRegistrationDateResponse")]
-        System.IAsyncResult BeginGetCameraRegistrationDate(int cameraID, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GroupMemberAdd", ReplyAction="http://tempuri.org/ICloudObserverService/GroupMemberAddResponse")]
+        System.IAsyncResult BeginGroupMemberAdd(int userID, int groupID, int privileges, System.AsyncCallback callback, object asyncState);
         
-        System.DateTime EndGetCameraRegistrationDate(System.IAsyncResult result);
+        void EndGroupMemberAdd(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GetCameraGroups", ReplyAction="http://tempuri.org/ICloudObserverService/GetCameraGroupsResponse")]
-        System.IAsyncResult BeginGetCameraGroups(int cameraID, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GroupMemberRemove", ReplyAction="http://tempuri.org/ICloudObserverService/GroupMemberRemoveResponse")]
+        System.IAsyncResult BeginGroupMemberRemove(int userID, int groupID, System.AsyncCallback callback, object asyncState);
         
-        System.Collections.ObjectModel.ObservableCollection<int> EndGetCameraGroups(System.IAsyncResult result);
+        void EndGroupMemberRemove(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GetCameraFrames", ReplyAction="http://tempuri.org/ICloudObserverService/GetCameraFramesResponse")]
-        System.IAsyncResult BeginGetCameraFrames(int cameraID, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GroupMemberGetPrivileges", ReplyAction="http://tempuri.org/ICloudObserverService/GroupMemberGetPrivilegesResponse")]
+        System.IAsyncResult BeginGroupMemberGetPrivileges(int userID, int groupID, System.AsyncCallback callback, object asyncState);
         
-        System.Collections.ObjectModel.ObservableCollection<int> EndGetCameraFrames(System.IAsyncResult result);
+        int EndGroupMemberGetPrivileges(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/SetCameraName", ReplyAction="http://tempuri.org/ICloudObserverService/SetCameraNameResponse")]
-        System.IAsyncResult BeginSetCameraName(int cameraID, string name, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GroupMemberSetPrivileges", ReplyAction="http://tempuri.org/ICloudObserverService/GroupMemberSetPrivilegesResponse")]
+        System.IAsyncResult BeginGroupMemberSetPrivileges(int userID, int groupID, int privileges, System.AsyncCallback callback, object asyncState);
         
-        void EndSetCameraName(System.IAsyncResult result);
+        void EndGroupMemberSetPrivileges(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/SetCameraDescription", ReplyAction="http://tempuri.org/ICloudObserverService/SetCameraDescriptionResponse")]
-        System.IAsyncResult BeginSetCameraDescription(int cameraID, string description, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GroupCameraAdd", ReplyAction="http://tempuri.org/ICloudObserverService/GroupCameraAddResponse")]
+        System.IAsyncResult BeginGroupCameraAdd(int cameraID, int groupID, System.AsyncCallback callback, object asyncState);
         
-        void EndSetCameraDescription(System.IAsyncResult result);
+        void EndGroupCameraAdd(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/SetCameraIcon", ReplyAction="http://tempuri.org/ICloudObserverService/SetCameraIconResponse")]
-        System.IAsyncResult BeginSetCameraIcon(int cameraID, byte[] icon, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GroupCameraRemove", ReplyAction="http://tempuri.org/ICloudObserverService/GroupCameraRemoveResponse")]
+        System.IAsyncResult BeginGroupCameraRemove(int cameraID, int groupID, System.AsyncCallback callback, object asyncState);
         
-        void EndSetCameraIcon(System.IAsyncResult result);
+        void EndGroupCameraRemove(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/AddFrame", ReplyAction="http://tempuri.org/ICloudObserverService/AddFrameResponse")]
-        System.IAsyncResult BeginAddFrame(int cameraID, byte[] content, string marker, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/FrameAdd", ReplyAction="http://tempuri.org/ICloudObserverService/FrameAddResponse")]
+        System.IAsyncResult BeginFrameAdd(int cameraID, byte[] content, string marker, System.AsyncCallback callback, object asyncState);
         
-        void EndAddFrame(System.IAsyncResult result);
+        int EndFrameAdd(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/RemoveFrame", ReplyAction="http://tempuri.org/ICloudObserverService/RemoveFrameResponse")]
-        System.IAsyncResult BeginRemoveFrame(int frameID, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/FrameRemove", ReplyAction="http://tempuri.org/ICloudObserverService/FrameRemoveResponse")]
+        System.IAsyncResult BeginFrameRemove(int frameID, System.AsyncCallback callback, object asyncState);
         
-        void EndRemoveFrame(System.IAsyncResult result);
+        void EndFrameRemove(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GetFrameContent", ReplyAction="http://tempuri.org/ICloudObserverService/GetFrameContentResponse")]
-        System.IAsyncResult BeginGetFrameContent(int frameID, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/FrameGetContent", ReplyAction="http://tempuri.org/ICloudObserverService/FrameGetContentResponse")]
+        System.IAsyncResult BeginFrameGetContent(int frameID, System.AsyncCallback callback, object asyncState);
         
-        byte[] EndGetFrameContent(System.IAsyncResult result);
+        byte[] EndFrameGetContent(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GetFrameMarker", ReplyAction="http://tempuri.org/ICloudObserverService/GetFrameMarkerResponse")]
-        System.IAsyncResult BeginGetFrameMarker(int frameID, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/FrameGetMarker", ReplyAction="http://tempuri.org/ICloudObserverService/FrameGetMarkerResponse")]
+        System.IAsyncResult BeginFrameGetMarker(int frameID, System.AsyncCallback callback, object asyncState);
         
-        string EndGetFrameMarker(System.IAsyncResult result);
+        string EndFrameGetMarker(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/IsEmailRegistered", ReplyAction="http://tempuri.org/ICloudObserverService/IsEmailRegisteredResponse")]
-        System.IAsyncResult BeginIsEmailRegistered(string email, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/UserIsEmailAvailable", ReplyAction="http://tempuri.org/ICloudObserverService/UserIsEmailAvailableResponse")]
+        System.IAsyncResult BeginUserIsEmailAvailable(string email, System.AsyncCallback callback, object asyncState);
         
-        bool EndIsEmailRegistered(System.IAsyncResult result);
+        bool EndUserIsEmailAvailable(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/IsUserRegistered", ReplyAction="http://tempuri.org/ICloudObserverService/IsUserRegisteredResponse")]
-        System.IAsyncResult BeginIsUserRegistered(string email, string password, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/UserLogin", ReplyAction="http://tempuri.org/ICloudObserverService/UserLoginResponse")]
+        System.IAsyncResult BeginUserLogin(string email, string password, System.AsyncCallback callback, object asyncState);
         
-        bool EndIsUserRegistered(System.IAsyncResult result);
+        bool EndUserLogin(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/RegisterUser", ReplyAction="http://tempuri.org/ICloudObserverService/RegisterUserResponse")]
-        System.IAsyncResult BeginRegisterUser(string email, string password, string name, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/UserAdd", ReplyAction="http://tempuri.org/ICloudObserverService/UserAddResponse")]
+        System.IAsyncResult BeginUserAdd(string email, string password, string name, string description, byte[] icon, System.AsyncCallback callback, object asyncState);
         
-        int EndRegisterUser(System.IAsyncResult result);
+        int EndUserAdd(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/RemoveUser", ReplyAction="http://tempuri.org/ICloudObserverService/RemoveUserResponse")]
-        System.IAsyncResult BeginRemoveUser(int userID, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/UserRemove", ReplyAction="http://tempuri.org/ICloudObserverService/UserRemoveResponse")]
+        System.IAsyncResult BeginUserRemove(int userID, System.AsyncCallback callback, object asyncState);
         
-        void EndRemoveUser(System.IAsyncResult result);
+        void EndUserRemove(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GetUserID", ReplyAction="http://tempuri.org/ICloudObserverService/GetUserIDResponse")]
-        System.IAsyncResult BeginGetUserID(string email, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/UserGetID", ReplyAction="http://tempuri.org/ICloudObserverService/UserGetIDResponse")]
+        System.IAsyncResult BeginUserGetID(string email, System.AsyncCallback callback, object asyncState);
         
-        int EndGetUserID(System.IAsyncResult result);
+        int EndUserGetID(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GetUserEmail", ReplyAction="http://tempuri.org/ICloudObserverService/GetUserEmailResponse")]
-        System.IAsyncResult BeginGetUserEmail(int userID, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/UserGetEmail", ReplyAction="http://tempuri.org/ICloudObserverService/UserGetEmailResponse")]
+        System.IAsyncResult BeginUserGetEmail(int userID, System.AsyncCallback callback, object asyncState);
         
-        string EndGetUserEmail(System.IAsyncResult result);
+        string EndUserGetEmail(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GetUserPassword", ReplyAction="http://tempuri.org/ICloudObserverService/GetUserPasswordResponse")]
-        System.IAsyncResult BeginGetUserPassword(int userID, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/UserGetPassword", ReplyAction="http://tempuri.org/ICloudObserverService/UserGetPasswordResponse")]
+        System.IAsyncResult BeginUserGetPassword(int userID, System.AsyncCallback callback, object asyncState);
         
-        string EndGetUserPassword(System.IAsyncResult result);
+        string EndUserGetPassword(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GetUserName", ReplyAction="http://tempuri.org/ICloudObserverService/GetUserNameResponse")]
-        System.IAsyncResult BeginGetUserName(int userID, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/UserGetName", ReplyAction="http://tempuri.org/ICloudObserverService/UserGetNameResponse")]
+        System.IAsyncResult BeginUserGetName(int userID, System.AsyncCallback callback, object asyncState);
         
-        string EndGetUserName(System.IAsyncResult result);
+        string EndUserGetName(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GetUserDescription", ReplyAction="http://tempuri.org/ICloudObserverService/GetUserDescriptionResponse")]
-        System.IAsyncResult BeginGetUserDescription(int userID, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/UserGetDescription", ReplyAction="http://tempuri.org/ICloudObserverService/UserGetDescriptionResponse")]
+        System.IAsyncResult BeginUserGetDescription(int userID, System.AsyncCallback callback, object asyncState);
         
-        string EndGetUserDescription(System.IAsyncResult result);
+        string EndUserGetDescription(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GetUserIcon", ReplyAction="http://tempuri.org/ICloudObserverService/GetUserIconResponse")]
-        System.IAsyncResult BeginGetUserIcon(int userID, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/UserGetIcon", ReplyAction="http://tempuri.org/ICloudObserverService/UserGetIconResponse")]
+        System.IAsyncResult BeginUserGetIcon(int userID, System.AsyncCallback callback, object asyncState);
         
-        byte[] EndGetUserIcon(System.IAsyncResult result);
+        byte[] EndUserGetIcon(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GetUserRegistrationDate", ReplyAction="http://tempuri.org/ICloudObserverService/GetUserRegistrationDateResponse")]
-        System.IAsyncResult BeginGetUserRegistrationDate(int userID, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/UserGetRegistrationDate", ReplyAction="http://tempuri.org/ICloudObserverService/UserGetRegistrationDateResponse")]
+        System.IAsyncResult BeginUserGetRegistrationDate(int userID, System.AsyncCallback callback, object asyncState);
         
-        System.DateTime EndGetUserRegistrationDate(System.IAsyncResult result);
+        System.DateTime EndUserGetRegistrationDate(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GetUserGroups", ReplyAction="http://tempuri.org/ICloudObserverService/GetUserGroupsResponse")]
-        System.IAsyncResult BeginGetUserGroups(int userID, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/UserGetGroups", ReplyAction="http://tempuri.org/ICloudObserverService/UserGetGroupsResponse")]
+        System.IAsyncResult BeginUserGetGroups(int userID, System.AsyncCallback callback, object asyncState);
         
-        System.Collections.ObjectModel.ObservableCollection<int> EndGetUserGroups(System.IAsyncResult result);
+        System.Collections.ObjectModel.ObservableCollection<int> EndUserGetGroups(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/SetUserPassword", ReplyAction="http://tempuri.org/ICloudObserverService/SetUserPasswordResponse")]
-        System.IAsyncResult BeginSetUserPassword(int userID, string password, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/UserSetPassword", ReplyAction="http://tempuri.org/ICloudObserverService/UserSetPasswordResponse")]
+        System.IAsyncResult BeginUserSetPassword(int userID, string password, System.AsyncCallback callback, object asyncState);
         
-        void EndSetUserPassword(System.IAsyncResult result);
+        void EndUserSetPassword(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/SetUserName", ReplyAction="http://tempuri.org/ICloudObserverService/SetUserNameResponse")]
-        System.IAsyncResult BeginSetUserName(int userID, string name, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/UserSetName", ReplyAction="http://tempuri.org/ICloudObserverService/UserSetNameResponse")]
+        System.IAsyncResult BeginUserSetName(int userID, string name, System.AsyncCallback callback, object asyncState);
         
-        void EndSetUserName(System.IAsyncResult result);
+        void EndUserSetName(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/SetUserDescription", ReplyAction="http://tempuri.org/ICloudObserverService/SetUserDescriptionResponse")]
-        System.IAsyncResult BeginSetUserDescription(int userID, string description, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/UserSetDescription", ReplyAction="http://tempuri.org/ICloudObserverService/UserSetDescriptionResponse")]
+        System.IAsyncResult BeginUserSetDescription(int userID, string description, System.AsyncCallback callback, object asyncState);
         
-        void EndSetUserDescription(System.IAsyncResult result);
+        void EndUserSetDescription(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/SetUserIcon", ReplyAction="http://tempuri.org/ICloudObserverService/SetUserIconResponse")]
-        System.IAsyncResult BeginSetUserIcon(int userID, byte[] icon, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/UserSetIcon", ReplyAction="http://tempuri.org/ICloudObserverService/UserSetIconResponse")]
+        System.IAsyncResult BeginUserSetIcon(int userID, byte[] icon, System.AsyncCallback callback, object asyncState);
         
-        void EndSetUserIcon(System.IAsyncResult result);
+        void EndUserSetIcon(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/IsGroupRegistered", ReplyAction="http://tempuri.org/ICloudObserverService/IsGroupRegisteredResponse")]
-        System.IAsyncResult BeginIsGroupRegistered(string name, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/CameraIsPathAvailable", ReplyAction="http://tempuri.org/ICloudObserverService/CameraIsPathAvailableResponse")]
+        System.IAsyncResult BeginCameraIsPathAvailable(string path, System.AsyncCallback callback, object asyncState);
         
-        bool EndIsGroupRegistered(System.IAsyncResult result);
+        bool EndCameraIsPathAvailable(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/RegisterGroup", ReplyAction="http://tempuri.org/ICloudObserverService/RegisterGroupResponse")]
-        System.IAsyncResult BeginRegisterGroup(string name, int privacy, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/CameraAdd", ReplyAction="http://tempuri.org/ICloudObserverService/CameraAddResponse")]
+        System.IAsyncResult BeginCameraAdd(string name, string description, byte[] icon, System.AsyncCallback callback, object asyncState);
         
-        int EndRegisterGroup(System.IAsyncResult result);
+        int EndCameraAdd(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/RemoveGroup", ReplyAction="http://tempuri.org/ICloudObserverService/RemoveGroupResponse")]
-        System.IAsyncResult BeginRemoveGroup(int groupID, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/CameraRemove", ReplyAction="http://tempuri.org/ICloudObserverService/CameraRemoveResponse")]
+        System.IAsyncResult BeginCameraRemove(int cameraID, System.AsyncCallback callback, object asyncState);
         
-        void EndRemoveGroup(System.IAsyncResult result);
+        void EndCameraRemove(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GetGroupID", ReplyAction="http://tempuri.org/ICloudObserverService/GetGroupIDResponse")]
-        System.IAsyncResult BeginGetGroupID(string name, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/CameraGetID", ReplyAction="http://tempuri.org/ICloudObserverService/CameraGetIDResponse")]
+        System.IAsyncResult BeginCameraGetID(string path, System.AsyncCallback callback, object asyncState);
         
-        int EndGetGroupID(System.IAsyncResult result);
+        int EndCameraGetID(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GetGroupName", ReplyAction="http://tempuri.org/ICloudObserverService/GetGroupNameResponse")]
-        System.IAsyncResult BeginGetGroupName(int groupID, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/CameraGetPath", ReplyAction="http://tempuri.org/ICloudObserverService/CameraGetPathResponse")]
+        System.IAsyncResult BeginCameraGetPath(int cameraID, System.AsyncCallback callback, object asyncState);
         
-        string EndGetGroupName(System.IAsyncResult result);
+        string EndCameraGetPath(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GetGroupDescription", ReplyAction="http://tempuri.org/ICloudObserverService/GetGroupDescriptionResponse")]
-        System.IAsyncResult BeginGetGroupDescription(int groupID, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/CameraGetName", ReplyAction="http://tempuri.org/ICloudObserverService/CameraGetNameResponse")]
+        System.IAsyncResult BeginCameraGetName(int cameraID, System.AsyncCallback callback, object asyncState);
         
-        string EndGetGroupDescription(System.IAsyncResult result);
+        string EndCameraGetName(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GetGroupIcon", ReplyAction="http://tempuri.org/ICloudObserverService/GetGroupIconResponse")]
-        System.IAsyncResult BeginGetGroupIcon(int groupID, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/CameraGetDescription", ReplyAction="http://tempuri.org/ICloudObserverService/CameraGetDescriptionResponse")]
+        System.IAsyncResult BeginCameraGetDescription(int cameraID, System.AsyncCallback callback, object asyncState);
         
-        byte[] EndGetGroupIcon(System.IAsyncResult result);
+        string EndCameraGetDescription(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GetGroupPrivacy", ReplyAction="http://tempuri.org/ICloudObserverService/GetGroupPrivacyResponse")]
-        System.IAsyncResult BeginGetGroupPrivacy(int groupID, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/CameraGetIcon", ReplyAction="http://tempuri.org/ICloudObserverService/CameraGetIconResponse")]
+        System.IAsyncResult BeginCameraGetIcon(int cameraID, System.AsyncCallback callback, object asyncState);
         
-        int EndGetGroupPrivacy(System.IAsyncResult result);
+        byte[] EndCameraGetIcon(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GetGroupRegistrationDate", ReplyAction="http://tempuri.org/ICloudObserverService/GetGroupRegistrationDateResponse")]
-        System.IAsyncResult BeginGetGroupRegistrationDate(int groupID, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/CameraGetRegistrationDate", ReplyAction="http://tempuri.org/ICloudObserverService/CameraGetRegistrationDateResponse")]
+        System.IAsyncResult BeginCameraGetRegistrationDate(int cameraID, System.AsyncCallback callback, object asyncState);
         
-        System.DateTime EndGetGroupRegistrationDate(System.IAsyncResult result);
+        System.DateTime EndCameraGetRegistrationDate(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GetGroupMembers", ReplyAction="http://tempuri.org/ICloudObserverService/GetGroupMembersResponse")]
-        System.IAsyncResult BeginGetGroupMembers(int groupID, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/CameraGetGroups", ReplyAction="http://tempuri.org/ICloudObserverService/CameraGetGroupsResponse")]
+        System.IAsyncResult BeginCameraGetGroups(int cameraID, System.AsyncCallback callback, object asyncState);
         
-        System.Collections.ObjectModel.ObservableCollection<int> EndGetGroupMembers(System.IAsyncResult result);
+        System.Collections.ObjectModel.ObservableCollection<int> EndCameraGetGroups(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GetGroupCameras", ReplyAction="http://tempuri.org/ICloudObserverService/GetGroupCamerasResponse")]
-        System.IAsyncResult BeginGetGroupCameras(int groupID, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/CameraGetFrames", ReplyAction="http://tempuri.org/ICloudObserverService/CameraGetFramesResponse")]
+        System.IAsyncResult BeginCameraGetFrames(int cameraID, System.AsyncCallback callback, object asyncState);
         
-        System.Collections.ObjectModel.ObservableCollection<int> EndGetGroupCameras(System.IAsyncResult result);
+        System.Collections.ObjectModel.ObservableCollection<int> EndCameraGetFrames(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/SetGroupName", ReplyAction="http://tempuri.org/ICloudObserverService/SetGroupNameResponse")]
-        System.IAsyncResult BeginSetGroupName(int groupID, string name, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/CameraSetName", ReplyAction="http://tempuri.org/ICloudObserverService/CameraSetNameResponse")]
+        System.IAsyncResult BeginCameraSetName(int cameraID, string name, System.AsyncCallback callback, object asyncState);
         
-        void EndSetGroupName(System.IAsyncResult result);
+        void EndCameraSetName(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/SetGroupDescription", ReplyAction="http://tempuri.org/ICloudObserverService/SetGroupDescriptionResponse")]
-        System.IAsyncResult BeginSetGroupDescription(int groupID, string description, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/CameraSetDescription", ReplyAction="http://tempuri.org/ICloudObserverService/CameraSetDescriptionResponse")]
+        System.IAsyncResult BeginCameraSetDescription(int cameraID, string description, System.AsyncCallback callback, object asyncState);
         
-        void EndSetGroupDescription(System.IAsyncResult result);
+        void EndCameraSetDescription(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/SetGroupIcon", ReplyAction="http://tempuri.org/ICloudObserverService/SetGroupIconResponse")]
-        System.IAsyncResult BeginSetGroupIcon(int groupID, byte[] icon, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/CameraSetIcon", ReplyAction="http://tempuri.org/ICloudObserverService/CameraSetIconResponse")]
+        System.IAsyncResult BeginCameraSetIcon(int cameraID, byte[] icon, System.AsyncCallback callback, object asyncState);
         
-        void EndSetGroupIcon(System.IAsyncResult result);
+        void EndCameraSetIcon(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/SetGroupPrivacy", ReplyAction="http://tempuri.org/ICloudObserverService/SetGroupPrivacyResponse")]
-        System.IAsyncResult BeginSetGroupPrivacy(int groupID, int privacy, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GroupAdd", ReplyAction="http://tempuri.org/ICloudObserverService/GroupAddResponse")]
+        System.IAsyncResult BeginGroupAdd(string name, string description, byte[] icon, int privacy, System.AsyncCallback callback, object asyncState);
         
-        void EndSetGroupPrivacy(System.IAsyncResult result);
+        int EndGroupAdd(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/AddGroupMember", ReplyAction="http://tempuri.org/ICloudObserverService/AddGroupMemberResponse")]
-        System.IAsyncResult BeginAddGroupMember(int userID, int groupID, int privileges, System.AsyncCallback callback, object asyncState);
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ICloudObserverService/GroupRemove", ReplyAction="http://tempuri.org/ICloudObserverService/GroupRemoveResponse")]
+        System.IAsyncResult BeginGroupRemove(int groupID, System.AsyncCallback callback, object asyncState);
         
-        void EndAddGroupMember(System.IAsyncResult result);
+        void EndGroupRemove(System.IAsyncResult result);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
@@ -295,30 +295,11 @@ namespace CloudObserverUserInterface.CloudObserverServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-    public partial class IsCameraRegisteredCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    public partial class GroupGetIDCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
         
         private object[] results;
         
-        public IsCameraRegisteredCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
-            this.results = results;
-        }
-        
-        public bool Result {
-            get {
-                base.RaiseExceptionIfNecessary();
-                return ((bool)(this.results[0]));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-    public partial class RegisterCameraCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
-        private object[] results;
-        
-        public RegisterCameraCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+        public GroupGetIDCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
@@ -333,30 +314,11 @@ namespace CloudObserverUserInterface.CloudObserverServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-    public partial class GetCameraIDCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    public partial class GroupGetNameCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
         
         private object[] results;
         
-        public GetCameraIDCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
-            this.results = results;
-        }
-        
-        public int Result {
-            get {
-                base.RaiseExceptionIfNecessary();
-                return ((int)(this.results[0]));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-    public partial class GetCameraPathCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
-        private object[] results;
-        
-        public GetCameraPathCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+        public GroupGetNameCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
@@ -371,11 +333,11 @@ namespace CloudObserverUserInterface.CloudObserverServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-    public partial class GetCameraNameCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    public partial class GroupGetDescriptionCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
         
         private object[] results;
         
-        public GetCameraNameCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+        public GroupGetDescriptionCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
@@ -390,30 +352,11 @@ namespace CloudObserverUserInterface.CloudObserverServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-    public partial class GetCameraDescriptionCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    public partial class GroupGetIconCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
         
         private object[] results;
         
-        public GetCameraDescriptionCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
-            this.results = results;
-        }
-        
-        public string Result {
-            get {
-                base.RaiseExceptionIfNecessary();
-                return ((string)(this.results[0]));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-    public partial class GetCameraIconCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
-        private object[] results;
-        
-        public GetCameraIconCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+        public GroupGetIconCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
@@ -428,11 +371,30 @@ namespace CloudObserverUserInterface.CloudObserverServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-    public partial class GetCameraRegistrationDateCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    public partial class GroupGetPrivacyCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
         
         private object[] results;
         
-        public GetCameraRegistrationDateCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+        public GroupGetPrivacyCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        public int Result {
+            get {
+                base.RaiseExceptionIfNecessary();
+                return ((int)(this.results[0]));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
+    public partial class GroupGetRegistrationDateCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        public GroupGetRegistrationDateCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
@@ -447,11 +409,11 @@ namespace CloudObserverUserInterface.CloudObserverServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-    public partial class GetCameraGroupsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    public partial class GroupGetMembersCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
         
         private object[] results;
         
-        public GetCameraGroupsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+        public GroupGetMembersCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
@@ -466,11 +428,11 @@ namespace CloudObserverUserInterface.CloudObserverServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-    public partial class GetCameraFramesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    public partial class GroupGetCamerasCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
         
         private object[] results;
         
-        public GetCameraFramesCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+        public GroupGetCamerasCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
@@ -485,87 +447,11 @@ namespace CloudObserverUserInterface.CloudObserverServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-    public partial class GetFrameContentCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    public partial class GroupMemberGetPrivilegesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
         
         private object[] results;
         
-        public GetFrameContentCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
-            this.results = results;
-        }
-        
-        public byte[] Result {
-            get {
-                base.RaiseExceptionIfNecessary();
-                return ((byte[])(this.results[0]));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-    public partial class GetFrameMarkerCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
-        private object[] results;
-        
-        public GetFrameMarkerCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
-            this.results = results;
-        }
-        
-        public string Result {
-            get {
-                base.RaiseExceptionIfNecessary();
-                return ((string)(this.results[0]));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-    public partial class IsEmailRegisteredCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
-        private object[] results;
-        
-        public IsEmailRegisteredCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
-            this.results = results;
-        }
-        
-        public bool Result {
-            get {
-                base.RaiseExceptionIfNecessary();
-                return ((bool)(this.results[0]));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-    public partial class IsUserRegisteredCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
-        private object[] results;
-        
-        public IsUserRegisteredCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
-            this.results = results;
-        }
-        
-        public bool Result {
-            get {
-                base.RaiseExceptionIfNecessary();
-                return ((bool)(this.results[0]));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-    public partial class RegisterUserCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
-        private object[] results;
-        
-        public RegisterUserCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+        public GroupMemberGetPrivilegesCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
@@ -580,11 +466,11 @@ namespace CloudObserverUserInterface.CloudObserverServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-    public partial class GetUserIDCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    public partial class FrameAddCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
         
         private object[] results;
         
-        public GetUserIDCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+        public FrameAddCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
@@ -599,87 +485,11 @@ namespace CloudObserverUserInterface.CloudObserverServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-    public partial class GetUserEmailCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    public partial class FrameGetContentCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
         
         private object[] results;
         
-        public GetUserEmailCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
-            this.results = results;
-        }
-        
-        public string Result {
-            get {
-                base.RaiseExceptionIfNecessary();
-                return ((string)(this.results[0]));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-    public partial class GetUserPasswordCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
-        private object[] results;
-        
-        public GetUserPasswordCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
-            this.results = results;
-        }
-        
-        public string Result {
-            get {
-                base.RaiseExceptionIfNecessary();
-                return ((string)(this.results[0]));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-    public partial class GetUserNameCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
-        private object[] results;
-        
-        public GetUserNameCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
-            this.results = results;
-        }
-        
-        public string Result {
-            get {
-                base.RaiseExceptionIfNecessary();
-                return ((string)(this.results[0]));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-    public partial class GetUserDescriptionCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
-        private object[] results;
-        
-        public GetUserDescriptionCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
-            this.results = results;
-        }
-        
-        public string Result {
-            get {
-                base.RaiseExceptionIfNecessary();
-                return ((string)(this.results[0]));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-    public partial class GetUserIconCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
-        private object[] results;
-        
-        public GetUserIconCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+        public FrameGetContentCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
@@ -694,11 +504,201 @@ namespace CloudObserverUserInterface.CloudObserverServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-    public partial class GetUserRegistrationDateCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    public partial class FrameGetMarkerCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
         
         private object[] results;
         
-        public GetUserRegistrationDateCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+        public FrameGetMarkerCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        public string Result {
+            get {
+                base.RaiseExceptionIfNecessary();
+                return ((string)(this.results[0]));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
+    public partial class UserIsEmailAvailableCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        public UserIsEmailAvailableCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        public bool Result {
+            get {
+                base.RaiseExceptionIfNecessary();
+                return ((bool)(this.results[0]));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
+    public partial class UserLoginCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        public UserLoginCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        public bool Result {
+            get {
+                base.RaiseExceptionIfNecessary();
+                return ((bool)(this.results[0]));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
+    public partial class UserAddCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        public UserAddCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        public int Result {
+            get {
+                base.RaiseExceptionIfNecessary();
+                return ((int)(this.results[0]));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
+    public partial class UserGetIDCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        public UserGetIDCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        public int Result {
+            get {
+                base.RaiseExceptionIfNecessary();
+                return ((int)(this.results[0]));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
+    public partial class UserGetEmailCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        public UserGetEmailCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        public string Result {
+            get {
+                base.RaiseExceptionIfNecessary();
+                return ((string)(this.results[0]));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
+    public partial class UserGetPasswordCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        public UserGetPasswordCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        public string Result {
+            get {
+                base.RaiseExceptionIfNecessary();
+                return ((string)(this.results[0]));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
+    public partial class UserGetNameCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        public UserGetNameCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        public string Result {
+            get {
+                base.RaiseExceptionIfNecessary();
+                return ((string)(this.results[0]));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
+    public partial class UserGetDescriptionCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        public UserGetDescriptionCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        public string Result {
+            get {
+                base.RaiseExceptionIfNecessary();
+                return ((string)(this.results[0]));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
+    public partial class UserGetIconCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        public UserGetIconCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        public byte[] Result {
+            get {
+                base.RaiseExceptionIfNecessary();
+                return ((byte[])(this.results[0]));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
+    public partial class UserGetRegistrationDateCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        public UserGetRegistrationDateCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
@@ -713,11 +713,11 @@ namespace CloudObserverUserInterface.CloudObserverServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-    public partial class GetUserGroupsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    public partial class UserGetGroupsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
         
         private object[] results;
         
-        public GetUserGroupsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+        public UserGetGroupsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
@@ -732,11 +732,11 @@ namespace CloudObserverUserInterface.CloudObserverServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-    public partial class IsGroupRegisteredCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    public partial class CameraIsPathAvailableCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
         
         private object[] results;
         
-        public IsGroupRegisteredCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+        public CameraIsPathAvailableCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
@@ -751,11 +751,11 @@ namespace CloudObserverUserInterface.CloudObserverServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-    public partial class RegisterGroupCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    public partial class CameraAddCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
         
         private object[] results;
         
-        public RegisterGroupCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+        public CameraAddCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
@@ -770,11 +770,11 @@ namespace CloudObserverUserInterface.CloudObserverServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-    public partial class GetGroupIDCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    public partial class CameraGetIDCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
         
         private object[] results;
         
-        public GetGroupIDCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+        public CameraGetIDCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
@@ -789,11 +789,11 @@ namespace CloudObserverUserInterface.CloudObserverServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-    public partial class GetGroupNameCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    public partial class CameraGetPathCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
         
         private object[] results;
         
-        public GetGroupNameCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+        public CameraGetPathCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
@@ -808,11 +808,11 @@ namespace CloudObserverUserInterface.CloudObserverServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-    public partial class GetGroupDescriptionCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    public partial class CameraGetNameCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
         
         private object[] results;
         
-        public GetGroupDescriptionCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+        public CameraGetNameCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
@@ -827,11 +827,30 @@ namespace CloudObserverUserInterface.CloudObserverServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-    public partial class GetGroupIconCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    public partial class CameraGetDescriptionCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
         
         private object[] results;
         
-        public GetGroupIconCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+        public CameraGetDescriptionCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        public string Result {
+            get {
+                base.RaiseExceptionIfNecessary();
+                return ((string)(this.results[0]));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
+    public partial class CameraGetIconCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        public CameraGetIconCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
@@ -846,30 +865,11 @@ namespace CloudObserverUserInterface.CloudObserverServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-    public partial class GetGroupPrivacyCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    public partial class CameraGetRegistrationDateCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
         
         private object[] results;
         
-        public GetGroupPrivacyCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
-            this.results = results;
-        }
-        
-        public int Result {
-            get {
-                base.RaiseExceptionIfNecessary();
-                return ((int)(this.results[0]));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-    public partial class GetGroupRegistrationDateCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
-        private object[] results;
-        
-        public GetGroupRegistrationDateCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+        public CameraGetRegistrationDateCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
@@ -884,11 +884,11 @@ namespace CloudObserverUserInterface.CloudObserverServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-    public partial class GetGroupMembersCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    public partial class CameraGetGroupsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
         
         private object[] results;
         
-        public GetGroupMembersCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+        public CameraGetGroupsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
@@ -903,11 +903,11 @@ namespace CloudObserverUserInterface.CloudObserverServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-    public partial class GetGroupCamerasCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    public partial class CameraGetFramesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
         
         private object[] results;
         
-        public GetGroupCamerasCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+        public CameraGetFramesCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
@@ -916,6 +916,25 @@ namespace CloudObserverUserInterface.CloudObserverServiceReference {
             get {
                 base.RaiseExceptionIfNecessary();
                 return ((System.Collections.ObjectModel.ObservableCollection<int>)(this.results[0]));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
+    public partial class GroupAddCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        public GroupAddCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        public int Result {
+            get {
+                base.RaiseExceptionIfNecessary();
+                return ((int)(this.results[0]));
             }
         }
     }
@@ -924,329 +943,329 @@ namespace CloudObserverUserInterface.CloudObserverServiceReference {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
     public partial class CloudObserverServiceClient : System.ServiceModel.ClientBase<CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService>, CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService {
         
-        private BeginOperationDelegate onBeginSetGroupMemberPrivilegesDelegate;
+        private BeginOperationDelegate onBeginGroupGetIDDelegate;
         
-        private EndOperationDelegate onEndSetGroupMemberPrivilegesDelegate;
+        private EndOperationDelegate onEndGroupGetIDDelegate;
         
-        private System.Threading.SendOrPostCallback onSetGroupMemberPrivilegesCompletedDelegate;
+        private System.Threading.SendOrPostCallback onGroupGetIDCompletedDelegate;
         
-        private BeginOperationDelegate onBeginRemoveGroupMemberDelegate;
+        private BeginOperationDelegate onBeginGroupGetNameDelegate;
         
-        private EndOperationDelegate onEndRemoveGroupMemberDelegate;
+        private EndOperationDelegate onEndGroupGetNameDelegate;
         
-        private System.Threading.SendOrPostCallback onRemoveGroupMemberCompletedDelegate;
+        private System.Threading.SendOrPostCallback onGroupGetNameCompletedDelegate;
         
-        private BeginOperationDelegate onBeginAddGroupCameraDelegate;
+        private BeginOperationDelegate onBeginGroupGetDescriptionDelegate;
         
-        private EndOperationDelegate onEndAddGroupCameraDelegate;
+        private EndOperationDelegate onEndGroupGetDescriptionDelegate;
         
-        private System.Threading.SendOrPostCallback onAddGroupCameraCompletedDelegate;
+        private System.Threading.SendOrPostCallback onGroupGetDescriptionCompletedDelegate;
         
-        private BeginOperationDelegate onBeginRemoveGroupCameraDelegate;
+        private BeginOperationDelegate onBeginGroupGetIconDelegate;
         
-        private EndOperationDelegate onEndRemoveGroupCameraDelegate;
+        private EndOperationDelegate onEndGroupGetIconDelegate;
         
-        private System.Threading.SendOrPostCallback onRemoveGroupCameraCompletedDelegate;
+        private System.Threading.SendOrPostCallback onGroupGetIconCompletedDelegate;
         
-        private BeginOperationDelegate onBeginIsCameraRegisteredDelegate;
+        private BeginOperationDelegate onBeginGroupGetPrivacyDelegate;
         
-        private EndOperationDelegate onEndIsCameraRegisteredDelegate;
+        private EndOperationDelegate onEndGroupGetPrivacyDelegate;
         
-        private System.Threading.SendOrPostCallback onIsCameraRegisteredCompletedDelegate;
+        private System.Threading.SendOrPostCallback onGroupGetPrivacyCompletedDelegate;
         
-        private BeginOperationDelegate onBeginRegisterCameraDelegate;
+        private BeginOperationDelegate onBeginGroupGetRegistrationDateDelegate;
         
-        private EndOperationDelegate onEndRegisterCameraDelegate;
+        private EndOperationDelegate onEndGroupGetRegistrationDateDelegate;
         
-        private System.Threading.SendOrPostCallback onRegisterCameraCompletedDelegate;
+        private System.Threading.SendOrPostCallback onGroupGetRegistrationDateCompletedDelegate;
         
-        private BeginOperationDelegate onBeginRemoveCameraDelegate;
+        private BeginOperationDelegate onBeginGroupGetMembersDelegate;
         
-        private EndOperationDelegate onEndRemoveCameraDelegate;
+        private EndOperationDelegate onEndGroupGetMembersDelegate;
         
-        private System.Threading.SendOrPostCallback onRemoveCameraCompletedDelegate;
+        private System.Threading.SendOrPostCallback onGroupGetMembersCompletedDelegate;
         
-        private BeginOperationDelegate onBeginGetCameraIDDelegate;
+        private BeginOperationDelegate onBeginGroupGetCamerasDelegate;
         
-        private EndOperationDelegate onEndGetCameraIDDelegate;
+        private EndOperationDelegate onEndGroupGetCamerasDelegate;
         
-        private System.Threading.SendOrPostCallback onGetCameraIDCompletedDelegate;
+        private System.Threading.SendOrPostCallback onGroupGetCamerasCompletedDelegate;
         
-        private BeginOperationDelegate onBeginGetCameraPathDelegate;
+        private BeginOperationDelegate onBeginGroupSetNameDelegate;
         
-        private EndOperationDelegate onEndGetCameraPathDelegate;
+        private EndOperationDelegate onEndGroupSetNameDelegate;
         
-        private System.Threading.SendOrPostCallback onGetCameraPathCompletedDelegate;
+        private System.Threading.SendOrPostCallback onGroupSetNameCompletedDelegate;
         
-        private BeginOperationDelegate onBeginGetCameraNameDelegate;
+        private BeginOperationDelegate onBeginGroupSetDescriptionDelegate;
         
-        private EndOperationDelegate onEndGetCameraNameDelegate;
+        private EndOperationDelegate onEndGroupSetDescriptionDelegate;
         
-        private System.Threading.SendOrPostCallback onGetCameraNameCompletedDelegate;
+        private System.Threading.SendOrPostCallback onGroupSetDescriptionCompletedDelegate;
         
-        private BeginOperationDelegate onBeginGetCameraDescriptionDelegate;
+        private BeginOperationDelegate onBeginGroupSetIconDelegate;
         
-        private EndOperationDelegate onEndGetCameraDescriptionDelegate;
+        private EndOperationDelegate onEndGroupSetIconDelegate;
         
-        private System.Threading.SendOrPostCallback onGetCameraDescriptionCompletedDelegate;
+        private System.Threading.SendOrPostCallback onGroupSetIconCompletedDelegate;
         
-        private BeginOperationDelegate onBeginGetCameraIconDelegate;
+        private BeginOperationDelegate onBeginGroupSetPrivacyDelegate;
         
-        private EndOperationDelegate onEndGetCameraIconDelegate;
+        private EndOperationDelegate onEndGroupSetPrivacyDelegate;
         
-        private System.Threading.SendOrPostCallback onGetCameraIconCompletedDelegate;
+        private System.Threading.SendOrPostCallback onGroupSetPrivacyCompletedDelegate;
         
-        private BeginOperationDelegate onBeginGetCameraRegistrationDateDelegate;
+        private BeginOperationDelegate onBeginGroupMemberAddDelegate;
         
-        private EndOperationDelegate onEndGetCameraRegistrationDateDelegate;
+        private EndOperationDelegate onEndGroupMemberAddDelegate;
         
-        private System.Threading.SendOrPostCallback onGetCameraRegistrationDateCompletedDelegate;
+        private System.Threading.SendOrPostCallback onGroupMemberAddCompletedDelegate;
         
-        private BeginOperationDelegate onBeginGetCameraGroupsDelegate;
+        private BeginOperationDelegate onBeginGroupMemberRemoveDelegate;
         
-        private EndOperationDelegate onEndGetCameraGroupsDelegate;
+        private EndOperationDelegate onEndGroupMemberRemoveDelegate;
         
-        private System.Threading.SendOrPostCallback onGetCameraGroupsCompletedDelegate;
+        private System.Threading.SendOrPostCallback onGroupMemberRemoveCompletedDelegate;
         
-        private BeginOperationDelegate onBeginGetCameraFramesDelegate;
+        private BeginOperationDelegate onBeginGroupMemberGetPrivilegesDelegate;
         
-        private EndOperationDelegate onEndGetCameraFramesDelegate;
+        private EndOperationDelegate onEndGroupMemberGetPrivilegesDelegate;
         
-        private System.Threading.SendOrPostCallback onGetCameraFramesCompletedDelegate;
+        private System.Threading.SendOrPostCallback onGroupMemberGetPrivilegesCompletedDelegate;
         
-        private BeginOperationDelegate onBeginSetCameraNameDelegate;
+        private BeginOperationDelegate onBeginGroupMemberSetPrivilegesDelegate;
         
-        private EndOperationDelegate onEndSetCameraNameDelegate;
+        private EndOperationDelegate onEndGroupMemberSetPrivilegesDelegate;
         
-        private System.Threading.SendOrPostCallback onSetCameraNameCompletedDelegate;
+        private System.Threading.SendOrPostCallback onGroupMemberSetPrivilegesCompletedDelegate;
         
-        private BeginOperationDelegate onBeginSetCameraDescriptionDelegate;
+        private BeginOperationDelegate onBeginGroupCameraAddDelegate;
         
-        private EndOperationDelegate onEndSetCameraDescriptionDelegate;
+        private EndOperationDelegate onEndGroupCameraAddDelegate;
         
-        private System.Threading.SendOrPostCallback onSetCameraDescriptionCompletedDelegate;
+        private System.Threading.SendOrPostCallback onGroupCameraAddCompletedDelegate;
         
-        private BeginOperationDelegate onBeginSetCameraIconDelegate;
+        private BeginOperationDelegate onBeginGroupCameraRemoveDelegate;
         
-        private EndOperationDelegate onEndSetCameraIconDelegate;
+        private EndOperationDelegate onEndGroupCameraRemoveDelegate;
         
-        private System.Threading.SendOrPostCallback onSetCameraIconCompletedDelegate;
+        private System.Threading.SendOrPostCallback onGroupCameraRemoveCompletedDelegate;
         
-        private BeginOperationDelegate onBeginAddFrameDelegate;
+        private BeginOperationDelegate onBeginFrameAddDelegate;
         
-        private EndOperationDelegate onEndAddFrameDelegate;
+        private EndOperationDelegate onEndFrameAddDelegate;
         
-        private System.Threading.SendOrPostCallback onAddFrameCompletedDelegate;
+        private System.Threading.SendOrPostCallback onFrameAddCompletedDelegate;
         
-        private BeginOperationDelegate onBeginRemoveFrameDelegate;
+        private BeginOperationDelegate onBeginFrameRemoveDelegate;
         
-        private EndOperationDelegate onEndRemoveFrameDelegate;
+        private EndOperationDelegate onEndFrameRemoveDelegate;
         
-        private System.Threading.SendOrPostCallback onRemoveFrameCompletedDelegate;
+        private System.Threading.SendOrPostCallback onFrameRemoveCompletedDelegate;
         
-        private BeginOperationDelegate onBeginGetFrameContentDelegate;
+        private BeginOperationDelegate onBeginFrameGetContentDelegate;
         
-        private EndOperationDelegate onEndGetFrameContentDelegate;
+        private EndOperationDelegate onEndFrameGetContentDelegate;
         
-        private System.Threading.SendOrPostCallback onGetFrameContentCompletedDelegate;
+        private System.Threading.SendOrPostCallback onFrameGetContentCompletedDelegate;
         
-        private BeginOperationDelegate onBeginGetFrameMarkerDelegate;
+        private BeginOperationDelegate onBeginFrameGetMarkerDelegate;
         
-        private EndOperationDelegate onEndGetFrameMarkerDelegate;
+        private EndOperationDelegate onEndFrameGetMarkerDelegate;
         
-        private System.Threading.SendOrPostCallback onGetFrameMarkerCompletedDelegate;
+        private System.Threading.SendOrPostCallback onFrameGetMarkerCompletedDelegate;
         
-        private BeginOperationDelegate onBeginIsEmailRegisteredDelegate;
+        private BeginOperationDelegate onBeginUserIsEmailAvailableDelegate;
         
-        private EndOperationDelegate onEndIsEmailRegisteredDelegate;
+        private EndOperationDelegate onEndUserIsEmailAvailableDelegate;
         
-        private System.Threading.SendOrPostCallback onIsEmailRegisteredCompletedDelegate;
+        private System.Threading.SendOrPostCallback onUserIsEmailAvailableCompletedDelegate;
         
-        private BeginOperationDelegate onBeginIsUserRegisteredDelegate;
+        private BeginOperationDelegate onBeginUserLoginDelegate;
         
-        private EndOperationDelegate onEndIsUserRegisteredDelegate;
+        private EndOperationDelegate onEndUserLoginDelegate;
         
-        private System.Threading.SendOrPostCallback onIsUserRegisteredCompletedDelegate;
+        private System.Threading.SendOrPostCallback onUserLoginCompletedDelegate;
         
-        private BeginOperationDelegate onBeginRegisterUserDelegate;
+        private BeginOperationDelegate onBeginUserAddDelegate;
         
-        private EndOperationDelegate onEndRegisterUserDelegate;
+        private EndOperationDelegate onEndUserAddDelegate;
         
-        private System.Threading.SendOrPostCallback onRegisterUserCompletedDelegate;
+        private System.Threading.SendOrPostCallback onUserAddCompletedDelegate;
         
-        private BeginOperationDelegate onBeginRemoveUserDelegate;
+        private BeginOperationDelegate onBeginUserRemoveDelegate;
         
-        private EndOperationDelegate onEndRemoveUserDelegate;
+        private EndOperationDelegate onEndUserRemoveDelegate;
         
-        private System.Threading.SendOrPostCallback onRemoveUserCompletedDelegate;
+        private System.Threading.SendOrPostCallback onUserRemoveCompletedDelegate;
         
-        private BeginOperationDelegate onBeginGetUserIDDelegate;
+        private BeginOperationDelegate onBeginUserGetIDDelegate;
         
-        private EndOperationDelegate onEndGetUserIDDelegate;
+        private EndOperationDelegate onEndUserGetIDDelegate;
         
-        private System.Threading.SendOrPostCallback onGetUserIDCompletedDelegate;
+        private System.Threading.SendOrPostCallback onUserGetIDCompletedDelegate;
         
-        private BeginOperationDelegate onBeginGetUserEmailDelegate;
+        private BeginOperationDelegate onBeginUserGetEmailDelegate;
         
-        private EndOperationDelegate onEndGetUserEmailDelegate;
+        private EndOperationDelegate onEndUserGetEmailDelegate;
         
-        private System.Threading.SendOrPostCallback onGetUserEmailCompletedDelegate;
+        private System.Threading.SendOrPostCallback onUserGetEmailCompletedDelegate;
         
-        private BeginOperationDelegate onBeginGetUserPasswordDelegate;
+        private BeginOperationDelegate onBeginUserGetPasswordDelegate;
         
-        private EndOperationDelegate onEndGetUserPasswordDelegate;
+        private EndOperationDelegate onEndUserGetPasswordDelegate;
         
-        private System.Threading.SendOrPostCallback onGetUserPasswordCompletedDelegate;
+        private System.Threading.SendOrPostCallback onUserGetPasswordCompletedDelegate;
         
-        private BeginOperationDelegate onBeginGetUserNameDelegate;
+        private BeginOperationDelegate onBeginUserGetNameDelegate;
         
-        private EndOperationDelegate onEndGetUserNameDelegate;
+        private EndOperationDelegate onEndUserGetNameDelegate;
         
-        private System.Threading.SendOrPostCallback onGetUserNameCompletedDelegate;
+        private System.Threading.SendOrPostCallback onUserGetNameCompletedDelegate;
         
-        private BeginOperationDelegate onBeginGetUserDescriptionDelegate;
+        private BeginOperationDelegate onBeginUserGetDescriptionDelegate;
         
-        private EndOperationDelegate onEndGetUserDescriptionDelegate;
+        private EndOperationDelegate onEndUserGetDescriptionDelegate;
         
-        private System.Threading.SendOrPostCallback onGetUserDescriptionCompletedDelegate;
+        private System.Threading.SendOrPostCallback onUserGetDescriptionCompletedDelegate;
         
-        private BeginOperationDelegate onBeginGetUserIconDelegate;
+        private BeginOperationDelegate onBeginUserGetIconDelegate;
         
-        private EndOperationDelegate onEndGetUserIconDelegate;
+        private EndOperationDelegate onEndUserGetIconDelegate;
         
-        private System.Threading.SendOrPostCallback onGetUserIconCompletedDelegate;
+        private System.Threading.SendOrPostCallback onUserGetIconCompletedDelegate;
         
-        private BeginOperationDelegate onBeginGetUserRegistrationDateDelegate;
+        private BeginOperationDelegate onBeginUserGetRegistrationDateDelegate;
         
-        private EndOperationDelegate onEndGetUserRegistrationDateDelegate;
+        private EndOperationDelegate onEndUserGetRegistrationDateDelegate;
         
-        private System.Threading.SendOrPostCallback onGetUserRegistrationDateCompletedDelegate;
+        private System.Threading.SendOrPostCallback onUserGetRegistrationDateCompletedDelegate;
         
-        private BeginOperationDelegate onBeginGetUserGroupsDelegate;
+        private BeginOperationDelegate onBeginUserGetGroupsDelegate;
         
-        private EndOperationDelegate onEndGetUserGroupsDelegate;
+        private EndOperationDelegate onEndUserGetGroupsDelegate;
         
-        private System.Threading.SendOrPostCallback onGetUserGroupsCompletedDelegate;
+        private System.Threading.SendOrPostCallback onUserGetGroupsCompletedDelegate;
         
-        private BeginOperationDelegate onBeginSetUserPasswordDelegate;
+        private BeginOperationDelegate onBeginUserSetPasswordDelegate;
         
-        private EndOperationDelegate onEndSetUserPasswordDelegate;
+        private EndOperationDelegate onEndUserSetPasswordDelegate;
         
-        private System.Threading.SendOrPostCallback onSetUserPasswordCompletedDelegate;
+        private System.Threading.SendOrPostCallback onUserSetPasswordCompletedDelegate;
         
-        private BeginOperationDelegate onBeginSetUserNameDelegate;
+        private BeginOperationDelegate onBeginUserSetNameDelegate;
         
-        private EndOperationDelegate onEndSetUserNameDelegate;
+        private EndOperationDelegate onEndUserSetNameDelegate;
         
-        private System.Threading.SendOrPostCallback onSetUserNameCompletedDelegate;
+        private System.Threading.SendOrPostCallback onUserSetNameCompletedDelegate;
         
-        private BeginOperationDelegate onBeginSetUserDescriptionDelegate;
+        private BeginOperationDelegate onBeginUserSetDescriptionDelegate;
         
-        private EndOperationDelegate onEndSetUserDescriptionDelegate;
+        private EndOperationDelegate onEndUserSetDescriptionDelegate;
         
-        private System.Threading.SendOrPostCallback onSetUserDescriptionCompletedDelegate;
+        private System.Threading.SendOrPostCallback onUserSetDescriptionCompletedDelegate;
         
-        private BeginOperationDelegate onBeginSetUserIconDelegate;
+        private BeginOperationDelegate onBeginUserSetIconDelegate;
         
-        private EndOperationDelegate onEndSetUserIconDelegate;
+        private EndOperationDelegate onEndUserSetIconDelegate;
         
-        private System.Threading.SendOrPostCallback onSetUserIconCompletedDelegate;
+        private System.Threading.SendOrPostCallback onUserSetIconCompletedDelegate;
         
-        private BeginOperationDelegate onBeginIsGroupRegisteredDelegate;
+        private BeginOperationDelegate onBeginCameraIsPathAvailableDelegate;
         
-        private EndOperationDelegate onEndIsGroupRegisteredDelegate;
+        private EndOperationDelegate onEndCameraIsPathAvailableDelegate;
         
-        private System.Threading.SendOrPostCallback onIsGroupRegisteredCompletedDelegate;
+        private System.Threading.SendOrPostCallback onCameraIsPathAvailableCompletedDelegate;
         
-        private BeginOperationDelegate onBeginRegisterGroupDelegate;
+        private BeginOperationDelegate onBeginCameraAddDelegate;
         
-        private EndOperationDelegate onEndRegisterGroupDelegate;
+        private EndOperationDelegate onEndCameraAddDelegate;
         
-        private System.Threading.SendOrPostCallback onRegisterGroupCompletedDelegate;
+        private System.Threading.SendOrPostCallback onCameraAddCompletedDelegate;
         
-        private BeginOperationDelegate onBeginRemoveGroupDelegate;
+        private BeginOperationDelegate onBeginCameraRemoveDelegate;
         
-        private EndOperationDelegate onEndRemoveGroupDelegate;
+        private EndOperationDelegate onEndCameraRemoveDelegate;
         
-        private System.Threading.SendOrPostCallback onRemoveGroupCompletedDelegate;
+        private System.Threading.SendOrPostCallback onCameraRemoveCompletedDelegate;
         
-        private BeginOperationDelegate onBeginGetGroupIDDelegate;
+        private BeginOperationDelegate onBeginCameraGetIDDelegate;
         
-        private EndOperationDelegate onEndGetGroupIDDelegate;
+        private EndOperationDelegate onEndCameraGetIDDelegate;
         
-        private System.Threading.SendOrPostCallback onGetGroupIDCompletedDelegate;
+        private System.Threading.SendOrPostCallback onCameraGetIDCompletedDelegate;
         
-        private BeginOperationDelegate onBeginGetGroupNameDelegate;
+        private BeginOperationDelegate onBeginCameraGetPathDelegate;
         
-        private EndOperationDelegate onEndGetGroupNameDelegate;
+        private EndOperationDelegate onEndCameraGetPathDelegate;
         
-        private System.Threading.SendOrPostCallback onGetGroupNameCompletedDelegate;
+        private System.Threading.SendOrPostCallback onCameraGetPathCompletedDelegate;
         
-        private BeginOperationDelegate onBeginGetGroupDescriptionDelegate;
+        private BeginOperationDelegate onBeginCameraGetNameDelegate;
         
-        private EndOperationDelegate onEndGetGroupDescriptionDelegate;
+        private EndOperationDelegate onEndCameraGetNameDelegate;
         
-        private System.Threading.SendOrPostCallback onGetGroupDescriptionCompletedDelegate;
+        private System.Threading.SendOrPostCallback onCameraGetNameCompletedDelegate;
         
-        private BeginOperationDelegate onBeginGetGroupIconDelegate;
+        private BeginOperationDelegate onBeginCameraGetDescriptionDelegate;
         
-        private EndOperationDelegate onEndGetGroupIconDelegate;
+        private EndOperationDelegate onEndCameraGetDescriptionDelegate;
         
-        private System.Threading.SendOrPostCallback onGetGroupIconCompletedDelegate;
+        private System.Threading.SendOrPostCallback onCameraGetDescriptionCompletedDelegate;
         
-        private BeginOperationDelegate onBeginGetGroupPrivacyDelegate;
+        private BeginOperationDelegate onBeginCameraGetIconDelegate;
         
-        private EndOperationDelegate onEndGetGroupPrivacyDelegate;
+        private EndOperationDelegate onEndCameraGetIconDelegate;
         
-        private System.Threading.SendOrPostCallback onGetGroupPrivacyCompletedDelegate;
+        private System.Threading.SendOrPostCallback onCameraGetIconCompletedDelegate;
         
-        private BeginOperationDelegate onBeginGetGroupRegistrationDateDelegate;
+        private BeginOperationDelegate onBeginCameraGetRegistrationDateDelegate;
         
-        private EndOperationDelegate onEndGetGroupRegistrationDateDelegate;
+        private EndOperationDelegate onEndCameraGetRegistrationDateDelegate;
         
-        private System.Threading.SendOrPostCallback onGetGroupRegistrationDateCompletedDelegate;
+        private System.Threading.SendOrPostCallback onCameraGetRegistrationDateCompletedDelegate;
         
-        private BeginOperationDelegate onBeginGetGroupMembersDelegate;
+        private BeginOperationDelegate onBeginCameraGetGroupsDelegate;
         
-        private EndOperationDelegate onEndGetGroupMembersDelegate;
+        private EndOperationDelegate onEndCameraGetGroupsDelegate;
         
-        private System.Threading.SendOrPostCallback onGetGroupMembersCompletedDelegate;
+        private System.Threading.SendOrPostCallback onCameraGetGroupsCompletedDelegate;
         
-        private BeginOperationDelegate onBeginGetGroupCamerasDelegate;
+        private BeginOperationDelegate onBeginCameraGetFramesDelegate;
         
-        private EndOperationDelegate onEndGetGroupCamerasDelegate;
+        private EndOperationDelegate onEndCameraGetFramesDelegate;
         
-        private System.Threading.SendOrPostCallback onGetGroupCamerasCompletedDelegate;
+        private System.Threading.SendOrPostCallback onCameraGetFramesCompletedDelegate;
         
-        private BeginOperationDelegate onBeginSetGroupNameDelegate;
+        private BeginOperationDelegate onBeginCameraSetNameDelegate;
         
-        private EndOperationDelegate onEndSetGroupNameDelegate;
+        private EndOperationDelegate onEndCameraSetNameDelegate;
         
-        private System.Threading.SendOrPostCallback onSetGroupNameCompletedDelegate;
+        private System.Threading.SendOrPostCallback onCameraSetNameCompletedDelegate;
         
-        private BeginOperationDelegate onBeginSetGroupDescriptionDelegate;
+        private BeginOperationDelegate onBeginCameraSetDescriptionDelegate;
         
-        private EndOperationDelegate onEndSetGroupDescriptionDelegate;
+        private EndOperationDelegate onEndCameraSetDescriptionDelegate;
         
-        private System.Threading.SendOrPostCallback onSetGroupDescriptionCompletedDelegate;
+        private System.Threading.SendOrPostCallback onCameraSetDescriptionCompletedDelegate;
         
-        private BeginOperationDelegate onBeginSetGroupIconDelegate;
+        private BeginOperationDelegate onBeginCameraSetIconDelegate;
         
-        private EndOperationDelegate onEndSetGroupIconDelegate;
+        private EndOperationDelegate onEndCameraSetIconDelegate;
         
-        private System.Threading.SendOrPostCallback onSetGroupIconCompletedDelegate;
+        private System.Threading.SendOrPostCallback onCameraSetIconCompletedDelegate;
         
-        private BeginOperationDelegate onBeginSetGroupPrivacyDelegate;
+        private BeginOperationDelegate onBeginGroupAddDelegate;
         
-        private EndOperationDelegate onEndSetGroupPrivacyDelegate;
+        private EndOperationDelegate onEndGroupAddDelegate;
         
-        private System.Threading.SendOrPostCallback onSetGroupPrivacyCompletedDelegate;
+        private System.Threading.SendOrPostCallback onGroupAddCompletedDelegate;
         
-        private BeginOperationDelegate onBeginAddGroupMemberDelegate;
+        private BeginOperationDelegate onBeginGroupRemoveDelegate;
         
-        private EndOperationDelegate onEndAddGroupMemberDelegate;
+        private EndOperationDelegate onEndGroupRemoveDelegate;
         
-        private System.Threading.SendOrPostCallback onAddGroupMemberCompletedDelegate;
+        private System.Threading.SendOrPostCallback onGroupRemoveCompletedDelegate;
         
         private BeginOperationDelegate onBeginOpenDelegate;
         
@@ -1301,2627 +1320,2642 @@ namespace CloudObserverUserInterface.CloudObserverServiceReference {
             }
         }
         
-        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> SetGroupMemberPrivilegesCompleted;
+        public event System.EventHandler<GroupGetIDCompletedEventArgs> GroupGetIDCompleted;
         
-        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> RemoveGroupMemberCompleted;
+        public event System.EventHandler<GroupGetNameCompletedEventArgs> GroupGetNameCompleted;
         
-        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> AddGroupCameraCompleted;
+        public event System.EventHandler<GroupGetDescriptionCompletedEventArgs> GroupGetDescriptionCompleted;
         
-        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> RemoveGroupCameraCompleted;
+        public event System.EventHandler<GroupGetIconCompletedEventArgs> GroupGetIconCompleted;
         
-        public event System.EventHandler<IsCameraRegisteredCompletedEventArgs> IsCameraRegisteredCompleted;
+        public event System.EventHandler<GroupGetPrivacyCompletedEventArgs> GroupGetPrivacyCompleted;
         
-        public event System.EventHandler<RegisterCameraCompletedEventArgs> RegisterCameraCompleted;
+        public event System.EventHandler<GroupGetRegistrationDateCompletedEventArgs> GroupGetRegistrationDateCompleted;
         
-        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> RemoveCameraCompleted;
+        public event System.EventHandler<GroupGetMembersCompletedEventArgs> GroupGetMembersCompleted;
         
-        public event System.EventHandler<GetCameraIDCompletedEventArgs> GetCameraIDCompleted;
+        public event System.EventHandler<GroupGetCamerasCompletedEventArgs> GroupGetCamerasCompleted;
         
-        public event System.EventHandler<GetCameraPathCompletedEventArgs> GetCameraPathCompleted;
+        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> GroupSetNameCompleted;
         
-        public event System.EventHandler<GetCameraNameCompletedEventArgs> GetCameraNameCompleted;
+        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> GroupSetDescriptionCompleted;
         
-        public event System.EventHandler<GetCameraDescriptionCompletedEventArgs> GetCameraDescriptionCompleted;
+        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> GroupSetIconCompleted;
         
-        public event System.EventHandler<GetCameraIconCompletedEventArgs> GetCameraIconCompleted;
+        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> GroupSetPrivacyCompleted;
         
-        public event System.EventHandler<GetCameraRegistrationDateCompletedEventArgs> GetCameraRegistrationDateCompleted;
+        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> GroupMemberAddCompleted;
         
-        public event System.EventHandler<GetCameraGroupsCompletedEventArgs> GetCameraGroupsCompleted;
+        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> GroupMemberRemoveCompleted;
         
-        public event System.EventHandler<GetCameraFramesCompletedEventArgs> GetCameraFramesCompleted;
+        public event System.EventHandler<GroupMemberGetPrivilegesCompletedEventArgs> GroupMemberGetPrivilegesCompleted;
         
-        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> SetCameraNameCompleted;
+        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> GroupMemberSetPrivilegesCompleted;
         
-        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> SetCameraDescriptionCompleted;
+        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> GroupCameraAddCompleted;
         
-        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> SetCameraIconCompleted;
+        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> GroupCameraRemoveCompleted;
         
-        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> AddFrameCompleted;
+        public event System.EventHandler<FrameAddCompletedEventArgs> FrameAddCompleted;
         
-        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> RemoveFrameCompleted;
+        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> FrameRemoveCompleted;
         
-        public event System.EventHandler<GetFrameContentCompletedEventArgs> GetFrameContentCompleted;
+        public event System.EventHandler<FrameGetContentCompletedEventArgs> FrameGetContentCompleted;
         
-        public event System.EventHandler<GetFrameMarkerCompletedEventArgs> GetFrameMarkerCompleted;
+        public event System.EventHandler<FrameGetMarkerCompletedEventArgs> FrameGetMarkerCompleted;
         
-        public event System.EventHandler<IsEmailRegisteredCompletedEventArgs> IsEmailRegisteredCompleted;
+        public event System.EventHandler<UserIsEmailAvailableCompletedEventArgs> UserIsEmailAvailableCompleted;
         
-        public event System.EventHandler<IsUserRegisteredCompletedEventArgs> IsUserRegisteredCompleted;
+        public event System.EventHandler<UserLoginCompletedEventArgs> UserLoginCompleted;
         
-        public event System.EventHandler<RegisterUserCompletedEventArgs> RegisterUserCompleted;
+        public event System.EventHandler<UserAddCompletedEventArgs> UserAddCompleted;
         
-        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> RemoveUserCompleted;
+        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> UserRemoveCompleted;
         
-        public event System.EventHandler<GetUserIDCompletedEventArgs> GetUserIDCompleted;
+        public event System.EventHandler<UserGetIDCompletedEventArgs> UserGetIDCompleted;
         
-        public event System.EventHandler<GetUserEmailCompletedEventArgs> GetUserEmailCompleted;
+        public event System.EventHandler<UserGetEmailCompletedEventArgs> UserGetEmailCompleted;
         
-        public event System.EventHandler<GetUserPasswordCompletedEventArgs> GetUserPasswordCompleted;
+        public event System.EventHandler<UserGetPasswordCompletedEventArgs> UserGetPasswordCompleted;
         
-        public event System.EventHandler<GetUserNameCompletedEventArgs> GetUserNameCompleted;
+        public event System.EventHandler<UserGetNameCompletedEventArgs> UserGetNameCompleted;
         
-        public event System.EventHandler<GetUserDescriptionCompletedEventArgs> GetUserDescriptionCompleted;
+        public event System.EventHandler<UserGetDescriptionCompletedEventArgs> UserGetDescriptionCompleted;
         
-        public event System.EventHandler<GetUserIconCompletedEventArgs> GetUserIconCompleted;
+        public event System.EventHandler<UserGetIconCompletedEventArgs> UserGetIconCompleted;
         
-        public event System.EventHandler<GetUserRegistrationDateCompletedEventArgs> GetUserRegistrationDateCompleted;
+        public event System.EventHandler<UserGetRegistrationDateCompletedEventArgs> UserGetRegistrationDateCompleted;
         
-        public event System.EventHandler<GetUserGroupsCompletedEventArgs> GetUserGroupsCompleted;
+        public event System.EventHandler<UserGetGroupsCompletedEventArgs> UserGetGroupsCompleted;
         
-        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> SetUserPasswordCompleted;
+        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> UserSetPasswordCompleted;
         
-        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> SetUserNameCompleted;
+        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> UserSetNameCompleted;
         
-        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> SetUserDescriptionCompleted;
+        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> UserSetDescriptionCompleted;
         
-        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> SetUserIconCompleted;
+        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> UserSetIconCompleted;
         
-        public event System.EventHandler<IsGroupRegisteredCompletedEventArgs> IsGroupRegisteredCompleted;
+        public event System.EventHandler<CameraIsPathAvailableCompletedEventArgs> CameraIsPathAvailableCompleted;
         
-        public event System.EventHandler<RegisterGroupCompletedEventArgs> RegisterGroupCompleted;
+        public event System.EventHandler<CameraAddCompletedEventArgs> CameraAddCompleted;
         
-        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> RemoveGroupCompleted;
+        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> CameraRemoveCompleted;
         
-        public event System.EventHandler<GetGroupIDCompletedEventArgs> GetGroupIDCompleted;
+        public event System.EventHandler<CameraGetIDCompletedEventArgs> CameraGetIDCompleted;
         
-        public event System.EventHandler<GetGroupNameCompletedEventArgs> GetGroupNameCompleted;
+        public event System.EventHandler<CameraGetPathCompletedEventArgs> CameraGetPathCompleted;
         
-        public event System.EventHandler<GetGroupDescriptionCompletedEventArgs> GetGroupDescriptionCompleted;
+        public event System.EventHandler<CameraGetNameCompletedEventArgs> CameraGetNameCompleted;
         
-        public event System.EventHandler<GetGroupIconCompletedEventArgs> GetGroupIconCompleted;
+        public event System.EventHandler<CameraGetDescriptionCompletedEventArgs> CameraGetDescriptionCompleted;
         
-        public event System.EventHandler<GetGroupPrivacyCompletedEventArgs> GetGroupPrivacyCompleted;
+        public event System.EventHandler<CameraGetIconCompletedEventArgs> CameraGetIconCompleted;
         
-        public event System.EventHandler<GetGroupRegistrationDateCompletedEventArgs> GetGroupRegistrationDateCompleted;
+        public event System.EventHandler<CameraGetRegistrationDateCompletedEventArgs> CameraGetRegistrationDateCompleted;
         
-        public event System.EventHandler<GetGroupMembersCompletedEventArgs> GetGroupMembersCompleted;
+        public event System.EventHandler<CameraGetGroupsCompletedEventArgs> CameraGetGroupsCompleted;
         
-        public event System.EventHandler<GetGroupCamerasCompletedEventArgs> GetGroupCamerasCompleted;
+        public event System.EventHandler<CameraGetFramesCompletedEventArgs> CameraGetFramesCompleted;
         
-        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> SetGroupNameCompleted;
+        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> CameraSetNameCompleted;
         
-        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> SetGroupDescriptionCompleted;
+        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> CameraSetDescriptionCompleted;
         
-        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> SetGroupIconCompleted;
+        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> CameraSetIconCompleted;
         
-        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> SetGroupPrivacyCompleted;
+        public event System.EventHandler<GroupAddCompletedEventArgs> GroupAddCompleted;
         
-        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> AddGroupMemberCompleted;
+        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> GroupRemoveCompleted;
         
         public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> OpenCompleted;
         
         public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> CloseCompleted;
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginSetGroupMemberPrivileges(int userID, int groupID, int privileges, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginSetGroupMemberPrivileges(userID, groupID, privileges, callback, asyncState);
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGroupGetID(string name, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginGroupGetID(name, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndSetGroupMemberPrivileges(System.IAsyncResult result) {
-            base.Channel.EndSetGroupMemberPrivileges(result);
+        int CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGroupGetID(System.IAsyncResult result) {
+            return base.Channel.EndGroupGetID(result);
         }
         
-        private System.IAsyncResult OnBeginSetGroupMemberPrivileges(object[] inValues, System.AsyncCallback callback, object asyncState) {
+        private System.IAsyncResult OnBeginGroupGetID(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            string name = ((string)(inValues[0]));
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGroupGetID(name, callback, asyncState);
+        }
+        
+        private object[] OnEndGroupGetID(System.IAsyncResult result) {
+            int retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGroupGetID(result);
+            return new object[] {
+                    retVal};
+        }
+        
+        private void OnGroupGetIDCompleted(object state) {
+            if ((this.GroupGetIDCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.GroupGetIDCompleted(this, new GroupGetIDCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void GroupGetIDAsync(string name) {
+            this.GroupGetIDAsync(name, null);
+        }
+        
+        public void GroupGetIDAsync(string name, object userState) {
+            if ((this.onBeginGroupGetIDDelegate == null)) {
+                this.onBeginGroupGetIDDelegate = new BeginOperationDelegate(this.OnBeginGroupGetID);
+            }
+            if ((this.onEndGroupGetIDDelegate == null)) {
+                this.onEndGroupGetIDDelegate = new EndOperationDelegate(this.OnEndGroupGetID);
+            }
+            if ((this.onGroupGetIDCompletedDelegate == null)) {
+                this.onGroupGetIDCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGroupGetIDCompleted);
+            }
+            base.InvokeAsync(this.onBeginGroupGetIDDelegate, new object[] {
+                        name}, this.onEndGroupGetIDDelegate, this.onGroupGetIDCompletedDelegate, userState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGroupGetName(int groupID, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginGroupGetName(groupID, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        string CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGroupGetName(System.IAsyncResult result) {
+            return base.Channel.EndGroupGetName(result);
+        }
+        
+        private System.IAsyncResult OnBeginGroupGetName(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            int groupID = ((int)(inValues[0]));
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGroupGetName(groupID, callback, asyncState);
+        }
+        
+        private object[] OnEndGroupGetName(System.IAsyncResult result) {
+            string retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGroupGetName(result);
+            return new object[] {
+                    retVal};
+        }
+        
+        private void OnGroupGetNameCompleted(object state) {
+            if ((this.GroupGetNameCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.GroupGetNameCompleted(this, new GroupGetNameCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void GroupGetNameAsync(int groupID) {
+            this.GroupGetNameAsync(groupID, null);
+        }
+        
+        public void GroupGetNameAsync(int groupID, object userState) {
+            if ((this.onBeginGroupGetNameDelegate == null)) {
+                this.onBeginGroupGetNameDelegate = new BeginOperationDelegate(this.OnBeginGroupGetName);
+            }
+            if ((this.onEndGroupGetNameDelegate == null)) {
+                this.onEndGroupGetNameDelegate = new EndOperationDelegate(this.OnEndGroupGetName);
+            }
+            if ((this.onGroupGetNameCompletedDelegate == null)) {
+                this.onGroupGetNameCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGroupGetNameCompleted);
+            }
+            base.InvokeAsync(this.onBeginGroupGetNameDelegate, new object[] {
+                        groupID}, this.onEndGroupGetNameDelegate, this.onGroupGetNameCompletedDelegate, userState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGroupGetDescription(int groupID, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginGroupGetDescription(groupID, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        string CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGroupGetDescription(System.IAsyncResult result) {
+            return base.Channel.EndGroupGetDescription(result);
+        }
+        
+        private System.IAsyncResult OnBeginGroupGetDescription(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            int groupID = ((int)(inValues[0]));
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGroupGetDescription(groupID, callback, asyncState);
+        }
+        
+        private object[] OnEndGroupGetDescription(System.IAsyncResult result) {
+            string retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGroupGetDescription(result);
+            return new object[] {
+                    retVal};
+        }
+        
+        private void OnGroupGetDescriptionCompleted(object state) {
+            if ((this.GroupGetDescriptionCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.GroupGetDescriptionCompleted(this, new GroupGetDescriptionCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void GroupGetDescriptionAsync(int groupID) {
+            this.GroupGetDescriptionAsync(groupID, null);
+        }
+        
+        public void GroupGetDescriptionAsync(int groupID, object userState) {
+            if ((this.onBeginGroupGetDescriptionDelegate == null)) {
+                this.onBeginGroupGetDescriptionDelegate = new BeginOperationDelegate(this.OnBeginGroupGetDescription);
+            }
+            if ((this.onEndGroupGetDescriptionDelegate == null)) {
+                this.onEndGroupGetDescriptionDelegate = new EndOperationDelegate(this.OnEndGroupGetDescription);
+            }
+            if ((this.onGroupGetDescriptionCompletedDelegate == null)) {
+                this.onGroupGetDescriptionCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGroupGetDescriptionCompleted);
+            }
+            base.InvokeAsync(this.onBeginGroupGetDescriptionDelegate, new object[] {
+                        groupID}, this.onEndGroupGetDescriptionDelegate, this.onGroupGetDescriptionCompletedDelegate, userState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGroupGetIcon(int groupID, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginGroupGetIcon(groupID, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        byte[] CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGroupGetIcon(System.IAsyncResult result) {
+            return base.Channel.EndGroupGetIcon(result);
+        }
+        
+        private System.IAsyncResult OnBeginGroupGetIcon(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            int groupID = ((int)(inValues[0]));
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGroupGetIcon(groupID, callback, asyncState);
+        }
+        
+        private object[] OnEndGroupGetIcon(System.IAsyncResult result) {
+            byte[] retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGroupGetIcon(result);
+            return new object[] {
+                    retVal};
+        }
+        
+        private void OnGroupGetIconCompleted(object state) {
+            if ((this.GroupGetIconCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.GroupGetIconCompleted(this, new GroupGetIconCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void GroupGetIconAsync(int groupID) {
+            this.GroupGetIconAsync(groupID, null);
+        }
+        
+        public void GroupGetIconAsync(int groupID, object userState) {
+            if ((this.onBeginGroupGetIconDelegate == null)) {
+                this.onBeginGroupGetIconDelegate = new BeginOperationDelegate(this.OnBeginGroupGetIcon);
+            }
+            if ((this.onEndGroupGetIconDelegate == null)) {
+                this.onEndGroupGetIconDelegate = new EndOperationDelegate(this.OnEndGroupGetIcon);
+            }
+            if ((this.onGroupGetIconCompletedDelegate == null)) {
+                this.onGroupGetIconCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGroupGetIconCompleted);
+            }
+            base.InvokeAsync(this.onBeginGroupGetIconDelegate, new object[] {
+                        groupID}, this.onEndGroupGetIconDelegate, this.onGroupGetIconCompletedDelegate, userState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGroupGetPrivacy(int groupID, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginGroupGetPrivacy(groupID, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        int CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGroupGetPrivacy(System.IAsyncResult result) {
+            return base.Channel.EndGroupGetPrivacy(result);
+        }
+        
+        private System.IAsyncResult OnBeginGroupGetPrivacy(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            int groupID = ((int)(inValues[0]));
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGroupGetPrivacy(groupID, callback, asyncState);
+        }
+        
+        private object[] OnEndGroupGetPrivacy(System.IAsyncResult result) {
+            int retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGroupGetPrivacy(result);
+            return new object[] {
+                    retVal};
+        }
+        
+        private void OnGroupGetPrivacyCompleted(object state) {
+            if ((this.GroupGetPrivacyCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.GroupGetPrivacyCompleted(this, new GroupGetPrivacyCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void GroupGetPrivacyAsync(int groupID) {
+            this.GroupGetPrivacyAsync(groupID, null);
+        }
+        
+        public void GroupGetPrivacyAsync(int groupID, object userState) {
+            if ((this.onBeginGroupGetPrivacyDelegate == null)) {
+                this.onBeginGroupGetPrivacyDelegate = new BeginOperationDelegate(this.OnBeginGroupGetPrivacy);
+            }
+            if ((this.onEndGroupGetPrivacyDelegate == null)) {
+                this.onEndGroupGetPrivacyDelegate = new EndOperationDelegate(this.OnEndGroupGetPrivacy);
+            }
+            if ((this.onGroupGetPrivacyCompletedDelegate == null)) {
+                this.onGroupGetPrivacyCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGroupGetPrivacyCompleted);
+            }
+            base.InvokeAsync(this.onBeginGroupGetPrivacyDelegate, new object[] {
+                        groupID}, this.onEndGroupGetPrivacyDelegate, this.onGroupGetPrivacyCompletedDelegate, userState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGroupGetRegistrationDate(int groupID, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginGroupGetRegistrationDate(groupID, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.DateTime CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGroupGetRegistrationDate(System.IAsyncResult result) {
+            return base.Channel.EndGroupGetRegistrationDate(result);
+        }
+        
+        private System.IAsyncResult OnBeginGroupGetRegistrationDate(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            int groupID = ((int)(inValues[0]));
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGroupGetRegistrationDate(groupID, callback, asyncState);
+        }
+        
+        private object[] OnEndGroupGetRegistrationDate(System.IAsyncResult result) {
+            System.DateTime retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGroupGetRegistrationDate(result);
+            return new object[] {
+                    retVal};
+        }
+        
+        private void OnGroupGetRegistrationDateCompleted(object state) {
+            if ((this.GroupGetRegistrationDateCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.GroupGetRegistrationDateCompleted(this, new GroupGetRegistrationDateCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void GroupGetRegistrationDateAsync(int groupID) {
+            this.GroupGetRegistrationDateAsync(groupID, null);
+        }
+        
+        public void GroupGetRegistrationDateAsync(int groupID, object userState) {
+            if ((this.onBeginGroupGetRegistrationDateDelegate == null)) {
+                this.onBeginGroupGetRegistrationDateDelegate = new BeginOperationDelegate(this.OnBeginGroupGetRegistrationDate);
+            }
+            if ((this.onEndGroupGetRegistrationDateDelegate == null)) {
+                this.onEndGroupGetRegistrationDateDelegate = new EndOperationDelegate(this.OnEndGroupGetRegistrationDate);
+            }
+            if ((this.onGroupGetRegistrationDateCompletedDelegate == null)) {
+                this.onGroupGetRegistrationDateCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGroupGetRegistrationDateCompleted);
+            }
+            base.InvokeAsync(this.onBeginGroupGetRegistrationDateDelegate, new object[] {
+                        groupID}, this.onEndGroupGetRegistrationDateDelegate, this.onGroupGetRegistrationDateCompletedDelegate, userState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGroupGetMembers(int groupID, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginGroupGetMembers(groupID, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Collections.ObjectModel.ObservableCollection<int> CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGroupGetMembers(System.IAsyncResult result) {
+            return base.Channel.EndGroupGetMembers(result);
+        }
+        
+        private System.IAsyncResult OnBeginGroupGetMembers(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            int groupID = ((int)(inValues[0]));
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGroupGetMembers(groupID, callback, asyncState);
+        }
+        
+        private object[] OnEndGroupGetMembers(System.IAsyncResult result) {
+            System.Collections.ObjectModel.ObservableCollection<int> retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGroupGetMembers(result);
+            return new object[] {
+                    retVal};
+        }
+        
+        private void OnGroupGetMembersCompleted(object state) {
+            if ((this.GroupGetMembersCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.GroupGetMembersCompleted(this, new GroupGetMembersCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void GroupGetMembersAsync(int groupID) {
+            this.GroupGetMembersAsync(groupID, null);
+        }
+        
+        public void GroupGetMembersAsync(int groupID, object userState) {
+            if ((this.onBeginGroupGetMembersDelegate == null)) {
+                this.onBeginGroupGetMembersDelegate = new BeginOperationDelegate(this.OnBeginGroupGetMembers);
+            }
+            if ((this.onEndGroupGetMembersDelegate == null)) {
+                this.onEndGroupGetMembersDelegate = new EndOperationDelegate(this.OnEndGroupGetMembers);
+            }
+            if ((this.onGroupGetMembersCompletedDelegate == null)) {
+                this.onGroupGetMembersCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGroupGetMembersCompleted);
+            }
+            base.InvokeAsync(this.onBeginGroupGetMembersDelegate, new object[] {
+                        groupID}, this.onEndGroupGetMembersDelegate, this.onGroupGetMembersCompletedDelegate, userState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGroupGetCameras(int groupID, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginGroupGetCameras(groupID, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Collections.ObjectModel.ObservableCollection<int> CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGroupGetCameras(System.IAsyncResult result) {
+            return base.Channel.EndGroupGetCameras(result);
+        }
+        
+        private System.IAsyncResult OnBeginGroupGetCameras(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            int groupID = ((int)(inValues[0]));
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGroupGetCameras(groupID, callback, asyncState);
+        }
+        
+        private object[] OnEndGroupGetCameras(System.IAsyncResult result) {
+            System.Collections.ObjectModel.ObservableCollection<int> retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGroupGetCameras(result);
+            return new object[] {
+                    retVal};
+        }
+        
+        private void OnGroupGetCamerasCompleted(object state) {
+            if ((this.GroupGetCamerasCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.GroupGetCamerasCompleted(this, new GroupGetCamerasCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void GroupGetCamerasAsync(int groupID) {
+            this.GroupGetCamerasAsync(groupID, null);
+        }
+        
+        public void GroupGetCamerasAsync(int groupID, object userState) {
+            if ((this.onBeginGroupGetCamerasDelegate == null)) {
+                this.onBeginGroupGetCamerasDelegate = new BeginOperationDelegate(this.OnBeginGroupGetCameras);
+            }
+            if ((this.onEndGroupGetCamerasDelegate == null)) {
+                this.onEndGroupGetCamerasDelegate = new EndOperationDelegate(this.OnEndGroupGetCameras);
+            }
+            if ((this.onGroupGetCamerasCompletedDelegate == null)) {
+                this.onGroupGetCamerasCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGroupGetCamerasCompleted);
+            }
+            base.InvokeAsync(this.onBeginGroupGetCamerasDelegate, new object[] {
+                        groupID}, this.onEndGroupGetCamerasDelegate, this.onGroupGetCamerasCompletedDelegate, userState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGroupSetName(int groupID, string name, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginGroupSetName(groupID, name, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGroupSetName(System.IAsyncResult result) {
+            base.Channel.EndGroupSetName(result);
+        }
+        
+        private System.IAsyncResult OnBeginGroupSetName(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            int groupID = ((int)(inValues[0]));
+            string name = ((string)(inValues[1]));
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGroupSetName(groupID, name, callback, asyncState);
+        }
+        
+        private object[] OnEndGroupSetName(System.IAsyncResult result) {
+            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGroupSetName(result);
+            return null;
+        }
+        
+        private void OnGroupSetNameCompleted(object state) {
+            if ((this.GroupSetNameCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.GroupSetNameCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void GroupSetNameAsync(int groupID, string name) {
+            this.GroupSetNameAsync(groupID, name, null);
+        }
+        
+        public void GroupSetNameAsync(int groupID, string name, object userState) {
+            if ((this.onBeginGroupSetNameDelegate == null)) {
+                this.onBeginGroupSetNameDelegate = new BeginOperationDelegate(this.OnBeginGroupSetName);
+            }
+            if ((this.onEndGroupSetNameDelegate == null)) {
+                this.onEndGroupSetNameDelegate = new EndOperationDelegate(this.OnEndGroupSetName);
+            }
+            if ((this.onGroupSetNameCompletedDelegate == null)) {
+                this.onGroupSetNameCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGroupSetNameCompleted);
+            }
+            base.InvokeAsync(this.onBeginGroupSetNameDelegate, new object[] {
+                        groupID,
+                        name}, this.onEndGroupSetNameDelegate, this.onGroupSetNameCompletedDelegate, userState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGroupSetDescription(int groupID, string description, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginGroupSetDescription(groupID, description, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGroupSetDescription(System.IAsyncResult result) {
+            base.Channel.EndGroupSetDescription(result);
+        }
+        
+        private System.IAsyncResult OnBeginGroupSetDescription(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            int groupID = ((int)(inValues[0]));
+            string description = ((string)(inValues[1]));
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGroupSetDescription(groupID, description, callback, asyncState);
+        }
+        
+        private object[] OnEndGroupSetDescription(System.IAsyncResult result) {
+            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGroupSetDescription(result);
+            return null;
+        }
+        
+        private void OnGroupSetDescriptionCompleted(object state) {
+            if ((this.GroupSetDescriptionCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.GroupSetDescriptionCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void GroupSetDescriptionAsync(int groupID, string description) {
+            this.GroupSetDescriptionAsync(groupID, description, null);
+        }
+        
+        public void GroupSetDescriptionAsync(int groupID, string description, object userState) {
+            if ((this.onBeginGroupSetDescriptionDelegate == null)) {
+                this.onBeginGroupSetDescriptionDelegate = new BeginOperationDelegate(this.OnBeginGroupSetDescription);
+            }
+            if ((this.onEndGroupSetDescriptionDelegate == null)) {
+                this.onEndGroupSetDescriptionDelegate = new EndOperationDelegate(this.OnEndGroupSetDescription);
+            }
+            if ((this.onGroupSetDescriptionCompletedDelegate == null)) {
+                this.onGroupSetDescriptionCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGroupSetDescriptionCompleted);
+            }
+            base.InvokeAsync(this.onBeginGroupSetDescriptionDelegate, new object[] {
+                        groupID,
+                        description}, this.onEndGroupSetDescriptionDelegate, this.onGroupSetDescriptionCompletedDelegate, userState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGroupSetIcon(int groupID, byte[] icon, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginGroupSetIcon(groupID, icon, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGroupSetIcon(System.IAsyncResult result) {
+            base.Channel.EndGroupSetIcon(result);
+        }
+        
+        private System.IAsyncResult OnBeginGroupSetIcon(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            int groupID = ((int)(inValues[0]));
+            byte[] icon = ((byte[])(inValues[1]));
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGroupSetIcon(groupID, icon, callback, asyncState);
+        }
+        
+        private object[] OnEndGroupSetIcon(System.IAsyncResult result) {
+            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGroupSetIcon(result);
+            return null;
+        }
+        
+        private void OnGroupSetIconCompleted(object state) {
+            if ((this.GroupSetIconCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.GroupSetIconCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void GroupSetIconAsync(int groupID, byte[] icon) {
+            this.GroupSetIconAsync(groupID, icon, null);
+        }
+        
+        public void GroupSetIconAsync(int groupID, byte[] icon, object userState) {
+            if ((this.onBeginGroupSetIconDelegate == null)) {
+                this.onBeginGroupSetIconDelegate = new BeginOperationDelegate(this.OnBeginGroupSetIcon);
+            }
+            if ((this.onEndGroupSetIconDelegate == null)) {
+                this.onEndGroupSetIconDelegate = new EndOperationDelegate(this.OnEndGroupSetIcon);
+            }
+            if ((this.onGroupSetIconCompletedDelegate == null)) {
+                this.onGroupSetIconCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGroupSetIconCompleted);
+            }
+            base.InvokeAsync(this.onBeginGroupSetIconDelegate, new object[] {
+                        groupID,
+                        icon}, this.onEndGroupSetIconDelegate, this.onGroupSetIconCompletedDelegate, userState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGroupSetPrivacy(int groupID, int privacy, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginGroupSetPrivacy(groupID, privacy, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGroupSetPrivacy(System.IAsyncResult result) {
+            base.Channel.EndGroupSetPrivacy(result);
+        }
+        
+        private System.IAsyncResult OnBeginGroupSetPrivacy(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            int groupID = ((int)(inValues[0]));
+            int privacy = ((int)(inValues[1]));
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGroupSetPrivacy(groupID, privacy, callback, asyncState);
+        }
+        
+        private object[] OnEndGroupSetPrivacy(System.IAsyncResult result) {
+            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGroupSetPrivacy(result);
+            return null;
+        }
+        
+        private void OnGroupSetPrivacyCompleted(object state) {
+            if ((this.GroupSetPrivacyCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.GroupSetPrivacyCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void GroupSetPrivacyAsync(int groupID, int privacy) {
+            this.GroupSetPrivacyAsync(groupID, privacy, null);
+        }
+        
+        public void GroupSetPrivacyAsync(int groupID, int privacy, object userState) {
+            if ((this.onBeginGroupSetPrivacyDelegate == null)) {
+                this.onBeginGroupSetPrivacyDelegate = new BeginOperationDelegate(this.OnBeginGroupSetPrivacy);
+            }
+            if ((this.onEndGroupSetPrivacyDelegate == null)) {
+                this.onEndGroupSetPrivacyDelegate = new EndOperationDelegate(this.OnEndGroupSetPrivacy);
+            }
+            if ((this.onGroupSetPrivacyCompletedDelegate == null)) {
+                this.onGroupSetPrivacyCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGroupSetPrivacyCompleted);
+            }
+            base.InvokeAsync(this.onBeginGroupSetPrivacyDelegate, new object[] {
+                        groupID,
+                        privacy}, this.onEndGroupSetPrivacyDelegate, this.onGroupSetPrivacyCompletedDelegate, userState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGroupMemberAdd(int userID, int groupID, int privileges, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginGroupMemberAdd(userID, groupID, privileges, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGroupMemberAdd(System.IAsyncResult result) {
+            base.Channel.EndGroupMemberAdd(result);
+        }
+        
+        private System.IAsyncResult OnBeginGroupMemberAdd(object[] inValues, System.AsyncCallback callback, object asyncState) {
             int userID = ((int)(inValues[0]));
             int groupID = ((int)(inValues[1]));
             int privileges = ((int)(inValues[2]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginSetGroupMemberPrivileges(userID, groupID, privileges, callback, asyncState);
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGroupMemberAdd(userID, groupID, privileges, callback, asyncState);
         }
         
-        private object[] OnEndSetGroupMemberPrivileges(System.IAsyncResult result) {
-            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndSetGroupMemberPrivileges(result);
+        private object[] OnEndGroupMemberAdd(System.IAsyncResult result) {
+            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGroupMemberAdd(result);
             return null;
         }
         
-        private void OnSetGroupMemberPrivilegesCompleted(object state) {
-            if ((this.SetGroupMemberPrivilegesCompleted != null)) {
+        private void OnGroupMemberAddCompleted(object state) {
+            if ((this.GroupMemberAddCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.SetGroupMemberPrivilegesCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+                this.GroupMemberAddCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void SetGroupMemberPrivilegesAsync(int userID, int groupID, int privileges) {
-            this.SetGroupMemberPrivilegesAsync(userID, groupID, privileges, null);
+        public void GroupMemberAddAsync(int userID, int groupID, int privileges) {
+            this.GroupMemberAddAsync(userID, groupID, privileges, null);
         }
         
-        public void SetGroupMemberPrivilegesAsync(int userID, int groupID, int privileges, object userState) {
-            if ((this.onBeginSetGroupMemberPrivilegesDelegate == null)) {
-                this.onBeginSetGroupMemberPrivilegesDelegate = new BeginOperationDelegate(this.OnBeginSetGroupMemberPrivileges);
+        public void GroupMemberAddAsync(int userID, int groupID, int privileges, object userState) {
+            if ((this.onBeginGroupMemberAddDelegate == null)) {
+                this.onBeginGroupMemberAddDelegate = new BeginOperationDelegate(this.OnBeginGroupMemberAdd);
             }
-            if ((this.onEndSetGroupMemberPrivilegesDelegate == null)) {
-                this.onEndSetGroupMemberPrivilegesDelegate = new EndOperationDelegate(this.OnEndSetGroupMemberPrivileges);
+            if ((this.onEndGroupMemberAddDelegate == null)) {
+                this.onEndGroupMemberAddDelegate = new EndOperationDelegate(this.OnEndGroupMemberAdd);
             }
-            if ((this.onSetGroupMemberPrivilegesCompletedDelegate == null)) {
-                this.onSetGroupMemberPrivilegesCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnSetGroupMemberPrivilegesCompleted);
+            if ((this.onGroupMemberAddCompletedDelegate == null)) {
+                this.onGroupMemberAddCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGroupMemberAddCompleted);
             }
-            base.InvokeAsync(this.onBeginSetGroupMemberPrivilegesDelegate, new object[] {
+            base.InvokeAsync(this.onBeginGroupMemberAddDelegate, new object[] {
                         userID,
                         groupID,
-                        privileges}, this.onEndSetGroupMemberPrivilegesDelegate, this.onSetGroupMemberPrivilegesCompletedDelegate, userState);
+                        privileges}, this.onEndGroupMemberAddDelegate, this.onGroupMemberAddCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginRemoveGroupMember(int userID, int groupID, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginRemoveGroupMember(userID, groupID, callback, asyncState);
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGroupMemberRemove(int userID, int groupID, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginGroupMemberRemove(userID, groupID, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndRemoveGroupMember(System.IAsyncResult result) {
-            base.Channel.EndRemoveGroupMember(result);
+        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGroupMemberRemove(System.IAsyncResult result) {
+            base.Channel.EndGroupMemberRemove(result);
         }
         
-        private System.IAsyncResult OnBeginRemoveGroupMember(object[] inValues, System.AsyncCallback callback, object asyncState) {
+        private System.IAsyncResult OnBeginGroupMemberRemove(object[] inValues, System.AsyncCallback callback, object asyncState) {
             int userID = ((int)(inValues[0]));
             int groupID = ((int)(inValues[1]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginRemoveGroupMember(userID, groupID, callback, asyncState);
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGroupMemberRemove(userID, groupID, callback, asyncState);
         }
         
-        private object[] OnEndRemoveGroupMember(System.IAsyncResult result) {
-            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndRemoveGroupMember(result);
+        private object[] OnEndGroupMemberRemove(System.IAsyncResult result) {
+            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGroupMemberRemove(result);
             return null;
         }
         
-        private void OnRemoveGroupMemberCompleted(object state) {
-            if ((this.RemoveGroupMemberCompleted != null)) {
+        private void OnGroupMemberRemoveCompleted(object state) {
+            if ((this.GroupMemberRemoveCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.RemoveGroupMemberCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+                this.GroupMemberRemoveCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void RemoveGroupMemberAsync(int userID, int groupID) {
-            this.RemoveGroupMemberAsync(userID, groupID, null);
+        public void GroupMemberRemoveAsync(int userID, int groupID) {
+            this.GroupMemberRemoveAsync(userID, groupID, null);
         }
         
-        public void RemoveGroupMemberAsync(int userID, int groupID, object userState) {
-            if ((this.onBeginRemoveGroupMemberDelegate == null)) {
-                this.onBeginRemoveGroupMemberDelegate = new BeginOperationDelegate(this.OnBeginRemoveGroupMember);
+        public void GroupMemberRemoveAsync(int userID, int groupID, object userState) {
+            if ((this.onBeginGroupMemberRemoveDelegate == null)) {
+                this.onBeginGroupMemberRemoveDelegate = new BeginOperationDelegate(this.OnBeginGroupMemberRemove);
             }
-            if ((this.onEndRemoveGroupMemberDelegate == null)) {
-                this.onEndRemoveGroupMemberDelegate = new EndOperationDelegate(this.OnEndRemoveGroupMember);
+            if ((this.onEndGroupMemberRemoveDelegate == null)) {
+                this.onEndGroupMemberRemoveDelegate = new EndOperationDelegate(this.OnEndGroupMemberRemove);
             }
-            if ((this.onRemoveGroupMemberCompletedDelegate == null)) {
-                this.onRemoveGroupMemberCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnRemoveGroupMemberCompleted);
+            if ((this.onGroupMemberRemoveCompletedDelegate == null)) {
+                this.onGroupMemberRemoveCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGroupMemberRemoveCompleted);
             }
-            base.InvokeAsync(this.onBeginRemoveGroupMemberDelegate, new object[] {
+            base.InvokeAsync(this.onBeginGroupMemberRemoveDelegate, new object[] {
                         userID,
-                        groupID}, this.onEndRemoveGroupMemberDelegate, this.onRemoveGroupMemberCompletedDelegate, userState);
+                        groupID}, this.onEndGroupMemberRemoveDelegate, this.onGroupMemberRemoveCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginAddGroupCamera(int cameraID, int groupID, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginAddGroupCamera(cameraID, groupID, callback, asyncState);
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGroupMemberGetPrivileges(int userID, int groupID, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginGroupMemberGetPrivileges(userID, groupID, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndAddGroupCamera(System.IAsyncResult result) {
-            base.Channel.EndAddGroupCamera(result);
+        int CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGroupMemberGetPrivileges(System.IAsyncResult result) {
+            return base.Channel.EndGroupMemberGetPrivileges(result);
         }
         
-        private System.IAsyncResult OnBeginAddGroupCamera(object[] inValues, System.AsyncCallback callback, object asyncState) {
+        private System.IAsyncResult OnBeginGroupMemberGetPrivileges(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            int userID = ((int)(inValues[0]));
+            int groupID = ((int)(inValues[1]));
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGroupMemberGetPrivileges(userID, groupID, callback, asyncState);
+        }
+        
+        private object[] OnEndGroupMemberGetPrivileges(System.IAsyncResult result) {
+            int retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGroupMemberGetPrivileges(result);
+            return new object[] {
+                    retVal};
+        }
+        
+        private void OnGroupMemberGetPrivilegesCompleted(object state) {
+            if ((this.GroupMemberGetPrivilegesCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.GroupMemberGetPrivilegesCompleted(this, new GroupMemberGetPrivilegesCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void GroupMemberGetPrivilegesAsync(int userID, int groupID) {
+            this.GroupMemberGetPrivilegesAsync(userID, groupID, null);
+        }
+        
+        public void GroupMemberGetPrivilegesAsync(int userID, int groupID, object userState) {
+            if ((this.onBeginGroupMemberGetPrivilegesDelegate == null)) {
+                this.onBeginGroupMemberGetPrivilegesDelegate = new BeginOperationDelegate(this.OnBeginGroupMemberGetPrivileges);
+            }
+            if ((this.onEndGroupMemberGetPrivilegesDelegate == null)) {
+                this.onEndGroupMemberGetPrivilegesDelegate = new EndOperationDelegate(this.OnEndGroupMemberGetPrivileges);
+            }
+            if ((this.onGroupMemberGetPrivilegesCompletedDelegate == null)) {
+                this.onGroupMemberGetPrivilegesCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGroupMemberGetPrivilegesCompleted);
+            }
+            base.InvokeAsync(this.onBeginGroupMemberGetPrivilegesDelegate, new object[] {
+                        userID,
+                        groupID}, this.onEndGroupMemberGetPrivilegesDelegate, this.onGroupMemberGetPrivilegesCompletedDelegate, userState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGroupMemberSetPrivileges(int userID, int groupID, int privileges, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginGroupMemberSetPrivileges(userID, groupID, privileges, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGroupMemberSetPrivileges(System.IAsyncResult result) {
+            base.Channel.EndGroupMemberSetPrivileges(result);
+        }
+        
+        private System.IAsyncResult OnBeginGroupMemberSetPrivileges(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            int userID = ((int)(inValues[0]));
+            int groupID = ((int)(inValues[1]));
+            int privileges = ((int)(inValues[2]));
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGroupMemberSetPrivileges(userID, groupID, privileges, callback, asyncState);
+        }
+        
+        private object[] OnEndGroupMemberSetPrivileges(System.IAsyncResult result) {
+            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGroupMemberSetPrivileges(result);
+            return null;
+        }
+        
+        private void OnGroupMemberSetPrivilegesCompleted(object state) {
+            if ((this.GroupMemberSetPrivilegesCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.GroupMemberSetPrivilegesCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void GroupMemberSetPrivilegesAsync(int userID, int groupID, int privileges) {
+            this.GroupMemberSetPrivilegesAsync(userID, groupID, privileges, null);
+        }
+        
+        public void GroupMemberSetPrivilegesAsync(int userID, int groupID, int privileges, object userState) {
+            if ((this.onBeginGroupMemberSetPrivilegesDelegate == null)) {
+                this.onBeginGroupMemberSetPrivilegesDelegate = new BeginOperationDelegate(this.OnBeginGroupMemberSetPrivileges);
+            }
+            if ((this.onEndGroupMemberSetPrivilegesDelegate == null)) {
+                this.onEndGroupMemberSetPrivilegesDelegate = new EndOperationDelegate(this.OnEndGroupMemberSetPrivileges);
+            }
+            if ((this.onGroupMemberSetPrivilegesCompletedDelegate == null)) {
+                this.onGroupMemberSetPrivilegesCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGroupMemberSetPrivilegesCompleted);
+            }
+            base.InvokeAsync(this.onBeginGroupMemberSetPrivilegesDelegate, new object[] {
+                        userID,
+                        groupID,
+                        privileges}, this.onEndGroupMemberSetPrivilegesDelegate, this.onGroupMemberSetPrivilegesCompletedDelegate, userState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGroupCameraAdd(int cameraID, int groupID, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginGroupCameraAdd(cameraID, groupID, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGroupCameraAdd(System.IAsyncResult result) {
+            base.Channel.EndGroupCameraAdd(result);
+        }
+        
+        private System.IAsyncResult OnBeginGroupCameraAdd(object[] inValues, System.AsyncCallback callback, object asyncState) {
             int cameraID = ((int)(inValues[0]));
             int groupID = ((int)(inValues[1]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginAddGroupCamera(cameraID, groupID, callback, asyncState);
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGroupCameraAdd(cameraID, groupID, callback, asyncState);
         }
         
-        private object[] OnEndAddGroupCamera(System.IAsyncResult result) {
-            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndAddGroupCamera(result);
+        private object[] OnEndGroupCameraAdd(System.IAsyncResult result) {
+            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGroupCameraAdd(result);
             return null;
         }
         
-        private void OnAddGroupCameraCompleted(object state) {
-            if ((this.AddGroupCameraCompleted != null)) {
+        private void OnGroupCameraAddCompleted(object state) {
+            if ((this.GroupCameraAddCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.AddGroupCameraCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+                this.GroupCameraAddCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void AddGroupCameraAsync(int cameraID, int groupID) {
-            this.AddGroupCameraAsync(cameraID, groupID, null);
+        public void GroupCameraAddAsync(int cameraID, int groupID) {
+            this.GroupCameraAddAsync(cameraID, groupID, null);
         }
         
-        public void AddGroupCameraAsync(int cameraID, int groupID, object userState) {
-            if ((this.onBeginAddGroupCameraDelegate == null)) {
-                this.onBeginAddGroupCameraDelegate = new BeginOperationDelegate(this.OnBeginAddGroupCamera);
+        public void GroupCameraAddAsync(int cameraID, int groupID, object userState) {
+            if ((this.onBeginGroupCameraAddDelegate == null)) {
+                this.onBeginGroupCameraAddDelegate = new BeginOperationDelegate(this.OnBeginGroupCameraAdd);
             }
-            if ((this.onEndAddGroupCameraDelegate == null)) {
-                this.onEndAddGroupCameraDelegate = new EndOperationDelegate(this.OnEndAddGroupCamera);
+            if ((this.onEndGroupCameraAddDelegate == null)) {
+                this.onEndGroupCameraAddDelegate = new EndOperationDelegate(this.OnEndGroupCameraAdd);
             }
-            if ((this.onAddGroupCameraCompletedDelegate == null)) {
-                this.onAddGroupCameraCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnAddGroupCameraCompleted);
+            if ((this.onGroupCameraAddCompletedDelegate == null)) {
+                this.onGroupCameraAddCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGroupCameraAddCompleted);
             }
-            base.InvokeAsync(this.onBeginAddGroupCameraDelegate, new object[] {
+            base.InvokeAsync(this.onBeginGroupCameraAddDelegate, new object[] {
                         cameraID,
-                        groupID}, this.onEndAddGroupCameraDelegate, this.onAddGroupCameraCompletedDelegate, userState);
+                        groupID}, this.onEndGroupCameraAddDelegate, this.onGroupCameraAddCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginRemoveGroupCamera(int cameraID, int groupID, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginRemoveGroupCamera(cameraID, groupID, callback, asyncState);
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGroupCameraRemove(int cameraID, int groupID, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginGroupCameraRemove(cameraID, groupID, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndRemoveGroupCamera(System.IAsyncResult result) {
-            base.Channel.EndRemoveGroupCamera(result);
+        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGroupCameraRemove(System.IAsyncResult result) {
+            base.Channel.EndGroupCameraRemove(result);
         }
         
-        private System.IAsyncResult OnBeginRemoveGroupCamera(object[] inValues, System.AsyncCallback callback, object asyncState) {
+        private System.IAsyncResult OnBeginGroupCameraRemove(object[] inValues, System.AsyncCallback callback, object asyncState) {
             int cameraID = ((int)(inValues[0]));
             int groupID = ((int)(inValues[1]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginRemoveGroupCamera(cameraID, groupID, callback, asyncState);
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGroupCameraRemove(cameraID, groupID, callback, asyncState);
         }
         
-        private object[] OnEndRemoveGroupCamera(System.IAsyncResult result) {
-            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndRemoveGroupCamera(result);
+        private object[] OnEndGroupCameraRemove(System.IAsyncResult result) {
+            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGroupCameraRemove(result);
             return null;
         }
         
-        private void OnRemoveGroupCameraCompleted(object state) {
-            if ((this.RemoveGroupCameraCompleted != null)) {
+        private void OnGroupCameraRemoveCompleted(object state) {
+            if ((this.GroupCameraRemoveCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.RemoveGroupCameraCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+                this.GroupCameraRemoveCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void RemoveGroupCameraAsync(int cameraID, int groupID) {
-            this.RemoveGroupCameraAsync(cameraID, groupID, null);
+        public void GroupCameraRemoveAsync(int cameraID, int groupID) {
+            this.GroupCameraRemoveAsync(cameraID, groupID, null);
         }
         
-        public void RemoveGroupCameraAsync(int cameraID, int groupID, object userState) {
-            if ((this.onBeginRemoveGroupCameraDelegate == null)) {
-                this.onBeginRemoveGroupCameraDelegate = new BeginOperationDelegate(this.OnBeginRemoveGroupCamera);
+        public void GroupCameraRemoveAsync(int cameraID, int groupID, object userState) {
+            if ((this.onBeginGroupCameraRemoveDelegate == null)) {
+                this.onBeginGroupCameraRemoveDelegate = new BeginOperationDelegate(this.OnBeginGroupCameraRemove);
             }
-            if ((this.onEndRemoveGroupCameraDelegate == null)) {
-                this.onEndRemoveGroupCameraDelegate = new EndOperationDelegate(this.OnEndRemoveGroupCamera);
+            if ((this.onEndGroupCameraRemoveDelegate == null)) {
+                this.onEndGroupCameraRemoveDelegate = new EndOperationDelegate(this.OnEndGroupCameraRemove);
             }
-            if ((this.onRemoveGroupCameraCompletedDelegate == null)) {
-                this.onRemoveGroupCameraCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnRemoveGroupCameraCompleted);
+            if ((this.onGroupCameraRemoveCompletedDelegate == null)) {
+                this.onGroupCameraRemoveCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGroupCameraRemoveCompleted);
             }
-            base.InvokeAsync(this.onBeginRemoveGroupCameraDelegate, new object[] {
+            base.InvokeAsync(this.onBeginGroupCameraRemoveDelegate, new object[] {
                         cameraID,
-                        groupID}, this.onEndRemoveGroupCameraDelegate, this.onRemoveGroupCameraCompletedDelegate, userState);
+                        groupID}, this.onEndGroupCameraRemoveDelegate, this.onGroupCameraRemoveCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginIsCameraRegistered(string path, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginIsCameraRegistered(path, callback, asyncState);
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginFrameAdd(int cameraID, byte[] content, string marker, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginFrameAdd(cameraID, content, marker, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        bool CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndIsCameraRegistered(System.IAsyncResult result) {
-            return base.Channel.EndIsCameraRegistered(result);
+        int CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndFrameAdd(System.IAsyncResult result) {
+            return base.Channel.EndFrameAdd(result);
         }
         
-        private System.IAsyncResult OnBeginIsCameraRegistered(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            string path = ((string)(inValues[0]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginIsCameraRegistered(path, callback, asyncState);
-        }
-        
-        private object[] OnEndIsCameraRegistered(System.IAsyncResult result) {
-            bool retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndIsCameraRegistered(result);
-            return new object[] {
-                    retVal};
-        }
-        
-        private void OnIsCameraRegisteredCompleted(object state) {
-            if ((this.IsCameraRegisteredCompleted != null)) {
-                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.IsCameraRegisteredCompleted(this, new IsCameraRegisteredCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
-            }
-        }
-        
-        public void IsCameraRegisteredAsync(string path) {
-            this.IsCameraRegisteredAsync(path, null);
-        }
-        
-        public void IsCameraRegisteredAsync(string path, object userState) {
-            if ((this.onBeginIsCameraRegisteredDelegate == null)) {
-                this.onBeginIsCameraRegisteredDelegate = new BeginOperationDelegate(this.OnBeginIsCameraRegistered);
-            }
-            if ((this.onEndIsCameraRegisteredDelegate == null)) {
-                this.onEndIsCameraRegisteredDelegate = new EndOperationDelegate(this.OnEndIsCameraRegistered);
-            }
-            if ((this.onIsCameraRegisteredCompletedDelegate == null)) {
-                this.onIsCameraRegisteredCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnIsCameraRegisteredCompleted);
-            }
-            base.InvokeAsync(this.onBeginIsCameraRegisteredDelegate, new object[] {
-                        path}, this.onEndIsCameraRegisteredDelegate, this.onIsCameraRegisteredCompletedDelegate, userState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginRegisterCamera(string name, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginRegisterCamera(name, callback, asyncState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        int CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndRegisterCamera(System.IAsyncResult result) {
-            return base.Channel.EndRegisterCamera(result);
-        }
-        
-        private System.IAsyncResult OnBeginRegisterCamera(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            string name = ((string)(inValues[0]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginRegisterCamera(name, callback, asyncState);
-        }
-        
-        private object[] OnEndRegisterCamera(System.IAsyncResult result) {
-            int retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndRegisterCamera(result);
-            return new object[] {
-                    retVal};
-        }
-        
-        private void OnRegisterCameraCompleted(object state) {
-            if ((this.RegisterCameraCompleted != null)) {
-                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.RegisterCameraCompleted(this, new RegisterCameraCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
-            }
-        }
-        
-        public void RegisterCameraAsync(string name) {
-            this.RegisterCameraAsync(name, null);
-        }
-        
-        public void RegisterCameraAsync(string name, object userState) {
-            if ((this.onBeginRegisterCameraDelegate == null)) {
-                this.onBeginRegisterCameraDelegate = new BeginOperationDelegate(this.OnBeginRegisterCamera);
-            }
-            if ((this.onEndRegisterCameraDelegate == null)) {
-                this.onEndRegisterCameraDelegate = new EndOperationDelegate(this.OnEndRegisterCamera);
-            }
-            if ((this.onRegisterCameraCompletedDelegate == null)) {
-                this.onRegisterCameraCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnRegisterCameraCompleted);
-            }
-            base.InvokeAsync(this.onBeginRegisterCameraDelegate, new object[] {
-                        name}, this.onEndRegisterCameraDelegate, this.onRegisterCameraCompletedDelegate, userState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginRemoveCamera(int cameraID, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginRemoveCamera(cameraID, callback, asyncState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndRemoveCamera(System.IAsyncResult result) {
-            base.Channel.EndRemoveCamera(result);
-        }
-        
-        private System.IAsyncResult OnBeginRemoveCamera(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            int cameraID = ((int)(inValues[0]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginRemoveCamera(cameraID, callback, asyncState);
-        }
-        
-        private object[] OnEndRemoveCamera(System.IAsyncResult result) {
-            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndRemoveCamera(result);
-            return null;
-        }
-        
-        private void OnRemoveCameraCompleted(object state) {
-            if ((this.RemoveCameraCompleted != null)) {
-                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.RemoveCameraCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
-            }
-        }
-        
-        public void RemoveCameraAsync(int cameraID) {
-            this.RemoveCameraAsync(cameraID, null);
-        }
-        
-        public void RemoveCameraAsync(int cameraID, object userState) {
-            if ((this.onBeginRemoveCameraDelegate == null)) {
-                this.onBeginRemoveCameraDelegate = new BeginOperationDelegate(this.OnBeginRemoveCamera);
-            }
-            if ((this.onEndRemoveCameraDelegate == null)) {
-                this.onEndRemoveCameraDelegate = new EndOperationDelegate(this.OnEndRemoveCamera);
-            }
-            if ((this.onRemoveCameraCompletedDelegate == null)) {
-                this.onRemoveCameraCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnRemoveCameraCompleted);
-            }
-            base.InvokeAsync(this.onBeginRemoveCameraDelegate, new object[] {
-                        cameraID}, this.onEndRemoveCameraDelegate, this.onRemoveCameraCompletedDelegate, userState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGetCameraID(string path, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginGetCameraID(path, callback, asyncState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        int CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGetCameraID(System.IAsyncResult result) {
-            return base.Channel.EndGetCameraID(result);
-        }
-        
-        private System.IAsyncResult OnBeginGetCameraID(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            string path = ((string)(inValues[0]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGetCameraID(path, callback, asyncState);
-        }
-        
-        private object[] OnEndGetCameraID(System.IAsyncResult result) {
-            int retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGetCameraID(result);
-            return new object[] {
-                    retVal};
-        }
-        
-        private void OnGetCameraIDCompleted(object state) {
-            if ((this.GetCameraIDCompleted != null)) {
-                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.GetCameraIDCompleted(this, new GetCameraIDCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
-            }
-        }
-        
-        public void GetCameraIDAsync(string path) {
-            this.GetCameraIDAsync(path, null);
-        }
-        
-        public void GetCameraIDAsync(string path, object userState) {
-            if ((this.onBeginGetCameraIDDelegate == null)) {
-                this.onBeginGetCameraIDDelegate = new BeginOperationDelegate(this.OnBeginGetCameraID);
-            }
-            if ((this.onEndGetCameraIDDelegate == null)) {
-                this.onEndGetCameraIDDelegate = new EndOperationDelegate(this.OnEndGetCameraID);
-            }
-            if ((this.onGetCameraIDCompletedDelegate == null)) {
-                this.onGetCameraIDCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGetCameraIDCompleted);
-            }
-            base.InvokeAsync(this.onBeginGetCameraIDDelegate, new object[] {
-                        path}, this.onEndGetCameraIDDelegate, this.onGetCameraIDCompletedDelegate, userState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGetCameraPath(int cameraID, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginGetCameraPath(cameraID, callback, asyncState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        string CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGetCameraPath(System.IAsyncResult result) {
-            return base.Channel.EndGetCameraPath(result);
-        }
-        
-        private System.IAsyncResult OnBeginGetCameraPath(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            int cameraID = ((int)(inValues[0]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGetCameraPath(cameraID, callback, asyncState);
-        }
-        
-        private object[] OnEndGetCameraPath(System.IAsyncResult result) {
-            string retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGetCameraPath(result);
-            return new object[] {
-                    retVal};
-        }
-        
-        private void OnGetCameraPathCompleted(object state) {
-            if ((this.GetCameraPathCompleted != null)) {
-                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.GetCameraPathCompleted(this, new GetCameraPathCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
-            }
-        }
-        
-        public void GetCameraPathAsync(int cameraID) {
-            this.GetCameraPathAsync(cameraID, null);
-        }
-        
-        public void GetCameraPathAsync(int cameraID, object userState) {
-            if ((this.onBeginGetCameraPathDelegate == null)) {
-                this.onBeginGetCameraPathDelegate = new BeginOperationDelegate(this.OnBeginGetCameraPath);
-            }
-            if ((this.onEndGetCameraPathDelegate == null)) {
-                this.onEndGetCameraPathDelegate = new EndOperationDelegate(this.OnEndGetCameraPath);
-            }
-            if ((this.onGetCameraPathCompletedDelegate == null)) {
-                this.onGetCameraPathCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGetCameraPathCompleted);
-            }
-            base.InvokeAsync(this.onBeginGetCameraPathDelegate, new object[] {
-                        cameraID}, this.onEndGetCameraPathDelegate, this.onGetCameraPathCompletedDelegate, userState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGetCameraName(int cameraID, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginGetCameraName(cameraID, callback, asyncState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        string CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGetCameraName(System.IAsyncResult result) {
-            return base.Channel.EndGetCameraName(result);
-        }
-        
-        private System.IAsyncResult OnBeginGetCameraName(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            int cameraID = ((int)(inValues[0]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGetCameraName(cameraID, callback, asyncState);
-        }
-        
-        private object[] OnEndGetCameraName(System.IAsyncResult result) {
-            string retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGetCameraName(result);
-            return new object[] {
-                    retVal};
-        }
-        
-        private void OnGetCameraNameCompleted(object state) {
-            if ((this.GetCameraNameCompleted != null)) {
-                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.GetCameraNameCompleted(this, new GetCameraNameCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
-            }
-        }
-        
-        public void GetCameraNameAsync(int cameraID) {
-            this.GetCameraNameAsync(cameraID, null);
-        }
-        
-        public void GetCameraNameAsync(int cameraID, object userState) {
-            if ((this.onBeginGetCameraNameDelegate == null)) {
-                this.onBeginGetCameraNameDelegate = new BeginOperationDelegate(this.OnBeginGetCameraName);
-            }
-            if ((this.onEndGetCameraNameDelegate == null)) {
-                this.onEndGetCameraNameDelegate = new EndOperationDelegate(this.OnEndGetCameraName);
-            }
-            if ((this.onGetCameraNameCompletedDelegate == null)) {
-                this.onGetCameraNameCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGetCameraNameCompleted);
-            }
-            base.InvokeAsync(this.onBeginGetCameraNameDelegate, new object[] {
-                        cameraID}, this.onEndGetCameraNameDelegate, this.onGetCameraNameCompletedDelegate, userState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGetCameraDescription(int cameraID, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginGetCameraDescription(cameraID, callback, asyncState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        string CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGetCameraDescription(System.IAsyncResult result) {
-            return base.Channel.EndGetCameraDescription(result);
-        }
-        
-        private System.IAsyncResult OnBeginGetCameraDescription(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            int cameraID = ((int)(inValues[0]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGetCameraDescription(cameraID, callback, asyncState);
-        }
-        
-        private object[] OnEndGetCameraDescription(System.IAsyncResult result) {
-            string retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGetCameraDescription(result);
-            return new object[] {
-                    retVal};
-        }
-        
-        private void OnGetCameraDescriptionCompleted(object state) {
-            if ((this.GetCameraDescriptionCompleted != null)) {
-                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.GetCameraDescriptionCompleted(this, new GetCameraDescriptionCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
-            }
-        }
-        
-        public void GetCameraDescriptionAsync(int cameraID) {
-            this.GetCameraDescriptionAsync(cameraID, null);
-        }
-        
-        public void GetCameraDescriptionAsync(int cameraID, object userState) {
-            if ((this.onBeginGetCameraDescriptionDelegate == null)) {
-                this.onBeginGetCameraDescriptionDelegate = new BeginOperationDelegate(this.OnBeginGetCameraDescription);
-            }
-            if ((this.onEndGetCameraDescriptionDelegate == null)) {
-                this.onEndGetCameraDescriptionDelegate = new EndOperationDelegate(this.OnEndGetCameraDescription);
-            }
-            if ((this.onGetCameraDescriptionCompletedDelegate == null)) {
-                this.onGetCameraDescriptionCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGetCameraDescriptionCompleted);
-            }
-            base.InvokeAsync(this.onBeginGetCameraDescriptionDelegate, new object[] {
-                        cameraID}, this.onEndGetCameraDescriptionDelegate, this.onGetCameraDescriptionCompletedDelegate, userState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGetCameraIcon(int cameraID, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginGetCameraIcon(cameraID, callback, asyncState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        byte[] CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGetCameraIcon(System.IAsyncResult result) {
-            return base.Channel.EndGetCameraIcon(result);
-        }
-        
-        private System.IAsyncResult OnBeginGetCameraIcon(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            int cameraID = ((int)(inValues[0]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGetCameraIcon(cameraID, callback, asyncState);
-        }
-        
-        private object[] OnEndGetCameraIcon(System.IAsyncResult result) {
-            byte[] retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGetCameraIcon(result);
-            return new object[] {
-                    retVal};
-        }
-        
-        private void OnGetCameraIconCompleted(object state) {
-            if ((this.GetCameraIconCompleted != null)) {
-                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.GetCameraIconCompleted(this, new GetCameraIconCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
-            }
-        }
-        
-        public void GetCameraIconAsync(int cameraID) {
-            this.GetCameraIconAsync(cameraID, null);
-        }
-        
-        public void GetCameraIconAsync(int cameraID, object userState) {
-            if ((this.onBeginGetCameraIconDelegate == null)) {
-                this.onBeginGetCameraIconDelegate = new BeginOperationDelegate(this.OnBeginGetCameraIcon);
-            }
-            if ((this.onEndGetCameraIconDelegate == null)) {
-                this.onEndGetCameraIconDelegate = new EndOperationDelegate(this.OnEndGetCameraIcon);
-            }
-            if ((this.onGetCameraIconCompletedDelegate == null)) {
-                this.onGetCameraIconCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGetCameraIconCompleted);
-            }
-            base.InvokeAsync(this.onBeginGetCameraIconDelegate, new object[] {
-                        cameraID}, this.onEndGetCameraIconDelegate, this.onGetCameraIconCompletedDelegate, userState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGetCameraRegistrationDate(int cameraID, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginGetCameraRegistrationDate(cameraID, callback, asyncState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.DateTime CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGetCameraRegistrationDate(System.IAsyncResult result) {
-            return base.Channel.EndGetCameraRegistrationDate(result);
-        }
-        
-        private System.IAsyncResult OnBeginGetCameraRegistrationDate(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            int cameraID = ((int)(inValues[0]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGetCameraRegistrationDate(cameraID, callback, asyncState);
-        }
-        
-        private object[] OnEndGetCameraRegistrationDate(System.IAsyncResult result) {
-            System.DateTime retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGetCameraRegistrationDate(result);
-            return new object[] {
-                    retVal};
-        }
-        
-        private void OnGetCameraRegistrationDateCompleted(object state) {
-            if ((this.GetCameraRegistrationDateCompleted != null)) {
-                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.GetCameraRegistrationDateCompleted(this, new GetCameraRegistrationDateCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
-            }
-        }
-        
-        public void GetCameraRegistrationDateAsync(int cameraID) {
-            this.GetCameraRegistrationDateAsync(cameraID, null);
-        }
-        
-        public void GetCameraRegistrationDateAsync(int cameraID, object userState) {
-            if ((this.onBeginGetCameraRegistrationDateDelegate == null)) {
-                this.onBeginGetCameraRegistrationDateDelegate = new BeginOperationDelegate(this.OnBeginGetCameraRegistrationDate);
-            }
-            if ((this.onEndGetCameraRegistrationDateDelegate == null)) {
-                this.onEndGetCameraRegistrationDateDelegate = new EndOperationDelegate(this.OnEndGetCameraRegistrationDate);
-            }
-            if ((this.onGetCameraRegistrationDateCompletedDelegate == null)) {
-                this.onGetCameraRegistrationDateCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGetCameraRegistrationDateCompleted);
-            }
-            base.InvokeAsync(this.onBeginGetCameraRegistrationDateDelegate, new object[] {
-                        cameraID}, this.onEndGetCameraRegistrationDateDelegate, this.onGetCameraRegistrationDateCompletedDelegate, userState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGetCameraGroups(int cameraID, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginGetCameraGroups(cameraID, callback, asyncState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Collections.ObjectModel.ObservableCollection<int> CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGetCameraGroups(System.IAsyncResult result) {
-            return base.Channel.EndGetCameraGroups(result);
-        }
-        
-        private System.IAsyncResult OnBeginGetCameraGroups(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            int cameraID = ((int)(inValues[0]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGetCameraGroups(cameraID, callback, asyncState);
-        }
-        
-        private object[] OnEndGetCameraGroups(System.IAsyncResult result) {
-            System.Collections.ObjectModel.ObservableCollection<int> retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGetCameraGroups(result);
-            return new object[] {
-                    retVal};
-        }
-        
-        private void OnGetCameraGroupsCompleted(object state) {
-            if ((this.GetCameraGroupsCompleted != null)) {
-                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.GetCameraGroupsCompleted(this, new GetCameraGroupsCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
-            }
-        }
-        
-        public void GetCameraGroupsAsync(int cameraID) {
-            this.GetCameraGroupsAsync(cameraID, null);
-        }
-        
-        public void GetCameraGroupsAsync(int cameraID, object userState) {
-            if ((this.onBeginGetCameraGroupsDelegate == null)) {
-                this.onBeginGetCameraGroupsDelegate = new BeginOperationDelegate(this.OnBeginGetCameraGroups);
-            }
-            if ((this.onEndGetCameraGroupsDelegate == null)) {
-                this.onEndGetCameraGroupsDelegate = new EndOperationDelegate(this.OnEndGetCameraGroups);
-            }
-            if ((this.onGetCameraGroupsCompletedDelegate == null)) {
-                this.onGetCameraGroupsCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGetCameraGroupsCompleted);
-            }
-            base.InvokeAsync(this.onBeginGetCameraGroupsDelegate, new object[] {
-                        cameraID}, this.onEndGetCameraGroupsDelegate, this.onGetCameraGroupsCompletedDelegate, userState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGetCameraFrames(int cameraID, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginGetCameraFrames(cameraID, callback, asyncState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Collections.ObjectModel.ObservableCollection<int> CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGetCameraFrames(System.IAsyncResult result) {
-            return base.Channel.EndGetCameraFrames(result);
-        }
-        
-        private System.IAsyncResult OnBeginGetCameraFrames(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            int cameraID = ((int)(inValues[0]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGetCameraFrames(cameraID, callback, asyncState);
-        }
-        
-        private object[] OnEndGetCameraFrames(System.IAsyncResult result) {
-            System.Collections.ObjectModel.ObservableCollection<int> retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGetCameraFrames(result);
-            return new object[] {
-                    retVal};
-        }
-        
-        private void OnGetCameraFramesCompleted(object state) {
-            if ((this.GetCameraFramesCompleted != null)) {
-                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.GetCameraFramesCompleted(this, new GetCameraFramesCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
-            }
-        }
-        
-        public void GetCameraFramesAsync(int cameraID) {
-            this.GetCameraFramesAsync(cameraID, null);
-        }
-        
-        public void GetCameraFramesAsync(int cameraID, object userState) {
-            if ((this.onBeginGetCameraFramesDelegate == null)) {
-                this.onBeginGetCameraFramesDelegate = new BeginOperationDelegate(this.OnBeginGetCameraFrames);
-            }
-            if ((this.onEndGetCameraFramesDelegate == null)) {
-                this.onEndGetCameraFramesDelegate = new EndOperationDelegate(this.OnEndGetCameraFrames);
-            }
-            if ((this.onGetCameraFramesCompletedDelegate == null)) {
-                this.onGetCameraFramesCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGetCameraFramesCompleted);
-            }
-            base.InvokeAsync(this.onBeginGetCameraFramesDelegate, new object[] {
-                        cameraID}, this.onEndGetCameraFramesDelegate, this.onGetCameraFramesCompletedDelegate, userState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginSetCameraName(int cameraID, string name, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginSetCameraName(cameraID, name, callback, asyncState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndSetCameraName(System.IAsyncResult result) {
-            base.Channel.EndSetCameraName(result);
-        }
-        
-        private System.IAsyncResult OnBeginSetCameraName(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            int cameraID = ((int)(inValues[0]));
-            string name = ((string)(inValues[1]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginSetCameraName(cameraID, name, callback, asyncState);
-        }
-        
-        private object[] OnEndSetCameraName(System.IAsyncResult result) {
-            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndSetCameraName(result);
-            return null;
-        }
-        
-        private void OnSetCameraNameCompleted(object state) {
-            if ((this.SetCameraNameCompleted != null)) {
-                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.SetCameraNameCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
-            }
-        }
-        
-        public void SetCameraNameAsync(int cameraID, string name) {
-            this.SetCameraNameAsync(cameraID, name, null);
-        }
-        
-        public void SetCameraNameAsync(int cameraID, string name, object userState) {
-            if ((this.onBeginSetCameraNameDelegate == null)) {
-                this.onBeginSetCameraNameDelegate = new BeginOperationDelegate(this.OnBeginSetCameraName);
-            }
-            if ((this.onEndSetCameraNameDelegate == null)) {
-                this.onEndSetCameraNameDelegate = new EndOperationDelegate(this.OnEndSetCameraName);
-            }
-            if ((this.onSetCameraNameCompletedDelegate == null)) {
-                this.onSetCameraNameCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnSetCameraNameCompleted);
-            }
-            base.InvokeAsync(this.onBeginSetCameraNameDelegate, new object[] {
-                        cameraID,
-                        name}, this.onEndSetCameraNameDelegate, this.onSetCameraNameCompletedDelegate, userState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginSetCameraDescription(int cameraID, string description, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginSetCameraDescription(cameraID, description, callback, asyncState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndSetCameraDescription(System.IAsyncResult result) {
-            base.Channel.EndSetCameraDescription(result);
-        }
-        
-        private System.IAsyncResult OnBeginSetCameraDescription(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            int cameraID = ((int)(inValues[0]));
-            string description = ((string)(inValues[1]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginSetCameraDescription(cameraID, description, callback, asyncState);
-        }
-        
-        private object[] OnEndSetCameraDescription(System.IAsyncResult result) {
-            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndSetCameraDescription(result);
-            return null;
-        }
-        
-        private void OnSetCameraDescriptionCompleted(object state) {
-            if ((this.SetCameraDescriptionCompleted != null)) {
-                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.SetCameraDescriptionCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
-            }
-        }
-        
-        public void SetCameraDescriptionAsync(int cameraID, string description) {
-            this.SetCameraDescriptionAsync(cameraID, description, null);
-        }
-        
-        public void SetCameraDescriptionAsync(int cameraID, string description, object userState) {
-            if ((this.onBeginSetCameraDescriptionDelegate == null)) {
-                this.onBeginSetCameraDescriptionDelegate = new BeginOperationDelegate(this.OnBeginSetCameraDescription);
-            }
-            if ((this.onEndSetCameraDescriptionDelegate == null)) {
-                this.onEndSetCameraDescriptionDelegate = new EndOperationDelegate(this.OnEndSetCameraDescription);
-            }
-            if ((this.onSetCameraDescriptionCompletedDelegate == null)) {
-                this.onSetCameraDescriptionCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnSetCameraDescriptionCompleted);
-            }
-            base.InvokeAsync(this.onBeginSetCameraDescriptionDelegate, new object[] {
-                        cameraID,
-                        description}, this.onEndSetCameraDescriptionDelegate, this.onSetCameraDescriptionCompletedDelegate, userState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginSetCameraIcon(int cameraID, byte[] icon, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginSetCameraIcon(cameraID, icon, callback, asyncState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndSetCameraIcon(System.IAsyncResult result) {
-            base.Channel.EndSetCameraIcon(result);
-        }
-        
-        private System.IAsyncResult OnBeginSetCameraIcon(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            int cameraID = ((int)(inValues[0]));
-            byte[] icon = ((byte[])(inValues[1]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginSetCameraIcon(cameraID, icon, callback, asyncState);
-        }
-        
-        private object[] OnEndSetCameraIcon(System.IAsyncResult result) {
-            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndSetCameraIcon(result);
-            return null;
-        }
-        
-        private void OnSetCameraIconCompleted(object state) {
-            if ((this.SetCameraIconCompleted != null)) {
-                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.SetCameraIconCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
-            }
-        }
-        
-        public void SetCameraIconAsync(int cameraID, byte[] icon) {
-            this.SetCameraIconAsync(cameraID, icon, null);
-        }
-        
-        public void SetCameraIconAsync(int cameraID, byte[] icon, object userState) {
-            if ((this.onBeginSetCameraIconDelegate == null)) {
-                this.onBeginSetCameraIconDelegate = new BeginOperationDelegate(this.OnBeginSetCameraIcon);
-            }
-            if ((this.onEndSetCameraIconDelegate == null)) {
-                this.onEndSetCameraIconDelegate = new EndOperationDelegate(this.OnEndSetCameraIcon);
-            }
-            if ((this.onSetCameraIconCompletedDelegate == null)) {
-                this.onSetCameraIconCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnSetCameraIconCompleted);
-            }
-            base.InvokeAsync(this.onBeginSetCameraIconDelegate, new object[] {
-                        cameraID,
-                        icon}, this.onEndSetCameraIconDelegate, this.onSetCameraIconCompletedDelegate, userState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginAddFrame(int cameraID, byte[] content, string marker, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginAddFrame(cameraID, content, marker, callback, asyncState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndAddFrame(System.IAsyncResult result) {
-            base.Channel.EndAddFrame(result);
-        }
-        
-        private System.IAsyncResult OnBeginAddFrame(object[] inValues, System.AsyncCallback callback, object asyncState) {
+        private System.IAsyncResult OnBeginFrameAdd(object[] inValues, System.AsyncCallback callback, object asyncState) {
             int cameraID = ((int)(inValues[0]));
             byte[] content = ((byte[])(inValues[1]));
             string marker = ((string)(inValues[2]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginAddFrame(cameraID, content, marker, callback, asyncState);
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginFrameAdd(cameraID, content, marker, callback, asyncState);
         }
         
-        private object[] OnEndAddFrame(System.IAsyncResult result) {
-            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndAddFrame(result);
-            return null;
+        private object[] OnEndFrameAdd(System.IAsyncResult result) {
+            int retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndFrameAdd(result);
+            return new object[] {
+                    retVal};
         }
         
-        private void OnAddFrameCompleted(object state) {
-            if ((this.AddFrameCompleted != null)) {
+        private void OnFrameAddCompleted(object state) {
+            if ((this.FrameAddCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.AddFrameCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+                this.FrameAddCompleted(this, new FrameAddCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void AddFrameAsync(int cameraID, byte[] content, string marker) {
-            this.AddFrameAsync(cameraID, content, marker, null);
+        public void FrameAddAsync(int cameraID, byte[] content, string marker) {
+            this.FrameAddAsync(cameraID, content, marker, null);
         }
         
-        public void AddFrameAsync(int cameraID, byte[] content, string marker, object userState) {
-            if ((this.onBeginAddFrameDelegate == null)) {
-                this.onBeginAddFrameDelegate = new BeginOperationDelegate(this.OnBeginAddFrame);
+        public void FrameAddAsync(int cameraID, byte[] content, string marker, object userState) {
+            if ((this.onBeginFrameAddDelegate == null)) {
+                this.onBeginFrameAddDelegate = new BeginOperationDelegate(this.OnBeginFrameAdd);
             }
-            if ((this.onEndAddFrameDelegate == null)) {
-                this.onEndAddFrameDelegate = new EndOperationDelegate(this.OnEndAddFrame);
+            if ((this.onEndFrameAddDelegate == null)) {
+                this.onEndFrameAddDelegate = new EndOperationDelegate(this.OnEndFrameAdd);
             }
-            if ((this.onAddFrameCompletedDelegate == null)) {
-                this.onAddFrameCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnAddFrameCompleted);
+            if ((this.onFrameAddCompletedDelegate == null)) {
+                this.onFrameAddCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnFrameAddCompleted);
             }
-            base.InvokeAsync(this.onBeginAddFrameDelegate, new object[] {
+            base.InvokeAsync(this.onBeginFrameAddDelegate, new object[] {
                         cameraID,
                         content,
-                        marker}, this.onEndAddFrameDelegate, this.onAddFrameCompletedDelegate, userState);
+                        marker}, this.onEndFrameAddDelegate, this.onFrameAddCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginRemoveFrame(int frameID, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginRemoveFrame(frameID, callback, asyncState);
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginFrameRemove(int frameID, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginFrameRemove(frameID, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndRemoveFrame(System.IAsyncResult result) {
-            base.Channel.EndRemoveFrame(result);
+        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndFrameRemove(System.IAsyncResult result) {
+            base.Channel.EndFrameRemove(result);
         }
         
-        private System.IAsyncResult OnBeginRemoveFrame(object[] inValues, System.AsyncCallback callback, object asyncState) {
+        private System.IAsyncResult OnBeginFrameRemove(object[] inValues, System.AsyncCallback callback, object asyncState) {
             int frameID = ((int)(inValues[0]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginRemoveFrame(frameID, callback, asyncState);
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginFrameRemove(frameID, callback, asyncState);
         }
         
-        private object[] OnEndRemoveFrame(System.IAsyncResult result) {
-            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndRemoveFrame(result);
+        private object[] OnEndFrameRemove(System.IAsyncResult result) {
+            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndFrameRemove(result);
             return null;
         }
         
-        private void OnRemoveFrameCompleted(object state) {
-            if ((this.RemoveFrameCompleted != null)) {
+        private void OnFrameRemoveCompleted(object state) {
+            if ((this.FrameRemoveCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.RemoveFrameCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+                this.FrameRemoveCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void RemoveFrameAsync(int frameID) {
-            this.RemoveFrameAsync(frameID, null);
+        public void FrameRemoveAsync(int frameID) {
+            this.FrameRemoveAsync(frameID, null);
         }
         
-        public void RemoveFrameAsync(int frameID, object userState) {
-            if ((this.onBeginRemoveFrameDelegate == null)) {
-                this.onBeginRemoveFrameDelegate = new BeginOperationDelegate(this.OnBeginRemoveFrame);
+        public void FrameRemoveAsync(int frameID, object userState) {
+            if ((this.onBeginFrameRemoveDelegate == null)) {
+                this.onBeginFrameRemoveDelegate = new BeginOperationDelegate(this.OnBeginFrameRemove);
             }
-            if ((this.onEndRemoveFrameDelegate == null)) {
-                this.onEndRemoveFrameDelegate = new EndOperationDelegate(this.OnEndRemoveFrame);
+            if ((this.onEndFrameRemoveDelegate == null)) {
+                this.onEndFrameRemoveDelegate = new EndOperationDelegate(this.OnEndFrameRemove);
             }
-            if ((this.onRemoveFrameCompletedDelegate == null)) {
-                this.onRemoveFrameCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnRemoveFrameCompleted);
+            if ((this.onFrameRemoveCompletedDelegate == null)) {
+                this.onFrameRemoveCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnFrameRemoveCompleted);
             }
-            base.InvokeAsync(this.onBeginRemoveFrameDelegate, new object[] {
-                        frameID}, this.onEndRemoveFrameDelegate, this.onRemoveFrameCompletedDelegate, userState);
+            base.InvokeAsync(this.onBeginFrameRemoveDelegate, new object[] {
+                        frameID}, this.onEndFrameRemoveDelegate, this.onFrameRemoveCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGetFrameContent(int frameID, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginGetFrameContent(frameID, callback, asyncState);
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginFrameGetContent(int frameID, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginFrameGetContent(frameID, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        byte[] CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGetFrameContent(System.IAsyncResult result) {
-            return base.Channel.EndGetFrameContent(result);
+        byte[] CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndFrameGetContent(System.IAsyncResult result) {
+            return base.Channel.EndFrameGetContent(result);
         }
         
-        private System.IAsyncResult OnBeginGetFrameContent(object[] inValues, System.AsyncCallback callback, object asyncState) {
+        private System.IAsyncResult OnBeginFrameGetContent(object[] inValues, System.AsyncCallback callback, object asyncState) {
             int frameID = ((int)(inValues[0]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGetFrameContent(frameID, callback, asyncState);
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginFrameGetContent(frameID, callback, asyncState);
         }
         
-        private object[] OnEndGetFrameContent(System.IAsyncResult result) {
-            byte[] retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGetFrameContent(result);
+        private object[] OnEndFrameGetContent(System.IAsyncResult result) {
+            byte[] retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndFrameGetContent(result);
             return new object[] {
                     retVal};
         }
         
-        private void OnGetFrameContentCompleted(object state) {
-            if ((this.GetFrameContentCompleted != null)) {
+        private void OnFrameGetContentCompleted(object state) {
+            if ((this.FrameGetContentCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.GetFrameContentCompleted(this, new GetFrameContentCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+                this.FrameGetContentCompleted(this, new FrameGetContentCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void GetFrameContentAsync(int frameID) {
-            this.GetFrameContentAsync(frameID, null);
+        public void FrameGetContentAsync(int frameID) {
+            this.FrameGetContentAsync(frameID, null);
         }
         
-        public void GetFrameContentAsync(int frameID, object userState) {
-            if ((this.onBeginGetFrameContentDelegate == null)) {
-                this.onBeginGetFrameContentDelegate = new BeginOperationDelegate(this.OnBeginGetFrameContent);
+        public void FrameGetContentAsync(int frameID, object userState) {
+            if ((this.onBeginFrameGetContentDelegate == null)) {
+                this.onBeginFrameGetContentDelegate = new BeginOperationDelegate(this.OnBeginFrameGetContent);
             }
-            if ((this.onEndGetFrameContentDelegate == null)) {
-                this.onEndGetFrameContentDelegate = new EndOperationDelegate(this.OnEndGetFrameContent);
+            if ((this.onEndFrameGetContentDelegate == null)) {
+                this.onEndFrameGetContentDelegate = new EndOperationDelegate(this.OnEndFrameGetContent);
             }
-            if ((this.onGetFrameContentCompletedDelegate == null)) {
-                this.onGetFrameContentCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGetFrameContentCompleted);
+            if ((this.onFrameGetContentCompletedDelegate == null)) {
+                this.onFrameGetContentCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnFrameGetContentCompleted);
             }
-            base.InvokeAsync(this.onBeginGetFrameContentDelegate, new object[] {
-                        frameID}, this.onEndGetFrameContentDelegate, this.onGetFrameContentCompletedDelegate, userState);
+            base.InvokeAsync(this.onBeginFrameGetContentDelegate, new object[] {
+                        frameID}, this.onEndFrameGetContentDelegate, this.onFrameGetContentCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGetFrameMarker(int frameID, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginGetFrameMarker(frameID, callback, asyncState);
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginFrameGetMarker(int frameID, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginFrameGetMarker(frameID, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        string CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGetFrameMarker(System.IAsyncResult result) {
-            return base.Channel.EndGetFrameMarker(result);
+        string CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndFrameGetMarker(System.IAsyncResult result) {
+            return base.Channel.EndFrameGetMarker(result);
         }
         
-        private System.IAsyncResult OnBeginGetFrameMarker(object[] inValues, System.AsyncCallback callback, object asyncState) {
+        private System.IAsyncResult OnBeginFrameGetMarker(object[] inValues, System.AsyncCallback callback, object asyncState) {
             int frameID = ((int)(inValues[0]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGetFrameMarker(frameID, callback, asyncState);
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginFrameGetMarker(frameID, callback, asyncState);
         }
         
-        private object[] OnEndGetFrameMarker(System.IAsyncResult result) {
-            string retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGetFrameMarker(result);
+        private object[] OnEndFrameGetMarker(System.IAsyncResult result) {
+            string retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndFrameGetMarker(result);
             return new object[] {
                     retVal};
         }
         
-        private void OnGetFrameMarkerCompleted(object state) {
-            if ((this.GetFrameMarkerCompleted != null)) {
+        private void OnFrameGetMarkerCompleted(object state) {
+            if ((this.FrameGetMarkerCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.GetFrameMarkerCompleted(this, new GetFrameMarkerCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+                this.FrameGetMarkerCompleted(this, new FrameGetMarkerCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void GetFrameMarkerAsync(int frameID) {
-            this.GetFrameMarkerAsync(frameID, null);
+        public void FrameGetMarkerAsync(int frameID) {
+            this.FrameGetMarkerAsync(frameID, null);
         }
         
-        public void GetFrameMarkerAsync(int frameID, object userState) {
-            if ((this.onBeginGetFrameMarkerDelegate == null)) {
-                this.onBeginGetFrameMarkerDelegate = new BeginOperationDelegate(this.OnBeginGetFrameMarker);
+        public void FrameGetMarkerAsync(int frameID, object userState) {
+            if ((this.onBeginFrameGetMarkerDelegate == null)) {
+                this.onBeginFrameGetMarkerDelegate = new BeginOperationDelegate(this.OnBeginFrameGetMarker);
             }
-            if ((this.onEndGetFrameMarkerDelegate == null)) {
-                this.onEndGetFrameMarkerDelegate = new EndOperationDelegate(this.OnEndGetFrameMarker);
+            if ((this.onEndFrameGetMarkerDelegate == null)) {
+                this.onEndFrameGetMarkerDelegate = new EndOperationDelegate(this.OnEndFrameGetMarker);
             }
-            if ((this.onGetFrameMarkerCompletedDelegate == null)) {
-                this.onGetFrameMarkerCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGetFrameMarkerCompleted);
+            if ((this.onFrameGetMarkerCompletedDelegate == null)) {
+                this.onFrameGetMarkerCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnFrameGetMarkerCompleted);
             }
-            base.InvokeAsync(this.onBeginGetFrameMarkerDelegate, new object[] {
-                        frameID}, this.onEndGetFrameMarkerDelegate, this.onGetFrameMarkerCompletedDelegate, userState);
+            base.InvokeAsync(this.onBeginFrameGetMarkerDelegate, new object[] {
+                        frameID}, this.onEndFrameGetMarkerDelegate, this.onFrameGetMarkerCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginIsEmailRegistered(string email, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginIsEmailRegistered(email, callback, asyncState);
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginUserIsEmailAvailable(string email, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginUserIsEmailAvailable(email, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        bool CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndIsEmailRegistered(System.IAsyncResult result) {
-            return base.Channel.EndIsEmailRegistered(result);
+        bool CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndUserIsEmailAvailable(System.IAsyncResult result) {
+            return base.Channel.EndUserIsEmailAvailable(result);
         }
         
-        private System.IAsyncResult OnBeginIsEmailRegistered(object[] inValues, System.AsyncCallback callback, object asyncState) {
+        private System.IAsyncResult OnBeginUserIsEmailAvailable(object[] inValues, System.AsyncCallback callback, object asyncState) {
             string email = ((string)(inValues[0]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginIsEmailRegistered(email, callback, asyncState);
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginUserIsEmailAvailable(email, callback, asyncState);
         }
         
-        private object[] OnEndIsEmailRegistered(System.IAsyncResult result) {
-            bool retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndIsEmailRegistered(result);
+        private object[] OnEndUserIsEmailAvailable(System.IAsyncResult result) {
+            bool retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndUserIsEmailAvailable(result);
             return new object[] {
                     retVal};
         }
         
-        private void OnIsEmailRegisteredCompleted(object state) {
-            if ((this.IsEmailRegisteredCompleted != null)) {
+        private void OnUserIsEmailAvailableCompleted(object state) {
+            if ((this.UserIsEmailAvailableCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.IsEmailRegisteredCompleted(this, new IsEmailRegisteredCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+                this.UserIsEmailAvailableCompleted(this, new UserIsEmailAvailableCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void IsEmailRegisteredAsync(string email) {
-            this.IsEmailRegisteredAsync(email, null);
+        public void UserIsEmailAvailableAsync(string email) {
+            this.UserIsEmailAvailableAsync(email, null);
         }
         
-        public void IsEmailRegisteredAsync(string email, object userState) {
-            if ((this.onBeginIsEmailRegisteredDelegate == null)) {
-                this.onBeginIsEmailRegisteredDelegate = new BeginOperationDelegate(this.OnBeginIsEmailRegistered);
+        public void UserIsEmailAvailableAsync(string email, object userState) {
+            if ((this.onBeginUserIsEmailAvailableDelegate == null)) {
+                this.onBeginUserIsEmailAvailableDelegate = new BeginOperationDelegate(this.OnBeginUserIsEmailAvailable);
             }
-            if ((this.onEndIsEmailRegisteredDelegate == null)) {
-                this.onEndIsEmailRegisteredDelegate = new EndOperationDelegate(this.OnEndIsEmailRegistered);
+            if ((this.onEndUserIsEmailAvailableDelegate == null)) {
+                this.onEndUserIsEmailAvailableDelegate = new EndOperationDelegate(this.OnEndUserIsEmailAvailable);
             }
-            if ((this.onIsEmailRegisteredCompletedDelegate == null)) {
-                this.onIsEmailRegisteredCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnIsEmailRegisteredCompleted);
+            if ((this.onUserIsEmailAvailableCompletedDelegate == null)) {
+                this.onUserIsEmailAvailableCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnUserIsEmailAvailableCompleted);
             }
-            base.InvokeAsync(this.onBeginIsEmailRegisteredDelegate, new object[] {
-                        email}, this.onEndIsEmailRegisteredDelegate, this.onIsEmailRegisteredCompletedDelegate, userState);
+            base.InvokeAsync(this.onBeginUserIsEmailAvailableDelegate, new object[] {
+                        email}, this.onEndUserIsEmailAvailableDelegate, this.onUserIsEmailAvailableCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginIsUserRegistered(string email, string password, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginIsUserRegistered(email, password, callback, asyncState);
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginUserLogin(string email, string password, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginUserLogin(email, password, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        bool CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndIsUserRegistered(System.IAsyncResult result) {
-            return base.Channel.EndIsUserRegistered(result);
+        bool CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndUserLogin(System.IAsyncResult result) {
+            return base.Channel.EndUserLogin(result);
         }
         
-        private System.IAsyncResult OnBeginIsUserRegistered(object[] inValues, System.AsyncCallback callback, object asyncState) {
+        private System.IAsyncResult OnBeginUserLogin(object[] inValues, System.AsyncCallback callback, object asyncState) {
             string email = ((string)(inValues[0]));
             string password = ((string)(inValues[1]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginIsUserRegistered(email, password, callback, asyncState);
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginUserLogin(email, password, callback, asyncState);
         }
         
-        private object[] OnEndIsUserRegistered(System.IAsyncResult result) {
-            bool retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndIsUserRegistered(result);
+        private object[] OnEndUserLogin(System.IAsyncResult result) {
+            bool retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndUserLogin(result);
             return new object[] {
                     retVal};
         }
         
-        private void OnIsUserRegisteredCompleted(object state) {
-            if ((this.IsUserRegisteredCompleted != null)) {
+        private void OnUserLoginCompleted(object state) {
+            if ((this.UserLoginCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.IsUserRegisteredCompleted(this, new IsUserRegisteredCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+                this.UserLoginCompleted(this, new UserLoginCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void IsUserRegisteredAsync(string email, string password) {
-            this.IsUserRegisteredAsync(email, password, null);
+        public void UserLoginAsync(string email, string password) {
+            this.UserLoginAsync(email, password, null);
         }
         
-        public void IsUserRegisteredAsync(string email, string password, object userState) {
-            if ((this.onBeginIsUserRegisteredDelegate == null)) {
-                this.onBeginIsUserRegisteredDelegate = new BeginOperationDelegate(this.OnBeginIsUserRegistered);
+        public void UserLoginAsync(string email, string password, object userState) {
+            if ((this.onBeginUserLoginDelegate == null)) {
+                this.onBeginUserLoginDelegate = new BeginOperationDelegate(this.OnBeginUserLogin);
             }
-            if ((this.onEndIsUserRegisteredDelegate == null)) {
-                this.onEndIsUserRegisteredDelegate = new EndOperationDelegate(this.OnEndIsUserRegistered);
+            if ((this.onEndUserLoginDelegate == null)) {
+                this.onEndUserLoginDelegate = new EndOperationDelegate(this.OnEndUserLogin);
             }
-            if ((this.onIsUserRegisteredCompletedDelegate == null)) {
-                this.onIsUserRegisteredCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnIsUserRegisteredCompleted);
+            if ((this.onUserLoginCompletedDelegate == null)) {
+                this.onUserLoginCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnUserLoginCompleted);
             }
-            base.InvokeAsync(this.onBeginIsUserRegisteredDelegate, new object[] {
+            base.InvokeAsync(this.onBeginUserLoginDelegate, new object[] {
                         email,
-                        password}, this.onEndIsUserRegisteredDelegate, this.onIsUserRegisteredCompletedDelegate, userState);
+                        password}, this.onEndUserLoginDelegate, this.onUserLoginCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginRegisterUser(string email, string password, string name, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginRegisterUser(email, password, name, callback, asyncState);
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginUserAdd(string email, string password, string name, string description, byte[] icon, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginUserAdd(email, password, name, description, icon, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        int CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndRegisterUser(System.IAsyncResult result) {
-            return base.Channel.EndRegisterUser(result);
+        int CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndUserAdd(System.IAsyncResult result) {
+            return base.Channel.EndUserAdd(result);
         }
         
-        private System.IAsyncResult OnBeginRegisterUser(object[] inValues, System.AsyncCallback callback, object asyncState) {
+        private System.IAsyncResult OnBeginUserAdd(object[] inValues, System.AsyncCallback callback, object asyncState) {
             string email = ((string)(inValues[0]));
             string password = ((string)(inValues[1]));
             string name = ((string)(inValues[2]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginRegisterUser(email, password, name, callback, asyncState);
+            string description = ((string)(inValues[3]));
+            byte[] icon = ((byte[])(inValues[4]));
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginUserAdd(email, password, name, description, icon, callback, asyncState);
         }
         
-        private object[] OnEndRegisterUser(System.IAsyncResult result) {
-            int retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndRegisterUser(result);
+        private object[] OnEndUserAdd(System.IAsyncResult result) {
+            int retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndUserAdd(result);
             return new object[] {
                     retVal};
         }
         
-        private void OnRegisterUserCompleted(object state) {
-            if ((this.RegisterUserCompleted != null)) {
+        private void OnUserAddCompleted(object state) {
+            if ((this.UserAddCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.RegisterUserCompleted(this, new RegisterUserCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+                this.UserAddCompleted(this, new UserAddCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void RegisterUserAsync(string email, string password, string name) {
-            this.RegisterUserAsync(email, password, name, null);
+        public void UserAddAsync(string email, string password, string name, string description, byte[] icon) {
+            this.UserAddAsync(email, password, name, description, icon, null);
         }
         
-        public void RegisterUserAsync(string email, string password, string name, object userState) {
-            if ((this.onBeginRegisterUserDelegate == null)) {
-                this.onBeginRegisterUserDelegate = new BeginOperationDelegate(this.OnBeginRegisterUser);
+        public void UserAddAsync(string email, string password, string name, string description, byte[] icon, object userState) {
+            if ((this.onBeginUserAddDelegate == null)) {
+                this.onBeginUserAddDelegate = new BeginOperationDelegate(this.OnBeginUserAdd);
             }
-            if ((this.onEndRegisterUserDelegate == null)) {
-                this.onEndRegisterUserDelegate = new EndOperationDelegate(this.OnEndRegisterUser);
+            if ((this.onEndUserAddDelegate == null)) {
+                this.onEndUserAddDelegate = new EndOperationDelegate(this.OnEndUserAdd);
             }
-            if ((this.onRegisterUserCompletedDelegate == null)) {
-                this.onRegisterUserCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnRegisterUserCompleted);
+            if ((this.onUserAddCompletedDelegate == null)) {
+                this.onUserAddCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnUserAddCompleted);
             }
-            base.InvokeAsync(this.onBeginRegisterUserDelegate, new object[] {
+            base.InvokeAsync(this.onBeginUserAddDelegate, new object[] {
                         email,
                         password,
-                        name}, this.onEndRegisterUserDelegate, this.onRegisterUserCompletedDelegate, userState);
+                        name,
+                        description,
+                        icon}, this.onEndUserAddDelegate, this.onUserAddCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginRemoveUser(int userID, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginRemoveUser(userID, callback, asyncState);
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginUserRemove(int userID, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginUserRemove(userID, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndRemoveUser(System.IAsyncResult result) {
-            base.Channel.EndRemoveUser(result);
+        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndUserRemove(System.IAsyncResult result) {
+            base.Channel.EndUserRemove(result);
         }
         
-        private System.IAsyncResult OnBeginRemoveUser(object[] inValues, System.AsyncCallback callback, object asyncState) {
+        private System.IAsyncResult OnBeginUserRemove(object[] inValues, System.AsyncCallback callback, object asyncState) {
             int userID = ((int)(inValues[0]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginRemoveUser(userID, callback, asyncState);
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginUserRemove(userID, callback, asyncState);
         }
         
-        private object[] OnEndRemoveUser(System.IAsyncResult result) {
-            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndRemoveUser(result);
+        private object[] OnEndUserRemove(System.IAsyncResult result) {
+            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndUserRemove(result);
             return null;
         }
         
-        private void OnRemoveUserCompleted(object state) {
-            if ((this.RemoveUserCompleted != null)) {
+        private void OnUserRemoveCompleted(object state) {
+            if ((this.UserRemoveCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.RemoveUserCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+                this.UserRemoveCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void RemoveUserAsync(int userID) {
-            this.RemoveUserAsync(userID, null);
+        public void UserRemoveAsync(int userID) {
+            this.UserRemoveAsync(userID, null);
         }
         
-        public void RemoveUserAsync(int userID, object userState) {
-            if ((this.onBeginRemoveUserDelegate == null)) {
-                this.onBeginRemoveUserDelegate = new BeginOperationDelegate(this.OnBeginRemoveUser);
+        public void UserRemoveAsync(int userID, object userState) {
+            if ((this.onBeginUserRemoveDelegate == null)) {
+                this.onBeginUserRemoveDelegate = new BeginOperationDelegate(this.OnBeginUserRemove);
             }
-            if ((this.onEndRemoveUserDelegate == null)) {
-                this.onEndRemoveUserDelegate = new EndOperationDelegate(this.OnEndRemoveUser);
+            if ((this.onEndUserRemoveDelegate == null)) {
+                this.onEndUserRemoveDelegate = new EndOperationDelegate(this.OnEndUserRemove);
             }
-            if ((this.onRemoveUserCompletedDelegate == null)) {
-                this.onRemoveUserCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnRemoveUserCompleted);
+            if ((this.onUserRemoveCompletedDelegate == null)) {
+                this.onUserRemoveCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnUserRemoveCompleted);
             }
-            base.InvokeAsync(this.onBeginRemoveUserDelegate, new object[] {
-                        userID}, this.onEndRemoveUserDelegate, this.onRemoveUserCompletedDelegate, userState);
+            base.InvokeAsync(this.onBeginUserRemoveDelegate, new object[] {
+                        userID}, this.onEndUserRemoveDelegate, this.onUserRemoveCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGetUserID(string email, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginGetUserID(email, callback, asyncState);
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginUserGetID(string email, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginUserGetID(email, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        int CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGetUserID(System.IAsyncResult result) {
-            return base.Channel.EndGetUserID(result);
+        int CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndUserGetID(System.IAsyncResult result) {
+            return base.Channel.EndUserGetID(result);
         }
         
-        private System.IAsyncResult OnBeginGetUserID(object[] inValues, System.AsyncCallback callback, object asyncState) {
+        private System.IAsyncResult OnBeginUserGetID(object[] inValues, System.AsyncCallback callback, object asyncState) {
             string email = ((string)(inValues[0]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGetUserID(email, callback, asyncState);
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginUserGetID(email, callback, asyncState);
         }
         
-        private object[] OnEndGetUserID(System.IAsyncResult result) {
-            int retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGetUserID(result);
+        private object[] OnEndUserGetID(System.IAsyncResult result) {
+            int retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndUserGetID(result);
             return new object[] {
                     retVal};
         }
         
-        private void OnGetUserIDCompleted(object state) {
-            if ((this.GetUserIDCompleted != null)) {
+        private void OnUserGetIDCompleted(object state) {
+            if ((this.UserGetIDCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.GetUserIDCompleted(this, new GetUserIDCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+                this.UserGetIDCompleted(this, new UserGetIDCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void GetUserIDAsync(string email) {
-            this.GetUserIDAsync(email, null);
+        public void UserGetIDAsync(string email) {
+            this.UserGetIDAsync(email, null);
         }
         
-        public void GetUserIDAsync(string email, object userState) {
-            if ((this.onBeginGetUserIDDelegate == null)) {
-                this.onBeginGetUserIDDelegate = new BeginOperationDelegate(this.OnBeginGetUserID);
+        public void UserGetIDAsync(string email, object userState) {
+            if ((this.onBeginUserGetIDDelegate == null)) {
+                this.onBeginUserGetIDDelegate = new BeginOperationDelegate(this.OnBeginUserGetID);
             }
-            if ((this.onEndGetUserIDDelegate == null)) {
-                this.onEndGetUserIDDelegate = new EndOperationDelegate(this.OnEndGetUserID);
+            if ((this.onEndUserGetIDDelegate == null)) {
+                this.onEndUserGetIDDelegate = new EndOperationDelegate(this.OnEndUserGetID);
             }
-            if ((this.onGetUserIDCompletedDelegate == null)) {
-                this.onGetUserIDCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGetUserIDCompleted);
+            if ((this.onUserGetIDCompletedDelegate == null)) {
+                this.onUserGetIDCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnUserGetIDCompleted);
             }
-            base.InvokeAsync(this.onBeginGetUserIDDelegate, new object[] {
-                        email}, this.onEndGetUserIDDelegate, this.onGetUserIDCompletedDelegate, userState);
+            base.InvokeAsync(this.onBeginUserGetIDDelegate, new object[] {
+                        email}, this.onEndUserGetIDDelegate, this.onUserGetIDCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGetUserEmail(int userID, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginGetUserEmail(userID, callback, asyncState);
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginUserGetEmail(int userID, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginUserGetEmail(userID, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        string CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGetUserEmail(System.IAsyncResult result) {
-            return base.Channel.EndGetUserEmail(result);
+        string CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndUserGetEmail(System.IAsyncResult result) {
+            return base.Channel.EndUserGetEmail(result);
         }
         
-        private System.IAsyncResult OnBeginGetUserEmail(object[] inValues, System.AsyncCallback callback, object asyncState) {
+        private System.IAsyncResult OnBeginUserGetEmail(object[] inValues, System.AsyncCallback callback, object asyncState) {
             int userID = ((int)(inValues[0]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGetUserEmail(userID, callback, asyncState);
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginUserGetEmail(userID, callback, asyncState);
         }
         
-        private object[] OnEndGetUserEmail(System.IAsyncResult result) {
-            string retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGetUserEmail(result);
+        private object[] OnEndUserGetEmail(System.IAsyncResult result) {
+            string retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndUserGetEmail(result);
             return new object[] {
                     retVal};
         }
         
-        private void OnGetUserEmailCompleted(object state) {
-            if ((this.GetUserEmailCompleted != null)) {
+        private void OnUserGetEmailCompleted(object state) {
+            if ((this.UserGetEmailCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.GetUserEmailCompleted(this, new GetUserEmailCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+                this.UserGetEmailCompleted(this, new UserGetEmailCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void GetUserEmailAsync(int userID) {
-            this.GetUserEmailAsync(userID, null);
+        public void UserGetEmailAsync(int userID) {
+            this.UserGetEmailAsync(userID, null);
         }
         
-        public void GetUserEmailAsync(int userID, object userState) {
-            if ((this.onBeginGetUserEmailDelegate == null)) {
-                this.onBeginGetUserEmailDelegate = new BeginOperationDelegate(this.OnBeginGetUserEmail);
+        public void UserGetEmailAsync(int userID, object userState) {
+            if ((this.onBeginUserGetEmailDelegate == null)) {
+                this.onBeginUserGetEmailDelegate = new BeginOperationDelegate(this.OnBeginUserGetEmail);
             }
-            if ((this.onEndGetUserEmailDelegate == null)) {
-                this.onEndGetUserEmailDelegate = new EndOperationDelegate(this.OnEndGetUserEmail);
+            if ((this.onEndUserGetEmailDelegate == null)) {
+                this.onEndUserGetEmailDelegate = new EndOperationDelegate(this.OnEndUserGetEmail);
             }
-            if ((this.onGetUserEmailCompletedDelegate == null)) {
-                this.onGetUserEmailCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGetUserEmailCompleted);
+            if ((this.onUserGetEmailCompletedDelegate == null)) {
+                this.onUserGetEmailCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnUserGetEmailCompleted);
             }
-            base.InvokeAsync(this.onBeginGetUserEmailDelegate, new object[] {
-                        userID}, this.onEndGetUserEmailDelegate, this.onGetUserEmailCompletedDelegate, userState);
+            base.InvokeAsync(this.onBeginUserGetEmailDelegate, new object[] {
+                        userID}, this.onEndUserGetEmailDelegate, this.onUserGetEmailCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGetUserPassword(int userID, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginGetUserPassword(userID, callback, asyncState);
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginUserGetPassword(int userID, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginUserGetPassword(userID, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        string CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGetUserPassword(System.IAsyncResult result) {
-            return base.Channel.EndGetUserPassword(result);
+        string CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndUserGetPassword(System.IAsyncResult result) {
+            return base.Channel.EndUserGetPassword(result);
         }
         
-        private System.IAsyncResult OnBeginGetUserPassword(object[] inValues, System.AsyncCallback callback, object asyncState) {
+        private System.IAsyncResult OnBeginUserGetPassword(object[] inValues, System.AsyncCallback callback, object asyncState) {
             int userID = ((int)(inValues[0]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGetUserPassword(userID, callback, asyncState);
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginUserGetPassword(userID, callback, asyncState);
         }
         
-        private object[] OnEndGetUserPassword(System.IAsyncResult result) {
-            string retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGetUserPassword(result);
+        private object[] OnEndUserGetPassword(System.IAsyncResult result) {
+            string retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndUserGetPassword(result);
             return new object[] {
                     retVal};
         }
         
-        private void OnGetUserPasswordCompleted(object state) {
-            if ((this.GetUserPasswordCompleted != null)) {
+        private void OnUserGetPasswordCompleted(object state) {
+            if ((this.UserGetPasswordCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.GetUserPasswordCompleted(this, new GetUserPasswordCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+                this.UserGetPasswordCompleted(this, new UserGetPasswordCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void GetUserPasswordAsync(int userID) {
-            this.GetUserPasswordAsync(userID, null);
+        public void UserGetPasswordAsync(int userID) {
+            this.UserGetPasswordAsync(userID, null);
         }
         
-        public void GetUserPasswordAsync(int userID, object userState) {
-            if ((this.onBeginGetUserPasswordDelegate == null)) {
-                this.onBeginGetUserPasswordDelegate = new BeginOperationDelegate(this.OnBeginGetUserPassword);
+        public void UserGetPasswordAsync(int userID, object userState) {
+            if ((this.onBeginUserGetPasswordDelegate == null)) {
+                this.onBeginUserGetPasswordDelegate = new BeginOperationDelegate(this.OnBeginUserGetPassword);
             }
-            if ((this.onEndGetUserPasswordDelegate == null)) {
-                this.onEndGetUserPasswordDelegate = new EndOperationDelegate(this.OnEndGetUserPassword);
+            if ((this.onEndUserGetPasswordDelegate == null)) {
+                this.onEndUserGetPasswordDelegate = new EndOperationDelegate(this.OnEndUserGetPassword);
             }
-            if ((this.onGetUserPasswordCompletedDelegate == null)) {
-                this.onGetUserPasswordCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGetUserPasswordCompleted);
+            if ((this.onUserGetPasswordCompletedDelegate == null)) {
+                this.onUserGetPasswordCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnUserGetPasswordCompleted);
             }
-            base.InvokeAsync(this.onBeginGetUserPasswordDelegate, new object[] {
-                        userID}, this.onEndGetUserPasswordDelegate, this.onGetUserPasswordCompletedDelegate, userState);
+            base.InvokeAsync(this.onBeginUserGetPasswordDelegate, new object[] {
+                        userID}, this.onEndUserGetPasswordDelegate, this.onUserGetPasswordCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGetUserName(int userID, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginGetUserName(userID, callback, asyncState);
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginUserGetName(int userID, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginUserGetName(userID, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        string CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGetUserName(System.IAsyncResult result) {
-            return base.Channel.EndGetUserName(result);
+        string CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndUserGetName(System.IAsyncResult result) {
+            return base.Channel.EndUserGetName(result);
         }
         
-        private System.IAsyncResult OnBeginGetUserName(object[] inValues, System.AsyncCallback callback, object asyncState) {
+        private System.IAsyncResult OnBeginUserGetName(object[] inValues, System.AsyncCallback callback, object asyncState) {
             int userID = ((int)(inValues[0]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGetUserName(userID, callback, asyncState);
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginUserGetName(userID, callback, asyncState);
         }
         
-        private object[] OnEndGetUserName(System.IAsyncResult result) {
-            string retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGetUserName(result);
+        private object[] OnEndUserGetName(System.IAsyncResult result) {
+            string retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndUserGetName(result);
             return new object[] {
                     retVal};
         }
         
-        private void OnGetUserNameCompleted(object state) {
-            if ((this.GetUserNameCompleted != null)) {
+        private void OnUserGetNameCompleted(object state) {
+            if ((this.UserGetNameCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.GetUserNameCompleted(this, new GetUserNameCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+                this.UserGetNameCompleted(this, new UserGetNameCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void GetUserNameAsync(int userID) {
-            this.GetUserNameAsync(userID, null);
+        public void UserGetNameAsync(int userID) {
+            this.UserGetNameAsync(userID, null);
         }
         
-        public void GetUserNameAsync(int userID, object userState) {
-            if ((this.onBeginGetUserNameDelegate == null)) {
-                this.onBeginGetUserNameDelegate = new BeginOperationDelegate(this.OnBeginGetUserName);
+        public void UserGetNameAsync(int userID, object userState) {
+            if ((this.onBeginUserGetNameDelegate == null)) {
+                this.onBeginUserGetNameDelegate = new BeginOperationDelegate(this.OnBeginUserGetName);
             }
-            if ((this.onEndGetUserNameDelegate == null)) {
-                this.onEndGetUserNameDelegate = new EndOperationDelegate(this.OnEndGetUserName);
+            if ((this.onEndUserGetNameDelegate == null)) {
+                this.onEndUserGetNameDelegate = new EndOperationDelegate(this.OnEndUserGetName);
             }
-            if ((this.onGetUserNameCompletedDelegate == null)) {
-                this.onGetUserNameCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGetUserNameCompleted);
+            if ((this.onUserGetNameCompletedDelegate == null)) {
+                this.onUserGetNameCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnUserGetNameCompleted);
             }
-            base.InvokeAsync(this.onBeginGetUserNameDelegate, new object[] {
-                        userID}, this.onEndGetUserNameDelegate, this.onGetUserNameCompletedDelegate, userState);
+            base.InvokeAsync(this.onBeginUserGetNameDelegate, new object[] {
+                        userID}, this.onEndUserGetNameDelegate, this.onUserGetNameCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGetUserDescription(int userID, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginGetUserDescription(userID, callback, asyncState);
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginUserGetDescription(int userID, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginUserGetDescription(userID, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        string CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGetUserDescription(System.IAsyncResult result) {
-            return base.Channel.EndGetUserDescription(result);
+        string CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndUserGetDescription(System.IAsyncResult result) {
+            return base.Channel.EndUserGetDescription(result);
         }
         
-        private System.IAsyncResult OnBeginGetUserDescription(object[] inValues, System.AsyncCallback callback, object asyncState) {
+        private System.IAsyncResult OnBeginUserGetDescription(object[] inValues, System.AsyncCallback callback, object asyncState) {
             int userID = ((int)(inValues[0]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGetUserDescription(userID, callback, asyncState);
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginUserGetDescription(userID, callback, asyncState);
         }
         
-        private object[] OnEndGetUserDescription(System.IAsyncResult result) {
-            string retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGetUserDescription(result);
+        private object[] OnEndUserGetDescription(System.IAsyncResult result) {
+            string retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndUserGetDescription(result);
             return new object[] {
                     retVal};
         }
         
-        private void OnGetUserDescriptionCompleted(object state) {
-            if ((this.GetUserDescriptionCompleted != null)) {
+        private void OnUserGetDescriptionCompleted(object state) {
+            if ((this.UserGetDescriptionCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.GetUserDescriptionCompleted(this, new GetUserDescriptionCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+                this.UserGetDescriptionCompleted(this, new UserGetDescriptionCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void GetUserDescriptionAsync(int userID) {
-            this.GetUserDescriptionAsync(userID, null);
+        public void UserGetDescriptionAsync(int userID) {
+            this.UserGetDescriptionAsync(userID, null);
         }
         
-        public void GetUserDescriptionAsync(int userID, object userState) {
-            if ((this.onBeginGetUserDescriptionDelegate == null)) {
-                this.onBeginGetUserDescriptionDelegate = new BeginOperationDelegate(this.OnBeginGetUserDescription);
+        public void UserGetDescriptionAsync(int userID, object userState) {
+            if ((this.onBeginUserGetDescriptionDelegate == null)) {
+                this.onBeginUserGetDescriptionDelegate = new BeginOperationDelegate(this.OnBeginUserGetDescription);
             }
-            if ((this.onEndGetUserDescriptionDelegate == null)) {
-                this.onEndGetUserDescriptionDelegate = new EndOperationDelegate(this.OnEndGetUserDescription);
+            if ((this.onEndUserGetDescriptionDelegate == null)) {
+                this.onEndUserGetDescriptionDelegate = new EndOperationDelegate(this.OnEndUserGetDescription);
             }
-            if ((this.onGetUserDescriptionCompletedDelegate == null)) {
-                this.onGetUserDescriptionCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGetUserDescriptionCompleted);
+            if ((this.onUserGetDescriptionCompletedDelegate == null)) {
+                this.onUserGetDescriptionCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnUserGetDescriptionCompleted);
             }
-            base.InvokeAsync(this.onBeginGetUserDescriptionDelegate, new object[] {
-                        userID}, this.onEndGetUserDescriptionDelegate, this.onGetUserDescriptionCompletedDelegate, userState);
+            base.InvokeAsync(this.onBeginUserGetDescriptionDelegate, new object[] {
+                        userID}, this.onEndUserGetDescriptionDelegate, this.onUserGetDescriptionCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGetUserIcon(int userID, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginGetUserIcon(userID, callback, asyncState);
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginUserGetIcon(int userID, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginUserGetIcon(userID, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        byte[] CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGetUserIcon(System.IAsyncResult result) {
-            return base.Channel.EndGetUserIcon(result);
+        byte[] CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndUserGetIcon(System.IAsyncResult result) {
+            return base.Channel.EndUserGetIcon(result);
         }
         
-        private System.IAsyncResult OnBeginGetUserIcon(object[] inValues, System.AsyncCallback callback, object asyncState) {
+        private System.IAsyncResult OnBeginUserGetIcon(object[] inValues, System.AsyncCallback callback, object asyncState) {
             int userID = ((int)(inValues[0]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGetUserIcon(userID, callback, asyncState);
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginUserGetIcon(userID, callback, asyncState);
         }
         
-        private object[] OnEndGetUserIcon(System.IAsyncResult result) {
-            byte[] retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGetUserIcon(result);
+        private object[] OnEndUserGetIcon(System.IAsyncResult result) {
+            byte[] retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndUserGetIcon(result);
             return new object[] {
                     retVal};
         }
         
-        private void OnGetUserIconCompleted(object state) {
-            if ((this.GetUserIconCompleted != null)) {
+        private void OnUserGetIconCompleted(object state) {
+            if ((this.UserGetIconCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.GetUserIconCompleted(this, new GetUserIconCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+                this.UserGetIconCompleted(this, new UserGetIconCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void GetUserIconAsync(int userID) {
-            this.GetUserIconAsync(userID, null);
+        public void UserGetIconAsync(int userID) {
+            this.UserGetIconAsync(userID, null);
         }
         
-        public void GetUserIconAsync(int userID, object userState) {
-            if ((this.onBeginGetUserIconDelegate == null)) {
-                this.onBeginGetUserIconDelegate = new BeginOperationDelegate(this.OnBeginGetUserIcon);
+        public void UserGetIconAsync(int userID, object userState) {
+            if ((this.onBeginUserGetIconDelegate == null)) {
+                this.onBeginUserGetIconDelegate = new BeginOperationDelegate(this.OnBeginUserGetIcon);
             }
-            if ((this.onEndGetUserIconDelegate == null)) {
-                this.onEndGetUserIconDelegate = new EndOperationDelegate(this.OnEndGetUserIcon);
+            if ((this.onEndUserGetIconDelegate == null)) {
+                this.onEndUserGetIconDelegate = new EndOperationDelegate(this.OnEndUserGetIcon);
             }
-            if ((this.onGetUserIconCompletedDelegate == null)) {
-                this.onGetUserIconCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGetUserIconCompleted);
+            if ((this.onUserGetIconCompletedDelegate == null)) {
+                this.onUserGetIconCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnUserGetIconCompleted);
             }
-            base.InvokeAsync(this.onBeginGetUserIconDelegate, new object[] {
-                        userID}, this.onEndGetUserIconDelegate, this.onGetUserIconCompletedDelegate, userState);
+            base.InvokeAsync(this.onBeginUserGetIconDelegate, new object[] {
+                        userID}, this.onEndUserGetIconDelegate, this.onUserGetIconCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGetUserRegistrationDate(int userID, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginGetUserRegistrationDate(userID, callback, asyncState);
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginUserGetRegistrationDate(int userID, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginUserGetRegistrationDate(userID, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.DateTime CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGetUserRegistrationDate(System.IAsyncResult result) {
-            return base.Channel.EndGetUserRegistrationDate(result);
+        System.DateTime CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndUserGetRegistrationDate(System.IAsyncResult result) {
+            return base.Channel.EndUserGetRegistrationDate(result);
         }
         
-        private System.IAsyncResult OnBeginGetUserRegistrationDate(object[] inValues, System.AsyncCallback callback, object asyncState) {
+        private System.IAsyncResult OnBeginUserGetRegistrationDate(object[] inValues, System.AsyncCallback callback, object asyncState) {
             int userID = ((int)(inValues[0]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGetUserRegistrationDate(userID, callback, asyncState);
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginUserGetRegistrationDate(userID, callback, asyncState);
         }
         
-        private object[] OnEndGetUserRegistrationDate(System.IAsyncResult result) {
-            System.DateTime retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGetUserRegistrationDate(result);
+        private object[] OnEndUserGetRegistrationDate(System.IAsyncResult result) {
+            System.DateTime retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndUserGetRegistrationDate(result);
             return new object[] {
                     retVal};
         }
         
-        private void OnGetUserRegistrationDateCompleted(object state) {
-            if ((this.GetUserRegistrationDateCompleted != null)) {
+        private void OnUserGetRegistrationDateCompleted(object state) {
+            if ((this.UserGetRegistrationDateCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.GetUserRegistrationDateCompleted(this, new GetUserRegistrationDateCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+                this.UserGetRegistrationDateCompleted(this, new UserGetRegistrationDateCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void GetUserRegistrationDateAsync(int userID) {
-            this.GetUserRegistrationDateAsync(userID, null);
+        public void UserGetRegistrationDateAsync(int userID) {
+            this.UserGetRegistrationDateAsync(userID, null);
         }
         
-        public void GetUserRegistrationDateAsync(int userID, object userState) {
-            if ((this.onBeginGetUserRegistrationDateDelegate == null)) {
-                this.onBeginGetUserRegistrationDateDelegate = new BeginOperationDelegate(this.OnBeginGetUserRegistrationDate);
+        public void UserGetRegistrationDateAsync(int userID, object userState) {
+            if ((this.onBeginUserGetRegistrationDateDelegate == null)) {
+                this.onBeginUserGetRegistrationDateDelegate = new BeginOperationDelegate(this.OnBeginUserGetRegistrationDate);
             }
-            if ((this.onEndGetUserRegistrationDateDelegate == null)) {
-                this.onEndGetUserRegistrationDateDelegate = new EndOperationDelegate(this.OnEndGetUserRegistrationDate);
+            if ((this.onEndUserGetRegistrationDateDelegate == null)) {
+                this.onEndUserGetRegistrationDateDelegate = new EndOperationDelegate(this.OnEndUserGetRegistrationDate);
             }
-            if ((this.onGetUserRegistrationDateCompletedDelegate == null)) {
-                this.onGetUserRegistrationDateCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGetUserRegistrationDateCompleted);
+            if ((this.onUserGetRegistrationDateCompletedDelegate == null)) {
+                this.onUserGetRegistrationDateCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnUserGetRegistrationDateCompleted);
             }
-            base.InvokeAsync(this.onBeginGetUserRegistrationDateDelegate, new object[] {
-                        userID}, this.onEndGetUserRegistrationDateDelegate, this.onGetUserRegistrationDateCompletedDelegate, userState);
+            base.InvokeAsync(this.onBeginUserGetRegistrationDateDelegate, new object[] {
+                        userID}, this.onEndUserGetRegistrationDateDelegate, this.onUserGetRegistrationDateCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGetUserGroups(int userID, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginGetUserGroups(userID, callback, asyncState);
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginUserGetGroups(int userID, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginUserGetGroups(userID, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Collections.ObjectModel.ObservableCollection<int> CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGetUserGroups(System.IAsyncResult result) {
-            return base.Channel.EndGetUserGroups(result);
+        System.Collections.ObjectModel.ObservableCollection<int> CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndUserGetGroups(System.IAsyncResult result) {
+            return base.Channel.EndUserGetGroups(result);
         }
         
-        private System.IAsyncResult OnBeginGetUserGroups(object[] inValues, System.AsyncCallback callback, object asyncState) {
+        private System.IAsyncResult OnBeginUserGetGroups(object[] inValues, System.AsyncCallback callback, object asyncState) {
             int userID = ((int)(inValues[0]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGetUserGroups(userID, callback, asyncState);
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginUserGetGroups(userID, callback, asyncState);
         }
         
-        private object[] OnEndGetUserGroups(System.IAsyncResult result) {
-            System.Collections.ObjectModel.ObservableCollection<int> retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGetUserGroups(result);
+        private object[] OnEndUserGetGroups(System.IAsyncResult result) {
+            System.Collections.ObjectModel.ObservableCollection<int> retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndUserGetGroups(result);
             return new object[] {
                     retVal};
         }
         
-        private void OnGetUserGroupsCompleted(object state) {
-            if ((this.GetUserGroupsCompleted != null)) {
+        private void OnUserGetGroupsCompleted(object state) {
+            if ((this.UserGetGroupsCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.GetUserGroupsCompleted(this, new GetUserGroupsCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+                this.UserGetGroupsCompleted(this, new UserGetGroupsCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void GetUserGroupsAsync(int userID) {
-            this.GetUserGroupsAsync(userID, null);
+        public void UserGetGroupsAsync(int userID) {
+            this.UserGetGroupsAsync(userID, null);
         }
         
-        public void GetUserGroupsAsync(int userID, object userState) {
-            if ((this.onBeginGetUserGroupsDelegate == null)) {
-                this.onBeginGetUserGroupsDelegate = new BeginOperationDelegate(this.OnBeginGetUserGroups);
+        public void UserGetGroupsAsync(int userID, object userState) {
+            if ((this.onBeginUserGetGroupsDelegate == null)) {
+                this.onBeginUserGetGroupsDelegate = new BeginOperationDelegate(this.OnBeginUserGetGroups);
             }
-            if ((this.onEndGetUserGroupsDelegate == null)) {
-                this.onEndGetUserGroupsDelegate = new EndOperationDelegate(this.OnEndGetUserGroups);
+            if ((this.onEndUserGetGroupsDelegate == null)) {
+                this.onEndUserGetGroupsDelegate = new EndOperationDelegate(this.OnEndUserGetGroups);
             }
-            if ((this.onGetUserGroupsCompletedDelegate == null)) {
-                this.onGetUserGroupsCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGetUserGroupsCompleted);
+            if ((this.onUserGetGroupsCompletedDelegate == null)) {
+                this.onUserGetGroupsCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnUserGetGroupsCompleted);
             }
-            base.InvokeAsync(this.onBeginGetUserGroupsDelegate, new object[] {
-                        userID}, this.onEndGetUserGroupsDelegate, this.onGetUserGroupsCompletedDelegate, userState);
+            base.InvokeAsync(this.onBeginUserGetGroupsDelegate, new object[] {
+                        userID}, this.onEndUserGetGroupsDelegate, this.onUserGetGroupsCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginSetUserPassword(int userID, string password, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginSetUserPassword(userID, password, callback, asyncState);
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginUserSetPassword(int userID, string password, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginUserSetPassword(userID, password, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndSetUserPassword(System.IAsyncResult result) {
-            base.Channel.EndSetUserPassword(result);
+        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndUserSetPassword(System.IAsyncResult result) {
+            base.Channel.EndUserSetPassword(result);
         }
         
-        private System.IAsyncResult OnBeginSetUserPassword(object[] inValues, System.AsyncCallback callback, object asyncState) {
+        private System.IAsyncResult OnBeginUserSetPassword(object[] inValues, System.AsyncCallback callback, object asyncState) {
             int userID = ((int)(inValues[0]));
             string password = ((string)(inValues[1]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginSetUserPassword(userID, password, callback, asyncState);
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginUserSetPassword(userID, password, callback, asyncState);
         }
         
-        private object[] OnEndSetUserPassword(System.IAsyncResult result) {
-            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndSetUserPassword(result);
+        private object[] OnEndUserSetPassword(System.IAsyncResult result) {
+            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndUserSetPassword(result);
             return null;
         }
         
-        private void OnSetUserPasswordCompleted(object state) {
-            if ((this.SetUserPasswordCompleted != null)) {
+        private void OnUserSetPasswordCompleted(object state) {
+            if ((this.UserSetPasswordCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.SetUserPasswordCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+                this.UserSetPasswordCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void SetUserPasswordAsync(int userID, string password) {
-            this.SetUserPasswordAsync(userID, password, null);
+        public void UserSetPasswordAsync(int userID, string password) {
+            this.UserSetPasswordAsync(userID, password, null);
         }
         
-        public void SetUserPasswordAsync(int userID, string password, object userState) {
-            if ((this.onBeginSetUserPasswordDelegate == null)) {
-                this.onBeginSetUserPasswordDelegate = new BeginOperationDelegate(this.OnBeginSetUserPassword);
+        public void UserSetPasswordAsync(int userID, string password, object userState) {
+            if ((this.onBeginUserSetPasswordDelegate == null)) {
+                this.onBeginUserSetPasswordDelegate = new BeginOperationDelegate(this.OnBeginUserSetPassword);
             }
-            if ((this.onEndSetUserPasswordDelegate == null)) {
-                this.onEndSetUserPasswordDelegate = new EndOperationDelegate(this.OnEndSetUserPassword);
+            if ((this.onEndUserSetPasswordDelegate == null)) {
+                this.onEndUserSetPasswordDelegate = new EndOperationDelegate(this.OnEndUserSetPassword);
             }
-            if ((this.onSetUserPasswordCompletedDelegate == null)) {
-                this.onSetUserPasswordCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnSetUserPasswordCompleted);
+            if ((this.onUserSetPasswordCompletedDelegate == null)) {
+                this.onUserSetPasswordCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnUserSetPasswordCompleted);
             }
-            base.InvokeAsync(this.onBeginSetUserPasswordDelegate, new object[] {
+            base.InvokeAsync(this.onBeginUserSetPasswordDelegate, new object[] {
                         userID,
-                        password}, this.onEndSetUserPasswordDelegate, this.onSetUserPasswordCompletedDelegate, userState);
+                        password}, this.onEndUserSetPasswordDelegate, this.onUserSetPasswordCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginSetUserName(int userID, string name, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginSetUserName(userID, name, callback, asyncState);
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginUserSetName(int userID, string name, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginUserSetName(userID, name, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndSetUserName(System.IAsyncResult result) {
-            base.Channel.EndSetUserName(result);
+        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndUserSetName(System.IAsyncResult result) {
+            base.Channel.EndUserSetName(result);
         }
         
-        private System.IAsyncResult OnBeginSetUserName(object[] inValues, System.AsyncCallback callback, object asyncState) {
+        private System.IAsyncResult OnBeginUserSetName(object[] inValues, System.AsyncCallback callback, object asyncState) {
             int userID = ((int)(inValues[0]));
             string name = ((string)(inValues[1]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginSetUserName(userID, name, callback, asyncState);
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginUserSetName(userID, name, callback, asyncState);
         }
         
-        private object[] OnEndSetUserName(System.IAsyncResult result) {
-            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndSetUserName(result);
+        private object[] OnEndUserSetName(System.IAsyncResult result) {
+            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndUserSetName(result);
             return null;
         }
         
-        private void OnSetUserNameCompleted(object state) {
-            if ((this.SetUserNameCompleted != null)) {
+        private void OnUserSetNameCompleted(object state) {
+            if ((this.UserSetNameCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.SetUserNameCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+                this.UserSetNameCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void SetUserNameAsync(int userID, string name) {
-            this.SetUserNameAsync(userID, name, null);
+        public void UserSetNameAsync(int userID, string name) {
+            this.UserSetNameAsync(userID, name, null);
         }
         
-        public void SetUserNameAsync(int userID, string name, object userState) {
-            if ((this.onBeginSetUserNameDelegate == null)) {
-                this.onBeginSetUserNameDelegate = new BeginOperationDelegate(this.OnBeginSetUserName);
+        public void UserSetNameAsync(int userID, string name, object userState) {
+            if ((this.onBeginUserSetNameDelegate == null)) {
+                this.onBeginUserSetNameDelegate = new BeginOperationDelegate(this.OnBeginUserSetName);
             }
-            if ((this.onEndSetUserNameDelegate == null)) {
-                this.onEndSetUserNameDelegate = new EndOperationDelegate(this.OnEndSetUserName);
+            if ((this.onEndUserSetNameDelegate == null)) {
+                this.onEndUserSetNameDelegate = new EndOperationDelegate(this.OnEndUserSetName);
             }
-            if ((this.onSetUserNameCompletedDelegate == null)) {
-                this.onSetUserNameCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnSetUserNameCompleted);
+            if ((this.onUserSetNameCompletedDelegate == null)) {
+                this.onUserSetNameCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnUserSetNameCompleted);
             }
-            base.InvokeAsync(this.onBeginSetUserNameDelegate, new object[] {
+            base.InvokeAsync(this.onBeginUserSetNameDelegate, new object[] {
                         userID,
-                        name}, this.onEndSetUserNameDelegate, this.onSetUserNameCompletedDelegate, userState);
+                        name}, this.onEndUserSetNameDelegate, this.onUserSetNameCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginSetUserDescription(int userID, string description, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginSetUserDescription(userID, description, callback, asyncState);
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginUserSetDescription(int userID, string description, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginUserSetDescription(userID, description, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndSetUserDescription(System.IAsyncResult result) {
-            base.Channel.EndSetUserDescription(result);
+        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndUserSetDescription(System.IAsyncResult result) {
+            base.Channel.EndUserSetDescription(result);
         }
         
-        private System.IAsyncResult OnBeginSetUserDescription(object[] inValues, System.AsyncCallback callback, object asyncState) {
+        private System.IAsyncResult OnBeginUserSetDescription(object[] inValues, System.AsyncCallback callback, object asyncState) {
             int userID = ((int)(inValues[0]));
             string description = ((string)(inValues[1]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginSetUserDescription(userID, description, callback, asyncState);
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginUserSetDescription(userID, description, callback, asyncState);
         }
         
-        private object[] OnEndSetUserDescription(System.IAsyncResult result) {
-            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndSetUserDescription(result);
+        private object[] OnEndUserSetDescription(System.IAsyncResult result) {
+            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndUserSetDescription(result);
             return null;
         }
         
-        private void OnSetUserDescriptionCompleted(object state) {
-            if ((this.SetUserDescriptionCompleted != null)) {
+        private void OnUserSetDescriptionCompleted(object state) {
+            if ((this.UserSetDescriptionCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.SetUserDescriptionCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+                this.UserSetDescriptionCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void SetUserDescriptionAsync(int userID, string description) {
-            this.SetUserDescriptionAsync(userID, description, null);
+        public void UserSetDescriptionAsync(int userID, string description) {
+            this.UserSetDescriptionAsync(userID, description, null);
         }
         
-        public void SetUserDescriptionAsync(int userID, string description, object userState) {
-            if ((this.onBeginSetUserDescriptionDelegate == null)) {
-                this.onBeginSetUserDescriptionDelegate = new BeginOperationDelegate(this.OnBeginSetUserDescription);
+        public void UserSetDescriptionAsync(int userID, string description, object userState) {
+            if ((this.onBeginUserSetDescriptionDelegate == null)) {
+                this.onBeginUserSetDescriptionDelegate = new BeginOperationDelegate(this.OnBeginUserSetDescription);
             }
-            if ((this.onEndSetUserDescriptionDelegate == null)) {
-                this.onEndSetUserDescriptionDelegate = new EndOperationDelegate(this.OnEndSetUserDescription);
+            if ((this.onEndUserSetDescriptionDelegate == null)) {
+                this.onEndUserSetDescriptionDelegate = new EndOperationDelegate(this.OnEndUserSetDescription);
             }
-            if ((this.onSetUserDescriptionCompletedDelegate == null)) {
-                this.onSetUserDescriptionCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnSetUserDescriptionCompleted);
+            if ((this.onUserSetDescriptionCompletedDelegate == null)) {
+                this.onUserSetDescriptionCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnUserSetDescriptionCompleted);
             }
-            base.InvokeAsync(this.onBeginSetUserDescriptionDelegate, new object[] {
+            base.InvokeAsync(this.onBeginUserSetDescriptionDelegate, new object[] {
                         userID,
-                        description}, this.onEndSetUserDescriptionDelegate, this.onSetUserDescriptionCompletedDelegate, userState);
+                        description}, this.onEndUserSetDescriptionDelegate, this.onUserSetDescriptionCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginSetUserIcon(int userID, byte[] icon, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginSetUserIcon(userID, icon, callback, asyncState);
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginUserSetIcon(int userID, byte[] icon, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginUserSetIcon(userID, icon, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndSetUserIcon(System.IAsyncResult result) {
-            base.Channel.EndSetUserIcon(result);
+        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndUserSetIcon(System.IAsyncResult result) {
+            base.Channel.EndUserSetIcon(result);
         }
         
-        private System.IAsyncResult OnBeginSetUserIcon(object[] inValues, System.AsyncCallback callback, object asyncState) {
+        private System.IAsyncResult OnBeginUserSetIcon(object[] inValues, System.AsyncCallback callback, object asyncState) {
             int userID = ((int)(inValues[0]));
             byte[] icon = ((byte[])(inValues[1]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginSetUserIcon(userID, icon, callback, asyncState);
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginUserSetIcon(userID, icon, callback, asyncState);
         }
         
-        private object[] OnEndSetUserIcon(System.IAsyncResult result) {
-            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndSetUserIcon(result);
+        private object[] OnEndUserSetIcon(System.IAsyncResult result) {
+            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndUserSetIcon(result);
             return null;
         }
         
-        private void OnSetUserIconCompleted(object state) {
-            if ((this.SetUserIconCompleted != null)) {
+        private void OnUserSetIconCompleted(object state) {
+            if ((this.UserSetIconCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.SetUserIconCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+                this.UserSetIconCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void SetUserIconAsync(int userID, byte[] icon) {
-            this.SetUserIconAsync(userID, icon, null);
+        public void UserSetIconAsync(int userID, byte[] icon) {
+            this.UserSetIconAsync(userID, icon, null);
         }
         
-        public void SetUserIconAsync(int userID, byte[] icon, object userState) {
-            if ((this.onBeginSetUserIconDelegate == null)) {
-                this.onBeginSetUserIconDelegate = new BeginOperationDelegate(this.OnBeginSetUserIcon);
+        public void UserSetIconAsync(int userID, byte[] icon, object userState) {
+            if ((this.onBeginUserSetIconDelegate == null)) {
+                this.onBeginUserSetIconDelegate = new BeginOperationDelegate(this.OnBeginUserSetIcon);
             }
-            if ((this.onEndSetUserIconDelegate == null)) {
-                this.onEndSetUserIconDelegate = new EndOperationDelegate(this.OnEndSetUserIcon);
+            if ((this.onEndUserSetIconDelegate == null)) {
+                this.onEndUserSetIconDelegate = new EndOperationDelegate(this.OnEndUserSetIcon);
             }
-            if ((this.onSetUserIconCompletedDelegate == null)) {
-                this.onSetUserIconCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnSetUserIconCompleted);
+            if ((this.onUserSetIconCompletedDelegate == null)) {
+                this.onUserSetIconCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnUserSetIconCompleted);
             }
-            base.InvokeAsync(this.onBeginSetUserIconDelegate, new object[] {
+            base.InvokeAsync(this.onBeginUserSetIconDelegate, new object[] {
                         userID,
-                        icon}, this.onEndSetUserIconDelegate, this.onSetUserIconCompletedDelegate, userState);
+                        icon}, this.onEndUserSetIconDelegate, this.onUserSetIconCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginIsGroupRegistered(string name, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginIsGroupRegistered(name, callback, asyncState);
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginCameraIsPathAvailable(string path, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginCameraIsPathAvailable(path, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        bool CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndIsGroupRegistered(System.IAsyncResult result) {
-            return base.Channel.EndIsGroupRegistered(result);
+        bool CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndCameraIsPathAvailable(System.IAsyncResult result) {
+            return base.Channel.EndCameraIsPathAvailable(result);
         }
         
-        private System.IAsyncResult OnBeginIsGroupRegistered(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            string name = ((string)(inValues[0]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginIsGroupRegistered(name, callback, asyncState);
+        private System.IAsyncResult OnBeginCameraIsPathAvailable(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            string path = ((string)(inValues[0]));
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginCameraIsPathAvailable(path, callback, asyncState);
         }
         
-        private object[] OnEndIsGroupRegistered(System.IAsyncResult result) {
-            bool retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndIsGroupRegistered(result);
+        private object[] OnEndCameraIsPathAvailable(System.IAsyncResult result) {
+            bool retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndCameraIsPathAvailable(result);
             return new object[] {
                     retVal};
         }
         
-        private void OnIsGroupRegisteredCompleted(object state) {
-            if ((this.IsGroupRegisteredCompleted != null)) {
+        private void OnCameraIsPathAvailableCompleted(object state) {
+            if ((this.CameraIsPathAvailableCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.IsGroupRegisteredCompleted(this, new IsGroupRegisteredCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+                this.CameraIsPathAvailableCompleted(this, new CameraIsPathAvailableCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void IsGroupRegisteredAsync(string name) {
-            this.IsGroupRegisteredAsync(name, null);
+        public void CameraIsPathAvailableAsync(string path) {
+            this.CameraIsPathAvailableAsync(path, null);
         }
         
-        public void IsGroupRegisteredAsync(string name, object userState) {
-            if ((this.onBeginIsGroupRegisteredDelegate == null)) {
-                this.onBeginIsGroupRegisteredDelegate = new BeginOperationDelegate(this.OnBeginIsGroupRegistered);
+        public void CameraIsPathAvailableAsync(string path, object userState) {
+            if ((this.onBeginCameraIsPathAvailableDelegate == null)) {
+                this.onBeginCameraIsPathAvailableDelegate = new BeginOperationDelegate(this.OnBeginCameraIsPathAvailable);
             }
-            if ((this.onEndIsGroupRegisteredDelegate == null)) {
-                this.onEndIsGroupRegisteredDelegate = new EndOperationDelegate(this.OnEndIsGroupRegistered);
+            if ((this.onEndCameraIsPathAvailableDelegate == null)) {
+                this.onEndCameraIsPathAvailableDelegate = new EndOperationDelegate(this.OnEndCameraIsPathAvailable);
             }
-            if ((this.onIsGroupRegisteredCompletedDelegate == null)) {
-                this.onIsGroupRegisteredCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnIsGroupRegisteredCompleted);
+            if ((this.onCameraIsPathAvailableCompletedDelegate == null)) {
+                this.onCameraIsPathAvailableCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnCameraIsPathAvailableCompleted);
             }
-            base.InvokeAsync(this.onBeginIsGroupRegisteredDelegate, new object[] {
-                        name}, this.onEndIsGroupRegisteredDelegate, this.onIsGroupRegisteredCompletedDelegate, userState);
+            base.InvokeAsync(this.onBeginCameraIsPathAvailableDelegate, new object[] {
+                        path}, this.onEndCameraIsPathAvailableDelegate, this.onCameraIsPathAvailableCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginRegisterGroup(string name, int privacy, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginRegisterGroup(name, privacy, callback, asyncState);
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginCameraAdd(string name, string description, byte[] icon, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginCameraAdd(name, description, icon, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        int CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndRegisterGroup(System.IAsyncResult result) {
-            return base.Channel.EndRegisterGroup(result);
+        int CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndCameraAdd(System.IAsyncResult result) {
+            return base.Channel.EndCameraAdd(result);
         }
         
-        private System.IAsyncResult OnBeginRegisterGroup(object[] inValues, System.AsyncCallback callback, object asyncState) {
+        private System.IAsyncResult OnBeginCameraAdd(object[] inValues, System.AsyncCallback callback, object asyncState) {
             string name = ((string)(inValues[0]));
-            int privacy = ((int)(inValues[1]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginRegisterGroup(name, privacy, callback, asyncState);
+            string description = ((string)(inValues[1]));
+            byte[] icon = ((byte[])(inValues[2]));
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginCameraAdd(name, description, icon, callback, asyncState);
         }
         
-        private object[] OnEndRegisterGroup(System.IAsyncResult result) {
-            int retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndRegisterGroup(result);
+        private object[] OnEndCameraAdd(System.IAsyncResult result) {
+            int retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndCameraAdd(result);
             return new object[] {
                     retVal};
         }
         
-        private void OnRegisterGroupCompleted(object state) {
-            if ((this.RegisterGroupCompleted != null)) {
+        private void OnCameraAddCompleted(object state) {
+            if ((this.CameraAddCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.RegisterGroupCompleted(this, new RegisterGroupCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+                this.CameraAddCompleted(this, new CameraAddCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void RegisterGroupAsync(string name, int privacy) {
-            this.RegisterGroupAsync(name, privacy, null);
+        public void CameraAddAsync(string name, string description, byte[] icon) {
+            this.CameraAddAsync(name, description, icon, null);
         }
         
-        public void RegisterGroupAsync(string name, int privacy, object userState) {
-            if ((this.onBeginRegisterGroupDelegate == null)) {
-                this.onBeginRegisterGroupDelegate = new BeginOperationDelegate(this.OnBeginRegisterGroup);
+        public void CameraAddAsync(string name, string description, byte[] icon, object userState) {
+            if ((this.onBeginCameraAddDelegate == null)) {
+                this.onBeginCameraAddDelegate = new BeginOperationDelegate(this.OnBeginCameraAdd);
             }
-            if ((this.onEndRegisterGroupDelegate == null)) {
-                this.onEndRegisterGroupDelegate = new EndOperationDelegate(this.OnEndRegisterGroup);
+            if ((this.onEndCameraAddDelegate == null)) {
+                this.onEndCameraAddDelegate = new EndOperationDelegate(this.OnEndCameraAdd);
             }
-            if ((this.onRegisterGroupCompletedDelegate == null)) {
-                this.onRegisterGroupCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnRegisterGroupCompleted);
+            if ((this.onCameraAddCompletedDelegate == null)) {
+                this.onCameraAddCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnCameraAddCompleted);
             }
-            base.InvokeAsync(this.onBeginRegisterGroupDelegate, new object[] {
+            base.InvokeAsync(this.onBeginCameraAddDelegate, new object[] {
                         name,
-                        privacy}, this.onEndRegisterGroupDelegate, this.onRegisterGroupCompletedDelegate, userState);
+                        description,
+                        icon}, this.onEndCameraAddDelegate, this.onCameraAddCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginRemoveGroup(int groupID, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginRemoveGroup(groupID, callback, asyncState);
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginCameraRemove(int cameraID, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginCameraRemove(cameraID, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndRemoveGroup(System.IAsyncResult result) {
-            base.Channel.EndRemoveGroup(result);
+        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndCameraRemove(System.IAsyncResult result) {
+            base.Channel.EndCameraRemove(result);
         }
         
-        private System.IAsyncResult OnBeginRemoveGroup(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            int groupID = ((int)(inValues[0]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginRemoveGroup(groupID, callback, asyncState);
+        private System.IAsyncResult OnBeginCameraRemove(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            int cameraID = ((int)(inValues[0]));
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginCameraRemove(cameraID, callback, asyncState);
         }
         
-        private object[] OnEndRemoveGroup(System.IAsyncResult result) {
-            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndRemoveGroup(result);
+        private object[] OnEndCameraRemove(System.IAsyncResult result) {
+            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndCameraRemove(result);
             return null;
         }
         
-        private void OnRemoveGroupCompleted(object state) {
-            if ((this.RemoveGroupCompleted != null)) {
+        private void OnCameraRemoveCompleted(object state) {
+            if ((this.CameraRemoveCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.RemoveGroupCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+                this.CameraRemoveCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void RemoveGroupAsync(int groupID) {
-            this.RemoveGroupAsync(groupID, null);
+        public void CameraRemoveAsync(int cameraID) {
+            this.CameraRemoveAsync(cameraID, null);
         }
         
-        public void RemoveGroupAsync(int groupID, object userState) {
-            if ((this.onBeginRemoveGroupDelegate == null)) {
-                this.onBeginRemoveGroupDelegate = new BeginOperationDelegate(this.OnBeginRemoveGroup);
+        public void CameraRemoveAsync(int cameraID, object userState) {
+            if ((this.onBeginCameraRemoveDelegate == null)) {
+                this.onBeginCameraRemoveDelegate = new BeginOperationDelegate(this.OnBeginCameraRemove);
             }
-            if ((this.onEndRemoveGroupDelegate == null)) {
-                this.onEndRemoveGroupDelegate = new EndOperationDelegate(this.OnEndRemoveGroup);
+            if ((this.onEndCameraRemoveDelegate == null)) {
+                this.onEndCameraRemoveDelegate = new EndOperationDelegate(this.OnEndCameraRemove);
             }
-            if ((this.onRemoveGroupCompletedDelegate == null)) {
-                this.onRemoveGroupCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnRemoveGroupCompleted);
+            if ((this.onCameraRemoveCompletedDelegate == null)) {
+                this.onCameraRemoveCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnCameraRemoveCompleted);
             }
-            base.InvokeAsync(this.onBeginRemoveGroupDelegate, new object[] {
-                        groupID}, this.onEndRemoveGroupDelegate, this.onRemoveGroupCompletedDelegate, userState);
+            base.InvokeAsync(this.onBeginCameraRemoveDelegate, new object[] {
+                        cameraID}, this.onEndCameraRemoveDelegate, this.onCameraRemoveCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGetGroupID(string name, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginGetGroupID(name, callback, asyncState);
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginCameraGetID(string path, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginCameraGetID(path, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        int CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGetGroupID(System.IAsyncResult result) {
-            return base.Channel.EndGetGroupID(result);
+        int CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndCameraGetID(System.IAsyncResult result) {
+            return base.Channel.EndCameraGetID(result);
         }
         
-        private System.IAsyncResult OnBeginGetGroupID(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            string name = ((string)(inValues[0]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGetGroupID(name, callback, asyncState);
+        private System.IAsyncResult OnBeginCameraGetID(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            string path = ((string)(inValues[0]));
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginCameraGetID(path, callback, asyncState);
         }
         
-        private object[] OnEndGetGroupID(System.IAsyncResult result) {
-            int retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGetGroupID(result);
+        private object[] OnEndCameraGetID(System.IAsyncResult result) {
+            int retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndCameraGetID(result);
             return new object[] {
                     retVal};
         }
         
-        private void OnGetGroupIDCompleted(object state) {
-            if ((this.GetGroupIDCompleted != null)) {
+        private void OnCameraGetIDCompleted(object state) {
+            if ((this.CameraGetIDCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.GetGroupIDCompleted(this, new GetGroupIDCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+                this.CameraGetIDCompleted(this, new CameraGetIDCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void GetGroupIDAsync(string name) {
-            this.GetGroupIDAsync(name, null);
+        public void CameraGetIDAsync(string path) {
+            this.CameraGetIDAsync(path, null);
         }
         
-        public void GetGroupIDAsync(string name, object userState) {
-            if ((this.onBeginGetGroupIDDelegate == null)) {
-                this.onBeginGetGroupIDDelegate = new BeginOperationDelegate(this.OnBeginGetGroupID);
+        public void CameraGetIDAsync(string path, object userState) {
+            if ((this.onBeginCameraGetIDDelegate == null)) {
+                this.onBeginCameraGetIDDelegate = new BeginOperationDelegate(this.OnBeginCameraGetID);
             }
-            if ((this.onEndGetGroupIDDelegate == null)) {
-                this.onEndGetGroupIDDelegate = new EndOperationDelegate(this.OnEndGetGroupID);
+            if ((this.onEndCameraGetIDDelegate == null)) {
+                this.onEndCameraGetIDDelegate = new EndOperationDelegate(this.OnEndCameraGetID);
             }
-            if ((this.onGetGroupIDCompletedDelegate == null)) {
-                this.onGetGroupIDCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGetGroupIDCompleted);
+            if ((this.onCameraGetIDCompletedDelegate == null)) {
+                this.onCameraGetIDCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnCameraGetIDCompleted);
             }
-            base.InvokeAsync(this.onBeginGetGroupIDDelegate, new object[] {
-                        name}, this.onEndGetGroupIDDelegate, this.onGetGroupIDCompletedDelegate, userState);
+            base.InvokeAsync(this.onBeginCameraGetIDDelegate, new object[] {
+                        path}, this.onEndCameraGetIDDelegate, this.onCameraGetIDCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGetGroupName(int groupID, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginGetGroupName(groupID, callback, asyncState);
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginCameraGetPath(int cameraID, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginCameraGetPath(cameraID, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        string CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGetGroupName(System.IAsyncResult result) {
-            return base.Channel.EndGetGroupName(result);
+        string CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndCameraGetPath(System.IAsyncResult result) {
+            return base.Channel.EndCameraGetPath(result);
         }
         
-        private System.IAsyncResult OnBeginGetGroupName(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            int groupID = ((int)(inValues[0]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGetGroupName(groupID, callback, asyncState);
+        private System.IAsyncResult OnBeginCameraGetPath(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            int cameraID = ((int)(inValues[0]));
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginCameraGetPath(cameraID, callback, asyncState);
         }
         
-        private object[] OnEndGetGroupName(System.IAsyncResult result) {
-            string retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGetGroupName(result);
+        private object[] OnEndCameraGetPath(System.IAsyncResult result) {
+            string retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndCameraGetPath(result);
             return new object[] {
                     retVal};
         }
         
-        private void OnGetGroupNameCompleted(object state) {
-            if ((this.GetGroupNameCompleted != null)) {
+        private void OnCameraGetPathCompleted(object state) {
+            if ((this.CameraGetPathCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.GetGroupNameCompleted(this, new GetGroupNameCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+                this.CameraGetPathCompleted(this, new CameraGetPathCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void GetGroupNameAsync(int groupID) {
-            this.GetGroupNameAsync(groupID, null);
+        public void CameraGetPathAsync(int cameraID) {
+            this.CameraGetPathAsync(cameraID, null);
         }
         
-        public void GetGroupNameAsync(int groupID, object userState) {
-            if ((this.onBeginGetGroupNameDelegate == null)) {
-                this.onBeginGetGroupNameDelegate = new BeginOperationDelegate(this.OnBeginGetGroupName);
+        public void CameraGetPathAsync(int cameraID, object userState) {
+            if ((this.onBeginCameraGetPathDelegate == null)) {
+                this.onBeginCameraGetPathDelegate = new BeginOperationDelegate(this.OnBeginCameraGetPath);
             }
-            if ((this.onEndGetGroupNameDelegate == null)) {
-                this.onEndGetGroupNameDelegate = new EndOperationDelegate(this.OnEndGetGroupName);
+            if ((this.onEndCameraGetPathDelegate == null)) {
+                this.onEndCameraGetPathDelegate = new EndOperationDelegate(this.OnEndCameraGetPath);
             }
-            if ((this.onGetGroupNameCompletedDelegate == null)) {
-                this.onGetGroupNameCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGetGroupNameCompleted);
+            if ((this.onCameraGetPathCompletedDelegate == null)) {
+                this.onCameraGetPathCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnCameraGetPathCompleted);
             }
-            base.InvokeAsync(this.onBeginGetGroupNameDelegate, new object[] {
-                        groupID}, this.onEndGetGroupNameDelegate, this.onGetGroupNameCompletedDelegate, userState);
+            base.InvokeAsync(this.onBeginCameraGetPathDelegate, new object[] {
+                        cameraID}, this.onEndCameraGetPathDelegate, this.onCameraGetPathCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGetGroupDescription(int groupID, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginGetGroupDescription(groupID, callback, asyncState);
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginCameraGetName(int cameraID, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginCameraGetName(cameraID, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        string CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGetGroupDescription(System.IAsyncResult result) {
-            return base.Channel.EndGetGroupDescription(result);
+        string CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndCameraGetName(System.IAsyncResult result) {
+            return base.Channel.EndCameraGetName(result);
         }
         
-        private System.IAsyncResult OnBeginGetGroupDescription(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            int groupID = ((int)(inValues[0]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGetGroupDescription(groupID, callback, asyncState);
+        private System.IAsyncResult OnBeginCameraGetName(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            int cameraID = ((int)(inValues[0]));
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginCameraGetName(cameraID, callback, asyncState);
         }
         
-        private object[] OnEndGetGroupDescription(System.IAsyncResult result) {
-            string retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGetGroupDescription(result);
+        private object[] OnEndCameraGetName(System.IAsyncResult result) {
+            string retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndCameraGetName(result);
             return new object[] {
                     retVal};
         }
         
-        private void OnGetGroupDescriptionCompleted(object state) {
-            if ((this.GetGroupDescriptionCompleted != null)) {
+        private void OnCameraGetNameCompleted(object state) {
+            if ((this.CameraGetNameCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.GetGroupDescriptionCompleted(this, new GetGroupDescriptionCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+                this.CameraGetNameCompleted(this, new CameraGetNameCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void GetGroupDescriptionAsync(int groupID) {
-            this.GetGroupDescriptionAsync(groupID, null);
+        public void CameraGetNameAsync(int cameraID) {
+            this.CameraGetNameAsync(cameraID, null);
         }
         
-        public void GetGroupDescriptionAsync(int groupID, object userState) {
-            if ((this.onBeginGetGroupDescriptionDelegate == null)) {
-                this.onBeginGetGroupDescriptionDelegate = new BeginOperationDelegate(this.OnBeginGetGroupDescription);
+        public void CameraGetNameAsync(int cameraID, object userState) {
+            if ((this.onBeginCameraGetNameDelegate == null)) {
+                this.onBeginCameraGetNameDelegate = new BeginOperationDelegate(this.OnBeginCameraGetName);
             }
-            if ((this.onEndGetGroupDescriptionDelegate == null)) {
-                this.onEndGetGroupDescriptionDelegate = new EndOperationDelegate(this.OnEndGetGroupDescription);
+            if ((this.onEndCameraGetNameDelegate == null)) {
+                this.onEndCameraGetNameDelegate = new EndOperationDelegate(this.OnEndCameraGetName);
             }
-            if ((this.onGetGroupDescriptionCompletedDelegate == null)) {
-                this.onGetGroupDescriptionCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGetGroupDescriptionCompleted);
+            if ((this.onCameraGetNameCompletedDelegate == null)) {
+                this.onCameraGetNameCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnCameraGetNameCompleted);
             }
-            base.InvokeAsync(this.onBeginGetGroupDescriptionDelegate, new object[] {
-                        groupID}, this.onEndGetGroupDescriptionDelegate, this.onGetGroupDescriptionCompletedDelegate, userState);
+            base.InvokeAsync(this.onBeginCameraGetNameDelegate, new object[] {
+                        cameraID}, this.onEndCameraGetNameDelegate, this.onCameraGetNameCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGetGroupIcon(int groupID, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginGetGroupIcon(groupID, callback, asyncState);
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginCameraGetDescription(int cameraID, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginCameraGetDescription(cameraID, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        byte[] CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGetGroupIcon(System.IAsyncResult result) {
-            return base.Channel.EndGetGroupIcon(result);
+        string CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndCameraGetDescription(System.IAsyncResult result) {
+            return base.Channel.EndCameraGetDescription(result);
         }
         
-        private System.IAsyncResult OnBeginGetGroupIcon(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            int groupID = ((int)(inValues[0]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGetGroupIcon(groupID, callback, asyncState);
+        private System.IAsyncResult OnBeginCameraGetDescription(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            int cameraID = ((int)(inValues[0]));
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginCameraGetDescription(cameraID, callback, asyncState);
         }
         
-        private object[] OnEndGetGroupIcon(System.IAsyncResult result) {
-            byte[] retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGetGroupIcon(result);
+        private object[] OnEndCameraGetDescription(System.IAsyncResult result) {
+            string retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndCameraGetDescription(result);
             return new object[] {
                     retVal};
         }
         
-        private void OnGetGroupIconCompleted(object state) {
-            if ((this.GetGroupIconCompleted != null)) {
+        private void OnCameraGetDescriptionCompleted(object state) {
+            if ((this.CameraGetDescriptionCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.GetGroupIconCompleted(this, new GetGroupIconCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+                this.CameraGetDescriptionCompleted(this, new CameraGetDescriptionCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void GetGroupIconAsync(int groupID) {
-            this.GetGroupIconAsync(groupID, null);
+        public void CameraGetDescriptionAsync(int cameraID) {
+            this.CameraGetDescriptionAsync(cameraID, null);
         }
         
-        public void GetGroupIconAsync(int groupID, object userState) {
-            if ((this.onBeginGetGroupIconDelegate == null)) {
-                this.onBeginGetGroupIconDelegate = new BeginOperationDelegate(this.OnBeginGetGroupIcon);
+        public void CameraGetDescriptionAsync(int cameraID, object userState) {
+            if ((this.onBeginCameraGetDescriptionDelegate == null)) {
+                this.onBeginCameraGetDescriptionDelegate = new BeginOperationDelegate(this.OnBeginCameraGetDescription);
             }
-            if ((this.onEndGetGroupIconDelegate == null)) {
-                this.onEndGetGroupIconDelegate = new EndOperationDelegate(this.OnEndGetGroupIcon);
+            if ((this.onEndCameraGetDescriptionDelegate == null)) {
+                this.onEndCameraGetDescriptionDelegate = new EndOperationDelegate(this.OnEndCameraGetDescription);
             }
-            if ((this.onGetGroupIconCompletedDelegate == null)) {
-                this.onGetGroupIconCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGetGroupIconCompleted);
+            if ((this.onCameraGetDescriptionCompletedDelegate == null)) {
+                this.onCameraGetDescriptionCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnCameraGetDescriptionCompleted);
             }
-            base.InvokeAsync(this.onBeginGetGroupIconDelegate, new object[] {
-                        groupID}, this.onEndGetGroupIconDelegate, this.onGetGroupIconCompletedDelegate, userState);
+            base.InvokeAsync(this.onBeginCameraGetDescriptionDelegate, new object[] {
+                        cameraID}, this.onEndCameraGetDescriptionDelegate, this.onCameraGetDescriptionCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGetGroupPrivacy(int groupID, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginGetGroupPrivacy(groupID, callback, asyncState);
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginCameraGetIcon(int cameraID, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginCameraGetIcon(cameraID, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        int CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGetGroupPrivacy(System.IAsyncResult result) {
-            return base.Channel.EndGetGroupPrivacy(result);
+        byte[] CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndCameraGetIcon(System.IAsyncResult result) {
+            return base.Channel.EndCameraGetIcon(result);
         }
         
-        private System.IAsyncResult OnBeginGetGroupPrivacy(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            int groupID = ((int)(inValues[0]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGetGroupPrivacy(groupID, callback, asyncState);
+        private System.IAsyncResult OnBeginCameraGetIcon(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            int cameraID = ((int)(inValues[0]));
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginCameraGetIcon(cameraID, callback, asyncState);
         }
         
-        private object[] OnEndGetGroupPrivacy(System.IAsyncResult result) {
-            int retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGetGroupPrivacy(result);
+        private object[] OnEndCameraGetIcon(System.IAsyncResult result) {
+            byte[] retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndCameraGetIcon(result);
             return new object[] {
                     retVal};
         }
         
-        private void OnGetGroupPrivacyCompleted(object state) {
-            if ((this.GetGroupPrivacyCompleted != null)) {
+        private void OnCameraGetIconCompleted(object state) {
+            if ((this.CameraGetIconCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.GetGroupPrivacyCompleted(this, new GetGroupPrivacyCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+                this.CameraGetIconCompleted(this, new CameraGetIconCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void GetGroupPrivacyAsync(int groupID) {
-            this.GetGroupPrivacyAsync(groupID, null);
+        public void CameraGetIconAsync(int cameraID) {
+            this.CameraGetIconAsync(cameraID, null);
         }
         
-        public void GetGroupPrivacyAsync(int groupID, object userState) {
-            if ((this.onBeginGetGroupPrivacyDelegate == null)) {
-                this.onBeginGetGroupPrivacyDelegate = new BeginOperationDelegate(this.OnBeginGetGroupPrivacy);
+        public void CameraGetIconAsync(int cameraID, object userState) {
+            if ((this.onBeginCameraGetIconDelegate == null)) {
+                this.onBeginCameraGetIconDelegate = new BeginOperationDelegate(this.OnBeginCameraGetIcon);
             }
-            if ((this.onEndGetGroupPrivacyDelegate == null)) {
-                this.onEndGetGroupPrivacyDelegate = new EndOperationDelegate(this.OnEndGetGroupPrivacy);
+            if ((this.onEndCameraGetIconDelegate == null)) {
+                this.onEndCameraGetIconDelegate = new EndOperationDelegate(this.OnEndCameraGetIcon);
             }
-            if ((this.onGetGroupPrivacyCompletedDelegate == null)) {
-                this.onGetGroupPrivacyCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGetGroupPrivacyCompleted);
+            if ((this.onCameraGetIconCompletedDelegate == null)) {
+                this.onCameraGetIconCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnCameraGetIconCompleted);
             }
-            base.InvokeAsync(this.onBeginGetGroupPrivacyDelegate, new object[] {
-                        groupID}, this.onEndGetGroupPrivacyDelegate, this.onGetGroupPrivacyCompletedDelegate, userState);
+            base.InvokeAsync(this.onBeginCameraGetIconDelegate, new object[] {
+                        cameraID}, this.onEndCameraGetIconDelegate, this.onCameraGetIconCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGetGroupRegistrationDate(int groupID, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginGetGroupRegistrationDate(groupID, callback, asyncState);
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginCameraGetRegistrationDate(int cameraID, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginCameraGetRegistrationDate(cameraID, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.DateTime CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGetGroupRegistrationDate(System.IAsyncResult result) {
-            return base.Channel.EndGetGroupRegistrationDate(result);
+        System.DateTime CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndCameraGetRegistrationDate(System.IAsyncResult result) {
+            return base.Channel.EndCameraGetRegistrationDate(result);
         }
         
-        private System.IAsyncResult OnBeginGetGroupRegistrationDate(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            int groupID = ((int)(inValues[0]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGetGroupRegistrationDate(groupID, callback, asyncState);
+        private System.IAsyncResult OnBeginCameraGetRegistrationDate(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            int cameraID = ((int)(inValues[0]));
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginCameraGetRegistrationDate(cameraID, callback, asyncState);
         }
         
-        private object[] OnEndGetGroupRegistrationDate(System.IAsyncResult result) {
-            System.DateTime retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGetGroupRegistrationDate(result);
+        private object[] OnEndCameraGetRegistrationDate(System.IAsyncResult result) {
+            System.DateTime retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndCameraGetRegistrationDate(result);
             return new object[] {
                     retVal};
         }
         
-        private void OnGetGroupRegistrationDateCompleted(object state) {
-            if ((this.GetGroupRegistrationDateCompleted != null)) {
+        private void OnCameraGetRegistrationDateCompleted(object state) {
+            if ((this.CameraGetRegistrationDateCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.GetGroupRegistrationDateCompleted(this, new GetGroupRegistrationDateCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+                this.CameraGetRegistrationDateCompleted(this, new CameraGetRegistrationDateCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void GetGroupRegistrationDateAsync(int groupID) {
-            this.GetGroupRegistrationDateAsync(groupID, null);
+        public void CameraGetRegistrationDateAsync(int cameraID) {
+            this.CameraGetRegistrationDateAsync(cameraID, null);
         }
         
-        public void GetGroupRegistrationDateAsync(int groupID, object userState) {
-            if ((this.onBeginGetGroupRegistrationDateDelegate == null)) {
-                this.onBeginGetGroupRegistrationDateDelegate = new BeginOperationDelegate(this.OnBeginGetGroupRegistrationDate);
+        public void CameraGetRegistrationDateAsync(int cameraID, object userState) {
+            if ((this.onBeginCameraGetRegistrationDateDelegate == null)) {
+                this.onBeginCameraGetRegistrationDateDelegate = new BeginOperationDelegate(this.OnBeginCameraGetRegistrationDate);
             }
-            if ((this.onEndGetGroupRegistrationDateDelegate == null)) {
-                this.onEndGetGroupRegistrationDateDelegate = new EndOperationDelegate(this.OnEndGetGroupRegistrationDate);
+            if ((this.onEndCameraGetRegistrationDateDelegate == null)) {
+                this.onEndCameraGetRegistrationDateDelegate = new EndOperationDelegate(this.OnEndCameraGetRegistrationDate);
             }
-            if ((this.onGetGroupRegistrationDateCompletedDelegate == null)) {
-                this.onGetGroupRegistrationDateCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGetGroupRegistrationDateCompleted);
+            if ((this.onCameraGetRegistrationDateCompletedDelegate == null)) {
+                this.onCameraGetRegistrationDateCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnCameraGetRegistrationDateCompleted);
             }
-            base.InvokeAsync(this.onBeginGetGroupRegistrationDateDelegate, new object[] {
-                        groupID}, this.onEndGetGroupRegistrationDateDelegate, this.onGetGroupRegistrationDateCompletedDelegate, userState);
+            base.InvokeAsync(this.onBeginCameraGetRegistrationDateDelegate, new object[] {
+                        cameraID}, this.onEndCameraGetRegistrationDateDelegate, this.onCameraGetRegistrationDateCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGetGroupMembers(int groupID, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginGetGroupMembers(groupID, callback, asyncState);
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginCameraGetGroups(int cameraID, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginCameraGetGroups(cameraID, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Collections.ObjectModel.ObservableCollection<int> CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGetGroupMembers(System.IAsyncResult result) {
-            return base.Channel.EndGetGroupMembers(result);
+        System.Collections.ObjectModel.ObservableCollection<int> CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndCameraGetGroups(System.IAsyncResult result) {
+            return base.Channel.EndCameraGetGroups(result);
         }
         
-        private System.IAsyncResult OnBeginGetGroupMembers(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            int groupID = ((int)(inValues[0]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGetGroupMembers(groupID, callback, asyncState);
+        private System.IAsyncResult OnBeginCameraGetGroups(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            int cameraID = ((int)(inValues[0]));
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginCameraGetGroups(cameraID, callback, asyncState);
         }
         
-        private object[] OnEndGetGroupMembers(System.IAsyncResult result) {
-            System.Collections.ObjectModel.ObservableCollection<int> retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGetGroupMembers(result);
+        private object[] OnEndCameraGetGroups(System.IAsyncResult result) {
+            System.Collections.ObjectModel.ObservableCollection<int> retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndCameraGetGroups(result);
             return new object[] {
                     retVal};
         }
         
-        private void OnGetGroupMembersCompleted(object state) {
-            if ((this.GetGroupMembersCompleted != null)) {
+        private void OnCameraGetGroupsCompleted(object state) {
+            if ((this.CameraGetGroupsCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.GetGroupMembersCompleted(this, new GetGroupMembersCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+                this.CameraGetGroupsCompleted(this, new CameraGetGroupsCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void GetGroupMembersAsync(int groupID) {
-            this.GetGroupMembersAsync(groupID, null);
+        public void CameraGetGroupsAsync(int cameraID) {
+            this.CameraGetGroupsAsync(cameraID, null);
         }
         
-        public void GetGroupMembersAsync(int groupID, object userState) {
-            if ((this.onBeginGetGroupMembersDelegate == null)) {
-                this.onBeginGetGroupMembersDelegate = new BeginOperationDelegate(this.OnBeginGetGroupMembers);
+        public void CameraGetGroupsAsync(int cameraID, object userState) {
+            if ((this.onBeginCameraGetGroupsDelegate == null)) {
+                this.onBeginCameraGetGroupsDelegate = new BeginOperationDelegate(this.OnBeginCameraGetGroups);
             }
-            if ((this.onEndGetGroupMembersDelegate == null)) {
-                this.onEndGetGroupMembersDelegate = new EndOperationDelegate(this.OnEndGetGroupMembers);
+            if ((this.onEndCameraGetGroupsDelegate == null)) {
+                this.onEndCameraGetGroupsDelegate = new EndOperationDelegate(this.OnEndCameraGetGroups);
             }
-            if ((this.onGetGroupMembersCompletedDelegate == null)) {
-                this.onGetGroupMembersCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGetGroupMembersCompleted);
+            if ((this.onCameraGetGroupsCompletedDelegate == null)) {
+                this.onCameraGetGroupsCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnCameraGetGroupsCompleted);
             }
-            base.InvokeAsync(this.onBeginGetGroupMembersDelegate, new object[] {
-                        groupID}, this.onEndGetGroupMembersDelegate, this.onGetGroupMembersCompletedDelegate, userState);
+            base.InvokeAsync(this.onBeginCameraGetGroupsDelegate, new object[] {
+                        cameraID}, this.onEndCameraGetGroupsDelegate, this.onCameraGetGroupsCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGetGroupCameras(int groupID, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginGetGroupCameras(groupID, callback, asyncState);
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginCameraGetFrames(int cameraID, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginCameraGetFrames(cameraID, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Collections.ObjectModel.ObservableCollection<int> CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGetGroupCameras(System.IAsyncResult result) {
-            return base.Channel.EndGetGroupCameras(result);
+        System.Collections.ObjectModel.ObservableCollection<int> CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndCameraGetFrames(System.IAsyncResult result) {
+            return base.Channel.EndCameraGetFrames(result);
         }
         
-        private System.IAsyncResult OnBeginGetGroupCameras(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            int groupID = ((int)(inValues[0]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGetGroupCameras(groupID, callback, asyncState);
+        private System.IAsyncResult OnBeginCameraGetFrames(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            int cameraID = ((int)(inValues[0]));
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginCameraGetFrames(cameraID, callback, asyncState);
         }
         
-        private object[] OnEndGetGroupCameras(System.IAsyncResult result) {
-            System.Collections.ObjectModel.ObservableCollection<int> retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGetGroupCameras(result);
+        private object[] OnEndCameraGetFrames(System.IAsyncResult result) {
+            System.Collections.ObjectModel.ObservableCollection<int> retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndCameraGetFrames(result);
             return new object[] {
                     retVal};
         }
         
-        private void OnGetGroupCamerasCompleted(object state) {
-            if ((this.GetGroupCamerasCompleted != null)) {
+        private void OnCameraGetFramesCompleted(object state) {
+            if ((this.CameraGetFramesCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.GetGroupCamerasCompleted(this, new GetGroupCamerasCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+                this.CameraGetFramesCompleted(this, new CameraGetFramesCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void GetGroupCamerasAsync(int groupID) {
-            this.GetGroupCamerasAsync(groupID, null);
+        public void CameraGetFramesAsync(int cameraID) {
+            this.CameraGetFramesAsync(cameraID, null);
         }
         
-        public void GetGroupCamerasAsync(int groupID, object userState) {
-            if ((this.onBeginGetGroupCamerasDelegate == null)) {
-                this.onBeginGetGroupCamerasDelegate = new BeginOperationDelegate(this.OnBeginGetGroupCameras);
+        public void CameraGetFramesAsync(int cameraID, object userState) {
+            if ((this.onBeginCameraGetFramesDelegate == null)) {
+                this.onBeginCameraGetFramesDelegate = new BeginOperationDelegate(this.OnBeginCameraGetFrames);
             }
-            if ((this.onEndGetGroupCamerasDelegate == null)) {
-                this.onEndGetGroupCamerasDelegate = new EndOperationDelegate(this.OnEndGetGroupCameras);
+            if ((this.onEndCameraGetFramesDelegate == null)) {
+                this.onEndCameraGetFramesDelegate = new EndOperationDelegate(this.OnEndCameraGetFrames);
             }
-            if ((this.onGetGroupCamerasCompletedDelegate == null)) {
-                this.onGetGroupCamerasCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGetGroupCamerasCompleted);
+            if ((this.onCameraGetFramesCompletedDelegate == null)) {
+                this.onCameraGetFramesCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnCameraGetFramesCompleted);
             }
-            base.InvokeAsync(this.onBeginGetGroupCamerasDelegate, new object[] {
-                        groupID}, this.onEndGetGroupCamerasDelegate, this.onGetGroupCamerasCompletedDelegate, userState);
+            base.InvokeAsync(this.onBeginCameraGetFramesDelegate, new object[] {
+                        cameraID}, this.onEndCameraGetFramesDelegate, this.onCameraGetFramesCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginSetGroupName(int groupID, string name, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginSetGroupName(groupID, name, callback, asyncState);
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginCameraSetName(int cameraID, string name, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginCameraSetName(cameraID, name, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndSetGroupName(System.IAsyncResult result) {
-            base.Channel.EndSetGroupName(result);
+        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndCameraSetName(System.IAsyncResult result) {
+            base.Channel.EndCameraSetName(result);
         }
         
-        private System.IAsyncResult OnBeginSetGroupName(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            int groupID = ((int)(inValues[0]));
+        private System.IAsyncResult OnBeginCameraSetName(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            int cameraID = ((int)(inValues[0]));
             string name = ((string)(inValues[1]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginSetGroupName(groupID, name, callback, asyncState);
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginCameraSetName(cameraID, name, callback, asyncState);
         }
         
-        private object[] OnEndSetGroupName(System.IAsyncResult result) {
-            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndSetGroupName(result);
+        private object[] OnEndCameraSetName(System.IAsyncResult result) {
+            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndCameraSetName(result);
             return null;
         }
         
-        private void OnSetGroupNameCompleted(object state) {
-            if ((this.SetGroupNameCompleted != null)) {
+        private void OnCameraSetNameCompleted(object state) {
+            if ((this.CameraSetNameCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.SetGroupNameCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+                this.CameraSetNameCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void SetGroupNameAsync(int groupID, string name) {
-            this.SetGroupNameAsync(groupID, name, null);
+        public void CameraSetNameAsync(int cameraID, string name) {
+            this.CameraSetNameAsync(cameraID, name, null);
         }
         
-        public void SetGroupNameAsync(int groupID, string name, object userState) {
-            if ((this.onBeginSetGroupNameDelegate == null)) {
-                this.onBeginSetGroupNameDelegate = new BeginOperationDelegate(this.OnBeginSetGroupName);
+        public void CameraSetNameAsync(int cameraID, string name, object userState) {
+            if ((this.onBeginCameraSetNameDelegate == null)) {
+                this.onBeginCameraSetNameDelegate = new BeginOperationDelegate(this.OnBeginCameraSetName);
             }
-            if ((this.onEndSetGroupNameDelegate == null)) {
-                this.onEndSetGroupNameDelegate = new EndOperationDelegate(this.OnEndSetGroupName);
+            if ((this.onEndCameraSetNameDelegate == null)) {
+                this.onEndCameraSetNameDelegate = new EndOperationDelegate(this.OnEndCameraSetName);
             }
-            if ((this.onSetGroupNameCompletedDelegate == null)) {
-                this.onSetGroupNameCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnSetGroupNameCompleted);
+            if ((this.onCameraSetNameCompletedDelegate == null)) {
+                this.onCameraSetNameCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnCameraSetNameCompleted);
             }
-            base.InvokeAsync(this.onBeginSetGroupNameDelegate, new object[] {
-                        groupID,
-                        name}, this.onEndSetGroupNameDelegate, this.onSetGroupNameCompletedDelegate, userState);
+            base.InvokeAsync(this.onBeginCameraSetNameDelegate, new object[] {
+                        cameraID,
+                        name}, this.onEndCameraSetNameDelegate, this.onCameraSetNameCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginSetGroupDescription(int groupID, string description, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginSetGroupDescription(groupID, description, callback, asyncState);
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginCameraSetDescription(int cameraID, string description, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginCameraSetDescription(cameraID, description, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndSetGroupDescription(System.IAsyncResult result) {
-            base.Channel.EndSetGroupDescription(result);
+        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndCameraSetDescription(System.IAsyncResult result) {
+            base.Channel.EndCameraSetDescription(result);
         }
         
-        private System.IAsyncResult OnBeginSetGroupDescription(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            int groupID = ((int)(inValues[0]));
+        private System.IAsyncResult OnBeginCameraSetDescription(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            int cameraID = ((int)(inValues[0]));
             string description = ((string)(inValues[1]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginSetGroupDescription(groupID, description, callback, asyncState);
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginCameraSetDescription(cameraID, description, callback, asyncState);
         }
         
-        private object[] OnEndSetGroupDescription(System.IAsyncResult result) {
-            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndSetGroupDescription(result);
+        private object[] OnEndCameraSetDescription(System.IAsyncResult result) {
+            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndCameraSetDescription(result);
             return null;
         }
         
-        private void OnSetGroupDescriptionCompleted(object state) {
-            if ((this.SetGroupDescriptionCompleted != null)) {
+        private void OnCameraSetDescriptionCompleted(object state) {
+            if ((this.CameraSetDescriptionCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.SetGroupDescriptionCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+                this.CameraSetDescriptionCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void SetGroupDescriptionAsync(int groupID, string description) {
-            this.SetGroupDescriptionAsync(groupID, description, null);
+        public void CameraSetDescriptionAsync(int cameraID, string description) {
+            this.CameraSetDescriptionAsync(cameraID, description, null);
         }
         
-        public void SetGroupDescriptionAsync(int groupID, string description, object userState) {
-            if ((this.onBeginSetGroupDescriptionDelegate == null)) {
-                this.onBeginSetGroupDescriptionDelegate = new BeginOperationDelegate(this.OnBeginSetGroupDescription);
+        public void CameraSetDescriptionAsync(int cameraID, string description, object userState) {
+            if ((this.onBeginCameraSetDescriptionDelegate == null)) {
+                this.onBeginCameraSetDescriptionDelegate = new BeginOperationDelegate(this.OnBeginCameraSetDescription);
             }
-            if ((this.onEndSetGroupDescriptionDelegate == null)) {
-                this.onEndSetGroupDescriptionDelegate = new EndOperationDelegate(this.OnEndSetGroupDescription);
+            if ((this.onEndCameraSetDescriptionDelegate == null)) {
+                this.onEndCameraSetDescriptionDelegate = new EndOperationDelegate(this.OnEndCameraSetDescription);
             }
-            if ((this.onSetGroupDescriptionCompletedDelegate == null)) {
-                this.onSetGroupDescriptionCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnSetGroupDescriptionCompleted);
+            if ((this.onCameraSetDescriptionCompletedDelegate == null)) {
+                this.onCameraSetDescriptionCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnCameraSetDescriptionCompleted);
             }
-            base.InvokeAsync(this.onBeginSetGroupDescriptionDelegate, new object[] {
-                        groupID,
-                        description}, this.onEndSetGroupDescriptionDelegate, this.onSetGroupDescriptionCompletedDelegate, userState);
+            base.InvokeAsync(this.onBeginCameraSetDescriptionDelegate, new object[] {
+                        cameraID,
+                        description}, this.onEndCameraSetDescriptionDelegate, this.onCameraSetDescriptionCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginSetGroupIcon(int groupID, byte[] icon, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginSetGroupIcon(groupID, icon, callback, asyncState);
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginCameraSetIcon(int cameraID, byte[] icon, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginCameraSetIcon(cameraID, icon, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndSetGroupIcon(System.IAsyncResult result) {
-            base.Channel.EndSetGroupIcon(result);
+        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndCameraSetIcon(System.IAsyncResult result) {
+            base.Channel.EndCameraSetIcon(result);
         }
         
-        private System.IAsyncResult OnBeginSetGroupIcon(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            int groupID = ((int)(inValues[0]));
+        private System.IAsyncResult OnBeginCameraSetIcon(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            int cameraID = ((int)(inValues[0]));
             byte[] icon = ((byte[])(inValues[1]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginSetGroupIcon(groupID, icon, callback, asyncState);
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginCameraSetIcon(cameraID, icon, callback, asyncState);
         }
         
-        private object[] OnEndSetGroupIcon(System.IAsyncResult result) {
-            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndSetGroupIcon(result);
+        private object[] OnEndCameraSetIcon(System.IAsyncResult result) {
+            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndCameraSetIcon(result);
             return null;
         }
         
-        private void OnSetGroupIconCompleted(object state) {
-            if ((this.SetGroupIconCompleted != null)) {
+        private void OnCameraSetIconCompleted(object state) {
+            if ((this.CameraSetIconCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.SetGroupIconCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+                this.CameraSetIconCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void SetGroupIconAsync(int groupID, byte[] icon) {
-            this.SetGroupIconAsync(groupID, icon, null);
+        public void CameraSetIconAsync(int cameraID, byte[] icon) {
+            this.CameraSetIconAsync(cameraID, icon, null);
         }
         
-        public void SetGroupIconAsync(int groupID, byte[] icon, object userState) {
-            if ((this.onBeginSetGroupIconDelegate == null)) {
-                this.onBeginSetGroupIconDelegate = new BeginOperationDelegate(this.OnBeginSetGroupIcon);
+        public void CameraSetIconAsync(int cameraID, byte[] icon, object userState) {
+            if ((this.onBeginCameraSetIconDelegate == null)) {
+                this.onBeginCameraSetIconDelegate = new BeginOperationDelegate(this.OnBeginCameraSetIcon);
             }
-            if ((this.onEndSetGroupIconDelegate == null)) {
-                this.onEndSetGroupIconDelegate = new EndOperationDelegate(this.OnEndSetGroupIcon);
+            if ((this.onEndCameraSetIconDelegate == null)) {
+                this.onEndCameraSetIconDelegate = new EndOperationDelegate(this.OnEndCameraSetIcon);
             }
-            if ((this.onSetGroupIconCompletedDelegate == null)) {
-                this.onSetGroupIconCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnSetGroupIconCompleted);
+            if ((this.onCameraSetIconCompletedDelegate == null)) {
+                this.onCameraSetIconCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnCameraSetIconCompleted);
             }
-            base.InvokeAsync(this.onBeginSetGroupIconDelegate, new object[] {
-                        groupID,
-                        icon}, this.onEndSetGroupIconDelegate, this.onSetGroupIconCompletedDelegate, userState);
+            base.InvokeAsync(this.onBeginCameraSetIconDelegate, new object[] {
+                        cameraID,
+                        icon}, this.onEndCameraSetIconDelegate, this.onCameraSetIconCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginSetGroupPrivacy(int groupID, int privacy, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginSetGroupPrivacy(groupID, privacy, callback, asyncState);
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGroupAdd(string name, string description, byte[] icon, int privacy, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginGroupAdd(name, description, icon, privacy, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndSetGroupPrivacy(System.IAsyncResult result) {
-            base.Channel.EndSetGroupPrivacy(result);
+        int CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGroupAdd(System.IAsyncResult result) {
+            return base.Channel.EndGroupAdd(result);
         }
         
-        private System.IAsyncResult OnBeginSetGroupPrivacy(object[] inValues, System.AsyncCallback callback, object asyncState) {
+        private System.IAsyncResult OnBeginGroupAdd(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            string name = ((string)(inValues[0]));
+            string description = ((string)(inValues[1]));
+            byte[] icon = ((byte[])(inValues[2]));
+            int privacy = ((int)(inValues[3]));
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGroupAdd(name, description, icon, privacy, callback, asyncState);
+        }
+        
+        private object[] OnEndGroupAdd(System.IAsyncResult result) {
+            int retVal = ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGroupAdd(result);
+            return new object[] {
+                    retVal};
+        }
+        
+        private void OnGroupAddCompleted(object state) {
+            if ((this.GroupAddCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.GroupAddCompleted(this, new GroupAddCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void GroupAddAsync(string name, string description, byte[] icon, int privacy) {
+            this.GroupAddAsync(name, description, icon, privacy, null);
+        }
+        
+        public void GroupAddAsync(string name, string description, byte[] icon, int privacy, object userState) {
+            if ((this.onBeginGroupAddDelegate == null)) {
+                this.onBeginGroupAddDelegate = new BeginOperationDelegate(this.OnBeginGroupAdd);
+            }
+            if ((this.onEndGroupAddDelegate == null)) {
+                this.onEndGroupAddDelegate = new EndOperationDelegate(this.OnEndGroupAdd);
+            }
+            if ((this.onGroupAddCompletedDelegate == null)) {
+                this.onGroupAddCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGroupAddCompleted);
+            }
+            base.InvokeAsync(this.onBeginGroupAddDelegate, new object[] {
+                        name,
+                        description,
+                        icon,
+                        privacy}, this.onEndGroupAddDelegate, this.onGroupAddCompletedDelegate, userState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginGroupRemove(int groupID, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginGroupRemove(groupID, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndGroupRemove(System.IAsyncResult result) {
+            base.Channel.EndGroupRemove(result);
+        }
+        
+        private System.IAsyncResult OnBeginGroupRemove(object[] inValues, System.AsyncCallback callback, object asyncState) {
             int groupID = ((int)(inValues[0]));
-            int privacy = ((int)(inValues[1]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginSetGroupPrivacy(groupID, privacy, callback, asyncState);
+            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginGroupRemove(groupID, callback, asyncState);
         }
         
-        private object[] OnEndSetGroupPrivacy(System.IAsyncResult result) {
-            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndSetGroupPrivacy(result);
+        private object[] OnEndGroupRemove(System.IAsyncResult result) {
+            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndGroupRemove(result);
             return null;
         }
         
-        private void OnSetGroupPrivacyCompleted(object state) {
-            if ((this.SetGroupPrivacyCompleted != null)) {
+        private void OnGroupRemoveCompleted(object state) {
+            if ((this.GroupRemoveCompleted != null)) {
                 InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.SetGroupPrivacyCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+                this.GroupRemoveCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
             }
         }
         
-        public void SetGroupPrivacyAsync(int groupID, int privacy) {
-            this.SetGroupPrivacyAsync(groupID, privacy, null);
+        public void GroupRemoveAsync(int groupID) {
+            this.GroupRemoveAsync(groupID, null);
         }
         
-        public void SetGroupPrivacyAsync(int groupID, int privacy, object userState) {
-            if ((this.onBeginSetGroupPrivacyDelegate == null)) {
-                this.onBeginSetGroupPrivacyDelegate = new BeginOperationDelegate(this.OnBeginSetGroupPrivacy);
+        public void GroupRemoveAsync(int groupID, object userState) {
+            if ((this.onBeginGroupRemoveDelegate == null)) {
+                this.onBeginGroupRemoveDelegate = new BeginOperationDelegate(this.OnBeginGroupRemove);
             }
-            if ((this.onEndSetGroupPrivacyDelegate == null)) {
-                this.onEndSetGroupPrivacyDelegate = new EndOperationDelegate(this.OnEndSetGroupPrivacy);
+            if ((this.onEndGroupRemoveDelegate == null)) {
+                this.onEndGroupRemoveDelegate = new EndOperationDelegate(this.OnEndGroupRemove);
             }
-            if ((this.onSetGroupPrivacyCompletedDelegate == null)) {
-                this.onSetGroupPrivacyCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnSetGroupPrivacyCompleted);
+            if ((this.onGroupRemoveCompletedDelegate == null)) {
+                this.onGroupRemoveCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGroupRemoveCompleted);
             }
-            base.InvokeAsync(this.onBeginSetGroupPrivacyDelegate, new object[] {
-                        groupID,
-                        privacy}, this.onEndSetGroupPrivacyDelegate, this.onSetGroupPrivacyCompletedDelegate, userState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.BeginAddGroupMember(int userID, int groupID, int privileges, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginAddGroupMember(userID, groupID, privileges, callback, asyncState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        void CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService.EndAddGroupMember(System.IAsyncResult result) {
-            base.Channel.EndAddGroupMember(result);
-        }
-        
-        private System.IAsyncResult OnBeginAddGroupMember(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            int userID = ((int)(inValues[0]));
-            int groupID = ((int)(inValues[1]));
-            int privileges = ((int)(inValues[2]));
-            return ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).BeginAddGroupMember(userID, groupID, privileges, callback, asyncState);
-        }
-        
-        private object[] OnEndAddGroupMember(System.IAsyncResult result) {
-            ((CloudObserverUserInterface.CloudObserverServiceReference.ICloudObserverService)(this)).EndAddGroupMember(result);
-            return null;
-        }
-        
-        private void OnAddGroupMemberCompleted(object state) {
-            if ((this.AddGroupMemberCompleted != null)) {
-                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.AddGroupMemberCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
-            }
-        }
-        
-        public void AddGroupMemberAsync(int userID, int groupID, int privileges) {
-            this.AddGroupMemberAsync(userID, groupID, privileges, null);
-        }
-        
-        public void AddGroupMemberAsync(int userID, int groupID, int privileges, object userState) {
-            if ((this.onBeginAddGroupMemberDelegate == null)) {
-                this.onBeginAddGroupMemberDelegate = new BeginOperationDelegate(this.OnBeginAddGroupMember);
-            }
-            if ((this.onEndAddGroupMemberDelegate == null)) {
-                this.onEndAddGroupMemberDelegate = new EndOperationDelegate(this.OnEndAddGroupMember);
-            }
-            if ((this.onAddGroupMemberCompletedDelegate == null)) {
-                this.onAddGroupMemberCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnAddGroupMemberCompleted);
-            }
-            base.InvokeAsync(this.onBeginAddGroupMemberDelegate, new object[] {
-                        userID,
-                        groupID,
-                        privileges}, this.onEndAddGroupMemberDelegate, this.onAddGroupMemberCompletedDelegate, userState);
+            base.InvokeAsync(this.onBeginGroupRemoveDelegate, new object[] {
+                        groupID}, this.onEndGroupRemoveDelegate, this.onGroupRemoveCompletedDelegate, userState);
         }
         
         private System.IAsyncResult OnBeginOpen(object[] inValues, System.AsyncCallback callback, object asyncState) {
@@ -4000,709 +4034,717 @@ namespace CloudObserverUserInterface.CloudObserverServiceReference {
                     base(client) {
             }
             
-            public System.IAsyncResult BeginSetGroupMemberPrivileges(int userID, int groupID, int privileges, System.AsyncCallback callback, object asyncState) {
+            public System.IAsyncResult BeginGroupGetID(string name, System.AsyncCallback callback, object asyncState) {
+                object[] _args = new object[1];
+                _args[0] = name;
+                System.IAsyncResult _result = base.BeginInvoke("GroupGetID", _args, callback, asyncState);
+                return _result;
+            }
+            
+            public int EndGroupGetID(System.IAsyncResult result) {
+                object[] _args = new object[0];
+                int _result = ((int)(base.EndInvoke("GroupGetID", _args, result)));
+                return _result;
+            }
+            
+            public System.IAsyncResult BeginGroupGetName(int groupID, System.AsyncCallback callback, object asyncState) {
+                object[] _args = new object[1];
+                _args[0] = groupID;
+                System.IAsyncResult _result = base.BeginInvoke("GroupGetName", _args, callback, asyncState);
+                return _result;
+            }
+            
+            public string EndGroupGetName(System.IAsyncResult result) {
+                object[] _args = new object[0];
+                string _result = ((string)(base.EndInvoke("GroupGetName", _args, result)));
+                return _result;
+            }
+            
+            public System.IAsyncResult BeginGroupGetDescription(int groupID, System.AsyncCallback callback, object asyncState) {
+                object[] _args = new object[1];
+                _args[0] = groupID;
+                System.IAsyncResult _result = base.BeginInvoke("GroupGetDescription", _args, callback, asyncState);
+                return _result;
+            }
+            
+            public string EndGroupGetDescription(System.IAsyncResult result) {
+                object[] _args = new object[0];
+                string _result = ((string)(base.EndInvoke("GroupGetDescription", _args, result)));
+                return _result;
+            }
+            
+            public System.IAsyncResult BeginGroupGetIcon(int groupID, System.AsyncCallback callback, object asyncState) {
+                object[] _args = new object[1];
+                _args[0] = groupID;
+                System.IAsyncResult _result = base.BeginInvoke("GroupGetIcon", _args, callback, asyncState);
+                return _result;
+            }
+            
+            public byte[] EndGroupGetIcon(System.IAsyncResult result) {
+                object[] _args = new object[0];
+                byte[] _result = ((byte[])(base.EndInvoke("GroupGetIcon", _args, result)));
+                return _result;
+            }
+            
+            public System.IAsyncResult BeginGroupGetPrivacy(int groupID, System.AsyncCallback callback, object asyncState) {
+                object[] _args = new object[1];
+                _args[0] = groupID;
+                System.IAsyncResult _result = base.BeginInvoke("GroupGetPrivacy", _args, callback, asyncState);
+                return _result;
+            }
+            
+            public int EndGroupGetPrivacy(System.IAsyncResult result) {
+                object[] _args = new object[0];
+                int _result = ((int)(base.EndInvoke("GroupGetPrivacy", _args, result)));
+                return _result;
+            }
+            
+            public System.IAsyncResult BeginGroupGetRegistrationDate(int groupID, System.AsyncCallback callback, object asyncState) {
+                object[] _args = new object[1];
+                _args[0] = groupID;
+                System.IAsyncResult _result = base.BeginInvoke("GroupGetRegistrationDate", _args, callback, asyncState);
+                return _result;
+            }
+            
+            public System.DateTime EndGroupGetRegistrationDate(System.IAsyncResult result) {
+                object[] _args = new object[0];
+                System.DateTime _result = ((System.DateTime)(base.EndInvoke("GroupGetRegistrationDate", _args, result)));
+                return _result;
+            }
+            
+            public System.IAsyncResult BeginGroupGetMembers(int groupID, System.AsyncCallback callback, object asyncState) {
+                object[] _args = new object[1];
+                _args[0] = groupID;
+                System.IAsyncResult _result = base.BeginInvoke("GroupGetMembers", _args, callback, asyncState);
+                return _result;
+            }
+            
+            public System.Collections.ObjectModel.ObservableCollection<int> EndGroupGetMembers(System.IAsyncResult result) {
+                object[] _args = new object[0];
+                System.Collections.ObjectModel.ObservableCollection<int> _result = ((System.Collections.ObjectModel.ObservableCollection<int>)(base.EndInvoke("GroupGetMembers", _args, result)));
+                return _result;
+            }
+            
+            public System.IAsyncResult BeginGroupGetCameras(int groupID, System.AsyncCallback callback, object asyncState) {
+                object[] _args = new object[1];
+                _args[0] = groupID;
+                System.IAsyncResult _result = base.BeginInvoke("GroupGetCameras", _args, callback, asyncState);
+                return _result;
+            }
+            
+            public System.Collections.ObjectModel.ObservableCollection<int> EndGroupGetCameras(System.IAsyncResult result) {
+                object[] _args = new object[0];
+                System.Collections.ObjectModel.ObservableCollection<int> _result = ((System.Collections.ObjectModel.ObservableCollection<int>)(base.EndInvoke("GroupGetCameras", _args, result)));
+                return _result;
+            }
+            
+            public System.IAsyncResult BeginGroupSetName(int groupID, string name, System.AsyncCallback callback, object asyncState) {
+                object[] _args = new object[2];
+                _args[0] = groupID;
+                _args[1] = name;
+                System.IAsyncResult _result = base.BeginInvoke("GroupSetName", _args, callback, asyncState);
+                return _result;
+            }
+            
+            public void EndGroupSetName(System.IAsyncResult result) {
+                object[] _args = new object[0];
+                base.EndInvoke("GroupSetName", _args, result);
+            }
+            
+            public System.IAsyncResult BeginGroupSetDescription(int groupID, string description, System.AsyncCallback callback, object asyncState) {
+                object[] _args = new object[2];
+                _args[0] = groupID;
+                _args[1] = description;
+                System.IAsyncResult _result = base.BeginInvoke("GroupSetDescription", _args, callback, asyncState);
+                return _result;
+            }
+            
+            public void EndGroupSetDescription(System.IAsyncResult result) {
+                object[] _args = new object[0];
+                base.EndInvoke("GroupSetDescription", _args, result);
+            }
+            
+            public System.IAsyncResult BeginGroupSetIcon(int groupID, byte[] icon, System.AsyncCallback callback, object asyncState) {
+                object[] _args = new object[2];
+                _args[0] = groupID;
+                _args[1] = icon;
+                System.IAsyncResult _result = base.BeginInvoke("GroupSetIcon", _args, callback, asyncState);
+                return _result;
+            }
+            
+            public void EndGroupSetIcon(System.IAsyncResult result) {
+                object[] _args = new object[0];
+                base.EndInvoke("GroupSetIcon", _args, result);
+            }
+            
+            public System.IAsyncResult BeginGroupSetPrivacy(int groupID, int privacy, System.AsyncCallback callback, object asyncState) {
+                object[] _args = new object[2];
+                _args[0] = groupID;
+                _args[1] = privacy;
+                System.IAsyncResult _result = base.BeginInvoke("GroupSetPrivacy", _args, callback, asyncState);
+                return _result;
+            }
+            
+            public void EndGroupSetPrivacy(System.IAsyncResult result) {
+                object[] _args = new object[0];
+                base.EndInvoke("GroupSetPrivacy", _args, result);
+            }
+            
+            public System.IAsyncResult BeginGroupMemberAdd(int userID, int groupID, int privileges, System.AsyncCallback callback, object asyncState) {
                 object[] _args = new object[3];
                 _args[0] = userID;
                 _args[1] = groupID;
                 _args[2] = privileges;
-                System.IAsyncResult _result = base.BeginInvoke("SetGroupMemberPrivileges", _args, callback, asyncState);
+                System.IAsyncResult _result = base.BeginInvoke("GroupMemberAdd", _args, callback, asyncState);
                 return _result;
             }
             
-            public void EndSetGroupMemberPrivileges(System.IAsyncResult result) {
+            public void EndGroupMemberAdd(System.IAsyncResult result) {
                 object[] _args = new object[0];
-                base.EndInvoke("SetGroupMemberPrivileges", _args, result);
+                base.EndInvoke("GroupMemberAdd", _args, result);
             }
             
-            public System.IAsyncResult BeginRemoveGroupMember(int userID, int groupID, System.AsyncCallback callback, object asyncState) {
+            public System.IAsyncResult BeginGroupMemberRemove(int userID, int groupID, System.AsyncCallback callback, object asyncState) {
                 object[] _args = new object[2];
                 _args[0] = userID;
                 _args[1] = groupID;
-                System.IAsyncResult _result = base.BeginInvoke("RemoveGroupMember", _args, callback, asyncState);
+                System.IAsyncResult _result = base.BeginInvoke("GroupMemberRemove", _args, callback, asyncState);
                 return _result;
             }
             
-            public void EndRemoveGroupMember(System.IAsyncResult result) {
+            public void EndGroupMemberRemove(System.IAsyncResult result) {
                 object[] _args = new object[0];
-                base.EndInvoke("RemoveGroupMember", _args, result);
+                base.EndInvoke("GroupMemberRemove", _args, result);
             }
             
-            public System.IAsyncResult BeginAddGroupCamera(int cameraID, int groupID, System.AsyncCallback callback, object asyncState) {
+            public System.IAsyncResult BeginGroupMemberGetPrivileges(int userID, int groupID, System.AsyncCallback callback, object asyncState) {
+                object[] _args = new object[2];
+                _args[0] = userID;
+                _args[1] = groupID;
+                System.IAsyncResult _result = base.BeginInvoke("GroupMemberGetPrivileges", _args, callback, asyncState);
+                return _result;
+            }
+            
+            public int EndGroupMemberGetPrivileges(System.IAsyncResult result) {
+                object[] _args = new object[0];
+                int _result = ((int)(base.EndInvoke("GroupMemberGetPrivileges", _args, result)));
+                return _result;
+            }
+            
+            public System.IAsyncResult BeginGroupMemberSetPrivileges(int userID, int groupID, int privileges, System.AsyncCallback callback, object asyncState) {
+                object[] _args = new object[3];
+                _args[0] = userID;
+                _args[1] = groupID;
+                _args[2] = privileges;
+                System.IAsyncResult _result = base.BeginInvoke("GroupMemberSetPrivileges", _args, callback, asyncState);
+                return _result;
+            }
+            
+            public void EndGroupMemberSetPrivileges(System.IAsyncResult result) {
+                object[] _args = new object[0];
+                base.EndInvoke("GroupMemberSetPrivileges", _args, result);
+            }
+            
+            public System.IAsyncResult BeginGroupCameraAdd(int cameraID, int groupID, System.AsyncCallback callback, object asyncState) {
                 object[] _args = new object[2];
                 _args[0] = cameraID;
                 _args[1] = groupID;
-                System.IAsyncResult _result = base.BeginInvoke("AddGroupCamera", _args, callback, asyncState);
+                System.IAsyncResult _result = base.BeginInvoke("GroupCameraAdd", _args, callback, asyncState);
                 return _result;
             }
             
-            public void EndAddGroupCamera(System.IAsyncResult result) {
+            public void EndGroupCameraAdd(System.IAsyncResult result) {
                 object[] _args = new object[0];
-                base.EndInvoke("AddGroupCamera", _args, result);
+                base.EndInvoke("GroupCameraAdd", _args, result);
             }
             
-            public System.IAsyncResult BeginRemoveGroupCamera(int cameraID, int groupID, System.AsyncCallback callback, object asyncState) {
+            public System.IAsyncResult BeginGroupCameraRemove(int cameraID, int groupID, System.AsyncCallback callback, object asyncState) {
                 object[] _args = new object[2];
                 _args[0] = cameraID;
                 _args[1] = groupID;
-                System.IAsyncResult _result = base.BeginInvoke("RemoveGroupCamera", _args, callback, asyncState);
+                System.IAsyncResult _result = base.BeginInvoke("GroupCameraRemove", _args, callback, asyncState);
                 return _result;
             }
             
-            public void EndRemoveGroupCamera(System.IAsyncResult result) {
+            public void EndGroupCameraRemove(System.IAsyncResult result) {
                 object[] _args = new object[0];
-                base.EndInvoke("RemoveGroupCamera", _args, result);
+                base.EndInvoke("GroupCameraRemove", _args, result);
             }
             
-            public System.IAsyncResult BeginIsCameraRegistered(string path, System.AsyncCallback callback, object asyncState) {
-                object[] _args = new object[1];
-                _args[0] = path;
-                System.IAsyncResult _result = base.BeginInvoke("IsCameraRegistered", _args, callback, asyncState);
-                return _result;
-            }
-            
-            public bool EndIsCameraRegistered(System.IAsyncResult result) {
-                object[] _args = new object[0];
-                bool _result = ((bool)(base.EndInvoke("IsCameraRegistered", _args, result)));
-                return _result;
-            }
-            
-            public System.IAsyncResult BeginRegisterCamera(string name, System.AsyncCallback callback, object asyncState) {
-                object[] _args = new object[1];
-                _args[0] = name;
-                System.IAsyncResult _result = base.BeginInvoke("RegisterCamera", _args, callback, asyncState);
-                return _result;
-            }
-            
-            public int EndRegisterCamera(System.IAsyncResult result) {
-                object[] _args = new object[0];
-                int _result = ((int)(base.EndInvoke("RegisterCamera", _args, result)));
-                return _result;
-            }
-            
-            public System.IAsyncResult BeginRemoveCamera(int cameraID, System.AsyncCallback callback, object asyncState) {
-                object[] _args = new object[1];
-                _args[0] = cameraID;
-                System.IAsyncResult _result = base.BeginInvoke("RemoveCamera", _args, callback, asyncState);
-                return _result;
-            }
-            
-            public void EndRemoveCamera(System.IAsyncResult result) {
-                object[] _args = new object[0];
-                base.EndInvoke("RemoveCamera", _args, result);
-            }
-            
-            public System.IAsyncResult BeginGetCameraID(string path, System.AsyncCallback callback, object asyncState) {
-                object[] _args = new object[1];
-                _args[0] = path;
-                System.IAsyncResult _result = base.BeginInvoke("GetCameraID", _args, callback, asyncState);
-                return _result;
-            }
-            
-            public int EndGetCameraID(System.IAsyncResult result) {
-                object[] _args = new object[0];
-                int _result = ((int)(base.EndInvoke("GetCameraID", _args, result)));
-                return _result;
-            }
-            
-            public System.IAsyncResult BeginGetCameraPath(int cameraID, System.AsyncCallback callback, object asyncState) {
-                object[] _args = new object[1];
-                _args[0] = cameraID;
-                System.IAsyncResult _result = base.BeginInvoke("GetCameraPath", _args, callback, asyncState);
-                return _result;
-            }
-            
-            public string EndGetCameraPath(System.IAsyncResult result) {
-                object[] _args = new object[0];
-                string _result = ((string)(base.EndInvoke("GetCameraPath", _args, result)));
-                return _result;
-            }
-            
-            public System.IAsyncResult BeginGetCameraName(int cameraID, System.AsyncCallback callback, object asyncState) {
-                object[] _args = new object[1];
-                _args[0] = cameraID;
-                System.IAsyncResult _result = base.BeginInvoke("GetCameraName", _args, callback, asyncState);
-                return _result;
-            }
-            
-            public string EndGetCameraName(System.IAsyncResult result) {
-                object[] _args = new object[0];
-                string _result = ((string)(base.EndInvoke("GetCameraName", _args, result)));
-                return _result;
-            }
-            
-            public System.IAsyncResult BeginGetCameraDescription(int cameraID, System.AsyncCallback callback, object asyncState) {
-                object[] _args = new object[1];
-                _args[0] = cameraID;
-                System.IAsyncResult _result = base.BeginInvoke("GetCameraDescription", _args, callback, asyncState);
-                return _result;
-            }
-            
-            public string EndGetCameraDescription(System.IAsyncResult result) {
-                object[] _args = new object[0];
-                string _result = ((string)(base.EndInvoke("GetCameraDescription", _args, result)));
-                return _result;
-            }
-            
-            public System.IAsyncResult BeginGetCameraIcon(int cameraID, System.AsyncCallback callback, object asyncState) {
-                object[] _args = new object[1];
-                _args[0] = cameraID;
-                System.IAsyncResult _result = base.BeginInvoke("GetCameraIcon", _args, callback, asyncState);
-                return _result;
-            }
-            
-            public byte[] EndGetCameraIcon(System.IAsyncResult result) {
-                object[] _args = new object[0];
-                byte[] _result = ((byte[])(base.EndInvoke("GetCameraIcon", _args, result)));
-                return _result;
-            }
-            
-            public System.IAsyncResult BeginGetCameraRegistrationDate(int cameraID, System.AsyncCallback callback, object asyncState) {
-                object[] _args = new object[1];
-                _args[0] = cameraID;
-                System.IAsyncResult _result = base.BeginInvoke("GetCameraRegistrationDate", _args, callback, asyncState);
-                return _result;
-            }
-            
-            public System.DateTime EndGetCameraRegistrationDate(System.IAsyncResult result) {
-                object[] _args = new object[0];
-                System.DateTime _result = ((System.DateTime)(base.EndInvoke("GetCameraRegistrationDate", _args, result)));
-                return _result;
-            }
-            
-            public System.IAsyncResult BeginGetCameraGroups(int cameraID, System.AsyncCallback callback, object asyncState) {
-                object[] _args = new object[1];
-                _args[0] = cameraID;
-                System.IAsyncResult _result = base.BeginInvoke("GetCameraGroups", _args, callback, asyncState);
-                return _result;
-            }
-            
-            public System.Collections.ObjectModel.ObservableCollection<int> EndGetCameraGroups(System.IAsyncResult result) {
-                object[] _args = new object[0];
-                System.Collections.ObjectModel.ObservableCollection<int> _result = ((System.Collections.ObjectModel.ObservableCollection<int>)(base.EndInvoke("GetCameraGroups", _args, result)));
-                return _result;
-            }
-            
-            public System.IAsyncResult BeginGetCameraFrames(int cameraID, System.AsyncCallback callback, object asyncState) {
-                object[] _args = new object[1];
-                _args[0] = cameraID;
-                System.IAsyncResult _result = base.BeginInvoke("GetCameraFrames", _args, callback, asyncState);
-                return _result;
-            }
-            
-            public System.Collections.ObjectModel.ObservableCollection<int> EndGetCameraFrames(System.IAsyncResult result) {
-                object[] _args = new object[0];
-                System.Collections.ObjectModel.ObservableCollection<int> _result = ((System.Collections.ObjectModel.ObservableCollection<int>)(base.EndInvoke("GetCameraFrames", _args, result)));
-                return _result;
-            }
-            
-            public System.IAsyncResult BeginSetCameraName(int cameraID, string name, System.AsyncCallback callback, object asyncState) {
-                object[] _args = new object[2];
-                _args[0] = cameraID;
-                _args[1] = name;
-                System.IAsyncResult _result = base.BeginInvoke("SetCameraName", _args, callback, asyncState);
-                return _result;
-            }
-            
-            public void EndSetCameraName(System.IAsyncResult result) {
-                object[] _args = new object[0];
-                base.EndInvoke("SetCameraName", _args, result);
-            }
-            
-            public System.IAsyncResult BeginSetCameraDescription(int cameraID, string description, System.AsyncCallback callback, object asyncState) {
-                object[] _args = new object[2];
-                _args[0] = cameraID;
-                _args[1] = description;
-                System.IAsyncResult _result = base.BeginInvoke("SetCameraDescription", _args, callback, asyncState);
-                return _result;
-            }
-            
-            public void EndSetCameraDescription(System.IAsyncResult result) {
-                object[] _args = new object[0];
-                base.EndInvoke("SetCameraDescription", _args, result);
-            }
-            
-            public System.IAsyncResult BeginSetCameraIcon(int cameraID, byte[] icon, System.AsyncCallback callback, object asyncState) {
-                object[] _args = new object[2];
-                _args[0] = cameraID;
-                _args[1] = icon;
-                System.IAsyncResult _result = base.BeginInvoke("SetCameraIcon", _args, callback, asyncState);
-                return _result;
-            }
-            
-            public void EndSetCameraIcon(System.IAsyncResult result) {
-                object[] _args = new object[0];
-                base.EndInvoke("SetCameraIcon", _args, result);
-            }
-            
-            public System.IAsyncResult BeginAddFrame(int cameraID, byte[] content, string marker, System.AsyncCallback callback, object asyncState) {
+            public System.IAsyncResult BeginFrameAdd(int cameraID, byte[] content, string marker, System.AsyncCallback callback, object asyncState) {
                 object[] _args = new object[3];
                 _args[0] = cameraID;
                 _args[1] = content;
                 _args[2] = marker;
-                System.IAsyncResult _result = base.BeginInvoke("AddFrame", _args, callback, asyncState);
+                System.IAsyncResult _result = base.BeginInvoke("FrameAdd", _args, callback, asyncState);
                 return _result;
             }
             
-            public void EndAddFrame(System.IAsyncResult result) {
+            public int EndFrameAdd(System.IAsyncResult result) {
                 object[] _args = new object[0];
-                base.EndInvoke("AddFrame", _args, result);
+                int _result = ((int)(base.EndInvoke("FrameAdd", _args, result)));
+                return _result;
             }
             
-            public System.IAsyncResult BeginRemoveFrame(int frameID, System.AsyncCallback callback, object asyncState) {
+            public System.IAsyncResult BeginFrameRemove(int frameID, System.AsyncCallback callback, object asyncState) {
                 object[] _args = new object[1];
                 _args[0] = frameID;
-                System.IAsyncResult _result = base.BeginInvoke("RemoveFrame", _args, callback, asyncState);
+                System.IAsyncResult _result = base.BeginInvoke("FrameRemove", _args, callback, asyncState);
                 return _result;
             }
             
-            public void EndRemoveFrame(System.IAsyncResult result) {
+            public void EndFrameRemove(System.IAsyncResult result) {
                 object[] _args = new object[0];
-                base.EndInvoke("RemoveFrame", _args, result);
+                base.EndInvoke("FrameRemove", _args, result);
             }
             
-            public System.IAsyncResult BeginGetFrameContent(int frameID, System.AsyncCallback callback, object asyncState) {
+            public System.IAsyncResult BeginFrameGetContent(int frameID, System.AsyncCallback callback, object asyncState) {
                 object[] _args = new object[1];
                 _args[0] = frameID;
-                System.IAsyncResult _result = base.BeginInvoke("GetFrameContent", _args, callback, asyncState);
+                System.IAsyncResult _result = base.BeginInvoke("FrameGetContent", _args, callback, asyncState);
                 return _result;
             }
             
-            public byte[] EndGetFrameContent(System.IAsyncResult result) {
+            public byte[] EndFrameGetContent(System.IAsyncResult result) {
                 object[] _args = new object[0];
-                byte[] _result = ((byte[])(base.EndInvoke("GetFrameContent", _args, result)));
+                byte[] _result = ((byte[])(base.EndInvoke("FrameGetContent", _args, result)));
                 return _result;
             }
             
-            public System.IAsyncResult BeginGetFrameMarker(int frameID, System.AsyncCallback callback, object asyncState) {
+            public System.IAsyncResult BeginFrameGetMarker(int frameID, System.AsyncCallback callback, object asyncState) {
                 object[] _args = new object[1];
                 _args[0] = frameID;
-                System.IAsyncResult _result = base.BeginInvoke("GetFrameMarker", _args, callback, asyncState);
+                System.IAsyncResult _result = base.BeginInvoke("FrameGetMarker", _args, callback, asyncState);
                 return _result;
             }
             
-            public string EndGetFrameMarker(System.IAsyncResult result) {
+            public string EndFrameGetMarker(System.IAsyncResult result) {
                 object[] _args = new object[0];
-                string _result = ((string)(base.EndInvoke("GetFrameMarker", _args, result)));
+                string _result = ((string)(base.EndInvoke("FrameGetMarker", _args, result)));
                 return _result;
             }
             
-            public System.IAsyncResult BeginIsEmailRegistered(string email, System.AsyncCallback callback, object asyncState) {
+            public System.IAsyncResult BeginUserIsEmailAvailable(string email, System.AsyncCallback callback, object asyncState) {
                 object[] _args = new object[1];
                 _args[0] = email;
-                System.IAsyncResult _result = base.BeginInvoke("IsEmailRegistered", _args, callback, asyncState);
+                System.IAsyncResult _result = base.BeginInvoke("UserIsEmailAvailable", _args, callback, asyncState);
                 return _result;
             }
             
-            public bool EndIsEmailRegistered(System.IAsyncResult result) {
+            public bool EndUserIsEmailAvailable(System.IAsyncResult result) {
                 object[] _args = new object[0];
-                bool _result = ((bool)(base.EndInvoke("IsEmailRegistered", _args, result)));
+                bool _result = ((bool)(base.EndInvoke("UserIsEmailAvailable", _args, result)));
                 return _result;
             }
             
-            public System.IAsyncResult BeginIsUserRegistered(string email, string password, System.AsyncCallback callback, object asyncState) {
+            public System.IAsyncResult BeginUserLogin(string email, string password, System.AsyncCallback callback, object asyncState) {
                 object[] _args = new object[2];
                 _args[0] = email;
                 _args[1] = password;
-                System.IAsyncResult _result = base.BeginInvoke("IsUserRegistered", _args, callback, asyncState);
+                System.IAsyncResult _result = base.BeginInvoke("UserLogin", _args, callback, asyncState);
                 return _result;
             }
             
-            public bool EndIsUserRegistered(System.IAsyncResult result) {
+            public bool EndUserLogin(System.IAsyncResult result) {
                 object[] _args = new object[0];
-                bool _result = ((bool)(base.EndInvoke("IsUserRegistered", _args, result)));
+                bool _result = ((bool)(base.EndInvoke("UserLogin", _args, result)));
                 return _result;
             }
             
-            public System.IAsyncResult BeginRegisterUser(string email, string password, string name, System.AsyncCallback callback, object asyncState) {
-                object[] _args = new object[3];
+            public System.IAsyncResult BeginUserAdd(string email, string password, string name, string description, byte[] icon, System.AsyncCallback callback, object asyncState) {
+                object[] _args = new object[5];
                 _args[0] = email;
                 _args[1] = password;
                 _args[2] = name;
-                System.IAsyncResult _result = base.BeginInvoke("RegisterUser", _args, callback, asyncState);
+                _args[3] = description;
+                _args[4] = icon;
+                System.IAsyncResult _result = base.BeginInvoke("UserAdd", _args, callback, asyncState);
                 return _result;
             }
             
-            public int EndRegisterUser(System.IAsyncResult result) {
+            public int EndUserAdd(System.IAsyncResult result) {
                 object[] _args = new object[0];
-                int _result = ((int)(base.EndInvoke("RegisterUser", _args, result)));
+                int _result = ((int)(base.EndInvoke("UserAdd", _args, result)));
                 return _result;
             }
             
-            public System.IAsyncResult BeginRemoveUser(int userID, System.AsyncCallback callback, object asyncState) {
+            public System.IAsyncResult BeginUserRemove(int userID, System.AsyncCallback callback, object asyncState) {
                 object[] _args = new object[1];
                 _args[0] = userID;
-                System.IAsyncResult _result = base.BeginInvoke("RemoveUser", _args, callback, asyncState);
+                System.IAsyncResult _result = base.BeginInvoke("UserRemove", _args, callback, asyncState);
                 return _result;
             }
             
-            public void EndRemoveUser(System.IAsyncResult result) {
+            public void EndUserRemove(System.IAsyncResult result) {
                 object[] _args = new object[0];
-                base.EndInvoke("RemoveUser", _args, result);
+                base.EndInvoke("UserRemove", _args, result);
             }
             
-            public System.IAsyncResult BeginGetUserID(string email, System.AsyncCallback callback, object asyncState) {
+            public System.IAsyncResult BeginUserGetID(string email, System.AsyncCallback callback, object asyncState) {
                 object[] _args = new object[1];
                 _args[0] = email;
-                System.IAsyncResult _result = base.BeginInvoke("GetUserID", _args, callback, asyncState);
+                System.IAsyncResult _result = base.BeginInvoke("UserGetID", _args, callback, asyncState);
                 return _result;
             }
             
-            public int EndGetUserID(System.IAsyncResult result) {
+            public int EndUserGetID(System.IAsyncResult result) {
                 object[] _args = new object[0];
-                int _result = ((int)(base.EndInvoke("GetUserID", _args, result)));
+                int _result = ((int)(base.EndInvoke("UserGetID", _args, result)));
                 return _result;
             }
             
-            public System.IAsyncResult BeginGetUserEmail(int userID, System.AsyncCallback callback, object asyncState) {
+            public System.IAsyncResult BeginUserGetEmail(int userID, System.AsyncCallback callback, object asyncState) {
                 object[] _args = new object[1];
                 _args[0] = userID;
-                System.IAsyncResult _result = base.BeginInvoke("GetUserEmail", _args, callback, asyncState);
+                System.IAsyncResult _result = base.BeginInvoke("UserGetEmail", _args, callback, asyncState);
                 return _result;
             }
             
-            public string EndGetUserEmail(System.IAsyncResult result) {
+            public string EndUserGetEmail(System.IAsyncResult result) {
                 object[] _args = new object[0];
-                string _result = ((string)(base.EndInvoke("GetUserEmail", _args, result)));
+                string _result = ((string)(base.EndInvoke("UserGetEmail", _args, result)));
                 return _result;
             }
             
-            public System.IAsyncResult BeginGetUserPassword(int userID, System.AsyncCallback callback, object asyncState) {
+            public System.IAsyncResult BeginUserGetPassword(int userID, System.AsyncCallback callback, object asyncState) {
                 object[] _args = new object[1];
                 _args[0] = userID;
-                System.IAsyncResult _result = base.BeginInvoke("GetUserPassword", _args, callback, asyncState);
+                System.IAsyncResult _result = base.BeginInvoke("UserGetPassword", _args, callback, asyncState);
                 return _result;
             }
             
-            public string EndGetUserPassword(System.IAsyncResult result) {
+            public string EndUserGetPassword(System.IAsyncResult result) {
                 object[] _args = new object[0];
-                string _result = ((string)(base.EndInvoke("GetUserPassword", _args, result)));
+                string _result = ((string)(base.EndInvoke("UserGetPassword", _args, result)));
                 return _result;
             }
             
-            public System.IAsyncResult BeginGetUserName(int userID, System.AsyncCallback callback, object asyncState) {
+            public System.IAsyncResult BeginUserGetName(int userID, System.AsyncCallback callback, object asyncState) {
                 object[] _args = new object[1];
                 _args[0] = userID;
-                System.IAsyncResult _result = base.BeginInvoke("GetUserName", _args, callback, asyncState);
+                System.IAsyncResult _result = base.BeginInvoke("UserGetName", _args, callback, asyncState);
                 return _result;
             }
             
-            public string EndGetUserName(System.IAsyncResult result) {
+            public string EndUserGetName(System.IAsyncResult result) {
                 object[] _args = new object[0];
-                string _result = ((string)(base.EndInvoke("GetUserName", _args, result)));
+                string _result = ((string)(base.EndInvoke("UserGetName", _args, result)));
                 return _result;
             }
             
-            public System.IAsyncResult BeginGetUserDescription(int userID, System.AsyncCallback callback, object asyncState) {
+            public System.IAsyncResult BeginUserGetDescription(int userID, System.AsyncCallback callback, object asyncState) {
                 object[] _args = new object[1];
                 _args[0] = userID;
-                System.IAsyncResult _result = base.BeginInvoke("GetUserDescription", _args, callback, asyncState);
+                System.IAsyncResult _result = base.BeginInvoke("UserGetDescription", _args, callback, asyncState);
                 return _result;
             }
             
-            public string EndGetUserDescription(System.IAsyncResult result) {
+            public string EndUserGetDescription(System.IAsyncResult result) {
                 object[] _args = new object[0];
-                string _result = ((string)(base.EndInvoke("GetUserDescription", _args, result)));
+                string _result = ((string)(base.EndInvoke("UserGetDescription", _args, result)));
                 return _result;
             }
             
-            public System.IAsyncResult BeginGetUserIcon(int userID, System.AsyncCallback callback, object asyncState) {
+            public System.IAsyncResult BeginUserGetIcon(int userID, System.AsyncCallback callback, object asyncState) {
                 object[] _args = new object[1];
                 _args[0] = userID;
-                System.IAsyncResult _result = base.BeginInvoke("GetUserIcon", _args, callback, asyncState);
+                System.IAsyncResult _result = base.BeginInvoke("UserGetIcon", _args, callback, asyncState);
                 return _result;
             }
             
-            public byte[] EndGetUserIcon(System.IAsyncResult result) {
+            public byte[] EndUserGetIcon(System.IAsyncResult result) {
                 object[] _args = new object[0];
-                byte[] _result = ((byte[])(base.EndInvoke("GetUserIcon", _args, result)));
+                byte[] _result = ((byte[])(base.EndInvoke("UserGetIcon", _args, result)));
                 return _result;
             }
             
-            public System.IAsyncResult BeginGetUserRegistrationDate(int userID, System.AsyncCallback callback, object asyncState) {
+            public System.IAsyncResult BeginUserGetRegistrationDate(int userID, System.AsyncCallback callback, object asyncState) {
                 object[] _args = new object[1];
                 _args[0] = userID;
-                System.IAsyncResult _result = base.BeginInvoke("GetUserRegistrationDate", _args, callback, asyncState);
+                System.IAsyncResult _result = base.BeginInvoke("UserGetRegistrationDate", _args, callback, asyncState);
                 return _result;
             }
             
-            public System.DateTime EndGetUserRegistrationDate(System.IAsyncResult result) {
+            public System.DateTime EndUserGetRegistrationDate(System.IAsyncResult result) {
                 object[] _args = new object[0];
-                System.DateTime _result = ((System.DateTime)(base.EndInvoke("GetUserRegistrationDate", _args, result)));
+                System.DateTime _result = ((System.DateTime)(base.EndInvoke("UserGetRegistrationDate", _args, result)));
                 return _result;
             }
             
-            public System.IAsyncResult BeginGetUserGroups(int userID, System.AsyncCallback callback, object asyncState) {
+            public System.IAsyncResult BeginUserGetGroups(int userID, System.AsyncCallback callback, object asyncState) {
                 object[] _args = new object[1];
                 _args[0] = userID;
-                System.IAsyncResult _result = base.BeginInvoke("GetUserGroups", _args, callback, asyncState);
+                System.IAsyncResult _result = base.BeginInvoke("UserGetGroups", _args, callback, asyncState);
                 return _result;
             }
             
-            public System.Collections.ObjectModel.ObservableCollection<int> EndGetUserGroups(System.IAsyncResult result) {
+            public System.Collections.ObjectModel.ObservableCollection<int> EndUserGetGroups(System.IAsyncResult result) {
                 object[] _args = new object[0];
-                System.Collections.ObjectModel.ObservableCollection<int> _result = ((System.Collections.ObjectModel.ObservableCollection<int>)(base.EndInvoke("GetUserGroups", _args, result)));
+                System.Collections.ObjectModel.ObservableCollection<int> _result = ((System.Collections.ObjectModel.ObservableCollection<int>)(base.EndInvoke("UserGetGroups", _args, result)));
                 return _result;
             }
             
-            public System.IAsyncResult BeginSetUserPassword(int userID, string password, System.AsyncCallback callback, object asyncState) {
+            public System.IAsyncResult BeginUserSetPassword(int userID, string password, System.AsyncCallback callback, object asyncState) {
                 object[] _args = new object[2];
                 _args[0] = userID;
                 _args[1] = password;
-                System.IAsyncResult _result = base.BeginInvoke("SetUserPassword", _args, callback, asyncState);
+                System.IAsyncResult _result = base.BeginInvoke("UserSetPassword", _args, callback, asyncState);
                 return _result;
             }
             
-            public void EndSetUserPassword(System.IAsyncResult result) {
+            public void EndUserSetPassword(System.IAsyncResult result) {
                 object[] _args = new object[0];
-                base.EndInvoke("SetUserPassword", _args, result);
+                base.EndInvoke("UserSetPassword", _args, result);
             }
             
-            public System.IAsyncResult BeginSetUserName(int userID, string name, System.AsyncCallback callback, object asyncState) {
+            public System.IAsyncResult BeginUserSetName(int userID, string name, System.AsyncCallback callback, object asyncState) {
                 object[] _args = new object[2];
                 _args[0] = userID;
                 _args[1] = name;
-                System.IAsyncResult _result = base.BeginInvoke("SetUserName", _args, callback, asyncState);
+                System.IAsyncResult _result = base.BeginInvoke("UserSetName", _args, callback, asyncState);
                 return _result;
             }
             
-            public void EndSetUserName(System.IAsyncResult result) {
+            public void EndUserSetName(System.IAsyncResult result) {
                 object[] _args = new object[0];
-                base.EndInvoke("SetUserName", _args, result);
+                base.EndInvoke("UserSetName", _args, result);
             }
             
-            public System.IAsyncResult BeginSetUserDescription(int userID, string description, System.AsyncCallback callback, object asyncState) {
+            public System.IAsyncResult BeginUserSetDescription(int userID, string description, System.AsyncCallback callback, object asyncState) {
                 object[] _args = new object[2];
                 _args[0] = userID;
                 _args[1] = description;
-                System.IAsyncResult _result = base.BeginInvoke("SetUserDescription", _args, callback, asyncState);
+                System.IAsyncResult _result = base.BeginInvoke("UserSetDescription", _args, callback, asyncState);
                 return _result;
             }
             
-            public void EndSetUserDescription(System.IAsyncResult result) {
+            public void EndUserSetDescription(System.IAsyncResult result) {
                 object[] _args = new object[0];
-                base.EndInvoke("SetUserDescription", _args, result);
+                base.EndInvoke("UserSetDescription", _args, result);
             }
             
-            public System.IAsyncResult BeginSetUserIcon(int userID, byte[] icon, System.AsyncCallback callback, object asyncState) {
+            public System.IAsyncResult BeginUserSetIcon(int userID, byte[] icon, System.AsyncCallback callback, object asyncState) {
                 object[] _args = new object[2];
                 _args[0] = userID;
                 _args[1] = icon;
-                System.IAsyncResult _result = base.BeginInvoke("SetUserIcon", _args, callback, asyncState);
+                System.IAsyncResult _result = base.BeginInvoke("UserSetIcon", _args, callback, asyncState);
                 return _result;
             }
             
-            public void EndSetUserIcon(System.IAsyncResult result) {
+            public void EndUserSetIcon(System.IAsyncResult result) {
                 object[] _args = new object[0];
-                base.EndInvoke("SetUserIcon", _args, result);
+                base.EndInvoke("UserSetIcon", _args, result);
             }
             
-            public System.IAsyncResult BeginIsGroupRegistered(string name, System.AsyncCallback callback, object asyncState) {
+            public System.IAsyncResult BeginCameraIsPathAvailable(string path, System.AsyncCallback callback, object asyncState) {
                 object[] _args = new object[1];
-                _args[0] = name;
-                System.IAsyncResult _result = base.BeginInvoke("IsGroupRegistered", _args, callback, asyncState);
+                _args[0] = path;
+                System.IAsyncResult _result = base.BeginInvoke("CameraIsPathAvailable", _args, callback, asyncState);
                 return _result;
             }
             
-            public bool EndIsGroupRegistered(System.IAsyncResult result) {
+            public bool EndCameraIsPathAvailable(System.IAsyncResult result) {
                 object[] _args = new object[0];
-                bool _result = ((bool)(base.EndInvoke("IsGroupRegistered", _args, result)));
+                bool _result = ((bool)(base.EndInvoke("CameraIsPathAvailable", _args, result)));
                 return _result;
             }
             
-            public System.IAsyncResult BeginRegisterGroup(string name, int privacy, System.AsyncCallback callback, object asyncState) {
-                object[] _args = new object[2];
-                _args[0] = name;
-                _args[1] = privacy;
-                System.IAsyncResult _result = base.BeginInvoke("RegisterGroup", _args, callback, asyncState);
-                return _result;
-            }
-            
-            public int EndRegisterGroup(System.IAsyncResult result) {
-                object[] _args = new object[0];
-                int _result = ((int)(base.EndInvoke("RegisterGroup", _args, result)));
-                return _result;
-            }
-            
-            public System.IAsyncResult BeginRemoveGroup(int groupID, System.AsyncCallback callback, object asyncState) {
-                object[] _args = new object[1];
-                _args[0] = groupID;
-                System.IAsyncResult _result = base.BeginInvoke("RemoveGroup", _args, callback, asyncState);
-                return _result;
-            }
-            
-            public void EndRemoveGroup(System.IAsyncResult result) {
-                object[] _args = new object[0];
-                base.EndInvoke("RemoveGroup", _args, result);
-            }
-            
-            public System.IAsyncResult BeginGetGroupID(string name, System.AsyncCallback callback, object asyncState) {
-                object[] _args = new object[1];
-                _args[0] = name;
-                System.IAsyncResult _result = base.BeginInvoke("GetGroupID", _args, callback, asyncState);
-                return _result;
-            }
-            
-            public int EndGetGroupID(System.IAsyncResult result) {
-                object[] _args = new object[0];
-                int _result = ((int)(base.EndInvoke("GetGroupID", _args, result)));
-                return _result;
-            }
-            
-            public System.IAsyncResult BeginGetGroupName(int groupID, System.AsyncCallback callback, object asyncState) {
-                object[] _args = new object[1];
-                _args[0] = groupID;
-                System.IAsyncResult _result = base.BeginInvoke("GetGroupName", _args, callback, asyncState);
-                return _result;
-            }
-            
-            public string EndGetGroupName(System.IAsyncResult result) {
-                object[] _args = new object[0];
-                string _result = ((string)(base.EndInvoke("GetGroupName", _args, result)));
-                return _result;
-            }
-            
-            public System.IAsyncResult BeginGetGroupDescription(int groupID, System.AsyncCallback callback, object asyncState) {
-                object[] _args = new object[1];
-                _args[0] = groupID;
-                System.IAsyncResult _result = base.BeginInvoke("GetGroupDescription", _args, callback, asyncState);
-                return _result;
-            }
-            
-            public string EndGetGroupDescription(System.IAsyncResult result) {
-                object[] _args = new object[0];
-                string _result = ((string)(base.EndInvoke("GetGroupDescription", _args, result)));
-                return _result;
-            }
-            
-            public System.IAsyncResult BeginGetGroupIcon(int groupID, System.AsyncCallback callback, object asyncState) {
-                object[] _args = new object[1];
-                _args[0] = groupID;
-                System.IAsyncResult _result = base.BeginInvoke("GetGroupIcon", _args, callback, asyncState);
-                return _result;
-            }
-            
-            public byte[] EndGetGroupIcon(System.IAsyncResult result) {
-                object[] _args = new object[0];
-                byte[] _result = ((byte[])(base.EndInvoke("GetGroupIcon", _args, result)));
-                return _result;
-            }
-            
-            public System.IAsyncResult BeginGetGroupPrivacy(int groupID, System.AsyncCallback callback, object asyncState) {
-                object[] _args = new object[1];
-                _args[0] = groupID;
-                System.IAsyncResult _result = base.BeginInvoke("GetGroupPrivacy", _args, callback, asyncState);
-                return _result;
-            }
-            
-            public int EndGetGroupPrivacy(System.IAsyncResult result) {
-                object[] _args = new object[0];
-                int _result = ((int)(base.EndInvoke("GetGroupPrivacy", _args, result)));
-                return _result;
-            }
-            
-            public System.IAsyncResult BeginGetGroupRegistrationDate(int groupID, System.AsyncCallback callback, object asyncState) {
-                object[] _args = new object[1];
-                _args[0] = groupID;
-                System.IAsyncResult _result = base.BeginInvoke("GetGroupRegistrationDate", _args, callback, asyncState);
-                return _result;
-            }
-            
-            public System.DateTime EndGetGroupRegistrationDate(System.IAsyncResult result) {
-                object[] _args = new object[0];
-                System.DateTime _result = ((System.DateTime)(base.EndInvoke("GetGroupRegistrationDate", _args, result)));
-                return _result;
-            }
-            
-            public System.IAsyncResult BeginGetGroupMembers(int groupID, System.AsyncCallback callback, object asyncState) {
-                object[] _args = new object[1];
-                _args[0] = groupID;
-                System.IAsyncResult _result = base.BeginInvoke("GetGroupMembers", _args, callback, asyncState);
-                return _result;
-            }
-            
-            public System.Collections.ObjectModel.ObservableCollection<int> EndGetGroupMembers(System.IAsyncResult result) {
-                object[] _args = new object[0];
-                System.Collections.ObjectModel.ObservableCollection<int> _result = ((System.Collections.ObjectModel.ObservableCollection<int>)(base.EndInvoke("GetGroupMembers", _args, result)));
-                return _result;
-            }
-            
-            public System.IAsyncResult BeginGetGroupCameras(int groupID, System.AsyncCallback callback, object asyncState) {
-                object[] _args = new object[1];
-                _args[0] = groupID;
-                System.IAsyncResult _result = base.BeginInvoke("GetGroupCameras", _args, callback, asyncState);
-                return _result;
-            }
-            
-            public System.Collections.ObjectModel.ObservableCollection<int> EndGetGroupCameras(System.IAsyncResult result) {
-                object[] _args = new object[0];
-                System.Collections.ObjectModel.ObservableCollection<int> _result = ((System.Collections.ObjectModel.ObservableCollection<int>)(base.EndInvoke("GetGroupCameras", _args, result)));
-                return _result;
-            }
-            
-            public System.IAsyncResult BeginSetGroupName(int groupID, string name, System.AsyncCallback callback, object asyncState) {
-                object[] _args = new object[2];
-                _args[0] = groupID;
-                _args[1] = name;
-                System.IAsyncResult _result = base.BeginInvoke("SetGroupName", _args, callback, asyncState);
-                return _result;
-            }
-            
-            public void EndSetGroupName(System.IAsyncResult result) {
-                object[] _args = new object[0];
-                base.EndInvoke("SetGroupName", _args, result);
-            }
-            
-            public System.IAsyncResult BeginSetGroupDescription(int groupID, string description, System.AsyncCallback callback, object asyncState) {
-                object[] _args = new object[2];
-                _args[0] = groupID;
-                _args[1] = description;
-                System.IAsyncResult _result = base.BeginInvoke("SetGroupDescription", _args, callback, asyncState);
-                return _result;
-            }
-            
-            public void EndSetGroupDescription(System.IAsyncResult result) {
-                object[] _args = new object[0];
-                base.EndInvoke("SetGroupDescription", _args, result);
-            }
-            
-            public System.IAsyncResult BeginSetGroupIcon(int groupID, byte[] icon, System.AsyncCallback callback, object asyncState) {
-                object[] _args = new object[2];
-                _args[0] = groupID;
-                _args[1] = icon;
-                System.IAsyncResult _result = base.BeginInvoke("SetGroupIcon", _args, callback, asyncState);
-                return _result;
-            }
-            
-            public void EndSetGroupIcon(System.IAsyncResult result) {
-                object[] _args = new object[0];
-                base.EndInvoke("SetGroupIcon", _args, result);
-            }
-            
-            public System.IAsyncResult BeginSetGroupPrivacy(int groupID, int privacy, System.AsyncCallback callback, object asyncState) {
-                object[] _args = new object[2];
-                _args[0] = groupID;
-                _args[1] = privacy;
-                System.IAsyncResult _result = base.BeginInvoke("SetGroupPrivacy", _args, callback, asyncState);
-                return _result;
-            }
-            
-            public void EndSetGroupPrivacy(System.IAsyncResult result) {
-                object[] _args = new object[0];
-                base.EndInvoke("SetGroupPrivacy", _args, result);
-            }
-            
-            public System.IAsyncResult BeginAddGroupMember(int userID, int groupID, int privileges, System.AsyncCallback callback, object asyncState) {
+            public System.IAsyncResult BeginCameraAdd(string name, string description, byte[] icon, System.AsyncCallback callback, object asyncState) {
                 object[] _args = new object[3];
-                _args[0] = userID;
-                _args[1] = groupID;
-                _args[2] = privileges;
-                System.IAsyncResult _result = base.BeginInvoke("AddGroupMember", _args, callback, asyncState);
+                _args[0] = name;
+                _args[1] = description;
+                _args[2] = icon;
+                System.IAsyncResult _result = base.BeginInvoke("CameraAdd", _args, callback, asyncState);
                 return _result;
             }
             
-            public void EndAddGroupMember(System.IAsyncResult result) {
+            public int EndCameraAdd(System.IAsyncResult result) {
                 object[] _args = new object[0];
-                base.EndInvoke("AddGroupMember", _args, result);
+                int _result = ((int)(base.EndInvoke("CameraAdd", _args, result)));
+                return _result;
+            }
+            
+            public System.IAsyncResult BeginCameraRemove(int cameraID, System.AsyncCallback callback, object asyncState) {
+                object[] _args = new object[1];
+                _args[0] = cameraID;
+                System.IAsyncResult _result = base.BeginInvoke("CameraRemove", _args, callback, asyncState);
+                return _result;
+            }
+            
+            public void EndCameraRemove(System.IAsyncResult result) {
+                object[] _args = new object[0];
+                base.EndInvoke("CameraRemove", _args, result);
+            }
+            
+            public System.IAsyncResult BeginCameraGetID(string path, System.AsyncCallback callback, object asyncState) {
+                object[] _args = new object[1];
+                _args[0] = path;
+                System.IAsyncResult _result = base.BeginInvoke("CameraGetID", _args, callback, asyncState);
+                return _result;
+            }
+            
+            public int EndCameraGetID(System.IAsyncResult result) {
+                object[] _args = new object[0];
+                int _result = ((int)(base.EndInvoke("CameraGetID", _args, result)));
+                return _result;
+            }
+            
+            public System.IAsyncResult BeginCameraGetPath(int cameraID, System.AsyncCallback callback, object asyncState) {
+                object[] _args = new object[1];
+                _args[0] = cameraID;
+                System.IAsyncResult _result = base.BeginInvoke("CameraGetPath", _args, callback, asyncState);
+                return _result;
+            }
+            
+            public string EndCameraGetPath(System.IAsyncResult result) {
+                object[] _args = new object[0];
+                string _result = ((string)(base.EndInvoke("CameraGetPath", _args, result)));
+                return _result;
+            }
+            
+            public System.IAsyncResult BeginCameraGetName(int cameraID, System.AsyncCallback callback, object asyncState) {
+                object[] _args = new object[1];
+                _args[0] = cameraID;
+                System.IAsyncResult _result = base.BeginInvoke("CameraGetName", _args, callback, asyncState);
+                return _result;
+            }
+            
+            public string EndCameraGetName(System.IAsyncResult result) {
+                object[] _args = new object[0];
+                string _result = ((string)(base.EndInvoke("CameraGetName", _args, result)));
+                return _result;
+            }
+            
+            public System.IAsyncResult BeginCameraGetDescription(int cameraID, System.AsyncCallback callback, object asyncState) {
+                object[] _args = new object[1];
+                _args[0] = cameraID;
+                System.IAsyncResult _result = base.BeginInvoke("CameraGetDescription", _args, callback, asyncState);
+                return _result;
+            }
+            
+            public string EndCameraGetDescription(System.IAsyncResult result) {
+                object[] _args = new object[0];
+                string _result = ((string)(base.EndInvoke("CameraGetDescription", _args, result)));
+                return _result;
+            }
+            
+            public System.IAsyncResult BeginCameraGetIcon(int cameraID, System.AsyncCallback callback, object asyncState) {
+                object[] _args = new object[1];
+                _args[0] = cameraID;
+                System.IAsyncResult _result = base.BeginInvoke("CameraGetIcon", _args, callback, asyncState);
+                return _result;
+            }
+            
+            public byte[] EndCameraGetIcon(System.IAsyncResult result) {
+                object[] _args = new object[0];
+                byte[] _result = ((byte[])(base.EndInvoke("CameraGetIcon", _args, result)));
+                return _result;
+            }
+            
+            public System.IAsyncResult BeginCameraGetRegistrationDate(int cameraID, System.AsyncCallback callback, object asyncState) {
+                object[] _args = new object[1];
+                _args[0] = cameraID;
+                System.IAsyncResult _result = base.BeginInvoke("CameraGetRegistrationDate", _args, callback, asyncState);
+                return _result;
+            }
+            
+            public System.DateTime EndCameraGetRegistrationDate(System.IAsyncResult result) {
+                object[] _args = new object[0];
+                System.DateTime _result = ((System.DateTime)(base.EndInvoke("CameraGetRegistrationDate", _args, result)));
+                return _result;
+            }
+            
+            public System.IAsyncResult BeginCameraGetGroups(int cameraID, System.AsyncCallback callback, object asyncState) {
+                object[] _args = new object[1];
+                _args[0] = cameraID;
+                System.IAsyncResult _result = base.BeginInvoke("CameraGetGroups", _args, callback, asyncState);
+                return _result;
+            }
+            
+            public System.Collections.ObjectModel.ObservableCollection<int> EndCameraGetGroups(System.IAsyncResult result) {
+                object[] _args = new object[0];
+                System.Collections.ObjectModel.ObservableCollection<int> _result = ((System.Collections.ObjectModel.ObservableCollection<int>)(base.EndInvoke("CameraGetGroups", _args, result)));
+                return _result;
+            }
+            
+            public System.IAsyncResult BeginCameraGetFrames(int cameraID, System.AsyncCallback callback, object asyncState) {
+                object[] _args = new object[1];
+                _args[0] = cameraID;
+                System.IAsyncResult _result = base.BeginInvoke("CameraGetFrames", _args, callback, asyncState);
+                return _result;
+            }
+            
+            public System.Collections.ObjectModel.ObservableCollection<int> EndCameraGetFrames(System.IAsyncResult result) {
+                object[] _args = new object[0];
+                System.Collections.ObjectModel.ObservableCollection<int> _result = ((System.Collections.ObjectModel.ObservableCollection<int>)(base.EndInvoke("CameraGetFrames", _args, result)));
+                return _result;
+            }
+            
+            public System.IAsyncResult BeginCameraSetName(int cameraID, string name, System.AsyncCallback callback, object asyncState) {
+                object[] _args = new object[2];
+                _args[0] = cameraID;
+                _args[1] = name;
+                System.IAsyncResult _result = base.BeginInvoke("CameraSetName", _args, callback, asyncState);
+                return _result;
+            }
+            
+            public void EndCameraSetName(System.IAsyncResult result) {
+                object[] _args = new object[0];
+                base.EndInvoke("CameraSetName", _args, result);
+            }
+            
+            public System.IAsyncResult BeginCameraSetDescription(int cameraID, string description, System.AsyncCallback callback, object asyncState) {
+                object[] _args = new object[2];
+                _args[0] = cameraID;
+                _args[1] = description;
+                System.IAsyncResult _result = base.BeginInvoke("CameraSetDescription", _args, callback, asyncState);
+                return _result;
+            }
+            
+            public void EndCameraSetDescription(System.IAsyncResult result) {
+                object[] _args = new object[0];
+                base.EndInvoke("CameraSetDescription", _args, result);
+            }
+            
+            public System.IAsyncResult BeginCameraSetIcon(int cameraID, byte[] icon, System.AsyncCallback callback, object asyncState) {
+                object[] _args = new object[2];
+                _args[0] = cameraID;
+                _args[1] = icon;
+                System.IAsyncResult _result = base.BeginInvoke("CameraSetIcon", _args, callback, asyncState);
+                return _result;
+            }
+            
+            public void EndCameraSetIcon(System.IAsyncResult result) {
+                object[] _args = new object[0];
+                base.EndInvoke("CameraSetIcon", _args, result);
+            }
+            
+            public System.IAsyncResult BeginGroupAdd(string name, string description, byte[] icon, int privacy, System.AsyncCallback callback, object asyncState) {
+                object[] _args = new object[4];
+                _args[0] = name;
+                _args[1] = description;
+                _args[2] = icon;
+                _args[3] = privacy;
+                System.IAsyncResult _result = base.BeginInvoke("GroupAdd", _args, callback, asyncState);
+                return _result;
+            }
+            
+            public int EndGroupAdd(System.IAsyncResult result) {
+                object[] _args = new object[0];
+                int _result = ((int)(base.EndInvoke("GroupAdd", _args, result)));
+                return _result;
+            }
+            
+            public System.IAsyncResult BeginGroupRemove(int groupID, System.AsyncCallback callback, object asyncState) {
+                object[] _args = new object[1];
+                _args[0] = groupID;
+                System.IAsyncResult _result = base.BeginInvoke("GroupRemove", _args, callback, asyncState);
+                return _result;
+            }
+            
+            public void EndGroupRemove(System.IAsyncResult result) {
+                object[] _args = new object[0];
+                base.EndInvoke("GroupRemove", _args, result);
             }
         }
     }

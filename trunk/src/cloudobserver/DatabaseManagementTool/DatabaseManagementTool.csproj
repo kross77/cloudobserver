@@ -90,36 +90,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\001.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Assets\002.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Assets\003.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Assets\004.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Assets\005.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Assets\006.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Assets\007.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Assets\008.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Assets\009.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Assets\010.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Assets\DefaultFrame001.jpg" />
   </ItemGroup>
   <ItemGroup>
@@ -150,7 +120,9 @@
     <None Include="Assets\DefaultFrame010.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\DefaultMarker.xml" />
+    <Content Include="Assets\DefaultCameraIcon.png" />
+    <Content Include="Assets\DefaultGroupIcon.png" />
+    <Content Include="Assets\DefaultUserIcon.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Presets\" />
