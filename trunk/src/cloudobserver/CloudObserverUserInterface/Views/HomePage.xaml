@@ -10,7 +10,7 @@
 
     <Grid x:Name="LayoutRoot">
         <ScrollViewer x:Name="PageScrollViewer" Style="{StaticResource PageScrollViewerStyle}" Margin="0"/>
-        <Canvas x:Name="ContentStackPanel" Height="434" HorizontalAlignment="Left" VerticalAlignment="Top" Width="196" Background="White" Margin="8,8,0,0" d:LayoutOverrides="HorizontalAlignment">
+        <Canvas x:Name="ContentStackPanel" Height="434" HorizontalAlignment="Left" VerticalAlignment="Top" Width="196" Margin="8,8,0,0" d:LayoutOverrides="HorizontalAlignment">
 
         	<TextBlock x:Name="TextBlockHeader" Style="{StaticResource HeaderTextStyle}" 
         		Text="Welcome!" HorizontalAlignment="Stretch" Margin="0" Canvas.Top="8" Canvas.Left="53"/>

@@ -41,9 +41,6 @@ namespace CloudObserverUserInterface.Views
             emailChecker.Interval = new TimeSpan(0, 0, 0, 1, 0);
             emailChecker.Tick += new EventHandler(emailChecker_Tick);
             emailChecker.Start();
-
-            icon = new byte[16384]; // 16384 max
-            for (int i = 0; i < 16384; i++) icon[i] = 1;
         }
 
         private void TextBoxEmail_TextChanged(object sender, TextChangedEventArgs e)
@@ -97,7 +94,6 @@ namespace CloudObserverUserInterface.Views
             if (openFileDialog.ShowDialog().Equals(true))
             {
                 FileStream fileStream = openFileDialog.File.OpenRead();
-                ButtonRegister.Content = (int)fileStream.Length;
                 icon = new BinaryReader(fileStream).ReadBytes((int)fileStream.Length);
                 BitmapImage bitmapImage = new BitmapImage();
                 bitmapImage.SetSource(fileStream);
@@ -131,7 +127,7 @@ namespace CloudObserverUserInterface.Views
 
         private void client_UserAddCompleted(object sender, UserAddCompletedEventArgs e)
         {
-            MessageBox.Show("Registration succeed. New user ID is " + e.Result + ".");
+            new MessageWindow("Resigtration complete.", "Registration", new TimeSpan(0, 0, 0, 1)).Show();
             Close();
         }
 

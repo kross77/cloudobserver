@@ -46,7 +46,7 @@ namespace CloudObserverUserInterface
 
         private void client_UserLoginCompleted(object sender, UserLoginCompletedEventArgs e)
         {
-            MessageBox.Show(e.Result ? "Login succeed." : "Invalid login or password.");
+            new MessageWindow(e.Result ? "Login succeed." : "Invalid login or password.", "Login", new TimeSpan(0, 0, 0, 1)).Show();
         }
     }
 }
