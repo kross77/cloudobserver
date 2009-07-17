@@ -1,3 +1,7 @@
-
 Начальную информацию о формировании HTTP запросов можно почерпнуть здесь:
-http://www.cyberguru.ru/dotnet/web-services-wcf/wcf-http-page2.html
+
+[http://www.cyberguru.ru/dotnet/web-services-wcf/wcf-http-page2.html]
+
+Просто отправить HTTP-запрос можно с помощью сокетов. Надо просто сделать подключение и отправить с помощью имеющегося метода работы с сокетами сформированный "в строке" запрос соответствующий спецификации HTTP, которая имеется здесь:
+
+[http://lib.misto.kiev.ua/WEBMASTER/rfc2068/]
