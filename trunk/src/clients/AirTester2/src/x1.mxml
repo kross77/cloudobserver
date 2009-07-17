@@ -39,7 +39,7 @@
 	
    private function inita(evt:ListEvent):void {
            
-            var tList:List = evt.currentTarget as List;
+            var tList:List = tutu.selectedIndex  as List;
              var cameraName:String = tList.selectedIndex.toString();
           
                
@@ -55,7 +55,7 @@
 	
 				]]>
 		</mx:Script>
-<mx:List id="tutu"  change="inita(event);"  dataProvider="{data}" backgroundColor="#33D426" x="241" y="24">
+<mx:List id="tutu"  change="inita(event);"  selectedIndex="0" dataProvider="{data}" backgroundColor="#33D426" x="241" y="24">
 	
 	</mx:List>
 	<!--	<mx:List dataProvider="{lcd}" x="170" backgroundColor="#E81A1A">
