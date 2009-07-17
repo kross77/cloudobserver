@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute">
+	<mx:Script>
+		<![CDATA[
+					import mx.events.DragEvent;
+		private function initApp():void
+		{
+			foodItems.dataProvider = 
+				[
+					"Amaranth (Amaranthus cruentus)",
+					"Banana (Musacea spp.; Musaceae)",
+					"Betel Nut",
+					"Bitterleaf (Vernonia calvoana)",
+					"Blueberry (Vaccinium, sect. Cyanococcus; Ericaceae)",
+					"Bok choy (Brassica rapa Pekinensis and Chinensis groups)",
+				
+				]
+	
+		//	fruits.dataProvider = [];
+		}
+
+
+		private function dragDropHandler(event:DragEvent):void
+		{
+			var listTarget:List = event.currentTarget as List;
+			listTarget.dataProvider.addItem(foodItems.selectedItem)
+			foodItems.dataProvider.removeItemAt(foodItems.selectedIndex);
+		
+		
+		}
+		]]>
+	</mx:Script>
+	
+	<mx:List id="foodItems" itemRenderer="x1"   width="262" height="204" x="86" y="37">
+		
+	</mx:List>
+</mx:WindowedApplication>

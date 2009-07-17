@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="542" height="264" >
+		<mx:Script>
+			<![CDATA[
+				   	import mx.collections.ArrayCollection;
+    import flash.media.Camera;
+    import mx.controls.Alert;
+    import mx.events.ListEvent;
+    import mx.utils.ObjectUtil;
+  	import flash.media.Video;
+  	import mx.core.UIComponent; 	
+  	import flash.display.Bitmap;
+    import mx.events.CloseEvent;
+    import flash.display.Sprite;
+    import flash.text.TextField;
+    import flash.text.TextFieldAutoSize;
+    import flash.utils.Timer;
+    import flash.events.TimerEvent;
+    import flash.events.ActivityEvent;
+            import mx.rpc.xml.SimpleXMLEncoder;
+            import mx.utils.ObjectUtil;
+               import mx.rpc.events.FaultEvent;
+            import mx.rpc.events.ResultEvent;
+            import mx.rpc.xml.SimpleXMLDecoder;
+            
+	public var cameraName:String = new String;
+         	
+ 	 public var videoHolder:UIComponent = new UIComponent;
+
+ 	 public var video:Video = new Video;
+
+     private var camera:Camera = new Camera;
+   
+         	
+//		[Bindable]
+//	private var lcd:Array = new Array;//	lcd = tutu.dataProvider.toString().split(/,/);
+	
+
+	
+   private function inita(evt:ListEvent):void {
+           
+            var tList:List = evt.currentTarget as List;
+             var cameraName:String = tList.selectedIndex.toString();
+          
+               
+                    camera = Camera.getCamera(cameraName);             
+                  
+             video = new Video(cnvWebcam.width ,cnvWebcam.height);            
+ 	        video.attachCamera(camera);                
+ 	        videoHolder.addChild(video);
+ 	        cnvWebcam.addChild(videoHolder);
+ 	         //camera.setMotionLevel(5, 1000);
+ 	   
+            }
+	
+				]]>
+		</mx:Script>
+<mx:List id="tutu"  change="inita(event);"  dataProvider="{data}" backgroundColor="#33D426" x="241" y="24">
+	
+	</mx:List>
+	<!--	<mx:List dataProvider="{lcd}" x="170" backgroundColor="#E81A1A">
+			
+		</mx:List> -->	
+		
+		<mx:Panel width="223" height="224" layout="absolute" title="Вешание с выбранной камеры" backgroundAlpha="0.0" x="10" y="10">
+		  <mx:Image  source="assets/TV.png" horizontalCenter="0" verticalCenter="0">
+		  	
+		  </mx:Image>
+		    <mx:Canvas
+		    id="cnvWebcam" visible="true" left="10" right="10" top="10" bottom="15">
+		    </mx:Canvas>
+		</mx:Panel>
+	
+</mx:Canvas>

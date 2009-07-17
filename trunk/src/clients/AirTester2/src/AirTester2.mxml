@@ -53,11 +53,11 @@
             import mx.rpc.events.ResultEvent;
             import mx.rpc.xml.SimpleXMLDecoder;
          	
- 	 public var videoHolder:UIComponent;
+ //	 public var videoHolder:UIComponent;
 
- 	 public var video:Video;
+ //	 public var video:Video;
 
-     private var camera:Camera;
+   //  private var camera:Camera;
    
     
 		[Bindable]
@@ -105,29 +105,26 @@
     			lcdb[counterGlobal++] = arr[st];
     			arr2[counterLocal++] = arr[st];
     		}
-    	var xml:XML = objectToXML(arr2)
+ 
     	massiv.addItem(arr2);
-    	xal = xal + xml;
-    	trace(xal)
-    	xal.normalize();
-    	xal.toXMLString();
-  xmll =  xal.toXMLString();
+    
       }
     
       
       
     xml = objectToXML(lcdb);
-                textArea1.text = ObjectUtil.toString(lcdb);
-                textArea2.text = xml.toXMLString();
-   list1.dataProvider = lcdb;
+  //              textArea1.text = ObjectUtil.toString(lcdb);
+              
+  // list1.dataProvider = lcdb;
     p1.status=lcdb.length.toString();
     for(var co:int; co < lcdb.length; co++){
    
     }
-    p1.title =  xml.item[5].toString();
-   
-    tree.dataProvider = xmll;
-    
+
+  
+ //  list1.dataProvider = massiv;
+  //   list2.dataProvider = massiv;
+     
                 }
            
 
@@ -139,7 +136,7 @@
                 var simpleXMLEncoder:SimpleXMLEncoder = new SimpleXMLEncoder(xmlDocument);
                 var xmlNode:XMLNode = simpleXMLEncoder.encodeValue(obj, qName, xmlDocument);
                 var xml:XML = new XML(xmlDocument.toString());
-                // trace(xml.toXMLString());
+             
                 return xml;
             }
                public function startMove(event:MouseEvent):void {
@@ -148,18 +145,18 @@
 
             private function list_change(evt:ListEvent):void {
            
-                var tList:List = evt.currentTarget as List;
-                var cameraName:String = tList.selectedIndex.toString();
+         //       var tList:List = evt.currentTarget as List;
+          //      var cameraName:String = tList.selectedIndex.toString();
                
-              videoHolder = new UIComponent();             
-                camera = Camera.getCamera(cameraName);             
+           //   videoHolder = new UIComponent();             
+             //   camera = Camera.getCamera(cameraName);             
                   
-             video = new Video(cnvWebcam.width ,cnvWebcam.height);            
- 	        video.attachCamera(camera);                
- 	        videoHolder.addChild(video);
- 	        cnvWebcam.addChild(videoHolder);
- 	         camera.setMotionLevel(5, 1000);
- 	         init();  
+             // video = new Video(cnvWebcam.width ,cnvWebcam.height);            
+ 	        //video.attachCamera(camera);                
+ 	        //videoHolder.addChild(video);
+ 	        //cnvWebcam.addChild(videoHolder);
+ 	         //camera.setMotionLevel(5, 1000);
+ 	   
             }
 
         ]]>
@@ -170,18 +167,18 @@
     <mx:Image source="assets/bACK3.png" x="29" y="-3" alpha="1" />
       </mx:Canvas>
   <mx:TitleWindow  roundedBottomCorners="true" layout="absolute" title="Клиент со стороны камер" showCloseButton="true" close="close();"  backgroundAlpha="0.83" id="titlewindow1" backgroundColor="#757575" borderColor="#797979" left="20.5" right="10" top="24" bottom="7">
-    <mx:HBox left="10" right="10" top="10" bottom="10">
+    <mx:HDividedBox left="10" right="10" top="10" bottom="10">
     	
   
     <mx:VBox left="10" id="vbox1" top="10" bottom="10" width="100%" height="100%">
-      <mx:Panel width="100%" height="100%" layout="absolute" title="Вешание с выбранной камеры" backgroundAlpha="0.0">
+    <!--  <mx:Panel width="100%" height="100%" layout="absolute" title="Вешание с выбранной камеры" backgroundAlpha="0.0">
         <mx:Image  source="assets/TV.png" horizontalCenter="0" verticalCenter="0">
         	
         </mx:Image>
           <mx:Canvas
           id="cnvWebcam" visible="true" left="10" right="10" top="10" bottom="15">
           </mx:Canvas>
-      </mx:Panel>
+      </mx:Panel> -->
       <mx:Panel id="mainPanel"
               title="Установленные камеры"
               status="{list.dataProvider.length} camera(s)" width="100%" height="100%" backgroundAlpha="0.0">
@@ -198,28 +195,15 @@
     <mx:Panel width="100%" layout="absolute" id="p1" title="ListV2" backgroundAlpha="0.0" right="10" top="10" bottom="10" height="100%">
       
       <mx:HDividedBox width="100%" height="100%" right="0">
-      <mx:List id="list1" 
-    
-              width="49%" left="0" top="0" bottom="0" height="100%"/>
+       
               
-              <mx:Tree  id="tree" width="100%" height="100%">
-              	
-              </mx:Tree>
-        <mx:TextArea id="textArea1"
-                editable="false"
-                width="100%"
-                height="100%" />
-        <mx:TextArea id="textArea2"
-                editable="false"
-                width="100%"
-                height="100%" />
     </mx:HDividedBox>
     </mx:Panel>
     
     
     	
    
-      </mx:HBox>
+      </mx:HDividedBox>
     </mx:TitleWindow>
   
   
