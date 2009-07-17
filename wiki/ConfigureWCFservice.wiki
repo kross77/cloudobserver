@@ -13,15 +13,20 @@
  ==Решение:==
 [http://sql.ru/forum/actualthread.aspx?tid=518271]
 решение состоит в том что на стороне сервиса(следовательно при добавлении ServiceReference и у клиента) прописать новые параметры взамен тех что по умолчанию в описание биндинга:
-<bindings>
-<basicHttpBinding>
-  <binding name="HttpStreaming" maxReceivedMessageSize="65536000"
-           maxArrayLength="65536000"
-           closeTimeout="00:05:00" bypassProxyOnLocal="true"
-           openTimeout="00:05:00" receiveTimeout="00:30:00" sendTimeout="00:30:00"
-           transferMode="Streamed" messageEncoding="Mtom"/>
-</basicHttpBinding>
-</bindings>
+
+   <bindings>
+     <basicHttpBinding>
+       <binding name="basicHttpBinding_IPhotoManagerService" transferMode="Streamed" messageEncoding="Mtom"  closeTimeout="00:01:00" openTimeout="00:01:00" receiveTimeout="00:10:00" sendTimeout="00:01:00" bypassProxyOnLocal="false" hostNameComparisonMode="StrongWildcard" maxBufferPoolSize="524288" maxReceivedMessageSize="2097151" textEncoding="utf-8" useDefaultWebProxy="true" allowCookies="false">
+         <readerQuotas maxDepth="32" maxStringContentLength="8192" maxArrayLength="16384" maxBytesPerRead="4096" maxNameTableCharCount="16384"/>
+
+         <security mode="TransportCredentialOnly">
+           <transport clientCredentialType="None" proxyCredentialType="None" realm=""/>
+           <message  algorithmSuite="Default" />
+         </security>
+       </binding>
+     </basicHttpBinding>
+   </bindings>
+
 Важно, что указаны параметры: Streamed, Mtom, 65536000.
 А еще важно, что :
  # При отдельно стоящем WCF-сервисе стриминг идет отлично в обе стороны.
