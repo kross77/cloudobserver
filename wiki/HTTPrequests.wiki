@@ -1,0 +1,3 @@
+
+Начальную информацию о формировании HTTP запросов можно почерпнуть здесь:
+http://www.cyberguru.ru/dotnet/web-services-wcf/wcf-http-page2.html
