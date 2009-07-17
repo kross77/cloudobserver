@@ -24,11 +24,20 @@ http://sql.ru/forum/actualthread.aspx?tid=518271
 </bindings>
 Важно, что указаны параметры: Streamed, Mtom, 65536000.
 А еще важно, что :
-1) При отдельно стоящем WCF-сервисе стриминг идет отлично в обе стороны.
-2) При попытке запихать сервис под IIS, существует такая описанная проблема: стриминг НА сервер работает. Стриминг С сервера - не работает. IIS упорно буфферизует поток и заставить его стриминговать - нереально... При передаче файликов метров по двести очень хорошо видно, как это всё лезет через память :)
+* При отдельно стоящем WCF-сервисе стриминг идет отлично в обе стороны.
+* При попытке запихать сервис под IIS, существует такая описанная проблема: стриминг НА сервер работает. Стриминг С сервера - не работает. IIS упорно буфферизует поток и заставить его стриминговать - нереально... При передаче файликов метров по двести очень хорошо видно, как это всё лезет через память :)
 У вас есть два варианта:
-1. Забить на IIS и использовать WCF-сервис под своей виндослужбой.
-2. Забить на WCF и использовать IIS с веб-сервисами.
+* Забить на IIS и использовать WCF-сервис под своей виндослужбой.
+* Забить на WCF и использовать IIS с веб-сервисами.
+
+Basic binding 
+
+Offered by the BasicHttpBinding class, this is designed to expose a WCF service as a legacy ASMX web service, so that old clients can work with new services. The basic binding makes your service look, on the wire, like a legacy web service that communicates over the basic web service profile. When used by clients, this binding enables new WCF clients to work with old ASMX services.
+
+Web Service (WS) binding 
+
+Offered by the WSHttpBinding class, this uses HTTP or HTTPS for transport, and is designed to offer a variety of features (such as reliability, transactions, and security) over the Internet, all using the WS-* standards. This binding is designed to interoperate with any party that supports the WS-* standards.
+
 
  =Часть 3.=
 
