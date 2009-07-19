@@ -84,10 +84,6 @@
       <Project>{D8967BBE-DA2D-4ADB-B804-7C60F0BD8CD4}</Project>
       <Name>CloudObserverDatabaseLibrary</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CloudObserverDataClasses\CloudObserverDataClasses.csproj">
-      <Project>{AA1EFD2A-9647-4DD2-AA3D-D380D3330CEA}</Project>
-      <Name>CloudObserverDataClasses</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\DefaultFrame001.jpg" />
