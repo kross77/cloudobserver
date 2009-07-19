@@ -1,1 +1,0 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="CloudObserverService" CodeBehind="~/App_Code/CloudObserverService.cs" %>
