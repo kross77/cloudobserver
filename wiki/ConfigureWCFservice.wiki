@@ -36,6 +36,9 @@
  # Забить на IIS и использовать WCF-сервис под своей виндослужбой.
  # Забить на WCF и использовать IIS с веб-сервисами.
 
+Еще предлагается попытаться сделать то, что написано здесь:
+[http://sites.google.com/site/phenixpinkbookmarks/iis-wcf-maxclientrequestbuffer-instruction]
+
 Basic binding 
 
 Offered by the BasicHttpBinding class, this is designed to expose a WCF service as a legacy ASMX web service, so that old clients can work with new services. The basic binding makes your service look, on the wire, like a legacy web service that communicates over the basic web service profile. When used by clients, this binding enables new WCF clients to work with old ASMX services.
