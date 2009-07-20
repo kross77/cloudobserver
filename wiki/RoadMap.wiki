@@ -25,12 +25,14 @@
   # Реал тайм видео 
   # передача просмотр запись видео
  *  Версия 1.1 (исправление багов)
- *  Версия 1.2  
-  #  Axis cameras and video servers,
-  #  StarDot cameras and video servers,
-  #  PiXORD cameras,
-  #  Panasonic cameras,
-  #  D-Link cameras 
+ *  Версия 1.2
+  #  подключение к клиентам "gaforflash" и "Silverlight Analytics"
+  # выделение взаимодействий со стороны сервера с
+   #  Axis cameras and video servers,
+   #  StarDot cameras and video servers,
+   #  PiXORD cameras,
+   #  Panasonic cameras,
+   #  D-Link cameras 
  * версия 2 
   # Фильтры
   # адаптивное сжатие
