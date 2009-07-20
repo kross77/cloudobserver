@@ -34,6 +34,6 @@
    #  Panasonic cameras,
    #  D-Link cameras 
  * версия 2 
-  # Фильтры
+  # Фильтры  HLSL (server & silverligh site), HYDRA (Adobe AIR & Flashsite) effects 
   # адаптивное сжатие
   # уникальная система комментариев и сообщений)
