@@ -1,0 +1,6 @@
+F:\SummerProject\src\Sample_percall\testConsoleApp\bin\Debug\testConsoleApp.exe.config
+F:\SummerProject\src\Sample_percall\testConsoleApp\bin\Debug\testConsoleApp.exe
+F:\SummerProject\src\Sample_percall\testConsoleApp\bin\Debug\testConsoleApp.pdb
+F:\SummerProject\src\Sample_percall\testConsoleApp\obj\Debug\ResolveAssemblyReference.cache
+F:\SummerProject\src\Sample_percall\testConsoleApp\obj\Debug\testConsoleApp.exe
+F:\SummerProject\src\Sample_percall\testConsoleApp\obj\Debug\testConsoleApp.pdb

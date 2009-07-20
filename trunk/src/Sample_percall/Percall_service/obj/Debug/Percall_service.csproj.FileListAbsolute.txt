@@ -1,0 +1,5 @@
+F:\SummerProject\src\Sample_percall\Percall_service\bin\Percall_service.dll
+F:\SummerProject\src\Sample_percall\Percall_service\bin\Percall_service.pdb
+F:\SummerProject\src\Sample_percall\Percall_service\obj\Debug\ResolveAssemblyReference.cache
+F:\SummerProject\src\Sample_percall\Percall_service\obj\Debug\Percall_service.dll
+F:\SummerProject\src\Sample_percall\Percall_service\obj\Debug\Percall_service.pdb
