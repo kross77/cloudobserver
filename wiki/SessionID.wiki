@@ -12,3 +12,6 @@ Really, basicHttpBinding doesn't support transport sessions. We have to use wsHt
 Another solving is ti refuse using SessionID property and use information which client will send to us.
 Some another information could be get in Wiki/WCFServices /book1 in the list of links.
 and here: http://silverlight.net/forums/t/14175.aspx 
+
+also look this: http://weblogs.asp.net/brucezhang/archive/2009/06/01/stream-operation-in-wcf.aspx
+When TransferMode is stream than we have not sessionID
