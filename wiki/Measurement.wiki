@@ -1,0 +1,1 @@
+A bit later here will be written some dependences beetwen size of images, buffer size, tipe of binding and time.
