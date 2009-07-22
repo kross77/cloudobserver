@@ -42,6 +42,8 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "CloudObserverWebsite", "Clo
 		ProjOutputReferences = "{DE03D550-11C3-426B-B086-BC6F55D44FDC}|ClientBin|false;"
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserverServicesHoster", "CloudObserverServicesHoster\CloudObserverServicesHoster.csproj", "{7EBABAF8-9E80-4856-9171-9C722C1B43E2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -76,6 +78,10 @@ Global
 		{A613753D-B429-46CD-83CB-6EC85D213257}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A613753D-B429-46CD-83CB-6EC85D213257}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{A613753D-B429-46CD-83CB-6EC85D213257}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{7EBABAF8-9E80-4856-9171-9C722C1B43E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EBABAF8-9E80-4856-9171-9C722C1B43E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EBABAF8-9E80-4856-9171-9C722C1B43E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EBABAF8-9E80-4856-9171-9C722C1B43E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
