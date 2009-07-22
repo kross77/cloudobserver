@@ -15,3 +15,7 @@ and here: http://silverlight.net/forums/t/14175.aspx
 
 also look this: http://weblogs.asp.net/brucezhang/archive/2009/06/01/stream-operation-in-wcf.aspx
 When TransferMode is stream than we have not sessionID
+
+ = Afternote =
+
+that is not enought useful for our tasks 
