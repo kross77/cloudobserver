@@ -38,3 +38,6 @@
   # Фильтры  HLSL (server & silverligh site), HYDRA (Adobe AIR & Flashsite) effects 
   # адаптивное сжатие
   # уникальная система комментариев и сообщений)
+ * версия 3
+  # мобильный клиент
+  # API/sdk + docs
