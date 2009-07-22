@@ -1,0 +1,28 @@
+ = Introduction =
+In another page on wiki was described a problem with limited size of transferring data. In the article was written two possible decisions:
+ # refuse using wcf and using iss + winservces
+ # refuse using iss and use only wcf
+Some another decision is below.
+
+ = Solving =
+
+Really, if we don't use iis the trouble is solved easily. We have to describe service endpoint and binding config in such way:
+serverSide:
+<endpoint address ="" binding="wsHttpBinding" bindingConfiguration="WsStreaming"  contract="CloudObserverBroadcastServiceLibrary.ICloudObserverBroadcastService">
+
+    <bindings>
+      <wsHttpBinding>
+        <binding name="WsStreaming" maxReceivedMessageSize="65536000" closeTimeout="00:05:00" bypassProxyOnLocal="true" openTimeout="00:05:00" receiveTimeout="00:30:00" sendTimeout="00:30:00" messageEncoding="Mtom">
+          <readerQuotas maxArrayLength="1000000000" />
+        </binding>
+      </wsHttpBinding>
+    </bindings>
+
+In some place must be added TransferMode="streaming" but I yet haven't known where.
+It is important that on the client size the config could be not generated if it is wsHttpBinding. Or on the client side you will have to add some strings to app.config by youself. Seems, VS2008 have some problems with correct description upload.
+In Client Side:
+<binding name="WSHttpBinding_ICloudObserverBroadcastService" closeTimeout="00:01:00" openTimeout="00:01:00" receiveTimeout="00:10:00" sendTimeout="00:01:00" bypassProxyOnLocal="false" transactionFlow="false" hostNameComparisonMode="StrongWildcard" maxBufferPoolSize="524288" maxReceivedMessageSize="65536000" messageEncoding="Mtom" textEncoding="utf-8" useDefaultWebProxy="true" allowCookies="false">
+<readerQuotas maxDepth="32" maxStringContentLength="8192" maxArrayLength="1000000000" maxBytesPerRead="4096" maxNameTableCharCount="16384" />
+
+ <endpoint address="http://localhost:8731/Design_Time_Addresses/CloudObserverBroadcastServiceLibrary/Service1/" binding="wsHttpBinding" bindingConfiguration="WSHttpBinding_ICloudObserverBroadcastService" contract="CloudObserverBroadcastService.ICloudObserverBroadcastService" name="WSHttpBinding_ICloudObserverBroadcastService">
+   
