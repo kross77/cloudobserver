@@ -1,0 +1,6 @@
+TCP binding 
+
+Offered by the NetTcpBinding class, this uses TCP for cross-machine communication on the intranet. It supports a variety of features, including reliability, transactions, and security, and is optimized for WCF-to-WCF communication. As a result, it requires both the client and the service to use WCF.
+
+
+Is the service hosted in IIS? If so, IIS 5.0 cannot host net.tcp binding services. NetTcp in IIS are only supported in IIS7 with WAS.
