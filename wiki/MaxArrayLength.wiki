@@ -18,7 +18,7 @@ serverSide:
       </wsHttpBinding>
     </bindings>
 
-In some place must be added TransferMode="streaming" but I yet haven't known where.
+In some place must be added TransferMode="streaming"(defaultly it is buffered: we wait until all the message is downloaded and only then work it up. if it is streamed(seems, impossible with IIS), the message is represented as stream and we start work when received first parts of message) but I yet haven't known where.
 It is important that on the client size the config could be not generated if it is wsHttpBinding. Or on the client side you will have to add some strings to app.config by youself. Seems, VS2008 have some problems with correct description upload.
 In Client Side:
 <binding name="WSHttpBinding_ICloudObserverBroadcastService" closeTimeout="00:01:00" openTimeout="00:01:00" receiveTimeout="00:10:00" sendTimeout="00:01:00" bypassProxyOnLocal="false" transactionFlow="false" hostNameComparisonMode="StrongWildcard" maxBufferPoolSize="524288" maxReceivedMessageSize="65536000" messageEncoding="Mtom" textEncoding="utf-8" useDefaultWebProxy="true" allowCookies="false">
