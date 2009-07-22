@@ -8,7 +8,7 @@ using System.Text;
 namespace CloudObserverBroadcastServiceLibrary
 {
     [ServiceContract]
-    public interface ICloudObserverBroadcastServer
+    public interface ICloudObserverBroadcastService
     {
         [OperationContract]
         void bindMeToCamera(int clientID, int cameraID);
