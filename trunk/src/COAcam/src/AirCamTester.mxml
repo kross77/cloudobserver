@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="init();" layout="absolute" width="1133">
+	<!-- ЛОГИКА СНЯТИЯ ИЗОБРАЖЕНИЯ -->
+	
+	<mx:Script> 
+        <![CDATA[
+           import mx.effects.Parallel;
+           
+        	import mx.binding.utils.BindingUtils;
+        	import mx.graphics.codec.JPEGEncoder; 
+        import mx.controls.Image; 
+        import flash.display.Bitmap; 
+ import  flash.net.*;
+ import flash.media.*;
+                import flash.filesystem.File;
+                 import flash.filesystem.FileMode;
+                  import flash.filesystem.FileStream;
+                  import mx.core.Window; 
+
+private var encoder:JPEGEncoder = new JPEGEncoder();
+
+        private function takeBitMap():void{ 
+
+   var colorBmp:BitmapData = new BitmapData(mySource.width,  mySource.height);
+        colorBmp.draw(myCanvas);     
+      myImage.source = new Bitmap(colorBmp);  
+        
+        } 
+         private function takeJPEG():void{
+      	 var colorJpeg:BitmapData = new BitmapData(mySource.width,  mySource.height);
+        colorJpeg.draw(myCanvas);    
+  	encoder = new JPEGEncoder(NumStepperJPEG.value);
+        var ba:ByteArray = encoder.encode(colorJpeg);
+     var file:File = File.desktopDirectory.resolvePath("webcab" + ".jpeg");
+     var fileStream:FileStream = new FileStream();
+     fileStream.open(file, FileMode.WRITE);
+     fileStream.writeBytes(ba);
+     fileStream.close();
+    myImageJ.source = new Bitmap(colorJpeg);
+   myImageJ.source =  "file:///C:/Documents%20and%20Settings/fenix/Desktop/webcab.jpeg";
+         	
+         }
+        private var videoURL:String = "Video.flv";
+        private var connection:NetConnection;
+        private var stream:NetStream;
+       public function init():void{
+       	  connection = new NetConnection();
+       	  connection.addEventListener(NetStatusEvent.NET_STATUS, netStatusHandler);
+       	   connection.connect(null);
+//Wcam.attachCamera(Camera.getCamera());
+//var win2:WinTest2 = new WinTest2();  
+//        win2.open(true);  
+         }
+           private function netStatusHandler(event:NetStatusEvent):void {
+            switch (event.info.code) {
+                case "NetConnection.Connect.Success":
+                    connectStream();
+                    break;
+                case "NetStream.Play.StreamNotFound":
+                    trace("Stream not found: " + videoURL);
+                    break;
+            }
+        }
+         private function connectStream():void {
+            var stream:NetStream = new NetStream(connection);
+            stream.addEventListener(NetStatusEvent.NET_STATUS, netStatusHandler);
+       
+          //  stream.client = new CustomClient();
+            var video:Video = new Video();
+        
+         video.attachNetStream(stream);
+             stream.attachCamera(Camera.getCamera());
+           //CanW.addChild(video);
+         //   stream.play();  //.play(videoURL);
+     // Wcam.source = 
+        }
+        
+        ]]> 
+</mx:Script> 
+
+	<!-- ЛОГИКА ВЗАИМОДЕЙСТВИЯ КОМПОНЕНТОВ -->
+	
+<mx:Script>
+	<![CDATA[
+	     import flash.utils.Timer;
+    import flash.events.TimerEvent;
+    import flash.display.Sprite;
+[Bindable]
+ public var timerBmp:Timer = new Timer(10, 500000);
+ 
+ [Bindable]
+ public var timerJpeg:Timer = new Timer(250, 500000);
+// логика замены урл
+		  
+		 
+		 public function TimerExampleBmp():void {
+          
+            timerBmp.addEventListener("timer", timerHandlerBmp);
+            timerBmp.start();
+        }
+			
+		    public function TimerExampleJpeg():void {
+          
+            timerJpeg.addEventListener("timer", timerHandlerJpeg);
+            timerJpeg.start();
+        }    
+
+        public function timerHandlerBmp(event:TimerEvent):void {
+            trace("timerHandler: " + event);
+            takeBitMap();
+        }
+              public function timerHandlerJpeg(event:TimerEvent):void {
+            trace("timerHandler: " + event);
+            takeJPEG();
+        }
+
+	]]>
+</mx:Script>
+<mx:Script>
+	<![CDATA[
+		   private function goToUrl():void{ 
+		    HtFrame.location = HtFrameURL.text ;
+		    }
+	]]>
+</mx:Script>
+
+<mx:Canvas x="10" y="31" id="myCanvas" width="193" height="141"> 
+<mx:Button   click="takeBitMap();" id="mySource"   width="100%" height="100%"/>
+
+<mx:HTML id="HtFrame" location="http://www.adobe.com" width="100%" height="100%" horizontalCenter="0" verticalCenter="0" backgroundColor="#A33737"/>
+</mx:Canvas> 
+
+<mx:Canvas x="338" y="31" width="176" height="141" id="board">
+	<mx:Image id="myImage" x="0" y="0" width="100%" height="100%"/>
+</mx:Canvas> 
+	<mx:Form x="23" y="337" width="356" height="135">	
+<mx:HBox width="308">
+<mx:Button label="Снять Битмап" click="takeBitMap();"/>
+<mx:Button label="Снять Джипег" click="takeJPEG();"/>
+</mx:HBox>
+	<mx:HBox>
+		<mx:Button label="Снять серию Битмапов"  click="TimerExampleBmp();"/>
+		<mx:Button label="Снять серию Джипегов"  click="TimerExampleJpeg();"/>
+		</mx:HBox>
+		<mx:FormItem label="URL" horizontalAlign="center" width="318" required="true">
+			<mx:TextInput change="goToUrl();" id="HtFrameURL"/>
+		</mx:FormItem>
+		<mx:FormItem label="JPEG Q" width="315" horizontalAlign="center" required="true">
+			<mx:NumericStepper value="10" minimum="1" maximum="100" stepSize="1"  enabled="true" id="NumStepperJPEG"/>
+		</mx:FormItem>
+	</mx:Form>
+	<mx:Canvas x="549" y="36" width="151" height="121" id="boardJ">
+		<mx:Image  id="myImageJ"	 x="0" source="file:///C:/Documents%20and%20Settings/fenix/Desktop/webcab.jpeg" y="0" width="100%" height="100%"/>
+	</mx:Canvas>
+	<mx:Label x="143" y="10" text="Html" id="Jpeg"/>
+	<mx:Label x="394" y="10" text="BITMAP" id="Jpeg0"/>
+	<mx:Label x="606" y="10" text="JPEG" id="Jpeg1"/>
+	<mx:LinkButton x="444" y="358" label="МедведВидео"  click="HtFrame.location = 'http://www.echo.msk.ru/blog/echomsk/607440-echo/'" />
+	<mx:LinkButton x="459" y="388"  click="HtFrame.location = 'http://vkontakte.ru/'" label="Вконтакт"/>
+	<mx:Canvas x="10" y="180" width="193" height="136" id="CanW">
+		<mx:VideoDisplay left="0" right="148" top="91" bottom="0" id="Wcam"/>
+	</mx:Canvas>
+	
+</mx:WindowedApplication>
