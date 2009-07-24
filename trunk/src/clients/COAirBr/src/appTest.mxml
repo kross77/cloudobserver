@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute">
+	<!-- ЛОГИКА СНЯТИЯ ИЗОБРАЖЕНИЯ -->
+	
+	<mx:Script> 
+        <![CDATA[ 
+        import mx.controls.Image; 
+        import flash.display.Bitmap; 
+
+        private function takeBitMap():void{ 
+/* для пременения необходима система ВЛОЖЕННЫХ КОМПОНЕНТОВ иначе  
+ требуется использовать mx.graphics.ImageSnapshot который 
+ 700 трок в длинну... и пользует для записи PNGEncoder по умолчанию...
+ замечено что с ним торможение довольно сильное... 
+ данный метод довольно прост и довольно удобен если вложенность компонента
+  может достигать хотябы 2х ступений 
+  */
+        var color:BitmapData = new BitmapData(mySource.width, mySource.height); 
+
+        color.draw(myCanvas); 
+
+        var myImage:Image =  new Image(); 
+        myImage.source = new Bitmap(color); 
+        board.addChild(myImage); 
+
+        } 
+        ]]> 
+</mx:Script> 
+
+	<!-- ЛОГИКА ВЗАИМОДЕЙСТВИЯ КОМПОНЕНТОВ -->
+	
+<mx:Script>
+	<![CDATA[
+	     import flash.utils.Timer;
+    import flash.events.TimerEvent;
+    import flash.display.Sprite;
+[Bindable]
+ public var myTimer:Timer = new Timer(300, 500000);
+// логика замены урл
+		    private function goToUrl():void{ 
+		    HtFrame.location = HtFrameURL.text ;
+		    }
+		
+
+ 
+        public function TimerExample():void {
+          
+            myTimer.addEventListener("timer", timerHandler);
+            myTimer.start();
+        }
+
+        public function timerHandler(event:TimerEvent):void {
+            trace("timerHandler: " + event);
+            takeBitMap();
+          
+        }
+
+	]]>
+</mx:Script>
+
+<mx:Canvas x="10" y="10" id="myCanvas" width="301" height="280"> 
+<mx:Button   click="takeBitMap();" id="mySource"   width="100%" height="100%"/>
+
+<mx:HTML id="HtFrame" location="http://www.adobe.com" width="100%" height="100%" horizontalCenter="0" verticalCenter="0" backgroundColor="#A33737"/>
+</mx:Canvas> 
+
+<mx:Canvas x="340" y="10" width="320" height="298" id="board"/> 
+	<mx:Form x="166" y="324" width="252" height="135">
+		<mx:FormHeading label="Heading"/>
+		<mx:Button label="Снять Битмап" click="takeBitMap();"/>
+		<mx:Button label="Снять серию Битмапов"  click="TimerExample();"/>
+		<mx:FormItem label="URL">
+			<mx:TextInput change="goToUrl();" id="HtFrameURL"/>
+		</mx:FormItem>
+	</mx:Form>
+	
+</mx:WindowedApplication>

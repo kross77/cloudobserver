@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute"   width="748">
+
+	<mx:Script>
+		<![CDATA[
+			      import mx.core.IUIComponent;
+            import mx.graphics.ImageSnapshot;
+
+            private function takeSnapshot(source:IBitmapDrawable):void {
+                var imageSnap:ImageSnapshot = ImageSnapshot.captureImage(source, 70);
+                var imageByteArray:ByteArray = imageSnap.data as ByteArray;
+                swfLoader.load(imageByteArray);
+            }
+		]]>
+	</mx:Script>
+	<!--<mx:Script>
+		<![CDATA[
+			      import mx.core.IUIComponent;
+            import mx.graphics.ImageSnapshot;
+
+            private function takeJpeg(source:IBitmapDrawable):void {
+                var imageSnap:ImageSnapshot = ImageSnapshot.captureImage(source, 70);
+                var imageByteArray:ByteArray = imageSnap.data as ByteArray;
+                swfLoader.load(imageByteArray);
+            }
+		]]>
+	</mx:Script>-->
+	<mx:Script>
+		<![CDATA[
+				import com.adobe.images.JPGEncoder;
+				
+			import mx.graphics.ImageSnapshot;
+			import mx.events.*;
+
+		
+			protected function textinput1_changeHandler(event):void
+			{
+				htmlframe.location = tiurl.text;
+  // var base64string:String = new ImageSnapshot ImageSnapshot.encodeImageAsBase64( ImageSnapshot.captureImage(drawingBoard,300, new PNGEncoder(),false) );
+			}
+			
+		]]>
+	</mx:Script>
+	<mx:Script>
+		<![CDATA[
+				
+			import mx.core.UIComponent;
+			import mx.controls.Alert;
+			import mx.controls.SWFLoader;
+			import com.adobe.images.JPGEncoder;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+		
+			private var send_compressed:Boolean = false;	// send always uncompressed bytearrays (i.e. your server doesn not support "gzuncompress")
+			private var encoder:JPGEncoder;
+			
+			/**
+			 * Default handler for the remote SaveAsJPEG function
+			 */
+			private function savejpeg_resultHandler(event:ResultEvent):void
+			{
+				if(event.result || event.result is String)
+				{
+					var path:String = event.result as String;
+					trace(path);
+					
+					var swf_loader:SWFLoader = preview_box.getChildByName("preview") as SWFLoader;
+					swf_loader.showBusyCursor = true;
+					swf_loader.load(path + "?rand=" + new Date().getTime());
+					
+					image_size.text = "Loading...";
+				}
+			}
+			
+			/**
+			 * Default handler for the remote SaveAsByteArray function
+			 */
+			private function savebyte_resultHandler(event:ResultEvent):void
+			{
+				var ba:ByteArray = event.result as ByteArray;
+				var ui_loader:UIComponent = preview_box.getChildByName("preview") as UIComponent;
+				image_size.text = 'ByteArray size: ' + Math.round(((ba.length/4)/1024)*100)/100 + ' Kb'
+				
+				try
+				{
+					ba.uncompress();
+				} catch(err:Error)
+				{
+				}
+
+				var data:BitmapData = new BitmapData(html_conteiner.width, html_conteiner.height, false, 0);
+				var bmp:Bitmap = new Bitmap(data);
+				bmp.name = "image";
+				data.setPixels(data.rect, ba);
+				
+				ui_loader.addChild(new Bitmap(data));
+				ui_loader.width = data.width;
+				ui_loader.height = data.height;
+				
+			}
+			
+			/**
+			 * Default fault handler
+			 */
+			private function faultHandler(event:FaultEvent):void
+			{
+				Alert.show(event.fault.faultString, "Error: " + event.fault.faultCode);
+				trace(event.fault.message);
+			}
+			
+			
+			/**
+			 * Save the image using the JPEGEncoder class
+			 */
+			private function saveJpegHandler(event:MouseEvent):void
+			{
+				removeImages();
+				
+				var swf_loader:SWFLoader = new SWFLoader();
+				swf_loader.autoLoad = true;
+				swf_loader.name = "preview";
+				swf_loader.addEventListener(Event.COMPLETE, function(event:Event):void { image_size.text = 'Image size: ' + (SWFLoader(event.target).bytesTotal/1024).toPrecision(3) + ' Kb' });
+				preview_box.addChildAt(swf_loader, 0);
+				
+				var bmpdata:BitmapData = Bitmap(html_conteiner).bitmapData;
+				var ba:ByteArray;
+				
+				encoder = new JPGEncoder(jpeg_quality.value);
+				ba = encoder.encode( bmpdata );
+				
+				if(send_compressed)
+					ba.compress();
+					
+			//	service.getOperation("SaveAsJPEG").send(ba, send_compressed);
+				
+				image_size.text = "Sending..."
+			}
+
+
+			/**
+			 * Save the image using only ByteArray derived from
+			 * BitmapData.getPixels
+			 */
+			private function saveByteHandler(event:MouseEvent):void
+			{
+				removeImages();
+				
+				var ui_loader:UIComponent = new UIComponent();
+				ui_loader.name = "preview";
+				preview_box.addChildAt(ui_loader, 0);
+				
+				
+				var bmpdata:BitmapData = Bitmap(html_conteiner).bitmapData;
+				var arr:ByteArray = Bitmap(html_conteiner).bitmapData.getPixels(new Rectangle(0,0,bmpdata.width, bmpdata.height));
+				
+				if(send_compressed)
+					arr.compress();
+					
+				arr.position = 0;
+			//	service.getOperation("SaveAsByteArray").send(arr, send_compressed);
+				
+				image_size.text = "Sending..."
+			}			
+			
+			
+			private function removeImages():void
+			{
+				if(preview_box.getChildByName("preview"))
+					preview_box.removeChild(preview_box.getChildByName("preview"));
+				
+				image_size.text = "";
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:HRule x="130" y="58"/>
+	
+
+		<mx:Canvas id="html_conteiner" cacheAsBitmap="true"	 width="404" height="340">
+			
+		
+	
+  	
+<mx:HTML   backgroundAlpha="0.1"  id="htmlframe" location="http://livedocs.adobe.com/livecycle/es/sdkHelp/common/langref/flash/display/DisplayObject.html#cacheAsBitmap" width="346" height="482" x="35" y="-195">
+	
+</mx:HTML>
+    <mx:DataGrid   x="19" y="295" selectedIndex="0" width="373" height="333"/>
+   <mx:Label text="URL" />
+ 
+    </mx:Canvas>	
+    	<mx:Grid x="269" y="33">
+			<mx:GridRow width="100%" height="100%">
+				<mx:GridItem width="100%" height="100%" verticalAlign="middle">
+					<mx:Label text="URL"/>	
+						</mx:GridItem>
+						<mx:GridItem width="100%" height="100%" verticalAlign="middle">
+						<mx:TextInput x="142" id="tiurl" change="textinput1_changeHandler(event)" y="28"/>	
+						</mx:GridItem>	
+			</mx:GridRow>
+				<mx:GridRow width="100%" height="100%">
+					<mx:GridItem width="100%" height="100%" verticalAlign="middle">
+						<mx:Label text="Jpeg quality"/>
+					</mx:GridItem>
+					<mx:GridItem width="100%" height="100%" verticalAlign="middle">
+					<mx:NumericStepper id="jpeg_quality" minimum="1" maximum="100" stepSize="1" value="50" />
+				
+					</mx:GridItem>
+				</mx:GridRow>
+				<mx:GridRow width="100%" height="100%">
+					<mx:GridItem width="100%" height="100%">
+					</mx:GridItem>
+					<mx:GridItem width="100%" height="100%" verticalAlign="middle">
+						<mx:Button label="Save as Jpeg" click="saveJpegHandler(event)" width="100%"/>
+					</mx:GridItem>
+				</mx:GridRow>
+				<mx:GridRow width="100%" height="100%">
+					<mx:GridItem width="100%" height="100%">
+					</mx:GridItem>
+					<mx:GridItem width="100%" height="100%" verticalAlign="middle">
+						<mx:Button label="Save as ByteArray" click="saveByteHandler(event)" width="100%"/>
+					</mx:GridItem>
+				</mx:GridRow>
+				<mx:GridRow width="100%" height="100%">
+					<mx:GridItem width="100%" height="100%" colSpan="2">
+					        <mx:Button label="Take snapshot of DataGrid"
+                click="takeSnapshot(html_conteiner);" />
+
+					</mx:GridItem>
+				</mx:GridRow>
+				
+			</mx:Grid>		
+    	<mx:Canvas id="preview_box" minWidth="300" minHeight="100" width="{html_conteiner.width}" x="412" y="0">
+    			<mx:Grid>
+    				<mx:GridRow width="100%" height="100%">
+    					<mx:GridItem width="100%" height="100%" verticalAlign="middle">
+    						<mx:Label text="" id="image_size" />
+    					</mx:GridItem>
+    				</mx:GridRow>
+    				<mx:GridRow width="100%" height="100%">
+    				</mx:GridRow>
+    			</mx:Grid>
+    			 <mx:HBox>
+    			  
+    			  
+    			  <mx:SWFLoader id="swfLoader">
+    			      <mx:filters>
+    			          <mx:DropShadowFilter />
+    			      </mx:filters>
+    			  </mx:SWFLoader>
+    			 </mx:HBox>
+    			</mx:Canvas>
+
+	<!--	</ns1:LabelledBox>-->
+
+
+	
+
+</mx:WindowedApplication>
