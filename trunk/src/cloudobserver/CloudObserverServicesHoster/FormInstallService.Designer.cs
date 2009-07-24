@@ -85,7 +85,7 @@
             this.numericUpDownServicePort.Size = new System.Drawing.Size(56, 20);
             this.numericUpDownServicePort.TabIndex = 4;
             this.numericUpDownServicePort.Value = new decimal(new int[] {
-            7000,
+            9000,
             0,
             0,
             0});
@@ -99,6 +99,7 @@
             this.buttonInstall.TabIndex = 5;
             this.buttonInstall.Text = "Install";
             this.buttonInstall.UseVisualStyleBackColor = true;
+            this.buttonInstall.Click += new System.EventHandler(this.buttonInstall_Click);
             // 
             // listViewLoadedServices
             // 
@@ -109,10 +110,12 @@
             this.listViewLoadedServices.FullRowSelect = true;
             this.listViewLoadedServices.Location = new System.Drawing.Point(12, 25);
             this.listViewLoadedServices.Name = "listViewLoadedServices";
+            this.listViewLoadedServices.ShowItemToolTips = true;
             this.listViewLoadedServices.Size = new System.Drawing.Size(370, 97);
             this.listViewLoadedServices.TabIndex = 6;
             this.listViewLoadedServices.UseCompatibleStateImageBehavior = false;
             this.listViewLoadedServices.View = System.Windows.Forms.View.Details;
+            this.listViewLoadedServices.SelectedIndexChanged += new System.EventHandler(this.listViewLoadedServices_SelectedIndexChanged);
             // 
             // columnHeaderServiceDLL
             // 
@@ -146,6 +149,7 @@
             this.Name = "FormInstallService";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Install Service";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormInstallService_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownServicePort)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

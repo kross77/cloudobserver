@@ -13,23 +13,53 @@ namespace CloudObserverServicesHoster
 {
     public partial class FormInstallService : Form
     {
-        private string settingsFilePath = Application.ExecutablePath + "/settings.xml";
+        private string servicesFilePath = Application.StartupPath + "/services.xml";
 
         public FormInstallService()
         {
             InitializeComponent();
 
-            loadSettings(settingsFilePath);
+            if (File.Exists(servicesFilePath)) LoadServices(File.OpenRead(servicesFilePath));
         }
 
-        private void loadSettings(string settingsXMLFilePath)
+        private void LoadServices(Stream input)
         {
-            //
+            XmlTextReader servicesFileReader = new XmlTextReader(input);
+            while (servicesFileReader.Read())
+                if (servicesFileReader.NodeType == XmlNodeType.Element)
+                    if (servicesFileReader.Name == "Service")
+                    {
+                        ListViewItem newServiceItem = listViewLoadedServices.Items.Add(servicesFileReader.GetAttribute("DLL"));
+                        newServiceItem.SubItems.Add(servicesFileReader.GetAttribute("Interface"));
+                        newServiceItem.SubItems.Add(servicesFileReader.GetAttribute("Class"));
+                    }
+            input.Close();
         }
 
-        private void listBoxLoadedServices_SelectedIndexChanged(object sender, EventArgs e)
+        private void SaveServices(Stream output)
         {
-            buttonInstall.Enabled = (listViewLoadedServices.SelectedIndices.Count >= 0);
+            XmlTextWriter servicesFileWriter = null;
+            try
+            {
+                servicesFileWriter = new XmlTextWriter(output, Encoding.Unicode);
+                servicesFileWriter.WriteStartDocument();
+                servicesFileWriter.WriteStartElement("Services");
+                foreach (ListViewItem serviceItem in listViewLoadedServices.Items)
+                {
+                    servicesFileWriter.WriteStartElement("Service");
+                    servicesFileWriter.WriteAttributeString("DLL", serviceItem.SubItems[0].Text);
+                    servicesFileWriter.WriteAttributeString("Interface", serviceItem.SubItems[1].Text);
+                    servicesFileWriter.WriteAttributeString("Class", serviceItem.SubItems[2].Text);
+                    servicesFileWriter.WriteEndElement();
+                }
+                servicesFileWriter.WriteEndElement();
+                servicesFileWriter.WriteEndDocument();
+            }
+            finally
+            {
+                if (servicesFileWriter != null)
+                    servicesFileWriter.Close(); 
+            }
         }
 
         private void buttonLoadServiceDLL_Click(object sender, EventArgs e)
@@ -39,9 +69,26 @@ namespace CloudObserverServicesHoster
 
         public void loadServiceDLL(string serviceDLLFile, string serviceInterface, string serviceClass)
         {
-            int newItemIndex = listViewLoadedServices.Items.Add(serviceDLLFile).Index;
-            listViewLoadedServices.Items[newItemIndex].SubItems.Add(serviceInterface);
-            listViewLoadedServices.Items[newItemIndex].SubItems.Add(serviceClass);
+            ListViewItem newServiceItem = listViewLoadedServices.Items.Add(serviceDLLFile);
+            newServiceItem.SubItems.Add(serviceInterface);
+            newServiceItem.SubItems.Add(serviceClass);
+        }
+
+        private void FormInstallService_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            SaveServices(File.Create(servicesFilePath));
+        }
+
+        private void buttonInstall_Click(object sender, EventArgs e)
+        {
+            ListViewItem selectedServiceItem = listViewLoadedServices.SelectedItems[0];
+            ((FormMain)Owner).InstallService(selectedServiceItem.SubItems[0].Text, selectedServiceItem.SubItems[1].Text, selectedServiceItem.SubItems[2].Text, Decimal.ToInt32(numericUpDownServicePort.Value));
+            Close();
+        }
+
+        private void listViewLoadedServices_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            buttonInstall.Enabled = (listViewLoadedServices.SelectedItems.Count > 0);
         }
     }
 }

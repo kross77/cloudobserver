@@ -6,6 +6,9 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Reflection;
+using System.ServiceModel;
+using System.ServiceModel.Description;
 
 namespace CloudObserverServicesHoster
 {
@@ -24,6 +27,55 @@ namespace CloudObserverServicesHoster
         private void buttonInstallService_Click(object sender, EventArgs e)
         {
             new FormInstallService().ShowDialog(this);
+        }
+
+        public void InstallService(string serviceDLL, string serviceInterface, string serviceClass, int servicePort)
+        {
+            ListViewItem newService = new ListViewItem(serviceDLL); //listViewInstalledServices.Items.Add(serviceDLL);
+            newService.SubItems.Add(serviceInterface);
+            newService.SubItems.Add(serviceClass);
+            newService.SubItems.Add(servicePort.ToString());
+            newService.SubItems.Add("loaded").ForeColor = Color.Blue;
+            newService.UseItemStyleForSubItems = false;
+            listViewInstalledServices.Items.Add(newService);
+        }
+
+        private void listViewInstalledServices_ItemChecked(object sender, ItemCheckedEventArgs e)
+        {
+            ListViewItem.ListViewSubItem serviceStatusSubItem = e.Item.SubItems[4];
+            if (e.Item.Checked)
+            {
+                serviceStatusSubItem.Text = "starting...";
+                serviceStatusSubItem.ForeColor = Color.DarkGreen;
+
+                Assembly serviceDLLAssembly = Assembly.LoadFile(e.Item.SubItems[0].Text);
+                Type serviceType = serviceDLLAssembly.GetType(e.Item.SubItems[2].Text);
+                Type serviceContractType = serviceDLLAssembly.GetType(e.Item.SubItems[1].Text);
+                string servicePath = "http://localhost:" + e.Item.SubItems[3].Text + "/" + serviceDLLAssembly.GetType(e.Item.SubItems[2].Text).Name;
+                ServiceHost serviceHost = new ServiceHost(serviceType, new Uri(servicePath));
+                ServiceMetadataBehavior mexBehavior = new ServiceMetadataBehavior();
+                mexBehavior.HttpGetEnabled = true;
+                serviceHost.Description.Behaviors.Add(mexBehavior);
+                serviceHost.AddServiceEndpoint(serviceContractType, new BasicHttpBinding(), "");
+                e.Item.Tag = serviceHost;
+                serviceHost.Open();
+
+                serviceStatusSubItem.Text = "running..";
+                serviceStatusSubItem.ForeColor = Color.Green;
+            }
+            else
+            {
+                serviceStatusSubItem.Text = "stopping...";
+                serviceStatusSubItem.ForeColor = Color.DarkOrange;
+                if (e.Item.Tag != null) ((ServiceHost)e.Item.Tag).Close();
+                serviceStatusSubItem.Text = "stopped";
+                serviceStatusSubItem.ForeColor = Color.Orange;
+            }
+        }
+
+        private void listViewInstalledServices_Resize(object sender, EventArgs e)
+        {
+//
         }
     }
 }
