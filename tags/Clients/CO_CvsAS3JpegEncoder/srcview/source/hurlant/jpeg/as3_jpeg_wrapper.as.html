@@ -1,0 +1,22 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>as3_jpeg_wrapper.as</title>
+<link rel="stylesheet" type="text/css" href="../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">hurlant</span>.<span class="ActionScriptDefault_Text">jpeg</span> <span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">as3_jpeg_wrapper</span> <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">cmodule</span>.<span class="ActionScriptDefault_Text">as3_jpeg_wrapper</span>.<span class="ActionScriptDefault_Text">CLibInit</span>;
+        <span class="ActionScriptReserved">protected</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">_lib_init</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">cmodule</span>.<span class="ActionScriptDefault_Text">as3_jpeg_wrapper</span>.<span class="ActionScriptDefault_Text">CLibInit</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">cmodule</span>.<span class="ActionScriptDefault_Text">as3_jpeg_wrapper</span>.<span class="ActionScriptDefault_Text">CLibInit</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptReserved">protected</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">_lib</span><span class="ActionScriptOperator">:*</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_lib_init</span>.<span class="ActionScriptDefault_Text">init</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptDefault_Text">ByteArray</span>;
+        <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">write_jpeg_file</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">data</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ByteArray</span>, <span class="ActionScriptDefault_Text">width</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>, <span class="ActionScriptDefault_Text">height</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>, <span class="ActionScriptDefault_Text">bytes_per_pixel</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>, <span class="ActionScriptDefault_Text">color_space</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ByteArray</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_lib</span>.<span class="ActionScriptDefault_Text">write_jpeg_file</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">data</span>, <span class="ActionScriptDefault_Text">width</span>, <span class="ActionScriptDefault_Text">height</span>, <span class="ActionScriptDefault_Text">bytes_per_pixel</span>, <span class="ActionScriptDefault_Text">color_space</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span>
+</pre></body>
+</html>
