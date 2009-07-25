@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete=" JpegTest()" layout="absolute" backgroundGradientAlphas="[1.0, 1.0]" backgroundGradientColors="[#FFFFFF, #FFFFFF]" viewSourceURL="srcview/index.html">
+	<mx:Script>
+		<![CDATA[
+				import com.adobe.images.JPGEncoder;
+	
+	import flash.display.*;
+	import flash.events.*;
+	import flash.geom.Rectangle;
+	import flash.net.*;
+	import flash.text.*;
+	import flash.utils.ByteArray;
+	import flash.utils.getTimer;
+	
+	import hurlant.jpeg.as3_jpeg_wrapper;
+	
+
+   import mx.controls.Alert;
+            import mx.utils.ObjectUtil;
+	
+		private var fr:FileReference;
+	
+
+
+
+	public function FileLiad():void{
+	
+		
+	
+		
+			
+		
+			
+	
+			fr = new FileReference();
+	fr.addEventListener(Event.SELECT, fileReference_select);
+	fr.addEventListener(Event.COMPLETE, fileReference_complete); 
+			
+		}
+		
+		  private function btn_click(evt:MouseEvent):void {
+                var arr:Array = [];
+            var arr2:Array = [];
+                arr.push(new FileFilter(" Images ", " .gif;*.jpeg;*.jpg;*.png"));
+             
+                   
+                fr.browse(arr);
+          
+            }
+
+            private function fileReference_select(evt:Event):void {
+              fr.load();
+            }
+
+            private function fileReference_complete(evt:Event):void {
+                bi.source = fr.data;
+               it.text = it.text +  " /// Source: \\\	 " + (ObjectUtil.toString(fr)).toString() + " " ;
+          
+            }
+              private function GetImWH():void {
+	  it.text = it.text + " /// Created Object Width  Height: \\\	 " + bi.width.toString() + " X " + bi.height.toString() + " " ;
+              }
+		private function onSave(e:Event):void
+		{
+		var textReportName:String = "Report" + ".txt";
+			fr.save(it.text, textReportName);
+		}
+	
+		public function JpegTest():void {
+	
+		it.text = it.text +"hello."+ " 		";
+           FileLiad();
+			
+		}
+		private function testWrite(e:Event):ByteArray {
+		var bmpdata:BitmapData = Bitmap(bi.content).bitmapData;
+		
+
+			// as3 way
+			var t1:int = getTimer();
+			var s:JPGEncoder = new JPGEncoder();
+			var jpg:ByteArray = s.encode(bmpdata);
+			it.text = it.text + ("        /// AS3 JPEG ENCODING: \\\ "+(getTimer()-t1)+"ms.").toString()+ "	 ";
+			it.text = it.text + ("   jpg.length = "+jpg.length).toString()+ " ";
+
+
+			// C way
+			var t2:int = getTimer();
+			var ba:ByteArray = bmpdata.getPixels(new Rectangle(0,0, bi.width , bi.height));
+			var ret:ByteArray = as3_jpeg_wrapper.write_jpeg_file(ba, bi.width , bi.height, bpp.value, cs.value);	
+			it.text = it.text +("          /// C  JPEG ENCODING: \\\ "+(getTimer()-t2)+"ms.").toString() + " 	" ;
+
+			it.text = it.text + (" ret.length="+ret.length).toString();
+			return ret;
+		}
+
+		]]>
+	</mx:Script>
+	<mx:Button label="Image Goes Here" horizontalCenter="0" verticalCenter="0" click="btn_click(event);"/>
+	<mx:ApplicationControlBar bottom="0" right="0" left="0" top="0" dock="false" fillAlphas="[0.53, 0.58]" fillColors="[#44FB44, #27BAE5]">
+			<mx:Image scaleContent="true" autoLoad="true" id="bi" top="200"/>
+	
+	</mx:ApplicationControlBar>
+	<mx:ApplicationControlBar dock="true" height="103" fillAlphas="[0.6, 0.27]" fillColors="[#1DFD06, #12E50D]" right="2" left="2" top="2">
+	<mx:Form>
+		<mx:FormItem>
+			
+	
+<mx:Button label=" Image WxH " id="qb4" click="GetImWH();" />
+	</mx:FormItem>
+		<mx:FormItem label="color_space (цветовая схема)">
+			<mx:NumericStepper value="2" id="cs" stepSize="1" minimum="0" maximum="200"/>
+		</mx:FormItem>
+		<mx:FormItem label="bytes_per_pixel">
+			<mx:NumericStepper value="3" id="bpp" stepSize="1" minimum="0" maximum="200"/>
+		</mx:FormItem>
+		</mx:Form>
+		<mx:FormItem>
+					<mx:Button label="Load Image" id="qb1" click="btn_click(event);"/>
+		<mx:Button label="Calculate" id="qb3" click="	testWrite(event)"/>
+		<mx:Button label="Save Report" id="qb2" click="onSave(event);"/>
+		</mx:FormItem>
+				<mx:TextArea id="it" maxChars="5000" displayAsPassword="false" editable="true" enabled="true" height="68" width="100%"/>
+	</mx:ApplicationControlBar>
+	
+
+
+</mx:Application>
