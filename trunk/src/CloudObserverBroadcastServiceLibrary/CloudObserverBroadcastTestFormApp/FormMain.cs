@@ -11,7 +11,7 @@ using System.IO;
 
 namespace CloudObserverBroadcastTestFormApp
 {
-    public partial class Form1 : Form
+    public partial class FormMain : Form
     {
         public static byte[] BmpToBytes(Bitmap bmp)
         {
@@ -36,7 +36,7 @@ namespace CloudObserverBroadcastTestFormApp
             return bmp;
         }
 
-        public Form1()
+        public FormMain()
         {
             InitializeComponent();
             label1.Text = "From 1 user";
@@ -63,7 +63,7 @@ namespace CloudObserverBroadcastTestFormApp
 
             for (int i = 0; (i <= 9) && (i >= 0); i++)
             {
-                Bitmap cameraImage = new Bitmap("F:\\pictures\\snapshot" + i.ToString() + ".bmp");
+                Bitmap cameraImage = new Bitmap(Application.StartupPath + @"\pictures\Snapshot" + i.ToString() + ".bmp");
 
                 byte[] cameraImageToArray = new byte[0];
                 cameraImageToArray = BmpToBytes(cameraImage);

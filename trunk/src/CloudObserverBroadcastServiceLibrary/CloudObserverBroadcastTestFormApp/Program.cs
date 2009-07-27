@@ -13,7 +13,7 @@ namespace CloudObserverBroadcastTestFormApp
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Form1 TestForm = new Form1();
+            FormMain TestForm = new FormMain();
             Application.Run(TestForm);
         }
     }
