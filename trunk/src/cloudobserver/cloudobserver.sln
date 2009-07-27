@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserverDatabaseLibrary", "CloudObserverDatabaseLibrary\CloudObserverDatabaseLibrary.csproj", "{D8967BBE-DA2D-4ADB-B804-7C60F0BD8CD4}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestProjects", "TestProjects", "{6937BAF3-70DB-42A2-9272-F8DE0BE96FD7}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test Projects", "Test Projects", "{6937BAF3-70DB-42A2-9272-F8DE0BE96FD7}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DebugProjects", "DebugProjects", "{12D90619-4DAD-4960-9B36-51F912677C6F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Auxiliary Projects", "Auxiliary Projects", "{12D90619-4DAD-4960-9B36-51F912677C6F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseManagementTool", "DatabaseManagementTool\DatabaseManagementTool.csproj", "{2FA4EECF-8B8A-44CC-86AA-55C4FA2957CA}"
 EndProject
@@ -37,12 +37,20 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "CloudObserverWebsite", "Clo
 		Release.AspNetCompiler.ForceOverwrite = "true"
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
-		VWDPort = "59003"
+		VWDPort = "4937"
 		DefaultWebSiteLanguage = "Visual C#"
 		ProjOutputReferences = "{DE03D550-11C3-426B-B086-BC6F55D44FDC}|ClientBin|false;"
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserverServicesHoster", "CloudObserverServicesHoster\CloudObserverServicesHoster.csproj", "{7EBABAF8-9E80-4856-9171-9C722C1B43E2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Project Templates", "Project Templates", "{67E78D21-1493-43AB-93D6-64D359396E5E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserverTemplateServiceLibrary", "CloudObserverTemplateServiceLibrary\CloudObserverTemplateServiceLibrary.csproj", "{F5D6963A-0247-4D72-B0A7-FA0EC2D3F12F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services Libraries", "Services Libraries", "{E936EA91-41A2-42C2-9BE3-4EC77F81FC39}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserverBroadcastServiceLibrary", "CloudObserverBroadcastServiceLibrary\CloudObserverBroadcastServiceLibrary.csproj", "{B99444A2-19AA-458B-BB9C-E554ACB120B3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -82,6 +90,14 @@ Global
 		{7EBABAF8-9E80-4856-9171-9C722C1B43E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7EBABAF8-9E80-4856-9171-9C722C1B43E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7EBABAF8-9E80-4856-9171-9C722C1B43E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5D6963A-0247-4D72-B0A7-FA0EC2D3F12F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5D6963A-0247-4D72-B0A7-FA0EC2D3F12F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5D6963A-0247-4D72-B0A7-FA0EC2D3F12F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5D6963A-0247-4D72-B0A7-FA0EC2D3F12F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B99444A2-19AA-458B-BB9C-E554ACB120B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B99444A2-19AA-458B-BB9C-E554ACB120B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B99444A2-19AA-458B-BB9C-E554ACB120B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B99444A2-19AA-458B-BB9C-E554ACB120B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -90,5 +106,7 @@ Global
 		{095940BA-F39F-4A15-BF68-2864C486CFD6} = {6937BAF3-70DB-42A2-9272-F8DE0BE96FD7}
 		{45ACB5EB-2AC3-4233-89D1-A914304C1DAF} = {6937BAF3-70DB-42A2-9272-F8DE0BE96FD7}
 		{2FA4EECF-8B8A-44CC-86AA-55C4FA2957CA} = {12D90619-4DAD-4960-9B36-51F912677C6F}
+		{F5D6963A-0247-4D72-B0A7-FA0EC2D3F12F} = {67E78D21-1493-43AB-93D6-64D359396E5E}
+		{B99444A2-19AA-458B-BB9C-E554ACB120B3} = {E936EA91-41A2-42C2-9BE3-4EC77F81FC39}
 	EndGlobalSection
 EndGlobal

@@ -31,7 +31,7 @@ namespace CloudObserverServicesHoster
 
         public void InstallService(string serviceDLL, string serviceInterface, string serviceClass, int servicePort)
         {
-            ListViewItem newService = new ListViewItem(serviceDLL); //listViewInstalledServices.Items.Add(serviceDLL);
+            ListViewItem newService = new ListViewItem(serviceDLL);
             newService.SubItems.Add(serviceInterface);
             newService.SubItems.Add(serviceClass);
             newService.SubItems.Add(servicePort.ToString());
@@ -56,7 +56,7 @@ namespace CloudObserverServicesHoster
                 ServiceMetadataBehavior mexBehavior = new ServiceMetadataBehavior();
                 mexBehavior.HttpGetEnabled = true;
                 serviceHost.Description.Behaviors.Add(mexBehavior);
-                serviceHost.AddServiceEndpoint(serviceContractType, new BasicHttpBinding(), "");
+                serviceHost.AddServiceEndpoint(serviceContractType, new WSHttpBinding(), "");
                 e.Item.Tag = serviceHost;
                 serviceHost.Open();
 
@@ -73,9 +73,9 @@ namespace CloudObserverServicesHoster
             }
         }
 
-        private void listViewInstalledServices_Resize(object sender, EventArgs e)
+        private void buttonUninstallService_Click(object sender, EventArgs e)
         {
-//
+            listViewInstalledServices.SelectedItems[0].Remove();
         }
     }
 }

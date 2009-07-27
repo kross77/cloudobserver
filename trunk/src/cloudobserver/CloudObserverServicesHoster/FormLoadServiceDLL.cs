@@ -87,7 +87,7 @@ namespace CloudObserverServicesHoster
                 ServiceMetadataBehavior mexBehavior = new ServiceMetadataBehavior();
                 mexBehavior.HttpGetEnabled = true;
                 serviceHost.Description.Behaviors.Add(mexBehavior);
-                serviceHost.AddServiceEndpoint(serviceContractType, new BasicHttpBinding(), "");
+                serviceHost.AddServiceEndpoint(serviceContractType, new WSHttpBinding(), "");
                 serviceHost.Open();
                 serviceHost.Close();
                 isServiceHostingTestSucceed = true;

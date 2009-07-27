@@ -35,9 +35,9 @@
             this.columnHeaderInterface = new System.Windows.Forms.ColumnHeader();
             this.columnHeaderClass = new System.Windows.Forms.ColumnHeader();
             this.columnHeaderPort = new System.Windows.Forms.ColumnHeader();
+            this.columnHeaderStatus = new System.Windows.Forms.ColumnHeader();
             this.buttonInstallService = new System.Windows.Forms.Button();
             this.buttonUninstallService = new System.Windows.Forms.Button();
-            this.columnHeaderStatus = new System.Windows.Forms.ColumnHeader();
             this.SuspendLayout();
             // 
             // radioButtonManualMode
@@ -83,7 +83,6 @@
             this.listViewInstalledServices.TabIndex = 2;
             this.listViewInstalledServices.UseCompatibleStateImageBehavior = false;
             this.listViewInstalledServices.View = System.Windows.Forms.View.Details;
-            this.listViewInstalledServices.Resize += new System.EventHandler(this.listViewInstalledServices_Resize);
             this.listViewInstalledServices.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.listViewInstalledServices_ItemChecked);
             this.listViewInstalledServices.SelectedIndexChanged += new System.EventHandler(this.listViewInstalledServices_SelectedIndexChanged);
             // 
@@ -107,6 +106,11 @@
             this.columnHeaderPort.Text = "Port";
             this.columnHeaderPort.Width = 50;
             // 
+            // columnHeaderStatus
+            // 
+            this.columnHeaderStatus.Text = "Status";
+            this.columnHeaderStatus.Width = 100;
+            // 
             // buttonInstallService
             // 
             this.buttonInstallService.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -128,11 +132,7 @@
             this.buttonUninstallService.TabIndex = 4;
             this.buttonUninstallService.Text = "Uninstall Service";
             this.buttonUninstallService.UseVisualStyleBackColor = true;
-            // 
-            // columnHeaderStatus
-            // 
-            this.columnHeaderStatus.Text = "Status";
-            this.columnHeaderStatus.Width = 100;
+            this.buttonUninstallService.Click += new System.EventHandler(this.buttonUninstallService_Click);
             // 
             // FormMain
             // 
