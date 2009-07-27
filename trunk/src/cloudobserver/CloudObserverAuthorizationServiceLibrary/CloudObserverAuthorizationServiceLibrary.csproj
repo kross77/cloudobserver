@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{45ACB5EB-2AC3-4233-89D1-A914304C1DAF}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{3E76105C-29C2-47DA-81CE-4BB268FE4A2F}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SimpleServiceClient</RootNamespace>
-    <AssemblyName>SimpleServiceClient</AssemblyName>
+    <RootNamespace>CloudObserverAuthorizationServiceLibrary</RootNamespace>
+    <AssemblyName>CloudObserverAuthorizationServiceLibrary</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -37,13 +37,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="CloudObserverAuthorizationService.cs" />
+    <Compile Include="ICloudObserverAuthorizationService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CloudObserverAuthorizationServiceLibrary\CloudObserverAuthorizationServiceLibrary.csproj">
-      <Project>{3E76105C-29C2-47DA-81CE-4BB268FE4A2F}</Project>
-      <Name>CloudObserverAuthorizationServiceLibrary</Name>
+    <ProjectReference Include="..\CloudObserverDatabaseLibrary\CloudObserverDatabaseLibrary.csproj">
+      <Project>{D8967BBE-DA2D-4ADB-B804-7C60F0BD8CD4}</Project>
+      <Name>CloudObserverDatabaseLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

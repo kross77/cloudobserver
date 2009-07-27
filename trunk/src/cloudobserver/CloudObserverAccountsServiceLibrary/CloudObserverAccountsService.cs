@@ -1,38 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.ServiceModel;
-using System.Text;
 using CloudObserverDatabaseLibrary;
 
-namespace CloudObserverServiceLibrary
+namespace CloudObserverAccountsServiceLibrary
 {
-    public class CloudObserverService : ICloudObserverService
+    public class CloudObserverAccountsService : ICloudObserverAccountsService
     {
         CloudObserverDatabase database;
 
-        public CloudObserverService()
+        public CloudObserverAccountsService(string databaseConnection)
         {
-            database = new CloudObserverDatabase();
+            database = new CloudObserverDatabase(databaseConnection);
         }
 
         // users
-        public bool UserIsEmailAvailable(string email)
-        {
-            return database.UserIsEmailAvailable(email);
-        }
-
-        public bool UserLogin(string email, string password)
-        {
-            return database.UserLogin(email, password);
-        }
-
-        public int UserAdd(string email, string password, string name, string description, byte[] icon)
-        {
-            return database.UserAdd(email, password, name, description, icon);
-        }
-
         public void UserRemove(int userID)
         {
             database.UserRemove(userID);
@@ -270,27 +250,6 @@ namespace CloudObserverServiceLibrary
         public void GroupCameraRemove(int cameraID, int groupID)
         {
             database.GroupCameraRemove(cameraID, groupID);
-        }
-
-        // frames
-        public int FrameAdd(int cameraID, byte[] content, string marker)
-        {
-            return database.FrameAdd(cameraID, content, marker);
-        }
-
-        public void FrameRemove(int frameID)
-        {
-            database.FrameRemove(frameID);
-        }
-
-        public byte[] FrameGetContent(int frameID)
-        {
-            return database.FrameGetContent(frameID);
-        }
-
-        public string FrameGetMarker(int frameID)
-        {
-            return database.FrameGetMarker(frameID);
         }
     }
 }

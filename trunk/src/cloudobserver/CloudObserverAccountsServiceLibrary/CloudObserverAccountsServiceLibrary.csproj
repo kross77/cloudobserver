@@ -1,17 +1,17 @@
-﻿<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{99951F20-79A7-4EFC-9DE4-08E992AD4816}</ProjectGuid>
+    <ProjectGuid>{2E1BADC1-09A8-43E2-8D37-CEC63BF2383E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CloudObserverServiceLibrary</RootNamespace>
-    <AssemblyName>CloudObserverServiceLibrary</AssemblyName>
-    <ProjectTypeGuids>{3D9AD99F-2412-4246-B90B-4EAA41C64699};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <StartArguments>/client:"WcfTestClient.exe"</StartArguments>
+    <RootNamespace>CloudObserverAccountsServiceLibrary</RootNamespace>
+    <AssemblyName>CloudObserverAccountsServiceLibrary</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,28 +32,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data" />
-    <Reference Include="System.Runtime.Serialization">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.ServiceModel">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ICloudObserverService.cs" />
+    <Compile Include="CloudObserverAccountsService.cs" />
+    <Compile Include="ICloudObserverAccountsService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="CloudObserverService.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CloudObserverDatabaseLibrary\CloudObserverDatabaseLibrary.csproj">
@@ -61,7 +47,7 @@
       <Name>CloudObserverDatabaseLibrary</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
@@ -69,13 +55,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <ProjectExtensions>
-    <VisualStudio>
-      <FlavorProperties GUID="{3D9AD99F-2412-4246-B90B-4EAA41C64699}">
-        <WcfProjectProperties>
-          <AutoStart>True</AutoStart>
-        </WcfProjectProperties>
-      </FlavorProperties>
-    </VisualStudio>
-  </ProjectExtensions>
 </Project>

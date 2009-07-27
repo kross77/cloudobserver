@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("CloudObserverServiceLibrary")]
+[assembly: AssemblyTitle("CloudObserverAuthorizationServiceLibrary")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("CloudObserverServiceLibrary")]
+[assembly: AssemblyProduct("CloudObserverAuthorizationServiceLibrary")]
 [assembly: AssemblyCopyright("Copyright ©  2009")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("fd2380a9-96db-4bdf-b8af-7fa9800d045a")]
+[assembly: Guid("2dd6b1da-de5f-4358-80ee-0a9c4f185142")]
 
 // Version information for an assembly consists of the following four values:
 //

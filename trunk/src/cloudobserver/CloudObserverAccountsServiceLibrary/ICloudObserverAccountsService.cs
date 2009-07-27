@@ -1,25 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
 using System.ServiceModel;
-using System.Text;
 
-namespace CloudObserverServiceLibrary
+namespace CloudObserverAccountsServiceLibrary
 {
     [ServiceContract]
-    public interface ICloudObserverService
+    public interface ICloudObserverAccountsService
     {
         // users
-        [OperationContract]
-        bool UserIsEmailAvailable(string email);
-
-        [OperationContract]
-        bool UserLogin(string email, string password);
-
-        [OperationContract]
-        int UserAdd(string email, string password, string name, string description, byte[] icon);
-
         [OperationContract]
         void UserRemove(int userID);
 
@@ -164,18 +151,5 @@ namespace CloudObserverServiceLibrary
 
         [OperationContract]
         void GroupCameraRemove(int cameraID, int groupID);
-
-        // frames
-        [OperationContract]
-        int FrameAdd(int cameraID, byte[] content, string marker);
-
-        [OperationContract]
-        void FrameRemove(int frameID);
-
-        [OperationContract]
-        byte[] FrameGetContent(int frameID);
-
-        [OperationContract]
-        string FrameGetMarker(int frameID);
     }
 }
