@@ -5,7 +5,11 @@ namespace CloudObserverAccountsServiceLibrary
 {
     public class CloudObserverAccountsService : ICloudObserverAccountsService
     {
-        CloudObserverDatabase database;
+        private CloudObserverDatabase database = null;
+
+        private const string DEFAULT_DATABASE_CONNECTION = @"Data Source=.\sqlexpress;Initial Catalog=CloudObserverDatabase;Integrated Security=True";
+
+        public CloudObserverAccountsService() : this(DEFAULT_DATABASE_CONNECTION) { }
 
         public CloudObserverAccountsService(string databaseConnection)
         {

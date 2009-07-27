@@ -5,7 +5,11 @@ namespace CloudObserverAuthorizationServiceLibrary
 {
     public class CloudObserverAuthorizationService : ICloudObserverAuthorizationService
     {
-        CloudObserverDatabase database;
+        private CloudObserverDatabase database = null;
+
+        private const string DEFAULT_DATABASE_CONNECTION = @"Data Source=.\sqlexpress;Initial Catalog=CloudObserverDatabase;Integrated Security=True";
+
+        public CloudObserverAuthorizationService() : this(DEFAULT_DATABASE_CONNECTION) { }
 
         public CloudObserverAuthorizationService(string databaseConnection)
         {
