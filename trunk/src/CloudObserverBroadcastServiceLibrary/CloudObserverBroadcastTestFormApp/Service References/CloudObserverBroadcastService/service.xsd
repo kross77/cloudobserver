@@ -5,6 +5,7 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="clientID" type="xs:int" />
         <xs:element minOccurs="0" name="cameraID" type="xs:int" />
+        <xs:element minOccurs="0" name="ident" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -17,6 +18,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="cameraID" type="xs:int" />
+        <xs:element minOccurs="0" name="ident" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -29,6 +31,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="cameraID" type="xs:int" />
+        <xs:element minOccurs="0" name="ident" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -43,10 +46,21 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="frame" nillable="true" type="xs:base64Binary" />
+        <xs:element minOccurs="0" name="ident" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="setNextFrameResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="clean">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cleanResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>

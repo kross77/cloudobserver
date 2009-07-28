@@ -15,17 +15,20 @@ namespace CloudObserverBroadcastTestFormApp.CloudObserverBroadcastService {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="CloudObserverBroadcastService.ICloudObserverBroadcastService")]
     public interface ICloudObserverBroadcastService {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICloudObserverBroadcastService/bindMeToCamera", ReplyAction="http://tempuri.org/ICloudObserverBroadcastService/bindMeToCameraResponse")]
-        void bindMeToCamera(int clientID, int cameraID);
+        [System.ServiceModel.OperationContractAttribute(ProtectionLevel=System.Net.Security.ProtectionLevel.EncryptAndSign, Action="http://tempuri.org/ICloudObserverBroadcastService/bindMeToCamera", ReplyAction="http://tempuri.org/ICloudObserverBroadcastService/bindMeToCameraResponse")]
+        void bindMeToCamera(int clientID, int cameraID, int ident);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICloudObserverBroadcastService/setMeAsCamera", ReplyAction="http://tempuri.org/ICloudObserverBroadcastService/setMeAsCameraResponse")]
-        void setMeAsCamera(int cameraID);
+        [System.ServiceModel.OperationContractAttribute(ProtectionLevel=System.Net.Security.ProtectionLevel.EncryptAndSign, Action="http://tempuri.org/ICloudObserverBroadcastService/setMeAsCamera", ReplyAction="http://tempuri.org/ICloudObserverBroadcastService/setMeAsCameraResponse")]
+        void setMeAsCamera(int cameraID, int ident);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICloudObserverBroadcastService/getNextFrame", ReplyAction="http://tempuri.org/ICloudObserverBroadcastService/getNextFrameResponse")]
-        byte[] getNextFrame(int cameraID);
+        [System.ServiceModel.OperationContractAttribute(ProtectionLevel=System.Net.Security.ProtectionLevel.EncryptAndSign, Action="http://tempuri.org/ICloudObserverBroadcastService/getNextFrame", ReplyAction="http://tempuri.org/ICloudObserverBroadcastService/getNextFrameResponse")]
+        byte[] getNextFrame(int cameraID, int ident);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICloudObserverBroadcastService/setNextFrame", ReplyAction="http://tempuri.org/ICloudObserverBroadcastService/setNextFrameResponse")]
-        void setNextFrame(byte[] frame);
+        [System.ServiceModel.OperationContractAttribute(ProtectionLevel=System.Net.Security.ProtectionLevel.EncryptAndSign, Action="http://tempuri.org/ICloudObserverBroadcastService/setNextFrame", ReplyAction="http://tempuri.org/ICloudObserverBroadcastService/setNextFrameResponse")]
+        void setNextFrame(byte[] frame, int ident);
+        
+        [System.ServiceModel.OperationContractAttribute(ProtectionLevel=System.Net.Security.ProtectionLevel.EncryptAndSign, Action="http://tempuri.org/ICloudObserverBroadcastService/clean", ReplyAction="http://tempuri.org/ICloudObserverBroadcastService/cleanResponse")]
+        void clean();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
@@ -55,20 +58,24 @@ namespace CloudObserverBroadcastTestFormApp.CloudObserverBroadcastService {
                 base(binding, remoteAddress) {
         }
         
-        public void bindMeToCamera(int clientID, int cameraID) {
-            base.Channel.bindMeToCamera(clientID, cameraID);
+        public void bindMeToCamera(int clientID, int cameraID, int ident) {
+            base.Channel.bindMeToCamera(clientID, cameraID, ident);
         }
         
-        public void setMeAsCamera(int cameraID) {
-            base.Channel.setMeAsCamera(cameraID);
+        public void setMeAsCamera(int cameraID, int ident) {
+            base.Channel.setMeAsCamera(cameraID, ident);
         }
         
-        public byte[] getNextFrame(int cameraID) {
-            return base.Channel.getNextFrame(cameraID);
+        public byte[] getNextFrame(int cameraID, int ident) {
+            return base.Channel.getNextFrame(cameraID, ident);
         }
         
-        public void setNextFrame(byte[] frame) {
-            base.Channel.setNextFrame(frame);
+        public void setNextFrame(byte[] frame, int ident) {
+            base.Channel.setNextFrame(frame, ident);
+        }
+        
+        public void clean() {
+            base.Channel.clean();
         }
     }
 }

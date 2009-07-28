@@ -82,14 +82,15 @@ namespace CloudObserverBroadcastServiceLibrary
             SessionIDtoConnectedUser = new Dictionary<string,ConnectedUser>();
         }
 
-        public void bindMeToCamera(int clientID, int cameraID)
+        public void bindMeToCamera(int clientID, int cameraID, int ident)
         {
-            string currentSession = OperationContext.Current.SessionId;
-            ConnectedUser connectingUser = new ConnectedUser(clientID, currentSession);
+            //string currentSessionID = OperationContext.Current.SessionId;
+            string currentSessionID = ident.ToString();
+            ConnectedUser connectingUser = new ConnectedUser(clientID, currentSessionID);
             if (connectingUser.IsUserChecked() && CameraIDtoSessionID.ContainsKey(cameraID))
             {
                 connectingUser.getUserCameras(cameraID);//must be deleted
-                SessionIDtoConnectedUser.Add(currentSession, connectingUser);
+                SessionIDtoConnectedUser.Add(currentSessionID, connectingUser);
             }
             if (CameraIDtoSessionID.ContainsKey(cameraID))
             {
@@ -97,18 +98,20 @@ namespace CloudObserverBroadcastServiceLibrary
             }
         }
 
-        public void setMeAsCamera(int cameraID)
+        public void setMeAsCamera(int cameraID, int ident)
         {
-            string currentSessionId = OperationContext.Current.SessionId;
+            //string currentSessionId = OperationContext.Current.SessionId;
+            string currentSessionID = ident.ToString();
             CloudObserverBroadcastServiceLibrary.CameraDescription newCamera;
-            newCamera = new CameraDescription( cameraID,currentSessionId);
-            SessionIDtoCameraDescription.Add(currentSessionId,newCamera);
-            CameraIDtoSessionID.Add(cameraID,currentSessionId);
+            newCamera = new CameraDescription(cameraID, currentSessionID);
+            SessionIDtoCameraDescription.Add(currentSessionID, newCamera);
+            CameraIDtoSessionID.Add(cameraID, currentSessionID);
         }
 
-        public byte[] getNextFrame(int cameraID)
+        public byte[] getNextFrame(int cameraID, int ident)
         {
-            string currentSessionID = OperationContext.Current.SessionId;
+            //string currentSessionID = OperationContext.Current.SessionId;
+            string currentSessionID = ident.ToString();
             if (SessionIDtoConnectedUser.ContainsKey(currentSessionID))
             {
                 string cameraSession = CameraIDtoSessionID[cameraID];
@@ -117,14 +120,22 @@ namespace CloudObserverBroadcastServiceLibrary
             return (null);
         }
 
-        public void setNextFrame(byte[] frame)
+        public void setNextFrame(byte[] frame, int ident)
         {
-            string currentSessionID = OperationContext.Current.SessionId;
-            if (SessionIDtoCameraDescription.ContainsKey(currentSessionID))
-            {
-                CameraDescription camera = SessionIDtoCameraDescription[currentSessionID];
-                camera.setNewFrame(frame);
-            }
+            //string currentSessionID = OperationContext.Current.SessionId;
+            //string currentSessionID = ident.ToString();
+            //if (SessionIDtoCameraDescription.ContainsKey(currentSessionID))
+            //{
+            //    CameraDescription camera = SessionIDtoCameraDescription[currentSessionID];
+            //    camera.setNewFrame(frame);
+            //}
+        }
+
+        public void clean()
+        {
+            SessionIDtoCameraDescription.Clear();
+            CameraIDtoSessionID.Clear();
+            SessionIDtoConnectedUser.Clear();
         }
 
         public void Dispose()
