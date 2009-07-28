@@ -7,6 +7,6 @@ namespace CloudObserverTemplateServiceLibrary
     public interface ICloudObserverTemplateService
     {
         [OperationContract]
-        void TemplateMethod();
+        string Echo(string input);
     }
 }

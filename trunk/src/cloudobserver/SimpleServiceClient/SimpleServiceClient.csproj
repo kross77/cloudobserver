@@ -41,9 +41,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CloudObserverAuthorizationServiceLibrary\CloudObserverAuthorizationServiceLibrary.csproj">
-      <Project>{3E76105C-29C2-47DA-81CE-4BB268FE4A2F}</Project>
-      <Name>CloudObserverAuthorizationServiceLibrary</Name>
+    <ProjectReference Include="..\CloudObserverTemplateServiceLibrary\CloudObserverTemplateServiceLibrary.csproj">
+      <Project>{F5D6963A-0247-4D72-B0A7-FA0EC2D3F12F}</Project>
+      <Name>CloudObserverTemplateServiceLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

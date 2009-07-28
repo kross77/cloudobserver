@@ -4,8 +4,9 @@ namespace CloudObserverTemplateServiceLibrary
 {
     public class CloudObserverTemplateService : ICloudObserverTemplateService
     {
-        public void TemplateMethod()
+        public string Echo(string input)
         {
+            return input;
         }
     }
 }

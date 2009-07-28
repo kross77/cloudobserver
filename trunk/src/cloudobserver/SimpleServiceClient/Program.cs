@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ServiceModel;
-using CloudObserverAuthorizationServiceLibrary;
+using CloudObserverTemplateServiceLibrary;
 
 namespace SimpleServiceClient
 {
@@ -8,11 +8,20 @@ namespace SimpleServiceClient
     {
         static void Main(string[] args)
         {
-            Console.Write("Port: ");
-            string port = Console.ReadLine();
-            ICloudObserverAuthorizationService client = new ChannelFactory<ICloudObserverAuthorizationService>(new BasicHttpBinding(), "http://localhost:" + port + "/CloudObserverService").CreateChannel();
-            Console.Write("Email: ");
-            Console.Write("This email " + (client.UserIsEmailAvailable(Console.ReadLine()) ? "is" : "is not") + " available.");
+            try
+            {
+                Console.Write("Port (1024-65535): ");
+                int servicePort = Int32.Parse(Console.ReadLine());
+                if ((servicePort < 1024) || (servicePort > 65535)) throw new Exception("Port out of range.");
+                string serviceAddress = @"http://localhost:" + servicePort + "/CloudObserverTemplateService";
+                Console.WriteLine("Connecting to Cloud Observer Template service at " + serviceAddress);
+                ICloudObserverTemplateService client = new ChannelFactory<ICloudObserverTemplateService>(new BasicHttpBinding(), serviceAddress).CreateChannel();
+                Console.Write(client.Echo("Connection succeed. Press any key to exit..."));
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.Message);
+            }
             Console.ReadKey();
         }
     }

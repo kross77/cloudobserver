@@ -32,7 +32,9 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "CloudObserverWebsite", "Clo
 		Release.AspNetCompiler.ForceOverwrite = "true"
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
-		VWDPort = "4937"
+		VWDPort = "9999"
+		VWDDynamicPort = "false"
+		VWDVirtualPath = "/"
 		DefaultWebSiteLanguage = "Visual C#"
 		ProjOutputReferences = "{DE03D550-11C3-426B-B086-BC6F55D44FDC}|ClientBin|false;"
 	EndProjectSection
@@ -50,6 +52,14 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserverAuthorizationServiceLibrary", "CloudObserverAuthorizationServiceLibrary\CloudObserverAuthorizationServiceLibrary.csproj", "{3E76105C-29C2-47DA-81CE-4BB268FE4A2F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserverAccountsServiceLibrary", "CloudObserverAccountsServiceLibrary\CloudObserverAccountsServiceLibrary.csproj", "{2E1BADC1-09A8-43E2-8D37-CEC63BF2383E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserverPolicyRetrieverServiceLibrary", "CloudObserverPolicyRetrieverServiceLibrary\CloudObserverPolicyRetrieverServiceLibrary.csproj", "{06DF545E-21AF-4C4C-8D61-CA45328DC0D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimplePolicyRetrieverServiceHoster", "SimplePolicyRetrieverServiceHoster\SimplePolicyRetrieverServiceHoster.csproj", "{AA5F9708-968F-4240-B6A4-6C02D522B756}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleDatabaseClient", "SimpleDatabaseClient\SimpleDatabaseClient.csproj", "{7DE60DB9-A314-479B-95E0-06A13A63FCFA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleAuthorizationClient", "SimpleAuthorizationClient\SimpleAuthorizationClient.csproj", "{8501788C-FE7F-4B81-A11B-D3F472A991BE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -101,6 +111,22 @@ Global
 		{2E1BADC1-09A8-43E2-8D37-CEC63BF2383E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E1BADC1-09A8-43E2-8D37-CEC63BF2383E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E1BADC1-09A8-43E2-8D37-CEC63BF2383E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06DF545E-21AF-4C4C-8D61-CA45328DC0D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06DF545E-21AF-4C4C-8D61-CA45328DC0D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06DF545E-21AF-4C4C-8D61-CA45328DC0D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06DF545E-21AF-4C4C-8D61-CA45328DC0D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA5F9708-968F-4240-B6A4-6C02D522B756}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA5F9708-968F-4240-B6A4-6C02D522B756}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA5F9708-968F-4240-B6A4-6C02D522B756}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA5F9708-968F-4240-B6A4-6C02D522B756}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DE60DB9-A314-479B-95E0-06A13A63FCFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DE60DB9-A314-479B-95E0-06A13A63FCFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DE60DB9-A314-479B-95E0-06A13A63FCFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DE60DB9-A314-479B-95E0-06A13A63FCFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8501788C-FE7F-4B81-A11B-D3F472A991BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8501788C-FE7F-4B81-A11B-D3F472A991BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8501788C-FE7F-4B81-A11B-D3F472A991BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8501788C-FE7F-4B81-A11B-D3F472A991BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -108,10 +134,14 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{095940BA-F39F-4A15-BF68-2864C486CFD6} = {6937BAF3-70DB-42A2-9272-F8DE0BE96FD7}
 		{45ACB5EB-2AC3-4233-89D1-A914304C1DAF} = {6937BAF3-70DB-42A2-9272-F8DE0BE96FD7}
+		{AA5F9708-968F-4240-B6A4-6C02D522B756} = {6937BAF3-70DB-42A2-9272-F8DE0BE96FD7}
+		{7DE60DB9-A314-479B-95E0-06A13A63FCFA} = {6937BAF3-70DB-42A2-9272-F8DE0BE96FD7}
+		{8501788C-FE7F-4B81-A11B-D3F472A991BE} = {6937BAF3-70DB-42A2-9272-F8DE0BE96FD7}
 		{2FA4EECF-8B8A-44CC-86AA-55C4FA2957CA} = {12D90619-4DAD-4960-9B36-51F912677C6F}
 		{F5D6963A-0247-4D72-B0A7-FA0EC2D3F12F} = {67E78D21-1493-43AB-93D6-64D359396E5E}
 		{B99444A2-19AA-458B-BB9C-E554ACB120B3} = {E936EA91-41A2-42C2-9BE3-4EC77F81FC39}
 		{3E76105C-29C2-47DA-81CE-4BB268FE4A2F} = {E936EA91-41A2-42C2-9BE3-4EC77F81FC39}
 		{2E1BADC1-09A8-43E2-8D37-CEC63BF2383E} = {E936EA91-41A2-42C2-9BE3-4EC77F81FC39}
+		{06DF545E-21AF-4C4C-8D61-CA45328DC0D6} = {E936EA91-41A2-42C2-9BE3-4EC77F81FC39}
 	EndGlobalSection
 EndGlobal
