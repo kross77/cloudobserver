@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.radioButtonManualMode = new System.Windows.Forms.RadioButton();
+            this.radioButtonManualServicesManagement = new System.Windows.Forms.RadioButton();
             this.labelServices = new System.Windows.Forms.Label();
             this.listViewInstalledServices = new System.Windows.Forms.ListView();
             this.columnHeaderDLL = new System.Windows.Forms.ColumnHeader();
@@ -36,23 +36,23 @@
             this.columnHeaderClass = new System.Windows.Forms.ColumnHeader();
             this.columnHeaderPort = new System.Windows.Forms.ColumnHeader();
             this.columnHeaderBinding = new System.Windows.Forms.ColumnHeader();
+            this.columnHeaderStatus = new System.Windows.Forms.ColumnHeader();
             this.buttonInstallService = new System.Windows.Forms.Button();
             this.buttonUninstallService = new System.Windows.Forms.Button();
-            this.columnHeaderStatus = new System.Windows.Forms.ColumnHeader();
             this.SuspendLayout();
             // 
-            // radioButtonManualMode
+            // radioButtonManualServicesManagement
             // 
-            this.radioButtonManualMode.AutoSize = true;
-            this.radioButtonManualMode.Checked = true;
-            this.radioButtonManualMode.Enabled = false;
-            this.radioButtonManualMode.Location = new System.Drawing.Point(12, 12);
-            this.radioButtonManualMode.Name = "radioButtonManualMode";
-            this.radioButtonManualMode.Size = new System.Drawing.Size(92, 17);
-            this.radioButtonManualMode.TabIndex = 0;
-            this.radioButtonManualMode.TabStop = true;
-            this.radioButtonManualMode.Text = "Manual mode:";
-            this.radioButtonManualMode.UseVisualStyleBackColor = true;
+            this.radioButtonManualServicesManagement.AutoSize = true;
+            this.radioButtonManualServicesManagement.Checked = true;
+            this.radioButtonManualServicesManagement.Enabled = false;
+            this.radioButtonManualServicesManagement.Location = new System.Drawing.Point(12, 12);
+            this.radioButtonManualServicesManagement.Name = "radioButtonManualServicesManagement";
+            this.radioButtonManualServicesManagement.Size = new System.Drawing.Size(166, 17);
+            this.radioButtonManualServicesManagement.TabIndex = 0;
+            this.radioButtonManualServicesManagement.TabStop = true;
+            this.radioButtonManualServicesManagement.Text = "Manual services management";
+            this.radioButtonManualServicesManagement.UseVisualStyleBackColor = true;
             // 
             // labelServices
             // 
@@ -113,6 +113,10 @@
             this.columnHeaderBinding.Text = "Binding";
             this.columnHeaderBinding.Width = 100;
             // 
+            // columnHeaderStatus
+            // 
+            this.columnHeaderStatus.Text = "Status";
+            // 
             // buttonInstallService
             // 
             this.buttonInstallService.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -136,10 +140,6 @@
             this.buttonUninstallService.UseVisualStyleBackColor = true;
             this.buttonUninstallService.Click += new System.EventHandler(this.buttonUninstallService_Click);
             // 
-            // columnHeaderStatus
-            // 
-            this.columnHeaderStatus.Text = "Status";
-            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -149,7 +149,7 @@
             this.Controls.Add(this.buttonInstallService);
             this.Controls.Add(this.listViewInstalledServices);
             this.Controls.Add(this.labelServices);
-            this.Controls.Add(this.radioButtonManualMode);
+            this.Controls.Add(this.radioButtonManualServicesManagement);
             this.MaximizeBox = false;
             this.Name = "FormMain";
             this.Text = "Cloud Observer Services Hoster";
@@ -160,7 +160,7 @@
 
         #endregion
 
-        private System.Windows.Forms.RadioButton radioButtonManualMode;
+        private System.Windows.Forms.RadioButton radioButtonManualServicesManagement;
         private System.Windows.Forms.Label labelServices;
         private System.Windows.Forms.ListView listViewInstalledServices;
         private System.Windows.Forms.Button buttonInstallService;

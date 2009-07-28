@@ -21,7 +21,7 @@ namespace CloudObserverServicesHoster
 
             if (File.Exists(servicesFilePath)) LoadServices(File.OpenRead(servicesFilePath));
 
-            comboBoxBinding.SelectedIndex = 0;
+            comboBoxEndpointBinding.SelectedIndex = 0;
         }
 
         private void LoadServices(Stream input)
@@ -31,7 +31,7 @@ namespace CloudObserverServicesHoster
                 if (servicesFileReader.NodeType == XmlNodeType.Element)
                     if (servicesFileReader.Name == "Service")
                     {
-                        ListViewItem newServiceItem = listViewLoadedServices.Items.Add(servicesFileReader.GetAttribute("DLL"));
+                        ListViewItem newServiceItem = listViewServices.Items.Add(servicesFileReader.GetAttribute("DLL"));
                         newServiceItem.SubItems.Add(servicesFileReader.GetAttribute("Interface"));
                         newServiceItem.SubItems.Add(servicesFileReader.GetAttribute("Class"));
                     }
@@ -46,7 +46,7 @@ namespace CloudObserverServicesHoster
                 servicesFileWriter = new XmlTextWriter(output, Encoding.Unicode);
                 servicesFileWriter.WriteStartDocument();
                 servicesFileWriter.WriteStartElement("Services");
-                foreach (ListViewItem serviceItem in listViewLoadedServices.Items)
+                foreach (ListViewItem serviceItem in listViewServices.Items)
                 {
                     servicesFileWriter.WriteStartElement("Service");
                     servicesFileWriter.WriteAttributeString("DLL", serviceItem.SubItems[0].Text);
@@ -71,7 +71,7 @@ namespace CloudObserverServicesHoster
 
         public void loadServiceDLL(string serviceDLLFile, string serviceInterface, string serviceClass)
         {
-            ListViewItem newServiceItem = listViewLoadedServices.Items.Add(serviceDLLFile);
+            ListViewItem newServiceItem = listViewServices.Items.Add(serviceDLLFile);
             newServiceItem.SubItems.Add(serviceInterface);
             newServiceItem.SubItems.Add(serviceClass);
         }
@@ -83,14 +83,19 @@ namespace CloudObserverServicesHoster
 
         private void buttonInstall_Click(object sender, EventArgs e)
         {
-            ListViewItem selectedServiceItem = listViewLoadedServices.SelectedItems[0];
-            ((FormMain)Owner).InstallService(selectedServiceItem.SubItems[0].Text, selectedServiceItem.SubItems[1].Text, selectedServiceItem.SubItems[2].Text, Decimal.ToInt32(numericUpDownServicePort.Value), comboBoxBinding.SelectedItem.ToString());
+            ListViewItem selectedServiceItem = listViewServices.SelectedItems[0];
+            ((FormMain)Owner).InstallService(selectedServiceItem.SubItems[0].Text, selectedServiceItem.SubItems[1].Text, selectedServiceItem.SubItems[2].Text, Decimal.ToInt32(numericUpDownPort.Value), comboBoxEndpointBinding.SelectedItem.ToString());
             Close();
         }
 
         private void listViewLoadedServices_SelectedIndexChanged(object sender, EventArgs e)
         {
-            buttonInstall.Enabled = (listViewLoadedServices.SelectedItems.Count > 0);
+            buttonInstall.Enabled = (listViewServices.SelectedItems.Count > 0);
+        }
+
+        private void buttonAddEndpoint_Click(object sender, EventArgs e)
+        {
+            listViewEndpoints.Items.Add("BasicHttpBinding").SubItems.Add("");
         }
     }
 }

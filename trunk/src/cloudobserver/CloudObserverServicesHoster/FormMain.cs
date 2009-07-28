@@ -9,11 +9,15 @@ using System.Windows.Forms;
 using System.Reflection;
 using System.ServiceModel;
 using System.ServiceModel.Description;
+using System.Xml;
 
 namespace CloudObserverServicesHoster
 {
     public partial class FormMain : Form
     {
+        private const int MAX_RECEIVED_MESSAGE_SIZE = 2147483647;
+        private const int MAX_ARRAY_LENGTH = 2147483647;
+
         public FormMain()
         {
             InitializeComponent();
@@ -52,12 +56,40 @@ namespace CloudObserverServicesHoster
                 Assembly serviceDLLAssembly = Assembly.LoadFile(e.Item.SubItems[0].Text);
                 Type serviceType = serviceDLLAssembly.GetType(e.Item.SubItems[2].Text);
                 Type serviceContractType = serviceDLLAssembly.GetType(e.Item.SubItems[1].Text);
-                string servicePath = "http://localhost:" + e.Item.SubItems[3].Text + "/" + serviceDLLAssembly.GetType(e.Item.SubItems[2].Text).Name;
+                string servicePath = "http://localhost:" + e.Item.SubItems[3].Text + "/" + serviceType.Name;
+
                 ServiceHost serviceHost = new ServiceHost(serviceType, new Uri(servicePath));
-                ServiceMetadataBehavior mexBehavior = new ServiceMetadataBehavior();
-                mexBehavior.HttpGetEnabled = true;
-                serviceHost.Description.Behaviors.Add(mexBehavior);
-                serviceHost.AddServiceEndpoint(serviceContractType, GetBinding(e.Item.SubItems[4].Text), "");
+
+                ServiceMetadataBehavior serviceMetadataBehavior = serviceHost.Description.Behaviors.Find<ServiceMetadataBehavior>();
+                if (serviceMetadataBehavior == null)
+                {
+                    serviceMetadataBehavior = new ServiceMetadataBehavior();
+                    serviceMetadataBehavior.HttpGetEnabled = true;
+                    serviceHost.Description.Behaviors.Add(serviceMetadataBehavior);
+                }
+                else
+                    serviceMetadataBehavior.HttpGetEnabled = true;
+
+                ServiceDebugBehavior serviceDebugBehavior = serviceHost.Description.Behaviors.Find<ServiceDebugBehavior>();
+                if (serviceDebugBehavior == null)
+                {
+                    serviceDebugBehavior = new ServiceDebugBehavior();
+                    serviceDebugBehavior.IncludeExceptionDetailInFaults = true;
+                    serviceHost.Description.Behaviors.Add(serviceDebugBehavior);
+                }
+                else
+                    serviceDebugBehavior.IncludeExceptionDetailInFaults = true;
+
+                BasicHttpBinding binding = (BasicHttpBinding)GetBinding(e.Item.SubItems[4].Text);
+                binding.BypassProxyOnLocal = true;
+                binding.MaxReceivedMessageSize = MAX_RECEIVED_MESSAGE_SIZE;
+                binding.OpenTimeout = TimeSpan.FromMinutes(5);
+                binding.CloseTimeout = TimeSpan.FromMinutes(5);
+                binding.ReceiveTimeout = TimeSpan.FromMinutes(30);
+                binding.SendTimeout = TimeSpan.FromMinutes(30);
+                binding.ReaderQuotas.MaxArrayLength = MAX_ARRAY_LENGTH;
+                serviceHost.AddServiceEndpoint(serviceContractType, binding, "");
+
                 e.Item.Tag = serviceHost;
                 serviceHost.Open();
 

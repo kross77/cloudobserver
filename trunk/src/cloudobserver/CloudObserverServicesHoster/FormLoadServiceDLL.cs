@@ -39,7 +39,7 @@ namespace CloudObserverServicesHoster
             {
                 serviceDLLFileName = openFileDialogSelectDLLFile.SafeFileName;
                 textBoxDLLFile.Text = openFileDialogSelectDLLFile.FileName;
-                loadServiceDetails();
+                LoadServiceDetails();
             }
         }
 
@@ -77,6 +77,21 @@ namespace CloudObserverServicesHoster
 
         private void buttonTestServiceHosting_Click(object sender, EventArgs e)
         {
+            isServiceHostingTestSucceed = TestServiceHosting(true);
+        }
+
+        private void buttonLoadService_Click(object sender, EventArgs e)
+        {
+            if (!isServiceHostingTestSucceed) isServiceHostingTestSucceed = TestServiceHosting(false);
+            if (isServiceHostingTestSucceed)
+            {
+                ((FormInstallService)Owner).loadServiceDLL(textBoxDLLFile.Text, comboBoxServiceDetailsInterface.Text, comboBoxServiceDetailsClass.Text);
+                Close();
+            }
+        }
+
+        private bool TestServiceHosting(bool showMessageOnSucceed)
+        {
             try
             {
                 serviceDLLAssembly = Assembly.LoadFile(textBoxDLLFile.Text);
@@ -87,30 +102,20 @@ namespace CloudObserverServicesHoster
                 ServiceMetadataBehavior mexBehavior = new ServiceMetadataBehavior();
                 mexBehavior.HttpGetEnabled = true;
                 serviceHost.Description.Behaviors.Add(mexBehavior);
-                serviceHost.AddServiceEndpoint(serviceContractType, new WSHttpBinding(), "");
+                serviceHost.AddServiceEndpoint(serviceContractType, new BasicHttpBinding(), "");
                 serviceHost.Open();
                 serviceHost.Close();
-                isServiceHostingTestSucceed = true;
-                MessageBox.Show("Service hosting test succeed.", "Test Service Hosting", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (showMessageOnSucceed) MessageBox.Show("Service hosting test succeed.", "Test Service Hosting", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return true;
             }
             catch (Exception exception)
             {
-                isServiceHostingTestSucceed = false;
                 MessageBox.Show(exception.Message, "Testing Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
         }
 
-        private void buttonLoadService_Click(object sender, EventArgs e)
-        {
-            if (!isServiceHostingTestSucceed) buttonTestServiceHosting_Click(sender, e);
-            if (isServiceHostingTestSucceed)
-            {
-                ((FormInstallService)Owner).loadServiceDLL(textBoxDLLFile.Text, comboBoxServiceDetailsInterface.Text, comboBoxServiceDetailsClass.Text);
-                Close();
-            }
-        }
-
-        private void loadServiceDetails()
+        private void LoadServiceDetails()
         {
             isServiceHostingTestSucceed = false;
             comboBoxServiceDetailsInterface.Items.Clear();
