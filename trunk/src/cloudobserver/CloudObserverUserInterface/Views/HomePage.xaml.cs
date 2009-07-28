@@ -11,20 +11,20 @@ using System.Windows.Media.Animation;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using CloudObserverUserInterface.Views;
-using CloudObserverUserInterface.CloudObserverServiceReference;
+using CloudObserverUserInterface.CloudObserverAuthorizationServiceReference;
 
 namespace CloudObserverUserInterface
 {
     public partial class HomePage : Page
     {
-        private CloudObserverServiceClient client;
+        private CloudObserverAuthorizationServiceClient client;
         private RegistrationWindow registrationWindow;
 
         public HomePage()
         {
             InitializeComponent();
 
-            client = new CloudObserverServiceClient();
+            client = new CloudObserverAuthorizationServiceClient();
             client.UserLoginCompleted += new EventHandler<UserLoginCompletedEventArgs>(client_UserLoginCompleted);
         }
 

@@ -35,9 +35,10 @@
             this.columnHeaderInterface = new System.Windows.Forms.ColumnHeader();
             this.columnHeaderClass = new System.Windows.Forms.ColumnHeader();
             this.columnHeaderPort = new System.Windows.Forms.ColumnHeader();
-            this.columnHeaderStatus = new System.Windows.Forms.ColumnHeader();
+            this.columnHeaderBinding = new System.Windows.Forms.ColumnHeader();
             this.buttonInstallService = new System.Windows.Forms.Button();
             this.buttonUninstallService = new System.Windows.Forms.Button();
+            this.columnHeaderStatus = new System.Windows.Forms.ColumnHeader();
             this.SuspendLayout();
             // 
             // radioButtonManualMode
@@ -73,6 +74,7 @@
             this.columnHeaderInterface,
             this.columnHeaderClass,
             this.columnHeaderPort,
+            this.columnHeaderBinding,
             this.columnHeaderStatus});
             this.listViewInstalledServices.FullRowSelect = true;
             this.listViewInstalledServices.Location = new System.Drawing.Point(12, 48);
@@ -106,10 +108,10 @@
             this.columnHeaderPort.Text = "Port";
             this.columnHeaderPort.Width = 50;
             // 
-            // columnHeaderStatus
+            // columnHeaderBinding
             // 
-            this.columnHeaderStatus.Text = "Status";
-            this.columnHeaderStatus.Width = 100;
+            this.columnHeaderBinding.Text = "Binding";
+            this.columnHeaderBinding.Width = 100;
             // 
             // buttonInstallService
             // 
@@ -133,6 +135,10 @@
             this.buttonUninstallService.Text = "Uninstall Service";
             this.buttonUninstallService.UseVisualStyleBackColor = true;
             this.buttonUninstallService.Click += new System.EventHandler(this.buttonUninstallService_Click);
+            // 
+            // columnHeaderStatus
+            // 
+            this.columnHeaderStatus.Text = "Status";
             // 
             // FormMain
             // 
@@ -163,6 +169,7 @@
         private System.Windows.Forms.ColumnHeader columnHeaderInterface;
         private System.Windows.Forms.ColumnHeader columnHeaderClass;
         private System.Windows.Forms.ColumnHeader columnHeaderPort;
+        private System.Windows.Forms.ColumnHeader columnHeaderBinding;
         private System.Windows.Forms.ColumnHeader columnHeaderStatus;
     }
 }

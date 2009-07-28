@@ -14,7 +14,7 @@ using System.IO;
 using System.ServiceModel;
 using System.Runtime.Serialization;
 using System.Windows.Threading;
-using CloudObserverUserInterface.CloudObserverServiceReference;
+using CloudObserverUserInterface.CloudObserverAuthorizationServiceReference;
 
 namespace CloudObserverUserInterface.Views
 {
@@ -22,7 +22,7 @@ namespace CloudObserverUserInterface.Views
     {
         enum CorrectnessCheckElement { Email, Password };
 
-        CloudObserverServiceClient client;
+        CloudObserverAuthorizationServiceClient client;
         bool emailChecked = true;
         bool emailChecking = false;
         bool emailCorrect = false;
@@ -33,7 +33,7 @@ namespace CloudObserverUserInterface.Views
         {           
             InitializeComponent();
 
-            client = new CloudObserverServiceClient();
+            client = new CloudObserverAuthorizationServiceClient();
             client.UserIsEmailAvailableCompleted += new EventHandler<UserIsEmailAvailableCompletedEventArgs>(client_UserIsEmailAvailableCompleted);
             client.UserAddCompleted += new EventHandler<UserAddCompletedEventArgs>(client_UserAddCompleted);
 

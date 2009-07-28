@@ -37,6 +37,8 @@
             this.columnHeaderServiceDLL = new System.Windows.Forms.ColumnHeader();
             this.columnHeaderServiceInterface = new System.Windows.Forms.ColumnHeader();
             this.columnHeaderServiceClass = new System.Windows.Forms.ColumnHeader();
+            this.labelBinding = new System.Windows.Forms.Label();
+            this.comboBoxBinding = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownServicePort)).BeginInit();
             this.SuspendLayout();
             // 
@@ -51,7 +53,7 @@
             // 
             // buttonLoadServiceDLL
             // 
-            this.buttonLoadServiceDLL.Location = new System.Drawing.Point(278, 128);
+            this.buttonLoadServiceDLL.Location = new System.Drawing.Point(275, 155);
             this.buttonLoadServiceDLL.Name = "buttonLoadServiceDLL";
             this.buttonLoadServiceDLL.Size = new System.Drawing.Size(104, 23);
             this.buttonLoadServiceDLL.TabIndex = 2;
@@ -93,7 +95,7 @@
             // buttonInstall
             // 
             this.buttonInstall.Enabled = false;
-            this.buttonInstall.Location = new System.Drawing.Point(147, 128);
+            this.buttonInstall.Location = new System.Drawing.Point(12, 154);
             this.buttonInstall.Name = "buttonInstall";
             this.buttonInstall.Size = new System.Drawing.Size(125, 23);
             this.buttonInstall.TabIndex = 5;
@@ -132,11 +134,34 @@
             this.columnHeaderServiceClass.Text = "Class";
             this.columnHeaderServiceClass.Width = 122;
             // 
+            // labelBinding
+            // 
+            this.labelBinding.AutoSize = true;
+            this.labelBinding.Location = new System.Drawing.Point(147, 131);
+            this.labelBinding.Name = "labelBinding";
+            this.labelBinding.Size = new System.Drawing.Size(45, 13);
+            this.labelBinding.TabIndex = 7;
+            this.labelBinding.Text = "Binding:";
+            // 
+            // comboBoxBinding
+            // 
+            this.comboBoxBinding.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxBinding.FormattingEnabled = true;
+            this.comboBoxBinding.Items.AddRange(new object[] {
+            "BasicHttpBinding",
+            "WSHttpBinding"});
+            this.comboBoxBinding.Location = new System.Drawing.Point(198, 128);
+            this.comboBoxBinding.Name = "comboBoxBinding";
+            this.comboBoxBinding.Size = new System.Drawing.Size(181, 21);
+            this.comboBoxBinding.TabIndex = 8;
+            // 
             // FormInstallService
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(394, 163);
+            this.ClientSize = new System.Drawing.Size(394, 190);
+            this.Controls.Add(this.comboBoxBinding);
+            this.Controls.Add(this.labelBinding);
             this.Controls.Add(this.listViewLoadedServices);
             this.Controls.Add(this.buttonInstall);
             this.Controls.Add(this.numericUpDownServicePort);
@@ -167,5 +192,7 @@
         private System.Windows.Forms.ColumnHeader columnHeaderServiceDLL;
         private System.Windows.Forms.ColumnHeader columnHeaderServiceInterface;
         private System.Windows.Forms.ColumnHeader columnHeaderServiceClass;
+        private System.Windows.Forms.Label labelBinding;
+        private System.Windows.Forms.ComboBox comboBoxBinding;
     }
 }

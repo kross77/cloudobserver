@@ -29,12 +29,13 @@ namespace CloudObserverServicesHoster
             new FormInstallService().ShowDialog(this);
         }
 
-        public void InstallService(string serviceDLL, string serviceInterface, string serviceClass, int servicePort)
+        public void InstallService(string serviceDLL, string serviceInterface, string serviceClass, int servicePort, string serviceBinding)
         {
             ListViewItem newService = new ListViewItem(serviceDLL);
             newService.SubItems.Add(serviceInterface);
             newService.SubItems.Add(serviceClass);
             newService.SubItems.Add(servicePort.ToString());
+            newService.SubItems.Add(serviceBinding);
             newService.SubItems.Add("loaded").ForeColor = Color.Blue;
             newService.UseItemStyleForSubItems = false;
             listViewInstalledServices.Items.Add(newService);
@@ -42,7 +43,7 @@ namespace CloudObserverServicesHoster
 
         private void listViewInstalledServices_ItemChecked(object sender, ItemCheckedEventArgs e)
         {
-            ListViewItem.ListViewSubItem serviceStatusSubItem = e.Item.SubItems[4];
+            ListViewItem.ListViewSubItem serviceStatusSubItem = e.Item.SubItems[5];
             if (e.Item.Checked)
             {
                 serviceStatusSubItem.Text = "starting...";
@@ -56,7 +57,7 @@ namespace CloudObserverServicesHoster
                 ServiceMetadataBehavior mexBehavior = new ServiceMetadataBehavior();
                 mexBehavior.HttpGetEnabled = true;
                 serviceHost.Description.Behaviors.Add(mexBehavior);
-                serviceHost.AddServiceEndpoint(serviceContractType, new WSHttpBinding(), "");
+                serviceHost.AddServiceEndpoint(serviceContractType, GetBinding(e.Item.SubItems[4].Text), "");
                 e.Item.Tag = serviceHost;
                 serviceHost.Open();
 
@@ -76,6 +77,19 @@ namespace CloudObserverServicesHoster
         private void buttonUninstallService_Click(object sender, EventArgs e)
         {
             listViewInstalledServices.SelectedItems[0].Remove();
+        }
+
+        private System.ServiceModel.Channels.Binding GetBinding(string bindingName)
+        {
+            switch (bindingName)
+            {
+                case "BasicHttpBinding":
+                    return new BasicHttpBinding();
+                case "WSHttpBinding":
+                    return new WSHttpBinding();
+                default:
+                    return new BasicHttpBinding();
+            }
         }
     }
 }

@@ -20,6 +20,8 @@ namespace CloudObserverServicesHoster
             InitializeComponent();
 
             if (File.Exists(servicesFilePath)) LoadServices(File.OpenRead(servicesFilePath));
+
+            comboBoxBinding.SelectedIndex = 0;
         }
 
         private void LoadServices(Stream input)
@@ -82,7 +84,7 @@ namespace CloudObserverServicesHoster
         private void buttonInstall_Click(object sender, EventArgs e)
         {
             ListViewItem selectedServiceItem = listViewLoadedServices.SelectedItems[0];
-            ((FormMain)Owner).InstallService(selectedServiceItem.SubItems[0].Text, selectedServiceItem.SubItems[1].Text, selectedServiceItem.SubItems[2].Text, Decimal.ToInt32(numericUpDownServicePort.Value));
+            ((FormMain)Owner).InstallService(selectedServiceItem.SubItems[0].Text, selectedServiceItem.SubItems[1].Text, selectedServiceItem.SubItems[2].Text, Decimal.ToInt32(numericUpDownServicePort.Value), comboBoxBinding.SelectedItem.ToString());
             Close();
         }
 
