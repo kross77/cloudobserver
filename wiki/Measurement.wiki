@@ -3,4 +3,197 @@ A bit later here will be written some dependences beetwen size of images, buffer
 http://geekswithblogs.net/BizG/archive/2008/02/22/socket-errors-in-wcf-nettcpbinding.aspx
 
 
-                     START_OF_SECTION: Used Time for transfer(milliseconds) : 13127; Picture quality : High; Average picture size(B) : 1036854; Average data transfered(B) : 3110562; EndpointName : WSHttpBinding_ICloudObserverBroadcastService; Binding name : WSHttpBinding;  END_OF_SECTION                                                      START_OF_SECTION: Used Time for transfer(milliseconds) : 5014; Picture quality : Middle; Average picture size(B) : 360054; Average data transfered(B) : 1080162; EndpointName : WSHttpBinding_ICloudObserverBroadcastService; Binding name : WSHttpBinding;  END_OF_SECTION                                                      START_OF_SECTION: Used Time for transfer(milliseconds) : 1692; Picture quality : Low; Average picture size(B) : 90054; Average data transfered(B) : 270162; EndpointName : WSHttpBinding_ICloudObserverBroadcastService; Binding name : WSHttpBinding;  END_OF_SECTION                                                      START_OF_SECTION: Used Time for transfer(milliseconds) : 12421; Picture quality : High; Average picture size(B) : 1036854; Average data transfered(B) : 3110562; EndpointName : WSHttpBinding_ICloudObserverBroadcastService; Binding name : WSHttpBinding;  END_OF_SECTION                                                      START_OF_SECTION: Used Time for transfer(milliseconds) : 4726; Picture quality : Middle; Average picture size(B) : 360054; Average data transfered(B) : 1080162; EndpointName : WSHttpBinding_ICloudObserverBroadcastService; Binding name : WSHttpBinding;  END_OF_SECTION                                                      START_OF_SECTION: Used Time for transfer(milliseconds) : 1440; Picture quality : Low; Average picture size(B) : 90054; Average data transfered(B) : 270162; EndpointName : WSHttpBinding_ICloudObserverBroadcastService; Binding name : WSHttpBinding;  END_OF_SECTION                                 
+START_OF_SECTION: NetTCPBinding
+	TransferMode : Buffered
+	Average used time for transfer(camera->service->client)(milliseconds) : 149; 
+	Average picture size(B) : 1036854; 
+	Average data transfered(B) : 2073708; 
+	MaxBytePerRead attribute: 10000
+END_OF_SECTION
+
+START_OF_SECTION: NetTCPBinding
+	TransferMode : Buffered
+	Average used time for transfer(camera->service->client)(milliseconds) : 63; 
+	Average picture size(B) : 360054; 
+	Average data transfered(B) : 720108; 
+	MaxBytePerRead attribute: 10000
+END_OF_SECTION
+
+START_OF_SECTION: NetTCPBinding
+	TransferMode : Buffered
+	Average used time for transfer(camera->service->client)(milliseconds) : 27; 
+	Average picture size(B) : 90054; 
+	Average data transfered(B) : 180108; 
+	MaxBytePerRead attribute: 10000
+END_OF_SECTION
+
+START_OF_SECTION: NetTCPBinding
+	TransferMode : Buffered
+	Average used time for transfer(camera->service->client)(milliseconds) : 148; 
+	Average picture size(B) : 1036854; 
+	Average data transfered(B) : 2073708; 
+	MaxBytePerRead attribute: 60000
+END_OF_SECTION
+
+START_OF_SECTION: NetTCPBinding
+	TransferMode : Buffered
+	Average used time for transfer(camera->service->client)(milliseconds) : 64; 
+	Average picture size(B) : 360054; 
+	Average data transfered(B) : 720108; 
+	MaxBytePerRead attribute: 60000
+END_OF_SECTION
+
+START_OF_SECTION: NetTCPBinding
+	TransferMode : Buffered
+	Average used time for transfer(camera->service->client)(milliseconds) : 25; 
+	Average picture size(B) : 90054; 
+	Average data transfered(B) : 180108; 
+	MaxBytePerRead attribute: 60000
+END_OF_SECTION
+
+
+START_OF_SECTION: WSHttpBinding
+	TransferMode : Buffered
+	Average used time for transfer(camera->service->client)(milliseconds) : 170; 
+	Average picture size(B) : 1036854; 
+	Average data transfered(B) : 2073708; 
+	MaxBytePerRead attribute: 10000
+END_OF_SECTION
+
+START_OF_SECTION: WSHttpBinding
+	TransferMode : Buffered
+	Average used time for transfer(camera->service->client)(milliseconds) : 77; 
+	Average picture size(B) : 360054; 
+	Average data transfered(B) : 720108; 
+	MaxBytePerRead attribute: 10000
+END_OF_SECTION
+
+START_OF_SECTION: WSHttpBinding
+	TransferMode : Buffered
+	Average used time for transfer(camera->service->client)(milliseconds) : 31; 
+	Average picture size(B) : 90054; 
+	Average data transfered(B) : 180108; 
+	MaxBytePerRead attribute: 10000
+END_OF_SECTION
+
+START_OF_SECTION: WSHttpBinding
+	TransferMode : Buffered
+	Average used time for transfer(camera->service->client)(milliseconds) : 159; 
+	Average picture size(B) : 1036854; 
+	Average data transfered(B) : 2073708; 
+	MaxBytePerRead attribute: 60000
+END_OF_SECTION
+
+START_OF_SECTION: WSHttpBinding
+	TransferMode : Buffered
+	Average used time for transfer(camera->service->client)(milliseconds) : 74; 
+	Average picture size(B) : 360054; 
+	Average data transfered(B) : 720108; 
+	MaxBytePerRead attribute: 60000
+END_OF_SECTION
+
+START_OF_SECTION: WSHttpBinding
+	TransferMode : Buffered
+	Average used time for transfer(camera->service->client)(milliseconds) : 33; 
+	Average picture size(B) : 90054; 
+	Average data transfered(B) : 180108; 
+	MaxBytePerRead attribute: 60000
+END_OF_SECTION
+
+
+START_OF_SECTION: BasicHttpBinding
+	TransferMode : Streamed
+	Average used time for transfer(camera->service->client)(milliseconds) : 200; 
+	Average picture size(B) : 1036854; 
+	Average data transfered(B) : 2073708; 
+	MaxBytePerRead attribute: 10000
+END_OF_SECTION
+
+START_OF_SECTION: BasicHttpBinding
+	TransferMode : Streamed
+	Average used time for transfer(camera->service->client)(milliseconds) : 75; 
+	Average picture size(B) : 360054; 
+	Average data transfered(B) : 720108; 
+	MaxBytePerRead attribute: 10000
+END_OF_SECTION
+
+START_OF_SECTION: BasicHttpBinding
+	TransferMode : Streamed
+	Average used time for transfer(camera->service->client)(milliseconds) : 38; 
+	Average picture size(B) : 90054; 
+	Average data transfered(B) : 180108; 
+	MaxBytePerRead attribute: 10000
+END_OF_SECTION
+
+START_OF_SECTION: BasicHttpBinding
+	TransferMode : Streamed
+	Average used time for transfer(camera->service->client)(milliseconds) : 191; 
+	Average picture size(B) : 1036854; 
+	Average data transfered(B) : 2073708; 
+	MaxBytePerRead attribute: 60000
+END_OF_SECTION
+
+START_OF_SECTION: BasicHttpBinding
+	TransferMode : Streamed
+	Average used time for transfer(camera->service->client)(milliseconds) : 76; 
+	Average picture size(B) : 360054; 
+	Average data transfered(B) : 720108; 
+	MaxBytePerRead attribute: 60000
+END_OF_SECTION
+
+START_OF_SECTION: BasicHttpBinding
+	TransferMode : Streamed
+	Average used time for transfer(camera->service->client)(milliseconds) : 35; 
+	Average picture size(B) : 90054; 
+	Average data transfered(B) : 180108; 
+	MaxBytePerRead attribute: 60000
+END_OF_SECTION
+
+
+START_OF_SECTION: BasicHttpBinding
+	TransferMode : Buffered
+	Average used time for transfer(camera->service->client)(milliseconds) : 168; 
+	Average picture size(B) : 1036854; 
+	Average data transfered(B) : 2073708; 
+	MaxBytePerRead attribute: 10000
+END_OF_SECTION
+
+START_OF_SECTION: BasicHttpBinding
+	TransferMode : Buffered
+	Average used time for transfer(camera->service->client)(milliseconds) : 66; 
+	Average picture size(B) : 360054; 
+	Average data transfered(B) : 720108; 
+	MaxBytePerRead attribute: 10000
+END_OF_SECTION
+
+START_OF_SECTION: BasicHttpBinding
+	TransferMode : Buffered
+	Average used time for transfer(camera->service->client)(milliseconds) : 31; 
+	Average picture size(B) : 90054; 
+	Average data transfered(B) : 180108; 
+	MaxBytePerRead attribute: 10000
+END_OF_SECTION
+
+START_OF_SECTION: BasicHttpBinding
+	TransferMode : Buffered
+	Average used time for transfer(camera->service->client)(milliseconds) : 164; 
+	Average picture size(B) : 1036854; 
+	Average data transfered(B) : 2073708; 
+	MaxBytePerRead attribute: 60000
+END_OF_SECTION
+
+START_OF_SECTION: BasicHttpBinding
+	TransferMode : Buffered
+	Average used time for transfer(camera->service->client)(milliseconds) : 63; 
+	Average picture size(B) : 360054; 
+	Average data transfered(B) : 720108; 
+	MaxBytePerRead attribute: 60000
+END_OF_SECTION
+
+START_OF_SECTION: BasicHttpBinding
+	TransferMode : Buffered
+	Average used time for transfer(camera->service->client)(milliseconds) : 31; 
+	Average picture size(B) : 90054; 
+	Average data transfered(B) : 180108; 
+	MaxBytePerRead attribute: 60000
+END_OF_SECTION
