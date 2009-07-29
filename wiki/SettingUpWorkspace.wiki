@@ -46,7 +46,7 @@
 == Подключение базы данных ==
  # Запустите Microsoft Visual Studio 2008.
  # Откройте окно Server Explorer, выбрав пункт меню View -> Server Explorer (или нажав сочетание клавиш Ctrl+Alt+S).
- # Нажмите правой кнопкой мыши по папке Data Connections и выберите в контекстном меню пункт Add Connection... В поле Server name введите '.\sqlexpress' (без кавычек), в поле Select or enter a database name выберите CloudObserverDatabase.
+ # Нажмите правой кнопкой мыши по папке Data Connections и выберите в контекстном меню пункт Add Connection... В поле Server name введите '.\sqlexpress' (без кавычек), в поле Select or enter a database name выберите !CloudObserverDatabase.
  # Нажмите OK.
  # Для просмотра значений таблиц подключённой базы выделите таблицу в окне Server Explorer и выберите в контекстном меню пункт Show Table Data.
 
