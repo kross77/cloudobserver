@@ -37,7 +37,6 @@ namespace CloudObserverCampusCamerasStreaming
             }
             while (true)
             {
-                System.Threading.Thread.Sleep(500);
                 for (int i = 0; i <= magicConst - 1; i++)
                 {
                     string webAddress = GetImageURI(i+1);
@@ -61,6 +60,7 @@ namespace CloudObserverCampusCamerasStreaming
                     }
                     httpWResp.Close();
                     proxy.SetNextFrame(byteImage, UIDs[i]);
+                    System.Threading.Thread.Sleep(50000);
                 }
             }
         }
