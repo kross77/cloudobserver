@@ -1,22 +1,13 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Data.Linq;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Xml;
 
 namespace CloudObserverDatabaseLibrary
 {
-    public class CloudObserverDatabase : ICloudObserverDatabase
+    public class CloudObserverDatabase
     {
         private readonly CloudObserverDBDataContext database;
 
-        public CloudObserverDatabase() : this(global::CloudObserverDatabaseLibrary.Properties.Settings.Default.CloudObserverDatabaseConnectionString) { }
+        public CloudObserverDatabase() : this(@"Data Source=.\sqlexpress;Initial Catalog=CloudObserverDatabase;Integrated Security=True") { }
 
         public CloudObserverDatabase(string connection)
         {
