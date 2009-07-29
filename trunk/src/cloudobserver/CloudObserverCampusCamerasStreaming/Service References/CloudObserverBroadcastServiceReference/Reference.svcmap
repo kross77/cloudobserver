@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="e198b014-49b0-4c0b-be20-4d888cd128d0" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:9000/CloudObserverBroadcastService" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="CloudObserverBroadcastService.xsd" MetadataType="Schema" ID="420e91f0-8804-453f-8f0b-bc9b541bc92a" SourceId="1" SourceUrl="http://localhost:9000/CloudObserverBroadcastService?xsd=xsd0" />
+    <MetadataFile FileName="CloudObserverBroadcastService.wsdl" MetadataType="Wsdl" ID="548eda0b-0107-4f74-8dd0-259b242f4fbe" SourceId="1" SourceUrl="http://localhost:9000/CloudObserverBroadcastService?wsdl" />
+    <MetadataFile FileName="CloudObserverBroadcastService.disco" MetadataType="Disco" ID="e8b31f24-faba-4091-a49c-89ebcb7b0d8c" SourceId="1" SourceUrl="http://localhost:9000/CloudObserverBroadcastService?disco" />
+    <MetadataFile FileName="CloudObserverBroadcastService1.xsd" MetadataType="Schema" ID="70216edc-d250-4aa8-9623-a3a8f8b9319a" SourceId="1" SourceUrl="http://localhost:9000/CloudObserverBroadcastService?xsd=xsd1" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

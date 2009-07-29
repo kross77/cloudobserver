@@ -18,6 +18,7 @@ namespace CloudObserverUserInterface
         private bool cameraConnected;
         private string UID;
         CloudObserverBroadcastServiceReference.CloudObserverBroadcastServiceClient proxy;
+
 		public cameraViewer()
 		{
 			// Required to initialize variables

@@ -61,6 +61,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleDatabaseClient", "Sim
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleAuthorizationClient", "SimpleAuthorizationClient\SimpleAuthorizationClient.csproj", "{8501788C-FE7F-4B81-A11B-D3F472A991BE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserverCampusCamerasStreaming", "CloudObserverCampusCamerasStreaming\CloudObserverCampusCamerasStreaming.csproj", "{9C7BFE8E-B702-4EFD-B7EA-0BBE644E67A2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -127,6 +129,10 @@ Global
 		{8501788C-FE7F-4B81-A11B-D3F472A991BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8501788C-FE7F-4B81-A11B-D3F472A991BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8501788C-FE7F-4B81-A11B-D3F472A991BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C7BFE8E-B702-4EFD-B7EA-0BBE644E67A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C7BFE8E-B702-4EFD-B7EA-0BBE644E67A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C7BFE8E-B702-4EFD-B7EA-0BBE644E67A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C7BFE8E-B702-4EFD-B7EA-0BBE644E67A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -143,5 +149,6 @@ Global
 		{3E76105C-29C2-47DA-81CE-4BB268FE4A2F} = {E936EA91-41A2-42C2-9BE3-4EC77F81FC39}
 		{2E1BADC1-09A8-43E2-8D37-CEC63BF2383E} = {E936EA91-41A2-42C2-9BE3-4EC77F81FC39}
 		{06DF545E-21AF-4C4C-8D61-CA45328DC0D6} = {E936EA91-41A2-42C2-9BE3-4EC77F81FC39}
+		{9C7BFE8E-B702-4EFD-B7EA-0BBE644E67A2} = {E936EA91-41A2-42C2-9BE3-4EC77F81FC39}
 	EndGlobalSection
 EndGlobal
