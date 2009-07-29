@@ -1,0 +1,8 @@
+F:\nextSummerProjectVersion\src\ShowWithCameras\ShowWithCameras\obj\Debug\ResolveAssemblyReference.cache
+F:\nextSummerProjectVersion\src\ShowWithCameras\ShowWithCameras\obj\Debug\ShowWithCameras.Form1.resources
+F:\nextSummerProjectVersion\src\ShowWithCameras\ShowWithCameras\obj\Debug\ShowWithCameras.Properties.Resources.resources
+F:\nextSummerProjectVersion\src\ShowWithCameras\ShowWithCameras\obj\Debug\ShowWithCameras.csproj.GenerateResource.Cache
+F:\nextSummerProjectVersion\src\ShowWithCameras\ShowWithCameras\bin\Debug\ShowWithCameras.exe
+F:\nextSummerProjectVersion\src\ShowWithCameras\ShowWithCameras\bin\Debug\ShowWithCameras.pdb
+F:\nextSummerProjectVersion\src\ShowWithCameras\ShowWithCameras\obj\Debug\ShowWithCameras.exe
+F:\nextSummerProjectVersion\src\ShowWithCameras\ShowWithCameras\obj\Debug\ShowWithCameras.pdb
