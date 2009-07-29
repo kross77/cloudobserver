@@ -4,6 +4,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Navigation"
     mc:Ignorable="d" xmlns:dataInput="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Data.Input" x:Class="CloudObserverUserInterface.AboutPage" 
+   xmlns:local="clr-namespace:CloudObserverUserInterface"
     d:DesignWidth="640" d:DesignHeight="480"
     Title="About" 
     Style="{StaticResource PageStyle}">
@@ -12,7 +13,7 @@
         <ScrollViewer x:Name="PageScrollViewer" Style="{StaticResource PageScrollViewerStyle}">
 
             <StackPanel x:Name="ContentStackPanel">
-
+<local:cameraViewer></local:cameraViewer>
                 <TextBlock x:Name="HeaderText" Style="{StaticResource HeaderTextStyle}" 
                            Text="About"/>
                 <TextBlock x:Name="ContentText" Style="{StaticResource ContentTextStyle}" 

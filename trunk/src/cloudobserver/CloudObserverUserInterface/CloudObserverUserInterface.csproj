@@ -75,6 +75,14 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Service References\CloudObserverBroadcastServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Views\cameraViewer.xaml.cs">
+      <DependentUpon>cameraViewer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ErrorWindow.xaml.cs">
       <DependentUpon>ErrorWindow.xaml</DependentUpon>
     </Compile>
@@ -104,6 +112,10 @@
       <Generator>MSBuild:MarkupCompilePass1</Generator>
       <SubType>Designer</SubType>
     </Resource>
+    <Page Include="Views\cameraViewer.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\ErrorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:MarkupCompilePass1</Generator>
@@ -134,6 +146,13 @@
     <None Include="Service References\CloudObserverAuthorizationServiceReference\CloudObserverAuthorizationService.wsdl" />
     <None Include="Service References\CloudObserverAuthorizationServiceReference\CloudObserverAuthorizationService.xsd" />
     <None Include="Service References\CloudObserverAuthorizationServiceReference\CloudObserverAuthorizationService1.xsd" />
+    <None Include="Service References\CloudObserverBroadcastServiceReference\CloudObserverBroadcastService.disco" />
+    <None Include="Service References\CloudObserverBroadcastServiceReference\configuration91.svcinfo" />
+    <None Include="Service References\CloudObserverBroadcastServiceReference\configuration.svcinfo" />
+    <None Include="Service References\CloudObserverBroadcastServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="ServiceReferences.ClientConfig" />
   </ItemGroup>
   <ItemGroup>
@@ -144,6 +163,7 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\CloudObserverAuthorizationServiceReference\" />
+    <WCFMetadataStorage Include="Service References\CloudObserverBroadcastServiceReference\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\CloudObserverAuthorizationServiceReference\CloudObserverAuthorizationService.disco" />
@@ -159,6 +179,9 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+    <None Include="Service References\CloudObserverBroadcastServiceReference\CloudObserverBroadcastService.wsdl" />
+    <None Include="Service References\CloudObserverBroadcastServiceReference\CloudObserverBroadcastService.xsd" />
+    <None Include="Service References\CloudObserverBroadcastServiceReference\CloudObserverBroadcastService1.xsd" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\v3.0\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
