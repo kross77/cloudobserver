@@ -7,9 +7,10 @@ namespace CloudObserverAuthorizationServiceLibrary
     {
         private CloudObserverDatabase database = null;
 
-        private const string DEFAULT_DATABASE_CONNECTION = @"Data Source=.\sqlexpress;Initial Catalog=CloudObserverDatabase;Integrated Security=True";
-
-        public CloudObserverAuthorizationService() : this(DEFAULT_DATABASE_CONNECTION) { }
+        public CloudObserverAuthorizationService()
+        {
+            database = new CloudObserverDatabase();
+        }
 
         public CloudObserverAuthorizationService(string databaseConnection)
         {

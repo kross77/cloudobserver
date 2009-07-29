@@ -13,7 +13,7 @@
         <ScrollViewer x:Name="PageScrollViewer" Style="{StaticResource PageScrollViewerStyle}">
 
             <StackPanel x:Name="ContentStackPanel">
-<local:cameraViewer></local:cameraViewer>
+<local:CameraViewer></local:CameraViewer>
                 <TextBlock x:Name="HeaderText" Style="{StaticResource HeaderTextStyle}" 
                            Text="About"/>
                 <TextBlock x:Name="ContentText" Style="{StaticResource ContentTextStyle}" 

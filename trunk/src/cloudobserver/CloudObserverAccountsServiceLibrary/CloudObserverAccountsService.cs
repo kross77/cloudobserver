@@ -7,9 +7,10 @@ namespace CloudObserverAccountsServiceLibrary
     {
         private CloudObserverDatabase database = null;
 
-        private const string DEFAULT_DATABASE_CONNECTION = @"Data Source=.\sqlexpress;Initial Catalog=CloudObserverDatabase;Integrated Security=True";
-
-        public CloudObserverAccountsService() : this(DEFAULT_DATABASE_CONNECTION) { }
+        public CloudObserverAccountsService()
+        {
+            database = new CloudObserverDatabase();
+        }
 
         public CloudObserverAccountsService(string databaseConnection)
         {

@@ -80,8 +80,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="Views\cameraViewer.xaml.cs">
-      <DependentUpon>cameraViewer.xaml</DependentUpon>
+    <Compile Include="Views\CameraViewer.xaml.cs">
+      <DependentUpon>CameraViewer.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ErrorWindow.xaml.cs">
       <DependentUpon>ErrorWindow.xaml</DependentUpon>
@@ -112,7 +112,7 @@
       <Generator>MSBuild:MarkupCompilePass1</Generator>
       <SubType>Designer</SubType>
     </Resource>
-    <Page Include="Views\cameraViewer.xaml">
+    <Page Include="Views\CameraViewer.xaml">
       <Generator>MSBuild:MarkupCompilePass1</Generator>
       <SubType>Designer</SubType>
     </Page>

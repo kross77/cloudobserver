@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Linq;
+using System.ServiceModel;
+using CloudObserverStorageServiceLibrary;
 
 namespace CloudObserverDatabaseLibrary
 {
     public class CloudObserverDatabase
     {
+        private ICloudObserverStorageService client;
         private readonly CloudObserverDBDataContext database;
 
         public CloudObserverDatabase() : this(@"Data Source=.\sqlexpress;Initial Catalog=CloudObserverDatabase;Integrated Security=True") { }
 
         public CloudObserverDatabase(string connection)
         {
+            client = new ChannelFactory<ICloudObserverStorageService>(new BasicHttpBinding(), "http://localhost:9000/CloudObserverStorageService").CreateChannel();
             database = new CloudObserverDBDataContext(connection);
             if (!database.DatabaseExists())
                 database.CreateDatabase();
@@ -29,13 +33,15 @@ namespace CloudObserverDatabaseLibrary
 
         public int UserAdd(string email, string password, string name, string description, byte[] icon)
         {
+            string iconPath = "testIconPath.jpg";
+            client.SaveIntoStorage(iconPath, icon);
             User user = new User
             {
                 Email = email,
                 Password = password,
                 Name = name,
                 Description = description,
-                IconPath = "UserIconPath", // save icon into storage and receive path
+                IconPath = iconPath,
                 RegistrationDate = DateTime.Now
             };
             database.Users.InsertOnSubmit(user);
