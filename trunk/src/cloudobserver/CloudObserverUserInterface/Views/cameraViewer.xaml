@@ -4,15 +4,15 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d"
+	xmlns:dataInput="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Data.Input"
 	x:Class="CloudObserverUserInterface.CameraViewer"
 	d:DesignWidth="640" d:DesignHeight="480">
 
 	<Grid x:Name="LayoutRoot">
-		<TextBox x:Name="UserIDTextBox" Height="33" Margin="8,48,0,0" VerticalAlignment="Top" Text="UserID" TextWrapping="Wrap" HorizontalAlignment="Left" Width="219"/>
-		<TextBox x:Name="CameraIDTextBox" Height="33" Margin="8,85,0,0" VerticalAlignment="Top" Text="CameraID" TextWrapping="Wrap" HorizontalAlignment="Left" Width="219"/>
-		<TextBox x:Name="UIDTextBox" Height="33" Margin="8,122,0,0" VerticalAlignment="Top" Text="UID" TextWrapping="Wrap" HorizontalAlignment="Left" Width="219"/>
-		<Button x:Name="StartButton" Click="StartButton_Click" Height="33" HorizontalAlignment="Left" Margin="8,159,0,0" VerticalAlignment="Top" Width="100" Content="Start"/>
-		<Button x:Name="StopButton" Click="StopButton_Click" Height="33" HorizontalAlignment="Left" Margin="127,159,0,0" VerticalAlignment="Top" Width="100" Content="Stop"/>
-		<Image x:Name="ImageBox" HorizontalAlignment="Left" Margin="8,196,0,134" Width="219"/>
+		<dataInput:Label x:Name="LabelCameraID" HorizontalAlignment="Left" Margin="8,8,0,0" VerticalAlignment="Top" Content="CameraID:"/>
+		<TextBox x:Name="TextBoxCameraID" Margin="8,24,0,0" VerticalAlignment="Top" Text="CameraID" TextWrapping="Wrap" HorizontalAlignment="Left" Width="204"/>
+		<Button x:Name="ButtonStart" Click="ButtonStart_Click" HorizontalAlignment="Left" Margin="8,52,0,0" VerticalAlignment="Top" Width="100" Content="Start"/>
+		<Button x:Name="ButtonStop" Click="ButtonStop_Click" HorizontalAlignment="Left" Margin="112,52,0,0" VerticalAlignment="Top" Width="100" Content="Stop"/>
+		<Image x:Name="ImageFrame" HorizontalAlignment="Left" Margin="8,78,0,0" Width="204" Height="152" VerticalAlignment="Top"/>
 	</Grid>
 </UserControl>

@@ -7,15 +7,9 @@ namespace CloudObserverBroadcastServiceLibrary
     public interface ICloudObserverBroadcastService
     {
         [OperationContract]
-        void BindMeToCamera(int clientID, int cameraID, string UID);
+        byte[] ReadFrame(int cameraID);
 
         [OperationContract]
-        void SetMeAsCamera(int cameraID, string UID);
-
-        [OperationContract]
-        byte[] GetNextFrame(int cameraID, string UID);
-
-        [OperationContract]
-        void SetNextFrame(byte[] frame, string UID);
+        void WriteFrame(int cameraID, byte[] frame);
     }
 }

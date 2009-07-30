@@ -26,7 +26,7 @@ namespace CloudObserverUserInterface
 			InitializeComponent();
 
             client = new CloudObserverBroadcastServiceClient();
-            UID = "unic";
+            client.ReadFrameCompleted += new EventHandler<ReadFrameCompletedEventArgs>(client_ReadFrameCompleted);
             framesTimer = new DispatcherTimer();
             framesTimer.Interval = new TimeSpan(0, 0, 0, 0, 250);
             framesTimer.Tick += new EventHandler(framesTimer_Tick);
@@ -34,34 +34,25 @@ namespace CloudObserverUserInterface
 
         void framesTimer_Tick(object sender, EventArgs e)
         {
-            client.GetNextFrameAsync(Int32.Parse(CameraIDTextBox.Text), UID);
+            client.ReadFrameAsync(Int32.Parse(TextBoxCameraID.Text));
         }
 
-        private void StopButton_Click(object sender, RoutedEventArgs e)
-        {
-            framesTimer.Stop();
-        }
-
-        private void StartButton_Click(object sender, RoutedEventArgs e)
-        {
-            UID = UIDTextBox.Text;
-            client.BindMeToCameraCompleted += new EventHandler<System.ComponentModel.AsyncCompletedEventArgs>(client_BindMeToCameraCompleted);
-            client.BindMeToCameraAsync(Int32.Parse(UserIDTextBox.Text), Int32.Parse(CameraIDTextBox.Text), UID);
-            client.GetNextFrameCompleted += new EventHandler<GetNextFrameCompletedEventArgs>(client_GetNextFrameCompleted);
-            framesTimer.Start();
-        }
-
-        void client_GetNextFrameCompleted(object sender, GetNextFrameCompletedEventArgs e)
+        void client_ReadFrameCompleted(object sender, ReadFrameCompletedEventArgs e)
         {
             byte[] receivedImage = e.Result;
             BitmapImage bitmapImage = new BitmapImage();
             bitmapImage.SetSource(new MemoryStream(receivedImage));
-            ImageBox.Source = bitmapImage;
+            ImageFrame.Source = bitmapImage;
         }
 
-        void client_BindMeToCameraCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
+        private void ButtonStart_Click(object sender, RoutedEventArgs e)
         {
-            new MessageWindow("Binded to camera.", "Debug message", new TimeSpan(0, 0, 1));
+            framesTimer.Start();
+        }
+
+        private void ButtonStop_Click(object sender, RoutedEventArgs e)
+        {
+            framesTimer.Stop();
         }
 	}
 }

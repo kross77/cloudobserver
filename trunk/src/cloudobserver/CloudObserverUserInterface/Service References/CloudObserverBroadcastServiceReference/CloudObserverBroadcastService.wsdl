@@ -6,52 +6,32 @@
       <xsd:import schemaLocation="http://localhost:9000/CloudObserverBroadcastService?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
     </xsd:schema>
   </wsdl:types>
-  <wsdl:message name="ICloudObserverBroadcastService_BindMeToCamera_InputMessage">
-    <wsdl:part name="parameters" element="tns:BindMeToCamera" />
+  <wsdl:message name="ICloudObserverBroadcastService_ReadFrame_InputMessage">
+    <wsdl:part name="parameters" element="tns:ReadFrame" />
   </wsdl:message>
-  <wsdl:message name="ICloudObserverBroadcastService_BindMeToCamera_OutputMessage">
-    <wsdl:part name="parameters" element="tns:BindMeToCameraResponse" />
+  <wsdl:message name="ICloudObserverBroadcastService_ReadFrame_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ReadFrameResponse" />
   </wsdl:message>
-  <wsdl:message name="ICloudObserverBroadcastService_SetMeAsCamera_InputMessage">
-    <wsdl:part name="parameters" element="tns:SetMeAsCamera" />
+  <wsdl:message name="ICloudObserverBroadcastService_WriteFrame_InputMessage">
+    <wsdl:part name="parameters" element="tns:WriteFrame" />
   </wsdl:message>
-  <wsdl:message name="ICloudObserverBroadcastService_SetMeAsCamera_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SetMeAsCameraResponse" />
-  </wsdl:message>
-  <wsdl:message name="ICloudObserverBroadcastService_GetNextFrame_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetNextFrame" />
-  </wsdl:message>
-  <wsdl:message name="ICloudObserverBroadcastService_GetNextFrame_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetNextFrameResponse" />
-  </wsdl:message>
-  <wsdl:message name="ICloudObserverBroadcastService_SetNextFrame_InputMessage">
-    <wsdl:part name="parameters" element="tns:SetNextFrame" />
-  </wsdl:message>
-  <wsdl:message name="ICloudObserverBroadcastService_SetNextFrame_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SetNextFrameResponse" />
+  <wsdl:message name="ICloudObserverBroadcastService_WriteFrame_OutputMessage">
+    <wsdl:part name="parameters" element="tns:WriteFrameResponse" />
   </wsdl:message>
   <wsdl:portType name="ICloudObserverBroadcastService">
-    <wsdl:operation name="BindMeToCamera">
-      <wsdl:input wsaw:Action="http://tempuri.org/ICloudObserverBroadcastService/BindMeToCamera" message="tns:ICloudObserverBroadcastService_BindMeToCamera_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/ICloudObserverBroadcastService/BindMeToCameraResponse" message="tns:ICloudObserverBroadcastService_BindMeToCamera_OutputMessage" />
+    <wsdl:operation name="ReadFrame">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICloudObserverBroadcastService/ReadFrame" message="tns:ICloudObserverBroadcastService_ReadFrame_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICloudObserverBroadcastService/ReadFrameResponse" message="tns:ICloudObserverBroadcastService_ReadFrame_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="SetMeAsCamera">
-      <wsdl:input wsaw:Action="http://tempuri.org/ICloudObserverBroadcastService/SetMeAsCamera" message="tns:ICloudObserverBroadcastService_SetMeAsCamera_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/ICloudObserverBroadcastService/SetMeAsCameraResponse" message="tns:ICloudObserverBroadcastService_SetMeAsCamera_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetNextFrame">
-      <wsdl:input wsaw:Action="http://tempuri.org/ICloudObserverBroadcastService/GetNextFrame" message="tns:ICloudObserverBroadcastService_GetNextFrame_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/ICloudObserverBroadcastService/GetNextFrameResponse" message="tns:ICloudObserverBroadcastService_GetNextFrame_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SetNextFrame">
-      <wsdl:input wsaw:Action="http://tempuri.org/ICloudObserverBroadcastService/SetNextFrame" message="tns:ICloudObserverBroadcastService_SetNextFrame_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/ICloudObserverBroadcastService/SetNextFrameResponse" message="tns:ICloudObserverBroadcastService_SetNextFrame_OutputMessage" />
+    <wsdl:operation name="WriteFrame">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICloudObserverBroadcastService/WriteFrame" message="tns:ICloudObserverBroadcastService_WriteFrame_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICloudObserverBroadcastService/WriteFrameResponse" message="tns:ICloudObserverBroadcastService_WriteFrame_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_ICloudObserverBroadcastService" type="tns:ICloudObserverBroadcastService">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
-    <wsdl:operation name="BindMeToCamera">
-      <soap:operation soapAction="http://tempuri.org/ICloudObserverBroadcastService/BindMeToCamera" style="document" />
+    <wsdl:operation name="ReadFrame">
+      <soap:operation soapAction="http://tempuri.org/ICloudObserverBroadcastService/ReadFrame" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -59,26 +39,8 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="SetMeAsCamera">
-      <soap:operation soapAction="http://tempuri.org/ICloudObserverBroadcastService/SetMeAsCamera" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetNextFrame">
-      <soap:operation soapAction="http://tempuri.org/ICloudObserverBroadcastService/GetNextFrame" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SetNextFrame">
-      <soap:operation soapAction="http://tempuri.org/ICloudObserverBroadcastService/SetNextFrame" style="document" />
+    <wsdl:operation name="WriteFrame">
+      <soap:operation soapAction="http://tempuri.org/ICloudObserverBroadcastService/WriteFrame" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

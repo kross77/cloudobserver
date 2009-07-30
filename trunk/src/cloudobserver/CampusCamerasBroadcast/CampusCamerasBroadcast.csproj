@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{C80DDD24-4541-4A9B-8E5E-3056F0B6EB4B}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{EEE4106C-DF8B-4893-8FCE-7DDED2E17D6B}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CloudObserverBroadcastServiceLibrary</RootNamespace>
-    <AssemblyName>CloudObserverBroadcastServiceLibrary</AssemblyName>
+    <RootNamespace>CampusCamerasBroadcast</RootNamespace>
+    <AssemblyName>CampusCamerasBroadcast</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -37,9 +37,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CloudObserverBroadcastService.cs" />
-    <Compile Include="ICloudObserverBroadcastService.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CloudObserverVirtualCamerasServiceLibrary\CloudObserverVirtualCamerasServiceLibrary.csproj">
+      <Project>{4B2EAB2F-506D-4426-B543-01EE379A1229}</Project>
+      <Name>CloudObserverVirtualCamerasServiceLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
