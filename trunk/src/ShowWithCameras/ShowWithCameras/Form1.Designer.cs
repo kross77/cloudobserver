@@ -30,6 +30,7 @@
         {
             this.StartButton = new System.Windows.Forms.Button();
             this.pictureBox = new System.Windows.Forms.PictureBox();
+            this.ButtonStop = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -52,11 +53,22 @@
             this.pictureBox.TabIndex = 1;
             this.pictureBox.TabStop = false;
             // 
+            // ButtonStop
+            // 
+            this.ButtonStop.Location = new System.Drawing.Point(367, 13);
+            this.ButtonStop.Name = "ButtonStop";
+            this.ButtonStop.Size = new System.Drawing.Size(139, 41);
+            this.ButtonStop.TabIndex = 2;
+            this.ButtonStop.Text = "Stop";
+            this.ButtonStop.UseVisualStyleBackColor = true;
+            this.ButtonStop.Click += new System.EventHandler(this.ButtonStop_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(758, 358);
+            this.Controls.Add(this.ButtonStop);
             this.Controls.Add(this.pictureBox);
             this.Controls.Add(this.StartButton);
             this.Name = "Form1";
@@ -70,6 +82,7 @@
 
         private System.Windows.Forms.Button StartButton;
         private System.Windows.Forms.PictureBox pictureBox;
+        private System.Windows.Forms.Button ButtonStop;
     }
 }
 

@@ -8,18 +8,21 @@ using System.Text;
 using System.Windows.Forms;
 using System.Net;
 using System.IO;
+using System.Threading;
 
 namespace ShowWithCameras
 {
     public partial class Form1 : Form
     {
+        const int magicConst = 5;
+        string[] UIDs = new string[magicConst];
+        bool started;
+
         public Form1()
         {
             InitializeComponent();
+            started = false;
         }
-
-        const int magicConst = 5;
-        string[] UIDs = new string[magicConst];
 
         private string GetImageURI(int num)
         {
@@ -37,14 +40,11 @@ namespace ShowWithCameras
             return bmp;
         }
 
-        private void StartButton_Click(object sender, EventArgs e)
+        private void translation()
         {
-
-
-
-            while (true)
+            while (true & started)
             {
-                for (int i = 0; i <= magicConst - 1; i++)
+                for (int i = 0; (i <= magicConst - 1) & started; i++)
                 {
                     string webAddress = GetImageURI(i + 1);
                     byte[] byteImage = new byte[0];
@@ -67,10 +67,21 @@ namespace ShowWithCameras
                     }
                     httpWResp.Close();
                     pictureBox.Image = (Image)BmpFromBytes(byteImage);
-                    pictureBox.Refresh();
+                    //pictureBox.Refresh();
                     System.Threading.Thread.Sleep(500);
                 }
             }
         }
+
+        private void StartButton_Click(object sender, EventArgs e)
+        {
+            started = true;
+            new Thread(translation).Start();
+        }
+
+        private void ButtonStop_Click(object sender, EventArgs e)
+        {
+            started = false;
         }
     }
+}
