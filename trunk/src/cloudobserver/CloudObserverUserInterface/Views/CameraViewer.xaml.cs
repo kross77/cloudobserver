@@ -18,23 +18,34 @@ namespace CloudObserverUserInterface
 	{
         CloudObserverBroadcastServiceClient client;
 
-        private string UID;
+        int realFPS;
         private DispatcherTimer framesTimer;
+        private DispatcherTimer fpsCounter;
 
 		public CameraViewer()
 		{
-			InitializeComponent();
-
             client = new CloudObserverBroadcastServiceClient();
             client.ReadFrameCompleted += new EventHandler<ReadFrameCompletedEventArgs>(client_ReadFrameCompleted);
             framesTimer = new DispatcherTimer();
-            framesTimer.Interval = new TimeSpan(0, 0, 0, 0, 250);
+            framesTimer.Interval = new TimeSpan(0, 0, 0, 0, 40);
             framesTimer.Tick += new EventHandler(framesTimer_Tick);
+            fpsCounter = new DispatcherTimer();
+            fpsCounter.Interval = new TimeSpan(0, 0, 1);
+            fpsCounter.Tick += new EventHandler(fpsCounter_Tick);
+
+			InitializeComponent();
 		}
+
+        void fpsCounter_Tick(object sender, EventArgs e)
+        {
+            LabelRealFPS.Content = "Real FPS: " + realFPS;
+            realFPS = 0;
+        }
 
         void framesTimer_Tick(object sender, EventArgs e)
         {
             client.ReadFrameAsync(Int32.Parse(TextBoxCameraID.Text));
+            realFPS++;
         }
 
         void client_ReadFrameCompleted(object sender, ReadFrameCompletedEventArgs e)
@@ -43,6 +54,11 @@ namespace CloudObserverUserInterface
             BitmapImage bitmapImage = new BitmapImage();
             bitmapImage.SetSource(new MemoryStream(receivedImage));
             ImageFrame.Source = bitmapImage;
+        }
+
+        private void NumericUpDownFPS_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            framesTimer.Interval = new TimeSpan(0, 0, 0, 0, (int)(1000 / e.NewValue));
         }
 
         private void ButtonStart_Click(object sender, RoutedEventArgs e)

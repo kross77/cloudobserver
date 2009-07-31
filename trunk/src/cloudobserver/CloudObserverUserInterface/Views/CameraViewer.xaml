@@ -5,14 +5,18 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d"
 	xmlns:dataInput="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Data.Input"
+	xmlns:inputToolkit="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
 	x:Class="CloudObserverUserInterface.CameraViewer"
 	d:DesignWidth="640" d:DesignHeight="480">
 
 	<Grid x:Name="LayoutRoot">
 		<dataInput:Label x:Name="LabelCameraID" HorizontalAlignment="Left" Margin="8,8,0,0" VerticalAlignment="Top" Content="CameraID:"/>
-		<TextBox x:Name="TextBoxCameraID" Margin="8,24,0,0" VerticalAlignment="Top" Text="CameraID" TextWrapping="Wrap" HorizontalAlignment="Left" Width="204"/>
-		<Button x:Name="ButtonStart" Click="ButtonStart_Click" HorizontalAlignment="Left" Margin="8,52,0,0" VerticalAlignment="Top" Width="100" Content="Start"/>
-		<Button x:Name="ButtonStop" Click="ButtonStop_Click" HorizontalAlignment="Left" Margin="112,52,0,0" VerticalAlignment="Top" Width="100" Content="Stop"/>
-		<Image x:Name="ImageFrame" HorizontalAlignment="Left" Margin="8,78,0,0" Width="204" Height="152" VerticalAlignment="Top"/>
+		<TextBox x:Name="TextBoxCameraID" Margin="8,24,0,0" VerticalAlignment="Top" Text="1" TextWrapping="Wrap" HorizontalAlignment="Left" Width="204"/>
+		<dataInput:Label x:Name="LabelFPS" HorizontalAlignment="Left" Margin="8,52,0,0" VerticalAlignment="Top" Content="FPS:"/>
+		<inputToolkit:NumericUpDown x:Name="NumericUpDownFPS" ValueChanged="NumericUpDownFPS_ValueChanged" HorizontalAlignment="Left" Margin="38,52,0,0" VerticalAlignment="Top" Width="48" Minimum="1" IsEditable="False" Maximum="100" Value="25"/>
+		<dataInput:Label x:Name="LabelRealFPS" HorizontalAlignment="Left" Margin="90,52,0,0" VerticalAlignment="Top" Content="Real FPS:"/>
+		<Button x:Name="ButtonStart" Click="ButtonStart_Click" HorizontalAlignment="Left" Margin="8,78,0,0" VerticalAlignment="Top" Width="100" Content="Start"/>
+		<Button x:Name="ButtonStop" Click="ButtonStop_Click" HorizontalAlignment="Left" Margin="112,78,0,0" VerticalAlignment="Top" Width="100" Content="Stop"/>
+		<Image x:Name="ImageFrame" HorizontalAlignment="Left" Margin="8,104,0,224" Width="204"/>
 	</Grid>
 </UserControl>
