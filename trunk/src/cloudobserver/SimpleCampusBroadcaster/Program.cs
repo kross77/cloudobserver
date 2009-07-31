@@ -3,7 +3,7 @@ using System.Timers;
 using System.ServiceModel;
 using CloudObserverVirtualCamerasServiceLibrary;
 
-namespace CampusCamerasBroadcast
+namespace SimpleCampusBroadcaster
 {
     class Program
     {
@@ -31,7 +31,7 @@ namespace CampusCamerasBroadcast
             Timer timer = new Timer(250);
             timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
             timer.Start();
-            Console.Write("Press any key to stop broadcasting...");
+            Console.WriteLine("Press any key to stop broadcasting...");
             Console.ReadKey();
         }
 

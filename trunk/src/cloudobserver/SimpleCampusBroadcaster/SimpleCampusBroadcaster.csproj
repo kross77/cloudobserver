@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{EEE4106C-DF8B-4893-8FCE-7DDED2E17D6B}</ProjectGuid>
+    <ProjectGuid>{879CCE8E-407B-4E37-8B06-BDA928A32724}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CampusCamerasBroadcast</RootNamespace>
-    <AssemblyName>CampusCamerasBroadcast</AssemblyName>
+    <RootNamespace>SimpleCampusBroadcaster</RootNamespace>
+    <AssemblyName>SimpleCampusBroadcaster</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
