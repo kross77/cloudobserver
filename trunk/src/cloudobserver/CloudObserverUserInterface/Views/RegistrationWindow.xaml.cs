@@ -22,20 +22,21 @@ namespace CloudObserverUserInterface.Views
     {
         enum CorrectnessCheckElement { Email, Password };
 
-        CloudObserverAuthorizationServiceClient client;
         bool emailChecked = true;
         bool emailChecking = false;
         bool emailCorrect = false;
         bool passwordCorrect = false;
         byte[] icon;
+        private MessageWindow errorMessageWindow;
+        CloudObserverAuthorizationServiceClient authorizationServiceClient;
 
         public RegistrationWindow()
         {           
             InitializeComponent();
 
-            client = new CloudObserverAuthorizationServiceClient();
-            client.UserIsEmailAvailableCompleted += new EventHandler<UserIsEmailAvailableCompletedEventArgs>(client_UserIsEmailAvailableCompleted);
-            client.UserAddCompleted += new EventHandler<UserAddCompletedEventArgs>(client_UserAddCompleted);
+            authorizationServiceClient = new CloudObserverAuthorizationServiceClient();
+            authorizationServiceClient.UserIsEmailAvailableCompleted += new EventHandler<UserIsEmailAvailableCompletedEventArgs>(client_UserIsEmailAvailableCompleted);
+            authorizationServiceClient.UserAddCompleted += new EventHandler<UserAddCompletedEventArgs>(client_UserAddCompleted);
 
             DispatcherTimer emailChecker = new DispatcherTimer();
             emailChecker.Interval = new TimeSpan(0, 0, 0, 1, 0);
@@ -52,8 +53,9 @@ namespace CloudObserverUserInterface.Views
                 LabelEmailStatus.Foreground = new SolidColorBrush(Colors.Red);
             } else {
                 LabelEmailStatus.Content = "Checking availability...";
-                LabelEmailStatus.Foreground = new SolidColorBrush(Colors.Red);
+                LabelEmailStatus.Foreground = new SolidColorBrush(Colors.Orange);
                 emailChecked = false;
+                emailChecking = false;
             }
         }
 
@@ -104,11 +106,23 @@ namespace CloudObserverUserInterface.Views
 
         private void ButtonRegister_Click(object sender, RoutedEventArgs e)
         {
-            client.UserAddAsync(TextBoxEmail.Text, PasswordBoxPassword.Password, TextBoxName.Text, TextBoxDescription.Text, icon);
+            authorizationServiceClient.UserAddAsync(TextBoxEmail.Text, PasswordBoxPassword.Password, TextBoxName.Text, TextBoxDescription.Text, icon);
         }
 
         private void client_UserIsEmailAvailableCompleted(object sender, UserIsEmailAvailableCompletedEventArgs e)
         {
+            if (e.Error != null)
+            {
+                LabelEmailStatus.Content = "Connection error.";
+                LabelEmailStatus.Foreground = new SolidColorBrush(Colors.Red);
+                if (errorMessageWindow == null)
+                {
+                    errorMessageWindow = new MessageWindow("Can't access authorization service.", "Error", new TimeSpan(0, 0, 2));
+                    errorMessageWindow.Closed += new EventHandler(errorMessageWindow_Closed);
+                    errorMessageWindow.Show();
+                }
+                return;
+            }
             emailChecking = false;
             if (e.Result)
             {
@@ -127,6 +141,16 @@ namespace CloudObserverUserInterface.Views
 
         private void client_UserAddCompleted(object sender, UserAddCompletedEventArgs e)
         {
+            if (e.Error != null)
+            {
+                if (errorMessageWindow == null)
+                {
+                    errorMessageWindow = new MessageWindow("Can't access authorization service.", "Error", new TimeSpan(0, 0, 2));
+                    errorMessageWindow.Closed += new EventHandler(errorMessageWindow_Closed);
+                    errorMessageWindow.Show();
+                }
+                return;
+            }
             new MessageWindow("Resigtration complete.", "Registration", new TimeSpan(0, 0, 0, 1)).Show();
             Close();
         }
@@ -135,9 +159,14 @@ namespace CloudObserverUserInterface.Views
         {
             if (!emailChecked && !emailChecking)
             {
-                client.UserIsEmailAvailableAsync(TextBoxEmail.Text);
+                authorizationServiceClient.UserIsEmailAvailableAsync(TextBoxEmail.Text);
                 emailChecking = true;
             }
+        }
+
+        private void errorMessageWindow_Closed(object sender, EventArgs e)
+        {
+            errorMessageWindow = null;
         }
 
         private void SetCorrectness(CorrectnessCheckElement correctnessCheckElement, bool value)

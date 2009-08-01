@@ -10,14 +10,10 @@ namespace SimplePolicyRetrieverServiceHoster
     {
         static void Main(string[] args)
         {
-            Console.Write("Port (1024-65535): ");
-            ServiceHost serviceHost = null;
             try
             {
-                int servicePort = Int32.Parse(Console.ReadLine());
-                if ((servicePort < 1024) || (servicePort > 65535)) throw new Exception("Port out of range.");
-                string serviceAddress = "http://localhost:" + servicePort + "/";
-                serviceHost = new ServiceHost(typeof(CloudObserverPolicyRetrieverService), new Uri(serviceAddress));
+                string serviceAddress = "http://localhost:9000/";
+                ServiceHost serviceHost = new ServiceHost(typeof(CloudObserverPolicyRetrieverService), new Uri(serviceAddress));
                 serviceHost.AddServiceEndpoint(typeof(ICloudObserverPolicyRetrieverService), new WebHttpBinding(), "").Behaviors.Add(new WebHttpBehavior());
                 serviceHost.Open();
                 Console.WriteLine("Cloud Observer Policy Retriever service hosted at " + serviceAddress);

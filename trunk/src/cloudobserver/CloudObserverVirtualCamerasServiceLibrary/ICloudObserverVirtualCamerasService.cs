@@ -7,7 +7,10 @@ namespace CloudObserverVirtualCamerasServiceLibrary
     public interface ICloudObserverVirtualCamerasService
     {
         [OperationContract]
-        void AddSource(int cameraID, string uri, int framesPerCycle);
+        void SetSource(int cameraID, string source);
+
+        [OperationContract]
+        void SetCredentials(int cameraID, string userName, string password);
 
         [OperationContract]
         void SetFPS(int cameraID, int fps);
@@ -17,9 +20,6 @@ namespace CloudObserverVirtualCamerasServiceLibrary
 
         [OperationContract]
         void StopBroadcasting(int cameraID);
-
-        [OperationContract]
-        string[] GetSources(int cameraID);
 
         [OperationContract]
         int GetFramesCounter(int cameraID);

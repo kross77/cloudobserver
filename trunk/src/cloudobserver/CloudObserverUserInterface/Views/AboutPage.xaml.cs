@@ -20,7 +20,6 @@ namespace CloudObserverUserInterface
             InitializeComponent();
         }
 
-        // Executes when the user navigates to this page.
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
         }

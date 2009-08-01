@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{FA45C960-836B-46BD-87B8-06D75684936E}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{B1925ABD-CA46-4212-BDA4-55892A29D18B}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CloudObserverRemoteCamerasServiceLibrary</RootNamespace>
-    <AssemblyName>CloudObserverRemoteCamerasServiceLibrary</AssemblyName>
+    <RootNamespace>SimpleIPCameraBroadcaster</RootNamespace>
+    <AssemblyName>SimpleIPCameraBroadcaster</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -17,16 +17,17 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
+    <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <OutputPath>..\bin\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -37,15 +38,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CloudObserverRemoteCamerasService.cs" />
-    <Compile Include="ICloudObserverRemoteCamerasService.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RemoteCamera.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CloudObserverBroadcastServiceLibrary\CloudObserverBroadcastServiceLibrary.csproj">
-      <Project>{C80DDD24-4541-4A9B-8E5E-3056F0B6EB4B}</Project>
-      <Name>CloudObserverBroadcastServiceLibrary</Name>
+    <ProjectReference Include="..\CloudObserverVirtualCamerasServiceLibrary\CloudObserverVirtualCamerasServiceLibrary.csproj">
+      <Project>{4B2EAB2F-506D-4426-B543-01EE379A1229}</Project>
+      <Name>CloudObserverVirtualCamerasServiceLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

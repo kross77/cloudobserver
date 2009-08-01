@@ -1,0 +1,20 @@
+﻿<UserControl
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d"
+	xmlns:dataInput="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Data.Input"
+	xmlns:inputToolkit="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
+	x:Class="CloudObserverUserInterface.CameraControl"
+	d:DesignWidth="640" d:DesignHeight="480">
+
+	<Grid x:Name="LayoutRoot">
+		<TextBlock x:Name="TextBlockCameraID" HorizontalAlignment="Left" VerticalAlignment="Top" Text="CameraID:" TextWrapping="Wrap" Margin="8,8,0,0"/>
+		<inputToolkit:NumericUpDown x:Name="NumericUpDownCameraID" HorizontalAlignment="Left" VerticalAlignment="Top" d:LayoutOverrides="Height" Margin="8,24,0,0" Maximum="2147483647" Value="1" Minimum="1" Width="114"/>
+		<TextBlock x:Name="TextBlockRefreshRate" HorizontalAlignment="Left" VerticalAlignment="Top" Text="Refresh rate:" TextWrapping="Wrap" Margin="8,50,0,0"/>
+		<inputToolkit:NumericUpDown x:Name="NumericUpDownRefreshRate" ValueChanged="NumericUpDownRefreshRate_ValueChanged" HorizontalAlignment="Left" VerticalAlignment="Top" d:LayoutOverrides="Height" Margin="85,50,0,0" Minimum="1" Maximum="60" Value="10" Width="37"/>
+		<TextBlock x:Name="TextBlockFPS" HorizontalAlignment="Left" VerticalAlignment="Top" Text="FPS: 0" TextWrapping="Wrap" Margin="8,76,0,0"/>
+		<Image x:Name="ImageFrame" HorizontalAlignment="Left" Margin="8,96,0,0" VerticalAlignment="Top"/>
+	</Grid>
+</UserControl>

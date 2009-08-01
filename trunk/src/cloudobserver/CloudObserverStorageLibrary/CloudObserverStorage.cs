@@ -5,23 +5,24 @@ namespace CloudObserverStorageLibrary
 {
     public class CloudObserverStorage
     {
-        private readonly string baseAddress;
+        private readonly string basePath;
 
-        public CloudObserverStorage() : this(@"C:\CloudObserverStorage\") { }
+        public CloudObserverStorage() : this(System.Environment.GetEnvironmentVariable("windir") + @"\CloudObserverStorage\") { }
 
-        public CloudObserverStorage(string baseAddress)
+        public CloudObserverStorage(string basePath)
         {
-            this.baseAddress = baseAddress;
+            if (!Directory.Exists(basePath)) Directory.CreateDirectory(basePath);
+            this.basePath = basePath;
         }
 
         public void SaveIntoStorage(string path, byte[] data)
         {
-            File.WriteAllBytes(baseAddress + path, data);
+            File.WriteAllBytes(basePath + path, data);
         }
 
         public byte[] GetFromStorage(string path)
         {
-            return File.ReadAllBytes(baseAddress + path);
+            return File.ReadAllBytes(basePath + path);
         }
     }
 }

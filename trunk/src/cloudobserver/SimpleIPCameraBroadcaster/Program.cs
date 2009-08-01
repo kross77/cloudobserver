@@ -3,7 +3,7 @@ using System.Timers;
 using System.ServiceModel;
 using CloudObserverVirtualCamerasServiceLibrary;
 
-namespace SimpleCampusBroadcaster
+namespace SimpleIPCameraBroadcaster
 {
     class Program
     {
@@ -16,13 +16,12 @@ namespace SimpleCampusBroadcaster
             try
             {
                 virtualCamerasServiceClient = ChannelFactory<ICloudObserverVirtualCamerasService>.CreateChannel(new BasicHttpBinding(), new EndpointAddress("http://localhost:9000/CloudObserverVirtualCamerasService"));
-                Console.Write("Campus camera (1 - 5): ");
-                int campusCamera = Int32.Parse(Console.ReadLine());
                 Console.Write("CameraID: ");
                 cameraID = Int32.Parse(Console.ReadLine());
-                virtualCamerasServiceClient.SetSource(cameraID, @"http://www.campus.spbu.ru/images/webcam/camera" + campusCamera + ".jpg");
+                virtualCamerasServiceClient.SetSource(cameraID, @"http://89.106.173.195/snap.jpg");
                 Console.Write("FPS: ");
                 int fps = Int32.Parse(Console.ReadLine());
+                virtualCamerasServiceClient.SetCredentials(cameraID, "live", "live");
                 virtualCamerasServiceClient.SetFPS(cameraID, fps);
                 virtualCamerasServiceClient.StartBroadcasting(cameraID);
                 Console.WriteLine("Broadcast started.");
@@ -42,7 +41,7 @@ namespace SimpleCampusBroadcaster
 
         static void framesTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            Console.SetCursorPosition(0, 6);
+            Console.SetCursorPosition(0, 5);
             try
             {
                 Console.Write("Frames: " + virtualCamerasServiceClient.GetFramesCounter(cameraID));

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.ServiceModel;
 
@@ -16,7 +17,10 @@ namespace CloudObserverBroadcastServiceLibrary
 
         public byte[] ReadFrame(int cameraID)
         {
-            return frames[cameraID];
+            if (frames.ContainsKey(cameraID))
+                return frames[cameraID];
+            else
+                return CloudObserverBroadcastServiceLibrary.Properties.Resources.NoImageFrame;
         }
 
         public void WriteFrame(int cameraID, byte[] frame)

@@ -14,11 +14,16 @@ namespace CloudObserverVirtualCamerasServiceLibrary
             virtualCameras = new Dictionary<int, VirtualCamera>();
         }
 
-        public void AddSource(int cameraID, string uri, int framesPerCycle)
+        public void SetSource(int cameraID, string source)
         {
             if (!virtualCameras.ContainsKey(cameraID))
                 virtualCameras[cameraID] = new VirtualCamera(cameraID, "http://localhost:9000/CloudObserverBroadcastService");
-            virtualCameras[cameraID].AddSource(uri, framesPerCycle);
+            virtualCameras[cameraID].SetSource(source);
+        }
+
+        public void SetCredentials(int cameraID, string userName, string password)
+        {
+            virtualCameras[cameraID].SetCredentials(userName, password);
         }
 
         public void SetFPS(int cameraID, int fps)
@@ -33,11 +38,7 @@ namespace CloudObserverVirtualCamerasServiceLibrary
 
         public void StopBroadcasting(int cameraID)
         {
-            virtualCameras[cameraID].StopBroadcasting();
-        }
-        public string[] GetSources(int cameraID)
-        {
-            return virtualCameras[cameraID].GetSources();
+            virtualCameras[cameraID].StartBroadcasting();
         }
 
         public int GetFramesCounter(int cameraID)

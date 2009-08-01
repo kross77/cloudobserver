@@ -8,29 +8,54 @@ namespace SimpleBroadcaster
 {
     class Program
     {
-        static ICloudObserverBroadcastService client;
-        static int i = 0;
+        static int cameraID;
+        static int currentImage = 0;
         static int framesCounter = 0;
-        const string baseAddress = @"C:\";
+        static string basePath = @"C:\";
+        static Timer broadcastingTimer;
+        static ICloudObserverBroadcastService broadcastServiceClient;
 
         static void Main(string[] args)
         {
-            client = ChannelFactory<ICloudObserverBroadcastService>.CreateChannel(new BasicHttpBinding(), new EndpointAddress("http://localhost:9000/CloudObserverBroadcastService"));
-            Console.Write("FPS: ");
-            int fps = Int32.Parse(Console.ReadLine());
-            Timer timer = new Timer(1000 / fps);
-            timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
-            timer.Start();
-            Console.WriteLine("Press any key to stop broadcasting...");
-            Console.ReadKey();
+            try
+            {
+                broadcastServiceClient = ChannelFactory<ICloudObserverBroadcastService>.CreateChannel(new BasicHttpBinding(), new EndpointAddress(@"http://localhost:9000/CloudObserverBroadcastService"));
+                Console.Write("CameraID: ");
+                cameraID = Int32.Parse(Console.ReadLine());
+                Console.Write("FPS: ");
+                int fps = Int32.Parse(Console.ReadLine());
+                broadcastingTimer = new Timer(1000 / fps);
+                broadcastingTimer.Elapsed += new ElapsedEventHandler(broadcastingTimer_Elapsed);
+                broadcastingTimer.Start();
+                Console.WriteLine("Broadcast started.");
+                Console.WriteLine("Press any key to stop broadcasting...");
+                Console.CursorVisible = false;
+                Console.ReadKey();
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.Message);
+                Console.ReadKey();
+            }
         }
 
-        static void timer_Elapsed(object sender, ElapsedEventArgs e)
+        static void broadcastingTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            client.WriteFrame(1, File.ReadAllBytes(baseAddress + i + ".jpg"));
-            i = (i + 1) % 2;
             framesCounter++;
-            Console.WriteLine("  total frames sent: " + framesCounter);
+            Console.SetCursorPosition(0, 5);
+            Console.Write("Frames: " + framesCounter);
+            try
+            {
+                broadcastServiceClient.WriteFrame(cameraID, File.ReadAllBytes(basePath + currentImage + ".jpg"));
+                currentImage = (currentImage + 1) % 8;
+            }
+            catch (Exception exception)
+            {
+                broadcastingTimer.Stop();
+                Console.Clear();
+                Console.Write(exception.Message);
+                Console.ReadKey();
+            }
         }
     }
 }

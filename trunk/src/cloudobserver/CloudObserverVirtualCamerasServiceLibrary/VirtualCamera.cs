@@ -10,52 +10,45 @@ namespace CloudObserverVirtualCamerasServiceLibrary
     class VirtualCamera
     {
         int cameraID;
-        int sources = 0;
-        int position = 0;
-        int cyclePosition = 0;
+        string source;
+        string userName;
+        string password;
         int framesCounter = 0;
-        List<string> uri;
-        List<int> framesPerCycle;
         Timer broadcastingTimer;
-        ICloudObserverBroadcastService client;
+        ICloudObserverBroadcastService broadcastServiceClient;
 
         public VirtualCamera(int cameraID, string cloudObserverBroadcastServiceUri)
         {
             this.cameraID = cameraID;
 
-            uri = new List<string>();
-            framesPerCycle = new List<int>();
-
-            client = ChannelFactory<ICloudObserverBroadcastService>.CreateChannel(new BasicHttpBinding(), new EndpointAddress(cloudObserverBroadcastServiceUri));
+            broadcastServiceClient = ChannelFactory<ICloudObserverBroadcastService>.CreateChannel(new BasicHttpBinding(), new EndpointAddress(cloudObserverBroadcastServiceUri));
 
             broadcastingTimer = new Timer(1000);
             broadcastingTimer.Elapsed += new ElapsedEventHandler(broadcastingTimer_Elapsed);
         }
 
-        void broadcastingTimer_Elapsed(object sender, ElapsedEventArgs e)
+        private void broadcastingTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            framesCounter++;
-            HttpWebRequest httpWebRequest = (HttpWebRequest)HttpWebRequest.Create(uri[position]);
+            //HttpWebRequest httpWebRequest = (HttpWebRequest)HttpWebRequest.Create(source);
+            //httpWebRequest.Credentials = new NetworkCredential(userName, password);
             WebClient webClient = new WebClient();
-            HttpWebResponse httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
-            if (httpWebResponse.ContentType == "image/jpeg")
-                client.WriteFrame(cameraID, webClient.DownloadData(uri[position]));
-            httpWebResponse.Close();
-            position = (position + 1) % sources;
-            //cyclePosition++;
-            //if (cyclePosition > framesPerCycle[position])
-            //{
-            //    position++;
-            //    if (position > sources) position = 0;
-            //    cyclePosition = 0;
-            //}
+            webClient.Credentials = new NetworkCredential(userName, password);
+            //HttpWebResponse httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+            //if (httpWebRequest.ContentType == "image/jpeg")
+            broadcastServiceClient.WriteFrame(cameraID, webClient.DownloadData(source));
+            //httpWebResponse.Close();
+            framesCounter++;
         }
 
-        public void AddSource(string uri, int framesPerCycle)
+        public void SetSource(string source)
         {
-            sources++;
-            this.uri.Add(uri);
-            this.framesPerCycle.Add(framesPerCycle);
+            this.source = source;
+        }
+
+        public void SetCredentials(string userName, string password)
+        {
+            this.userName = userName;
+            this.password = password;
         }
 
         public void SetFPS(int fps)
@@ -71,11 +64,6 @@ namespace CloudObserverVirtualCamerasServiceLibrary
         public void StopBroadcasting()
         {
             broadcastingTimer.Stop();
-        }
-
-        public string[] GetSources()
-        {
-            return uri.ToArray();
         }
 
         public int GetFramesCounter()

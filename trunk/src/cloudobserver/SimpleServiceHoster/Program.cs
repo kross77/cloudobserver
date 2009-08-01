@@ -25,10 +25,7 @@ namespace SimpleServiceHoster
                 Type serviceContractType = serviceDLLAssembly.GetType(serviceName + "Library.I" + serviceName);
                 Console.WriteLine("Loaded: " + serviceName);
 
-                Console.Write("Port (1024-65535): ");
-                int servicePort = Int32.Parse(Console.ReadLine());
-                if ((servicePort < 1024) || (servicePort > 65535)) throw new Exception("Port out of range.");
-                string serviceAddress = @"http://localhost:" + servicePort + "/" + serviceName;
+                string serviceAddress = @"http://localhost:9000/" + serviceName;
 
                 ServiceHost serviceHost = new ServiceHost(serviceType, new Uri(serviceAddress));
 
