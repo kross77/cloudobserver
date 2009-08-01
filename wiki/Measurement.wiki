@@ -234,7 +234,7 @@ END_OF_SECTION
 
 START_OF_SECTION: IPC : NetNamedPipeBinding
 	TransferMode : Buffered
-	Average used time for transfer(camera->service->client)(milliseconds) : 152; 
+	Average used time for transfer(camera->service->client)(milliseconds) : 112; 
 	Average picture size(B) : 1036854; 
 	Average data transfered(B) : 2073708; 
 	MaxBytePerRead attribute: 10000
@@ -242,7 +242,7 @@ END_OF_SECTION
 
 START_OF_SECTION: IPC : NetNamedPipeBinding
 	TransferMode : Buffered
-	Average used time for transfer(camera->service->client)(milliseconds) : 63; 
+	Average used time for transfer(camera->service->client)(milliseconds) : 47; 
 	Average picture size(B) : 360054; 
 	Average data transfered(B) : 720108; 
 	MaxBytePerRead attribute: 10000
@@ -250,7 +250,7 @@ END_OF_SECTION
 
 START_OF_SECTION: IPC : NetNamedPipeBinding
 	TransferMode : Buffered
-	Average used time for transfer(camera->service->client)(milliseconds) : 83; 
+	Average used time for transfer(camera->service->client)(milliseconds) : 21; 
 	Average picture size(B) : 90054; 
 	Average data transfered(B) : 180108; 
 	MaxBytePerRead attribute: 10000
@@ -260,7 +260,7 @@ END_OF_SECTION
 
 START_OF_SECTION: IPC : NetNamedPipeBinding
 	TransferMode : Buffered
-	Average used time for transfer(camera->service->client)(milliseconds) : 114; 
+	Average used time for transfer(camera->service->client)(milliseconds) : 109; 
 	Average picture size(B) : 1036854; 
 	Average data transfered(B) : 2073708; 
 	MaxBytePerRead attribute: 60000
@@ -268,7 +268,7 @@ END_OF_SECTION
 
 START_OF_SECTION: IPC : NetNamedPipeBinding
 	TransferMode : Buffered
-	Average used time for transfer(camera->service->client)(milliseconds) : 49; 
+	Average used time for transfer(camera->service->client)(milliseconds) : 45; 
 	Average picture size(B) : 360054; 
 	Average data transfered(B) : 720108; 
 	MaxBytePerRead attribute: 60000
@@ -276,11 +276,12 @@ END_OF_SECTION
 
 START_OF_SECTION: IPC : NetNamedPipeBinding
 	TransferMode : Buffered
-	Average used time for transfer(camera->service->client)(milliseconds) : 22; 
+	Average used time for transfer(camera->service->client)(milliseconds) : 21; 
 	Average picture size(B) : 90054; 
 	Average data transfered(B) : 180108; 
 	MaxBytePerRead attribute: 60000
 END_OF_SECTION
+
 
  === Streamed ===
 
@@ -288,7 +289,7 @@ END_OF_SECTION
 
 START_OF_SECTION: IPC : NetNamedPipeBinding
 	TransferMode : Streamed
-	Average used time for transfer(camera->service->client)(milliseconds) : 145; 
+	Average used time for transfer(camera->service->client)(milliseconds) : 129; 
 	Average picture size(B) : 1036854; 
 	Average data transfered(B) : 2073708; 
 	MaxBytePerRead attribute: 10000
@@ -296,7 +297,7 @@ END_OF_SECTION
 
 START_OF_SECTION: IPC : NetNamedPipeBinding
 	TransferMode : Streamed
-	Average used time for transfer(camera->service->client)(milliseconds) : 71; 
+	Average used time for transfer(camera->service->client)(milliseconds) : 54; 
 	Average picture size(B) : 360054; 
 	Average data transfered(B) : 720108; 
 	MaxBytePerRead attribute: 10000
@@ -304,17 +305,17 @@ END_OF_SECTION
 
 START_OF_SECTION: IPC : NetNamedPipeBinding
 	TransferMode : Streamed
-	Average used time for transfer(camera->service->client)(milliseconds) : 29; 
+	Average used time for transfer(camera->service->client)(milliseconds) : 27; 
 	Average picture size(B) : 90054; 
 	Average data transfered(B) : 180108; 
 	MaxBytePerRead attribute: 10000
 END_OF_SECTION
 
- ====  Buffer: 60000 ====
+ ==== Buffer : 60000 ====
 
 START_OF_SECTION: IPC : NetNamedPipeBinding
 	TransferMode : Streamed
-	Average used time for transfer(camera->service->client)(milliseconds) : 131; 
+	Average used time for transfer(camera->service->client)(milliseconds) : 126; 
 	Average picture size(B) : 1036854; 
 	Average data transfered(B) : 2073708; 
 	MaxBytePerRead attribute: 60000
@@ -322,7 +323,7 @@ END_OF_SECTION
 
 START_OF_SECTION: IPC : NetNamedPipeBinding
 	TransferMode : Streamed
-	Average used time for transfer(camera->service->client)(milliseconds) : 60; 
+	Average used time for transfer(camera->service->client)(milliseconds) : 53; 
 	Average picture size(B) : 360054; 
 	Average data transfered(B) : 720108; 
 	MaxBytePerRead attribute: 60000
@@ -330,7 +331,7 @@ END_OF_SECTION
 
 START_OF_SECTION: IPC : NetNamedPipeBinding
 	TransferMode : Streamed
-	Average used time for transfer(camera->service->client)(milliseconds) : 28; 
+	Average used time for transfer(camera->service->client)(milliseconds) : 26; 
 	Average picture size(B) : 90054; 
 	Average data transfered(B) : 180108; 
 	MaxBytePerRead attribute: 60000
