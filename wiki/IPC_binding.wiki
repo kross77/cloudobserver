@@ -35,3 +35,7 @@ Note: The IPC address format is incorrect, indicating the mechanism instead of t
 IPC binding has no need for the reliable messaging protocol (all calls will be on the same machine anyway), and it is considered an inherently reliable transport.
 
 With the IPC binding, the client can access the SessionId property before making the first call, but the client will always get a session ID different from that of the service. When using this binding, it is therefore better to ignore the session ID altogether.
+
+In VS2008 System.ServiceModel.NetNamedPipeBinding.
+
+Important note: net.pipe://localhost/MyPipe without port and necessarily localhost. Without address after domain, because there is just a name of pipe.
