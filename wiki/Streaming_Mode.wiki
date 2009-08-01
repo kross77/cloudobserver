@@ -1,4 +1,3 @@
-
  = Streaming =
 
 By default, when the client and the service exchange messages, these messages are buffered on the receiving end and delivered only once the entire message has been received. This is true whether it is the client sending a message to the service or the service returning a message to the client. As a result, when the client calls the service, the service is invoked only after the client's message has been received in its entirety; likewise, the client is unblocked only once the returned message with the results of the invocation has been received in its entirety.
@@ -7,9 +6,9 @@ For sufficiently small messages, this exchange pattern provides for a simple pro
 
  == I/O Streams ==
 
-For message streaming, WCF requires the use of the .NET Stream class. In fact, the contract operations used for streaming look just like conventional I/O methods. The Stream class is the base class of all the I/O streams in .NET (such as the FileStream, NetworkStream, and MemoryStream classes), allowing you to stream content from any of these I/O sources. All you need to do is return or receive a Stream as an operation parameter, as shown in Example 5-17.
+For message streaming, WCF requires the use of the .NET Stream class. In fact, the contract operations used for streaming look just like conventional I/O methods. The Stream class is the base class of all the I/O streams in .NET (such as the FileStream, NetworkStream, and MemoryStream classes), allowing you to stream content from any of these I/O sources. All you need to do is return or receive a Stream as an operation parameter, as shown in Example.
 
-Example 5-17. Streaming operations
+Example. Streaming operations
 [ServiceContract]
 interface IMyContract
 {
@@ -51,7 +50,7 @@ public class BasicHttpBinding : Binding,...
 }
 
 
-TRansferMode.Streamed supports all streaming modes, and this is the only transfer mode that can support all the operations in Example 5-17. However, if the contract contains only a specific type of streaming, such as streamed reply:
+TRansferMode.Streamed supports all streaming modes, and this is the only transfer mode that can support all the operations in Example. However, if the contract contains only a specific type of streaming, such as streamed reply:
 
 [ServiceContract]
 interface IMyContract
