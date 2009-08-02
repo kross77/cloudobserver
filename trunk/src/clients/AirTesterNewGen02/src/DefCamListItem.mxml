@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+			minWidth="515"
+		   verticalScrollPolicy="off" 
+		   horizontalScrollPolicy="off"
+		   backgroundColor="white"
+		   creationComplete="init();" 
+		   height="139" 
+		   width="515"
+	 currentState="StartOne">
+	<mx:states>
+		<mx:State name="Info">
+			<mx:SetProperty target="{button1}" name="x"/>
+			<mx:SetProperty target="{button1}" name="y"/>
+			<mx:SetProperty target="{CamName}" name="x"/>
+			<mx:SetProperty target="{CamName}" name="y"/>
+			<mx:SetProperty target="{button1}" name="right" value="82"/>
+			<mx:SetProperty target="{button1}" name="width" value="79"/>
+			<mx:SetProperty target="{button1}" name="top" value="6"/>
+			<mx:SetProperty target="{CamName}" name="top" value="8"/>
+			<mx:SetProperty target="{CamName}" name="left" value="123"/>
+			<mx:SetProperty target="{CamName}" name="width" value="250"/>
+			<mx:SetProperty target="{CamName}" name="height" value="26"/>
+			<mx:RemoveChild target="{button2}"/>
+			<mx:AddChild position="lastChild">
+				<mx:Form x="238" y="34" width="183" height="107">
+					<mx:FormItem label="height" backgroundColor="#D5D2C2">
+						<mx:Label text="value" id="CamHeight"/>
+					</mx:FormItem>
+					<mx:FormItem label="key Interval" backgroundColor="#D5D2C2">
+						<mx:Label text="value" id="keyInterval"/>
+					</mx:FormItem>
+					<mx:FormItem label="loopback " backgroundColor="#D5D2C2">
+						<mx:Label text="value" id="loopback"/>
+					</mx:FormItem>
+				</mx:Form>
+			</mx:AddChild>
+			<mx:AddChild position="lastChild">
+				<mx:Form x="108" y="34" width="183" height="107">
+					<mx:FormItem label="activity Level" backgroundColor="#D5D2C2">
+						<mx:Label text="value" id="activityLevel"/>
+					</mx:FormItem>
+					<mx:FormItem label="bandwidth" backgroundColor="#D5D2C2">
+						<mx:Label text="value" id="bandwidth"/>
+					</mx:FormItem>
+					<mx:FormItem label="currentFPS" backgroundColor="#D5D2C2">
+						<mx:Label text="value" id="currentFPS"/>
+					</mx:FormItem>
+				</mx:Form>
+			</mx:AddChild>
+			<mx:AddChild position="lastChild">
+				<mx:Form x="364" y="34" width="183" height="107">
+					<mx:FormItem label="muted" backgroundColor="#D5D2C2">
+						<mx:Label text="value" id="muted"/>
+					</mx:FormItem>
+					<mx:FormItem label="quality" backgroundColor="#D5D2C2">
+						<mx:Label text="value" id="quality"/>
+					</mx:FormItem>
+					<mx:FormItem label="width" backgroundColor="#D5D2C2">
+						<mx:Label text="value" id="CamWidth"/>
+					</mx:FormItem>
+				</mx:Form>
+			</mx:AddChild>
+			<mx:AddChild position="lastChild">
+				<mx:Button label="OK" right="6" top="6" click="currentState='StartOne'"/>
+			</mx:AddChild>
+		</mx:State>
+		<mx:State name="StartOne">
+			<mx:SetProperty target="{button1}" name="y"/>
+			<mx:SetProperty target="{button1}" name="verticalCenter" value="0"/>
+			<mx:SetProperty target="{button2}" name="y"/>
+			<mx:SetProperty target="{button2}" name="verticalCenter" value="0"/>
+		</mx:State>
+		<mx:State name="Options">
+			<mx:RemoveChild target="{button2}"/>
+			<mx:RemoveChild target="{button1}"/>
+			<mx:AddChild position="lastChild">
+				<mx:Button x="437" y="7" label="OK"/>
+			</mx:AddChild>
+			<mx:AddChild position="lastChild">
+				<mx:Form x="191" y="59">
+					<mx:FormItem label="Label">
+						<mx:TextInput width="72"/>
+					</mx:FormItem>
+				</mx:Form>
+			</mx:AddChild>
+		</mx:State>
+	</mx:states>
+	
+	
+	
+	<mx:Script>
+		<![CDATA[
+    import flash.media.Camera;
+    import mx.controls.Alert;
+    import mx.events.ListEvent;
+    import mx.utils.ObjectUtil;
+  	import flash.media.Video;
+  	import mx.core.UIComponent; 	
+  	import flash.display.Bitmap;
+    import mx.events.CloseEvent;
+    import flash.display.Sprite;
+    import flash.text.TextField;
+    import flash.text.TextFieldAutoSize;
+    import flash.utils.Timer;
+    import flash.events.TimerEvent;
+    import flash.events.ActivityEvent;
+        
+         	
+ 	 public var videoHolder:UIComponent;
+
+ 	 public var video:Video;
+ 	 
+		
+     private var camera:Camera;
+   
+
+
+ private function init():void {
+            videoHolder = new UIComponent();             
+  		    camera = Camera.getCamera(data.toString());             
+            video = new Video(cnvWebcam.width ,cnvWebcam.height);            
+ 	        video.attachCamera(camera);                
+ 	        videoHolder.addChild(video);
+ 	        cnvWebcam.addChild(videoHolder);
+ 	        CamName.text = camera.name;
+ 	       
+ 	 }
+ 	 
+ 	  private function infoIni():void{
+ 	  	       activityLevel.text =  camera.activityLevel.toString();
+ 	       bandwidth.text = camera.bandwidth.toString();
+ 	       currentFPS.text = camera.currentFPS.toString();
+ 	       muted.text = camera.muted.toString();
+ 	       CamWidth.text = camera.width.toString();
+ 	       quality.text = camera.quality.toString();
+ 	       CamHeight.text = camera.height.toString();
+ 	       keyInterval.text = camera.keyFrameInterval.toString();
+ 	       loopback.text = camera.loopback.toString();
+ 	  }
+]]>
+	</mx:Script>
+	
+	<mx:Panel width="100"
+			  height="108" 
+			  layout="absolute"
+			  title="Вешание"
+			  backgroundAlpha="0.0"
+			  x="11" 
+			  y="13"
+		 horizontalAlign="center" verticalAlign="middle">
+		
+		<mx:Image  source="assets/TV.png" 
+				   horizontalCenter="0" 
+				   verticalCenter="0"
+			 scaleContent="true" autoLoad="true" y="71" width="45" x="70" height="46">
+			
+		</mx:Image>
+		<mx:Canvas
+			id="cnvWebcam" 
+			visible="true" 
+			left="0" 
+			right="0" 
+			top="0"
+			bottom="0"
+			>
+			
+		</mx:Canvas>
+	</mx:Panel>
+	<mx:Button x="134" y="63" label="Информация" id="button2" click="currentState='Info'; infoIni();"/>
+	<mx:Button x="242" y="65" label="Настройки" id="button1"/>
+	<mx:Label x="134" y="20" text="Название" id="CamName"/>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</mx:Canvas>
