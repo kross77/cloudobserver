@@ -1,0 +1,555 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication showStatusBar="false"   title="CloudObserver Browser" xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="init(event);"  width="817" verticalScrollPolicy="off" horizontalScrollPolicy="off"  height="500" layout="absolute" backgroundGradientAlphas="[1.0, 1.0]" backgroundGradientColors="[#CBCBCB, #6E6E6E]" xmlns:cloudobserverbroadcastservice="services.cloudobserverbroadcastservice.*" xmlns:broadcastservice="services.broadcastservice.*">
+
+ <mx:Fade id="fadeOut" duration="1000" alphaFrom="1.0" alphaTo="0.0"/>
+    <mx:Fade id="fadeIn" duration="1000" alphaFrom="0.0" alphaTo="1.0"/>
+    
+<mx:Script>
+	<![CDATA[
+		import mx.events.StateChangeEvent;
+		import mx.graphics.codec.PNGEncoder;
+	//	import spark.components.ToggleButton;
+	//	import flashx.textLayout.events.SelectionEvent;
+		import mx.events.IndexChangedEvent;
+				import mx.events.NumericStepperEvent;
+			import mx.events.NumericStepperEvent;
+mx.graphics.codec.PNGEncoder;
+			import mx.events.ItemClickEvent;
+			import mx.events.FlexEvent;
+			import mx.events.ResourceEvent;
+			import mx.rpc.events.ResultEvent;
+				
+//////////////////////////////////////////////////////
+//IMPORTS
+	import com.adobe.images.JPGEncoder;
+	import flash.display.*;
+	import flash.events.*;
+	import flash.geom.Rectangle;
+	import flash.net.*;
+	import flash.text.*;
+	import flash.utils.ByteArray;
+	import flash.utils.getTimer;
+	import hurlant.jpeg.as3_jpeg_wrapper;
+    import mx.controls.Alert;
+    import mx.utils.ObjectUtil;
+  ////////////////////////////////////////////// old
+    import mx.binding.utils.BindingUtils;
+    import mx.graphics.codec.JPEGEncoder; 
+    import mx.controls.Image; 
+    import flash.filesystem.File;
+    import flash.filesystem.FileMode;
+    import flash.filesystem.FileStream;
+///////////////////////////////////////////////
+  import mx.core.UIComponent;
+            import mx.controls.Alert;
+            import mx.controls.SWFLoader;
+            import com.adobe.images.JPGEncoder;
+            import mx.rpc.events.FaultEvent;
+            import mx.rpc.events.ResultEvent;
+//////////////////////////////////////////////////
+           	import flash.display.BitmapData;
+	import flash.geom.Matrix;
+	import flash.utils.ByteArray;
+	import flash.utils.Endian;
+///////////////////////////////////////////////////
+    import flash.media.Camera;
+    import mx.controls.Alert;
+    import mx.events.ListEvent;
+    import mx.utils.ObjectUtil;
+  	import flash.media.Video;
+  	import mx.core.UIComponent; 	
+  	import flash.display.Bitmap;
+    import mx.events.CloseEvent;
+    import flash.display.Sprite;
+    import flash.text.TextField;
+    import flash.text.TextFieldAutoSize;
+    import flash.utils.Timer;
+    import flash.events.TimerEvent;
+    import flash.events.ActivityEvent;
+			
+	     import flash.utils.Timer;
+    import flash.events.TimerEvent;
+    import flash.display.Sprite;
+    import mx.core.Window;
+    
+/* [Bindable]
+ public var timerBmp:Timer = new Timer(200, 500000);
+ 
+ [Bindable]
+ public var timerJpeg:Timer = new Timer(200 , 500000); */
+ 
+
+//////////////////////////////////////////////////
+// VARS
+	public var win2:WinTest2 = new WinTest2();
+	private var fr:FileReference;
+	private var fr2:FileReference;
+	private var connectionIdle:Boolean= new Boolean(true);
+			private	var imData:ByteArray = new ByteArray;
+	private var array:Array = new Array(Camera.names.length);
+
+//////////////////////////////////////////////////////////////////////////////////
+// FUNCTIONS
+ 
+	public function FileOpt():void{
+	
+			fr2 = new FileReference();
+	
+		}
+///////////////////////////////////////////////////////////////////////		
+			
+
+
+///////////////////////////////////////////////////////////////
+       
+/////////////////////////////////////////////////////////////////////////////
+          
+    /////////////////////////////////////////////////////////////////////////////
+              private function GetImWH():void {
+	
+	//  it.text = it.text + " !!! Created Object Width  Height: !!!	 " + bi.width.toString() + " X " + bi.height.toString() + " " ;
+  
+             }
+	////////////////////////////////////////////////////////////////////////////
+		private function onSave(e:Event):void	{
+	
+		var textReportName:String = "Report.txt";
+	//	fr2.save(it.text, textReportName);
+	
+		}
+	////////////////////////////////////////////////////////////////////////////
+	
+	/* 	public function imageReturned(e:ResultEvent):void {
+	  
+	                  var ba:ByteArray = GetNextFrameResult3.lastResult as ByteArray;
+     //var file:File = File.desktopDirectory.resolvePath("webcab" + ".jpeg")
+     var filePath:String = File.desktopDirectory.nativePath + "\\webcam.jpg";
+     var fileStream:FileStream = new FileStream();
+     fileStream.open(new File(filePath), FileMode.WRITE);
+     //fileStream.open(file, FileMode.WRITE);
+     fileStream.writeBytes(ba);
+     fileStream.close();
+  myImageJ.source = null;
+  
+   myImageJ.source =  filePath;
+                   
+		} */
+	////////////////////////////////////////////////////////////////////////////////////////////	
+		private function CalculateAll(e:Event):void{
+		
+			as3JpegWay(e);
+			CJpegWay(e);
+		
+			DreadnoughtBitmapWay(e);
+			
+		}
+	/////////////////////////////////////////////////////////////////////////////////	
+		private function as3JpegWay(e:Event):ByteArray {
+	
+	 var bmpdata:BitmapData = new BitmapData(mySource.width,  mySource.height);
+        bmpdata.draw(myCanvas); 
+			var timer:int = getTimer();
+			var s:JPGEncoder = new JPGEncoder();
+			var jpg:ByteArray = s.encode(bmpdata);
+		//	it.text = it.text + ("      !!! AS3 JPEG ENCODING: !!! "+(getTimer()-timer)+"ms.").toString()+ "	 ";
+		//	it.text = it.text + ("   jpg.length = "+jpg.length).toString()+ " ";
+				return jpg;
+		}
+///////////////////////////////////////////////////////////////////////////////////////////	
+		private function as3PNGWay(e:Event):ByteArray {
+	
+	 var bmpdata:BitmapData = new BitmapData(mySource.width,  mySource.height);
+        bmpdata.draw(myCanvas); 
+			var timer:int = getTimer();
+			var s:PNGEncoder = new PNGEncoder();
+			var png:ByteArray = s.encode(bmpdata);
+		//	it.text = it.text + ("      !!! AS3 JPEG ENCODING: !!! "+(getTimer()-timer)+"ms.").toString()+ "	 ";
+		//	it.text = it.text + ("   jpg.length = "+jpg.length).toString()+ " ";
+				return png;
+		}
+///////////////////////////////////////////////////////////////////////////////////////////	
+		private function CJpegWay(e:Event):ByteArray {
+	
+			 var bmpdata:BitmapData = new BitmapData(mySource.width,  mySource.height);
+        bmpdata.draw(myCanvas); 
+			var timer:int = getTimer();
+			var ba:ByteArray = bmpdata.getPixels(new Rectangle(0,0, bi.width , bi.height));
+			var ret:ByteArray = as3_jpeg_wrapper.write_jpeg_file(ba, bi.width , bi.height, 3, 2);	
+		//	it.text += ("   !!! C  JPEG ENCODING: !!! "+(getTimer()-timer)+"ms.").toString() + " 	" + (" ret.length="+ret.length).toString();
+		
+			
+				return ret;
+			}
+////////////////////////////////////////////////////////////////////////////////////////		
+	
+	////////////////////////////////////////////////////////////////////////////////	
+		private function DreadnoughtBitmapWay(e:Event):ByteArray {
+	
+			var timer:int = getTimer();
+		 var bmpdata:BitmapData = new BitmapData(mySource.width,  mySource.height);
+        bmpdata.draw(myCanvas); 
+		var arr:ByteArray = encode(bmpdata);	
+	//var arr:ByteArray = bmpdata.getPixels(new Rectangle(0,0,bmpdata.width, bmpdata.height));
+			
+			//it.text += ("       !!! BITMAP NEW(Dreadnought) ENCODING: !!!  "+(getTimer()-timer)+"ms.").toString() + " 	" + (" arr.length="+arr.length).toString();
+				return arr;
+
+		}
+
+			public static function encode(bitmapData:BitmapData):ByteArray {
+			
+			// image/file properties
+			var bmpWidth:int = bitmapData.width;
+			var bmpHeight:int = bitmapData.height;
+			var imageBytes:ByteArray = bitmapData.getPixels(bitmapData.rect);
+			var imageSize:int = imageBytes.length;
+			var imageDataOffset:int = 0x36;
+			var fileSize:int = imageSize + imageDataOffset;
+			
+			// binary BMP data
+			var bmpBytes:ByteArray = new ByteArray();
+			bmpBytes.endian = Endian.LITTLE_ENDIAN; // byte order
+			
+			// header information
+			bmpBytes.length = fileSize;
+			bmpBytes.writeByte(0x42); // B
+			bmpBytes.writeByte(0x4D); // M (BMP identifier)
+			bmpBytes.writeInt(fileSize); // file size
+			bmpBytes.position = 0x0A; // offset to image data
+			bmpBytes.writeInt(imageDataOffset);
+			bmpBytes.writeInt(0x28); // header size
+			bmpBytes.position = 0x12; // width, height
+			bmpBytes.writeInt(bmpWidth);
+			bmpBytes.writeInt(bmpHeight);
+			bmpBytes.writeShort(1); // planes (1)
+			bmpBytes.writeShort(32); // color depth (32 bit)
+			bmpBytes.writeInt(0); // compression type
+			bmpBytes.writeInt(imageSize); // image data size
+			//bmpBytes.position = imageDataOffset; // start of image data...
+			//dpi 300*300
+			bmpBytes.writeUnsignedInt(0x2e30); 
+			bmpBytes.writeUnsignedInt(0x2e30);
+			
+			bmpBytes.position = imageDataOffset; // start of image data...
+			
+			// write pixel bytes in upside-down order
+			// (as per BMP format)
+			var col:int = bmpWidth;
+			var row:int = bmpHeight;
+			var rowLength:int = col * 4; // 4 bytes per pixel (32 bit)
+			try {
+				
+				// make sure we're starting at the
+				// beginning of the image data
+				imageBytes.position = 0;
+				
+				// bottom row up
+				while (row--) {
+					// from end of file up to imageDataOffset
+					bmpBytes.position = imageDataOffset + row*rowLength;
+					
+					// read through each column writing
+					// those bits to the image in normal
+					// left to rightorder
+					col = bmpWidth;
+					while (col--) {
+						bmpBytes.writeInt(imageBytes.readInt());
+					}
+				}
+				
+			}catch(error:Error){
+				// end of file
+			}
+			
+			// return BMP file
+			return bmpBytes;
+		}
+	////////////////////////////////////////////////////////////////////////////
+	protected function button5_clickHandler(event:MouseEvent):void
+			{
+				WriteFrameResult.token = broadcastService.WriteFrame(parseInt(cameraIDTextInput4.text),Select(event));
+			}
+
+
+ 
+  [Bindable]
+ public var timerSetNextFrames:Timer = new Timer(300, 500000);
+ 
+			protected function SetNextFrames_clickHandler(event:Event):void
+			{
+				 timerSetNextFrames.addEventListener("timer", RecTime);
+            timerSetNextFrames.start();
+			}
+public function RecTime(e:TimerEvent):void{
+		WriteFrameResult.token = broadcastService.WriteFrame(parseInt(cameraIDTextInput4.text),Select(e)); // C way
+        
+}
+private function applicationExitHandler(event:Event):void
+    	{
+			// Close all windows on exit
+            var openedWindows:Array = NativeApplication.nativeApplication.openedWindows;
+            for (var i:int = 0; i < openedWindows.length; i ++) 
+            {
+                openedWindows[i].close();
+            }
+    	}
+
+			protected function init(event:FlexEvent):void
+			{
+			OptionsT.visible = false;
+this.addEventListener(Event.CLOSING, applicationExitHandler);
+	/* var im:int = 0;
+		for (im; im < Camera.names.length; im++ ){
+			var iu:Array = new Array;
+			iu[0] = (im).toString();
+			array[im] = iu.toString();
+		}
+	trace(array);
+	list.dataProvider = array; */
+		//it.text = it.text +"hello!"+ " 		";
+        FileOpt();
+
+
+			}
+
+
+
+		
+
+
+			protected function Select(e:Event):ByteArray
+			{
+	
+				if(Selector.selectedIndex == 1){	
+					imData = CJpegWay(e);
+				}
+				 if(Selector.selectedIndex == 2){
+					imData = as3PNGWay(e);
+				}
+				 if(Selector.selectedIndex == 0){
+					imData = DreadnoughtBitmapWay(e);
+				}
+				
+				LastBALa.text = imData.length.toString();
+				return imData;
+			}
+
+
+
+			protected function Fps_changeHandler():Number
+			{
+				
+			  var delay:Number;
+				
+			    delay = Number(1000 / Fps.value);
+//		trace(timerSetNextFrames.delay);
+	timerSetNextFrames.delay =  delay;
+	//trace(timerSetNextFrames.delay);
+				return delay;
+			
+			}		
+
+		 
+		
+	/* 	 public function TimerExampleBmp():void {
+          
+            timerBmp.addEventListener("timer", timerHandlerBmp);
+            timerBmp.start();
+        }
+			
+		    public function TimerExampleJpeg():void {
+          
+            timerJpeg.addEventListener("timer", timerHandlerJpeg);
+            timerJpeg.start();
+        }    
+ */
+        public function timerHandlerBmp(event:TimerEvent):void {
+         //   trace("timerHandler: " + event);
+         DreadnoughtBitmapWay(event);
+        }
+              public function timerHandlerJpeg(event:TimerEvent):void {
+        //    trace("timerHandler: " + event);
+          CJpegWay(event);
+        }
+
+			protected function HtFrameURL_changeHandler(event:Event):void
+			{   favPags.visible = false;
+				bi.location = HtFrameURL.text ; 
+			}
+
+		protected function bi_locationChangeHandler(event:Event):void
+		{
+			HtFrameURL.text = bi.location;
+			favPags.visible = false;
+		}
+
+
+		protected function Selector1_itemClickHandler(event:ItemClickEvent):void
+		{
+				
+					Broad.selected = true;
+					SetNextFrames_clickHandler(event);
+				
+			
+		}
+
+
+		protected function bi_mouseDownHandler(event:MouseEvent):void
+		{
+
+			favPags.visible = false;
+		}
+
+
+		protected function Options_mouseOverHandler(event:MouseEvent):void
+		{
+			favPags.visible = false;
+		}
+
+
+		protected function Selector1_mouseOverHandler(event:MouseEvent):void
+		{
+
+			favPags.visible = false;
+			
+		}
+
+
+	
+
+
+	
+
+/* 		protected function textinput1_changeHandler(event:Event):void
+		{
+			 if(textint0.text.toString() == "0"){	
+					Options.visible = true;
+				}
+				if (textint0.text.toString() == "-1"){
+						Options.visible = false;
+				}
+		} */
+
+
+		protected function Broad_clickHandler(event:MouseEvent):void
+		{
+				{
+			if(Broad.selected == true){	
+					SetNextFrames_clickHandler(event);
+					Selector1.selectedIndex = 0
+				}
+				if(Broad.selected == false){
+						timerSetNextFrames.stop();
+						Selector1.selectedIndex = -1;
+				}
+		}
+		}
+
+
+		protected function Selector1_doubleClickHandler(event:MouseEvent):void
+		{
+			Broad.selected = false;
+			timerSetNextFrames.stop();
+			Selector1.selectedIndex = -1
+		}
+
+
+		protected function Selector0_clickHandler(event:MouseEvent):void
+		{      var openedWindows:Array = NativeApplication.nativeApplication.openedWindows;
+            for (var i:int = 1; i < openedWindows.length; i ++) 
+            {
+                openedWindows[i].close();
+            }
+            
+			var config:WinTest2 = new WinTest2();
+			
+			config.addChild(swfBa);
+			swfBa.visible = true;
+			config.title += " Браузера."
+			config.addChild(OptionsT)
+			OptionsT.visible = true;
+					config.open()
+		}
+
+	]]>
+</mx:Script>
+
+<!--<mx:SWFLoader id="swfBa2" source="Bab.swf" scaleContent="true" autoLoad="true" width="100%" height="100%" />-->
+
+<mx:SWFLoader id="swfBa" source="449 .swf" scaleContent="true" visible="false" autoLoad="true" width="448" height="190" />
+<mx:ApplicationControlBar  dock="false" fillAlphas="[0.53, 0.58]" top="0" right="0" left="0" bottom="0">
+		<mx:Canvas id="myCanvas" width="100%" height="100%"> 
+			<mx:Button    id="mySource"   width="100%" height="100%"/>
+				<mx:Tile height="77" width="166" horizontalCenter="0" verticalCenter="0">
+				<mx:Button toolTip="Медведев, Видео" width="50" height="50" click="bi.location = 'http://www.echo.msk.ru/blog/echomsk/607440-echo/'" fillAlphas="[1.0, 1.0]" fillColors="[#C32B2B, #C32B2B]" styleName="unicved" icon="@Embed(source='Misha.png')"/>
+				<mx:Button  toolTip="Популярный сайт Вконтакте" label="" width="50" height="50" icon="@Embed(source='Vkon.png')" click="bi.location = 'http://www.vkontakte.ru/'"/>
+				<mx:Button toolTip="Красивый сайт" label="" width="50" height="50" icon="@Embed(source='Adobe.png')" click="bi.location = 'http://www.vkontakte.ru/'"/>
+				</mx:Tile>
+			<mx:HTML id="bi" location="http://www.adobe.com" width="100%" height="100%" horizontalCenter="0" verticalCenter="0" backgroundColor="#A33737" y="-104" x="-213" backgroundAlpha="1.0" liveScrolling="true" locationChange="bi_locationChangeHandler(event)" mouseDown="bi_mouseDownHandler(event)"/>
+		
+		</mx:Canvas>
+		
+	</mx:ApplicationControlBar>
+	<mx:ApplicationControlBar  dock="true" fillAlphas="[0.53, 0.58]"  width="100%" height="30" y="0" x="0">
+		<mx:FormItem label="Адресс" horizontalAlign="center" required="true" mouseOver="{favPags.visible = true}" color="#000000" width="100%">
+			<mx:TextInput  mouseOver="{favPags.visible = true; }" enter=" HtFrameURL_changeHandler(event)"    id="HtFrameURL"  width="100%" color="#000000" fontWeight="normal" fontFamily="Verdana"/>
+		</mx:FormItem>
+		<mx:ToggleButtonBar id="Selector1"  doubleClickEnabled="true" doubleClick="Selector1_doubleClickHandler(event)"   selectedIndex="-1" itemClick="Selector1_itemClickHandler(event);" mouseOver="Selector1_mouseOverHandler(event)">
+		  <mx:dataProvider>
+		       <mx:Array>
+		           <mx:String>Потоковое вещание</mx:String>
+		       
+		       </mx:Array>
+		   </mx:dataProvider>
+		</mx:ToggleButtonBar>
+		<mx:Button id="Selector0"  label="Опции"  click="Selector0_clickHandler(event)" />
+	</mx:ApplicationControlBar>
+
+	<broadcastservice:BroadcastService  id="broadcastService" fault="Alert.show('Вещание приостановленно. По причине ошибки. Сообщите об ошибке Вашему администратору. ' + event.fault.faultString  ); timerSetNextFrames.stop(); Selector1.selectedIndex = -1; Broad.selected = false;" showBusyCursor="false"/>
+	<mx:CallResponder id="WriteFrameResult" fault="Alert.show('Сервер не отвечает. Вещание приостановленно. По причине ошибки. Сообщите об ошибке Вашему администратору. ' + event.fault.faultString  ); timerSetNextFrames.stop(); Selector1.selectedIndex = -1; Broad.selected = false;"/>
+	
+	<mx:Canvas right="0" bottom="0">
+		
+
+	<mx:Form defaultButton="{button5}" id="OptionsT" visible="true" >
+		<mx:FormItem label="CameraID" blendMode="{BlendMode.HARDLIGHT}">
+			<mx:TextInput id="cameraIDTextInput4" text="1" maxChars="3000" editable="true" blendMode="{BlendMode.HARDLIGHT}" enabled="true" width="59"/>
+		</mx:FormItem>
+		<mx:FormItem label="Количество кадров в секунду" blendMode="{BlendMode.HARDLIGHT}">
+			<mx:NumericStepper id="Fps" value="5" minimum="1" maximum="30" stepSize="1" enabled="true" change="Fps_changeHandler()"/>
+		</mx:FormItem>
+		<mx:FormItem label="Опции вещания"  blendMode="{BlendMode.HARDLIGHT}">
+			<mx:ToggleButtonBar id="Selector" selectedIndex="1" blendMode="{BlendMode.HARDLIGHT}">
+			  <mx:dataProvider>
+			       <mx:Array>
+			           <mx:String>BMP</mx:String>
+			           <mx:String>JPEG</mx:String>
+			            <mx:String>PNG</mx:String>
+			       </mx:Array>
+			   </mx:dataProvider>
+			</mx:ToggleButtonBar>
+		</mx:FormItem>
+		<mx:FormItem label="Обьем последнего кадка" blendMode="{BlendMode.HARDLIGHT}">
+			<mx:Text id="LastBALa" text="Отправка кадов еще не начиналась"/>
+		</mx:FormItem>
+		<mx:FormItem label="Текущие размеры броузера" blendMode="{BlendMode.HARDLIGHT}">
+			<mx:Text id="LastBALa0" text="{'ширина: ' + bi.width.toString() + ' , высота: ' + bi.height.toString() }"/>
+	
+		</mx:FormItem>
+	
+			<mx:HBox width="100%" x="66" height="24" verticalAlign="middle" horizontalAlign="center">
+				<mx:Button label="Послать один кадр" id="button5" click="button5_clickHandler(event)" width="167" blendMode="{BlendMode.HARDLIGHT}"/>
+				<mx:CheckBox id="Broad"  mouseOver="Broad_clickHandler(event)" click="Broad_clickHandler(event)" label="Потоковое вещание"/>
+			</mx:HBox>
+	
+	</mx:Form>
+	</mx:Canvas>
+	<mx:Canvas height="72" id="Favors"   left="20" top="10" width="70%">
+		<mx:Tile  blendMode="{BlendMode.HARDLIGHT}"   mouseUp="{favPags.visible = false}"  height="63" width="166" id="favPags"   hideEffect="{fadeOut}" showEffect="{fadeIn}" horizontalCenter="0" visible="false" top="0">
+			<mx:Button toolTip="Медведев, Видео" width="50"   mouseUp="{favPags.visible = false}" height="50" click="bi.location = 'http://www.echo.msk.ru/blog/echomsk/607440-echo/' ; HtFrameURL.text = bi.location;" fillAlphas="[1.0, 1.0]" fillColors="[#C32B2B, #C32B2B]" styleName="unicved" icon="@Embed(source='Misha.png')"/>
+			<mx:Button  toolTip="Популярный сайт Вконтакте"      mouseUp="{favPags.visible = false}" label="" width="50" height="50" icon="@Embed(source='Vkon.png')" click="bi.location = 'http://www.vkontakte.ru/'; HtFrameURL.text = bi.location; "/>
+			<mx:Button toolTip="Красивый сайт" label=""    mouseUp="{favPags.visible = false}"  width="50" height="50" icon="@Embed(source='Adobe.png')" click="bi.location = 'http://www.adobe.com/'; ; HtFrameURL.text = bi.location;"/>
+		</mx:Tile>
+	</mx:Canvas>
+	
+</mx:WindowedApplication>

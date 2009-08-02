@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="init();" layout="absolute" width="1133">
+	<!-- ЛОГИКА СНЯТИЯ ИЗОБРАЖЕНИЯ -->
+	
+	<mx:Script> 
+		<![CDATA[
+        	import mx.binding.utils.BindingUtils;
+        	import mx.graphics.codec.JPEGEncoder; 
+        import mx.controls.Image; 
+        import flash.display.Bitmap; 
+        import com.adobe.images.JPGEncoder;
+                import flash.filesystem.File;
+                 import flash.filesystem.FileMode;
+                  import flash.filesystem.FileStream;
+                
+//[Bindable]
+//public  var color:BitmapData = new BitmapData(mySource.width,  mySource.height);
+
+/* для пременения необходима система ВЛОЖЕННЫХ КОМПОНЕНТОВ иначе  
+ требуется использовать mx.graphics.ImageSnapshot который 
+ 700 трок в длинну... и пользует для записи PNGEncoder по умолчанию...
+ замечено что с ним торможение довольно сильное... 
+ данный метод довольно прост и довольно удобен если вложенность компонента
+  может достигать хотябы 2х ступений 
+  */
+
+
+
+
+
+
+private var encoder:JPGEncoder;
+
+        private function takeBitMap():void{ 
+
+   var colorBmp:BitmapData = new BitmapData(mySource.width,  mySource.height);
+        colorBmp.draw(myCanvas);     
+  //    myImage.source = new Bitmap(colorBmp);
+			
+   //  var bmpdata:BitmapData = Bitmap(html_conteiner).bitmapData;
+				var ba:ByteArray = encode(colorBmp); // new Bitmap(colorBmp).bitmapData.getPixels(new Rectangle(0,0, mySource.width,  mySource.height));
+			     var filePath:String = File.desktopDirectory.nativePath + "\\webcam.bmp";
+     var fileStream:FileStream = new FileStream();
+     fileStream.open(new File(filePath), FileMode.WRITE);
+     //fileStream.open(file, FileMode.WRITE);
+     fileStream.writeBytes(ba);
+     fileStream.close();
+    myImage.source = null;
+   myImage.source =  filePath;
+         	
+        
+        
+        } 
+        	public static function encode(bitmapData:BitmapData):ByteArray {
+			
+			// image/file properties
+			var bmpWidth:int = bitmapData.width;
+			var bmpHeight:int = bitmapData.height;
+			var imageBytes:ByteArray = bitmapData.getPixels(bitmapData.rect);
+			var imageSize:int = imageBytes.length;
+			var imageDataOffset:int = 0x36;
+			var fileSize:int = imageSize + imageDataOffset;
+			
+			// binary BMP data
+			var bmpBytes:ByteArray = new ByteArray();
+			bmpBytes.endian = Endian.LITTLE_ENDIAN; // byte order
+			
+			// header information
+			bmpBytes.length = fileSize;
+			bmpBytes.writeByte(0x42); // B
+			bmpBytes.writeByte(0x4D); // M (BMP identifier)
+			bmpBytes.writeInt(fileSize); // file size
+			bmpBytes.position = 0x0A; // offset to image data
+			bmpBytes.writeInt(imageDataOffset);
+			bmpBytes.writeInt(0x28); // header size
+			bmpBytes.position = 0x12; // width, height
+			bmpBytes.writeInt(bmpWidth);
+			bmpBytes.writeInt(bmpHeight);
+			bmpBytes.writeShort(1); // planes (1)
+			bmpBytes.writeShort(32); // color depth (32 bit)
+			bmpBytes.writeInt(0); // compression type
+			bmpBytes.writeInt(imageSize); // image data size
+			//bmpBytes.position = imageDataOffset; // start of image data...
+			//dpi 300*300
+			bmpBytes.writeUnsignedInt(0x2e30); 
+			bmpBytes.writeUnsignedInt(0x2e30);
+			
+			bmpBytes.position = imageDataOffset; // start of image data...
+			
+			// write pixel bytes in upside-down order
+			// (as per BMP format)
+			var col:int = bmpWidth;
+			var row:int = bmpHeight;
+			var rowLength:int = col * 4; // 4 bytes per pixel (32 bit)
+			try {
+				
+				// make sure we're starting at the
+				// beginning of the image data
+				imageBytes.position = 0;
+				
+				// bottom row up
+				while (row--) {
+					// from end of file up to imageDataOffset
+					bmpBytes.position = imageDataOffset + row*rowLength;
+					
+					// read through each column writing
+					// those bits to the image in normal
+					// left to rightorder
+					col = bmpWidth;
+					while (col--) {
+						bmpBytes.writeInt(imageBytes.readInt());
+					}
+				}
+				
+			}catch(error:Error){
+				// end of file
+			}
+			
+			// return BMP file
+			return bmpBytes;
+		}
+         private function takeJPEG():void{
+      	 var colorData:BitmapData = new BitmapData(mySource.width,  mySource.height);
+        colorData.draw(myCanvas);  
+   var image:Image = new Image();
+   image.source = new Bitmap(colorData);
+   //image.scaleContent = true;
+   //image.setActualSize(100, 100);
+   
+    var colorJpeg:BitmapData = new BitmapData(image.width,  image.height);
+        colorJpeg.draw(image); 
+        
+ 
+  	encoder = new JPGEncoder(NumStepperJPEG.value);
+ //   var ba:ByteArray = JpegEnc.encode(colorJpeg);
+        var ba:ByteArray = encoder.encode(colorJpeg);
+     //var file:File = File.desktopDirectory.resolvePath("webcab" + ".jpeg")
+     var filePath:String = File.desktopDirectory.nativePath + "\\webcam.jpg";
+     var fileStream:FileStream = new FileStream();
+     fileStream.open(new File(filePath), FileMode.WRITE);
+     //fileStream.open(file, FileMode.WRITE);
+     fileStream.writeBytes(ba);
+     fileStream.close();
+    myImageJ.source = new Bitmap(colorJpeg);
+   myImageJ.source =  filePath;
+         	
+         }
+    
+         private function init():void{
+   
+         }
+        
+        ]]> 
+	</mx:Script> 
+	
+	<!-- ЛОГИКА ВЗАИМОДЕЙСТВИЯ КОМПОНЕНТОВ -->
+	
+	<mx:Script>
+		<![CDATA[
+	     import flash.utils.Timer;
+    import flash.events.TimerEvent;
+    import flash.display.Sprite;
+[Bindable]
+ public var timerBmp:Timer = new Timer(10, 500000);
+ 
+ [Bindable]
+ public var timerJpeg:Timer = new Timer(300, 500000);
+// логика замены урл
+		  
+		 
+		 public function TimerExampleBmp():void {
+          
+            timerBmp.addEventListener("timer", timerHandlerBmp);
+            timerBmp.start();
+        }
+			
+		    public function TimerExampleJpeg():void {
+          
+            timerJpeg.addEventListener("timer", timerHandlerJpeg);
+            timerJpeg.start();
+        }    
+
+        public function timerHandlerBmp(event:TimerEvent):void {
+            trace("timerHandler: " + event);
+            takeBitMap();
+        }
+              public function timerHandlerJpeg(event:TimerEvent):void {
+            trace("timerHandler: " + event);
+            takeJPEG();
+        }
+
+	]]>
+	</mx:Script>
+	<mx:Script>
+		<![CDATA[
+		   private function goToUrl():void{ 
+		    HtFrame.location = HtFrameURL.text ;
+		    }
+	]]>
+	</mx:Script>
+	
+	<mx:Canvas x="10" y="31" id="myCanvas" width="301" height="280"> 
+		<mx:Button   click="takeBitMap();" id="mySource"   width="100%" height="100%"/>
+		
+		<mx:HTML id="HtFrame" location="http://www.adobe.com" width="100%" height="100%" horizontalCenter="0" verticalCenter="0" backgroundColor="#A33737"/>
+	</mx:Canvas> 
+	
+	<mx:Canvas x="338" y="31" width="320" height="298" id="board">
+		<mx:Image id="myImage" x="10" y="10"/>
+	</mx:Canvas> 
+	<mx:Form x="23" y="337" width="356" height="135">	
+		<mx:HBox width="308">
+			<mx:Button label="Снять Битмап" click="takeBitMap();"/>
+			<mx:Button label="Снять Джипег" click="takeJPEG();"/>
+		</mx:HBox>
+		<mx:HBox>
+			<mx:Button label="Снять серию Битмапов"  click="TimerExampleBmp();"/>
+			<mx:Button label="Снять серию Джипегов"  click="TimerExampleJpeg();"/>
+		</mx:HBox>
+		<mx:FormItem label="URL" horizontalAlign="center" width="318" required="true">
+			<mx:TextInput change="goToUrl();" id="HtFrameURL"/>
+		</mx:FormItem>
+		<mx:FormItem label="JPEG Q" width="315" horizontalAlign="center" required="true">
+			<mx:NumericStepper value="10" minimum="1" maximum="100" stepSize="1"  enabled="true" id="NumStepperJPEG"/>
+		</mx:FormItem>
+	</mx:Form>
+	<mx:Canvas x="691" y="31" width="330" height="298" id="boardJ">
+		<mx:Image id="myImageJ" x="10" y="10" source="file:///C|/Users/Avesta-V/Desktop/webcab.jpeg"/>
+	</mx:Canvas>
+	<mx:Label x="143" y="10" text="Html" id="Jpeg"/>
+	<mx:Label x="485" y="10" text="BITMAP" id="Jpeg0"/>
+	<mx:Label x="848" y="10" text="JPEG" id="Jpeg1"/>
+	<mx:LinkButton x="444" y="358" label="МедведВидео"  click="HtFrame.location = 'http://www.echo.msk.ru/blog/echomsk/607440-echo/'" />
+	<mx:LinkButton x="459" y="388"  click="HtFrame.location = 'http://vkontakte.ru/'" label="Вконтакт"/>
+	
+</mx:WindowedApplication>
