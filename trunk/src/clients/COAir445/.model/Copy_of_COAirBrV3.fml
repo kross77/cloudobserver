@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model xmlns="http://ns.adobe.com/Fiber/0.3">
+  <service name="BroadcastService">
+    <annotation name="ActionScriptGeneration">
+      <item name="WSDL">http://localhost:9000/CloudObserverBroadcastService?wsdl</item>
+      <item name="WSDL-port">BasicHttpBinding_ICloudObserverBroadcastService</item>
+      <item name="WSDL-service">CloudObserverBroadcastService</item>
+      <item name="ServiceType">WebService</item>
+      <item name="Package">services.broadcastservice</item>
+    </annotation>
+    <annotation name="ServiceTypeGroup">
+      <item name="ServiceBackendType">WebService</item>
+    </annotation>
+    <annotation name="ServiceConfig">
+      <item name="LINKED_FILE"></item>
+    </annotation>
+    <function name="ReadFrame" arguments="cameraID:integer" return-type="integer">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">integer</item>
+        <item name="returnType">integer</item>
+      </annotation>
+    </function>
+    <function name="WriteFrame" arguments="cameraID:integer,frame:integer" return-type="void">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">integer,integer</item>
+      </annotation>
+    </function>
+  </service>
+</model>
