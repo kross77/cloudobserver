@@ -14,13 +14,24 @@ namespace SimpleServiceHoster
         [STAThread]
         static void Main(string[] args)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Dynamic Link Library (*.dll)|*.dll";
-            if (openFileDialog.ShowDialog() != DialogResult.OK) return;
-            string serviceName = openFileDialog.SafeFileName.Substring(0, openFileDialog.SafeFileName.Length - 11);
+            string serviceDLL;
+            string serviceName;
+            if (args.Length == 2)
+            {
+                serviceDLL = args[0];
+                serviceName = args[1];
+            }
+            else
+            {
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Filter = "Dynamic Link Library (*.dll)|*.dll";
+                if (openFileDialog.ShowDialog() != DialogResult.OK) return;
+                serviceDLL = openFileDialog.FileName;
+                serviceName = openFileDialog.SafeFileName.Substring(0, openFileDialog.SafeFileName.Length - 11);
+            }
             try
             {
-                Assembly serviceDLLAssembly = Assembly.LoadFile(openFileDialog.FileName);
+                Assembly serviceDLLAssembly = Assembly.LoadFile(serviceDLL);
                 Type serviceType = serviceDLLAssembly.GetType(serviceName + "Library." + serviceName);
                 Type serviceContractType = serviceDLLAssembly.GetType(serviceName + "Library.I" + serviceName);
                 Console.WriteLine("Loaded: " + serviceName);

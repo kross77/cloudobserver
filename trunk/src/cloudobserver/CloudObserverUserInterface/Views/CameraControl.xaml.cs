@@ -16,7 +16,10 @@ namespace CloudObserverUserInterface
 {
 	public partial class CameraControl : UserControl
 	{
-        private int fps;
+        private static const int MAX_REQUESTS = 5;
+
+        private int fps = 0;
+        private int requests = 0;
         private DispatcherTimer refreshTimer;
         private DispatcherTimer fpsTimer;
         private MessageWindow errorMessageWindow;
@@ -47,7 +50,11 @@ namespace CloudObserverUserInterface
 
         private void refreshTimer_Tick(object sender, EventArgs e)
         {
-            broadcastServiceClient.ReadFrameAsync((int)NumericUpDownCameraID.Value);
+            if (requests < MAX_REQUESTS)
+            {
+                broadcastServiceClient.ReadFrameAsync((int)NumericUpDownCameraID.Value);
+                requests++;
+            }
         }
 
         private void client_ReadFrameCompleted(object sender, ReadFrameCompletedEventArgs e)
@@ -64,6 +71,7 @@ namespace CloudObserverUserInterface
                 return;
             }
             fps++;
+            requests--;
             byte[] receivedImage = e.Result;
             BitmapImage bitmapImage = new BitmapImage();
             bitmapImage.SetSource(new MemoryStream(receivedImage));
@@ -78,6 +86,11 @@ namespace CloudObserverUserInterface
         private void NumericUpDownRefreshRate_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             refreshTimer.Interval = TimeSpan.FromMilliseconds(1000 / e.NewValue);
+        }
+
+        private void ButtonCloseCamera_Click(object sender, RoutedEventArgs e)
+        {
+            ((CamerasViewer)Parent).WrapPanelCameras.Children.Clear();
         }
 	}
 }

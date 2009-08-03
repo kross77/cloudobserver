@@ -10,11 +10,11 @@
     Style="{StaticResource PageStyle}">
 
     <Grid x:Name="LayoutRoot">
-        <ScrollViewer x:Name="PageScrollViewer" Style="{StaticResource PageScrollViewerStyle}" Margin="0">
-            <Canvas x:Name="ContentStackPanel">
-                <local:CameraControl Canvas.Top="128"/>
-                <local:LoginControl/>
-            </Canvas>
+        <ScrollViewer x:Name="PageScrollViewer" Style="{StaticResource PageScrollViewerStyle}" Margin="0" HorizontalScrollBarVisibility="Disabled">
+            <StackPanel>
+                <local:LoginControl d:LayoutOverrides="Width, Height"/>
+                <local:CamerasViewer/>
+            </StackPanel>
         </ScrollViewer>
     </Grid>
 

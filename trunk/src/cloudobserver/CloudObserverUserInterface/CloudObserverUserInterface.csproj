@@ -85,6 +85,9 @@
     <Compile Include="Views\CameraControl.xaml.cs">
       <DependentUpon>CameraControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\CamerasViewer.xaml.cs">
+      <DependentUpon>CamerasViewer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ErrorWindow.xaml.cs">
       <DependentUpon>ErrorWindow.xaml</DependentUpon>
     </Compile>
@@ -118,6 +121,10 @@
       <SubType>Designer</SubType>
     </Resource>
     <Page Include="Views\CameraControl.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\CamerasViewer.xaml">
       <Generator>MSBuild:MarkupCompilePass1</Generator>
       <SubType>Designer</SubType>
     </Page>

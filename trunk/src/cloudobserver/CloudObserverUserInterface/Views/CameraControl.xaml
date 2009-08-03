@@ -6,15 +6,15 @@
 	mc:Ignorable="d"
 	xmlns:dataInput="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Data.Input"
 	xmlns:inputToolkit="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
-	x:Class="CloudObserverUserInterface.CameraControl"
-	d:DesignWidth="640" d:DesignHeight="480">
+	x:Class="CloudObserverUserInterface.CameraControl" Width="454" Height="256">
 
 	<Grid x:Name="LayoutRoot">
-		<TextBlock x:Name="TextBlockCameraID" HorizontalAlignment="Left" VerticalAlignment="Top" Text="CameraID:" TextWrapping="Wrap" Margin="8,8,0,0"/>
-		<inputToolkit:NumericUpDown x:Name="NumericUpDownCameraID" HorizontalAlignment="Left" VerticalAlignment="Top" d:LayoutOverrides="Height" Margin="8,24,0,0" Maximum="2147483647" Value="1" Minimum="1" Width="114"/>
-		<TextBlock x:Name="TextBlockRefreshRate" HorizontalAlignment="Left" VerticalAlignment="Top" Text="Refresh rate:" TextWrapping="Wrap" Margin="8,50,0,0"/>
-		<inputToolkit:NumericUpDown x:Name="NumericUpDownRefreshRate" ValueChanged="NumericUpDownRefreshRate_ValueChanged" HorizontalAlignment="Left" VerticalAlignment="Top" d:LayoutOverrides="Height" Margin="85,50,0,0" Minimum="1" Maximum="60" Value="10" Width="37"/>
-		<TextBlock x:Name="TextBlockFPS" HorizontalAlignment="Left" VerticalAlignment="Top" Text="FPS: 0" TextWrapping="Wrap" Margin="8,76,0,0"/>
-		<Image x:Name="ImageFrame" HorizontalAlignment="Left" Margin="8,96,0,0" VerticalAlignment="Top"/>
+		<Image x:Name="ImageFrame" HorizontalAlignment="Left" Margin="8,8,0,0" VerticalAlignment="Top" Width="320" Height="240"/>
+		<TextBlock x:Name="TextBlockCameraID" HorizontalAlignment="Right" VerticalAlignment="Top" Text="CameraID:" TextWrapping="Wrap" Margin="0,8,61,0"/>
+		<inputToolkit:NumericUpDown x:Name="NumericUpDownCameraID" HorizontalAlignment="Right" VerticalAlignment="Top" d:LayoutOverrides="Height" Margin="0,28,8,0" Maximum="2147483647" Value="1" Minimum="1" Width="114"/>
+		<TextBlock x:Name="TextBlockRefreshRate" HorizontalAlignment="Right" VerticalAlignment="Top" Text="Refresh rate:" TextWrapping="Wrap" Margin="0,54,49,0"/>
+		<inputToolkit:NumericUpDown x:Name="NumericUpDownRefreshRate" ValueChanged="NumericUpDownRefreshRate_ValueChanged" HorizontalAlignment="Right" VerticalAlignment="Top" d:LayoutOverrides="Height" Margin="0,54,8,0" Minimum="1" Maximum="60" Value="10" Width="37"/>
+		<TextBlock x:Name="TextBlockFPS" HorizontalAlignment="Right" VerticalAlignment="Top" Text="FPS: 0" TextWrapping="Wrap" Margin="0,80,86,0"/>
+		<Button x:Name="ButtonCloseCamera" Click="ButtonCloseCamera_Click" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="114" Content="Close Camera" Margin="0,0,8,8"/>
 	</Grid>
 </UserControl>
