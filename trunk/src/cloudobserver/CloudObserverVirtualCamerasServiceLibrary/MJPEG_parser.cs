@@ -5,16 +5,16 @@ using System.Text;
 using System.Threading;
 using System.Net;
 using System.IO;
-
-//THIS FILE MUST BE REVIEWED COMPLETELY AND CAREFULLY
+using CloudObserverBroadcastServiceLibrary;
+using System.ServiceModel;
 
 namespace CloudObserverVirtualCamerasServiceLibrary
 {
-    public partial class MJPEG_decoder
+    public class MJPEG_decoder
     {
-
-
+        private int cameraID;
         private string source;
+        //workingSample: source = "http://195.243.185.195/axis-cgi/mjpg/video.cgi?camera=10";
         private string login = null;
         private string password = null;
         private object userData = null;
@@ -29,14 +29,26 @@ namespace CloudObserverVirtualCamerasServiceLibrary
         private ManualResetEvent stopEvent = null;
         private ManualResetEvent reloadEvent = null;
 
+        ICloudObserverBroadcastService broadcastServiceClient;
 
-
+        //Constructor
+        public MJPEG_decoder(int cameraID, string cloudObserverBroadcastServiceUri)
+        {
+            this.cameraID = cameraID;
+            broadcastServiceClient = ChannelFactory<ICloudObserverBroadcastService>.CreateChannel(new BasicHttpBinding(), new EndpointAddress(cloudObserverBroadcastServiceUri));
+        }
         // SeparateConnectioGroup property 
         // indicates to open WebRequest in separate connection group 
         public bool SeparateConnectionGroup
         {
             get { return useSeparateConnectionGroup; }
             set { useSeparateConnectionGroup = value; }
+        }
+        //Here we set what camera we are
+        public int CameraID
+        {
+            get {return cameraID;}
+            set {cameraID  = value;}
         }
         // VideoSource property 
         public string VideoSource
@@ -106,7 +118,7 @@ namespace CloudObserverVirtualCamerasServiceLibrary
         }
 
         // Start work 
-        private void button1_Click(object sender, EventArgs e)
+        public void start()
         {
             if (thread == null)
             {
@@ -118,12 +130,10 @@ namespace CloudObserverVirtualCamerasServiceLibrary
                 reloadEvent = new ManualResetEvent(false);
 
                 // create and start new thread 
-                /*thread = new Thread(new ThreadStart(WorkerThread));
-                source = "http://195.243.185.195/axis-cgi/mjpg/video.cgi?camera=10";
+                thread = new Thread(new ThreadStart(WorkerThread));
                 thread.Name = source; 
-                thread.Start(); */
-                source = "http://195.243.185.195/axis-cgi/mjpg/video.cgi?camera=3";
-                WorkerThread();
+                thread.Start(); 
+
             }
         }
 
@@ -245,7 +255,7 @@ namespace CloudObserverVirtualCamerasServiceLibrary
                         if (delimiter == null)
                         {
                             // find boundary 
-                            pos = ByteArrayUtils.Find(buffer, boundary, pos, todo);
+                            pos = Find(buffer, boundary, pos, todo);
 
                             if (pos == -1)
                             {
@@ -297,7 +307,7 @@ namespace CloudObserverVirtualCamerasServiceLibrary
                         // search for image 
                         if (align == 1)
                         {
-                            start = ByteArrayUtils.Find(buffer, delimiter, pos, todo);
+                            start = Find(buffer, delimiter, pos, todo);
                             if (start != -1)
                             {
                                 // found delimiter 
@@ -317,7 +327,7 @@ namespace CloudObserverVirtualCamerasServiceLibrary
                         // search for image end 
                         while ((align == 2) && (todo >= boundaryLen))
                         {
-                            stop = ByteArrayUtils.Find(buffer, boundary, pos, todo);
+                            stop = Find(buffer, boundary, pos, todo);
                             if (stop != -1)
                             {
                                 pos = stop;
@@ -325,10 +335,15 @@ namespace CloudObserverVirtualCamerasServiceLibrary
 
                                 // increment frames counter 
                                 framesReceived++;
+                                byte[] picture;
+                                picture = (new MemoryStream(buffer, start, stop - start)).ToArray();
+                                broadcastServiceClient.WriteFrame(cameraID, picture);
 
-                                Bitmap bmp = (Bitmap)Bitmap.FromStream(new MemoryStream(buffer, start, stop - start));
+                                /*Bitmap bmp = (Bitmap)Bitmap.FromStream(new MemoryStream(buffer, start, stop - start));
                                 pictureBox1.Image = bmp;
-                                pictureBox1.Refresh();
+                                pictureBox1.Refresh();*/
+
+                                //here byte[] is to be done..
 
                                 // image at stop 
                                 /*if (NewFrame != null) 
@@ -405,24 +420,6 @@ namespace CloudObserverVirtualCamerasServiceLibrary
 
 
         }
-    }
-
-    internal class ByteArrayUtils
-    {
-        // Check if the array contains needle on specified position
-        public static bool Compare(byte[] array, byte[] needle, int startIndex)
-        {
-            int needleLen = needle.Length;
-            // compare
-            for (int i = 0, p = startIndex; i < needleLen; i++, p++)
-            {
-                if (array[p] != needle[i])
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
 
         // Find subarray in array
         public static int Find(byte[] array, byte[] needle, int startIndex, int count)
@@ -459,21 +456,4 @@ namespace CloudObserverVirtualCamerasServiceLibrary
             return -1;
         }
     }
-    public class CameraEventArgs : EventArgs
-    {
-        private System.Drawing.Bitmap bmp;
-
-        // Constructor
-        public CameraEventArgs(System.Drawing.Bitmap bmp)
-        {
-            this.bmp = bmp;
-        }
-
-        // Bitmap property
-        public System.Drawing.Bitmap Bitmap
-        {
-            get { return bmp; }
-        }
-    }
-
 }
