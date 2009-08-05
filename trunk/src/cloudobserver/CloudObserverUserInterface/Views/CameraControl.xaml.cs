@@ -39,6 +39,7 @@ namespace CloudObserverUserInterface
             fpsTimer.Interval = TimeSpan.FromSeconds(1);
             fpsTimer.Tick += new EventHandler(fpsTimer_Tick);
             fpsTimer.Start();
+            this.Height = 300;
 
 			InitializeComponent();
 		}
@@ -91,7 +92,12 @@ namespace CloudObserverUserInterface
 
         private void ButtonCloseCamera_Click(object sender, RoutedEventArgs e)
         {
-            ((CamerasViewer)Parent).WrapPanelCameras.Items.Clear();
+            ((Blacklight.Controls.DragDockPanelHost)Parent).Items.Remove(this);
+        }
+
+        private void ButtonCloseCamera_Click_1(object sender, RoutedEventArgs e)
+        {
+
         }
 	}
 }

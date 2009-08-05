@@ -9,11 +9,11 @@
 	x:Class="CloudObserverUserInterface.CamerasViewer"
 	d:DesignWidth="640" d:DesignHeight="480">
 
-	<StackPanel Margin="0">
+	<StackPanel x:Name="StackPanel" Margin="0">
 		<Button x:Name="ButtonAddCamera" Click="ButtonAddCamera_Click" Content="Add Camera" Margin="8,8,0,0" HorizontalAlignment="Left" Width="188"/>
 		<controlsToolkit:WrapPanel Margin="8,8,8,0"/>
-		<ScrollViewer Margin="8,0,8,-432" VerticalScrollBarVisibility="Auto">
-			<Blacklight_Controls:DragDockPanelHost MinimizedColumnWidth="300" MinimizedRowHeight="300"  x:Name="WrapPanelCameras" Height="384" MaxColumns="3"/>
+		<ScrollViewer x:Name="ScrollViewer" Margin="8,0,8,-255" VerticalScrollBarVisibility="Auto">
+			<Blacklight_Controls:DragDockPanelHost MinimizedColumnWidth="300" MinimizedRowHeight="300"  x:Name="WrapPanelCameras" MaxColumns="3" Height="300" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
 		</ScrollViewer>
 	</StackPanel>
 </UserControl>
