@@ -54,9 +54,10 @@
   <ItemGroup>
     <Reference Include="Blacklight.Controls, Version=4.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\Саня\Desktop\Blacklight v4.1 Binaries\Blacklight v4.1 Binaries\Silverlight\Blacklight.Controls.dll</HintPath>
+      <HintPath>..\lib\Blacklight.Controls.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations, Version=2.0.5.0, Culture=neutral, PublicKeyToken=ddd0da4d3e678217" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Syndication, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -83,12 +84,12 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Service References\CloudObserverAuthorizationServiceReference\Reference.cs">
+    <Compile Include="Service References\BroadcastServiceReference\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="Service References\CloudObserverBroadcastServiceReference\Reference.cs">
+    <Compile Include="Service References\CloudObserverAuthorizationServiceReference\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -173,10 +174,10 @@
     <None Include="Service References\CloudObserverAuthorizationServiceReference\CloudObserverAuthorizationService.wsdl" />
     <None Include="Service References\CloudObserverAuthorizationServiceReference\CloudObserverAuthorizationService.xsd" />
     <None Include="Service References\CloudObserverAuthorizationServiceReference\CloudObserverAuthorizationService1.xsd" />
-    <None Include="Service References\CloudObserverBroadcastServiceReference\CloudObserverBroadcastService.disco" />
-    <None Include="Service References\CloudObserverBroadcastServiceReference\configuration91.svcinfo" />
-    <None Include="Service References\CloudObserverBroadcastServiceReference\configuration.svcinfo" />
-    <None Include="Service References\CloudObserverBroadcastServiceReference\Reference.svcmap">
+    <None Include="Service References\BroadcastServiceReference\BroadcastService.disco" />
+    <None Include="Service References\BroadcastServiceReference\configuration91.svcinfo" />
+    <None Include="Service References\BroadcastServiceReference\configuration.svcinfo" />
+    <None Include="Service References\BroadcastServiceReference\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
@@ -189,8 +190,8 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <WCFMetadataStorage Include="Service References\BroadcastServiceReference\" />
     <WCFMetadataStorage Include="Service References\CloudObserverAuthorizationServiceReference\" />
-    <WCFMetadataStorage Include="Service References\CloudObserverBroadcastServiceReference\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\CloudObserverAuthorizationServiceReference\CloudObserverAuthorizationService.disco" />
@@ -202,13 +203,13 @@
     <None Include="Service References\CloudObserverAuthorizationServiceReference\configuration.svcinfo" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Service References\BroadcastServiceReference\BroadcastService.wsdl" />
+    <None Include="Service References\BroadcastServiceReference\BroadcastService.xsd" />
+    <None Include="Service References\BroadcastServiceReference\BroadcastService1.xsd" />
     <None Include="Service References\CloudObserverAuthorizationServiceReference\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <None Include="Service References\CloudObserverBroadcastServiceReference\CloudObserverBroadcastService.wsdl" />
-    <None Include="Service References\CloudObserverBroadcastServiceReference\CloudObserverBroadcastService.xsd" />
-    <None Include="Service References\CloudObserverBroadcastServiceReference\CloudObserverBroadcastService1.xsd" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\v3.0\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

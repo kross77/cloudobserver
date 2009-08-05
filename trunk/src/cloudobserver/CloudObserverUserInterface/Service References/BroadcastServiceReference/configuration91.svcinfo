@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="0B92WB07tALwoLwu8f0x/pfNzZI=">
+<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="5ntBHKz1rvVJSxn4qTKj5PVOOI8=">
   <bindingConfigurations>
-    <bindingConfiguration bindingType="basicHttpBinding" name="BasicHttpBinding_ICloudObserverBroadcastService">
+    <bindingConfiguration bindingType="basicHttpBinding" name="BasicHttpBinding_BroadcastServiceContract">
       <properties>
         <property path="/name" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>BasicHttpBinding_ICloudObserverBroadcastService</serializedValue>
+          <serializedValue>BasicHttpBinding_BroadcastServiceContract</serializedValue>
         </property>
         <property path="/closeTimeout" isComplexType="false" isExplicitlyDefined="true" clrType="System.TimeSpan, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -100,10 +100,10 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="BasicHttpBinding_ICloudObserverBroadcastService" contract="CloudObserverBroadcastServiceReference.ICloudObserverBroadcastService" bindingType="basicHttpBinding" address="http://localhost:9000/CloudObserverBroadcastService" bindingConfiguration="BasicHttpBinding_ICloudObserverBroadcastService">
+    <endpoint name="BasicHttpBinding_BroadcastServiceContract" contract="BroadcastServiceReference.BroadcastServiceContract" bindingType="basicHttpBinding" address="http://93.100.45.201:9000/BroadcastService" bindingConfiguration="BasicHttpBinding_BroadcastServiceContract">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>http://localhost:9000/CloudObserverBroadcastService</serializedValue>
+          <serializedValue>http://93.100.45.201:9000/BroadcastService</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -112,10 +112,10 @@
           <serializedValue>basicHttpBinding</serializedValue>
         </property>
         <property path="/bindingConfiguration" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>BasicHttpBinding_ICloudObserverBroadcastService</serializedValue>
+          <serializedValue>BasicHttpBinding_BroadcastServiceContract</serializedValue>
         </property>
         <property path="/contract" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>CloudObserverBroadcastServiceReference.ICloudObserverBroadcastService</serializedValue>
+          <serializedValue>BroadcastServiceReference.BroadcastServiceContract</serializedValue>
         </property>
         <property path="/headers" isComplexType="true" isExplicitlyDefined="false" clrType="System.ServiceModel.Configuration.AddressHeaderCollectionElement, System.ServiceModel, Version=3.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>System.ServiceModel.Configuration.AddressHeaderCollectionElement</serializedValue>
@@ -175,7 +175,7 @@
           <serializedValue>False</serializedValue>
         </property>
         <property path="/name" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>BasicHttpBinding_ICloudObserverBroadcastService</serializedValue>
+          <serializedValue>BasicHttpBinding_BroadcastServiceContract</serializedValue>
         </property>
       </properties>
     </endpoint>

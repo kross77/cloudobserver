@@ -15,6 +15,6 @@
 		<TextBlock x:Name="TextBlockRefreshRate" HorizontalAlignment="Right" VerticalAlignment="Top" Text="Refresh rate:" TextWrapping="Wrap" Margin="0,54,49,0" Foreground="#FFD8CACA"/>
 		<inputToolkit:NumericUpDown x:Name="NumericUpDownRefreshRate" ValueChanged="NumericUpDownRefreshRate_ValueChanged" HorizontalAlignment="Right" VerticalAlignment="Top" d:LayoutOverrides="Height" Margin="0,54,8,0" Minimum="1" Maximum="60" Value="10" Width="37" Foreground="#FFD8CACA"/>
 		<TextBlock x:Name="TextBlockFPS" HorizontalAlignment="Right" VerticalAlignment="Top" Text="FPS: 0" TextWrapping="Wrap" Margin="0,80,86,0" Foreground="#FFD8CACA"/>
-		<Button x:Name="ButtonCloseCamera" Click="ButtonCloseCamera_Click" Click="" HorizontalAlignment="Right" Width="114" Content="Close Camera" Margin="0,129,8,149" RenderTransformOrigin="0.526,-5.909" d:LayoutOverrides="Height"/>
+		<Button x:Name="ButtonCloseCamera" Click="ButtonCloseCamera_Click" HorizontalAlignment="Right" Width="114" Content="Close Camera" Margin="0,129,8,149" RenderTransformOrigin="0.526,-5.909" d:LayoutOverrides="Height"/>
 	</Grid>
 </UserControl>

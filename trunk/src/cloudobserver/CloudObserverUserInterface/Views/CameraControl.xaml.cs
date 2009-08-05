@@ -11,7 +11,8 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.ServiceModel;
-using CloudObserverUserInterface.CloudObserverBroadcastServiceReference;
+using CloudObserverUserInterface.BroadcastServiceReference;
+using CloudObserverUserInterface.CloudObserverAuthorizationServiceReference;
 
 namespace CloudObserverUserInterface
 {
@@ -25,11 +26,11 @@ namespace CloudObserverUserInterface
         private DispatcherTimer fpsTimer;
         private MessageWindow errorMessageWindow;
 
-        CloudObserverBroadcastServiceClient broadcastServiceClient;
+        BroadcastServiceContractClient broadcastServiceClient;
 
 		public CameraControl()
 		{
-            broadcastServiceClient = new CloudObserverBroadcastServiceClient(new BasicHttpBinding(), new EndpointAddress("http://93.100.45.201:9000/CloudObserverBroadcastService"));
+            broadcastServiceClient = new BroadcastServiceContractClient(new BasicHttpBinding(), new EndpointAddress("http://93.100.45.201:9000/BroadcastService"));
             broadcastServiceClient.ReadFrameCompleted += new EventHandler<ReadFrameCompletedEventArgs>(client_ReadFrameCompleted);
             refreshTimer = new DispatcherTimer();
             refreshTimer.Interval = TimeSpan.FromMilliseconds(1000 / 60);

@@ -20,7 +20,7 @@ namespace SimpleCampusBroadcaster
                 int campusCamera = Int32.Parse(Console.ReadLine());
                 Console.Write("CameraID: ");
                 cameraID = Int32.Parse(Console.ReadLine());
-                virtualCamerasServiceClient.SetSource(cameraID, @"http://www.campus.spbu.ru/images/webcam/camera" + campusCamera + ".jpg");
+                virtualCamerasServiceClient.SetSource(cameraID, @"http://www.campus.spbu.ru/images/webcam/camera" + campusCamera + ".jpg", "JPEG");
                 Console.Write("FPS: ");
                 int fps = Int32.Parse(Console.ReadLine());
                 virtualCamerasServiceClient.SetFPS(cameraID, fps);

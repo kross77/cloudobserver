@@ -6,8 +6,8 @@
                     maxBufferSize="2147483647" maxReceivedMessageSize="2147483647">
                     <security mode="None" />
                 </binding>
-                <binding name="BasicHttpBinding_ICloudObserverBroadcastService"
-                    maxBufferSize="2147483647" maxReceivedMessageSize="2147483647">
+                <binding name="BasicHttpBinding_BroadcastServiceContract" maxBufferSize="2147483647"
+                    maxReceivedMessageSize="2147483647">
                     <security mode="None" />
                 </binding>
             </basicHttpBinding>
@@ -17,10 +17,10 @@
                 binding="basicHttpBinding" bindingConfiguration="BasicHttpBinding_ICloudObserverAuthorizationService"
                 contract="CloudObserverAuthorizationServiceReference.ICloudObserverAuthorizationService"
                 name="BasicHttpBinding_ICloudObserverAuthorizationService" />
-            <endpoint address="http://localhost:9000/CloudObserverBroadcastService"
-                binding="basicHttpBinding" bindingConfiguration="BasicHttpBinding_ICloudObserverBroadcastService"
-                contract="CloudObserverBroadcastServiceReference.ICloudObserverBroadcastService"
-                name="BasicHttpBinding_ICloudObserverBroadcastService" />
+            <endpoint address="http://93.100.45.201:9000/BroadcastService"
+                binding="basicHttpBinding" bindingConfiguration="BasicHttpBinding_BroadcastServiceContract"
+                contract="BroadcastServiceReference.BroadcastServiceContract"
+                name="BasicHttpBinding_BroadcastServiceContract" />
         </client>
     </system.serviceModel>
 </configuration>
