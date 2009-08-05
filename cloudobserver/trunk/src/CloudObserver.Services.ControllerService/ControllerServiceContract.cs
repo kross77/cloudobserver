@@ -5,6 +5,7 @@ using CloudObserver.Services;
 namespace CloudObserver.Services
 {
     [ServiceContract]
+    [ServiceKnownType(typeof(ServiceType))]
     public interface ControllerServiceContract
     {
         [OperationContract]

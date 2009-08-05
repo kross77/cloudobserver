@@ -6,11 +6,19 @@ namespace CloudObserver.Services
     [DataContract]
     public enum ServiceType
     {
-        ControllerService = 0,
-        AuthenticationService = 1,
-        AccountsService = 2,
-        BroadcastService = 3,
-        StorageService = 4,
-        VirtualCamerasService = 5,
+        [EnumMember]
+        UnknownService = 0,
+        [EnumMember]
+        ControllerService = 1,
+        [EnumMember]
+        AuthenticationService = 2,
+        [EnumMember]
+        AccountsService = 3,
+        [EnumMember]
+        BroadcastService = 4,
+        [EnumMember]
+        StorageService = 5,
+        [EnumMember]
+        VirtualCamerasService = 6,
     }
 }

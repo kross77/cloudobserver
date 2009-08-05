@@ -10,6 +10,8 @@ namespace CloudObserver.Services
         private string databaseName;
         private bool defaultConnection = true;
 
+        public AccountsService() : base() { }
+
         public AccountsService(string serverName, string databaseName)
         {
             this.serverName = serverName;

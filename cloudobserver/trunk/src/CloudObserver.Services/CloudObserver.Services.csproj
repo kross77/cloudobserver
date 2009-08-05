@@ -45,6 +45,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service.cs" />
     <Compile Include="ServiceContract.cs" />
+    <Compile Include="ServiceHoster.cs" />
     <Compile Include="ServiceType.cs" />
   </ItemGroup>
   <ItemGroup>

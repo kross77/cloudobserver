@@ -42,6 +42,7 @@
   </Target>
   -->
   <ItemGroup>
+    <Compile Include="PoliciesManager.cs" />
     <Compile Include="PolicyRetriever.cs" />
     <Compile Include="PolicyRetrieverContract.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
