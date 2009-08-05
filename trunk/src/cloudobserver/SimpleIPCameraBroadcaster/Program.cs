@@ -18,11 +18,11 @@ namespace SimpleIPCameraBroadcaster
                 virtualCamerasServiceClient = ChannelFactory<ICloudObserverVirtualCamerasService>.CreateChannel(new BasicHttpBinding(), new EndpointAddress("http://localhost:9000/CloudObserverVirtualCamerasService"));
                 Console.Write("CameraID: ");
                 cameraID = Int32.Parse(Console.ReadLine());
-                virtualCamerasServiceClient.SetSource(cameraID, @"http://89.106.173.195/snap.jpg");
+                virtualCamerasServiceClient.SetSource(cameraID, @"http://195.243.185.195/axis-cgi/mjpg/video.cgi?camera=10", "MJPEG");
                 Console.Write("FPS: ");
                 int fps = Int32.Parse(Console.ReadLine());
-                virtualCamerasServiceClient.SetCredentials(cameraID, "live", "live");
-                virtualCamerasServiceClient.SetFPS(cameraID, fps);
+                //virtualCamerasServiceClient.SetCredentials(cameraID, "live", "live");
+                //virtualCamerasServiceClient.SetFPS(cameraID, fps);
                 virtualCamerasServiceClient.StartBroadcasting(cameraID);
                 Console.WriteLine("Broadcast started.");
                 framesTimer = new Timer(100);

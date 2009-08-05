@@ -14,10 +14,15 @@ namespace CloudObserverVirtualCamerasServiceLibrary
             virtualCameras = new Dictionary<int, VirtualCamera>();
         }
 
-        public void SetSource(int cameraID, string source)
+        public void SetSource(int cameraID, string source, string SourceType)
         {
             if (!virtualCameras.ContainsKey(cameraID))
-                virtualCameras[cameraID] = new VirtualCamera(cameraID, "http://localhost:9000/CloudObserverBroadcastService");
+            {
+                if (SourceType.Equals("MJPEG"))
+                    virtualCameras[cameraID] = new MJPEG_decoder(cameraID, "http://localhost:9000/CloudObserverBroadcastService");
+                if (SourceType.Equals("JPEG"))
+                    virtualCameras[cameraID] = new JPEG_camera(cameraID, "http://localhost:9000/CloudObserverBroadcastService");
+            }
             virtualCameras[cameraID].SetSource(source);
         }
 

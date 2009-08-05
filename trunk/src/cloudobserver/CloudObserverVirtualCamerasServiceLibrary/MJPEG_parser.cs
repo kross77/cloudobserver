@@ -10,7 +10,7 @@ using System.ServiceModel;
 
 namespace CloudObserverVirtualCamerasServiceLibrary
 {
-    public class MJPEG_decoder
+    class MJPEG_decoder : VirtualCamera
     {
         private int cameraID;
         private string source;
@@ -35,6 +35,7 @@ namespace CloudObserverVirtualCamerasServiceLibrary
         public MJPEG_decoder(int cameraID, string cloudObserverBroadcastServiceUri)
         {
             this.cameraID = cameraID;
+            //source = "http://195.243.185.195/axis-cgi/mjpg/video.cgi?camera=10";
             broadcastServiceClient = ChannelFactory<ICloudObserverBroadcastService>.CreateChannel(new BasicHttpBinding(), new EndpointAddress(cloudObserverBroadcastServiceUri));
         }
         // SeparateConnectioGroup property 
@@ -116,9 +117,22 @@ namespace CloudObserverVirtualCamerasServiceLibrary
                 return false;
             }
         }
-
+        public override void SetSource(string source)
+        {
+            this.source = source;
+        }
+        //To  know how much frames transfered
+        public override int GetFramesCounter()
+        {
+            return FramesReceived;
+        }
+        //Without realisation
+        public override void SetFPS(int fps)
+        {
+            ;
+        }
         // Start work 
-        public void start()
+        public override void StartBroadcasting()
         {
             if (thread == null)
             {
@@ -138,7 +152,7 @@ namespace CloudObserverVirtualCamerasServiceLibrary
         }
 
         // Signal thread to stop work 
-        public void SignalToStop()
+        public override void StopBroadcasting()
         {
             // stop thread 
             if (thread != null)
@@ -159,7 +173,12 @@ namespace CloudObserverVirtualCamerasServiceLibrary
                 Free();
             }
         }
-
+        //set  information for https connection
+        public override void SetCredentials(string userName, string password)
+        {
+            this.login = userName;
+            this.password = password;
+        }
         // Abort thread 
         public void Stop()
         {
@@ -377,19 +396,20 @@ namespace CloudObserverVirtualCamerasServiceLibrary
                 }
                 catch (WebException ex)
                 {
-                    System.Diagnostics.Debug.WriteLine("=============1: " + ex.Message);
+                    //System.Diagnostics.Debug.WriteLine("=============1: " + ex.Message);
                     // wait for a while before the next try 
                     Thread.Sleep(250);
                 }
                 catch (ApplicationException ex)
                 {
-                    System.Diagnostics.Debug.WriteLine("=============2: " + ex.Message);
+                    //System.Diagnostics.Debug.WriteLine("=============2: " + ex.Message);
                     // wait for a while before the next try 
                     Thread.Sleep(250);
                 }
                 catch (Exception ex)
                 {
-                    System.Diagnostics.Debug.WriteLine("=============3: " + ex.Message);
+                    //System.Diagnostics.Debug.WriteLine("=============3: " + ex.Message);
+                    Thread.Sleep(250);
                 }
                 finally
                 {

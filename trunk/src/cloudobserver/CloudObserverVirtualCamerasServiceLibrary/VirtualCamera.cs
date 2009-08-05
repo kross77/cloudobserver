@@ -7,68 +7,13 @@ using CloudObserverBroadcastServiceLibrary;
 
 namespace CloudObserverVirtualCamerasServiceLibrary
 {
-    class VirtualCamera
+     abstract class VirtualCamera
     {
-        int cameraID;
-        string source;
-        string userName;
-        string password;
-        int framesCounter = 0;
-        Timer broadcastingTimer;
-        ICloudObserverBroadcastService broadcastServiceClient;
-
-        public VirtualCamera(int cameraID, string cloudObserverBroadcastServiceUri)
-        {
-            this.cameraID = cameraID;
-
-            broadcastServiceClient = ChannelFactory<ICloudObserverBroadcastService>.CreateChannel(new BasicHttpBinding(), new EndpointAddress(cloudObserverBroadcastServiceUri));
-
-            broadcastingTimer = new Timer(1000);
-            broadcastingTimer.Elapsed += new ElapsedEventHandler(broadcastingTimer_Elapsed);
-        }
-
-        private void broadcastingTimer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            //HttpWebRequest httpWebRequest = (HttpWebRequest)HttpWebRequest.Create(source);
-            //httpWebRequest.Credentials = new NetworkCredential(userName, password);
-            WebClient webClient = new WebClient();
-            webClient.Credentials = new NetworkCredential(userName, password);
-            //HttpWebResponse httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
-            //if (httpWebRequest.ContentType == "image/jpeg")
-            broadcastServiceClient.WriteFrame(cameraID, webClient.DownloadData(source));
-            //httpWebResponse.Close();
-            framesCounter++;
-        }
-
-        public void SetSource(string source)
-        {
-            this.source = source;
-        }
-
-        public void SetCredentials(string userName, string password)
-        {
-            this.userName = userName;
-            this.password = password;
-        }
-
-        public void SetFPS(int fps)
-        {
-            broadcastingTimer.Interval = 1000 / fps;
-        }
-
-        public void StartBroadcasting()
-        {
-            broadcastingTimer.Start();
-        }
-
-        public void StopBroadcasting()
-        {
-            broadcastingTimer.Stop();
-        }
-
-        public int GetFramesCounter()
-        {
-            return framesCounter;
-        }
+         public abstract void StartBroadcasting();
+         public abstract void StopBroadcasting();
+         public abstract int GetFramesCounter();
+         public abstract void SetFPS(int fps);
+         public abstract void SetCredentials(string userName, string password);
+         public abstract void SetSource(string source);
     }
 }
