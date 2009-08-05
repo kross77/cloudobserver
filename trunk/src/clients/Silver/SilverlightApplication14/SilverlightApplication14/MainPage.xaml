@@ -1,0 +1,28 @@
+﻿<UserControl
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:controlsToolkit="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Toolkit" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	x:Class="SilverlightApplication14.MainPage"
+	Width="640" Height="480" mc:Ignorable="d">
+
+	<Grid x:Name="LayoutRoot" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
+		<Grid.Background>
+			<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+				<GradientStop Color="#FF535353" Offset="0"/>
+				<GradientStop Color="#FF969696" Offset="1"/>
+			</LinearGradientBrush>
+		</Grid.Background>
+		<ScrollViewer Margin="2,134,0,18" VerticalScrollBarVisibility="Auto">
+			<controlsToolkit:WrapPanel x:Name="tttt" Height="0" Margin="24,0,-255,0" Background="#FFADADAD"/>
+		</ScrollViewer>
+		<Canvas x:Name="bbb" Height="110" HorizontalAlignment="Left" Margin="7,6,0,0" VerticalAlignment="Top" Width="108" MouseLeftButtonUp="fun1" d:LayoutOverrides="VerticalAlignment">
+			<Canvas.Background>
+				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+					<GradientStop Color="#FF526C5F" Offset="0"/>
+					<GradientStop Color="#FF91BFA7" Offset="1"/>
+					<GradientStop Color="#FE30A86A" Offset="0.509"/>
+				</LinearGradientBrush>
+			</Canvas.Background>
+		</Canvas>
+	</Grid>
+</UserControl>
