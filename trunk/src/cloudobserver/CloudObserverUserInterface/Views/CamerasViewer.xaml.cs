@@ -19,7 +19,9 @@ namespace CloudObserverUserInterface
 
         private void ButtonAddCamera_Click(object sender, RoutedEventArgs e)
         {
-            WrapPanelCameras.Children.Add(new CameraControl());
+			WrapPanelCameras.Height = WrapPanelCameras.Height + 200;
+            WrapPanelCameras.Items.Add(new CameraControl());
+           // WrapPanelCameras.Items.IsFixedSize(true);
         }
 	}
 }

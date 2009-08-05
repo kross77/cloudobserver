@@ -12,7 +12,14 @@
         <Border x:Name="ContentBorder" Style="{StaticResource ContentBorderStyle}">
 
             <navigation:Frame x:Name="ContentFrame" Style="{StaticResource ContentFrameStyle}" 
-                              Source="/HomePage" Navigated="ContentFrame_Navigated" NavigationFailed="ContentFrame_NavigationFailed">
+                              Source="/HomePage" Navigated="ContentFrame_Navigated" NavigationFailed="ContentFrame_NavigationFailed" Margin="0,-8,0,8">
+            	<navigation:Frame.Background>
+            		<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+            			<GradientStop Color="#FF3D3D3D" Offset="1"/>
+            			<GradientStop Color="#FF292929"/>
+            			<GradientStop Color="#FF373737" Offset="0.509"/>
+            		</LinearGradientBrush>
+            	</navigation:Frame.Background>
                 <navigation:Frame.UriMapper>
                   <uriMapper:UriMapper>
                     <uriMapper:UriMapping Uri="" MappedUri="/Views/HomePage.xaml"/>
@@ -23,27 +30,26 @@
         </Border>
 
         <Grid x:Name="NavigationGrid" Style="{StaticResource NavigationGridStyle}">
+        	<Grid.Background>
+        		<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+        			<GradientStop Color="#FF505050" Offset="0.035"/>
+        			<GradientStop Color="#FF292929" Offset="0.991"/>
+        			<GradientStop Color="#FF434343" Offset="0.526"/>
+        		</LinearGradientBrush>
+        	</Grid.Background>
 
             <Border x:Name="BrandingBorder" Style="{StaticResource BrandingBorderStyle}">
                 <StackPanel x:Name="BrandingStackPanel" Style="{StaticResource BrandingStackPanelStyle}">
-
-                    <ContentControl Style="{StaticResource LogoIcon}"/>
                     <TextBlock x:Name="ApplicationNameTextBlock" Style="{StaticResource ApplicationNameStyle}" 
-                               Text="Cloud Observer"/>
+                               Text="Cloud Observer" FontSize="16"/>
 
                 </StackPanel>
             </Border>
 
             <Border x:Name="LinksBorder" Style="{StaticResource LinksBorderStyle}">
                 <StackPanel x:Name="LinksStackPanel" Style="{StaticResource LinksStackPanelStyle}">
-
-                    <HyperlinkButton x:Name="Link1" Style="{StaticResource LinkStyle}" 
-                                     NavigateUri="/HomePage" TargetName="ContentFrame" Content="home"/>
 									 
                     <Rectangle x:Name="Divider1" Style="{StaticResource DividerStyle}"/>
-					
-                    <HyperlinkButton x:Name="Link2" Style="{StaticResource LinkStyle}" 
-                                     NavigateUri="/AboutPage" TargetName="ContentFrame" Content="about"/>
 
                 </StackPanel>
             </Border>

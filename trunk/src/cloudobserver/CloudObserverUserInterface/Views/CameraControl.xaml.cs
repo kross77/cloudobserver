@@ -10,13 +10,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using System.ServiceModel;
 using CloudObserverUserInterface.CloudObserverBroadcastServiceReference;
 
 namespace CloudObserverUserInterface
 {
 	public partial class CameraControl : UserControl
 	{
-        private static const int MAX_REQUESTS = 5;
+        private const int MAX_REQUESTS = 5;
 
         private int fps = 0;
         private int requests = 0;
@@ -28,7 +29,7 @@ namespace CloudObserverUserInterface
 
 		public CameraControl()
 		{
-            broadcastServiceClient = new CloudObserverBroadcastServiceClient();
+            broadcastServiceClient = new CloudObserverBroadcastServiceClient(new BasicHttpBinding(), new EndpointAddress("http://93.100.45.201:9000/CloudObserverBroadcastService"));
             broadcastServiceClient.ReadFrameCompleted += new EventHandler<ReadFrameCompletedEventArgs>(client_ReadFrameCompleted);
             refreshTimer = new DispatcherTimer();
             refreshTimer.Interval = TimeSpan.FromMilliseconds(1000 / 60);
@@ -90,7 +91,7 @@ namespace CloudObserverUserInterface
 
         private void ButtonCloseCamera_Click(object sender, RoutedEventArgs e)
         {
-            ((CamerasViewer)Parent).WrapPanelCameras.Children.Clear();
+            ((CamerasViewer)Parent).WrapPanelCameras.Items.Clear();
         }
 	}
 }
