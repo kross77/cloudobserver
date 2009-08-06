@@ -10,6 +10,6 @@ namespace CloudObserverBroadcastServiceLibrary
         byte[] ReadFrame(int cameraID);
 
         [OperationContract]
-        void WriteFrame(int cameraID, byte[] frame);
+        void WriteFrame(int cameraID, byte[] frame, DateTime time, bool WriteToDataBase);
     }
 }

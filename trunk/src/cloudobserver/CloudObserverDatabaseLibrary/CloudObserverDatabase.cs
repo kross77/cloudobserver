@@ -354,6 +354,11 @@ namespace CloudObserverDatabaseLibrary
             return (from f in database.Frames where f.FrameID.Equals(frameID) select f.Marker).Single();
         }
 
+        public int[] getFrameIndexesArray(DateTime start, DateTime stop)
+        {
+            return new int[0];
+        }
+
         // database management
         public void DatabaseClear()
         {
