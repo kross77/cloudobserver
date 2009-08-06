@@ -46,7 +46,7 @@ namespace SimpleBroadcaster
             Console.Write("Frames: " + framesCounter);
             try
             {
-                broadcastServiceClient.WriteFrame(cameraID, File.ReadAllBytes(basePath + currentImage + ".jpg"));
+                broadcastServiceClient.WriteFrame(cameraID, File.ReadAllBytes(basePath + currentImage + ".jpg"),DateTime.Now,false);
                 currentImage = (currentImage + 1) % 8;
             }
             catch (Exception exception)

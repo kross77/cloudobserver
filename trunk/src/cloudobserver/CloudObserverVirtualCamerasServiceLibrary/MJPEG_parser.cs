@@ -356,7 +356,7 @@ namespace CloudObserverVirtualCamerasServiceLibrary
                                 framesReceived++;
                                 byte[] picture;
                                 picture = (new MemoryStream(buffer, start, stop - start)).ToArray();
-                                broadcastServiceClient.WriteFrame(cameraID, picture);
+                                broadcastServiceClient.WriteFrame(cameraID, picture,DateTime.Now,false);
 
                                 /*Bitmap bmp = (Bitmap)Bitmap.FromStream(new MemoryStream(buffer, start, stop - start));
                                 pictureBox1.Image = bmp;

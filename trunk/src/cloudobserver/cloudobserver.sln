@@ -75,6 +75,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleIPCameraBroadcaster", "SimpleIPCameraBroadcaster\SimpleIPCameraBroadcaster.csproj", "{B1925ABD-CA46-4212-BDA4-55892A29D18B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserverContentServiceLibrary", "CloudObserverContentServiceLibrary\CloudObserverContentServiceLibrary.csproj", "{68A5426C-C367-4434-9D75-368E4923E99F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -161,6 +163,10 @@ Global
 		{B1925ABD-CA46-4212-BDA4-55892A29D18B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B1925ABD-CA46-4212-BDA4-55892A29D18B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B1925ABD-CA46-4212-BDA4-55892A29D18B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68A5426C-C367-4434-9D75-368E4923E99F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68A5426C-C367-4434-9D75-368E4923E99F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68A5426C-C367-4434-9D75-368E4923E99F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68A5426C-C367-4434-9D75-368E4923E99F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -184,5 +190,6 @@ Global
 		{BB970372-7DE1-459C-A00C-A62D4FA8F174} = {E936EA91-41A2-42C2-9BE3-4EC77F81FC39}
 		{C80DDD24-4541-4A9B-8E5E-3056F0B6EB4B} = {E936EA91-41A2-42C2-9BE3-4EC77F81FC39}
 		{4B2EAB2F-506D-4426-B543-01EE379A1229} = {E936EA91-41A2-42C2-9BE3-4EC77F81FC39}
+		{68A5426C-C367-4434-9D75-368E4923E99F} = {E936EA91-41A2-42C2-9BE3-4EC77F81FC39}
 	EndGlobalSection
 EndGlobal

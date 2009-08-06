@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{F5D6963A-0247-4D72-B0A7-FA0EC2D3F12F}</ProjectGuid>
+    <ProjectGuid>{68A5426C-C367-4434-9D75-368E4923E99F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CloudObserverContentServiceLibrary</RootNamespace>
@@ -38,9 +38,23 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CloudObserverTemplateService.cs" />
-    <Compile Include="ICloudObserverTemplateService.cs" />
+    <Compile Include="CloudObserverContentService.cs" />
+    <Compile Include="ICloudObserverContentService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CloudObserverBroadcastServiceLibrary\CloudObserverBroadcastServiceLibrary.csproj">
+      <Project>{C80DDD24-4541-4A9B-8E5E-3056F0B6EB4B}</Project>
+      <Name>CloudObserverBroadcastServiceLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CloudObserverDatabaseLibrary\CloudObserverDatabaseLibrary.csproj">
+      <Project>{D8967BBE-DA2D-4ADB-B804-7C60F0BD8CD4}</Project>
+      <Name>CloudObserverDatabaseLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CloudObserverStorageServiceLibrary\CloudObserverStorageServiceLibrary.csproj">
+      <Project>{BB970372-7DE1-459C-A00C-A62D4FA8F174}</Project>
+      <Name>CloudObserverStorageServiceLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

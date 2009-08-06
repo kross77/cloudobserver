@@ -36,7 +36,7 @@ namespace CloudObserverVirtualCamerasServiceLibrary
             webClient.Credentials = new NetworkCredential(userName, password);
             //HttpWebResponse httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
             //if (httpWebRequest.ContentType == "image/jpeg")
-            broadcastServiceClient.WriteFrame(cameraID, webClient.DownloadData(source));
+            broadcastServiceClient.WriteFrame(cameraID, webClient.DownloadData(source),DateTime.Now,false);
             //httpWebResponse.Close();
             framesCounter++;
         }

@@ -57,6 +57,16 @@
   <ItemGroup>
     <None Include="Assets\NoImageFrame" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CloudObserverDatabaseLibrary\CloudObserverDatabaseLibrary.csproj">
+      <Project>{D8967BBE-DA2D-4ADB-B804-7C60F0BD8CD4}</Project>
+      <Name>CloudObserverDatabaseLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CloudObserverStorageServiceLibrary\CloudObserverStorageServiceLibrary.csproj">
+      <Project>{BB970372-7DE1-459C-A00C-A62D4FA8F174}</Project>
+      <Name>CloudObserverStorageServiceLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
