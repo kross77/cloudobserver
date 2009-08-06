@@ -5,7 +5,7 @@ using System.ServiceModel;
 namespace CloudObserver.Services
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
-    public class VirtualCamerasService : Service, VirtualCamerasServiceContract
+    public class VirtualCamerasService : AbstractService, VirtualCamerasServiceContract
     {
         Dictionary<int, VirtualCamera> virtualCameras;
 

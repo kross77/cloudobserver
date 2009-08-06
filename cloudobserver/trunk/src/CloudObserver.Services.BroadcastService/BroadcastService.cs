@@ -5,7 +5,7 @@ using System.ServiceModel;
 namespace CloudObserver.Services
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
-    public class BroadcastService : Service, BroadcastServiceContract
+    public class BroadcastService : AbstractService, BroadcastServiceContract
     {
         Dictionary<int, byte[]> frames;
 

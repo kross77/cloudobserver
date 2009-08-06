@@ -4,7 +4,7 @@ using System.ServiceModel;
 namespace CloudObserver.Services
 {
     [ServiceContract]
-    public interface BroadcastServiceContract : ServiceContract
+    public interface BroadcastServiceContract : AbstractServiceContract
     {
         [OperationContract]
         byte[] ReadFrame(int cameraID);

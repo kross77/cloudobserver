@@ -4,7 +4,7 @@ using System.ServiceModel;
 namespace CloudObserver.Services
 {
     [ServiceContract]
-    public interface AccountsServiceContract : ServiceContract
+    public interface AccountsServiceContract : AbstractServiceContract
     {
         // users
         [OperationContract]

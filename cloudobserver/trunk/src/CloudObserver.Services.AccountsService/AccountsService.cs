@@ -3,7 +3,7 @@ using CloudObserver.Databases;
 
 namespace CloudObserver.Services
 {
-    public class AccountsService : Service, AccountsServiceContract
+    public class AccountsService : AbstractService, AccountsServiceContract
     {
         private AccountsDatabase accountsDatabase;
         private string serverName;

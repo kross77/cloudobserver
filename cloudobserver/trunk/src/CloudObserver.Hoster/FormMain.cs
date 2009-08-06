@@ -214,7 +214,7 @@ namespace CloudObserver.Hoster
                             new Thread(OpenHost).Start(serviceHost);
 
                             controllerServiceClient.SetServiceUri(GetServiceType(serviceType.Name), serviceUri);
-                            ChannelFactory<ServiceContract>.CreateChannel(new BasicHttpBinding(), new EndpointAddress(serviceUri)).SetControllerServiceUri(controllerServiceUri);
+                            ChannelFactory<AbstractServiceContract>.CreateChannel(new BasicHttpBinding(), new EndpointAddress(serviceUri)).SetControllerServiceUri(controllerServiceUri);
 
                             ListViewItem newService = new ListViewItem(serviceType.Name);
                             newService.Checked = true;

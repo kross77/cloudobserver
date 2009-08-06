@@ -2,7 +2,7 @@
 
 namespace CloudObserver.Services
 {
-    public class TemplateService : Service, TemplateServiceContract
+    public class TemplateService : AbstractService, TemplateServiceContract
     {
     }
 }

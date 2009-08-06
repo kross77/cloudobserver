@@ -4,7 +4,7 @@ using System.ServiceModel;
 namespace CloudObserver.Services
 {
     [ServiceContract]
-    public interface VirtualCamerasServiceContract : ServiceContract
+    public interface VirtualCamerasServiceContract : AbstractServiceContract
     {
         [OperationContract]
         void SetSource(int cameraID, string source);

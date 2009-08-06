@@ -4,7 +4,7 @@ using System.ServiceModel;
 namespace CloudObserver.Services
 {
     [ServiceContract]
-    public interface StorageServiceContract : ServiceContract
+    public interface StorageServiceContract : AbstractServiceContract
     {
         [OperationContract]
         void SaveIntoStorage(string path, byte[] data);

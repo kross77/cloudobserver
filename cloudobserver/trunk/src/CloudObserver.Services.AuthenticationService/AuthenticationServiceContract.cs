@@ -4,7 +4,7 @@ using System.ServiceModel;
 namespace CloudObserver.Services
 {
     [ServiceContract]
-    public interface AuthenticationServiceContract : ServiceContract
+    public interface AuthenticationServiceContract : AbstractServiceContract
     {
         [OperationContract]
         bool UserCheckEmailAvailability(string email);

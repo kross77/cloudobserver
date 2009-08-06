@@ -4,7 +4,7 @@ using System.ServiceModel;
 namespace CloudObserver.Services
 {
     [ServiceContract]
-    public interface ServiceContract
+    public interface AbstractServiceContract
     {
         [OperationContract]
         void SetControllerServiceUri(string controllerServiceUri);

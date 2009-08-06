@@ -2,7 +2,7 @@
 
 namespace CloudObserver.Services
 {
-    public abstract class Service : ServiceContract
+    public abstract class AbstractService : AbstractServiceContract
     {
         protected string controllerServiceUri;
 

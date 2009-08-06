@@ -3,7 +3,7 @@ using CloudObserver.Databases;
 
 namespace CloudObserver.Services
 {
-    public class AuthenticationService : Service, AuthenticationServiceContract
+    public class AuthenticationService : AbstractService, AuthenticationServiceContract
     {
         private AccountsDatabase accountsDatabase;
         private string serverName;
