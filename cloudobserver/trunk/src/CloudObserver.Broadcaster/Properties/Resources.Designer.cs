@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CloudObserver.Hoster.Properties {
+namespace CloudObserver.Broadcaster.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace CloudObserver.Hoster.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CloudObserver.Hoster.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CloudObserver.Broadcaster.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -60,9 +60,9 @@ namespace CloudObserver.Hoster.Properties {
             }
         }
         
-        internal static System.Drawing.Icon HosterIcon {
+        internal static System.Drawing.Icon BroadcasterIcon {
             get {
-                object obj = ResourceManager.GetObject("HosterIcon", resourceCulture);
+                object obj = ResourceManager.GetObject("BroadcasterIcon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }

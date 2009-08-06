@@ -85,7 +85,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxControllerServiceUri.Location = new System.Drawing.Point(133, 40);
             this.textBoxControllerServiceUri.Name = "textBoxControllerServiceUri";
-            this.textBoxControllerServiceUri.Size = new System.Drawing.Size(350, 20);
+            this.textBoxControllerServiceUri.Size = new System.Drawing.Size(522, 20);
             this.textBoxControllerServiceUri.TabIndex = 7;
             this.textBoxControllerServiceUri.Text = "http://";
             // 
@@ -105,13 +105,13 @@
             // buttonAddRemoveServices
             // 
             this.buttonAddRemoveServices.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonAddRemoveServices.Location = new System.Drawing.Point(407, 67);
+            this.buttonAddRemoveServices.Location = new System.Drawing.Point(579, 67);
             this.buttonAddRemoveServices.Name = "buttonAddRemoveServices";
             this.buttonAddRemoveServices.Size = new System.Drawing.Size(157, 23);
             this.buttonAddRemoveServices.TabIndex = 10;
             this.buttonAddRemoveServices.Text = "Add/Remove services";
             this.buttonAddRemoveServices.UseVisualStyleBackColor = true;
-            this.buttonAddRemoveServices.Click += new System.EventHandler(this.buttonInstalledServices_Click);
+            this.buttonAddRemoveServices.Click += new System.EventHandler(this.buttonAddRemoveServices_Click);
             // 
             // labelServices
             // 
@@ -127,7 +127,6 @@
             this.listViewServices.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.listViewServices.CheckBoxes = true;
             this.listViewServices.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeaderType,
             this.columnHeaderName,
@@ -138,10 +137,12 @@
             this.listViewServices.Location = new System.Drawing.Point(12, 107);
             this.listViewServices.MultiSelect = false;
             this.listViewServices.Name = "listViewServices";
-            this.listViewServices.Size = new System.Drawing.Size(552, 245);
+            this.listViewServices.Size = new System.Drawing.Size(724, 245);
             this.listViewServices.TabIndex = 12;
             this.listViewServices.UseCompatibleStateImageBehavior = false;
             this.listViewServices.View = System.Windows.Forms.View.Details;
+            this.listViewServices.Resize += new System.EventHandler(this.listViewServices_Resize);
+            this.listViewServices.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listViewServices_MouseClick);
             // 
             // columnHeaderType
             // 
@@ -156,7 +157,7 @@
             // columnHeaderAddress
             // 
             this.columnHeaderAddress.Text = "Address";
-            this.columnHeaderAddress.Width = 108;
+            this.columnHeaderAddress.Width = 279;
             // 
             // columnHeaderBindings
             // 
@@ -178,7 +179,7 @@
             this.groupBoxPoliciesManagement.Controls.Add(this.listBoxControlledPorts);
             this.groupBoxPoliciesManagement.Controls.Add(this.labelControlledPorts);
             this.groupBoxPoliciesManagement.Controls.Add(this.checkBoxAutomaticPoliciesManagement);
-            this.groupBoxPoliciesManagement.Location = new System.Drawing.Point(570, 38);
+            this.groupBoxPoliciesManagement.Location = new System.Drawing.Point(742, 38);
             this.groupBoxPoliciesManagement.Name = "groupBoxPoliciesManagement";
             this.groupBoxPoliciesManagement.Size = new System.Drawing.Size(130, 314);
             this.groupBoxPoliciesManagement.TabIndex = 13;
@@ -283,7 +284,7 @@
             // 
             this.labelExternalIP.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelExternalIP.AutoSize = true;
-            this.labelExternalIP.Location = new System.Drawing.Point(456, 15);
+            this.labelExternalIP.Location = new System.Drawing.Point(628, 15);
             this.labelExternalIP.Name = "labelExternalIP";
             this.labelExternalIP.Size = new System.Drawing.Size(61, 13);
             this.labelExternalIP.TabIndex = 3;
@@ -292,7 +293,7 @@
             // textBoxExternalIP
             // 
             this.textBoxExternalIP.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxExternalIP.Location = new System.Drawing.Point(523, 12);
+            this.textBoxExternalIP.Location = new System.Drawing.Point(695, 12);
             this.textBoxExternalIP.Name = "textBoxExternalIP";
             this.textBoxExternalIP.ReadOnly = true;
             this.textBoxExternalIP.Size = new System.Drawing.Size(90, 20);
@@ -306,7 +307,7 @@
             this.checkBoxAutoDetect.AutoSize = true;
             this.checkBoxAutoDetect.Checked = true;
             this.checkBoxAutoDetect.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxAutoDetect.Location = new System.Drawing.Point(619, 14);
+            this.checkBoxAutoDetect.Location = new System.Drawing.Point(791, 14);
             this.checkBoxAutoDetect.Name = "checkBoxAutoDetect";
             this.checkBoxAutoDetect.Size = new System.Drawing.Size(81, 17);
             this.checkBoxAutoDetect.TabIndex = 5;
@@ -317,7 +318,7 @@
             // numericUpDownControllerServicePort
             // 
             this.numericUpDownControllerServicePort.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.numericUpDownControllerServicePort.Location = new System.Drawing.Point(398, 13);
+            this.numericUpDownControllerServicePort.Location = new System.Drawing.Point(570, 13);
             this.numericUpDownControllerServicePort.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -342,7 +343,7 @@
             // 
             this.labelControllerServicePort.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelControllerServicePort.AutoSize = true;
-            this.labelControllerServicePort.Location = new System.Drawing.Point(363, 15);
+            this.labelControllerServicePort.Location = new System.Drawing.Point(535, 15);
             this.labelControllerServicePort.Name = "labelControllerServicePort";
             this.labelControllerServicePort.Size = new System.Drawing.Size(29, 13);
             this.labelControllerServicePort.TabIndex = 1;
@@ -351,7 +352,7 @@
             // buttonConnect
             // 
             this.buttonConnect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonConnect.Location = new System.Drawing.Point(489, 38);
+            this.buttonConnect.Location = new System.Drawing.Point(661, 38);
             this.buttonConnect.Name = "buttonConnect";
             this.buttonConnect.Size = new System.Drawing.Size(75, 23);
             this.buttonConnect.TabIndex = 8;
@@ -363,7 +364,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(712, 364);
+            this.ClientSize = new System.Drawing.Size(884, 364);
             this.Controls.Add(this.buttonConnect);
             this.Controls.Add(this.numericUpDownControllerServicePort);
             this.Controls.Add(this.labelControllerServicePort);
@@ -378,7 +379,7 @@
             this.Controls.Add(this.textBoxControllerServiceUri);
             this.Controls.Add(this.labelControllerServiceUri);
             this.Controls.Add(this.checkBoxHostControllerService);
-            this.MinimumSize = new System.Drawing.Size(728, 400);
+            this.MinimumSize = new System.Drawing.Size(721, 400);
             this.Name = "FormMain";
             this.Text = "Cloud Observer Hoster";
             this.groupBoxPoliciesManagement.ResumeLayout(false);

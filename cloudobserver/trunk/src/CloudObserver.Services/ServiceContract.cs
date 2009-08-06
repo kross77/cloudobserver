@@ -6,6 +6,7 @@ namespace CloudObserver.Services
     [ServiceContract]
     public interface ServiceContract
     {
+        [OperationContract]
         void SetControllerServiceUri(string controllerServiceUri);
     }
 }

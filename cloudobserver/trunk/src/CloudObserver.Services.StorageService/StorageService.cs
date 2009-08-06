@@ -5,7 +5,7 @@ using CloudObserver.Storages;
 namespace CloudObserver.Services
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
-    public class StorageService : StorageServiceContract
+    public class StorageService : Service, StorageServiceContract
     {
         private Storage storage;
 

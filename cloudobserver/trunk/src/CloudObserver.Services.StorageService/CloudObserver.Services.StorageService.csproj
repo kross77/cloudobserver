@@ -53,6 +53,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CloudObserver.Services\CloudObserver.Services.csproj">
+      <Project>{5053F6F6-8A2F-4C6F-8AB6-CEB0734A94C2}</Project>
+      <Name>CloudObserver.Services</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CloudObserver.Storages\CloudObserver.Storages.csproj">
       <Project>{BB1DFF8F-11F1-46A5-ABB6-7FC5829A4770}</Project>
       <Name>CloudObserver.Storages</Name>

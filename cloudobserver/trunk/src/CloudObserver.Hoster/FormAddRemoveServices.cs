@@ -19,6 +19,8 @@ namespace CloudObserver.Hoster
         {
             InitializeComponent();
 
+            Icon = Properties.Resources.HosterIcon;
+
             if (File.Exists(servicesFilePath))
                 LoadServices(File.OpenRead(servicesFilePath));
         }

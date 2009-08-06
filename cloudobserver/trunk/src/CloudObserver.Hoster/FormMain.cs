@@ -14,6 +14,7 @@ using System.Reflection;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.ServiceModel.Description;
+using System.Threading;
 using CloudObserver.Services;
 using CloudObserver.Policies;
 
@@ -37,6 +38,8 @@ namespace CloudObserver.Hoster
         public FormMain()
         {
             InitializeComponent();
+
+            Icon = Properties.Resources.HosterIcon;
 
             services = new List<ServiceHost>();
 
@@ -109,23 +112,39 @@ namespace CloudObserver.Hoster
 
         private void buttonConnect_Click(object sender, EventArgs e)
         {
+            Cursor = Cursors.WaitCursor;
             try
             {
                 controllerServiceClient = ChannelFactory<ControllerServiceContract>.CreateChannel(new BasicHttpBinding(), new EndpointAddress(controllerServiceUri));
             }
             catch (Exception)
             {
+                Cursor = Cursors.Arrow;
                 MessageBox.Show("Can't access controller service.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             buttonConnect.Enabled = false;
+            buttonConnect.Text = "Connected";
             controllerServiceConnected = true;
             UpdateServices();
         }
 
-        private void buttonInstalledServices_Click(object sender, EventArgs e)
+        private void buttonAddRemoveServices_Click(object sender, EventArgs e)
         {
             new FormAddRemoveServices().ShowDialog(this);
+        }
+
+        private void listViewServices_Resize(object sender, EventArgs e)
+        {
+            listViewServices.Columns[2].Width = listViewServices.Width - 445;
+        }
+
+        private void listViewServices_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Left) return;
+            ListViewHitTestInfo hitTestInfo = listViewServices.HitTest(e.X, e.Y);
+            ListViewItem.ListViewSubItem clickedSubItem = hitTestInfo.SubItem;
+            if (clickedSubItem.Font.Underline) System.Diagnostics.Process.Start(clickedSubItem.Text);
         }
 
         private void checkBoxAutomaticPoliciesManagement_CheckedChanged(object sender, EventArgs e)
@@ -172,6 +191,7 @@ namespace CloudObserver.Hoster
 
         public void UpdateServices()
         {
+            Cursor = Cursors.WaitCursor;
             if (!controllerServiceConnected) return;
             foreach (ServiceHost serviceHost in services)
                 serviceHost.Close();
@@ -191,14 +211,17 @@ namespace CloudObserver.Hoster
                             Type serviceContractType = serviceDLLAssembly.GetType(servicesFileReader.GetAttribute("Contract"));
                             string serviceUri = "http://" + textBoxExternalIP.Text + ":" + numericUpDownControllerServicePort.Value.ToString() + "/" + serviceType.Name;
                             ServiceHost serviceHost = ServiceHoster.CreateServiceHost(serviceType, serviceContractType, serviceUri);
-                            serviceHost.Open();
+                            new Thread(OpenHost).Start(serviceHost);
 
                             controllerServiceClient.SetServiceUri(GetServiceType(serviceType.Name), serviceUri);
+                            ChannelFactory<ServiceContract>.CreateChannel(new BasicHttpBinding(), new EndpointAddress(serviceUri)).SetControllerServiceUri(controllerServiceUri);
 
                             ListViewItem newService = new ListViewItem(serviceType.Name);
                             newService.Checked = true;
                             newService.SubItems.Add(serviceType.Name);
-                            newService.SubItems.Add(serviceUri);
+                            ListViewItem.ListViewSubItem serviceUriSubItem = newService.SubItems.Add(serviceUri);
+                            serviceUriSubItem.Font = new Font(serviceUriSubItem.Font, FontStyle.Underline);
+                            serviceUriSubItem.ForeColor = Color.Blue;
                             newService.SubItems.Add("Basic HTTP");
                             newService.SubItems.Add("running...").ForeColor = Color.Green;
                             newService.UseItemStyleForSubItems = false;
@@ -208,6 +231,7 @@ namespace CloudObserver.Hoster
                         }
                 input.Close();
             }
+            Cursor = Cursors.Arrow;
         }
 
         private string GetExternalIP()
@@ -229,7 +253,7 @@ namespace CloudObserver.Hoster
                     listBoxControlledPorts.Items.Add(controllerServicePort);
             }
 
-            controllerServiceHost.Open();
+            new Thread(OpenHost).Start(controllerServiceHost);
         }
 
         private void TerminateControllerService()
@@ -254,6 +278,11 @@ namespace CloudObserver.Hoster
                 controllerServiceUri = "http://" + textBoxExternalIP.Text + ":" + controllerServicePort.ToString() + "/ControllerService";
                 textBoxControllerServiceUri.Text = controllerServiceUri;
             }
+        }
+
+        private void OpenHost(object serviceHost)
+        {
+            ((ServiceHost)serviceHost).Open();
         }
 
         private ServiceType GetServiceType(string serviceName)

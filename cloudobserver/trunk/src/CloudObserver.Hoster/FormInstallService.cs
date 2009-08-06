@@ -24,6 +24,8 @@ namespace CloudObserver.Hoster
         {
             InitializeComponent();
 
+            Icon = Properties.Resources.HosterIcon;
+
             isServiceHostingTestSucceed = false;
         }
 

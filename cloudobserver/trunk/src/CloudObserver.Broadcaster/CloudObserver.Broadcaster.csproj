@@ -5,14 +5,14 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{12209FA2-D36D-42F2-8F59-4EFEA57C3E10}</ProjectGuid>
+    <ProjectGuid>{5145FBD1-E6B2-46AC-9D43-484F40CCDBCA}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CloudObserver.Hoster</RootNamespace>
-    <AssemblyName>CloudObserver.Hoster</AssemblyName>
+    <RootNamespace>CloudObserver.Broadcaster</RootNamespace>
+    <AssemblyName>CloudObserver.Broadcaster</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <ApplicationIcon>HosterIcon.ico</ApplicationIcon>
+    <ApplicationIcon>BroadcasterIcon.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -37,14 +37,8 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Runtime.Serialization">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.ServiceModel">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.ServiceModel.Web">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -59,17 +53,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FormAddRemoveServices.cs">
+    <Compile Include="Broadcast.cs" />
+    <Compile Include="BroadcastFormat.cs" />
+    <Compile Include="BroadcastSource.cs" />
+    <Compile Include="BroadcastSourceType.cs" />
+    <Compile Include="BroadcastType.cs" />
+    <Compile Include="FormInstallBroadcast.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormAddRemoveServices.Designer.cs">
-      <DependentUpon>FormAddRemoveServices.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FormInstallService.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormInstallService.Designer.cs">
-      <DependentUpon>FormInstallService.cs</DependentUpon>
+    <Compile Include="FormInstallBroadcast.Designer.cs">
+      <DependentUpon>FormInstallBroadcast.cs</DependentUpon>
     </Compile>
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
@@ -79,11 +72,8 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="FormAddRemoveServices.resx">
-      <DependentUpon>FormAddRemoveServices.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormInstallService.resx">
-      <DependentUpon>FormInstallService.cs</DependentUpon>
+    <EmbeddedResource Include="FormInstallBroadcast.resx">
+      <DependentUpon>FormInstallBroadcast.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
@@ -109,13 +99,17 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CloudObserver.Policies\CloudObserver.Policies.csproj">
-      <Project>{D8FB9FFF-CBC2-45A5-A9A6-285626B0C055}</Project>
-      <Name>CloudObserver.Policies</Name>
+    <ProjectReference Include="..\CloudObserver.Services.BroadcastService\CloudObserver.Services.BroadcastService.csproj">
+      <Project>{21004A10-70F4-4950-B144-70A89E579251}</Project>
+      <Name>CloudObserver.Services.BroadcastService</Name>
     </ProjectReference>
     <ProjectReference Include="..\CloudObserver.Services.ControllerService\CloudObserver.Services.ControllerService.csproj">
       <Project>{61A9BD39-5BEA-4277-8C08-8EA7E3F5FBF6}</Project>
       <Name>CloudObserver.Services.ControllerService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CloudObserver.Services.VirtualCamerasService\CloudObserver.Services.VirtualCamerasService.csproj">
+      <Project>{59C1844B-CC11-46FE-92CA-85DA031151DE}</Project>
+      <Name>CloudObserver.Services.VirtualCamerasService</Name>
     </ProjectReference>
     <ProjectReference Include="..\CloudObserver.Services\CloudObserver.Services.csproj">
       <Project>{5053F6F6-8A2F-4C6F-8AB6-CEB0734A94C2}</Project>
@@ -123,7 +117,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="HosterIcon.ico" />
+    <None Include="BroadcasterIcon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

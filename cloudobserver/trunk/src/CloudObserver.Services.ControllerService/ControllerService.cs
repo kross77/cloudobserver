@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ServiceModel;
 
 namespace CloudObserver.Services
 {
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     public class ControllerService : ControllerServiceContract
     {
         private Dictionary<ServiceType, List<string>> services;
