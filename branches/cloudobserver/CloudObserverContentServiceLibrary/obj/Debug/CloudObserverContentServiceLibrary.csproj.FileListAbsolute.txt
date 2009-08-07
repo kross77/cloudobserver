@@ -1,0 +1,5 @@
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\bin\CloudObserverContentServiceLibrary.dll
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\bin\CloudObserverContentServiceLibrary.pdb
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\CloudObserverContentServiceLibrary\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\CloudObserverContentServiceLibrary\obj\Debug\CloudObserverContentServiceLibrary.dll
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\CloudObserverContentServiceLibrary\obj\Debug\CloudObserverContentServiceLibrary.pdb

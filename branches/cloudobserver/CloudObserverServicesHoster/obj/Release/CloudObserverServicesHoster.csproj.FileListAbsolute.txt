@@ -1,0 +1,8 @@
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\bin\CloudObserverServicesHoster.exe
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\CloudObserverServicesHoster\obj\Release\ResolveAssemblyReference.cache
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\CloudObserverServicesHoster\obj\Release\CloudObserverServicesHoster.FormInstallService.resources
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\CloudObserverServicesHoster\obj\Release\CloudObserverServicesHoster.FormLoadServiceDLL.resources
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\CloudObserverServicesHoster\obj\Release\CloudObserverServicesHoster.FormMain.resources
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\CloudObserverServicesHoster\obj\Release\CloudObserverServicesHoster.Properties.Resources.resources
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\CloudObserverServicesHoster\obj\Release\CloudObserverServicesHoster.csproj.GenerateResource.Cache
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\CloudObserverServicesHoster\obj\Release\CloudObserverServicesHoster.exe

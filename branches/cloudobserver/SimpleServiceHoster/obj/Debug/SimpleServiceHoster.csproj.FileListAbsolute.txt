@@ -1,0 +1,5 @@
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\bin\SimpleServiceHoster.exe
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\bin\SimpleServiceHoster.pdb
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\SimpleServiceHoster\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\SimpleServiceHoster\obj\Debug\SimpleServiceHoster.exe
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\SimpleServiceHoster\obj\Debug\SimpleServiceHoster.pdb

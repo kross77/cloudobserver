@@ -1,0 +1,5 @@
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\bin\SimpleIPCameraBroadcaster.exe
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\bin\SimpleIPCameraBroadcaster.pdb
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\SimpleIPCameraBroadcaster\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\SimpleIPCameraBroadcaster\obj\Debug\SimpleIPCameraBroadcaster.exe
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\SimpleIPCameraBroadcaster\obj\Debug\SimpleIPCameraBroadcaster.pdb

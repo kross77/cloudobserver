@@ -1,0 +1,5 @@
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\bin\SimplePolicyRetrieverServiceHoster.exe
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\bin\SimplePolicyRetrieverServiceHoster.pdb
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\SimplePolicyRetrieverServiceHoster\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\SimplePolicyRetrieverServiceHoster\obj\Debug\SimplePolicyRetrieverServiceHoster.exe
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\SimplePolicyRetrieverServiceHoster\obj\Debug\SimplePolicyRetrieverServiceHoster.pdb

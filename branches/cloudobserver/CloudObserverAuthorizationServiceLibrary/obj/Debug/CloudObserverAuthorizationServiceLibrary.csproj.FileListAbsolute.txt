@@ -1,0 +1,5 @@
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\bin\CloudObserverAuthorizationServiceLibrary.dll
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\bin\CloudObserverAuthorizationServiceLibrary.pdb
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\CloudObserverAuthorizationServiceLibrary\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\CloudObserverAuthorizationServiceLibrary\obj\Debug\CloudObserverAuthorizationServiceLibrary.dll
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\CloudObserverAuthorizationServiceLibrary\obj\Debug\CloudObserverAuthorizationServiceLibrary.pdb

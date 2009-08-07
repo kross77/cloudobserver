@@ -1,0 +1,7 @@
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\bin\CloudObserverBroadcastServiceLibrary.dll
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\bin\CloudObserverBroadcastServiceLibrary.pdb
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\CloudObserverBroadcastServiceLibrary\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\CloudObserverBroadcastServiceLibrary\obj\Debug\CloudObserverBroadcastServiceLibrary.Properties.Resources.resources
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\CloudObserverBroadcastServiceLibrary\obj\Debug\CloudObserverBroadcastServiceLibrary.csproj.GenerateResource.Cache
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\CloudObserverBroadcastServiceLibrary\obj\Debug\CloudObserverBroadcastServiceLibrary.dll
+C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\CloudObserverBroadcastServiceLibrary\obj\Debug\CloudObserverBroadcastServiceLibrary.pdb
