@@ -107,9 +107,9 @@
       <Project>{61A9BD39-5BEA-4277-8C08-8EA7E3F5FBF6}</Project>
       <Name>CloudObserver.Services.ControllerService</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CloudObserver.Services.VirtualCamerasService\CloudObserver.Services.VirtualCamerasService.csproj">
-      <Project>{59C1844B-CC11-46FE-92CA-85DA031151DE}</Project>
-      <Name>CloudObserver.Services.VirtualCamerasService</Name>
+    <ProjectReference Include="..\CloudObserver.Services.IPCamerasService\CloudObserver.Services.IPCamerasService.csproj">
+      <Project>{D6DA3B30-7617-470A-BDE6-60CE6C9E9714}</Project>
+      <Name>CloudObserver.Services.IPCamerasService</Name>
     </ProjectReference>
     <ProjectReference Include="..\CloudObserver.Services\CloudObserver.Services.csproj">
       <Project>{5053F6F6-8A2F-4C6F-8AB6-CEB0734A94C2}</Project>

@@ -44,5 +44,24 @@ namespace CloudObserver.Services
             serviceHost.AddServiceEndpoint(serviceContractType, binding, "");
             return serviceHost;
         }
+
+        public static ServiceType GetServiceType(string serviceName)
+        {
+            switch (serviceName)
+            {
+                case "AccountsService":
+                    return ServiceType.AccountsService;
+                case "AuthenticationService":
+                    return ServiceType.AuthenticationService;
+                case "BroadcastService":
+                    return ServiceType.BroadcastService;
+                case "StorageService":
+                    return ServiceType.StorageService;
+                case "IPCamerasService":
+                    return ServiceType.IPCamerasService;
+                default:
+                    return ServiceType.UnknownService;
+            }
+        }
     }
 }

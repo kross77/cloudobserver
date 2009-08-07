@@ -4,16 +4,16 @@ using System.ServiceModel;
 namespace CloudObserver.Services
 {
     [ServiceContract]
-    public interface VirtualCamerasServiceContract : AbstractServiceContract
+    public interface IPCamerasServiceContract : AbstractServiceContract
     {
         [OperationContract]
-        void SetSource(int cameraID, string source);
+        void SetSource(int cameraID, string sourceType, string sourceUri);
+
+        [OperationContract]
+        void SetFPSLimit(int cameraID, int fpsLimit);
 
         [OperationContract]
         void SetCredentials(int cameraID, string userName, string password);
-
-        [OperationContract]
-        void SetFPS(int cameraID, int fps);
 
         [OperationContract]
         void StartBroadcasting(int cameraID);

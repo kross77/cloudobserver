@@ -7,6 +7,9 @@ namespace CloudObserver.Services
     public interface AbstractServiceContract
     {
         [OperationContract]
+        string GetControllerServiceUri();
+
+        [OperationContract]
         void SetControllerServiceUri(string controllerServiceUri);
     }
 }

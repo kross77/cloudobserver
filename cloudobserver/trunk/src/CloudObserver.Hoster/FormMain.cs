@@ -209,11 +209,11 @@ namespace CloudObserver.Hoster
                             Assembly serviceDLLAssembly = Assembly.LoadFile(servicesFileReader.GetAttribute("Library"));
                             Type serviceType = serviceDLLAssembly.GetType(servicesFileReader.GetAttribute("Service"));
                             Type serviceContractType = serviceDLLAssembly.GetType(servicesFileReader.GetAttribute("Contract"));
-                            string serviceUri = "http://" + textBoxExternalIP.Text + ":" + numericUpDownControllerServicePort.Value.ToString() + "/" + serviceType.Name;
+                            string serviceUri = @"http://" + textBoxExternalIP.Text + ":" + numericUpDownControllerServicePort.Value.ToString() + "/" + serviceType.Name;
                             ServiceHost serviceHost = ServiceHoster.CreateServiceHost(serviceType, serviceContractType, serviceUri);
                             new Thread(OpenHost).Start(serviceHost);
 
-                            controllerServiceClient.SetServiceUri(GetServiceType(serviceType.Name), serviceUri);
+                            controllerServiceClient.SetServiceUri(ServiceHoster.GetServiceType(serviceType.Name), serviceUri);
                             ChannelFactory<AbstractServiceContract>.CreateChannel(new BasicHttpBinding(), new EndpointAddress(serviceUri)).SetControllerServiceUri(controllerServiceUri);
 
                             ListViewItem newService = new ListViewItem(serviceType.Name);
@@ -283,25 +283,6 @@ namespace CloudObserver.Hoster
         private void OpenHost(object serviceHost)
         {
             ((ServiceHost)serviceHost).Open();
-        }
-
-        private ServiceType GetServiceType(string serviceName)
-        {
-            switch (serviceName)
-            {
-                case "AccountsService":
-                    return ServiceType.AccountsService;
-                case "AuthenticationService":
-                    return ServiceType.AuthenticationService;
-                case "BroadcastService":
-                    return ServiceType.BroadcastService;
-                case "StorageService":
-                    return ServiceType.StorageService;
-                case "VirtualCamerasService":
-                    return ServiceType.VirtualCamerasService;
-                default:
-                    return ServiceType.UnknownService;
-            }
         }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using System;
+using System.ServiceModel;
 using CloudObserver.Databases;
 
 namespace CloudObserver.Services
 {
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     public class AccountsService : AbstractService, AccountsServiceContract
     {
         private AccountsDatabase accountsDatabase;

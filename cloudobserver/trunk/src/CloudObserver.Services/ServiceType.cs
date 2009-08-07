@@ -19,6 +19,6 @@ namespace CloudObserver.Services
         [EnumMember]
         StorageService = 5,
         [EnumMember]
-        VirtualCamerasService = 6,
+        IPCamerasService = 6,
     }
 }

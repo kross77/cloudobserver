@@ -17,7 +17,6 @@ namespace CloudObserver.Hoster
     {
         private Assembly serviceDLLAssembly;
         private string serviceDLLFileName;
-        private string serviceName;
         private bool isServiceHostingTestSucceed;
 
         public FormInstallService()

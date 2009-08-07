@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{59C1844B-CC11-46FE-92CA-85DA031151DE}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{1F45769C-FB21-484F-8023-8737797CD871}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CloudObserver.Services</RootNamespace>
-    <AssemblyName>CloudObserver.Services.VirtualCamerasService</AssemblyName>
+    <RootNamespace>CloudObserver.ConsoleApps.Host</RootNamespace>
+    <AssemblyName>CloudObserver.ConsoleApps.Host</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <StartupObject>
@@ -42,22 +42,17 @@
   </Target>
   -->
   <ItemGroup>
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="VirtualCamera.cs" />
-    <Compile Include="VirtualCamerasService.cs" />
-    <Compile Include="VirtualCamerasServiceContract.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.ServiceModel">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CloudObserver.Services.BroadcastService\CloudObserver.Services.BroadcastService.csproj">
-      <Project>{21004A10-70F4-4950-B144-70A89E579251}</Project>
-      <Name>CloudObserver.Services.BroadcastService</Name>
-    </ProjectReference>
     <ProjectReference Include="..\CloudObserver.Services.ControllerService\CloudObserver.Services.ControllerService.csproj">
       <Project>{61A9BD39-5BEA-4277-8C08-8EA7E3F5FBF6}</Project>
       <Name>CloudObserver.Services.ControllerService</Name>

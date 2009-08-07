@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ServiceModel;
+using System.Collections.Generic;
 
 namespace CloudObserver.Services
 {

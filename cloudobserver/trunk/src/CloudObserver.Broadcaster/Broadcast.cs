@@ -19,7 +19,7 @@ namespace CloudObserver.Broadcaster
         private Timer broadcastingTimer;
         private ControllerServiceContract controllerServiceClient;
         private BroadcastServiceContract broadcastServiceClient;
-        private VirtualCamerasServiceContract virtualCamerasServiceClient;
+        private IPCamerasServiceContract ipCamerasServiceClient;
 
         public bool Running
         {
@@ -69,7 +69,7 @@ namespace CloudObserver.Broadcaster
         {
             broadcastServiceClient = ChannelFactory<BroadcastServiceContract>.CreateChannel(new BasicHttpBinding(), new EndpointAddress(controllerServiceClient.GetServiceUri(ServiceType.BroadcastService)));
             if (broadcastType == BroadcastType.VirtualClientService)
-                virtualCamerasServiceClient = ChannelFactory<VirtualCamerasServiceContract>.CreateChannel(new BasicHttpBinding(), new EndpointAddress(controllerServiceClient.GetServiceUri(ServiceType.VirtualCamerasService)));
+                ipCamerasServiceClient = ChannelFactory<IPCamerasServiceContract>.CreateChannel(new BasicHttpBinding(), new EndpointAddress(controllerServiceClient.GetServiceUri(ServiceType.IPCamerasService)));
             switch (broadcastSource.GetBroadcastSourceType())
             {
                 case BroadcastSourceType.LocalStorage:
@@ -143,10 +143,10 @@ namespace CloudObserver.Broadcaster
                 case BroadcastType.DirectBroadcasting:
                     break;
                 case BroadcastType.VirtualClientService:
-                    virtualCamerasServiceClient.SetSource(cameraID, broadcastSource.Uri);
-                    if (broadcastSource.ProvideCredentials) virtualCamerasServiceClient.SetCredentials(cameraID, broadcastSource.UserName, broadcastSource.Password);
-                    virtualCamerasServiceClient.SetFPS(cameraID, 1000 / maxFPS);
-                    virtualCamerasServiceClient.StartBroadcasting(cameraID);
+                    //ipCamerasServiceClient.SetSource(cameraID, broadcastType, broadcastSource.Uri);
+                    if (broadcastSource.ProvideCredentials) ipCamerasServiceClient.SetCredentials(cameraID, broadcastSource.UserName, broadcastSource.Password);
+                    ipCamerasServiceClient.SetFPSLimit(cameraID, maxFPS);
+                    ipCamerasServiceClient.StartBroadcasting(cameraID);
                     break;
             }
         }
@@ -158,7 +158,7 @@ namespace CloudObserver.Broadcaster
                 case BroadcastType.DirectBroadcasting:
                     break;
                 case BroadcastType.VirtualClientService:
-                    virtualCamerasServiceClient.StopBroadcasting(cameraID);
+                    ipCamerasServiceClient.StopBroadcasting(cameraID);
                     break;
             }
         }
