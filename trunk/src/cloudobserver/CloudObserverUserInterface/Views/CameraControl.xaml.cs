@@ -11,6 +11,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.ServiceModel;
+using System.ServiceModel.Description;
 using CloudObserverUserInterface.BroadcastServiceReference;
 using CloudObserverUserInterface.CloudObserverAuthorizationServiceReference;
 
@@ -19,6 +20,8 @@ namespace CloudObserverUserInterface
 	public partial class CameraControl : UserControl
 	{
         private const int MAX_REQUESTS = 5;
+        private const int MAX_RECEIVED_MESSAGE_SIZE = 2147483647;
+        private const int MAX_BUFFER_SIZE = 2147483647;
 
         private int fps = 0;
         private int requests = 0;
@@ -30,7 +33,14 @@ namespace CloudObserverUserInterface
 
 		public CameraControl()
 		{
-            broadcastServiceClient = new BroadcastServiceContractClient(new BasicHttpBinding(), new EndpointAddress("http://93.100.45.201:9000/BroadcastService"));
+            BasicHttpBinding binding = new BasicHttpBinding();
+            binding.MaxReceivedMessageSize = MAX_RECEIVED_MESSAGE_SIZE;
+            binding.MaxBufferSize = MAX_BUFFER_SIZE;
+            binding.OpenTimeout = TimeSpan.FromMinutes(5);
+            binding.CloseTimeout = TimeSpan.FromMinutes(5);
+            binding.ReceiveTimeout = TimeSpan.FromMinutes(30);
+            binding.SendTimeout = TimeSpan.FromMinutes(30);
+            broadcastServiceClient = new BroadcastServiceContractClient(binding, new EndpointAddress("http://localhost:9000/BroadcastService"));
             broadcastServiceClient.ReadFrameCompleted += new EventHandler<ReadFrameCompletedEventArgs>(client_ReadFrameCompleted);
             refreshTimer = new DispatcherTimer();
             refreshTimer.Interval = TimeSpan.FromMilliseconds(1000 / 60);
