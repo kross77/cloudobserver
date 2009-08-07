@@ -1,0 +1,16 @@
+﻿<basics:ChildWindow
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:basics="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls"
+	xmlns:dataInput="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Data.Input" x:Name="ChildWindowMessage"
+	x:Class="CloudObserver.UserInterface.MessageWindow"
+	Title="MessageWindow">
+	<Grid x:Name="LayoutRoot">
+		<Grid.RowDefinitions>
+			<RowDefinition />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+
+		<dataInput:Label x:Name="LabelMessage" Content=""/>
+	</Grid>
+</basics:ChildWindow>

@@ -51,6 +51,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserver.ConsoleApps.P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserver.Services.IPCamerasService", "CloudObserver.Services.IPCamerasService\CloudObserver.Services.IPCamerasService.csproj", "{D6DA3B30-7617-470A-BDE6-60CE6C9E9714}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserver.UserInterface", "CloudObserver.UserInterface\CloudObserver.UserInterface.csproj", "{E0197BDC-8ACE-4E75-8950-970F576171DA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -137,6 +139,10 @@ Global
 		{D6DA3B30-7617-470A-BDE6-60CE6C9E9714}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6DA3B30-7617-470A-BDE6-60CE6C9E9714}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6DA3B30-7617-470A-BDE6-60CE6C9E9714}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0197BDC-8ACE-4E75-8950-970F576171DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0197BDC-8ACE-4E75-8950-970F576171DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0197BDC-8ACE-4E75-8950-970F576171DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0197BDC-8ACE-4E75-8950-970F576171DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -7,7 +7,7 @@ namespace CloudObserver.Storages
     {
         private string basePath;
 
-        public LocalStorage() : this(System.Environment.GetEnvironmentVariable("windir") + @"\CloudObserverStorage\") { }
+        public LocalStorage() : this(System.Environment.GetEnvironmentVariable(@"D:\fchunovkin\share\CloudObserver\storage")) { }
 
         public LocalStorage(string basePath)
         {
