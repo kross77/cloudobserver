@@ -14,21 +14,21 @@
 -->
 
 	<!-- The application identifier string, unique to this application. Required. -->
-	<id>AIRCAMTesterConnect</id>
+	<id>CloudObserverAIRClient</id>
 
 	<!-- Used as the filename for the application. Required. -->
-	<filename>AIRCAMTesterConnect</filename>
+	<filename>CloudObserverAIRClient</filename>
 
 	<!-- The name that is displayed in the AIR application installer. 
 	     May have multiple values for each language. See samples or xsd schema file. Optional. -->
-	<name>AIRCAMTesterConnect</name>
+	<name>Cloud Observer AIR Client</name>
 
 	<!-- An application version designator (such as "v1", "2.5", or "Alpha 1"). Required. -->
-	<version>v2</version>
+	<version>v3</version>
 
 	<!-- Description, displayed in the AIR application installer.
 	     May have multiple values for each language. See samples or xsd schema file. Optional. -->
-	<!-- <description></description> -->
+<description>Cloud Observer AIR Client</description> 
 
 	<!-- Copyright information. Optional -->
 	<!-- <copyright></copyright> -->
