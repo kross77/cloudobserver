@@ -1,7 +1,0 @@
-C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\bin\CloudObserverPolicyRetrieverServiceLibrary.dll
-C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\bin\CloudObserverPolicyRetrieverServiceLibrary.pdb
-C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\CloudObserverPolicyRetrieverServiceLibrary\obj\Debug\ResolveAssemblyReference.cache
-C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\CloudObserverPolicyRetrieverServiceLibrary\obj\Debug\CloudObserverPolicyRetrieverServiceLibrary.Properties.Resources.resources
-C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\CloudObserverPolicyRetrieverServiceLibrary\obj\Debug\CloudObserverPolicyRetrieverServiceLibrary.csproj.GenerateResource.Cache
-C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\CloudObserverPolicyRetrieverServiceLibrary\obj\Debug\CloudObserverPolicyRetrieverServiceLibrary.dll
-C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\CloudObserverPolicyRetrieverServiceLibrary\obj\Debug\CloudObserverPolicyRetrieverServiceLibrary.pdb

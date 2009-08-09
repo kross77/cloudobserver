@@ -10,7 +10,7 @@ if not defined CloudObserverEnvironment call .\scripts\setenvironment.bat
 call .\scripts\broadcastairport-jpeg.bat
 echo.
 
-call .\scripts\broadcastairport-mjpg.bat
+call .\scripts\broadcastairport-mjpeg.bat
 echo.
 
 call .\scripts\broadcastboschsecuritysystems.bat

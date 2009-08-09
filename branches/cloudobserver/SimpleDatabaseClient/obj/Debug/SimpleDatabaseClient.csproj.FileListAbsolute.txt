@@ -1,5 +1,0 @@
-C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\bin\SimpleDatabaseClient.exe
-C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\bin\SimpleDatabaseClient.pdb
-C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\SimpleDatabaseClient\obj\Debug\ResolveAssemblyReference.cache
-C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\SimpleDatabaseClient\obj\Debug\SimpleDatabaseClient.exe
-C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\SimpleDatabaseClient\obj\Debug\SimpleDatabaseClient.pdb

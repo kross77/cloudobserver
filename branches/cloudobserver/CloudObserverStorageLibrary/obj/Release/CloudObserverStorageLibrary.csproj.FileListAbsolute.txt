@@ -1,3 +1,0 @@
-C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\bin\CloudObserverStorageLibrary.dll
-C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\CloudObserverStorageLibrary\obj\Release\ResolveAssemblyReference.cache
-C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\CloudObserverStorageLibrary\obj\Release\CloudObserverStorageLibrary.dll

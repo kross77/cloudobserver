@@ -39,7 +39,7 @@ namespace CloudObserver.UserInterface
             binding.CloseTimeout = TimeSpan.FromMinutes(5);
             binding.ReceiveTimeout = TimeSpan.FromMinutes(30);
             binding.SendTimeout = TimeSpan.FromMinutes(30);
-            broadcastServiceClient = new BroadcastServiceContractClient(binding, new EndpointAddress("http://10.0.4.74:9000/BroadcastService"));
+            broadcastServiceClient = new BroadcastServiceContractClient(binding, new EndpointAddress("http://localhost:9000/BroadcastService"));
             broadcastServiceClient.ReadFrameCompleted += new EventHandler<ReadFrameCompletedEventArgs>(client_ReadFrameCompleted);
             refreshTimer = new DispatcherTimer();
             refreshTimer.Interval = TimeSpan.FromMilliseconds(1000 / 60);

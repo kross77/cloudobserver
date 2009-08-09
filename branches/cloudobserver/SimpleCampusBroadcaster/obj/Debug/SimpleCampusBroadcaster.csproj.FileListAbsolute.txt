@@ -1,5 +1,0 @@
-C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\bin\SimpleCampusBroadcaster.exe
-C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\bin\SimpleCampusBroadcaster.pdb
-C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\SimpleCampusBroadcaster\obj\Debug\ResolveAssemblyReference.cache
-C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\SimpleCampusBroadcaster\obj\Debug\SimpleCampusBroadcaster.exe
-C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\SimpleCampusBroadcaster\obj\Debug\SimpleCampusBroadcaster.pdb

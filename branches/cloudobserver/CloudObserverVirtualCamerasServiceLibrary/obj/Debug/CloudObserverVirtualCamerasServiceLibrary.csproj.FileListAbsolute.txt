@@ -1,5 +1,0 @@
-C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\bin\CloudObserverVirtualCamerasServiceLibrary.dll
-C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\bin\CloudObserverVirtualCamerasServiceLibrary.pdb
-C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\CloudObserverVirtualCamerasServiceLibrary\obj\Debug\ResolveAssemblyReference.cache
-C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\CloudObserverVirtualCamerasServiceLibrary\obj\Debug\CloudObserverVirtualCamerasServiceLibrary.dll
-C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\CloudObserverVirtualCamerasServiceLibrary\obj\Debug\CloudObserverVirtualCamerasServiceLibrary.pdb

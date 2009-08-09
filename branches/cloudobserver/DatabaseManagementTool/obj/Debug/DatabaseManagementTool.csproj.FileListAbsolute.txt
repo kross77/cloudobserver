@@ -1,8 +1,0 @@
-C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\bin\DatabaseManagementTool.exe
-C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\bin\DatabaseManagementTool.pdb
-C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\DatabaseManagementTool\obj\Debug\ResolveAssemblyReference.cache
-C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\DatabaseManagementTool\obj\Debug\DatabaseManagementTool.FormMain.resources
-C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\DatabaseManagementTool\obj\Debug\DatabaseManagementTool.Properties.Resources.resources
-C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\DatabaseManagementTool\obj\Debug\DatabaseManagementTool.csproj.GenerateResource.Cache
-C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\DatabaseManagementTool\obj\Debug\DatabaseManagementTool.exe
-C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\DatabaseManagementTool\obj\Debug\DatabaseManagementTool.pdb

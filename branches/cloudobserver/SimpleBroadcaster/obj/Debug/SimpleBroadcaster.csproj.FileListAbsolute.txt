@@ -1,5 +1,0 @@
-C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\bin\SimpleBroadcaster.exe
-C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\bin\SimpleBroadcaster.pdb
-C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\SimpleBroadcaster\obj\Debug\ResolveAssemblyReference.cache
-C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\SimpleBroadcaster\obj\Debug\SimpleBroadcaster.exe
-C:\Users\Avesta-V\Desktop\New folder (3)\trunk\src\cloudobserver\SimpleBroadcaster\obj\Debug\SimpleBroadcaster.pdb
