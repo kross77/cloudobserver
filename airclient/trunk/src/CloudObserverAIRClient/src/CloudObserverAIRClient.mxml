@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication 
+						showStatusBar="false"
+						title="Cloud Observer AIR Client"
+						xmlns:mx="http://www.adobe.com/2006/mxml"
+						creationComplete="init(event);" 
+						width="450"
+						verticalScrollPolicy="off" 	
+						horizontalScrollPolicy="off"  
+						layout="absolute" 
+						backgroundGradientAlphas="[1.0, 1.0]"
+						backgroundGradientColors="[#CBCBCB, #6E6E6E]" 
+						xmlns:cloudobserverbroadcastservice="services.cloudobserverbroadcastservice.*" 
+						xmlns:broadcastservice="services.broadcastservice.*"
+						xmlns:mxmlY="http://www.yahoo.com/astra/2006/mxml"
+	>
+	
+	<mx:Script>
+		<![CDATA[
+				
+    import flash.media.Camera;
+    import mx.controls.Alert;
+    import mx.events.ListEvent;
+    import mx.utils.ObjectUtil;
+  	import flash.media.Video;
+  	import mx.core.UIComponent; 	
+  	import flash.display.Bitmap;
+    import mx.events.CloseEvent;
+    import flash.display.Sprite;
+    import flash.text.TextField;
+    import flash.text.TextFieldAutoSize;
+    import flash.utils.Timer;
+    import flash.events.TimerEvent;
+    import flash.events.ActivityEvent;
+
+	[Bindable]
+	private var array:Array = new Array(Camera.names.length);
+
+           private function init(e:Event):void
+         {
+         this.minWidth = 450;
+         this.maxWidth = 450;
+         this.minHeight = Camera.names.length * 132 + 80;
+         this.maxHeight  = Camera.names.length * 132 + 80;
+	         var im:int = 0;
+		     for (im; im < Camera.names.length; im++ )
+		     {
+		     	var iu:Array = new Array;
+		     	iu[0] = (im).toString();
+		     	array[im] = iu.toString();  
+		     }
+	 
+	         list.dataProvider = array;
+	         this.addEventListener(Event.CLOSING, applicationExitHandler);
+        }
+        
+           private function applicationExitHandler(event:Event):void
+    	{
+            var openedWindows:Array = NativeApplication.nativeApplication.openedWindows;
+            for (var i:int = 0; i < openedWindows.length; i ++) 
+            {
+               openedWindows[i].close();
+            }
+    	}
+	]]>
+	</mx:Script>
+	
+	<mx:Panel layout="absolute"
+			  left="10" 
+			  right="10" 
+			  top="10" 
+			  bottom="10" 
+			  title="{'Камеры ' + Camera.names.length.toString() + ' штуки имеются в наличии' }"
+		>
+		
+		<mx:List id="list" 
+				 itemRenderer="CamSendItem"    
+				 allowMultipleSelection="true"                
+				 width="100%"
+				 height="100%"
+				 y="16"
+				 x="0" alternatingItemColors="[#CEB9B9, #692E2E]"
+			/>
+			
+	</mx:Panel>
+	
+</mx:WindowedApplication>
