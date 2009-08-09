@@ -6,6 +6,11 @@ namespace CloudObserver.ConsoleApps.Template
     {
         static void Main(string[] args)
         {
+            if ((args.Length > 0) && (args[0] == "/?"))
+            {
+                Console.Write("Usage: CloudObserver.ConsoleApps.Template");
+                return;
+            }
         }
     }
 }

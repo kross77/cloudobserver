@@ -7,6 +7,9 @@ namespace CloudObserver.Services
     public interface StorageServiceContract : AbstractServiceContract
     {
         [OperationContract]
+        void SetBasePath(string basePath);
+
+        [OperationContract]
         void SaveIntoStorage(string path, byte[] data);
 
         [OperationContract]

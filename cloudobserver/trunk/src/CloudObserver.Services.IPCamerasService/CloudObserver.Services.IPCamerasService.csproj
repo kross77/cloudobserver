@@ -44,7 +44,7 @@
   <ItemGroup>
     <Compile Include="IPCamera.cs" />
     <Compile Include="IPCameraJpegFormat.cs" />
-    <Compile Include="IPCameraMjpgFormat.cs" />
+    <Compile Include="IPCameraMJpegFormat.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IPCamerasService.cs" />
     <Compile Include="IPCamerasServiceContract.cs" />

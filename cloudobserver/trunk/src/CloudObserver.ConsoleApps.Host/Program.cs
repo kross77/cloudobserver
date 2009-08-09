@@ -11,6 +11,11 @@ namespace CloudObserver.ConsoleApps.Host
         [STAThread]
         static void Main(string[] args)
         {
+            if ((args.Length > 0) && (args[0] == "/?"))
+            {
+                Console.Write("Usage: CloudObserver.ConsoleApps.Host <serviceName> <serviceDll> <serviceIP> <servicePort> <controllerServiceUri>");
+                return;
+            }
             string serviceName;
             string serviceDll;
             string serviceIP;
@@ -30,12 +35,6 @@ namespace CloudObserver.ConsoleApps.Host
             }
             else
             {
-                if (args.Length > 0)
-                {
-                    Console.Write("Usage: CloudObserver.ConsoleApps.Host <serviceName> <serviceDll> <serviceIP> <servicePort> <controllerServiceUri>");
-                    Console.ReadKey();
-                    return;
-                }
                 OpenFileDialog openFileDialogServiceDll = new OpenFileDialog();
                 openFileDialogServiceDll.Filter = "Dynamic Link Library (*.dll)|*.dll";
                 if (openFileDialogServiceDll.ShowDialog() != DialogResult.OK) return;

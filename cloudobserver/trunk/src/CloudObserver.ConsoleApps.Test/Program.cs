@@ -8,6 +8,11 @@ namespace CloudObserver.ConsoleApps.Test
     {
         static int Main(string[] args)
         {
+            if ((args.Length > 0) && (args[0] == "/?"))
+            {
+                Console.Write("Usage: CloudObserver.ConsoleApps.Test <serviceName> <controllerServiceUri>");
+                return 0;
+            }
             string serviceName;
             string controllerServiceUri;
             if (args.Length == 2)
@@ -17,12 +22,6 @@ namespace CloudObserver.ConsoleApps.Test
             }
             else
             {
-                if (args.Length > 0)
-                {
-                    Console.Write("Usage: CloudObserver.ConsoleApps.Test <serviceName> <controllerServiceUri>");
-                    Console.ReadKey();
-                    return 0;
-                }
                 Console.Write("Service name: ");
                 serviceName = Console.ReadLine();
                 Console.Write("Controller Service URI: ");

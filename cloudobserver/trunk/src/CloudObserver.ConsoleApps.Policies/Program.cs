@@ -10,6 +10,11 @@ namespace CloudObserver.ConsoleApps.Policies
     {
         static void Main(string[] args)
         {
+            if ((args.Length > 0) && (args[0] == "/?"))
+            {
+                Console.Write("Usage: CloudObserver.ConsoleApps.Policies <serviceIP> <servicePort>");
+                return;
+            }
             string serviceIP;
             int servicePort;
             if (args.Length == 2)
@@ -19,12 +24,6 @@ namespace CloudObserver.ConsoleApps.Policies
             }
             else
             {
-                if (args.Length > 0)
-                {
-                    Console.Write("Usage: CloudObserver.ConsoleApps.Policies <serviceIP> <servicePort>");
-                    Console.ReadKey();
-                    return;
-                }
                 Console.Write("Service IP: ");
                 serviceIP = Console.ReadLine();
                 Console.Write("Service port: ");

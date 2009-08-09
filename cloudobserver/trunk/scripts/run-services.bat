@@ -1,36 +1,32 @@
 @echo off
 
-setlocal
-
-echo Starting Cloud Observer...
+echo Starting Cloud Observer Services...
 echo.
 
-if not defined CloudObserverEnvironment call .\scripts\setenvironment.bat
+if not defined CloudObserverEnvironment call %~dp0setenvironment.bat
 
 echo Step 1: controller start
 if '%CloudObserverHostController%'=='true' (
-call .\scripts\hostcontroller.bat
+call %~dp0host-controller.bat
 ) else (
 echo ----------skipped----------
 )
 echo.
 
 echo Step 2: services start
-call .\scripts\hostservices.bat
+call %~dp0host-services.bat
 echo.
 
 echo Step 3: services test
 if '%CloudObserverTesting%'=='true' (
-call .\scripts\testservices.bat
+call %~dp0testservices.bat
 ) else (
 echo ---------skipped--------
 )
 echo.
 
 echo Step 4: policies setup
-call .\scripts\hostpolicies.bat
+call %~dp0setpolicies.bat
 echo.
 
 echo Done.
-
-endlocal

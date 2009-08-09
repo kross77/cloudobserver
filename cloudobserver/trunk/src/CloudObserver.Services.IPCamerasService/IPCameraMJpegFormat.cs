@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace CloudObserver.Services
 {
-    public class IPCameraMjpegFormat : IPCamera
+    public class IPCameraMJpegFormat : IPCamera
     {
         private int cameraID;
         private string sourceUri;
@@ -28,7 +28,7 @@ namespace CloudObserver.Services
         private BroadcastServiceContract broadcastServiceClient;
 
         //Constructor
-        public IPCameraMjpegFormat(int cameraID, string broadcastServiceUri)
+        public IPCameraMJpegFormat(int cameraID, string broadcastServiceUri)
         {
             this.cameraID = cameraID;
 

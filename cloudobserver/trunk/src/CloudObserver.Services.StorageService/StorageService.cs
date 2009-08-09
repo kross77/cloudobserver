@@ -9,23 +9,20 @@ namespace CloudObserver.Services
     {
         private Storage storage;
 
-        public StorageService()
+        public void SetBasePath(string basePath)
         {
-            storage = new LocalStorage();
-        }
-
-        public StorageService(string baseAddress)
-        {
-            storage = new LocalStorage(baseAddress);
+            storage = new LocalStorage(basePath);
         }
 
         public void SaveIntoStorage(string path, byte[] data)
         {
+            if (storage == null) storage = new LocalStorage();
             storage.SaveIntoStorage(path, data);
         }
 
         public byte[] LoadFromStorage(string path)
         {
+            if (storage == null) storage = new LocalStorage();
             return storage.LoadFromStorage(path);
         }
     }

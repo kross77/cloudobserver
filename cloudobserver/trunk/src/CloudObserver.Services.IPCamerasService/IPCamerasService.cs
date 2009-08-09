@@ -30,8 +30,8 @@ namespace CloudObserver.Services
             {
                 if (sourceType.Equals("JPEG"))
                     ipCameras[cameraID] = new IPCameraJpegFormat(cameraID, broadcastServiceUri);
-                if (sourceType.Equals("MJPG"))
-                    ipCameras[cameraID] = new IPCameraMjpegFormat(cameraID, broadcastServiceUri);
+                if (sourceType.Equals("MJPEG"))
+                    ipCameras[cameraID] = new IPCameraMJpegFormat(cameraID, broadcastServiceUri);
             }
             ipCameras[cameraID].SetSource(sourceUri);
         }

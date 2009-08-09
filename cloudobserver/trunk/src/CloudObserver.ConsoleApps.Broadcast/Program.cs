@@ -21,6 +21,11 @@ namespace CloudObserver.ConsoleApps.Broadcast
         [STAThread]
         static void Main(string[] args)
         {
+            if ((args.Length > 0) && (args[0] == "/?"))
+            {
+                Console.Write("Usage: CloudObserver.ConsoleApps.Broadcast <cameraID> <fpsLimit> <controllerServiceUri> <sourceType> <sourceUri> [<provideCredentials>] [<userName>] [<password>]");
+                return;
+            }
             int fpsLimit;
             string controllerServiceUri;
             bool provideCredentials = false;
@@ -28,12 +33,6 @@ namespace CloudObserver.ConsoleApps.Broadcast
             string password = "";
             if (args.Length > 0)
             {
-                if (args[0] == "/?")
-                {
-                    Console.Write("Usage: CloudObserver.ConsoleApps.Broadcast <cameraID> <fpsLimit> <controllerServiceUri> <sourceType> <sourceUri> [<provideCredentials>] [<userName>] [<password>]");
-                    Console.ReadKey();
-                    return;
-                }
                 cameraID = Int32.Parse(args[0]);
                 Console.WriteLine("Camera ID: " + cameraID);
                 fpsLimit = Int32.Parse(args[1]);
@@ -50,7 +49,7 @@ namespace CloudObserver.ConsoleApps.Broadcast
                             sourceUri[i - 4] = args[i];
                         break;
                     case "JPEG":
-                    case "MJPG":
+                    case "MJPEG":
                         sourceUri = new string[1];
                         sourceUri[0] = args[4];
                         Console.WriteLine("Source URI: " + sourceUri[0]);
@@ -65,7 +64,7 @@ namespace CloudObserver.ConsoleApps.Broadcast
                         }
                         break;
                     default:
-                        Console.Write("Invalid source type. Use 'JPEG' or 'MJPG' for IP cameras source and 'Files' for local files source.");
+                        Console.Write("Invalid source type. Use 'JPEG' or 'MJPEG' for IP cameras source and 'Files' for local files source.");
                         Console.ReadKey();
                         return;
                 }
@@ -81,7 +80,7 @@ namespace CloudObserver.ConsoleApps.Broadcast
                 Console.WriteLine("Select source type:");
                 Console.WriteLine("  1. Local Files");
                 Console.WriteLine("  2. JPEG IP Camera");
-                Console.WriteLine("  3. MJPG IP Camera");
+                Console.WriteLine("  3. MJPEG IP Camera");
                 Console.Write("Source type: ");
                 string temp = Console.ReadLine();
                 while ((temp != "1") && (temp != "2") && (temp != "3"))
@@ -98,7 +97,7 @@ namespace CloudObserver.ConsoleApps.Broadcast
                         sourceType = "JPEG";
                         break;
                     case "3":
-                        sourceType = "MJPG";
+                        sourceType = "MJPEG";
                         break;
                     default:
                         return;
@@ -113,7 +112,7 @@ namespace CloudObserver.ConsoleApps.Broadcast
                         sourceUri = openFileDialogServiceFiles.FileNames;
                         break;
                     case "JPEG":
-                    case "MJPG":
+                    case "MJPEG":
                         sourceUri = new string[1];
                         Console.Write("Source URI: ");
                         sourceUri[0] = Console.ReadLine();
@@ -134,7 +133,7 @@ namespace CloudObserver.ConsoleApps.Broadcast
                         }
                         break;
                     default:
-                        Console.Write("Invalid source type. Use 'JPEG' or 'MJPG' for IP cameras source and 'Files' for local files source.");
+                        Console.Write("Invalid source type. Use 'JPEG' or 'MJPEG' for IP cameras source and 'Files' for local files source.");
                         Console.ReadKey();
                         return;
                 }
@@ -156,9 +155,14 @@ namespace CloudObserver.ConsoleApps.Broadcast
                         broadcastingTimer = new Timer(1000 / fpsLimit);
                         broadcastingTimer.Elapsed += new ElapsedEventHandler(broadcastingTimer_Elapsed);
                         broadcastingTimer.Start();
+                        Console.WriteLine("Broadcasting from local files.");
+                        Console.Write("Press any key to stop broadcasting...");
+                        Console.CursorVisible = false;
+                        Console.ReadKey();
+                        broadcastingTimer.Stop();
                         break;
                     case "JPEG":
-                    case "MJPG":
+                    case "MJPEG":
                         ipCamerasServiceClient = ChannelFactory<IPCamerasServiceContract>.CreateChannel(new BasicHttpBinding(),
                             new EndpointAddress(controllerServiceClient.GetServiceUri(ServiceType.IPCamerasService)));
                         ipCamerasServiceClient.SetSource(cameraID, sourceType, sourceUri[0]);
