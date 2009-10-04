@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/CloudObserver.Services" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/CloudObserver.Services" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="ServiceType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="UnknownService" />
+      <xs:enumeration value="ControllerService" />
+      <xs:enumeration value="AuthenticationService" />
+      <xs:enumeration value="AccountsService" />
+      <xs:enumeration value="BroadcastService" />
+      <xs:enumeration value="StorageService" />
+      <xs:enumeration value="IPCamerasService" />
+      <xs:enumeration value="TestSoundService" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="ServiceType" nillable="true" type="tns:ServiceType" />
+</xs:schema>

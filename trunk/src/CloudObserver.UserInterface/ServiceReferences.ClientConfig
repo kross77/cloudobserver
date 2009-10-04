@@ -1,0 +1,34 @@
+﻿<configuration>
+    <system.serviceModel>
+        <bindings>
+            <basicHttpBinding>
+                <binding name="BasicHttpBinding_AuthenticationServiceContract"
+                    maxBufferSize="2147483647" maxReceivedMessageSize="2147483647">
+                    <security mode="None" />
+                </binding>
+                <binding name="BasicHttpBinding_BroadcastServiceContract" maxBufferSize="2147483647"
+                    maxReceivedMessageSize="2147483647">
+                    <security mode="None" />
+                </binding>
+                <binding name="BasicHttpBinding_ControllerServiceContract" maxBufferSize="2147483647"
+                    maxReceivedMessageSize="2147483647">
+                    <security mode="None" />
+                </binding>
+            </basicHttpBinding>
+        </bindings>
+        <client>
+            <endpoint address="http://10.0.4.74:9000/AuthenticationService"
+                binding="basicHttpBinding" bindingConfiguration="BasicHttpBinding_AuthenticationServiceContract"
+                contract="AuthenticationServiceReference.AuthenticationServiceContract"
+                name="BasicHttpBinding_AuthenticationServiceContract" />
+            <endpoint address="http://10.0.4.74:9000/BroadcastService" binding="basicHttpBinding"
+                bindingConfiguration="BasicHttpBinding_BroadcastServiceContract"
+                contract="BroadcastServiceReference.BroadcastServiceContract"
+                name="BasicHttpBinding_BroadcastServiceContract" />
+            <endpoint address="http://localhost:9000/ControllerService" binding="basicHttpBinding"
+                bindingConfiguration="BasicHttpBinding_ControllerServiceContract"
+                contract="ControllerServiceReference.ControllerServiceContract"
+                name="BasicHttpBinding_ControllerServiceContract" />
+        </client>
+    </system.serviceModel>
+</configuration>
