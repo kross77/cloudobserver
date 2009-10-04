@@ -1,8 +1,0 @@
-F:\Mpeg2Dec\CSharp_Client\obj\Debug\ResolveAssemblyReference.cache
-F:\Mpeg2Dec\CSharp_Client\obj\Debug\CSharp_Client.Properties.Resources.resources
-F:\Mpeg2Dec\CSharp_Client\obj\Debug\CSharp_Client.csproj.GenerateResource.Cache
-F:\Mpeg2Dec\CSharp_Client\bin\Debug\CSharp_Client.exe
-F:\Mpeg2Dec\CSharp_Client\bin\Debug\CSharp_Client.pdb
-F:\Mpeg2Dec\CSharp_Client\obj\Debug\CSharp_Client.exe
-F:\Mpeg2Dec\CSharp_Client\obj\Debug\CSharp_Client.pdb
-F:\Mpeg2Dec\CSharp_Client\obj\Debug\CSharp_Client.AppForm.resources
