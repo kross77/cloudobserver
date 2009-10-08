@@ -27,6 +27,8 @@ namespace CloudObserver.Client
         private AutoResetEvent notificationEvent;
         private SecondaryBuffer playbackBuffer;
 
+        private Random random = new Random();
+
         private ControllerServiceContract controllerServiceClient;
         private TestSoundServiceContract testSoundServiceClient;
 
@@ -86,6 +88,9 @@ namespace CloudObserver.Client
                 notificationEvent.WaitOne(Timeout.Infinite, true);
 
                 byte[] soundData = (byte[])captureBuffer.Read(offset, typeof(byte), LockFlag.None, bufferSize);
+                if (checkBoxAddNoise.Checked)
+                    for (int i = 0; i < bufferSize; i++)
+                        soundData[i] += (byte)random.Next(byte.MinValue, byte.MaxValue);
                 testSoundServiceClient.WriteSoundData(soundData);
 
                 offset = (offset + bufferSize) % (BUFFER_POSITIONS * bufferSize);
