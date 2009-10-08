@@ -33,6 +33,7 @@
             this.labelControllerServiceUri = new System.Windows.Forms.Label();
             this.buttonStartStopPlaying = new System.Windows.Forms.Button();
             this.buttonConnect = new System.Windows.Forms.Button();
+            this.checkBoxAddNoise = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // buttonStartStopCapturing
@@ -42,7 +43,7 @@
             this.buttonStartStopCapturing.Enabled = false;
             this.buttonStartStopCapturing.Location = new System.Drawing.Point(12, 41);
             this.buttonStartStopCapturing.Name = "buttonStartStopCapturing";
-            this.buttonStartStopCapturing.Size = new System.Drawing.Size(297, 23);
+            this.buttonStartStopCapturing.Size = new System.Drawing.Size(216, 23);
             this.buttonStartStopCapturing.TabIndex = 3;
             this.buttonStartStopCapturing.Text = "Start Capturing";
             this.buttonStartStopCapturing.UseVisualStyleBackColor = true;
@@ -75,7 +76,7 @@
             this.buttonStartStopPlaying.Location = new System.Drawing.Point(315, 41);
             this.buttonStartStopPlaying.Name = "buttonStartStopPlaying";
             this.buttonStartStopPlaying.Size = new System.Drawing.Size(297, 23);
-            this.buttonStartStopPlaying.TabIndex = 4;
+            this.buttonStartStopPlaying.TabIndex = 5;
             this.buttonStartStopPlaying.Text = "Start Playing";
             this.buttonStartStopPlaying.UseVisualStyleBackColor = true;
             this.buttonStartStopPlaying.Click += new System.EventHandler(this.buttonStartStopPlaying_Click);
@@ -91,11 +92,22 @@
             this.buttonConnect.UseVisualStyleBackColor = true;
             this.buttonConnect.Click += new System.EventHandler(this.buttonConnect_Click);
             // 
+            // checkBoxAddNoise
+            // 
+            this.checkBoxAddNoise.AutoSize = true;
+            this.checkBoxAddNoise.Location = new System.Drawing.Point(234, 45);
+            this.checkBoxAddNoise.Name = "checkBoxAddNoise";
+            this.checkBoxAddNoise.Size = new System.Drawing.Size(75, 17);
+            this.checkBoxAddNoise.TabIndex = 4;
+            this.checkBoxAddNoise.Text = "Add Noise";
+            this.checkBoxAddNoise.UseVisualStyleBackColor = true;
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(624, 76);
+            this.Controls.Add(this.checkBoxAddNoise);
             this.Controls.Add(this.buttonConnect);
             this.Controls.Add(this.buttonStartStopPlaying);
             this.Controls.Add(this.textBoxControllerServiceUri);
@@ -119,6 +131,7 @@
         private System.Windows.Forms.Label labelControllerServiceUri;
         private System.Windows.Forms.Button buttonStartStopPlaying;
         private System.Windows.Forms.Button buttonConnect;
+        private System.Windows.Forms.CheckBox checkBoxAddNoise;
     }
 }
 
