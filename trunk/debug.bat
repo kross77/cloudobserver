@@ -13,7 +13,8 @@ echo.
 call .\scripts\host-service-testsound.bat
 echo.
 
-start .\bin\CloudObserver.Client.exe
+call .\scripts\setpolicies.bat
+echo.
 
 echo Done.
 
