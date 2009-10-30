@@ -1,35 +1,26 @@
 ﻿using System;
 using System.Windows.Controls;
 
-using CloudObserver.Services.StreamingService;
+using CloudObserver.Silverlight.Formats.Audio;
+using CloudObserver.Silverlight.MediaStreamSources.Pcm;
 
 namespace SoundStreaming.SilverlightReceiver
 {
     public partial class MainPage : UserControl
     {
-        #region Fields
-
         StreamingServicePcmMediaStreamSource streamingServicePcmMediaStreamSource;
-
-        #endregion
-
-        #region Constructors
 
         public MainPage()
         {
             InitializeComponent();
 
-            streamingServicePcmMediaStreamSource = new StreamingServicePcmMediaStreamSource("http://127.0.0.1:9000/StreamingService");
+            streamingServicePcmMediaStreamSource = new StreamingServicePcmMediaStreamSource(new PcmAudioFormat(44100, 16, 2), "http://127.0.0.1:9000/StreamingService");
             PlaybackMediaElement.SetSource(streamingServicePcmMediaStreamSource);
         }
 
-        #endregion
-
-        #region Event Handlers
-
         private void buttonConnect_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            streamingServicePcmMediaStreamSource = new StreamingServicePcmMediaStreamSource(textBoxStreamingServiceUri.Text);
+            streamingServicePcmMediaStreamSource = new StreamingServicePcmMediaStreamSource(new PcmAudioFormat(44100, 16, 2), textBoxStreamingServiceUri.Text);
             PlaybackMediaElement.SetSource(streamingServicePcmMediaStreamSource);
         }
 
@@ -47,7 +38,5 @@ namespace SoundStreaming.SilverlightReceiver
                     break;
             }
         }
-
-        #endregion
     }
 }

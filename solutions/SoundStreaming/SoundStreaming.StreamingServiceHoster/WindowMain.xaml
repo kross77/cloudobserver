@@ -1,0 +1,29 @@
+﻿<Window x:Class="SoundStreaming.StreamingServiceHoster.WindowMain"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Streaming Service Hoster" Height="170" Width="680" ResizeMode="CanMinimize" Topmost="True" mc:Ignorable="d" Closing="Window_Closing">
+    <Grid>
+    	<TextBlock Height="16" HorizontalAlignment="Left" Margin="8,11,0,0" Text="IP Address:" VerticalAlignment="Top" Width="60" />
+    	<TextBox x:Name="textBoxIpAddress" Height="22" HorizontalAlignment="Left" Margin="72,8,0,0" VerticalAlignment="Top" Width="100" LostKeyboardFocus="textBoxIpAddress_LostKeyboardFocus" />
+    	<CheckBox x:Name="checkBoxLocalhost" Content="localhost" Height="16" HorizontalAlignment="Left" Margin="176,11,0,0" VerticalAlignment="Top" Width="65" Checked="checkBoxLocalhost_Checked" />
+    	<TextBlock Height="16" HorizontalAlignment="Left" Margin="255,11,0,0" Text="Port:" VerticalAlignment="Top" Width="25" />
+    	<TextBox x:Name="textBoxPort" Height="22" HorizontalAlignment="Left" Margin="284,8,0,0" VerticalAlignment="Top" Width="50" LostKeyboardFocus="textBoxPort_LostKeyboardFocus" />
+    	<TextBlock Height="16" HorizontalAlignment="Left" Margin="338,11,0,0" Text="Buffer length:" VerticalAlignment="Top" Width="72" />
+    	<TextBox x:Name="textBoxBufferLength" Height="22" HorizontalAlignment="Left" Margin="414,8,0,0" VerticalAlignment="Top" Width="75" LostKeyboardFocus="textBoxBufferLength_LostKeyboardFocus" />
+    	<Button x:Name="buttonStartStopService" Content="Start Service" Height="22" HorizontalAlignment="Left" Margin="493,8,0,0" VerticalAlignment="Top" Width="72" Click="buttonStartStopService_Click" />
+    	<TextBlock x:Name="textBlockState" Foreground="Gray" Height="16" HorizontalAlignment="Left" Margin="569,11,0,0" Text="State: not started." VerticalAlignment="Top" Width="97" />
+    	<TextBlock Height="16" HorizontalAlignment="Left" Margin="8,37,0,0" Text="Service URI:" VerticalAlignment="Top" Width="62" />
+    	<TextBox x:Name="textBoxServiceUri" Height="22" HorizontalAlignment="Left" IsReadOnly="True" Margin="75,34,185,0" VerticalAlignment="Top" Width="414" />
+    	<TextBlock x:Name="textBlockCheckServiceLink" Cursor="Hand" Foreground="Gray" Height="16" HorizontalAlignment="Left" IsEnabled="False" Margin="493,37,0,0" Text="Check Service" TextDecorations="Underline" VerticalAlignment="Top" Width="73" MouseLeftButtonDown="textBlockCheckService_MouseLeftButtonDown" />
+    	<CheckBox x:Name="checkBoxAlwaysOnTop" Content="Always On Top" Height="16" HorizontalAlignment="Left" Margin="570,37,0,0" VerticalAlignment="Top" Width="96" Checked="checkBoxAlwaysOnTop_Checked" Unchecked="checkBoxAlwaysOnTop_Unchecked" />
+    	<GroupBox Margin="8,60,8,8" Header="Diagnostics">
+    		<Grid>
+    			<TextBlock x:Name="textBlockBufferPosition" Height="16" HorizontalAlignment="Left" Margin="8,0,0,0" Text="Buffer position: 0 / 0" VerticalAlignment="Top" />
+    			<ProgressBar x:Name="progressBarBufferPosition" Height="8" Margin="8,16,8,0" VerticalAlignment="Top" />
+    			<TextBlock x:Name="textBlockLastReadPosition" Height="16" HorizontalAlignment="Left" Margin="8,28,0,0" Text="Last read position: 0 / 0" VerticalAlignment="Top" />
+    			<ProgressBar x:Name="progressBarLastReadPosition" Height="8" Margin="8,43.12,8,0" VerticalAlignment="Top" />
+    		</Grid>
+    	</GroupBox>
+    </Grid>
+</Window>
