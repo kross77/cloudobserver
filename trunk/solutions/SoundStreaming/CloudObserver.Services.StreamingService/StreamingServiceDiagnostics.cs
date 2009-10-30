@@ -6,7 +6,6 @@ namespace CloudObserver.Services.StreamingService
     /// <summary>
     /// Represents streaming service diagnostics information.
     /// </summary>
-    [DataContract]
     public class StreamingServiceDiagnostics
     {
         #region Fields
@@ -14,19 +13,16 @@ namespace CloudObserver.Services.StreamingService
         /// <summary>
         /// Stores the length (in bytes) of the internal buffer.
         /// </summary>
-        [DataMember]
         private int bufferLength;
 
         /// <summary>
         /// Stores current internal buffer position.
         /// </summary>
-        [DataMember]
         private int bufferPosition;
 
         /// <summary>
         /// Stores end position of the last read operation.
         /// </summary>
-        [DataMember]
         private int lastReadPosition;
 
         #endregion

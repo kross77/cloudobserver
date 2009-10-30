@@ -66,7 +66,7 @@ namespace CloudObserver.Services.StreamingService
 
         #endregion
 
-        #region IStreamingService Members
+        #region Public Methods
 
         /// <summary>
         /// Returns the diagnostics object, associated with this service instance.
@@ -77,22 +77,29 @@ namespace CloudObserver.Services.StreamingService
             return diagnostics;
         }
 
+        #endregion
+
+        #region IStreamingService Members
+
         /// <summary>
-        /// Reads a block of bytes from the internal buffer, starting from the specified position, and writes the data to buffer.
+        /// Reads a block of bytes from the internal buffer, starting from the specified position.
         /// </summary>
         /// <param name="buffer">When this method returns, contains the specified byte array with the values 
         /// between offset and (offset + count - 1) replaced by the characters read from the internal buffer.</param>
-        /// <param name="offset">The byte offset in buffer at which to begin writing.</param>
         /// <param name="count">The maximum number of bytes to read.</param>
         /// <param name="position">The position in internal buffer at which to begin reading. When this method returns, 
         /// position is at the end of the read block.</param>
         /// <param name="synchronize">true to synchronize buffers before reading, otherwise false</param>
         /// <returns>The total number of bytes written into the buffer. This can be less than 
         /// the number of bytes requested if that number of bytes are not currently available.</returns>
-        public int Read(out byte[] buffer, int offset, int count, ref int position, bool synchronize)
+        public int Read(out byte[] buffer, int count, ref int position, bool synchronize)
         {
             // Synchronize position if necessary.
-            if (synchronize) position = Synchronize();
+            if (synchronize)
+            {
+                position = Synchronize() - count;
+                if (position < 0) position += bufferLength;
+            }
 
             // Define and initialize a variable to store the number of bytes read.
             int bytes = 0;
@@ -104,10 +111,11 @@ namespace CloudObserver.Services.StreamingService
             while ((bytes < count) && (position != bufferPosition))
             {
                 // Copy next byte in the result buffer.
-                buffer[offset + bytes] = this.buffer[position];
+                buffer[bytes] = this.buffer[position];
 
                 // Move to the next position.
-                position = (position + 1) % bufferLength;
+                position++;
+                if (position == bufferLength) position = 0;
 
                 // Increase the number of bytes read.
                 bytes++;
@@ -121,35 +129,24 @@ namespace CloudObserver.Services.StreamingService
         }
 
         /// <summary>
-        /// Writes the provided data stream into the internal buffer.
+        /// Writes the provided data into the internal buffer.
         /// </summary>
-        /// <param name="dataStream">A stream to write data from.</param>
-        public void Write(MemoryStream dataStream)
+        /// <param name="data">An array of data to write.</param>
+        public void Write(byte[] data)
         {
-            // Define and initialize a variable to store the number of bytes written.
-            int bytes = 0;
-
-            // Try to read the first byte from the input stream.
-            int currentByte = dataStream.ReadByte();
-
-            // While there are bytes in the input stream.
-            while (currentByte != -1)
+            // For each byte of input data.
+            for (int i = 0; i < data.Length; i++)
             {
                 // Write the current byte in the internal buffer.
-                buffer[bufferPosition] = (byte)currentByte;
+                buffer[bufferPosition] = data[i];
 
                 // Move to the next position.
-                bufferPosition = (bufferPosition + 1) % bufferLength;
-
-                // Increase the number of bytes written.
-                bytes++;
-
-                // Try to read the next byte from the input stream.
-                currentByte = dataStream.ReadByte();
+                bufferPosition++;
+                if (bufferPosition == bufferLength) bufferPosition = 0;
             }
 
             // Notify diagnostics object about this write operation.
-            diagnostics.ConfirmWrite(bytes);
+            diagnostics.ConfirmWrite(data.Length);
         }
 
         /// <summary>

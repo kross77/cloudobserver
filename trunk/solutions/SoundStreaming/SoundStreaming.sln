@@ -1,15 +1,29 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoundStreaming.StreamingServiceHoster", "SoundStreaming.StreamingServiceHoster\SoundStreaming.StreamingServiceHoster.csproj", "{5A1FE145-BB55-4AFC-8964-13DB2768972D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserver.Services.StreamingService", "CloudObserver.Services.StreamingService\CloudObserver.Services.StreamingService.csproj", "{D9D64C11-6C17-4C22-BF86-3AD9BE2F169D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserver.Policies", "CloudObserver.Policies\CloudObserver.Policies.csproj", "{1A97B991-8F6B-4583-9B0F-7B4415EF1C8E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoundStreaming.DirectSoundSender", "SoundStreaming.DirectSoundSender\SoundStreaming.DirectSoundSender.csproj", "{5E377098-75AB-43DB-B5A1-FE794C65B471}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserver.Services", "CloudObserver.Services\CloudObserver.Services.csproj", "{21B2B47E-79C4-4BA7-8EE8-472615A43AE9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserver.Capture", "CloudObserver.Capture\CloudObserver.Capture.csproj", "{3F85372C-9EB3-440B-A6C4-1AD8D7E8938A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoundStreaming.SilverlightReceiver", "SoundStreaming.SilverlightReceiver\SoundStreaming.SilverlightReceiver.csproj", "{D5F16D2B-78FD-4F71-B3C3-8F163D4B546A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserver.Silverlight.Services", "CloudObserver.Silverlight.Services\CloudObserver.Silverlight.Services.csproj", "{709B8F89-6C28-4E9D-B8C5-00EA64CF02DB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserver.Silverlight.Formats", "CloudObserver.Silverlight.Formats\CloudObserver.Silverlight.Formats.csproj", "{91BAE96B-CE2E-4D10-AFBD-7BF887F54158}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserver.Formats", "CloudObserver.Formats\CloudObserver.Formats.csproj", "{4A21EBE0-E494-4254-A92E-12613A51DF54}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoundStreaming.FileReceiver", "SoundStreaming.FileReceiver\SoundStreaming.FileReceiver.csproj", "{395F8F7E-6FDB-4A4A-9168-D652D217384D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserver.Silverlight.MediaStreamSources", "CloudObserver.Silverlight.MediaStreamSources\CloudObserver.Silverlight.MediaStreamSources.csproj", "{9E4725EA-CC5B-4508-A382-BC45F509706D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoundStreaming.StreamingServiceHoster", "SoundStreaming.StreamingServiceHoster\SoundStreaming.StreamingServiceHoster.csproj", "{F41CD2C7-E3F3-4216-842B-36B93751A8E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoundStreaming.DirectSoundSender", "SoundStreaming.DirectSoundSender\SoundStreaming.DirectSoundSender.csproj", "{9A36DDD2-72F6-4356-892D-F4602B5872F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +31,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{5A1FE145-BB55-4AFC-8964-13DB2768972D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5A1FE145-BB55-4AFC-8964-13DB2768972D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5A1FE145-BB55-4AFC-8964-13DB2768972D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5A1FE145-BB55-4AFC-8964-13DB2768972D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D9D64C11-6C17-4C22-BF86-3AD9BE2F169D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D9D64C11-6C17-4C22-BF86-3AD9BE2F169D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D9D64C11-6C17-4C22-BF86-3AD9BE2F169D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -29,14 +39,46 @@ Global
 		{1A97B991-8F6B-4583-9B0F-7B4415EF1C8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1A97B991-8F6B-4583-9B0F-7B4415EF1C8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1A97B991-8F6B-4583-9B0F-7B4415EF1C8E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5E377098-75AB-43DB-B5A1-FE794C65B471}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5E377098-75AB-43DB-B5A1-FE794C65B471}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5E377098-75AB-43DB-B5A1-FE794C65B471}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5E377098-75AB-43DB-B5A1-FE794C65B471}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21B2B47E-79C4-4BA7-8EE8-472615A43AE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21B2B47E-79C4-4BA7-8EE8-472615A43AE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21B2B47E-79C4-4BA7-8EE8-472615A43AE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21B2B47E-79C4-4BA7-8EE8-472615A43AE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F85372C-9EB3-440B-A6C4-1AD8D7E8938A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F85372C-9EB3-440B-A6C4-1AD8D7E8938A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F85372C-9EB3-440B-A6C4-1AD8D7E8938A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F85372C-9EB3-440B-A6C4-1AD8D7E8938A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D5F16D2B-78FD-4F71-B3C3-8F163D4B546A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D5F16D2B-78FD-4F71-B3C3-8F163D4B546A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5F16D2B-78FD-4F71-B3C3-8F163D4B546A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5F16D2B-78FD-4F71-B3C3-8F163D4B546A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{709B8F89-6C28-4E9D-B8C5-00EA64CF02DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{709B8F89-6C28-4E9D-B8C5-00EA64CF02DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{709B8F89-6C28-4E9D-B8C5-00EA64CF02DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{709B8F89-6C28-4E9D-B8C5-00EA64CF02DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91BAE96B-CE2E-4D10-AFBD-7BF887F54158}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91BAE96B-CE2E-4D10-AFBD-7BF887F54158}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91BAE96B-CE2E-4D10-AFBD-7BF887F54158}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91BAE96B-CE2E-4D10-AFBD-7BF887F54158}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A21EBE0-E494-4254-A92E-12613A51DF54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A21EBE0-E494-4254-A92E-12613A51DF54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A21EBE0-E494-4254-A92E-12613A51DF54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A21EBE0-E494-4254-A92E-12613A51DF54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{395F8F7E-6FDB-4A4A-9168-D652D217384D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{395F8F7E-6FDB-4A4A-9168-D652D217384D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{395F8F7E-6FDB-4A4A-9168-D652D217384D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{395F8F7E-6FDB-4A4A-9168-D652D217384D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E4725EA-CC5B-4508-A382-BC45F509706D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E4725EA-CC5B-4508-A382-BC45F509706D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E4725EA-CC5B-4508-A382-BC45F509706D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E4725EA-CC5B-4508-A382-BC45F509706D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F41CD2C7-E3F3-4216-842B-36B93751A8E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F41CD2C7-E3F3-4216-842B-36B93751A8E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F41CD2C7-E3F3-4216-842B-36B93751A8E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F41CD2C7-E3F3-4216-842B-36B93751A8E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A36DDD2-72F6-4356-892D-F4602B5872F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A36DDD2-72F6-4356-892D-F4602B5872F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A36DDD2-72F6-4356-892D-F4602B5872F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A36DDD2-72F6-4356-892D-F4602B5872F0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

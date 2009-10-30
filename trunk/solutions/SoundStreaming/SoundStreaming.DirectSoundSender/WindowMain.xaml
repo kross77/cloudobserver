@@ -1,0 +1,23 @@
+﻿<Window
+    x:Class="SoundStreaming.DirectSoundSender.WindowMain"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	Title="DirectSound Sender"
+	Width="600" Height="139" mc:Ignorable="d" ResizeMode="CanMinimize" Loaded="Window_Loaded" Closing="Window_Closing">
+    <Grid x:Name="LayoutRoot">
+        <TextBlock VerticalAlignment="Top" Text="Streaming Service URI:" TextWrapping="Wrap" HorizontalAlignment="Left" Margin="8,11,0,0" Height="16" Width="120" />
+        <TextBox x:Name="textBoxStreamingServiceUri" VerticalAlignment="Top" Text="http://127.0.0.1:9000/StreamingService" TextWrapping="Wrap" Margin="132,8,8,0" Width="454" Height="22"/>
+        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Text="DirectSound Capture Device:" TextWrapping="Wrap" Margin="8,37,0,0" Width="152" Height="16" d:LayoutOverrides="VerticalAlignment" />
+        <ComboBox x:Name="comboBoxDirectSoundCaptureDevice" VerticalAlignment="Top" Margin="164,34,151,0" Width="279" Height="22" />
+        <TextBlock HorizontalAlignment="Right" VerticalAlignment="Top" Text="Audio Format:" TextWrapping="Wrap" Margin="0,37,72,0" Height="16" Width="75" d:LayoutOverrides="VerticalAlignment" />
+        <ComboBox x:Name="comboBoxAudioFormat" VerticalAlignment="Top" Margin="0,34,8,0" HorizontalAlignment="Right" Width="60" Height="22" SelectionChanged="comboBoxAudioFormat_SelectionChanged" />
+        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom" Text="Sampling:" TextWrapping="Wrap" Margin="8,0,0,32" Width="53" Height="16" />
+        <ComboBox x:Name="comboBoxSampling" HorizontalAlignment="Left" Width="150" Margin="65,0,0,29" VerticalAlignment="Bottom" Height="22" SelectionChanged="comboBoxSampling_SelectionChanged" />
+        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom" Text="Bit rate:" TextWrapping="Wrap" Margin="219,0,0,32" Width="41" Height="16" />
+        <ComboBox x:Name="comboBoxBitRate" Margin="264,0,190,29" Width="140" d:LayoutOverrides="HorizontalAlignment" VerticalAlignment="Bottom" Height="22" />
+        <TextBlock VerticalAlignment="Top" Text="Noise Level:" TextWrapping="Wrap" Margin="0,63,122,0" HorizontalAlignment="Right" Height="16" Width="64" />
+        <Slider x:Name="sliderNoiseLevel" VerticalAlignment="Top" Margin="0,60,8,0" Maximum="255" LargeChange="10" SmallChange="1" HorizontalAlignment="Right" Width="110" Height="22" ValueChanged="sliderNoiseLevel_ValueChanged" />
+        <Button x:Name="buttonStartStopCapture" HorizontalAlignment="Center" VerticalAlignment="Top" Content="Start Capture" Margin="0,86,8,0" Height="22" Width="150" Click="buttonStartStopCapture_Click" />
+    </Grid>
+</Window>
