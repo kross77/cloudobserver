@@ -1,15 +1,15 @@
 ﻿using System;
+using System.Text;
 using System.ServiceModel;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 
+using CloudObserver.Services;
+using CloudObserver.Formats;
 using CloudObserver.Formats.Audio;
 using CloudObserver.Formats.Audio.Mp3;
-using CloudObserver.Formats.Audio.Mp3.LameEncoder;
 using CloudObserver.Capture.DirectSound;
-using CloudObserver.Services;
-using CloudObserver.Services.Bindings;
 
 namespace SoundStreaming.DirectSoundSender
 {
@@ -44,19 +44,28 @@ namespace SoundStreaming.DirectSoundSender
                 if (capturing)
                 {
                     buttonStartStopCapture.Content = "Stop Capture";
-
-                    streamingServiceClient = new StreamingServiceClient(new ClientHttpBinding(), new EndpointAddress(textBoxStreamingServiceUri.Text));
+                    streamingServiceClient = new StreamingServiceClient(new InstanceContext(new StreamingServiceCallback()), new InternalNetTcpBinding(), new EndpointAddress(textBoxStreamingServiceUri.Text));
 
                     PcmAudioFormat pcmAudioFormat = (PcmAudioFormat)comboBoxSampling.SelectedItem;
+                    WaveFormatEx waveFormat = new WaveFormatEx(pcmAudioFormat.SamplesPerSecond, pcmAudioFormat.BitsPerSample, pcmAudioFormat.Channels);
                     if (comboBoxAudioFormat.SelectedItem.ToString().Equals("MP3"))
                     {
+                        mp3Compression = true;
                         Mp3BitRate mp3BitRate = (Mp3BitRate)comboBoxBitRate.SelectedItem;
                         Lame_encDll.beInitStream(new BE_CONFIG(new WaveFormat(pcmAudioFormat.SamplesPerSecond, pcmAudioFormat.BitsPerSample, pcmAudioFormat.Channels),
                             mp3BitRate, LAME_QUALITY_PRESET.LQP_NORMAL_QUALITY), ref m_InputSamples, ref m_OutBufferSize, ref m_hLameStream);
                         m_OutBuffer = new byte[m_OutBufferSize];
-                        mp3Compression = true;
+                        streamingServiceClient.SetSubscriptionResponse(Encoding.UTF8.GetBytes(FormatIdentifiers.FormatMp3));
                     }
-                    else mp3Compression = false;
+                    else
+                    {
+                        mp3Compression = false;
+                        byte[] waveFormatBytes = waveFormat.ToByteArray();
+                        byte[] response = new byte[4 + waveFormatBytes.Length];
+                        Array.Copy(Encoding.UTF8.GetBytes(FormatIdentifiers.FormatPcm), response, 4);
+                        Array.Copy(waveFormatBytes, 0, response, 4, waveFormatBytes.Length);
+                        streamingServiceClient.SetSubscriptionResponse(response);
+                    }
 
                     DirectSoundCaptureDevice directSoundCaptureDevice = (DirectSoundCaptureDevice)comboBoxDirectSoundCaptureDevice.SelectedItem;
                     directSoundCapture = new DirectSoundCapture(pcmAudioFormat, directSoundCaptureDevice);
@@ -122,11 +131,11 @@ namespace SoundStreaming.DirectSoundSender
                     {
                         byte[] data = new byte[EncodedSize];
                         Array.Copy(m_OutBuffer, data, EncodedSize);
-                        streamingServiceClient.Write(data);
+                        streamingServiceClient.Send(data);
                     }
             }
             else
-                streamingServiceClient.Write(e.ChunkData);
+                streamingServiceClient.Send(e.ChunkData);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

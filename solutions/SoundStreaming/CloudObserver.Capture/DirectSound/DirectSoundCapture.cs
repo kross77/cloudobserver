@@ -19,7 +19,7 @@ namespace CloudObserver.Capture.DirectSound
         private int notifySize;
         private int captureBufferSize;
         private CaptureBuffer captureBuffer;
-        private WaveFormat? cachedWaveFormat;
+        private Microsoft.DirectX.DirectSound.WaveFormat? cachedWaveFormat;
         private Thread notificationListenerThread;
         private AutoResetEvent notificationArrivalEvent;
         #endregion
@@ -62,13 +62,13 @@ namespace CloudObserver.Capture.DirectSound
         /// <summary>
         /// Converts PcmAudioFormat to DirectX WaveFormat.
         /// </summary>
-        private WaveFormat CaptureFormat
+        private Microsoft.DirectX.DirectSound.WaveFormat CaptureFormat
         {
             get
             {
                 if (!cachedWaveFormat.HasValue)
                 {
-                    WaveFormat waveFormat = new WaveFormat();
+                    Microsoft.DirectX.DirectSound.WaveFormat waveFormat = new Microsoft.DirectX.DirectSound.WaveFormat();
                     waveFormat.FormatTag = WaveFormatTag.Pcm;
                     waveFormat.Channels = pcmAudioFormat.Channels;
                     waveFormat.BitsPerSample = pcmAudioFormat.BitsPerSample;
@@ -105,6 +105,7 @@ namespace CloudObserver.Capture.DirectSound
             applicationNotify.SetNotificationPositions(positionNotifies, notifyPositions);
 
             notificationListenerThread = new Thread(new ThreadStart(ListenDirectSoundNotifications));
+            notificationListenerThread.IsBackground = true;
             notificationListenerThread.Start();
         }
 

@@ -7,7 +7,7 @@
 	Width="600" Height="139" mc:Ignorable="d" ResizeMode="CanMinimize" Loaded="Window_Loaded" Closing="Window_Closing">
     <Grid x:Name="LayoutRoot">
         <TextBlock VerticalAlignment="Top" Text="Streaming Service URI:" TextWrapping="Wrap" HorizontalAlignment="Left" Margin="8,11,0,0" Height="16" Width="120" />
-        <TextBox x:Name="textBoxStreamingServiceUri" VerticalAlignment="Top" Text="http://127.0.0.1:9000/StreamingService" TextWrapping="Wrap" Margin="132,8,8,0" Width="454" Height="22"/>
+        <TextBox x:Name="textBoxStreamingServiceUri" VerticalAlignment="Top" Text="net.tcp://127.0.0.1:9001/StreamingService" TextWrapping="Wrap" Margin="132,8,8,0" Width="454" Height="22"/>
         <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Text="DirectSound Capture Device:" TextWrapping="Wrap" Margin="8,37,0,0" Width="152" Height="16" d:LayoutOverrides="VerticalAlignment" />
         <ComboBox x:Name="comboBoxDirectSoundCaptureDevice" VerticalAlignment="Top" Margin="164,34,151,0" Width="279" Height="22" />
         <TextBlock HorizontalAlignment="Right" VerticalAlignment="Top" Text="Audio Format:" TextWrapping="Wrap" Margin="0,37,72,0" Height="16" Width="75" d:LayoutOverrides="VerticalAlignment" />

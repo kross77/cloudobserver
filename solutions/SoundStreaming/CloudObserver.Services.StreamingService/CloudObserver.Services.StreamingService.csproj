@@ -43,14 +43,22 @@
   </Target>
   -->
   <ItemGroup>
+    <Compile Include="DataTransferredEventArgs.cs" />
     <Compile Include="IStreamingService.cs" />
+    <Compile Include="IStreamingServiceCallback.cs" />
     <Compile Include="StreamingService.cs" />
-    <Compile Include="StreamingServiceDiagnostics.cs" />
+    <Compile Include="SubscribersChangedEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.ServiceModel">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CloudObserver.Formats\CloudObserver.Formats.csproj">
+      <Project>{4A21EBE0-E494-4254-A92E-12613A51DF54}</Project>
+      <Name>CloudObserver.Formats</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

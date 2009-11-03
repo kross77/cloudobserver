@@ -45,24 +45,31 @@
   <ItemGroup>
     <Compile Include="Audio\AudioFormatAttribute.cs" />
     <Compile Include="Audio\AudioFormatBase.cs" />
+    <Compile Include="FormatIdentifiers.cs" />
     <Compile Include="Audio\IAudioFormat.cs" />
-    <Compile Include="Audio\Mp3\LameEncoder\LameEncoder.cs" />
-    <Compile Include="Audio\Mp3\LameEncoder\WaveFormat.cs" />
+    <Compile Include="BitTools.cs" />
+    <Compile Include="Audio\Mp3\LameEncoder.cs" />
+    <Compile Include="Audio\WaveFormat.cs" />
     <Compile Include="Audio\Mp3\Mp3AudioFormat.cs" />
     <Compile Include="Audio\Mp3\Mp3BitRate.cs" />
+    <Compile Include="Audio\Mp3\MpegFrame.cs" />
     <Compile Include="Audio\Mp3\MpegVersion.cs" />
     <Compile Include="Audio\Mp3\PcmAudioFormatExtensions.cs" />
+    <Compile Include="Audio\Mp3\MpegLayer3WaveFormatEx.cs" />
     <Compile Include="Audio\PcmAudioFormat.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="lame_enc.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Compile Include="Audio\WaveFormatEx.cs" />
+    <Compile Include="Audio\WaveFormats.cs" />
+    <Compile Include="StringExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="lame_enc.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>

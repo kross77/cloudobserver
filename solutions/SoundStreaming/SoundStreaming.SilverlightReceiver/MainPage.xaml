@@ -212,61 +212,17 @@
 		</Style>
 	</UserControl.Resources>
     <Grid x:Name="LayoutRoot">
-        <Grid.Background>
-        	<RadialGradientBrush GradientOrigin="-0.194,0.942" RadiusX="1.126" RadiusY="1.126" Center="0.312,0.436">
-        		<GradientStop Color="#FFD6F8FF" Offset="0.44"/>
-        		<GradientStop Color="#FF5806A5" Offset="1"/>
-        	</RadialGradientBrush>
-        </Grid.Background>
-        <Image x:Name="Girl" Margin="0,0,-218,-3" Opacity="0.015" Source="Assets/2560x1600.png" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="483" Width="773"/>
-        <MediaElement x:Name="PlaybackMediaElement" AutoPlay="True" d:IsLocked="True" />
+        <MediaElement x:Name="PlaybackMediaElement" AutoPlay="True" />
         <StackPanel x:Name="Controls" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center">
         	<StackPanel x:Name="URL" Height="24" Margin="0,0,3,0" Orientation="Horizontal" d:LayoutOverrides="Width">
         		<Button x:Name="buttonPlayStop" Width="77" Content="Stop" Click="buttonPlayStop_Click" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="23" BorderBrush="{x:Null}" Background="{x:Null}" Margin="0,0,0,1" Opacity="0.575" BorderThickness="0" Style="{StaticResource ButtonStyle1}" FontFamily="Fonts/Fonts.zip#Bauhaus 93" FontSize="14.667"/>
         		<TextBox x:Name="textBoxStreamingServiceUri" Text="http://127.0.0.1:9000/StreamingService" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="24" Background="{x:Null}" BorderBrush="#00FFF7F7" BorderThickness="0" SelectionForeground="White" SelectionBackground="#4C324461"/>
-        		<Button x:Name="buttonConnect" Width="77" Content="Connect" Click="buttonConnect_Click" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="23" BorderBrush="{x:Null}" Background="{x:Null}" Margin="0,0,0,1" Opacity="0.575" BorderThickness="0" Style="{StaticResource ButtonStyle1}" FontFamily="Fonts/Fonts.zip#Bauhaus 93" FontSize="14.667"/>
+        		<Button x:Name="buttonConnect" Width="77" Content="Connect" Click="SetMediaStreamSource" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="23" BorderBrush="{x:Null}" Background="{x:Null}" Margin="0,0,0,1" Opacity="0.575" BorderThickness="0" Style="{StaticResource ButtonStyle1}" FontFamily="Fonts/Fonts.zip#Bauhaus 93" FontSize="14.667"/>
         	</StackPanel>
         	<StackPanel x:Name="Sound" Height="18" HorizontalAlignment="Center" Margin="9,0,0,0" Orientation="Horizontal" VerticalAlignment="Center">
-        		<TextBlock Text="Volume" TextWrapping="Wrap" Width="60" TextAlignment="Center" FontFamily="Fonts/Fonts.zip#Bauhaus 93" FontSize="14.667" Opacity="0.58"/>
+        		<TextBlock Text="Volume" TextWrapping="Wrap" Width="60" TextAlignment="Center" FontSize="14.667" Opacity="0.58"/>
         		<Slider Width="126" LargeChange="0.01" Maximum="1" SmallChange="0.001" Value="{Binding Volume, ElementName=PlaybackMediaElement, Mode=TwoWay, UpdateSourceTrigger=Default}" d:LayoutOverrides="Height" Style="{StaticResource SliderStyle1}"/>
         	</StackPanel>
         </StackPanel>
-    	<Canvas x:Name="Logo" Height="87" Margin="8,8,0,0" VerticalAlignment="Top" HorizontalAlignment="Center" Width="585">
-    		<Canvas.Effect>
-    			<BlurEffect Radius="2"/>
-    		</Canvas.Effect>
-    		<Canvas Height="87" Width="585">
-    			<TextBlock TextWrapping="Wrap" FontSize="48" TextAlignment="Center" RenderTransformOrigin="0.5,0.5" FontFamily="Fonts/Fonts.zip#Bauhaus 93" FontWeight="Bold" Height="59" Width="632" Opacity="0.215" Canvas.Top="30" Text="Silverlight Receiver"><TextBlock.Effect>
-    					<DropShadowEffect BlurRadius="100" Color="#FF0066FF" Direction="390" ShadowDepth="0"/>
-    				</TextBlock.Effect><TextBlock.RenderTransform>
-    					<TransformGroup>
-    						<ScaleTransform ScaleY="-1"/>
-    						<SkewTransform AngleX="0" AngleY="0"/>
-    						<RotateTransform Angle="0"/>
-    						<TranslateTransform/>
-    					</TransformGroup>
-    				</TextBlock.RenderTransform>
-    				<TextBlock.Foreground>
-    					<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-    						<GradientStop Offset="0.346"/>
-    						<GradientStop Color="#FFDF0808" Offset="0.99"/>
-    					</LinearGradientBrush>
-    				</TextBlock.Foreground>
-    			</TextBlock>
-    			<TextBlock Height="71" TextWrapping="Wrap" FontSize="48" TextAlignment="Center" Width="632" RenderTransformOrigin="0.5,0.5" FontFamily="Fonts/Fonts.zip#Bauhaus 93" FontWeight="Bold" Foreground="Black" Text="Silverlight Receiver">
-    				<TextBlock.Effect>
-    					<DropShadowEffect BlurRadius="100" Color="#FF0066FF" Direction="390" ShadowDepth="0"/>
-    				</TextBlock.Effect>
-    				<TextBlock.RenderTransform>
-    					<TransformGroup>
-    						<ScaleTransform/>
-    						<SkewTransform AngleX="0" AngleY="0"/>
-    						<RotateTransform Angle="0"/>
-    						<TranslateTransform/>
-    					</TransformGroup>
-    				</TextBlock.RenderTransform>
-    			</TextBlock>
-    		</Canvas>
-    	</Canvas>
     </Grid>
 </UserControl>
