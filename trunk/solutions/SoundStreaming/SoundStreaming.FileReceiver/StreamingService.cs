@@ -11,18 +11,32 @@
 
 
 [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-[System.ServiceModel.ServiceContractAttribute(ConfigurationName = "IStreamingService")]
+[System.ServiceModel.ServiceContractAttribute(Namespace = "Silverlight", ConfigurationName = "IStreamingService", CallbackContract = typeof(IStreamingServiceCallback))]
 public interface IStreamingService
 {
 
-    [System.ServiceModel.OperationContractAttribute(Action = "http://tempuri.org/IStreamingService/Read", ReplyAction = "http://tempuri.org/IStreamingService/ReadResponse")]
-    int Read(out byte[] buffer, int count, ref int position, bool synchronize);
+    [System.ServiceModel.OperationContractAttribute(IsOneWay = true, Action = "Silverlight/IStreamingService/Send")]
+    void Send(byte[] data);
 
-    [System.ServiceModel.OperationContractAttribute(Action = "http://tempuri.org/IStreamingService/Write", ReplyAction = "http://tempuri.org/IStreamingService/WriteResponse")]
-    void Write(byte[] data);
+    [System.ServiceModel.OperationContractAttribute(IsOneWay = true, Action = "Silverlight/IStreamingService/SetSubscriptionResponse")]
+    void SetSubscriptionResponse(byte[] response);
 
-    [System.ServiceModel.OperationContractAttribute(Action = "http://tempuri.org/IStreamingService/Synchronize", ReplyAction = "http://tempuri.org/IStreamingService/SynchronizeResponse")]
-    int Synchronize();
+    [System.ServiceModel.OperationContractAttribute(IsOneWay = true, Action = "Silverlight/IStreamingService/Subscribe")]
+    void Subscribe(System.TimeSpan timeout);
+
+    [System.ServiceModel.OperationContractAttribute(IsOneWay = true, Action = "Silverlight/IStreamingService/Unsubscribe")]
+    void Unsubscribe();
+}
+
+[System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
+public interface IStreamingServiceCallback
+{
+
+    [System.ServiceModel.OperationContractAttribute(IsOneWay = true, Action = "Silverlight/IStreamingService/DataCallback")]
+    void DataCallback(byte[] data);
+
+    [System.ServiceModel.OperationContractAttribute(IsOneWay = true, Action = "Silverlight/IStreamingService/SubscriptionResponse")]
+    void SubscriptionResponse(byte[] response);
 }
 
 [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
@@ -32,45 +46,51 @@ public interface IStreamingServiceChannel : IStreamingService, System.ServiceMod
 
 [System.Diagnostics.DebuggerStepThroughAttribute()]
 [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-public partial class StreamingServiceClient : System.ServiceModel.ClientBase<IStreamingService>, IStreamingService
+public partial class StreamingServiceClient : System.ServiceModel.DuplexClientBase<IStreamingService>, IStreamingService
 {
 
-    public StreamingServiceClient()
+    public StreamingServiceClient(System.ServiceModel.InstanceContext callbackInstance) :
+        base(callbackInstance)
     {
     }
 
-    public StreamingServiceClient(string endpointConfigurationName) :
-        base(endpointConfigurationName)
+    public StreamingServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) :
+        base(callbackInstance, endpointConfigurationName)
     {
     }
 
-    public StreamingServiceClient(string endpointConfigurationName, string remoteAddress) :
-        base(endpointConfigurationName, remoteAddress)
+    public StreamingServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) :
+        base(callbackInstance, endpointConfigurationName, remoteAddress)
     {
     }
 
-    public StreamingServiceClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) :
-        base(endpointConfigurationName, remoteAddress)
+    public StreamingServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) :
+        base(callbackInstance, endpointConfigurationName, remoteAddress)
     {
     }
 
-    public StreamingServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) :
-        base(binding, remoteAddress)
+    public StreamingServiceClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) :
+        base(callbackInstance, binding, remoteAddress)
     {
     }
 
-    public int Read(out byte[] buffer, int count, ref int position, bool synchronize)
+    public void Send(byte[] data)
     {
-        return base.Channel.Read(out buffer, count, ref position, synchronize);
+        base.Channel.Send(data);
     }
 
-    public void Write(byte[] data)
+    public void SetSubscriptionResponse(byte[] response)
     {
-        base.Channel.Write(data);
+        base.Channel.SetSubscriptionResponse(response);
     }
 
-    public int Synchronize()
+    public void Subscribe(System.TimeSpan timeout)
     {
-        return base.Channel.Synchronize();
+        base.Channel.Subscribe(timeout);
+    }
+
+    public void Unsubscribe()
+    {
+        base.Channel.Unsubscribe();
     }
 }

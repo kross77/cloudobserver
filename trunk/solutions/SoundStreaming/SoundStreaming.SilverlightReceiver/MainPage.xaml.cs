@@ -1,30 +1,31 @@
 ﻿using System;
+using System.ServiceModel;
+using System.Windows;
 using System.Windows.Controls;
 
-using CloudObserver.Silverlight.Formats.Audio;
-using CloudObserver.Silverlight.MediaStreamSources.Pcm;
+using CloudObserver.Silverlight;
 
 namespace SoundStreaming.SilverlightReceiver
 {
     public partial class MainPage : UserControl
     {
-        StreamingServicePcmMediaStreamSource streamingServicePcmMediaStreamSource;
+        StreamingServiceMediaStreamSource streamingServiceMediaStreamSource;
 
         public MainPage()
         {
             InitializeComponent();
 
-            streamingServicePcmMediaStreamSource = new StreamingServicePcmMediaStreamSource(new PcmAudioFormat(44100, 16, 2), "http://127.0.0.1:9000/StreamingService");
-            PlaybackMediaElement.SetSource(streamingServicePcmMediaStreamSource);
+            SetMediaStreamSource(this, EventArgs.Empty);
         }
 
-        private void buttonConnect_Click(object sender, System.Windows.RoutedEventArgs e)
+        void SetMediaStreamSource(object sender, EventArgs e)
         {
-            streamingServicePcmMediaStreamSource = new StreamingServicePcmMediaStreamSource(new PcmAudioFormat(44100, 16, 2), textBoxStreamingServiceUri.Text);
-            PlaybackMediaElement.SetSource(streamingServicePcmMediaStreamSource);
+            streamingServiceMediaStreamSource = new StreamingServiceMediaStreamSource(textBoxStreamingServiceUri.Text);
+            streamingServiceMediaStreamSource.NeedsReloading += new EventHandler(SetMediaStreamSource);
+            PlaybackMediaElement.SetSource(streamingServiceMediaStreamSource);
         }
 
-        private void buttonPlayStop_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void buttonPlayStop_Click(object sender, RoutedEventArgs e)
         {
             switch (buttonPlayStop.Content.ToString())
             {

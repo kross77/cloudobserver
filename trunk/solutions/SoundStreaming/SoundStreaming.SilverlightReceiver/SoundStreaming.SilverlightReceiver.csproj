@@ -55,6 +55,9 @@
     <Reference Include="mscorlib" />
     <Reference Include="system" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.PollingDuplex, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
@@ -81,13 +84,9 @@
     <None Include="Properties\AppManifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CloudObserver.Silverlight.Formats\CloudObserver.Silverlight.Formats.csproj">
-      <Project>{91BAE96B-CE2E-4D10-AFBD-7BF887F54158}</Project>
-      <Name>CloudObserver.Silverlight.Formats</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CloudObserver.Silverlight.MediaStreamSources\CloudObserver.Silverlight.MediaStreamSources.csproj">
-      <Project>{9E4725EA-CC5B-4508-A382-BC45F509706D}</Project>
-      <Name>CloudObserver.Silverlight.MediaStreamSources</Name>
+    <ProjectReference Include="..\CloudObserver.Silverlight\CloudObserver.Silverlight.csproj">
+      <Project>{151B5459-5365-4815-8594-6F22BF414F14}</Project>
+      <Name>CloudObserver.Silverlight</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\v3.0\Microsoft.Silverlight.CSharp.targets" />

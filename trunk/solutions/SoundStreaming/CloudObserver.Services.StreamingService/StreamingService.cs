@@ -1,163 +1,80 @@
 ﻿using System;
-using System.IO;
+using System.Text;
 using System.ServiceModel;
+using System.Collections.Generic;
+
+using CloudObserver.Formats;
 
 namespace CloudObserver.Services.StreamingService
 {
-    /// <summary>
-    /// Streaming service realization class.
-    /// </summary>
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
+    [CallbackBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
     public class StreamingService : IStreamingService
     {
-        #region Fields
+        private Dictionary<IStreamingServiceCallback, DateTime> subscribers = new Dictionary<IStreamingServiceCallback, DateTime>();
+        private List<IStreamingServiceCallback> timedOutSubscribers = new List<IStreamingServiceCallback>();
+        private byte[] subscriptionResponse;
 
-        /// <summary>
-        /// Stores an internal buffer to store the data.
-        /// </summary>
-        private byte[] buffer;
+        public event EventHandler<DataTransferredEventArgs> DataTransfered;
+        public event EventHandler<SubscribersChangedEventArgs> SubscribersChanged;
 
-        /// <summary>
-        /// Stores the length (in bytes) of the internal buffer.
-        /// </summary>
-        private int bufferLength;
-
-        /// <summary>
-        /// Stores current internal buffer position.
-        /// </summary>
-        private int bufferPosition;
-
-        /// <summary>
-        /// Stores the instance of diagnostics object, associated with this service instance.
-        /// </summary>
-        private StreamingServiceDiagnostics diagnostics;
-
-        #endregion
-
-        #region Constants
-
-        /// <summary>
-        /// Default length (in bytes) of the internal buffer.
-        /// </summary>
-        public const int defaultBufferLength = 1048576; // 1 megabyte
-
-        #endregion
-
-        #region Constructors
-
-        /// <summary>
-        /// Default constructor. This contructor is always used when accessing service.
-        /// </summary>
-        public StreamingService() : this(defaultBufferLength) { }
-
-        /// <summary>
-        /// Parameterized constructor. Allows to specify the internal buffer length. 
-        /// This constructor can only be used when specifying an instance of singleton service with ServiceHost object.
-        /// </summary>
-        /// <param name="bufferLength">Internal buffer length (in bytes).</param>
-        public StreamingService(int bufferLength)
+        public StreamingService()
         {
-            // Initialize default values of the fields.
-            this.bufferLength = bufferLength;
-            buffer = new byte[bufferLength];
-            bufferPosition = 0;
-            diagnostics = new StreamingServiceDiagnostics(bufferLength);
+            subscriptionResponse = Encoding.UTF8.GetBytes(FormatIdentifiers.FormatNone);
+            //{ 1, 0, 2, 0, 68, 172, 0, 0, 16, 177, 2, 0, 4, 0, 16, 0 } // 44100 Hz, 16 bit, Stereo WaveFormat
         }
 
-        #endregion
-
-        #region Public Methods
-
-        /// <summary>
-        /// Returns the diagnostics object, associated with this service instance.
-        /// </summary>
-        /// <returns>The instance of diagnostics object, associated with this service instance.</returns>
-        public StreamingServiceDiagnostics GetDiagnostics()
+        public void Send(byte[] data)
         {
-            return diagnostics;
+            List<IStreamingServiceCallback> timedOutSubscribers = new List<IStreamingServiceCallback>();
+            foreach (KeyValuePair<IStreamingServiceCallback, DateTime> subscriber in subscribers)
+                if (subscriber.Value > DateTime.Now)
+                    try
+                    {
+                        subscriber.Key.DataCallback(data);
+                    }
+                    catch (Exception)
+                    {
+                        timedOutSubscribers.Add(subscriber.Key);
+                    }
+                else
+                    timedOutSubscribers.Add(subscriber.Key);
+            foreach (IStreamingServiceCallback timedOutSubscriber in timedOutSubscribers)
+                subscribers.Remove(timedOutSubscriber);
+            DataTransfered.Invoke(this, new DataTransferredEventArgs(data.Length));
+            if (timedOutSubscribers.Count > 0)
+                SubscribersChanged.Invoke(this, new SubscribersChangedEventArgs(subscribers.Count));
+            timedOutSubscribers.Clear();
         }
 
-        #endregion
-
-        #region IStreamingService Members
-
-        /// <summary>
-        /// Reads a block of bytes from the internal buffer, starting from the specified position.
-        /// </summary>
-        /// <param name="buffer">When this method returns, contains the specified byte array with the values 
-        /// between offset and (offset + count - 1) replaced by the characters read from the internal buffer.</param>
-        /// <param name="count">The maximum number of bytes to read.</param>
-        /// <param name="position">The position in internal buffer at which to begin reading. When this method returns, 
-        /// position is at the end of the read block.</param>
-        /// <param name="synchronize">true to synchronize buffers before reading, otherwise false</param>
-        /// <returns>The total number of bytes written into the buffer. This can be less than 
-        /// the number of bytes requested if that number of bytes are not currently available.</returns>
-        public int Read(out byte[] buffer, int count, ref int position, bool synchronize)
+        public void SetSubscriptionResponse(byte[] response)
         {
-            // Synchronize position if necessary.
-            if (synchronize)
+            subscriptionResponse = response;
+            foreach (IStreamingServiceCallback subscriber in subscribers.Keys)
+                subscriber.SubscriptionResponse(subscriptionResponse);
+        }
+
+        public void Subscribe(TimeSpan timeout)
+        {
+            IStreamingServiceCallback subscriber = OperationContext.Current.GetCallbackChannel<IStreamingServiceCallback>();
+            if (subscribers.ContainsKey(subscriber))
+                subscribers[subscriber] = DateTime.Now.Add(timeout);
+            else
             {
-                position = Synchronize() - count;
-                if (position < 0) position += bufferLength;
+                subscribers.Add(subscriber, DateTime.Now.Add(timeout));
+                subscriber.SubscriptionResponse(subscriptionResponse);
+                SubscribersChanged.Invoke(this, new SubscribersChangedEventArgs(subscribers.Count));
             }
-
-            // Define and initialize a variable to store the number of bytes read.
-            int bytes = 0;
-
-            // Initialize an output buffer.
-            buffer = new byte[count];
-
-            // While there are less than count bytes read and more bytes are available.
-            while ((bytes < count) && (position != bufferPosition))
-            {
-                // Copy next byte in the result buffer.
-                buffer[bytes] = this.buffer[position];
-
-                // Move to the next position.
-                position++;
-                if (position == bufferLength) position = 0;
-
-                // Increase the number of bytes read.
-                bytes++;
-            }
-
-            // Notify diagnostics object about this read operation.
-            diagnostics.ConfirmRead(position);
-
-            // Return the total number of bytes written into the buffer.
-            return bytes;
         }
 
-        /// <summary>
-        /// Writes the provided data into the internal buffer.
-        /// </summary>
-        /// <param name="data">An array of data to write.</param>
-        public void Write(byte[] data)
+        public void Unsubscribe()
         {
-            // For each byte of input data.
-            for (int i = 0; i < data.Length; i++)
+            IStreamingServiceCallback subscriber = OperationContext.Current.GetCallbackChannel<IStreamingServiceCallback>();
+            if (subscribers.ContainsKey(subscriber))
             {
-                // Write the current byte in the internal buffer.
-                buffer[bufferPosition] = data[i];
-
-                // Move to the next position.
-                bufferPosition++;
-                if (bufferPosition == bufferLength) bufferPosition = 0;
+                subscribers.Remove(subscriber);
+                SubscribersChanged.Invoke(this, new SubscribersChangedEventArgs(subscribers.Count));
             }
-
-            // Notify diagnostics object about this write operation.
-            diagnostics.ConfirmWrite(data.Length);
         }
-
-        /// <summary>
-        /// Synchronizes with the service internal buffer.
-        /// </summary>
-        /// <returns>Synchronized buffer position.</returns>
-        public int Synchronize()
-        {
-            return bufferPosition;
-        }
-
-        #endregion
     }
 }

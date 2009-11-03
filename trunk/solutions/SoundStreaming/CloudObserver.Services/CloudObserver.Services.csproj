@@ -50,9 +50,13 @@
     <Reference Include="System.ServiceModel">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.ServiceModel.PollingDuplex, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>C:\Program Files\Microsoft SDKs\Silverlight\v3.0\Libraries\Server\System.ServiceModel.PollingDuplex.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bindings\ClientHttpBinding.cs" />
-    <Compile Include="DebugServiceHost.cs" />
+    <Compile Include="ExternalPollingDuplexHttpBinding.cs" />
+    <Compile Include="InternalNetTcpBinding.cs" />
   </ItemGroup>
 </Project>
