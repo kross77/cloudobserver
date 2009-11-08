@@ -1,0 +1,172 @@
+﻿<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ExpressionBlendVersion>3.0.1927.0</ExpressionBlendVersion>
+    <ProjectGuid>{C7DE7774-06CE-487B-80C9-80C91250B7BA}</ProjectGuid>
+    <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <DefaultClrNameSpace>COSilverlight</DefaultClrNameSpace>
+    <RootNamespace>COSilverlight</RootNamespace>
+    <AssemblyName>COSilverlight</AssemblyName>
+    <ApplicationVersion>1.0.0.*</ApplicationVersion>
+    <ApplicationRevision>0</ApplicationRevision>
+    <AlwaysCompileMarkupFilesInSeparateDomain>false</AlwaysCompileMarkupFilesInSeparateDomain>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <SilverlightApplication>true</SilverlightApplication>
+    <XapOutputs>true</XapOutputs>
+    <XapFilename>COSilverlight.xap</XapFilename>
+    <GenerateSilverlightManifest>true</GenerateSilverlightManifest>
+    <SilverlightManifestTemplate>Properties\AppManifest.xml</SilverlightManifestTemplate>
+    <SilverlightAppEntry>COSilverlight.App</SilverlightAppEntry>
+    <CreateTestPage>true</CreateTestPage>
+    <ValidateXaml>true</ValidateXaml>
+    <UsePlatformExtensions>false</UsePlatformExtensions>
+    <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+    <TestPageFileName>TestPage.html</TestPageFileName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Bin\Release</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Reactive, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1b331ac6720247d9" />
+    <Reference Include="System.Windows" />
+    <Reference Include="mscorlib" />
+    <Reference Include="system" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Windows.Controls" />
+    <Reference Include="System.Windows.Controls.Toolkit, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Windows.Browser" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Page Include="MainPage.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SampleData\SampleDataSource\SampleDataSource.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SampleData\SampleDataSource\SampleDataSource.xaml.cs">
+      <DependentUpon>SampleDataSource.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\pm_Bonus_01.jpg" />
+    <BlendEmbeddedFont Include="Fonts\TektonPro-Bold.otf">
+      <IsSystemFont>True</IsSystemFont>
+      <All>False</All>
+      <AutoFill>True</AutoFill>
+      <Characters>
+      </Characters>
+      <Uppercase>False</Uppercase>
+      <Lowercase>False</Lowercase>
+      <Numbers>False</Numbers>
+      <Punctuation>False</Punctuation>
+    </BlendEmbeddedFont>
+    <BlendEmbeddedFont Include="Fonts\TektonPro-BoldCond.otf">
+      <IsSystemFont>True</IsSystemFont>
+      <All>False</All>
+      <AutoFill>True</AutoFill>
+      <Characters>
+      </Characters>
+      <Uppercase>False</Uppercase>
+      <Lowercase>False</Lowercase>
+      <Numbers>False</Numbers>
+      <Punctuation>False</Punctuation>
+    </BlendEmbeddedFont>
+    <BlendEmbeddedFont Include="Fonts\TektonPro-BoldExt.otf">
+      <IsSystemFont>True</IsSystemFont>
+      <All>False</All>
+      <AutoFill>True</AutoFill>
+      <Characters>
+      </Characters>
+      <Uppercase>False</Uppercase>
+      <Lowercase>False</Lowercase>
+      <Numbers>False</Numbers>
+      <Punctuation>False</Punctuation>
+    </BlendEmbeddedFont>
+    <BlendEmbeddedFont Include="Fonts\TektonPro-BoldObl.otf">
+      <IsSystemFont>True</IsSystemFont>
+      <All>False</All>
+      <AutoFill>True</AutoFill>
+      <Characters>
+      </Characters>
+      <Uppercase>False</Uppercase>
+      <Lowercase>False</Lowercase>
+      <Numbers>False</Numbers>
+      <Punctuation>False</Punctuation>
+    </BlendEmbeddedFont>
+    <BlendEmbeddedFont Include="Fonts\VLADIMIR.TTF">
+      <IsSystemFont>True</IsSystemFont>
+      <All>False</All>
+      <AutoFill>True</AutoFill>
+      <Characters>
+      </Characters>
+      <Uppercase>False</Uppercase>
+      <Lowercase>False</Lowercase>
+      <Numbers>False</Numbers>
+      <Punctuation>False</Punctuation>
+    </BlendEmbeddedFont>
+    <Resource Include="Properties\AppManifest.xml" />
+    <Resource Include="SampleData\SampleDataSource\SampleDataSource_Files\001sec.png" />
+    <Resource Include="SampleData\SampleDataSource\SampleDataSource_Files\586x301.png" />
+    <Resource Include="SampleData\SampleDataSource\SampleDataSource_Files\AMbg.png" />
+    <Resource Include="SampleData\SampleDataSource\SampleDataSource_Files\C.png" />
+    <Resource Include="SampleData\SampleDataSource\SampleDataSource_Files\C1.png" />
+    <Resource Include="SampleData\SampleDataSource\SampleDataSource_Files\C11.png" />
+    <Resource Include="SampleData\SampleDataSource\SampleDataSource_Files\C12.png" />
+    <Resource Include="SampleData\SampleDataSource\SampleDataSource_Files\C13.png" />
+    <Resource Include="SampleData\SampleDataSource\SampleDataSource_Files\C14.png" />
+    <Resource Include="SampleData\SampleDataSource\SampleDataSource_Files\C2.png" />
+    <Resource Include="SampleData\SampleDataSource\SampleDataSource_Files\image01.png" />
+    <Resource Include="SampleData\SampleDataSource\SampleDataSource_Files\image02.png" />
+    <Resource Include="SampleData\SampleDataSource\SampleDataSource_Files\image03.png" />
+    <Resource Include="SampleData\SampleDataSource\SampleDataSource_Files\image04.png" />
+    <Resource Include="SampleData\SampleDataSource\SampleDataSource_Files\image05.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <DesignTimeOnly Include="SampleData\SampleDataSource\SampleDataSource.xsd" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\V3.0\Microsoft.Silverlight.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Expression\Blend\3.0\Silverlight\Microsoft.Expression.Blend.Silverlight.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{A1591282-1198-4647-A2B1-27E5FF5F6F3B}">
+        <SilverlightProjectProperties />
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>
