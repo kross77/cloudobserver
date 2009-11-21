@@ -59,13 +59,13 @@
     <Compile Include="Formats\Audio\WaveFormat.cs" />
     <Compile Include="Formats\Audio\WaveFormatEx.cs" />
     <Compile Include="Formats\Audio\WaveFormats.cs" />
-    <Compile Include="Formats\BitTools.cs" />
     <Compile Include="Formats\FormatIdentifiers.cs" />
-    <Compile Include="Formats\StringExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ExternalPollingDuplexHttpBinding.cs" />
     <Compile Include="Services\StreamingService.cs" />
     <Compile Include="StreamingServiceMediaStreamSource.cs" />
+    <Compile Include="Tools\BitTools.cs" />
+    <Compile Include="Tools\StringExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\v3.0\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
