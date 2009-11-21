@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CloudObserver.Formats
+namespace CloudObserver.Tools
 {
     /// <summary>
     /// Extensions for the standard string class.

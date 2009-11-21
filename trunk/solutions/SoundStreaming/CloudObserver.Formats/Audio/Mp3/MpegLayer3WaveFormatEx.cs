@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Globalization;
 
+using CloudObserver.Tools;
+
 namespace CloudObserver.Formats.Audio.Mp3
 {
     /// <summary>
