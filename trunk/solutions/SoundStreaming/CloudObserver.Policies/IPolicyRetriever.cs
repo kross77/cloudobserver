@@ -12,10 +12,17 @@ namespace CloudObserver.Policies
     public interface IPolicyRetriever
     {
         /// <summary>
-        /// Provides Silverlight policies.
+        /// Provides Silverlight policy file.
         /// </summary>
-        /// <returns>XML-formatted stream with Silverlight policy settings.</returns>
+        /// <returns>Stream containing Silverlight policy file.</returns>
         [OperationContract, WebGet(UriTemplate = "/clientaccesspolicy.xml")]
         Stream GetSilverlightPolicy();
+
+        /// <summary>
+        /// Provides Flash policy file.
+        /// </summary>
+        /// <returns>Stream containing Flash policy file.</returns>
+        [OperationContract, WebGet(UriTemplate = "/crossdomain.xml")]
+        Stream GetFlashPolicy();
     }
 }
