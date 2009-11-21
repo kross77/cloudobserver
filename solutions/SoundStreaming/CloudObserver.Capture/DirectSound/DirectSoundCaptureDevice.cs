@@ -8,6 +8,7 @@ namespace CloudObserver.Capture.DirectSound
     /// </summary>
     public struct DirectSoundCaptureDevice : IEquatable<DirectSoundCaptureDevice>
     {
+        #region Fields
         /// <summary>
         /// A textual description of the Microsoft DirectSound device.
         /// </summary>
@@ -27,7 +28,9 @@ namespace CloudObserver.Capture.DirectSound
         /// Operating system default audio capture device.
         /// </summary>
         public static readonly DirectSoundCaptureDevice Default = new DirectSoundCaptureDevice("Default", Guid.Empty, "");
+        #endregion Fields
 
+        #region Properties
         /// <summary>
         /// Lists audio capture devices which are currently available in the operating system.
         /// </summary>
@@ -61,7 +64,9 @@ namespace CloudObserver.Capture.DirectSound
         /// Retrieves the module name of the Microsoft DirectSound driver corresponding to this device.
         /// </summary>
         public string ModuleName { get { return moduleName; } }
+        #endregion Properties
 
+        #region Constructors
         /// <summary>
         /// Initializes a new instance of the CloudObserver.Capture.DirectSound.DirectSoundCaptureDevice class.
         /// </summary>
@@ -74,7 +79,9 @@ namespace CloudObserver.Capture.DirectSound
             this.driverGuid = driverGuid;
             this.moduleName = moduleName;
         }
+        #endregion Constructors
 
+        #region Public Methods
         /// <summary>
         /// Compares two CloudObserver.Capture.DirectSound.DirectSoundCaptureDevice objects.
         /// </summary>
@@ -135,5 +142,6 @@ namespace CloudObserver.Capture.DirectSound
         {
             return driverGuid == other.driverGuid;
         }
+        #endregion Public Methods
     }
 }
