@@ -96,6 +96,10 @@
       <Project>{21B2B47E-79C4-4BA7-8EE8-472615A43AE9}</Project>
       <Name>CloudObserver.Services</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CloudObserver.Tools\CloudObserver.Tools.csproj">
+      <Project>{5FC43280-090E-4789-8BBB-67E588695A9A}</Project>
+      <Name>CloudObserver.Tools</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
