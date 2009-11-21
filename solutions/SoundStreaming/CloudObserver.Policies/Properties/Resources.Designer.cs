@@ -80,5 +80,18 @@ namespace CloudObserver.Policies.Properties {
                 return ResourceManager.GetString("clientaccesspolicy", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot;?&gt;
+        ///&lt;!DOCTYPE cross-domain-policy SYSTEM &quot;http://www.macromedia.com/xml/dtds/cross-domain-policy.dtd&quot;&gt;
+        ///&lt;cross-domain-policy&gt;
+        ///  &lt;allow-access-from domain=&quot;*&quot; /&gt;
+        ///&lt;/cross-domain-policy&gt;.
+        /// </summary>
+        internal static string crossdomain {
+            get {
+                return ResourceManager.GetString("crossdomain", resourceCulture);
+            }
+        }
     }
 }

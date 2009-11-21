@@ -121,4 +121,7 @@
   <data name="clientaccesspolicy" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\clientaccesspolicy.xml;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="crossdomain" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\crossdomain.xml;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
 </root>

@@ -10,18 +10,24 @@ namespace CloudObserver.Policies
     /// </summary>
     public class PolicyRetriever : IPolicyRetriever
     {
-        #region IPolicyRetrieverService Members
-
         /// <summary>
-        /// Provides Silverlight policies.
+        /// Provides Silverlight policy file.
         /// </summary>
-        /// <returns>XML-formatted stream with Silverlight policy settings.</returns>
+        /// <returns>Stream containing Silverlight policy file.</returns>
         public Stream GetSilverlightPolicy()
         {
             WebOperationContext.Current.OutgoingResponse.ContentType = "application/xml";
             return new MemoryStream(Encoding.UTF8.GetBytes(Properties.Resources.clientaccesspolicy));
         }
 
-        #endregion
+        /// <summary>
+        /// Provides Flash policy file.
+        /// </summary>
+        /// <returns>Stream containing Flash policy file.</returns>
+        public Stream GetFlashPolicy()
+        {
+            WebOperationContext.Current.OutgoingResponse.ContentType = "application/xml";
+            return new MemoryStream(Encoding.UTF8.GetBytes(Properties.Resources.crossdomain));
+        }
     }
 }
