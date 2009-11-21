@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoundStreaming.FileSender",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoundStreaming.FileReceiver", "SoundStreaming.FileReceiver\SoundStreaming.FileReceiver.csproj", "{2F2CC33B-2C73-4CFD-9160-E73757F4ADEA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserver.Tools", "CloudObserver.Tools\CloudObserver.Tools.csproj", "{5FC43280-090E-4789-8BBB-67E588695A9A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,10 @@ Global
 		{2F2CC33B-2C73-4CFD-9160-E73757F4ADEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F2CC33B-2C73-4CFD-9160-E73757F4ADEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F2CC33B-2C73-4CFD-9160-E73757F4ADEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FC43280-090E-4789-8BBB-67E588695A9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FC43280-090E-4789-8BBB-67E588695A9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FC43280-090E-4789-8BBB-67E588695A9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FC43280-090E-4789-8BBB-67E588695A9A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
