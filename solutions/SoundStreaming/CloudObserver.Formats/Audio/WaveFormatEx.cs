@@ -74,6 +74,8 @@ namespace CloudObserver.Formats.Audio
         public const uint SizeOf = 18;
         #endregion
 
+        public WaveFormatEx() { }
+
         public WaveFormatEx(int samplesPerSec, short bitsPerSample, short channels)
         {
             FormatTag = (short)WaveFormats.Pcm;
