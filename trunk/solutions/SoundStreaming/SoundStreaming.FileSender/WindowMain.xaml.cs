@@ -226,6 +226,7 @@ namespace SoundStreaming.FileSender
                         case "mp3":
                             truncateWaveRiffHeader = false;
                             truncateMp3Id3Tags = checkBoxTruncateMp3Id3Tags.IsChecked.Value;
+                            streamingServiceClient.SetSubscriptionResponse(Encoding.UTF8.GetBytes(FormatIdentifiers.FormatMp3));
                             break;
                         default:
                             streamingServiceClient.SetSubscriptionResponse(Encoding.UTF8.GetBytes(FormatIdentifiers.FormatNone));
