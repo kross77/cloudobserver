@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Globalization;
 
+using CloudObserver.Tools;
+
 namespace CloudObserver.Formats.Audio
 {
     /// <summary>
@@ -71,6 +73,8 @@ namespace CloudObserver.Formats.Audio
         #region Constants
         public const uint SizeOf = 18;
         #endregion
+
+        public WaveFormatEx() { }
 
         public WaveFormatEx(int samplesPerSec, short bitsPerSample, short channels)
         {

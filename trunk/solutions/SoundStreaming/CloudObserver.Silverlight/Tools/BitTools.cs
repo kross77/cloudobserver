@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace CloudObserver.Formats
+namespace CloudObserver.Tools
 {
     /// <summary>
     /// Helper methods for manipulating values at the byte and binary level.
