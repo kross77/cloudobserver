@@ -6,6 +6,7 @@ using System.Threading;
 using System.ServiceModel;
 using Microsoft.Win32;
 
+using CloudObserver.Tools;
 using CloudObserver.Services;
 using CloudObserver.Formats;
 using CloudObserver.Formats.Audio;
