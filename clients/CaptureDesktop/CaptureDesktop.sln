@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CaptureDesktop", "CaptureDesktop\CaptureDesktop.csproj", "{63B3DB96-54BF-463C-97CE-5FFA132BFBF0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AviLib", "AviLib\AviLib.csproj", "{4878EB08-441D-4656-B180-91B68543B8FA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{63B3DB96-54BF-463C-97CE-5FFA132BFBF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63B3DB96-54BF-463C-97CE-5FFA132BFBF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63B3DB96-54BF-463C-97CE-5FFA132BFBF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4878EB08-441D-4656-B180-91B68543B8FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4878EB08-441D-4656-B180-91B68543B8FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4878EB08-441D-4656-B180-91B68543B8FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4878EB08-441D-4656-B180-91B68543B8FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
