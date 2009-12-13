@@ -2,6 +2,9 @@
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CaptureDesktop", "CaptureDesktop\CaptureDesktop.csproj", "{63B3DB96-54BF-463C-97CE-5FFA132BFBF0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4878EB08-441D-4656-B180-91B68543B8FA} = {4878EB08-441D-4656-B180-91B68543B8FA}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AviLib", "AviLib\AviLib.csproj", "{4878EB08-441D-4656-B180-91B68543B8FA}"
 EndProject

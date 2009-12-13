@@ -12,8 +12,10 @@ namespace CaptureDesktop
 {
     class CaptureDesktop
     {
-        private static TimerCallback timerDelegate = new TimerCallback(CaptureDesktop.CaptureFrame);
+        private static TimerCallback timerDelegate = new TimerCallback(CaptureDesktop.CaptureAndSaveDesktop);
         private static System.Threading.Timer timer = null;
+        private static AviLib.AviFile aviFile;
+        private static AviLib.VideoStream aviStream;
 
 
         protected CaptureDesktop()
@@ -116,7 +118,7 @@ namespace CaptureDesktop
         /// internal function/ it's called by timer for capture one desktop frame
         /// </summary>
         /// <param name="stateInfo"></param>
-        private static void CaptureFrame(Object stateInfo)
+        private static Bitmap CaptureFrame()
         {            
             Bitmap bmpDesctop, bmpCursor;
             Graphics g;
@@ -130,36 +132,28 @@ namespace CaptureDesktop
             Rectangle r = new Rectangle(curX, curY, bmpCursor.Width, bmpCursor.Height);
             g.DrawImage(bmpCursor, r);
             g.Flush();
-            bmpDesctop.Save("YourShot" + DateTime.Now.ToString("h_mm_ss_fff") + ".jpeg", ImageFormat.Jpeg);
+            return bmpDesctop;
         }
-/*    
-        static Bitmap CaptureCursor(ref int x, ref int y)
+        private static void SaveCaptureFrame(Bitmap bmpFrame)
         {
-            Bitmap bmp;
-            IntPtr hicon;
-            Win32Stuff.CURSORINFO ci = new Win32Stuff.CURSORINFO();
-            Win32Stuff.ICONINFO icInfo;
-            ci.cbSize = Marshal.SizeOf(ci);
-            if (Win32Stuff.GetCursorInfo(out ci))
+            try
             {
-                if (ci.flags == Win32Stuff.CURSOR_SHOWING)
-                {
-                    hicon = Win32Stuff.CopyIcon(ci.hCursor);
-                    if (Win32Stuff.GetIconInfo(hicon, out icInfo))
-                    {
-                        x = ci.ptScreenPos.x - ((int)icInfo.xHotspot);
-                        y = ci.ptScreenPos.y - ((int)icInfo.yHotspot);
-
-                        Icon ic = Icon.FromHandle(hicon);
-                        bmp = ic.ToBitmap();
-                        return bmp;
-                    }
-                }
+                aviStream.AddFrame(bmpFrame);
+            }
+            catch (Exception)
+            {
+                aviStream.Close();
+                AviLib.Avi.CloseFile(aviFile);
             }
 
-            return null;
+            //bmpFrame.Save("YourShot" + DateTime.Now.ToString("h_mm_ss_fff") + ".jpeg", ImageFormat.Jpeg);
         }
-*/
+        private static void CaptureAndSaveDesktop(Object stateInfo)
+        {
+            Bitmap bmpDesc = CaptureFrame();
+            SaveCaptureFrame(bmpDesc);
+        }
+
         private static Bitmap CaptureCursor(ref int x, ref int y)
         {
             Win32Stuff.CURSORINFO cursorInfo = new Win32Stuff.CURSORINFO();
@@ -230,14 +224,22 @@ namespace CaptureDesktop
             {
                 return -1;
             }
-            timer = new System.Threading.Timer(timerDelegate, null, 0, freq);
+            //create avi file and stream in it
+            aviFile = AviLib.Avi.CreateFile("Capture_" + DateTime.Now.ToString("h_mm_ss_fff") + ".avi");
+            Bitmap bmpDesc = CaptureFrame();
+            aviStream = AviLib.Avi.AddVideoStream(aviFile, AviLib.VideoStream.BmpToFrameParams(bmpDesc), 1000/freq);
+            aviStream.AddFrame(bmpDesc);
+           
+            timer = new System.Threading.Timer(timerDelegate, null, 0, freq);            
             return 0;
         }
 
         public void Stop()
-        {            
+        {
             timer.Dispose();
             timer = null;
+            aviStream.Close();
+            AviLib.Avi.CloseFile(aviFile);
         }
     }
 }
