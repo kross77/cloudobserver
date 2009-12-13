@@ -94,6 +94,12 @@
     </Compile>
     <Compile Include="Win32Stuff.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AviLib\AviLib.csproj">
+      <Project>{4878EB08-441D-4656-B180-91B68543B8FA}</Project>
+      <Name>AviLib</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

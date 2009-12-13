@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
+
 namespace CaptureDesktop
 {
     public partial class MainForm : Form
@@ -26,7 +27,7 @@ namespace CaptureDesktop
             }
             else
             {
-                CaptureDesktop.Instance.Start(100);
+                CaptureDesktop.Instance.Start(500);
                 btnCapture.Text = "Stop capture";
             }
         }

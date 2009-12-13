@@ -6,6 +6,11 @@ namespace AviLib
 {
     public class AviWrapper
     {
+        public const int OF_SHARE_DENY_WRITE = 32;
+        public const int OF_WRITE = 1;
+        public const int OF_READWRITE = 2;
+        public const int OF_CREATE = 4096;
+
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public struct RECT
         {
@@ -52,9 +57,14 @@ namespace AviLib
             public Int32 biClrUsed;
             public Int32 biClrImportant;
         }
+
         //hren kakay to
         [DllImport("winmm.dll", EntryPoint = "mmioStringToFOURCCA")]
         public static extern int mmioStringToFOURCC(String sz, int uFlags);
+
+        //Initialize the AVI library
+        [DllImport("avifil32.dll")]
+        public static extern void AVIFileInit();
 
         //Open an AVI file
         [DllImport("avifil32.dll", PreserveSig = true)]
@@ -76,6 +86,25 @@ namespace AviLib
             int pfile,
             out IntPtr ppavi,
             ref AVISTREAMINFO ptr_streaminfo);
+
+        //Write a sample to a stream
+        [DllImport("avifil32.dll")]
+        public static extern int AVIStreamWrite(
+            IntPtr aviStream, Int32 lStart, Int32 lSamples,
+            IntPtr lpBuffer, Int32 cbBuffer, Int32 dwFlags,
+            Int32 dummy1, Int32 dummy2);
+
+        //Release an open AVI stream
+        [DllImport("avifil32.dll")]
+        public static extern int AVIStreamRelease(IntPtr aviStream);
+
+        //Release an open AVI file
+        [DllImport("avifil32.dll")]
+        public static extern int AVIFileRelease(int pfile);
+
+        //Close the AVI library
+        [DllImport("avifil32.dll")]
+        public static extern void AVIFileExit();
 
     }
 }
