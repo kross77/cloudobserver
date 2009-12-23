@@ -16,7 +16,7 @@
  * [http://downloads.sourceforge.net/tortoisesvn/TortoiseSVN-1.6.3.16613-win32-svn-1.6.3.msi?download TortoiseSVN 1.6.3 (18,9 Мб)]
 
 == Установка программного обеспечения ==
- # Установите VirtualCamera.  Перезагрузите компьютер.
+ # Установите !VirtualCamera.  Перезагрузите компьютер.
  # Установите Microsoft Visual Studio 2008 Team System. Убедитесь, что также установился Microsoft SQL Server 2005.
  # Установите Microsoft Visual Studio 2008 Service Pack 1.
  # Удалите все приложения Microsoft Expression и Microsoft Silverlight. Перезагрузите компьютер.
