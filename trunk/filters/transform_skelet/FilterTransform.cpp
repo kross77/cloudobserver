@@ -6,21 +6,21 @@
 
 EXTERN_C const GUID CLSID_TransformSkelet;
 
-//CFilterTransform::CFilterTransform()
+//CFilter::CFilter()
 //{
 //}
-CFilterTransform::CFilterTransform(TCHAR *tszName, LPUNKNOWN punk, HRESULT *phr) :
+CFilter::CFilter(TCHAR *tszName, LPUNKNOWN punk, HRESULT *phr) :
     CTransInPlaceFilter(tszName, punk, CLSID_TransformSkelet, phr, true)
 {
 }
-CFilterTransform::~CFilterTransform()
+CFilter::~CFilter()
 {
 }
 
-CUnknown * WINAPI CFilterTransform::CreateInstance(LPUNKNOWN punk, HRESULT *phr)
+CUnknown * WINAPI CFilter::CreateInstance(LPUNKNOWN punk, HRESULT *phr)
 {
 	//ASSERT(phr);    
-	CFilterTransform *pNewObject = new CFilterTransform(NAME("fv Add Graph To ROT Sample Filter"), punk, phr);
+	CFilter *pNewObject = new CFilter(NAME("fv Add Graph To ROT Sample Filter"), punk, phr);
     if (pNewObject == NULL) {
         if (phr)
             *phr = E_OUTOFMEMORY;
@@ -30,12 +30,12 @@ CUnknown * WINAPI CFilterTransform::CreateInstance(LPUNKNOWN punk, HRESULT *phr)
 }
 
 
-HRESULT CFilterTransform::CheckInputType(const CMediaType* mtIn)
+HRESULT CFilter::CheckInputType(const CMediaType* mtIn)
 {
 	return E_INVALIDARG;
 }
 
-STDMETHODIMP CFilterTransform::JoinFilterGraph(IFilterGraph *pGraph, LPCWSTR pName)
+STDMETHODIMP CFilter::JoinFilterGraph(IFilterGraph *pGraph, LPCWSTR pName)
 {
 	//DWORD dwRot;
 	//CAutoLock cAutoLock(&m_fvLock);
@@ -72,7 +72,7 @@ STDMETHODIMP CFilterTransform::JoinFilterGraph(IFilterGraph *pGraph, LPCWSTR pNa
 //}
 
 
-HRESULT CFilterTransform::Transform(IMediaSample *pMediaSample)
+HRESULT CFilter::Transform(IMediaSample *pMediaSample)
 {
 	return NOERROR;
 }
