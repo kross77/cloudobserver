@@ -1,6 +1,6 @@
 #pragma once
 
-class CFilterTransform : public CTransInPlaceFilter
+class CFilter : public CTransInPlaceFilter
 {
 public:
 	static CUnknown * WINAPI CreateInstance(LPUNKNOWN punk, HRESULT *phr);
@@ -14,8 +14,8 @@ public:
 
 private:
 
-	CFilterTransform(TCHAR *tszName, LPUNKNOWN punk, HRESULT *phr);
-	~CFilterTransform();
+	CFilter(TCHAR *tszName, LPUNKNOWN punk, HRESULT *phr);
+	~CFilter();
 
 
 	//HRESULT AddToRot(IUnknown *pUnkGraph, DWORD *pdwRegister);
