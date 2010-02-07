@@ -1,0 +1,20 @@
+﻿<Window x:Class="MultimediaPlayer.WindowMain"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Cloud Observer - Multimedia Player"
+    Width="500" Height="144" ResizeMode="CanMinimize" Loaded="Window_Loaded">
+    <Grid>
+    	<TextBlock Height="16" HorizontalAlignment="Left" Margin="8,11,0,0" Text="Эльдорадио:" VerticalAlignment="Top" Width="70" />
+    	<TextBox x:Name="textBoxEldoradioUri" Height="22" Margin="82,8,87,0" IsReadOnly="True" Text="http://88.212.197.154:9000/eldoradio128" VerticalAlignment="Top" />
+    	<Button x:Name="buttonEldoradioPlayStop" Content="Play" Height="22" HorizontalAlignment="Right" Margin="0,8,8,0" VerticalAlignment="Top" Width="75" Click="buttonEldoradioPlayStop_Click" />
+    	<TextBlock Height="16" HorizontalAlignment="Left" Margin="8,37,0,0" Text="Love Radio:" VerticalAlignment="Top" Width="70" />
+    	<TextBox x:Name="textBoxLoveRadioUri" Height="22" Margin="82,34,87,0" IsReadOnly="True" Text="http://stream.loveradio.ru:8000/Loveradio_96_stereo.mp3" VerticalAlignment="Top" />
+    	<Button x:Name="buttonLoveRadioPlayStop" Content="Play" Height="22" HorizontalAlignment="Right" Margin="0,34,8,0" VerticalAlignment="Top" Width="75" Click="buttonLoveRadioPlayStop_Click" />
+    	<TextBlock Height="16" HorizontalAlignment="Left" Margin="8,0,0,37" Text="KCDX:" VerticalAlignment="Bottom" Width="70" />
+    	<TextBox x:Name="textBoxKCDXUri" Height="22" Margin="82,0,87,34" IsReadOnly="True" Text="http://mp3.kcdx.com:8000/stream" VerticalAlignment="Bottom" />
+    	<Button x:Name="buttonKCDXPlayStop" Content="Play" Height="22" HorizontalAlignment="Right" Margin="0,0,8,34" VerticalAlignment="Bottom" Width="75" Click="buttonKCDXPlayStop_Click" />
+    	<TextBlock Height="16" HorizontalAlignment="Left" Margin="8,0,0,11" Text="Другое:" VerticalAlignment="Bottom" Width="70" />
+    	<TextBox x:Name="textBoxOtherUri" Height="22" Margin="82,0,87,8" Text="http://localhost:4773/" VerticalAlignment="Bottom" />
+    	<Button x:Name="buttonOtherPlayStop" Content="Play" Height="22" HorizontalAlignment="Right" Margin="0,0,8,8" VerticalAlignment="Bottom" Width="75" Click="buttonOtherPlayStop_Click" />
+    </Grid>
+</Window>
