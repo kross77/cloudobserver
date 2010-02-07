@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultimediaPlayer", "..\Projects\MultimediaPlayer\MultimediaPlayer.csproj", "{E456F8CD-53B1-44DD-9D89-4E033E71117D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultimediaTransmitter", "..\Projects\MultimediaTransmitter\MultimediaTransmitter.csproj", "{527C56ED-C47D-4ABD-9552-50DA19759290}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{E456F8CD-53B1-44DD-9D89-4E033E71117D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E456F8CD-53B1-44DD-9D89-4E033E71117D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E456F8CD-53B1-44DD-9D89-4E033E71117D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{527C56ED-C47D-4ABD-9552-50DA19759290}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{527C56ED-C47D-4ABD-9552-50DA19759290}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{527C56ED-C47D-4ABD-9552-50DA19759290}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{527C56ED-C47D-4ABD-9552-50DA19759290}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
