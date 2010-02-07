@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8224169B-67F0-4B2A-A24F-B764BB6F888F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CloudObserver</RootNamespace>
+    <AssemblyName>cloudobserver</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\Binaries\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\Binaries\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.DirectX.DirectSound, Version=1.0.2902.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.ServiceModel">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.ServiceModel.PollingDuplex">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.ServiceModel.Web">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Capture\ChunkCapturedEventArgs.cs" />
+    <Compile Include="Capture\DirectSound\DirectSoundCapture.cs" />
+    <Compile Include="Capture\DirectSound\DirectSoundCaptureDevice.cs" />
+    <Compile Include="Capture\ICapture.cs" />
+    <Compile Include="Formats\Audio\AudioFormatAttribute.cs" />
+    <Compile Include="Formats\Audio\AudioFormatBase.cs" />
+    <Compile Include="Formats\Audio\IAudioFormat.cs" />
+    <Compile Include="Formats\Audio\Mp3\LameEncoder.cs" />
+    <Compile Include="Formats\Audio\Mp3\Mp3AudioFormat.cs" />
+    <Compile Include="Formats\Audio\Mp3\Mp3BitRate.cs" />
+    <Compile Include="Formats\Audio\Mp3\MpegFrame.cs" />
+    <Compile Include="Formats\Audio\Mp3\MpegLayer3WaveFormatEx.cs" />
+    <Compile Include="Formats\Audio\Mp3\MpegVersion.cs" />
+    <Compile Include="Formats\Audio\Mp3\PcmAudioFormatExtensions.cs" />
+    <Compile Include="Formats\Audio\PcmAudioFormat.cs" />
+    <Compile Include="Formats\Audio\WaveFormat.cs" />
+    <Compile Include="Formats\Audio\WaveFormatEx.cs" />
+    <Compile Include="Formats\Audio\WaveFormats.cs" />
+    <Compile Include="Formats\FormatIdentifiers.cs" />
+    <Compile Include="Policies\IPolicyRetriever.cs" />
+    <Compile Include="Policies\PoliciesManager.cs" />
+    <Compile Include="Policies\PolicyRetriever.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Services\ExternalPollingDuplexHttpBinding.cs" />
+    <Compile Include="Services\InternalNetTcpBinding.cs" />
+    <Compile Include="Services\StreamingService\DataTransferredEventArgs.cs" />
+    <Compile Include="Services\StreamingService\IStreamingService.cs" />
+    <Compile Include="Services\StreamingService\IStreamingServiceCallback.cs" />
+    <Compile Include="Services\StreamingService\StreamingService.cs" />
+    <Compile Include="Services\StreamingService\SubscribersChangedEventArgs.cs" />
+    <Compile Include="Tools\BitTools.cs" />
+    <Compile Include="Tools\StringExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="lame_enc.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\clientaccesspolicy.xml" />
+    <Content Include="Resources\crossdomain.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
