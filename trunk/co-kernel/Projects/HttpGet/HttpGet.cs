@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Text;
 
 namespace NetworkUtilities.HttpGet
 {
@@ -34,7 +35,7 @@ namespace NetworkUtilities.HttpGet
                     int read = responseStream.Read(buffer, 0, bufferSize);
                     while (read > 0)
                     {
-                        Console.Write(Convert.ToBase64String(buffer, 0, read));
+                        Console.Write(Encoding.UTF8.GetString(buffer, 0, read));
                         if (saveToFile)
                             fileStream.Write(buffer, 0, read);
                         read = responseStream.Read(buffer, 0, bufferSize);
