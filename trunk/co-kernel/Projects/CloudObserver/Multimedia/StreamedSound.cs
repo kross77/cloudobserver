@@ -3,7 +3,7 @@ using System.IO;
 
 using Microsoft.DirectX.DirectSound;
 
-namespace Mp3Sharp
+namespace CloudObserver.Multimedia
 {
 
 	/// <summary>

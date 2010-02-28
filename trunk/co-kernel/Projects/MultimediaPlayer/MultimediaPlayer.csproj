@@ -63,12 +63,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DXUtil.cs" />
-    <Compile Include="EventRaisingSoundBuffer.cs" />
-    <Compile Include="SoundUtil.cs" />
-    <Compile Include="StreamedMp3Sound.cs" />
-    <Compile Include="StreamedSound.cs" />
-    <Compile Include="WaveFormat.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -93,9 +87,9 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mp3Sharp\Mp3Sharp.csproj">
-      <Project>{834CAB58-648D-47CC-AC6F-D01C08C809A4}</Project>
-      <Name>Mp3Sharp</Name>
+    <ProjectReference Include="..\CloudObserver\CloudObserver.csproj">
+      <Project>{8224169B-67F0-4B2A-A24F-B764BB6F888F}</Project>
+      <Name>CloudObserver</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

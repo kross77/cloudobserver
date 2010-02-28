@@ -7,7 +7,7 @@ using System.IO;
 using Microsoft.DirectX;
 using Microsoft.DirectX.DirectSound;
 using Buffer = Microsoft.DirectX.DirectSound.Buffer;
-namespace Mp3Sharp
+namespace CloudObserver.Multimedia
 {
 
 

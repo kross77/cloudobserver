@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
 
-using Mp3Sharp;
+using CloudObserver.Multimedia;
 using Microsoft.DirectX.DirectSound;
 
 namespace MultimediaPlayer
@@ -13,7 +13,7 @@ namespace MultimediaPlayer
     public partial class WindowMain : Window
     {
         private Device device;
-        private StreamedMp3Sound streamedMp3Sound = null;
+        private Player player;
         private bool playing = false;
 
         public WindowMain()
@@ -32,19 +32,19 @@ namespace MultimediaPlayer
             if (buttonEldoradioPlayStop.Content.ToString() == "Play")
             {
                 if (playing)
-                    streamedMp3Sound.Stop();
+                    player.Stop();
                 buttonEldoradioPlayStop.Content = "Stop";
                 buttonLoveRadioPlayStop.Content = "Play";
                 buttonKCDXPlayStop.Content = "Play";
                 buttonOtherPlayStop.Content = "Play";
-                streamedMp3Sound = new StreamedMp3Sound(device, new Mp3Stream(WebRequest.Create(textBoxEldoradioUri.Text).GetResponse().GetResponseStream()));
-                streamedMp3Sound.Play();
+                player = new Player(textBoxEldoradioUri.Text, device);
+                player.Play();
                 playing = true;
             }
             else
             {
                 buttonEldoradioPlayStop.Content = "Play";
-                streamedMp3Sound.Stop();
+                player.Stop();
                 playing = false;
             }
         }
@@ -54,19 +54,19 @@ namespace MultimediaPlayer
             if (buttonLoveRadioPlayStop.Content.ToString() == "Play")
             {
                 if (playing)
-                    streamedMp3Sound.Stop();
+                    player.Stop();
                 buttonEldoradioPlayStop.Content = "Play";
                 buttonLoveRadioPlayStop.Content = "Stop";
                 buttonKCDXPlayStop.Content = "Play";
                 buttonOtherPlayStop.Content = "Play";
-                streamedMp3Sound = new StreamedMp3Sound(device, new Mp3Stream(WebRequest.Create(textBoxLoveRadioUri.Text).GetResponse().GetResponseStream()));
-                streamedMp3Sound.Play();
+                player = new Player(textBoxLoveRadioUri.Text, device);
+                player.Play();
                 playing = true;
             }
             else
             {
                 buttonLoveRadioPlayStop.Content = "Play";
-                streamedMp3Sound.Stop();
+                player.Stop();
                 playing = false;
             }
         }
@@ -76,19 +76,19 @@ namespace MultimediaPlayer
             if (buttonKCDXPlayStop.Content.ToString() == "Play")
             {
                 if (playing)
-                    streamedMp3Sound.Stop();
+                    player.Stop();
                 buttonEldoradioPlayStop.Content = "Play";
                 buttonLoveRadioPlayStop.Content = "Play";
                 buttonKCDXPlayStop.Content = "Stop";
                 buttonOtherPlayStop.Content = "Play";
-                streamedMp3Sound = new StreamedMp3Sound(device, new Mp3Stream(WebRequest.Create(textBoxKCDXUri.Text).GetResponse().GetResponseStream()));
-                streamedMp3Sound.Play();
+                player = new Player(textBoxKCDXUri.Text, device);
+                player.Play();
                 playing = true;
             }
             else
             {
                 buttonKCDXPlayStop.Content = "Play";
-                streamedMp3Sound.Stop();
+                player.Stop();
                 playing = false;
             }
         }
@@ -98,21 +98,21 @@ namespace MultimediaPlayer
             if (buttonOtherPlayStop.Content.ToString() == "Play")
             {
                 if (playing)
-                    streamedMp3Sound.Stop();
+                    player.Stop();
                 buttonEldoradioPlayStop.Content = "Play";
                 buttonLoveRadioPlayStop.Content = "Play";
                 buttonKCDXPlayStop.Content = "Play";
                 buttonOtherPlayStop.Content = "Stop";
                 textBoxOtherUri.IsReadOnly = true;
-                streamedMp3Sound = new StreamedMp3Sound(device, new Mp3Stream(WebRequest.Create(textBoxOtherUri.Text).GetResponse().GetResponseStream()));
-                streamedMp3Sound.Play();
+                player = new Player(textBoxOtherUri.Text, device);
+                player.Play();
                 playing = true;
             }
             else
             {
                 buttonOtherPlayStop.Content = "Play";
                 textBoxOtherUri.IsReadOnly = false;
-                streamedMp3Sound.Stop();
+                player.Stop();
                 playing = false;
             }
         }

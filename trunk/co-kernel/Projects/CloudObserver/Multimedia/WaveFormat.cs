@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace Mp3Sharp
+namespace CloudObserver.Multimedia
 {
 
 	public enum WaveFormats
