@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+				layout="absolute"
+				frameRate="100"
+				creationComplete="init()"
+				xmlns:local="*"
+				verticalScrollPolicy="off"
+				horizontalScrollPolicy="off"
+				viewSourceURL="srcview/index.html">
+	<mx:Script>
+		<![CDATA[
+			private function init():void
+			{
+				for (var i:String in Application.application.parameters)
+				{
+					switch (i)
+					{
+						case "url":
+							te.text=Application.application.parameters[i];
+							break;
+						case "uid":
+							te0.text=Application.application.parameters[i];
+							break;
+						default:
+							te1.text+=i + " " + Application.application.parameters[i] + "; ";
+							break;
+					}
+				}
+
+				sex.startfun(te.text);
+				sex.volumefun(volumetr.value);
+			}
+
+			private function blurFun():void
+			{
+				var sex0:CloudSuperSound=new CloudSuperSound();
+				sex0.width=465;
+				sex.addChild(sex0);
+				var blur:BlurFilter=new BlurFilter();
+				blur.blurX=10;
+				blur.blurY=10;
+				blur.quality=BitmapFilterQuality.MEDIUM;
+				sex0.filters=[blur];
+			}
+		]]>
+	</mx:Script>
+	<local:CloudSuperSound id="sex"
+						   alpha="1.0"
+						   width="465"
+						   horizontalCenter="-25"
+						   height="53"
+						   verticalCenter="-100"/>
+	<mx:ApplicationControlBar x="506"
+							  y="0"
+							  dock="true">
+		<mx:HBox width="100%"
+				 horizontalAlign="center"
+				 verticalAlign="middle">
+			<mx:Button label="start from url"
+					   click="sex.startfun(te.text)"/>
+			<mx:Button label="stop"
+					   click="sex.stopfun()"/>
+			<mx:FormItem label="Volume">
+				<mx:HSlider id="volumetr"
+							minimum="0"
+							maximum="1"
+							value="0.5"
+							snapInterval="0.001"
+							enabled="true"
+							liveDragging="true"
+							change="sex.volumefun(volumetr.value); "
+							allowTrackClick="true"
+							creationComplete="sex.volumefun(volumetr.value);"
+							width="100">
+					<mx:mouseDown>
+						sex.volumefun(volumetr.value);
+					</mx:mouseDown>
+					<mx:mouseOver>
+						sex.volumefun(volumetr.value);
+					</mx:mouseOver>
+					<mx:rollOver>
+						sex.volumefun(volumetr.value);
+					</mx:rollOver>
+					<mx:thumbDrag>
+						sex.volumefun(volumetr.value);
+					</mx:thumbDrag>
+					<mx:thumbPress>
+						sex.volumefun(volumetr.value);
+					</mx:thumbPress>
+					<mx:thumbRelease>
+						sex.volumefun(volumetr.value);
+					</mx:thumbRelease>
+					<mx:updateComplete>
+						sex.volumefun(volumetr.value);
+					</mx:updateComplete>
+					<mx:valueCommit>
+						sex.volumefun(volumetr.value);
+					</mx:valueCommit>
+					<mx:click>
+						sex.volumefun(volumetr.value);
+					</mx:click>
+				</mx:HSlider>
+			</mx:FormItem>
+			<mx:Button label="BlurFun!"
+					   click="blurFun()"
+					   fillAlphas="[1.0, 1.0]"
+					   fillColors="[#A5F1F8, #31BBD4, #5BE5F1, #31C3D0]"/>
+		</mx:HBox>
+	</mx:ApplicationControlBar>
+	<mx:FormHeading label="By Cloud  Observer team"
+					textAlign="center"
+					rotationZ="315"
+					right="-30"
+					bottom="-20"
+					color="#C4D2D5"/>
+	<mx:FormHeading label="Good MP3 MXML player"
+					left="10"
+					bottom="10"
+					color="#C4D2D5"/>
+	<mx:Form
+			 horizontalCenter="0"
+			 verticalCenter="0"
+			 borderStyle="solid">
+		<mx:TextInput id="te"
+					  text="http://localhost:4773/"
+					  enter="sex.startfun(te.text)"/>
+		<mx:TextInput id="te0"
+					  text="ID"
+					  enter="sex.startfun(te.text)"/>
+		<mx:TextInput id="te1"
+					  text="Other Params "
+					  enter="sex.startfun(te.text)"/>
+	</mx:Form>
+</mx:Application>
