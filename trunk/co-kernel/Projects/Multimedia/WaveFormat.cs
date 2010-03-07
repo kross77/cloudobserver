@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace CloudObserver.Multimedia
+namespace Multimedia
 {
 
 	public enum WaveFormats

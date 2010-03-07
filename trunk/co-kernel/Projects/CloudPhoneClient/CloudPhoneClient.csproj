@@ -91,6 +91,14 @@
       <Project>{8224169B-67F0-4B2A-A24F-B764BB6F888F}</Project>
       <Name>CloudObserver</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mp3Sharp\Mp3Sharp.csproj">
+      <Project>{834CAB58-648D-47CC-AC6F-D01C08C809A4}</Project>
+      <Name>Mp3Sharp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Multimedia\Multimedia.csproj">
+      <Project>{C8E53307-78B1-4DFC-B033-6A9810671504}</Project>
+      <Name>Multimedia</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

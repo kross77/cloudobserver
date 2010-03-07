@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 
-using CloudObserver.Multimedia;
+using Multimedia;
 using CloudObserver.Formats;
 using CloudObserver.Formats.Audio;
 using CloudObserver.Formats.Audio.Mp3;

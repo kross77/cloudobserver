@@ -3,7 +3,7 @@ using System.IO;
 
 using Microsoft.DirectX.DirectSound;
 
-namespace CloudObserver.Multimedia
+namespace Multimedia
 {
 
 	/// <summary>

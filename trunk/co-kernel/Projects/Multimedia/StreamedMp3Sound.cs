@@ -3,7 +3,7 @@ using System.IO;
 using Mp3Sharp;
 using Microsoft.DirectX.DirectSound;
 
-namespace CloudObserver.Multimedia
+namespace Multimedia
 {
 	/// <summary>
 	/// A modified version of the StreamedSound class that sets the frequency of the Secondary Buffer based on the
