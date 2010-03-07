@@ -37,7 +37,7 @@ namespace CloudObserver
             }
 
             // Get the service type.
-            string serviceType = args[1];
+            string serviceType = args[1].ToUpper();
 
             // Try to get the service contract and to create an instance of the service.
             Type serviceContract = null;

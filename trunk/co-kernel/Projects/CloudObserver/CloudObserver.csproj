@@ -82,14 +82,26 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\CloudController.cs" />
+    <Compile Include="Services\DatabaseManager.cs" />
     <Compile Include="Services\ExternalPollingDuplexHttpBinding.cs" />
+    <Compile Include="Services\Gateway.cs" />
+    <Compile Include="Services\ICloudController.cs" />
+    <Compile Include="Services\IDatabaseManager.cs" />
+    <Compile Include="Services\IGateway.cs" />
     <Compile Include="Services\InternalNetTcpBinding.cs" />
+    <Compile Include="Services\IResourceManager.cs" />
+    <Compile Include="Services\IStorageManager.cs" />
+    <Compile Include="Services\IWorkBlock.cs" />
+    <Compile Include="Services\ResourceManager.cs" />
     <Compile Include="Services\ServicesHelper.cs" />
+    <Compile Include="Services\StorageManager.cs" />
     <Compile Include="Services\StreamingService\DataTransferredEventArgs.cs" />
     <Compile Include="Services\StreamingService\IStreamingService.cs" />
     <Compile Include="Services\StreamingService\IStreamingServiceCallback.cs" />
     <Compile Include="Services\StreamingService\StreamingService.cs" />
     <Compile Include="Services\StreamingService\SubscribersChangedEventArgs.cs" />
+    <Compile Include="Services\WorkBlock.cs" />
     <Compile Include="Tools\BitTools.cs" />
     <Compile Include="Tools\StringExtensions.cs" />
   </ItemGroup>

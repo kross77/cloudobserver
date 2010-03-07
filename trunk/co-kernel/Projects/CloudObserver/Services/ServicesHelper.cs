@@ -17,6 +17,18 @@ namespace CloudObserver.Services
         {
             switch (serviceType)
             {
+                case "CC":
+                    return typeof(ICloudController);
+                case "GW":
+                    return typeof(IGateway);
+                case "WB":
+                    return typeof(IWorkBlock);
+                case "RM":
+                    return typeof(IResourceManager);
+                case "DM":
+                    return typeof(IDatabaseManager);
+                case "SM":
+                    return typeof(IStorageManager);
                 default:
                     throw new ArgumentException("Invalid service type.");
             }
@@ -32,6 +44,18 @@ namespace CloudObserver.Services
         {
             switch (serviceType)
             {
+                case "CC":
+                    return new CloudController();
+                case "GW":
+                    return new Gateway();
+                case "WB":
+                    return new WorkBlock();
+                case "RM":
+                    return new ResourceManager();
+                case "DM":
+                    return new DatabaseManager();
+                case "SM":
+                    return new StorageManager();
                 default:
                     throw new ArgumentException("Invalid service type.");
             }
