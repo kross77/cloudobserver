@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CloudObserver.Multimedia
+namespace Multimedia
 {
     public class ConnectionsUpdatedEventArgs : EventArgs
     {

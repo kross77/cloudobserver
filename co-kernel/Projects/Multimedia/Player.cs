@@ -4,7 +4,7 @@ using System.Net;
 using Mp3Sharp;
 using Microsoft.DirectX.DirectSound;
 
-namespace CloudObserver.Multimedia
+namespace Multimedia
 {
     public class Player
     {

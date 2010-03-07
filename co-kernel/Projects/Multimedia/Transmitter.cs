@@ -10,7 +10,7 @@ using CloudObserver.Formats.Audio;
 using CloudObserver.Formats.Audio.Mp3;
 using CloudObserver.Capture.DirectSound;
 
-namespace CloudObserver.Multimedia
+namespace Multimedia
 {
     public class Transmitter
     {
