@@ -19,8 +19,9 @@
         <controls:LinkLabel Content="Add this machine to an existing Cloud Observer infrastructure." IsEnabled="False" />
         <StackPanel Style="{DynamicResource ExpandablePanel}">
         </StackPanel>
-        <controls:LinkLabel Content="Modify or remove connections to an existing Cloud Observer systems." IsEnabled="False" />
-        <StackPanel Style="{DynamicResource ExpandablePanel}">
+        <controls:LinkLabel Click="LinkLabelExistingConnections_Click" Content="Modify or remove connections to an existing Cloud Observer systems." />
+        <StackPanel x:Name="stackPanelExistingConnections" Style="{DynamicResource ExpandablePanel}" Height="0">
+            <controls:LinkLabel Click="LinkLabelTerminateServices_Click" Content="Terminate all running Cloud Observer system services." Margin="24,0,0,0" />
         </StackPanel>
         <controls:LinkLabel Content="Explore and manage an existing Cloud Observer system." IsEnabled="False" />
         <StackPanel Style="{DynamicResource ExpandablePanel}">

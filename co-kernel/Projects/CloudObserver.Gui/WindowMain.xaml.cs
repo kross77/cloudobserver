@@ -136,6 +136,20 @@ namespace CloudObserver.Gui
             buttonNewInstanceLaunch.IsEnabled = true;
         }
 
+        private void LinkLabelExistingConnections_Click(object sender, RoutedEventArgs e)
+        {
+            // Expand the existing connections panel.
+            ExpandPanel(stackPanelExistingConnections);
+        }
+
+        private void LinkLabelTerminateServices_Click(object sender, RoutedEventArgs e)
+        {
+            ProcessStartInfo cmdProcessStartInfo = new ProcessStartInfo("cmd", @"/c ""taskkill /im csvchost.exe""");
+            cmdProcessStartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            Process.Start(cmdProcessStartInfo);
+            MessageBox.Show("All running Cloud Observer system services have been terminated.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
         private void LinkLabelClose_Click(object sender, RoutedEventArgs e)
         {
             // Close the window and the application.
