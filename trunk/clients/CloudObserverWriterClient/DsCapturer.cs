@@ -127,6 +127,9 @@ namespace CloudObserverWriterClient
                 moniker.BindToObject(bindCtx, null, ref guid, out obj);
                 filter = (IBaseFilter)obj;
             }
+            catch (Exception e)
+            {
+            }
             finally
             {
                 if (bindCtx != null) Marshal.ReleaseComObject(bindCtx);
