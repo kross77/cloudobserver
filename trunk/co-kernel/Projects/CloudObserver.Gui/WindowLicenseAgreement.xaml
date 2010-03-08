@@ -1,0 +1,14 @@
+﻿<Window x:Class="CloudObserver.Gui.WindowLicenseAgreement"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="License Agreement" Height="240" Width="480" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Grid>
+    	<TextBlock Text="Be sure to carefully read and understand all the rights and restrictions described in the license terms. You must accept the license terms before you can use the software." TextWrapping="Wrap" Margin="8,8,8,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="textBoxLicenseAgreement" IsReadOnly="True" Margin="8,43.92,8,76.92" Text="CLOUD OBSERVER SOFTWARE LICENSE TERMS&#xa;&#xa;ToDo: fill in later." TextWrapping="Wrap" VerticalScrollBarVisibility="Visible" />
+    	<Button Click="ButtonPrint_Click" HorizontalAlignment="Right" Width="75" Content="_Print" Margin="0,0,8,50.96" VerticalAlignment="Bottom"/>
+		<Path Fill="White" Stretch="Fill" Stroke="Black" Margin="0,0,0,45.96" VerticalAlignment="Bottom" Height="1" Data="M0,164 L464,160"/>
+    	<Button Click="ButtonAccept_Click" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="75" Content="_Accept" Margin="0,0,87,12"/>
+    	<Button HorizontalAlignment="Center" IsCancel="True" VerticalAlignment="Bottom" Width="75" Content="_Decline" Margin="87,0,0,12"/>
+    </Grid>
+</Window>
