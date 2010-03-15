@@ -12,13 +12,13 @@ const AMOVIESETUP_PIN AMSPins[]=
 {
 	{L"Input",             // Pin string name
     FALSE,                 // Is it rendered
-    FALSE,                  // Is it an output
+    FALSE,                 // Is it an output
     FALSE,                 // Can we have none
     FALSE,                 // Can we have many
     &CLSID_NULL,           // Connects to filter
-    NULL,                  // Connects to pin
+    L"Output",             // Connects to pin
     1,                     // Number of types
-    &pinSubtypes      // Pin Media types
+    &pinSubtypes           // Pin Media types
 	}
 };
 
