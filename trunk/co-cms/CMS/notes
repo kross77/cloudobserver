@@ -1,0 +1,20 @@
+Notes
+
+CREATE TABLE  `cms2`.`user` (
+`id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`username` VARCHAR( 50 ) NOT NULL ,
+`hashed_password` VARCHAR( 40 ) NULL ,
+`email` VARCHAR( 50 ) NULL ,
+`key` VARCHAR( 40 ) NULL ,
+`TIMESTAMP` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+INDEX (  `email` ,  `key` )
+) ENGINE = MYISAM ;
+
+
+Таблица `cms2`.`Streams` была создана.
+CREATE TABLE  `cms2`.`Streams` (
+`id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`userID` INT( 11 ) NOT NULL ,
+`streamID` INT( 11 ) NOT NULL ,
+`LastSeen` DATETIME NOT NULL
+) ENGINE = MYISAM ;
