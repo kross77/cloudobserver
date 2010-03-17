@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/halo" creationComplete="application_creationCompleteHandler(event)" minWidth="1024" minHeight="768" xmlns:gateway="services.gateway.*" xmlns:workblock="services.workblock.*">
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.core.FlexGlobals;
+			import mx.events.FlexEvent;
+			import mx.rpc.events.ResultEvent;
+
+			[Bindable]
+			public var gatewayUri:String;
+			[Bindable]
+			public var contentIdsArray:Array;
+			[Bindable]
+			public var workBlockUri:String =  new String();
+			[Bindable]
+			public var channel:SoundChannel = new SoundChannel;
+			[Bindable]
+			public var sound:Sound = new Sound();
+
+			protected function application_creationCompleteHandler(event:FlexEvent):void
+			{
+				for (var s:String in FlexGlobals.topLevelApplication.parameters)
+				{
+					switch (s)
+					{
+						case "url":
+							var ss:String = FlexGlobals.topLevelApplication.parameters[s]  as String;
+							ss += "?wsdl";
+							textArea.text += " \n ПРИНЯТЫЙ ОТ HTML Wsdl Url: " + ss;							
+							gateway.serviceStart(ss);
+							gateway.showBusyCursor = true;
+							GetWorkBlockResult.token = 	gateway.GetWorkBlock();
+							break;
+						case "sid":
+							textArea.text += " \n ПРИНЯТАЯ СТРОКА Cloud Observer Content IDs: " + FlexGlobals.topLevelApplication.parameters[s];
+							contentIdsArray = String(FlexGlobals.topLevelApplication.parameters[s]).split(/,/);
+							break;
+						default:
+							textArea.text += " \n остальные посланные аргументы: " + s + " " + FlexGlobals.topLevelApplication.parameters[s] + "; ";
+							break;
+					}
+				}
+				channel.addEventListener(Event.SOUND_COMPLETE, onPlaybackComplete);
+				sound.addEventListener(IOErrorEvent.IO_ERROR, funError);
+			}
+			
+			protected function GetWorkBlockResult_resultHandler(event:ResultEvent):void
+			{
+				workBlockUri = event.result as String;
+				workBlockUri += "?wsdl";
+				textArea.text +=  " \n Принятый Work Block Uri: " + workBlockUri;
+				workBlock.serviceStart(workBlockUri);
+				workBlock.showBusyCursor = true;
+				var contentIds:ArrayCollection = new ArrayCollection(contentIdsArray);
+				textArea.text +=  " \n Переведенный в ArrayCollection массив идентификаторов потока: " + contentIds.toString();
+				GetTcpStreamUriToReadResult.token = workBlock.GetTcpStreamUriToRead(contentIds);
+				
+			}
+			
+			protected function GetTcpStreamUriToReadResult_resultHandler(event:ResultEvent):void
+			{
+				var streamUri:String = event.result as String;
+				textArea.text +=  " \n Принятый streamUri Url: " + streamUri;
+				startFun(streamUri);
+			}
+			
+			//Ниже функции проигрывателя, в том числе ловящие ошибки и сьедающие их.
+			public function startFun(streamUri:String):void
+			{
+				stopFun();
+				var request:URLRequest = new URLRequest(streamUri);
+				sound = new Sound();
+				sound.load(request);
+				sound.addEventListener(IOErrorEvent.IO_ERROR, funError);
+				channel = sound.play();
+			}
+			
+			public function stopFun():void
+			{
+				SoundMixer.stopAll();
+			}
+			
+			private function funError(e:IOErrorEvent):void
+			{
+				stopFun();
+			}
+			
+			private function onPlaybackComplete(event:Event):void
+			{
+			}
+
+            // Проверка работоспособности проигрывателя - функия проиграть по ссылке.
+			protected function buttonTestSound_clickHandler(event:MouseEvent):void
+			{
+				startFun(testSoundUriTextInput.text);
+			}
+
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<gateway:Gateway id="gateway" />
+		<s:CallResponder id="GetWorkBlockResult"  result="GetWorkBlockResult_resultHandler(event)"/>
+		<workblock:WorkBlock id="workBlock" />
+		<s:CallResponder id="GetTcpStreamUriToReadResult"  result="GetTcpStreamUriToReadResult_resultHandler(event)"/>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<mx:Form id="form"  x="50" y="47" width="474" height="260">
+		<mx:FormHeading label="Проверка работоспособности сервисов" width="408"/>
+		<mx:FormHeading label="(проводится при инициализации)"/>
+		<mx:FormItem label="GetWorkBlock">
+			<s:TextInput id="getWorkBlockTextInput" text="{GetWorkBlockResult.lastResult as String}"/>
+		</mx:FormItem>
+		<mx:FormItem label="GetTcpStreamUriToRead">
+			<s:TextInput id="getTcpStreamUriToReadTextInput" text="{GetTcpStreamUriToReadResult.lastResult as String}"/>
+		</mx:FormItem>
+		<s:TextArea width="100%" text="Лог операций:" id="textArea" height="100%"/>
+	</mx:Form>
+	<mx:Form x="46" y="313" width="557" height="142">
+		<mx:FormHeading label="Проверка работоспособности проигрывателя" width="465"/>
+		<mx:FormHeading label="(проводится по требованию)"/>
+		<mx:FormItem label="Ссылка на мелодию для тестирования:">
+			<s:TextInput id="testSoundUriTextInput" text="http://superior0.narod.ru/slap.mp3"/>
+		</mx:FormItem>
+		<mx:FormItem label="Проиграть мелодию по ссылке">
+			<s:Button label="Провести проверку" click="buttonTestSound_clickHandler(event)"/>
+		</mx:FormItem>
+	</mx:Form>
+	<mx:FormHeading label="Если все тесты пройдены корректно, можно тестировать версию без UI." width="465" x="46" y="464"/>
+</s:Application>
