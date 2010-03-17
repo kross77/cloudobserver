@@ -1,6 +1,7 @@
 <?php require_once("includes/session.php"); ?>
 <?php require_once("includes/connection.php"); ?>
 <?php require_once("includes/functions.php"); ?>
+<?php $adress = CLOUD_OBSERVER_GATEWAY_ADDRESS; ?>
 <head> 
 	<link rel="stylesheet" href="css/common.css" type="text/css" />
 	<link type="text/css" rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/base/ui.all.css" />
@@ -106,9 +107,9 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 			"src", "CloudObserverCMSFP",
 			   "flashVars", "<?php
 			 
-echo "url=" , CLOUD_WSDL_URL; 
+echo "url=" , $adress; 
   if (isset($_POST['submitForm'])){
-	  	echo "&url=" , CLOUD_WSDL_URL;
+	  	echo "&url=" , $adress;
 	  $array =	$_POST[Streams];
 $count = count($array);
 echo "&sid=" ;
@@ -145,9 +146,9 @@ for ($i = 0; $i < $count; $i++) {
 			<param name="allowScriptAccess" value="sameDomain" />
 			 <param name='flashVars' value='<?php
 			 
-echo "url=" , CLOUD_WSDL_URL; 
+echo "url=" , $adress; 
   if (isset($_POST['submitForm'])){
-	  	echo ",url=" , CLOUD_WSDL_URL;
+	  	echo ",url=" , $adress;
 	  $array =	$_POST[Streams];
 $count = count($array);
 echo ",sid=" ;
