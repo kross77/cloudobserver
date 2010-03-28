@@ -9,6 +9,7 @@ CFilter::CFilter(TCHAR *tszName, LPUNKNOWN punk, HRESULT *phr) :
 		m_InputPin(NAME("Input Pin"),this,&m_InterfaceLock,phr,L"Input")
 {
 }
+
 CFilter::~CFilter()
 {
 }
@@ -32,5 +33,12 @@ HRESULT CFilter::CheckMediaType(const CMediaType *pmt)
 
 HRESULT CFilter::DoRenderSample(IMediaSample *pMediaSample)
 {
+	//we can get pointer to data is renrered
+//	BYTE *buff;
+//	pMediaSample->GetPointer(&buff);
+
+	//we can get actual size of data is saved in buffer
+	//pMediaSample->GetActualDataLength();
+	
 	return NOERROR;
 }

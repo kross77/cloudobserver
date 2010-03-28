@@ -1,13 +1,17 @@
+// This file must include the only time in project. It contains specification
+// for filter using in this project.
 
+//Defines filter name. It is shown in list of filters in GraphEdit util.
 static const WCHAR g_wszName[] = L"Sample Filter Transform Skelet";
 
-
+//Pin's type specification.
 const AMOVIESETUP_MEDIATYPE pinSubtypes = 
 { 
     &MEDIATYPE_Video, 
     &MEDIASUBTYPE_NULL 
 };
 
+//Describes pins using in the filter
 const AMOVIESETUP_PIN AMSPins[]=
 {
 	{L"Input",             // Pin string name
@@ -32,6 +36,7 @@ const AMOVIESETUP_PIN AMSPins[]=
 	}
 };
 
+//Describes filter parameters.
 const AMOVIESETUP_FILTER AMSFilter =
 {
     &CLSID_TransformSkelet,  // Filter CLSID
@@ -55,4 +60,5 @@ CFactoryTemplate g_Templates[] =
     },
 };
 
+//Set list of filters using in the dll
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
