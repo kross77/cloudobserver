@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HttpServer", "..\Projects\HttpServer\HttpServer.csproj", "{32D9F436-D710-4D8D-B467-B57964FCA4ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HttpClient", "..\Projects\HttpClient\HttpClient.csproj", "{CCD2347F-E1E8-47AE-841F-C2B6B7EADAB7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{32D9F436-D710-4D8D-B467-B57964FCA4ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32D9F436-D710-4D8D-B467-B57964FCA4ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32D9F436-D710-4D8D-B467-B57964FCA4ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32D9F436-D710-4D8D-B467-B57964FCA4ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCD2347F-E1E8-47AE-841F-C2B6B7EADAB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCD2347F-E1E8-47AE-841F-C2B6B7EADAB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCD2347F-E1E8-47AE-841F-C2B6B7EADAB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCD2347F-E1E8-47AE-841F-C2B6B7EADAB7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
