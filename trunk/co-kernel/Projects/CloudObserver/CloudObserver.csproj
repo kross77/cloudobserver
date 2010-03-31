@@ -46,9 +46,6 @@
     <Reference Include="System.ServiceModel">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.ServiceModel.PollingDuplex">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.ServiceModel.Web">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -85,12 +82,10 @@
     </Compile>
     <Compile Include="Services\CloudController.cs" />
     <Compile Include="Services\DatabaseManager.cs" />
-    <Compile Include="Services\ExternalPollingDuplexHttpBinding.cs" />
     <Compile Include="Services\Gateway.cs" />
     <Compile Include="Services\ICloudController.cs" />
     <Compile Include="Services\IDatabaseManager.cs" />
     <Compile Include="Services\IGateway.cs" />
-    <Compile Include="Services\InternalNetTcpBinding.cs" />
     <Compile Include="Services\IResourceManager.cs" />
     <Compile Include="Services\IService.cs" />
     <Compile Include="Services\IStorageManager.cs" />
@@ -100,11 +95,6 @@
     <Compile Include="Services\ServicesHelper.cs" />
     <Compile Include="Services\ServiceType.cs" />
     <Compile Include="Services\StorageManager.cs" />
-    <Compile Include="Services\StreamingService\DataTransferredEventArgs.cs" />
-    <Compile Include="Services\StreamingService\IStreamingService.cs" />
-    <Compile Include="Services\StreamingService\IStreamingServiceCallback.cs" />
-    <Compile Include="Services\StreamingService\StreamingService.cs" />
-    <Compile Include="Services\StreamingService\SubscribersChangedEventArgs.cs" />
     <Compile Include="Services\WorkBlock.cs" />
     <Compile Include="Services\WorkBlockHttpRequest.cs" />
     <Compile Include="Services\WorkBlockHttpServer.cs" />
