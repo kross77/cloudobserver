@@ -115,8 +115,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Services\ICloudController.cs" />
-    <Compile Include="Services\IGateway.cs" />
+    <Compile Include="Services\IService.cs" />
     <Compile Include="WindowLicenseAgreement.xaml.cs">
       <SubType>Code</SubType>
       <DependentUpon>WindowLicenseAgreement.xaml</DependentUpon>

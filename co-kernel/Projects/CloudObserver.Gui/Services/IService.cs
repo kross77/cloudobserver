@@ -3,12 +3,12 @@
 namespace CloudObserver.Services
 {
     [ServiceContract]
-    public interface IWorkBlock : IService
+    public interface IService
     {
         [OperationContract]
-        string GetTcpStreamUriToRead(int[] contentIds);
+        void ConnectToCloud(string cloudControllerUri);
 
         [OperationContract]
-        string GetTcpStreamUriToWrite(int contentId);
+        string GetCloudControllerUri();
     }
 }

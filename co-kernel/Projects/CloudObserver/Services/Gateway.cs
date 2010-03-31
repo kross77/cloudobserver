@@ -1,13 +1,13 @@
-﻿using System;
-using System.ServiceModel;
+﻿using System.ServiceModel;
 
 namespace CloudObserver.Services
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
-    public class Gateway : IGateway
+    public class Gateway : Service, IGateway
     {
-        public void Test()
+        public string GetWorkBlock()
         {
+            return this.cloudControllerUri.Replace("cc-0", "wb-0");
         }
     }
 }
