@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
 			   xmlns:s="library://ns.adobe.com/flex/spark" 
-			   xmlns:mx="library://ns.adobe.com/flex/halo" creationComplete="application_creationCompleteHandler(event)" minWidth="1024" minHeight="768" xmlns:gateway="services.gateway.*" xmlns:workblock="services.workblock.*">
+			   xmlns:mx="library://ns.adobe.com/flex/halo" creationComplete="application_creationCompleteHandler(event)" minWidth="1024" minHeight="768" xmlns:gateway="services.gateway.*" xmlns:workblock="services.workblock.*" xmlns:ns1="*">
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
@@ -76,6 +76,7 @@
 				sound.load(request);
 				sound.addEventListener(IOErrorEvent.IO_ERROR, funError);
 				channel = sound.play();
+				testSoundUriTextInput.text = streamUri;
 			}
 			
 			public function stopFun():void
@@ -91,11 +92,49 @@
 			private function onPlaybackComplete(event:Event):void
 			{
 			}
+			public function volumefun(volnumber:Number):void
+			{
+				var transform:SoundTransform=new SoundTransform(volnumber, 0);
+				channel.soundTransform=transform;
+			}
 
             // Проверка работоспособности проигрывателя - функия проиграть по ссылке.
-			protected function buttonTestSound_clickHandler(event:MouseEvent):void
+			protected function testSound_Handler(event:Event):void
 			{
+				stopFun();
 				startFun(testSoundUriTextInput.text);
+			}
+
+
+			protected function buttonReNewSoundUrl_clickHandler(event:MouseEvent):void
+			{
+				stopFun();
+				startFun("http://superior0.narod.ru/slap.mp3");
+			}
+
+
+			protected function testSoundUriTextInput_enterHandler(event:FlexEvent):void
+			{
+				stopFun();
+				startFun(testSoundUriTextInput.text);
+			}
+
+
+			protected function volumetr_changeHandler(event:Event):void
+			{
+				volumefun(volumetr.value/100);
+			}
+
+
+			protected function volumetr_creationCompleteHandler(event:FlexEvent):void
+			{
+				volumefun(volumetr.value/100);
+			}
+
+
+			protected function volumetr_mouseUpHandler(event:MouseEvent):void
+			{
+				volumefun(volumetr.value/100);
 			}
 
 		]]>
@@ -107,26 +146,34 @@
 		<s:CallResponder id="GetTcpStreamUriToReadResult"  result="GetTcpStreamUriToReadResult_resultHandler(event)"/>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
-	<mx:Form id="form"  x="50" y="47" width="474" height="260">
+	<ns1:CloudSoundVisual width="600" height="308" x="58" y="125"/>
+	<mx:Form id="form"  x="46" y="17" width="554" height="260">
 		<mx:FormHeading label="Проверка работоспособности сервисов" width="408"/>
 		<mx:FormHeading label="(проводится при инициализации)"/>
-		<mx:FormItem label="GetWorkBlock">
-			<s:TextInput id="getWorkBlockTextInput" text="{GetWorkBlockResult.lastResult as String}"/>
+		<mx:FormItem label="GetWorkBlock" width="519">
+			<s:TextInput id="getWorkBlockTextInput" text="{GetWorkBlockResult.lastResult as String}" width="100%"/>
 		</mx:FormItem>
-		<mx:FormItem label="GetTcpStreamUriToRead">
-			<s:TextInput id="getTcpStreamUriToReadTextInput" text="{GetTcpStreamUriToReadResult.lastResult as String}"/>
+		<mx:FormItem label="GetTcpStreamUriToRead" width="519">
+			<s:TextInput id="getTcpStreamUriToReadTextInput" text="{GetTcpStreamUriToReadResult.lastResult as String}" width="100%"/>
 		</mx:FormItem>
 		<s:TextArea width="100%" text="Лог операций:" id="textArea" height="100%"/>
 	</mx:Form>
-	<mx:Form x="46" y="313" width="557" height="142">
-		<mx:FormHeading label="Проверка работоспособности проигрывателя" width="465"/>
-		<mx:FormHeading label="(проводится по требованию)"/>
-		<mx:FormItem label="Ссылка на мелодию для тестирования:">
-			<s:TextInput id="testSoundUriTextInput" text="http://superior0.narod.ru/slap.mp3"/>
+	<mx:Form x="49" y="356" width="557" height="142">
+		<mx:FormHeading label="Проверка работоспособности МП3 плеера" width="408"/>
+		<mx:FormItem label="Ссылка на мелодию для тестирования:" width="100%">
+			<s:TextInput id="testSoundUriTextInput" text="http://superior0.narod.ru/slap.mp3" width="100%" enter="testSoundUriTextInput_enterHandler(event)"/>
 		</mx:FormItem>
-		<mx:FormItem label="Проиграть мелодию по ссылке">
-			<s:Button label="Провести проверку" click="buttonTestSound_clickHandler(event)"/>
+		<mx:FormItem label="Проиграть мелодию по ссылке" width="100%">
+			<s:Button label="Провести проверку" click="testSound_Handler(event)" width="99%"/>
+		</mx:FormItem>
+		<mx:FormItem label="Проиграть мелодию Из коллекции" width="100%">
+		<s:Button label="Проиграть мелодию slap.mp3" click="buttonReNewSoundUrl_clickHandler(event)" width="99%"/>
 		</mx:FormItem>
 	</mx:Form>
-	<mx:FormHeading label="Если все тесты пройдены корректно, можно тестировать версию без UI." width="465" x="46" y="464"/>
+	<mx:FormHeading label="Если все тесты пройдены корректно, можно тестировать версию без UI." width="465" x="46" y="494"/>
+	<s:VSlider x="27" y="279" toolTip="Громкость" creationComplete="volumetr_creationCompleteHandler(event)" minimum="0" maximum="100" stepSize="1" value="90" change="volumetr_changeHandler(event)" id="volumetr" enabled="true" liveDragging="true" mouseUp="volumetr_mouseUpHandler(event)"/>
+	<s:Label x="14" y="362" text="Громкость" rotationY="0" rotationX="0" rotationZ="270"/>
+	
+
+
 </s:Application>
