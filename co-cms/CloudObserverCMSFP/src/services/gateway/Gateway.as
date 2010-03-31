@@ -34,9 +34,9 @@ public class Gateway extends WebServiceWrapper
 				var operations:Object = new Object();
 				var operation:Operation;         
 				
-				operation = new Operation(null, "GetTcpStreamUriToRead");
+				operation = new Operation(null, "GetWorkBlock");
 				operation.resultType = String; 		 
-				operations["GetTcpStreamUriToRead"] = operation;
+				operations["GetWorkBlock"] = operation;
 				
 				_serviceControl.operations = operations;              
 		
