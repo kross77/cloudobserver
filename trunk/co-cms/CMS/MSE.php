@@ -58,7 +58,7 @@ $streams_set = mysql_query($query, $connection);
 	$streams_count = mysql_num_rows($streams_set);
 
 while ($row = mysql_fetch_array($streams_set)){
-  echo '<option value="' , $row['streamId'] , '"> sid: ' , $row['streamId'] , ' name: ' , $row['username'] , '</option> ';
+ echo '<option value="' , $row['streamId'] , '">  ' , $row['username'] , ' (' , $row['streamId'] ,')' ,'</option> ';
 }
      
 
