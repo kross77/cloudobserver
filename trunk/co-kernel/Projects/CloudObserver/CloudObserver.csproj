@@ -52,6 +52,7 @@
     <Reference Include="System.ServiceModel.Web">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Capture\ChunkCapturedEventArgs.cs" />
@@ -91,10 +92,13 @@
     <Compile Include="Services\IGateway.cs" />
     <Compile Include="Services\InternalNetTcpBinding.cs" />
     <Compile Include="Services\IResourceManager.cs" />
+    <Compile Include="Services\IService.cs" />
     <Compile Include="Services\IStorageManager.cs" />
     <Compile Include="Services\IWorkBlock.cs" />
     <Compile Include="Services\ResourceManager.cs" />
+    <Compile Include="Services\Service.cs" />
     <Compile Include="Services\ServicesHelper.cs" />
+    <Compile Include="Services\ServiceType.cs" />
     <Compile Include="Services\StorageManager.cs" />
     <Compile Include="Services\StreamingService\DataTransferredEventArgs.cs" />
     <Compile Include="Services\StreamingService\IStreamingService.cs" />
@@ -102,6 +106,8 @@
     <Compile Include="Services\StreamingService\StreamingService.cs" />
     <Compile Include="Services\StreamingService\SubscribersChangedEventArgs.cs" />
     <Compile Include="Services\WorkBlock.cs" />
+    <Compile Include="Services\WorkBlockHttpRequest.cs" />
+    <Compile Include="Services\WorkBlockHttpServer.cs" />
     <Compile Include="Tools\BitTools.cs" />
     <Compile Include="Tools\StringExtensions.cs" />
   </ItemGroup>
@@ -117,6 +123,12 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mp3Sharp\Mp3Sharp.csproj">
+      <Project>{834CAB58-648D-47CC-AC6F-D01C08C809A4}</Project>
+      <Name>Mp3Sharp</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

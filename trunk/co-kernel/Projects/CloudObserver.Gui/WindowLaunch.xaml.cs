@@ -43,6 +43,8 @@ namespace CloudObserver.Gui
         private OperationStage operationStage4 = null;
         private OperationStage operationStage5 = null;
         private OperationStage operationStage6 = null;
+        private OperationStage operationStage7 = null;
+        private OperationStage operationStage8 = null;
 
         private OperationResult operationResult = null;
 
@@ -74,8 +76,12 @@ namespace CloudObserver.Gui
             stackPanel.Children.Add(operationStage4);
             operationStage5 = new OperationStage("Checking the controller service...");
             stackPanel.Children.Add(operationStage5);
-            operationStage6 = new OperationStage("Finishing the launch...");
+            operationStage6 = new OperationStage("Launching the work block service...");
             stackPanel.Children.Add(operationStage6);
+            operationStage7 = new OperationStage("Checking the work block service...");
+            stackPanel.Children.Add(operationStage7);
+            operationStage8 = new OperationStage("Finishing the launch...");
+            stackPanel.Children.Add(operationStage8);
 
             operationResult = new OperationResult(new RoutedEventHandler(ButtonOK_Click));
             stackPanel.Children.Add(operationResult);
@@ -99,7 +105,8 @@ namespace CloudObserver.Gui
             // Stage 1: Prepare the launch configuration.
             operationStage1.Start();
             string gatewayServiceAddress = instanceGatewayAddress;
-            string controllerServiceAddress = instanceGatewayAddress + @"\cc-0";
+            string controllerServiceAddress = instanceGatewayAddress + @"/cc-0";
+            string workBlockServiceAddress = instanceGatewayAddress + @"/wb-0";
             operationStage1.Succeed();
 
             // Stage 2: Launch the gateway service.
@@ -122,12 +129,12 @@ namespace CloudObserver.Gui
 
             // Stage 3: Check the gateway service.
             operationStage3.Start();
-            using (ChannelFactory<IGateway> channelFactory = new ChannelFactory<IGateway>(new BasicHttpBinding(), gatewayServiceAddress))
+            using (ChannelFactory<IService> channelFactory = new ChannelFactory<IService>(new BasicHttpBinding(), gatewayServiceAddress))
             {
-                IGateway gateway = channelFactory.CreateChannel();
+                IService gateway = channelFactory.CreateChannel();
                 try
                 {
-                    gateway.Test();
+                    gateway.ConnectToCloud(controllerServiceAddress);
                 }
                 catch (Exception)
                 {
@@ -169,12 +176,12 @@ namespace CloudObserver.Gui
 
             // Stage 5: Check the controller service.
             operationStage5.Start();
-            using (ChannelFactory<ICloudController> channelFactory = new ChannelFactory<ICloudController>(new BasicHttpBinding(), controllerServiceAddress))
+            using (ChannelFactory<IService> channelFactory = new ChannelFactory<IService>(new BasicHttpBinding(), controllerServiceAddress))
             {
-                ICloudController controller = channelFactory.CreateChannel();
+                IService controller = channelFactory.CreateChannel();
                 try
                 {
-                    controller.Test();
+                    controller.ConnectToCloud(controllerServiceAddress);
                 }
                 catch (Exception)
                 {
@@ -196,9 +203,56 @@ namespace CloudObserver.Gui
             }
             operationStage5.Succeed();
 
-            // Stage 6: Finish the launch.
+            // Stage 6: Launch the work block service.
             operationStage6.Start();
+            ProcessStartInfo workBlockServiceHostProcessStartInfo = new ProcessStartInfo();
+            workBlockServiceHostProcessStartInfo.FileName = serviceHostProcessFileName;
+            workBlockServiceHostProcessStartInfo.Arguments = workBlockServiceAddress + " WB";
+            workBlockServiceHostProcessStartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            Process workBlockServiceHostProcess = new Process();
+            workBlockServiceHostProcess.StartInfo = workBlockServiceHostProcessStartInfo;
+            workBlockServiceHostProcess.Start();
+            Thread.Sleep(serviceStartTimeout);
+            if (workBlockServiceHostProcess.HasExited)
+            {
+                operationStage6.Failed();
+                LaunchFailed();
+                return;
+            }
             operationStage6.Succeed();
+
+            // Stage 7: Check the work block service.
+            operationStage7.Start();
+            using (ChannelFactory<IService> channelFactory = new ChannelFactory<IService>(new BasicHttpBinding(), workBlockServiceAddress))
+            {
+                IService workBlock = channelFactory.CreateChannel();
+                try
+                {
+                    workBlock.ConnectToCloud(controllerServiceAddress);
+                }
+                catch (Exception)
+                {
+                    operationStage7.Failed();
+                    LaunchFailed();
+                    return;
+                }
+                finally
+                {
+                    try
+                    {
+                        ((IClientChannel)workBlock).Close();
+                    }
+                    catch (Exception)
+                    {
+                        ((IClientChannel)workBlock).Abort();
+                    }
+                }
+            }
+            operationStage7.Succeed();
+
+            // Stage 8: Finish the launch.
+            operationStage8.Start();
+            operationStage8.Succeed();
 
             LaunchSucceed();
         }
