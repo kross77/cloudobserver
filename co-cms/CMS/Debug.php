@@ -2,6 +2,7 @@
 <?php require_once("includes/connection.php"); ?>
 <?php require_once("includes/functions.php"); ?>
 <?php $adress = CLOUD_OBSERVER_GATEWAY_ADDRESS; ?>
+
 <head> 
 	<link rel="stylesheet" href="css/common.css" type="text/css" />
 	<link type="text/css" rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/base/ui.all.css" />
@@ -43,9 +44,9 @@ var requiredRevision = 0;
 <body>
 
  	<div class="ui-widget-content ui-corner-all" style="width: 459px; margin: 0 auto;">
-    <form action="MSE.php" method="post">
+    <form action="Debug.php" method="post">
     		<fieldset class="ui-widget-content ui-corner-all">
-      <select id="Streams" class="multiselect ui-widget-content ui-corner-all" multiple="multiple" name="Streams[]">
+  <select id="Streams" class="multiselect ui-widget-content ui-corner-all" multiple="multiple" name="Streams[]">
      <?php      
      $query = "
 SELECT s.streamId, s.userId, u.username
@@ -54,15 +55,12 @@ JOIN user AS u ON s.userId = u.id
 LIMIT 0 , 30
   ";
 $streams_set = mysql_query($query, $connection);
-	confirm_query($streams_set);	
-	$streams_count = mysql_num_rows($streams_set);
+    confirm_query($streams_set);    
+    $streams_count = mysql_num_rows($streams_set);
 
 while ($row = mysql_fetch_array($streams_set)){
- echo '<option value="' , $row['streamId'] , '">  ' , $row['username'] , ' (' , $row['streamId'] ,')' ,'</option> ';
-}
-     
-
-    ?>
+ echo '<option value="' . $row['streamId'] . '"' . (in_array($row['streamId'], $_POST['Streams']) ? ' selected' : ''). '>  ' . $row['username'] . ' (' . $row['streamId'] .')' .'</option> ';
+} ?>
       </select>
       <br/>
       <input type="submit" class="ui-state-default ui-corner-all" name="submitForm" id="submitForm"  value="Play Stream from selected URL's!"/>    
@@ -107,7 +105,7 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 			"src", "CloudObserverCMSFP",
 			   "flashVars", "<?php
 			 
-echo "url=" , $adress; 
+
   if (isset($_POST['submitForm'])){
 	  	echo "&url=" , $adress;
 	  $array =	$_POST[Streams];
@@ -147,7 +145,7 @@ for ($i = 0; $i < $count; $i++) {
 			<param name="allowScriptAccess" value="sameDomain" />
 			 <param name='flashVars' value='<?php
 			 
-echo "url=" , $adress; 
+
   if (isset($_POST['submitForm'])){
 	  	echo ",url=" , $adress;
 	  $array =	$_POST[Streams];
