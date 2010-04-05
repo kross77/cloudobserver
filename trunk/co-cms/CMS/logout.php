@@ -17,5 +17,5 @@
 		// 4. Destroy the session
 		session_destroy();
 		
-		redirect_to("lin.php");
+		redirect_to("./");
 ?>

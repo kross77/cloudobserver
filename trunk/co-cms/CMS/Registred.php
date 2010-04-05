@@ -89,20 +89,19 @@ include_once("includes/form_functions.php");
   <form id="form4"  method="post">
 	<fieldset class="ui-widget-content ui-corner-all">
 			<legend class="ui-widget-header ui-corner-all">All user's streams!</legend>
-  <iframe  src="MSE.php"   width="100%" height="240"  class="ui-widget-content ui-corner-all" align="center"
+  <iframe  src="Debug.php"   width="100%" height="240"  class="ui-widget-content ui-corner-all" align="center"
    align="right" SCROLLING="NO"></iframe>
    
 				</fieldset>	
 	</form>
-			<H1> TRANSFER INTO REGISTRED USERS!</H1>
+	
 		
 
-	<form id="form3" action="Reg.php" method="post">
+	<form id="form3" action="Registred.php" method="post">
 	<fieldset class="ui-widget-content ui-corner-all">
 			<h1>Want to add stream? Add It!</h1>
 		<legend class="ui-widget-header ui-corner-all">CMS supports multiple streams of same ID in one user</legend>
 		<div class="ui-formular-error"></div> 
-		<h1> Your ID is <?php echo $_SESSION['user_id'];?> <h1>
 				<!--<label class="grey" for="uid"  >User ID (in real life CMS taken from session in API KEY) :</label> -->
 					<input class="text ui-widget-content ui-corner-all" type="hidden"  name="uid" id="uid" value="<?php echo $_SESSION['user_id'];?>" size="30"  />
 					<br/>
@@ -114,7 +113,7 @@ include_once("includes/form_functions.php");
 				</fieldset>	
 	</form>
 
-
+<?php include("includes/DebugComponentAd.php"); ?>
 
 			<div>
 		</div><!-- / content -->		

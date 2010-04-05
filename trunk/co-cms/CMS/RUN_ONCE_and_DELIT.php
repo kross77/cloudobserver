@@ -29,3 +29,39 @@ PRIMARY KEY (  `id` )
 			$message = "The STREAMS table was successfully created.";
 
 		?>
+		<?php include("includes/header.php"); ?>
+		<div id="toppanel" style="position:fixed">
+	<div id="panel">
+		<div class="content clearfix">
+
+		</div>
+	</div> <!-- /login -->	
+
+    <!-- The tab on top -->	
+	<div class="tab">
+		<ul class="login">
+	    	<li class="left">&nbsp;</li>
+	        <li>Set Up Tables Module</li>
+		 	<li class="sep">|</li>
+			<li id="toggle">
+			<a  href="logout.php">		Go to Main Page </a>
+			</li>
+	    	<li class="right">&nbsp;</li>
+		</ul> 
+
+	</div> <!-- / top -->
+	
+</div> <!--panel -->
+
+    <div id="container">
+		<div id="content" style="padding-top:100px;">
+			<?php if (!empty($message)) {echo "<h2>message</h2> <p class=\"message\">" . $message . "</p>";} ?>
+			<?php if (!empty($errors)) { display_errors($errors); } ?>
+			<br/>
+			<h1> <a  href="logout.php">		Go to Main Page </a> <h1>
+			<div>
+			<div>
+		</div><!-- / content -->		
+	</div><!-- / container -->
+	
+</body>

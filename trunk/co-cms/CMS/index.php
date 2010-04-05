@@ -3,7 +3,7 @@
 <?php require_once("includes/functions.php"); ?>
 <?php
 if (logged_in()) {
-		redirect_to("Reg.php");
+		redirect_to("Registred.php");
 	}
 		include_once("includes/form_functions.php");
 
@@ -40,7 +40,7 @@ if (logged_in()) {
 				$_SESSION['email'] = $found_user['email'];
 				
 					$message = "The user was successfully LogedIn.";
-		redirect_to("Reg.php");
+		redirect_to("Registred.php");
 			} else {
 				// username/password combo was not found in the database
 				$message = "Username/password combination incorrect.<br />
@@ -184,7 +184,7 @@ if (logged_in()) {
 			</div>
 <div class="left">
 
-	<form id="form1" action="lin.php" method="post">
+	<form id="form1" action="index.php" method="post">
 	<fieldset class="ui-widget-content ui-corner-all">
 			<legend class="ui-widget-header ui-corner-all">A Member? Login!</legend>
 				<label class="grey" for="email">Email (6-30):</label>
@@ -200,13 +200,13 @@ if (logged_in()) {
 
 <div class="left right">				
 
-					<form id="form2" action="lin.php" method="post">
+					<form id="form2" action="index.php" method="post">
 		<fieldset class="ui-widget-content ui-corner-all">
 			<legend class="ui-widget-header ui-corner-all">Not a member yet? Sign Up!</legend>	
 					<label class="grey" for="username">Username  (6-15):</label>
-					<input class="text ui-widget-content ui-corner-all"  type="text" name="username" id="username"  size="30"  value="Usdsdf sdsd"/>
+					<input class="text ui-widget-content ui-corner-all"  type="text" name="username" id="username"  size="30"  value="Example Name"/>
 					<label class="grey" for="email">Email  (6-30):</label>
-					<input class="text ui-widget-content ui-corner-all"  type="text" name="email" id="email" size="30"  value="sdfsdfsdfs@redr.tt"  />
+					<input class="text ui-widget-content ui-corner-all"  type="text" name="email" id="email" size="30"  value="Example@Example.com"  />
 					<label class="grey" for="password" >Password  (6-15):</label>
 					<input class="text ui-widget-content ui-corner-all"  type="password" name="password"  id="password" size="30"  value=""  />	
           <input type="submit" name="submitRegister" id="submitRegister" value="Register" class="ui-state-default ui-corner-all" />
@@ -246,29 +246,13 @@ if (logged_in()) {
   <form id="form4"  method="post">
 	<fieldset class="ui-widget-content ui-corner-all">
 			<legend class="ui-widget-header ui-corner-all">All user's streams!</legend>
-  <iframe  src="MSE.php"   width="100%" height="240"  class="ui-widget-content ui-corner-all" align="center"
+  <iframe  src="Debug.php"   width="100%" height="240"  class="ui-widget-content ui-corner-all" align="center"
    align="right" SCROLLING="NO"></iframe>
    
 				</fieldset>	
 	</form>
-			<H1> TRANSFER INTO REGISTRED USERS!</H1>
-		
 
-	<form id="form3" action="lin.php" method="post">
-	<fieldset class="ui-widget-content ui-corner-all">
-			<h1>Want to add stream? Add It!</h1>
-		<legend class="ui-widget-header ui-corner-all">CMS supports multiple streams of same ID in one user</legend>
-		<div class="ui-formular-error"></div> 
-				<label class="grey" for="uid">User ID (in real life CMS taken from session in API KEY) :</label>
-					<input class="text ui-widget-content ui-corner-all" type="text"  name="uid" id="uid" value="" size="30"  />
-					<br/>
-					<label class="grey" for="sid">Stream ID (Cloud Observer Core SID):</label>
-					<input class="text ui-widget-content ui-corner-all" type="sid" name="sid"  id="sid" size="30" value=""  />
-					<br/>
-			<input type="submit" name="CreateStream" id="CreateStream" value="Add Stream" class="ui-state-default ui-corner-all" />
-			<input type="reset" value="Reset" class="ui-state-default ui-corner-all" />
-				</fieldset>	
-	</form>
+<?php include("includes/DebugComponentAd.php"); ?>
 
 
 
@@ -313,38 +297,7 @@ validateLive: true,
 disabled: false,
 submitHowTo: "post"		
 			});		
-						var formular1 = $("#form3").formValidator({
-				forms: {			
-					uid: {
-						rules: {
-							lengthMin: 1,
-							lengthMax: 11,
-							regEx: "number",
-							required: true
-						},
-						msg: {	
-							regEx: "Please enter a valid User ID adress.",
-							required: "Please enter your User ID adress."	
-						}
-					},
-					sid: {
-						rules: {
-							lengthMin: 1,
-							lengthMax: 11,
-							regEx: "number",
-							required: true
-						},
-						msg: {	
-							regEx: "Please enter a valid Stream ID adress.",
-							required: "Please enter your Cloud Observer Stream ID adress."	
-						}
-					},
-
-},
-validateLive: true,
-disabled: false,
-submitHowTo: "post"		
-			});					
+					
 			var formular2 = $("#form2").formValidator({
 				forms: {
 					username:{
