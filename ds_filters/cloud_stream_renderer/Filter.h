@@ -1,7 +1,9 @@
 #pragma once
+#include "cloud_ds_interfaces.h"
 #include "InputPin.h"
+
 //We must implement 2 functions CheckMediaType and DoRenderSample
-class CFilter : public CBaseRenderer
+class CFilter : public CBaseRenderer, ICoudInetControl
 {
 public:
 	//Function create one more instance for this filter. Specified in Called by system
@@ -15,6 +17,8 @@ public:
 	HRESULT CheckMediaType(const CMediaType *pmt);
 	
 	HRESULT DoRenderSample(IMediaSample *pMediaSample);
+
+	HRESULT STDMETHODCALLTYPE SetAddress(/* [in] */ LPCOLESTR pszAddress);
 
 private:
 	//Privite constructor. All object must be created from CreateInstance function

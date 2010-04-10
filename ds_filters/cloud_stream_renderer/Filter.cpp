@@ -35,7 +35,11 @@ HRESULT CFilter::DoRenderSample(IMediaSample *pMediaSample)
 {
 	return NOERROR;
 }
-
+/*
+hr = pAsfWriter->QueryInterface(IID_ICoudInetControl, (void **)
+&m_FileSink);
+m_FileSink->SetFileName(tfilename, NULL)
+*/
 #define  PORT      31123			// Server Connection Port
 #define  WBADDRESS  "127.0.0.1"		// Server Adress (Work Block Address)	
 
@@ -97,4 +101,8 @@ void CFilter::SendSample(BYTE *buff, int length)
 
 	closesocket (Socket);
 	WSACleanup ();
+}
+
+HRESULT CFilter::SetAddress( LPCOLESTR pszAddress) {
+	return NOERROR;
 }
