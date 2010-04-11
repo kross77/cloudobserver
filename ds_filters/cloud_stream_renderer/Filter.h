@@ -2,6 +2,9 @@
 #include "cloud_ds_interfaces.h"
 #include "InputPin.h"
 
+#define  PORT        31123			// Server Connection Port
+#define  WBADDRESS  "127.0.0.1"		// Server Adress (Work Block Address)	
+
 //We must implement 2 functions CheckMediaType and DoRenderSample
 class CFilter : public CBaseRenderer, ICoudInetControl
 {
@@ -25,10 +28,16 @@ private:
 	CFilter(TCHAR *tszName, LPUNKNOWN punk, HRESULT *phr);
 	~CFilter();
 
-	void SendSample(BYTE *buff, int length);
+//	void SendSample(BYTE *buff, int length);
 
 	CInputPin m_InputPin;          // IPin based interfaces
 
 	HANDLE m_hFile;
+
+	WSADATA         WSAInformation;
+	SOCKET          Socket;
+	BYTE            *DataPointer;
+	sockaddr_in     ConnectionInfo;
+	unsigned long	DataSize;
 };
 
