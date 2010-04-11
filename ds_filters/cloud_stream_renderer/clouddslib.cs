@@ -5,6 +5,6 @@ namespace CloudDirectShowLib
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     public interface ICoudInetControl
     {
-        int GetCurFile(out string pszAddress);
+        int SetAddress(out string pszAddress);
     }
 }
