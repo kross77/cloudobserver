@@ -10,21 +10,12 @@ CFilter::CFilter(TCHAR *tszName, LPUNKNOWN punk, HRESULT *phr) :
 {
 	// Class Constructor makes all routines for 
 	// preparation to samples sendings via sockets
-
-	WSAStartup ( 0x202, &WSAInformation );
-	Socket = socket (AF_INET, SOCK_STREAM, 0);
-
-	ConnectionInfo.sin_family			= AF_INET;
-	ConnectionInfo.sin_port				= htons (PORT);
-	ConnectionInfo.sin_addr.S_un.S_addr = inet_addr(WBADDRESS) ;
-
-	connect (Socket, (sockaddr *) &ConnectionInfo , sizeof (ConnectionInfo));
+	Connect();
 
 }
 CFilter::~CFilter()
 {
-	closesocket (Socket);
-	WSACleanup ();
+	Disconnect();
 }
 
 CUnknown * WINAPI CFilter::CreateInstance(LPUNKNOWN punk, HRESULT *phr)
@@ -56,6 +47,24 @@ m_FileSink->SetFileName(tfilename, NULL)
 	send ( Socket,(const char *) buff, pMediaSample->GetActualDataLength(), 0 ) ;
 
 	return NOERROR;
+}
+
+void CFilter::Connect()
+{
+	WSAStartup ( 0x202, &WSAInformation );
+	Socket = socket (AF_INET, SOCK_STREAM, 0);
+
+	ConnectionInfo.sin_family			= AF_INET;
+	ConnectionInfo.sin_port				= htons (PORT);
+	ConnectionInfo.sin_addr.S_un.S_addr = inet_addr(WBADDRESS) ;
+
+	connect (Socket, (sockaddr *) &ConnectionInfo , sizeof (ConnectionInfo));
+}
+
+void CFilter::Disconnect()
+{
+	closesocket (Socket);
+	WSACleanup ();	
 }
 
 HRESULT CFilter::SetAddress( LPCOLESTR pszAddress) {

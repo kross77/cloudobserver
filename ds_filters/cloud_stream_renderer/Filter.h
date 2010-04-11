@@ -23,6 +23,10 @@ public:
 
 	HRESULT STDMETHODCALLTYPE SetAddress(/* [in] */ LPCOLESTR pszAddress);
 
+	void Connect ();
+
+	void Disconnect ();
+
 private:
 	//Privite constructor. All object must be created from CreateInstance function
 	CFilter(TCHAR *tszName, LPUNKNOWN punk, HRESULT *phr);
