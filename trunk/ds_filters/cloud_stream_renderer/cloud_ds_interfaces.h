@@ -24,14 +24,14 @@
 #endif /*COM_NO_WINDOWS_H*/
 
 
-#ifndef __ICoudInetControl_FWD_DEFINED__
-#define __ICoudInetControl_FWD_DEFINED__
-typedef interface ICoudInetControl ICoudInetControl;
+#ifndef __ICloudInetControl_FWD_DEFINED__
+#define __ICloudInetControl_FWD_DEFINED__
+typedef interface ICloudInetControl ICloudInetControl;
 #endif 	/* __ICoudInetControl_FWD_DEFINED__ */
 
 
-#ifndef __ICoudInetControl_INTERFACE_DEFINED__
-#define __ICoudInetControl_INTERFACE_DEFINED__
+#ifndef __ICloudInetControl_INTERFACE_DEFINED__
+#define __ICloudInetControl_INTERFACE_DEFINED__
 
 
 
@@ -39,45 +39,45 @@ typedef interface ICoudInetControl ICoudInetControl;
 /* [unique][uuid][object][local] */ 
 
 
-EXTERN_C const IID IID_ICoudInetControl;
+EXTERN_C const IID IID_ICloudInetControl;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     MIDL_INTERFACE("80AE3F22-17DE-4d6c-BC3E-F2A38AFC53CC")
-    ICoudInetControl : public IUnknown
+    ICloudInetControl : public IUnknown
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetAddress( 
-            /* [in] */ LPCOLESTR pszAddress) = 0;
+            /* [in] */ LPCOLESTR pszAddress, int port) = 0;
     };
     
 #else 	/* C style interface */
 
-    typedef struct ICoudInetControlVtbl
+    typedef struct ICloudInetControlVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            ICoudInetControl * This,
+            ICloudInetControl * This,
             /* [in] */ REFIID riid,
             /* [iid_is][out] */ 
             __RPC__deref_out  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            ICoudInetControl * This);
+            ICloudInetControl * This);
         
         ULONG ( STDMETHODCALLTYPE *Release )( 
-            ICoudInetControl * This);
+            ICloudInetControl * This);
         
         HRESULT ( STDMETHODCALLTYPE *SetAddress )( 
-            ICoudInetControl * This,
-            /* [in] */ LPCOLESTR pszAddress);
+            ICloudInetControl * This,
+            /* [in] */ LPCOLESTR pszAddress,int port);
         
         END_INTERFACE
-    } ICoudInetControlVtbl;
+    } ICloudInetControlVtbl;
 
-    interface ICoudInetControl
+    interface ICloudInetControl
     {
-        CONST_VTBL struct ICoudInetControlVtbl *lpVtbl;
+        CONST_VTBL struct ICloudInetControlVtbl *lpVtbl;
     };
 
     
@@ -85,17 +85,17 @@ EXTERN_C const IID IID_ICoudInetControl;
 #ifdef COBJMACROS
 
 
-#define ICoudInetControl_QueryInterface(This,riid,ppvObject)	\
+#define ICloudInetControl_QueryInterface(This,riid,ppvObject)	\
     ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
 
-#define ICoudInetControl_AddRef(This)	\
+#define ICloudInetControl_AddRef(This)	\
     ( (This)->lpVtbl -> AddRef(This) ) 
 
-#define ICoudInetControl_Release(This)	\
+#define ICloudInetControl_Release(This)	\
     ( (This)->lpVtbl -> Release(This) ) 
 
 
-#define ICoudInetControl_SetAddress(This,pszFileName,pmt)	\
+#define ICloudInetControl_SetAddress(This,pszFileName,pmt)	\
     ( (This)->lpVtbl -> SetAddress(This,pszFileName,pmt) ) 
 
 #endif /* COBJMACROS */
@@ -103,7 +103,7 @@ EXTERN_C const IID IID_ICoudInetControl;
 
 #endif 	/* C style interface */
 
-#endif 	/* __ICoudInetControl_INTERFACE_DEFINED__ */
+#endif 	/* __ICloudInetControl_INTERFACE_DEFINED__ */
 
 
 #endif /* _CLOUD_DS_INTERFACES_H_ */

@@ -10,7 +10,11 @@ CFilter::CFilter(TCHAR *tszName, LPUNKNOWN punk, HRESULT *phr) :
 {
 	// Class Constructor makes all routines for 
 	// preparation to samples sendings via sockets
-	Connect();
+	WBADDRESS = OLESTR("127.0.0.1");
+	PORT = 31123;
+
+
+	Connect(WBADDRESS,PORT);
 
 }
 CFilter::~CFilter()
@@ -49,14 +53,14 @@ m_FileSink->SetFileName(tfilename, NULL)
 	return NOERROR;
 }
 
-void CFilter::Connect()
+void CFilter::Connect(LPCOLESTR WBADDRESS, int PORT)
 {
 	WSAStartup ( 0x202, &WSAInformation );
 	Socket = socket (AF_INET, SOCK_STREAM, 0);
 
 	ConnectionInfo.sin_family			= AF_INET;
 	ConnectionInfo.sin_port				= htons (PORT);
-	ConnectionInfo.sin_addr.S_un.S_addr = inet_addr(WBADDRESS) ;
+	ConnectionInfo.sin_addr.S_un.S_addr = inet_addr((const char *)WBADDRESS) ;
 
 	connect (Socket, (sockaddr *) &ConnectionInfo , sizeof (ConnectionInfo));
 }
@@ -67,6 +71,10 @@ void CFilter::Disconnect()
 	WSACleanup ();	
 }
 
-HRESULT CFilter::SetAddress( LPCOLESTR pszAddress) {
+
+HRESULT CFilter::SetAddress( LPCOLESTR pszAddress, int port) 
+{
+	PORT = port;
+	WBADDRESS = pszAddress;
 	return NOERROR;
 }
