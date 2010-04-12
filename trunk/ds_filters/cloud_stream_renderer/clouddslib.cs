@@ -5,6 +5,6 @@ namespace CloudDirectShowLib
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     public interface ICloudInetControl
     {
-        int SetAddress(out string pszAddress);
+        int SetAddress(out string pszAddress, int port);
     }
 }
