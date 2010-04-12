@@ -2,11 +2,10 @@
 #include "cloud_ds_interfaces.h"
 #include "InputPin.h"
 
-#define  PORT        31123			// Server Connection Port
-#define  WBADDRESS  "127.0.0.1"		// Server Adress (Work Block Address)	
+
 
 //We must implement 2 functions CheckMediaType and DoRenderSample
-class CFilter : public CBaseRenderer, ICoudInetControl
+class CFilter : public CBaseRenderer, ICloudInetControl
 {
 public:
 	//Function create one more instance for this filter. Specified in Called by system
@@ -21,9 +20,9 @@ public:
 	
 	HRESULT DoRenderSample(IMediaSample *pMediaSample);
 
-	HRESULT STDMETHODCALLTYPE SetAddress(/* [in] */ LPCOLESTR pszAddress);
+	HRESULT STDMETHODCALLTYPE SetAddress(/* [in] */ LPCOLESTR pszAddress,int port);
 
-	void Connect ();
+	void Connect (LPCOLESTR WBADDRESS, int PORT);
 
 	void Disconnect ();
 
@@ -43,5 +42,7 @@ private:
 	BYTE            *DataPointer;
 	sockaddr_in     ConnectionInfo;
 	unsigned long	DataSize;
+	int				PORT;			//31123;			// Server Connection Port
+	LPCOLESTR		WBADDRESS;		//"127.0.0.1";		// Server Adress (Work Block Address)	
 };
 
