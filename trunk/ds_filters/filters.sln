@@ -13,6 +13,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "renderer_writer", "renderer
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cloud_stream_renderer", "cloud_stream_renderer\cloud_stream_renderer.vcproj", "{8632F0A2-B568-484C-B5FB-274C3C440A86}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test_ictrl", "test_ictrl\test_ictrl.csproj", "{7BDC7550-974B-4C80-951F-20FD95036FC1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,16 @@ Global
 		{8632F0A2-B568-484C-B5FB-274C3C440A86}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{8632F0A2-B568-484C-B5FB-274C3C440A86}.Release|Win32.ActiveCfg = Release|Win32
 		{8632F0A2-B568-484C-B5FB-274C3C440A86}.Release|Win32.Build.0 = Release|Win32
+		{7BDC7550-974B-4C80-951F-20FD95036FC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BDC7550-974B-4C80-951F-20FD95036FC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BDC7550-974B-4C80-951F-20FD95036FC1}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{7BDC7550-974B-4C80-951F-20FD95036FC1}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{7BDC7550-974B-4C80-951F-20FD95036FC1}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{7BDC7550-974B-4C80-951F-20FD95036FC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BDC7550-974B-4C80-951F-20FD95036FC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BDC7550-974B-4C80-951F-20FD95036FC1}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{7BDC7550-974B-4C80-951F-20FD95036FC1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{7BDC7550-974B-4C80-951F-20FD95036FC1}.Release|Win32.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
