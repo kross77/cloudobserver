@@ -80,24 +80,19 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Services\CloudController.cs" />
-    <Compile Include="Services\DatabaseManager.cs" />
-    <Compile Include="Services\Gateway.cs" />
-    <Compile Include="Services\ICloudController.cs" />
-    <Compile Include="Services\IDatabaseManager.cs" />
-    <Compile Include="Services\IGateway.cs" />
-    <Compile Include="Services\IResourceManager.cs" />
+    <Compile Include="Services\CC\CloudController.cs" />
+    <Compile Include="Services\GW\Gateway.cs" />
+    <Compile Include="Services\CC\ICloudController.cs" />
+    <Compile Include="Services\GW\IGateway.cs" />
+    <Compile Include="Services\RM\IResourceManager.cs" />
     <Compile Include="Services\IService.cs" />
-    <Compile Include="Services\IStorageManager.cs" />
-    <Compile Include="Services\IWorkBlock.cs" />
-    <Compile Include="Services\ResourceManager.cs" />
+    <Compile Include="Services\WB\IWorkBlock.cs" />
+    <Compile Include="Services\RM\ResourceManager.cs" />
     <Compile Include="Services\Service.cs" />
     <Compile Include="Services\ServicesHelper.cs" />
-    <Compile Include="Services\ServiceType.cs" />
-    <Compile Include="Services\StorageManager.cs" />
-    <Compile Include="Services\WorkBlock.cs" />
-    <Compile Include="Services\WorkBlockHttpRequest.cs" />
-    <Compile Include="Services\WorkBlockHttpServer.cs" />
+    <Compile Include="Services\WB\WorkBlock.cs" />
+    <Compile Include="Services\WB\WorkBlockHttpRequest.cs" />
+    <Compile Include="Services\WB\WorkBlockHttpServer.cs" />
     <Compile Include="Tools\BitTools.cs" />
     <Compile Include="Tools\StringExtensions.cs" />
   </ItemGroup>

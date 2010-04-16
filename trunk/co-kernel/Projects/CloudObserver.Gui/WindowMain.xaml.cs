@@ -15,46 +15,13 @@ namespace CloudObserver.Gui
         private const int animationTime = 200;
 
         /// <summary>
-        /// Cloud Observer system instance default name.
-        /// </summary>
-        private const string defaultInstanceName = "Cloud Observer";
-
-        /// <summary>
-        /// Cloud Observer system instance default gateway address.
-        /// </summary>
-        private const string defaultInstanceGatewayAddress = "http://localhost:4773/cloudobserver";
-
-        /// <summary>
-        /// The number of instances created.
-        /// </summary>
-        private int instancesCount = 0;
-
-        /// <summary>
         /// Currently expanded panel.
         /// </summary>
         private Panel expandedPanel = null;
 
         public WindowMain()
         {
-            InitializeComponent();
-
-            // Set instance default values.
-            SetInstanceDefaultValues();
-        }
-
-        /// <summary>
-        /// Sets instance default values.
-        /// </summary>
-        private void SetInstanceDefaultValues()
-        {
-            textBoxNewInstanceName.Text = defaultInstanceName;
-            textBoxNewInstanceGatewayAddress.Text = defaultInstanceGatewayAddress;
-            if (instancesCount > 0)
-            {
-                textBoxNewInstanceName.Text += " " + instancesCount.ToString();
-                textBoxNewInstanceGatewayAddress.Text += instancesCount.ToString();
-            }
-            instancesCount++;
+            InitializeComponent();;
         }
 
         /// <summary>
@@ -124,13 +91,10 @@ namespace CloudObserver.Gui
             }
 
             // Start the new instance launch process.
-            new WindowLaunch(textBoxNewInstanceName.Text, instanceUri).ShowDialog();
+            new WindowLaunch(instanceUri).ShowDialog();
 
             // Collapse the new instance panel.
             ExpandPanel(stackPanelNewInstance);
-
-            // Set instance default values.
-            SetInstanceDefaultValues();
 
             // Enable the new instance button.
             buttonNewInstanceLaunch.IsEnabled = true;

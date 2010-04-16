@@ -6,9 +6,6 @@ namespace CloudObserver.Services
     public interface IService
     {
         [OperationContract]
-        void ConnectToCloud(string cloudControllerUri);
-
-        [OperationContract]
-        string GetCloudControllerUri();
+        bool ConnectToController(string controllerAddress);
     }
 }

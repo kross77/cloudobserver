@@ -13,7 +13,8 @@ using CloudObserver.Capture.DirectSound;
 using CloudObserver.Formats;
 using CloudObserver.Formats.Audio;
 using CloudObserver.Formats.Audio.Mp3;
-using CloudObserver.Services;
+using CloudObserver.Services.GW;
+using CloudObserver.Services.WB;
 
 using Microsoft.DirectX.DirectSound;
 

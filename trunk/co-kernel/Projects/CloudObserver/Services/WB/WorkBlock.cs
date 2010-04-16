@@ -1,14 +1,15 @@
 ﻿using System.ServiceModel;
 using System.Text;
 
-namespace CloudObserver.Services
+namespace CloudObserver.Services.WB
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     public class WorkBlock : Service, IWorkBlock
     {
         private const int port = 52503;
 
-        public WorkBlock()
+        public WorkBlock(string serviceType, string serviceUri)
+            : base(serviceType, serviceUri)
         {
             WorkBlockHttpServer server = new WorkBlockHttpServer(port);
             server.Start();
@@ -16,9 +17,9 @@ namespace CloudObserver.Services
 
         public string GetTcpStreamUriToRead(int[] contentIds)
         {
-            StringBuilder stringBuilder = new StringBuilder(cloudControllerUri);
+            StringBuilder stringBuilder = new StringBuilder(ControllerAddress);
             stringBuilder.Replace("4773", port.ToString());
-            stringBuilder.Replace("cc-0", "wb-0?action=read&ids=");
+            stringBuilder.Replace("cc", "wb-0?action=read&ids=");
             for (int i = 0; i < contentIds.Length; i++)
             {
                 stringBuilder.Append(contentIds[i]);
@@ -30,9 +31,9 @@ namespace CloudObserver.Services
 
         public string GetTcpStreamUriToWrite(int contentId)
         {
-            StringBuilder stringBuilder = new StringBuilder(cloudControllerUri);
+            StringBuilder stringBuilder = new StringBuilder(ControllerAddress);
             stringBuilder.Replace("4773", port.ToString());
-            stringBuilder.Replace("cc-0", "wb-0?action=write&ids=");
+            stringBuilder.Replace("cc", "wb-0?action=write&ids=");
             stringBuilder.Append(contentId);
             return stringBuilder.ToString();
         }

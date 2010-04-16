@@ -2,37 +2,27 @@
 using System;
 using System.ServiceModel;
 
-namespace CloudObserver.Services
+namespace CloudObserver.Services.GW
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
-    public abstract class Service : IService
+    public class Gateway : Service, IGateway
     {
-        protected string ServiceAddress;
-        protected string ServiceType;
+        public Gateway(string serviceAddress, string serviceType) : base(serviceAddress, serviceType) { }
 
-        protected string ControllerAddress;
-        protected DateTime GlobalTime;
-
-        public Service(string serviceAddress, string serviceType)
+        public string GetWorkBlock()
         {
-            ServiceAddress = serviceAddress;
-            ServiceType = serviceType;
-        }
-
-        public bool ConnectToController(string controllerAddress)
-        {
-            ControllerAddress = controllerAddress;
+            string workBlockAddress;
 
             using (ChannelFactory<ICloudController> channelFactory = new ChannelFactory<ICloudController>(new BasicHttpBinding(), ControllerAddress))
             {
                 ICloudController cloudController = channelFactory.CreateChannel();
                 try
                 {
-                    cloudController.ConnectService(ServiceAddress, ServiceType, out GlobalTime);
+                    workBlockAddress = cloudController.GetWorkBlock();
                 }
                 catch (Exception)
                 {
-                    return false;
+                    return string.Empty;
                 }
                 finally
                 {
@@ -47,7 +37,7 @@ namespace CloudObserver.Services
                 }
             }
 
-            return true;
+            return workBlockAddress;
         }
     }
 }

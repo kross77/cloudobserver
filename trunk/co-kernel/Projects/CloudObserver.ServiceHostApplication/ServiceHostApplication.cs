@@ -25,10 +25,11 @@ namespace CloudObserver
             }
 
             // Try to get the service uri.
+            string serviceAddress = args[0];
             Uri serviceUri = null;
             try
             {
-                serviceUri = new Uri(args[0]);
+                serviceUri = new Uri(serviceAddress);
             }
             catch (UriFormatException)
             {
@@ -45,7 +46,7 @@ namespace CloudObserver
             try
             {
                 serviceContract = ServicesHelper.GetServiceContract(serviceType);
-                serviceInstance = ServicesHelper.CreateServiceInstance(serviceType);
+                serviceInstance = ServicesHelper.CreateServiceInstance(serviceAddress, serviceType);
             }
             catch (ArgumentException)
             {

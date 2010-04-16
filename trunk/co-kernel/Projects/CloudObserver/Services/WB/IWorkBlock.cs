@@ -1,6 +1,6 @@
 ﻿using System.ServiceModel;
 
-namespace CloudObserver.Services
+namespace CloudObserver.Services.WB
 {
     [ServiceContract]
     public interface IWorkBlock : IService

@@ -10,7 +10,7 @@ using CloudObserver.Formats.Audio;
 using CloudObserver.Formats.Audio.Mp3;
 using Mp3Sharp;
 
-namespace CloudObserver.Services
+namespace CloudObserver.Services.WB
 {
     public class WorkBlockHttpServer
     {
