@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Web;
 
-namespace CloudObserver.Services
+namespace CloudObserver.Services.WB
 {
     public enum ParserState
     {

@@ -8,14 +8,12 @@
         <controls:LinkLabel x:Name="linkLabelNewInstance" Click="LinkLabelNewInstance_Click" Content="Configure and launch a new instance of the Cloud Observer system." />
         <StackPanel x:Name="stackPanelNewInstance" Style="{DynamicResource ExpandablePanel}" Height="0">
         	<Grid>
-        		<Label Content="Instance _Name:" HorizontalAlignment="Left" Target="{Binding ElementName=textBoxNewInstanceName}"  VerticalAlignment="Top" />
-        		<TextBox x:Name="textBoxNewInstanceName" VerticalAlignment="Top" Margin="95.443,0,0,0" />
-        		<Label Content="_Gateway Address:" HorizontalAlignment="Left" Margin="0,25.96,0,29" Target="{Binding ElementName=textBoxNewInstanceGatewayAddress}"  />
-        		<TextBox x:Name="textBoxNewInstanceGatewayAddress" Margin="107.667,25.96,0,33" />
-        		<CheckBox Content="_Default Configuration" HorizontalAlignment="Left" Margin="8,54.92,0,0" IsChecked="True" IsEnabled="False" VerticalAlignment="Top" />
-        		<Button x:Name="buttonNewInstanceLaunch" Content="_Launch" Click="ButtonNewInstanceLaunch_Click" HorizontalAlignment="Right" Margin="0,51.92,0,0" VerticalAlignment="Top" Width="75" />
+        		<Label Content="_Gateway Address:" HorizontalAlignment="Left" Target="{Binding ElementName=textBoxNewInstanceGatewayAddress}" VerticalAlignment="Top"  />
+        		<TextBox x:Name="textBoxNewInstanceGatewayAddress" Margin="107.667,0,0,0" Text="http://localhost:4773/cloudobserver" VerticalAlignment="Top" Height="21.96" />
+        		<CheckBox Content="_Default Configuration" HorizontalAlignment="Left" Margin="8,28.96,0,0" IsChecked="True" IsEnabled="False" VerticalAlignment="Top" />
+        		<Button x:Name="buttonNewInstanceLaunch" Content="_Launch" Click="ButtonNewInstanceLaunch_Click" HorizontalAlignment="Right" Margin="0,25.96,0,0" VerticalAlignment="Top" Width="75" />
         	</Grid>
-        </StackPanel>
+		</StackPanel>
         <controls:LinkLabel Content="Add this machine to an existing Cloud Observer infrastructure." IsEnabled="False" />
         <StackPanel Style="{DynamicResource ExpandablePanel}">
         </StackPanel>

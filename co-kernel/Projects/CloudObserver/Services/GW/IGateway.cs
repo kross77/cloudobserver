@@ -1,6 +1,6 @@
 ﻿using System.ServiceModel;
 
-namespace CloudObserver.Services
+namespace CloudObserver.Services.GW
 {
     [ServiceContract]
     public interface IGateway : IService
