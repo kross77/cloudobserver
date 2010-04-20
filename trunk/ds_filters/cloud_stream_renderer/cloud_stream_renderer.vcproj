@@ -48,7 +48,7 @@
 				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="true"
 				TreatWChar_tAsBuiltInType="true"
-				UsePrecompiledHeader="2"
+				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 				CallingConvention="2"
@@ -193,6 +193,14 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
+			<File
+				RelativePath=".\cloud_ctrl.idl"
+				>
+			</File>
+			<File
+				RelativePath=".\cloud_ctrl_i.c"
+				>
+			</File>
 			<File
 				RelativePath=".\dll.cpp"
 				>

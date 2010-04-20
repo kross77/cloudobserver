@@ -1,7 +1,8 @@
 #pragma once
-#include "cloud_ds_interfaces.h"
 #include "InputPin.h"
+#include "cloud_ctrl_h.h"
 
+#include "cloud_ds_interfaces.h"
 
 
 //We must implement 2 functions CheckMediaType and DoRenderSample
@@ -27,6 +28,9 @@ public:
 	void Disconnect ();
 
 private:
+	// Overriden to say what interfaces we support where
+    STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
+
 	//Privite constructor. All object must be created from CreateInstance function
 	CFilter(TCHAR *tszName, LPUNKNOWN punk, HRESULT *phr);
 	~CFilter();

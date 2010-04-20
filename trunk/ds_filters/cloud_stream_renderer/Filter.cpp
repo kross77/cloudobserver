@@ -78,3 +78,24 @@ HRESULT CFilter::SetAddress( LPCOLESTR pszAddress, int port)
 	WBADDRESS = pszAddress;
 	return NOERROR;
 }
+#include "cloud_ctrl_h.h"
+//
+// NonDelegatingQueryInterface
+//
+// Override this to say what interfaces we support where
+//
+STDMETHODIMP CFilter::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
+{
+    CheckPointer(ppv,E_POINTER);
+ //   CAutoLock lock(&m_Lock);
+
+    // Do we have this interface
+
+	if (riid == IID_IFileSinkFilter) {
+        return GetInterface((IFileSinkFilter *) this, ppv);
+    } 
+    if (riid == IID_ICloudInetControl) {
+        return GetInterface((ICloudInetControl *) this, ppv);
+    }
+	return CBaseRenderer::NonDelegatingQueryInterface(riid,ppv);
+}
