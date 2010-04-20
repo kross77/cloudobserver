@@ -1,3 +1,4 @@
+#if 0
 #ifndef _CLOUD_DS_INTERFACES_H_
 #define _CLOUD_DS_INTERFACES_H_
 
@@ -47,7 +48,7 @@ EXTERN_C const IID IID_ICloudInetControl;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetAddress( 
-            /* [in] */ LPCOLESTR pszAddress, int port) = 0;
+            /* [in] */ LPCOLESTR pszAddress,/*[in]*/ int port) = 0;
     };
     
 #else 	/* C style interface */
@@ -107,3 +108,4 @@ EXTERN_C const IID IID_ICloudInetControl;
 
 
 #endif /* _CLOUD_DS_INTERFACES_H_ */
+#endif
