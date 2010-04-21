@@ -1,25 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
 			   xmlns:s="library://ns.adobe.com/flex/spark" 
-			   xmlns:mx="library://ns.adobe.com/flex/halo" creationComplete="application_creationCompleteHandler(event)" minWidth="1024" minHeight="768" xmlns:gateway="services.gateway.*" xmlns:workblock="services.workblock.*" xmlns:ns1="*">
+			   creationComplete="application_creationCompleteHandler(event)" minWidth="1024" minHeight="768" xmlns:gateway="services.gateway.*" xmlns:workblock="services.workblock.*" xmlns:ns1="*" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx">
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
 			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
 			import mx.rpc.events.ResultEvent;
-
+			
+			import spark.components.VSlider;
+			
 			[Bindable]
 			public var gatewayUri:String;
 			[Bindable]
 			public var contentIdsArray:Array;
 			[Bindable]
+			public var contentMp3UrlsArray:Array;
+			
+			[Bindable]
 			public var workBlockUri:String =  new String();
-			[Bindable]
-			public var channel:SoundChannel = new SoundChannel;
-			[Bindable]
-			public var sound:Sound = new Sound();
-
+			
+			
+			
 			protected function application_creationCompleteHandler(event:FlexEvent):void
 			{
 				for (var s:String in FlexGlobals.topLevelApplication.parameters)
@@ -30,9 +34,9 @@
 							var ss:String = FlexGlobals.topLevelApplication.parameters[s]  as String;
 							ss += "?wsdl";
 							textArea.text += " \n ПРИНЯТЫЙ ОТ HTML Wsdl Url: " + ss;							
-							gateway.serviceStart(ss);
-							gateway.showBusyCursor = true;
-							GetWorkBlockResult.token = 	gateway.GetWorkBlock();
+							//gateway.serviceStart(ss);
+							//gateway.showBusyCursor = true;
+							//GetWorkBlockResult.token = 	gateway.GetWorkBlock();
 							break;
 						case "sid":
 							textArea.text += " \n ПРИНЯТАЯ СТРОКА Cloud Observer Content IDs: " + FlexGlobals.topLevelApplication.parameters[s];
@@ -43,8 +47,8 @@
 							break;
 					}
 				}
-				channel.addEventListener(Event.SOUND_COMPLETE, onPlaybackComplete);
-				sound.addEventListener(IOErrorEvent.IO_ERROR, funError);
+				
+				
 			}
 			
 			protected function GetWorkBlockResult_resultHandler(event:ResultEvent):void
@@ -68,15 +72,26 @@
 			}
 			
 			//Ниже функции проигрывателя, в том числе ловящие ошибки и сьедающие их.
-			public function startFun(streamUri:String):void
+			public function startFun(streamsUri:String):void
 			{
+				contentMp3UrlsArray = String(streamsUri).split(/,/);
 				stopFun();
-				var request:URLRequest = new URLRequest(streamUri);
-				sound = new Sound();
-				sound.load(request);
-				sound.addEventListener(IOErrorEvent.IO_ERROR, funError);
-				channel = sound.play();
-				testSoundUriTextInput.text = streamUri;
+				for ( var i:String in contentMp3UrlsArray){
+					var streamUri:String = new String();
+					streamUri = contentMp3UrlsArray[i].toString();
+					var request:URLRequest = new URLRequest(streamUri);
+					trace(streamUri);
+					var sound:Sound = new Sound();
+					sound.addEventListener(IOErrorEvent.IO_ERROR, funError);
+					sound.load(request);
+					sound.addEventListener(IOErrorEvent.IO_ERROR, funError);
+					var channel:SoundChannel = new SoundChannel;
+					
+					channel.addEventListener(Event.SOUND_COMPLETE, onPlaybackComplete);
+					channel = sound.play();
+					
+				}
+				//testSoundUriTextInput.text = streamUri;
 			}
 			
 			public function stopFun():void
@@ -95,48 +110,42 @@
 			public function volumefun(volnumber:Number):void
 			{
 				var transform:SoundTransform=new SoundTransform(volnumber, 0);
-				channel.soundTransform=transform;
+				SoundMixer.soundTransform=transform;
 			}
-
-            // Проверка работоспособности проигрывателя - функия проиграть по ссылке.
+			
+			// Проверка работоспособности проигрывателя - функия проиграть по ссылке.
 			protected function testSound_Handler(event:Event):void
 			{
 				stopFun();
 				startFun(testSoundUriTextInput.text);
 			}
-
-
+			
+			
 			protected function buttonReNewSoundUrl_clickHandler(event:MouseEvent):void
 			{
 				stopFun();
-				startFun("http://superior0.narod.ru/slap.mp3");
+				startFun("http://superior0.narod.ru/slap.mp3,http://mp3.kcdx.com:8000/KCDX");
 			}
-
-
+			
+			
 			protected function testSoundUriTextInput_enterHandler(event:FlexEvent):void
 			{
 				stopFun();
 				startFun(testSoundUriTextInput.text);
 			}
-
-
+			
+			
 			protected function volumetr_changeHandler(event:Event):void
 			{
 				volumefun(volumetr.value/100);
 			}
-
-
+			
+			
 			protected function volumetr_creationCompleteHandler(event:FlexEvent):void
 			{
 				volumefun(volumetr.value/100);
 			}
-
-
-			protected function volumetr_mouseUpHandler(event:MouseEvent):void
-			{
-				volumefun(volumetr.value/100);
-			}
-
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -161,19 +170,17 @@
 	<mx:Form x="49" y="356" width="557" height="142">
 		<mx:FormHeading label="Проверка работоспособности МП3 плеера" width="408"/>
 		<mx:FormItem label="Ссылка на мелодию для тестирования:" width="100%">
-			<s:TextInput id="testSoundUriTextInput" text="http://superior0.narod.ru/slap.mp3" width="100%" enter="testSoundUriTextInput_enterHandler(event)"/>
+			<s:TextInput id="testSoundUriTextInput" text="http://superior0.narod.ru/slap.mp3,http://mp3.kcdx.com:8000/KCDX,http://stream.loveradio.ru:8000/Loveradio_96_stereo.mp3" width="100%" enter="testSoundUriTextInput_enterHandler(event)"/>
 		</mx:FormItem>
 		<mx:FormItem label="Проиграть мелодию по ссылке" width="100%">
 			<s:Button label="Провести проверку" click="testSound_Handler(event)" width="99%"/>
 		</mx:FormItem>
 		<mx:FormItem label="Проиграть мелодию Из коллекции" width="100%">
-		<s:Button label="Проиграть мелодию slap.mp3" click="buttonReNewSoundUrl_clickHandler(event)" width="99%"/>
+			<s:Button label="Проиграть мелодию slap.mp3,KCDX" click="buttonReNewSoundUrl_clickHandler(event)" width="99%"/>
 		</mx:FormItem>
 	</mx:Form>
 	<mx:FormHeading label="Если все тесты пройдены корректно, можно тестировать версию без UI." width="465" x="46" y="494"/>
-	<s:VSlider x="27" y="279" toolTip="Громкость" creationComplete="volumetr_creationCompleteHandler(event)" minimum="0" maximum="100" stepSize="1" value="90" change="volumetr_changeHandler(event)" id="volumetr" enabled="true" liveDragging="true" mouseUp="volumetr_mouseUpHandler(event)"/>
-	<s:Label x="14" y="362" text="Громкость" rotationY="0" rotationX="0" rotationZ="270"/>
+	<s:VSlider x="10" y="279" value="90" minimum="1" creationComplete="volumetr_creationCompleteHandler(event)" change="volumetr_changeHandler(event)" maximum="100" stepSize="1" id="volumetr"/>
+	<s:Label x="30" y="298" text="Громкость" rotationX="0" rotationY="0" rotationZ="90"/>
 	
-
-
 </s:Application>
