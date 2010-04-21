@@ -7,13 +7,14 @@
  
 package services.gateway
 {
-		import mx.rpc.AsyncToken;
-
-		import mx.rpc.AbstractOperation;
-		import mx.collections.ArrayCollection;
-		import mx.rpc.soap.mxml.WebService;
-		import mx.rpc.soap.mxml.Operation;
-		import com.adobe.fiber.services.wrapper.WebServiceWrapper;
+	import com.adobe.fiber.core.model_internal;
+	import com.adobe.fiber.services.wrapper.WebServiceWrapper;
+	import com.adobe.serializers.utility.TypeUtility;
+	import mx.collections.ArrayCollection;
+	import mx.rpc.AbstractOperation;
+	import mx.rpc.AsyncToken;
+	import mx.rpc.soap.mxml.Operation;
+	import mx.rpc.soap.mxml.WebService;
 public class Gateway extends WebServiceWrapper
 {
 	/**
@@ -25,23 +26,31 @@ public class Gateway extends WebServiceWrapper
 			// Constructor
 			public function Gateway()
 			{
-			
 			}
 			public function serviceStart(serviceURL:String):void
 			{
 				// initialize service control
-				_serviceControl = new WebService();
+				_serviceControl = new mx.rpc.soap.mxml.WebService();
 				var operations:Object = new Object();
-				var operation:Operation;         
+				var operation:mx.rpc.soap.mxml.Operation;    
 				
-				operation = new Operation(null, "GetWorkBlock");
+				operation = new mx.rpc.soap.mxml.Operation(null, "IWannaRead");
 				operation.resultType = String; 		 
-				operations["GetWorkBlock"] = operation;
+				operations["IWannaRead"] = operation;
 				
-				_serviceControl.operations = operations;              
-		
+				_serviceControl.operations = operations;
+				try
+				{
+					_serviceControl.convertResultHandler = com.adobe.serializers.utility.TypeUtility.convertResultHandler;
+				}
+				catch (e: Error)
+				{ /* Flex 3.4 and eralier does not support the convertResultHandler functionality. */ }
+				
+				
+				
 				_serviceControl.service = "Gateway";
-				_serviceControl.port = "BasicHttpBinding_IGateway";
+				_serviceControl.port = "BasicHttpBinding_IGateway";         
+		
 				_serviceControl.wsdl = serviceURL;
 				_serviceControl.loadWSDL();			
 			}
@@ -57,10 +66,10 @@ public class Gateway extends WebServiceWrapper
 			 *
 			 * @return an AsyncToken whose result property will be populated with the result of the operation when the server response is received.
 			 */          
-			public function GetWorkBlock() : AsyncToken
+			public function IWannaRead(contentIds:Array) : mx.rpc.AsyncToken
 			{
-				var _internal_operation:AbstractOperation = _serviceControl.getOperation("GetWorkBlock");
-				var _internal_token:AsyncToken = _internal_operation.send() ;	
+				var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("IWannaRead");
+				var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(contentIds) ;
 				return _internal_token;
 			}   
 			

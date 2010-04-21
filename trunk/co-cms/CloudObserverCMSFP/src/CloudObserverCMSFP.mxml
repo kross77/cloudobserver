@@ -3,6 +3,7 @@
 			   xmlns:s="library://ns.adobe.com/flex/spark" 
 			   creationComplete="application_creationCompleteHandler(event)" minWidth="1024" minHeight="768" xmlns:gateway="services.gateway.*" xmlns:workblock="services.workblock.*" xmlns:ns1="*" 
 			   xmlns:mx="library://ns.adobe.com/flex/mx">
+	
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
@@ -19,10 +20,10 @@
 			[Bindable]
 			public var contentMp3UrlsArray:Array;
 			
+/* 			[Bindable]
+			public var workBlockUri:String =  new String(); */
 			[Bindable]
-			public var workBlockUri:String =  new String();
-			
-			
+			public var mp3Uris:String =  new String();	
 			
 			protected function application_creationCompleteHandler(event:FlexEvent):void
 			{
@@ -34,13 +35,14 @@
 							var ss:String = FlexGlobals.topLevelApplication.parameters[s]  as String;
 							ss += "?wsdl";
 							textArea.text += " \n ПРИНЯТЫЙ ОТ HTML Wsdl Url: " + ss;							
-							//gateway.serviceStart(ss);
-							//gateway.showBusyCursor = true;
-							//GetWorkBlockResult.token = 	gateway.GetWorkBlock();
+							gateway.serviceStart(ss);
+							gateway.showBusyCursor = true;
+							
 							break;
 						case "sid":
 							textArea.text += " \n ПРИНЯТАЯ СТРОКА Cloud Observer Content IDs: " + FlexGlobals.topLevelApplication.parameters[s];
 							contentIdsArray = String(FlexGlobals.topLevelApplication.parameters[s]).split(/,/);
+							IWannaReadResult.token = 	gateway.IWannaRead(contentIdsArray);
 							break;
 						default:
 							textArea.text += " \n остальные посланные аргументы: " + s + " " + FlexGlobals.topLevelApplication.parameters[s] + "; ";
@@ -51,7 +53,15 @@
 				
 			}
 			
-			protected function GetWorkBlockResult_resultHandler(event:ResultEvent):void
+			protected function IWannaReadResult_resultHandler(event:ResultEvent):void
+			{
+				mp3Uris = event.result as String;
+				textArea.text +=  " \n Принятые MP3 Uri's: " + mp3Uris;
+				testSoundUriTextInput.text = mp3Uris;
+				startFun(mp3Uris);
+				
+			}
+			/* protected function GetWorkBlockResult_resultHandler(event:ResultEvent):void
 			{
 				workBlockUri = event.result as String;
 				workBlockUri += "?wsdl";
@@ -62,14 +72,14 @@
 				textArea.text +=  " \n Переведенный в ArrayCollection массив идентификаторов потока: " + contentIds.toString();
 				GetTcpStreamUriToReadResult.token = workBlock.GetTcpStreamUriToRead(contentIds);
 				
-			}
+			} 
 			
 			protected function GetTcpStreamUriToReadResult_resultHandler(event:ResultEvent):void
 			{
 				var streamUri:String = event.result as String;
 				textArea.text +=  " \n Принятый streamUri Url: " + streamUri;
 				startFun(streamUri);
-			}
+			}*/
 			
 			//Ниже функции проигрывателя, в том числе ловящие ошибки и сьедающие их.
 			public function startFun(streamsUri:String):void
@@ -145,26 +155,27 @@
 			{
 				volumefun(volumetr.value/100);
 			}
-			
+
 		]]>
 	</fx:Script>
 	<fx:Declarations>
 		<gateway:Gateway id="gateway" />
-		<s:CallResponder id="GetWorkBlockResult"  result="GetWorkBlockResult_resultHandler(event)"/>
+		<s:CallResponder id="IWannaReadResult"  result="IWannaReadResult_resultHandler(event)"/>
+<!--		<s:CallResponder id="GetWorkBlockResult"  result="GetWorkBlockResult_resultHandler(event)"/>
 		<workblock:WorkBlock id="workBlock" />
-		<s:CallResponder id="GetTcpStreamUriToReadResult"  result="GetTcpStreamUriToReadResult_resultHandler(event)"/>
+		<s:CallResponder id="GetTcpStreamUriToReadResult"  result="GetTcpStreamUriToReadResult_resultHandler(event)"/>-->
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
 	<ns1:CloudSoundVisual width="600" height="308" x="58" y="125"/>
 	<mx:Form id="form"  x="46" y="17" width="554" height="260">
 		<mx:FormHeading label="Проверка работоспособности сервисов" width="408"/>
 		<mx:FormHeading label="(проводится при инициализации)"/>
-		<mx:FormItem label="GetWorkBlock" width="519">
+	<!--	<mx:FormItem label="GetWorkBlock" width="519">
 			<s:TextInput id="getWorkBlockTextInput" text="{GetWorkBlockResult.lastResult as String}" width="100%"/>
 		</mx:FormItem>
 		<mx:FormItem label="GetTcpStreamUriToRead" width="519">
 			<s:TextInput id="getTcpStreamUriToReadTextInput" text="{GetTcpStreamUriToReadResult.lastResult as String}" width="100%"/>
-		</mx:FormItem>
+		</mx:FormItem>-->
 		<s:TextArea width="100%" text="Лог операций:" id="textArea" height="100%"/>
 	</mx:Form>
 	<mx:Form x="49" y="356" width="557" height="142">
@@ -182,5 +193,6 @@
 	<mx:FormHeading label="Если все тесты пройдены корректно, можно тестировать версию без UI." width="465" x="46" y="494"/>
 	<s:VSlider x="10" y="279" value="90" minimum="1" creationComplete="volumetr_creationCompleteHandler(event)" change="volumetr_changeHandler(event)" maximum="100" stepSize="1" id="volumetr"/>
 	<s:Label x="30" y="298" text="Громкость" rotationX="0" rotationY="0" rotationZ="90"/>
+	
 	
 </s:Application>
