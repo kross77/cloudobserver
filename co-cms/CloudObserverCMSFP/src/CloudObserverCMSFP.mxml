@@ -34,22 +34,21 @@
 						case "url":
 							var ss:String = FlexGlobals.topLevelApplication.parameters[s]  as String;
 							ss += "?wsdl";
-							textArea.text += " \n ПРИНЯТЫЙ ОТ HTML Wsdl Url: " + ss;							
-							gateway.serviceStart(ss);
-							gateway.showBusyCursor = true;
-							
-							break;
+							gatewayUri = ss;
+							textArea.text += " \n ПРИНЯТЫЙ ОТ HTML Wsdl Url: " + gatewayUri;							
+						break;
 						case "sid":
 							textArea.text += " \n ПРИНЯТАЯ СТРОКА Cloud Observer Content IDs: " + FlexGlobals.topLevelApplication.parameters[s];
 							contentIdsArray = String(FlexGlobals.topLevelApplication.parameters[s]).split(/,/);
-							IWannaReadResult.token = 	gateway.IWannaRead(contentIdsArray);
 							break;
 						default:
 							textArea.text += " \n остальные посланные аргументы: " + s + " " + FlexGlobals.topLevelApplication.parameters[s] + "; ";
 							break;
 					}
 				}
-				
+				gateway.serviceStart(gatewayUri);
+				gateway.showBusyCursor = true;
+				IWannaReadResult.token = 	gateway.IWannaRead(contentIdsArray);
 				
 			}
 			
@@ -156,6 +155,9 @@
 				volumefun(volumetr.value/100);
 			}
 
+
+
+
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -176,7 +178,7 @@
 		<mx:FormItem label="GetTcpStreamUriToRead" width="519">
 			<s:TextInput id="getTcpStreamUriToReadTextInput" text="{GetTcpStreamUriToReadResult.lastResult as String}" width="100%"/>
 		</mx:FormItem>-->
-		<s:TextArea width="100%" text="Лог операций:" id="textArea" height="100%"/>
+		<s:TextArea width="100%" text="Лог операций:" id="textArea" height="100%" borderVisible="false" borderAlpha="0.83" contentBackgroundAlpha="0.9"/>
 	</mx:Form>
 	<mx:Form x="49" y="356" width="557" height="142">
 		<mx:FormHeading label="Проверка работоспособности МП3 плеера" width="408"/>
