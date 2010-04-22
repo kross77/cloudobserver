@@ -3,9 +3,16 @@
 namespace CloudObserver.Services.GW
 {
     [ServiceContract]
-    public interface IGateway : IService
+    public interface IGateway// : IService
     {
+        //[OperationContract]
+        //string GetWorkBlock();
+
         [OperationContract]
-        string GetWorkBlock();
+        string IWannaRead(int[] contentIds);
+
+        [OperationContract]
+        string IWannaWrite(int contentId);
     }
 }
+ 

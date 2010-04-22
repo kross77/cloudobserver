@@ -84,6 +84,7 @@
     <Compile Include="Services\GW\Gateway.cs" />
     <Compile Include="Services\CC\ICloudController.cs" />
     <Compile Include="Services\GW\IGateway.cs" />
+    <Compile Include="Services\GW\Content.cs" />
     <Compile Include="Services\RM\IResourceManager.cs" />
     <Compile Include="Services\IService.cs" />
     <Compile Include="Services\WB\IWorkBlock.cs" />

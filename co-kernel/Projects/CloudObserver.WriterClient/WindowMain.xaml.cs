@@ -14,7 +14,7 @@ using CloudObserver.Formats;
 using CloudObserver.Formats.Audio;
 using CloudObserver.Formats.Audio.Mp3;
 using CloudObserver.Services.GW;
-using CloudObserver.Services.WB;
+//using CloudObserver.Services.WB;
 
 using Microsoft.DirectX.DirectSound;
 
@@ -24,7 +24,7 @@ namespace CloudObserver.WriterClient
     {
         private bool transmitting = false;
         private NetworkStream networkStream;
-        private bool networkStreamInitialized;
+        //private bool networkStreamInitialized;
         private DirectSoundCapture directSoundCapture = null;
         private Device device;
 
@@ -38,17 +38,76 @@ namespace CloudObserver.WriterClient
             get { return transmitting; }
             set
             {
-                string workBlockServiceAddress;
+                //string workBlockServiceAddress;
+                //using (ChannelFactory<IGateway> channelFactory = new ChannelFactory<IGateway>(new BasicHttpBinding(), textBoxGatewayAddress.Text))
+                //{
+                //    IGateway gateway = channelFactory.CreateChannel();
+                //    try
+                //    {
+                //        workBlockServiceAddress = gateway.GetWorkBlock();
+                //    }
+                //    catch (Exception exception)
+                //    {
+                //        Console.Write("An error occured while communicating with the gateway service. Details: " + exception.Message);
+                //        return;
+                //    }
+                //    finally
+                //    {
+                //        try
+                //        {
+                //            ((IClientChannel)gateway).Close();
+                //        }
+                //        catch (Exception)
+                //        {
+                //            ((IClientChannel)gateway).Abort();
+                //        }
+                //    }
+                //}
+
+                //string tcpStreamAddress;
+                //using (ChannelFactory<IWorkBlock> channelFactory = new ChannelFactory<IWorkBlock>(new BasicHttpBinding(), workBlockServiceAddress))
+                //{
+                //    IWorkBlock workBlock = channelFactory.CreateChannel();
+                //    try
+                //    {
+                //        tcpStreamAddress = workBlock.GetTcpStreamUriToWrite(Int32.Parse(textBoxContentId.Text));
+                //    }
+                //    catch (Exception exception)
+                //    {
+                //        Console.Write("An error occured while communicating with the work block service. Details: " + exception.Message);
+                //        return;
+                //    }
+                //    finally
+                //    {
+                //        try
+                //        {
+                //            ((IClientChannel)workBlock).Close();
+                //        }
+                //        catch (Exception)
+                //        {
+                //            ((IClientChannel)workBlock).Abort();
+                //        }
+                //    }
+                //}
+
+                int contentId;
+                if (!Int32.TryParse(textBoxContentId.Text, out contentId))
+                {
+                    MessageBox.Show("Invalid content id.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                string tcpStreamAddress;
                 using (ChannelFactory<IGateway> channelFactory = new ChannelFactory<IGateway>(new BasicHttpBinding(), textBoxGatewayAddress.Text))
                 {
                     IGateway gateway = channelFactory.CreateChannel();
                     try
                     {
-                        workBlockServiceAddress = gateway.GetWorkBlock();
+                        tcpStreamAddress = gateway.IWannaWrite(Int32.Parse(textBoxContentId.Text));
                     }
                     catch (Exception exception)
                     {
-                        Console.Write("An error occured while communicating with the gateway service. Details: " + exception.Message);
+                        MessageBox.Show("An error occured while communicating with the gateway service. Details: " + exception.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
                     finally
@@ -60,32 +119,6 @@ namespace CloudObserver.WriterClient
                         catch (Exception)
                         {
                             ((IClientChannel)gateway).Abort();
-                        }
-                    }
-                }
-
-                string tcpStreamAddress;
-                using (ChannelFactory<IWorkBlock> channelFactory = new ChannelFactory<IWorkBlock>(new BasicHttpBinding(), workBlockServiceAddress))
-                {
-                    IWorkBlock workBlock = channelFactory.CreateChannel();
-                    try
-                    {
-                        tcpStreamAddress = workBlock.GetTcpStreamUriToWrite(Int32.Parse(textBoxContentId.Text));
-                    }
-                    catch (Exception exception)
-                    {
-                        Console.Write("An error occured while communicating with the work block service. Details: " + exception.Message);
-                        return;
-                    }
-                    finally
-                    {
-                        try
-                        {
-                            ((IClientChannel)workBlock).Close();
-                        }
-                        catch (Exception)
-                        {
-                            ((IClientChannel)workBlock).Abort();
                         }
                     }
                 }
@@ -110,11 +143,11 @@ namespace CloudObserver.WriterClient
                     TcpClient tcpClient = new TcpClient();
                     tcpClient.Connect(targetUri.Host, targetUri.Port);
                     networkStream = tcpClient.GetStream();
-                    byte[] request = Encoding.UTF8.GetBytes("GET " + targetUri.PathAndQuery + " HTTP/1.0\r\n\r\n");
-                    networkStream.Write(request, 0, request.Length);
-                    networkStream.Flush();
+                    //byte[] request = Encoding.UTF8.GetBytes("GET " + targetUri.PathAndQuery + " HTTP/1.0\r\n\r\n");
+                    //networkStream.Write(request, 0, request.Length);
+                    //networkStream.Flush();
 
-                    networkStreamInitialized = false;
+                    //networkStreamInitialized = false;
 
                     DirectSoundCaptureDevice directSoundCaptureDevice = (DirectSoundCaptureDevice)comboBoxCaptureDevice.SelectedItem;
                     directSoundCapture = new DirectSoundCapture(pcmAudioFormat, directSoundCaptureDevice);
@@ -185,17 +218,17 @@ namespace CloudObserver.WriterClient
                 {
                     try
                     {
-                        if (!networkStreamInitialized)
-                            if (networkStream.DataAvailable)
-                            {
-                                int bufferSize = 1024;
-                                byte[] buffer = new byte[bufferSize];
-                                int read = networkStream.Read(buffer, 0, bufferSize);
-                                string response = Encoding.UTF8.GetString(buffer, 0, read);
-                                if (response.StartsWith("HTTP/1.1 200 Ok"))
-                                    networkStreamInitialized = true;
-                            }
-                        if (networkStreamInitialized)
+                        //if (!networkStreamInitialized)
+                        //    if (networkStream.DataAvailable)
+                        //    {
+                        //        int bufferSize = 1024;
+                        //        byte[] buffer = new byte[bufferSize];
+                        //        int read = networkStream.Read(buffer, 0, bufferSize);
+                        //        string response = Encoding.UTF8.GetString(buffer, 0, read);
+                        //        if (response.StartsWith("HTTP/1.1 200 Ok"))
+                        //            networkStreamInitialized = true;
+                        //    }
+                        //if (networkStreamInitialized)
                             networkStream.Write(m_OutBuffer, 0, (int)EncodedSize);
                     }
                     catch (Exception)
