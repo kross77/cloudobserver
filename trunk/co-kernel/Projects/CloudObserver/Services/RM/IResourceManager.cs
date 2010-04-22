@@ -1,14 +1,14 @@
-﻿using System.ServiceModel;
+﻿//using System.ServiceModel;
 
-namespace CloudObserver.Services.RM
-{
-    [ServiceContract]
-    public interface IResourceManager
-    {
-        [OperationContract]
-        bool StartCloudObserverInstance(string gatewayAddress);
+//namespace CloudObserver.Services.RM
+//{
+//    [ServiceContract]
+//    public interface IResourceManager
+//    {
+//        [OperationContract]
+//        bool StartCloudObserverInstance(string gatewayAddress);
 
-        [OperationContract]
-        string CreateWorkBlock();
-    }
-}
+//        [OperationContract]
+//        string CreateWorkBlock();
+//    }
+//}

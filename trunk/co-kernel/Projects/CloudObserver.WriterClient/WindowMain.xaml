@@ -12,9 +12,9 @@
         <TextBlock Height="16" HorizontalAlignment="Right" Margin="0,37,155,0" Text="Bit Rate:" Width="44" VerticalAlignment="Top" d:LayoutOverrides="VerticalAlignment" />
         <ComboBox x:Name="comboBoxBitRate" HorizontalAlignment="Right" Margin="0,34,8,0" Width="143" VerticalAlignment="Top" Height="22" />
         <TextBlock HorizontalAlignment="Left" Margin="8,0,0,37" Text="Gateway Address:" Width="94" VerticalAlignment="Bottom" Height="16" />
-		<TextBox x:Name="textBoxGatewayAddress" Margin="106,0,8,34" Text="http://localhost:4773/cloudobserver" VerticalAlignment="Bottom" Height="22" />
+		<TextBox x:Name="textBoxGatewayAddress" Margin="106,0,8,34" Text="http://localhost:4773/" VerticalAlignment="Bottom" Height="22" />
         <Button x:Name="buttonStartStop" Content="Start Transmission" Margin="186,0,8,8" Click="buttonStartStop_Click" VerticalAlignment="Bottom" Height="22" />
         <TextBlock HorizontalAlignment="Left" Margin="8,0,0,11" Text="Content ID:" VerticalAlignment="Bottom" Height="16" Width="60" />
-        <TextBox x:Name="textBoxContentId" Margin="72,0,0,8" Text="1" VerticalAlignment="Bottom" Height="22" HorizontalAlignment="Left" Width="110" />
+        <TextBox x:Name="textBoxContentId" Margin="72,0,0,8" Text="" VerticalAlignment="Bottom" Height="22" HorizontalAlignment="Left" Width="110" />
     </Grid>
 </Window>
