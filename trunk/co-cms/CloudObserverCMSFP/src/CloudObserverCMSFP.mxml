@@ -9,6 +9,7 @@
 			import mx.collections.ArrayCollection;
 			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
+			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
 			
 			import spark.components.VSlider;
@@ -46,12 +47,18 @@
 							break;
 					}
 				}
+				if (gatewayUri != null) {
 				gateway.serviceStart(gatewayUri);
 				gateway.showBusyCursor = true;
+				gateway.addEventListener(FaultEvent.FAULT, gatewayInactive);
 				IWannaReadResult.token = 	gateway.IWannaRead(contentIdsArray);
-				
+				} else {
+					textArea.text += " Не был указан адресс ядрышка.";
+				}
 			}
-			
+			protected function gatewayInactive(event:FaultEvent):void{
+				textArea.text += " Был указан адресс ядрышка. По данному адресу ядрышко не пашет";
+			}
 			protected function IWannaReadResult_resultHandler(event:ResultEvent):void
 			{
 				mp3Uris = event.result as String;
@@ -97,8 +104,7 @@
 					var channel:SoundChannel = new SoundChannel;
 					
 					channel.addEventListener(Event.SOUND_COMPLETE, onPlaybackComplete);
-					channel = sound.play();
-					
+					channel = sound.play();		
 				}
 				//testSoundUriTextInput.text = streamUri;
 			}
@@ -154,10 +160,6 @@
 			{
 				volumefun(volumetr.value/100);
 			}
-
-
-
-
 		]]>
 	</fx:Script>
 	<fx:Declarations>
