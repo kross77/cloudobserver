@@ -1,0 +1,11 @@
+import "oaidl.idl";
+import "ocidl.idl";
+import "unknwn.idl"; 
+[
+object,
+uuid(80AE3F22-17DE-4d6c-BC3E-F2A38AFC53CC),
+] 
+interface ICloudInetControl : IUnknown
+{
+HRESULT SetAddress([in] LPCOLESTR pszAddress, [in] int port) = 0;
+};
