@@ -63,7 +63,7 @@ namespace CloudObserverWriterClient
             ICloudInetControl COInetControl = pCloudStreamRenderer as ICloudInetControl;
             if (COInetControl == null)
                 checkHR(unchecked((int)0x80004002), "Can't add ICloudInetControl Interface.");
-            COInetControl.SetAddress(out targetAddress,targetPort);
+            COInetControl.SetAddress( targetAddress,targetPort);
 
             /*// add File writer
             IBaseFilter pFileWriter = (IBaseFilter)new FileWriter();
@@ -97,7 +97,7 @@ namespace CloudObserverWriterClient
             checkHR(hr, "Can't connect LAME Audio Encoder and Matroska Muxer.");
 
             // connect Matroska Muxer and CloudStreamRenderer Filter
-            hr = graph.ConnectDirect(GetPin(pMatroskaMuxer, "Output"), GetPin(pCloudStreamRenderer, "in"), null);
+            hr = graph.ConnectDirect(GetPin(pMatroskaMuxer, "Output"), GetPin(pCloudStreamRenderer, "In"), null);
             checkHR(hr,"Can't connect Matroska Muxer and CloudStreamRenderer Filter.");
             
             // connect Matroska Muxer and File Writer
@@ -205,7 +205,7 @@ namespace CloudObserverWriterClient
                 DsUtils.FreePinInfo(pinfo);
                 if (found) return pins[0];
             }
-            checkHR(-1, "Pin not found.");
+            checkHR(-1, "First output Pin not found.");
             return null;
         }
 

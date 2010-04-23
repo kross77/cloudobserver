@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Security;
+
 namespace CloudDirectShowLib
 {
     [SuppressUnmanagedCodeSecurity]
@@ -8,6 +9,6 @@ namespace CloudDirectShowLib
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     public interface ICloudInetControl
     {
-        int SetAddress(out string pszAddress, int port);
+        int SetAddress( string pszAddress, int port);
     }
 }
