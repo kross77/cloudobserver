@@ -79,14 +79,14 @@ namespace CloudObserverWriterClient
 
             
             //  CONNECTING FILTERS
+
+            // connect Audio Input Device and LAME Audio Encoder
+            hr = graph.ConnectDirect(GetFirstOutputPin(pAudioInputDevice), GetPin(pLAMEAudioEncoder, "XForm In"), null);
+            checkHR(hr, "Can't connect " + audioInputDevice.Name + " and LAME Audio Encoder.");  
             
             // connect Video Input Device and x264vfw - H.264/MPEG-4 AVC codec
             hr = graph.ConnectDirect(GetFirstOutputPin(pVideoInputDevice), GetPin(px264vfwH264MPEG4AVCcodec, "Input"), null);
             checkHR(hr, "Can't connect " + videoInputDevice.Name + " and x264vfw - H264/MPEG-4 AVC codec.");
-
-            // connect Audio Input Device and LAME Audio Encoder
-            hr = graph.ConnectDirect(GetFirstOutputPin(pAudioInputDevice), GetPin(pLAMEAudioEncoder, "XForm In"), null);
-            checkHR(hr, "Can't connect " + audioInputDevice.Name + " and LAME Audio Encoder.");
 
             // connect x264vfw - H.264/MPEG-4 AVC codec and Matroska Muxer
             hr = graph.ConnectDirect(GetPin(px264vfwH264MPEG4AVCcodec, "Output"), GetPin(pMatroskaMuxer, "Track 1"), null);
