@@ -11,6 +11,13 @@ public:
 		CCritSec *pInterfaceLock,       // Main critical section
 		HRESULT *phr,                   // OLE failure return code
 		LPCWSTR pPinName);              // This pins identification
+	 
+// EndOfStream Notification 
+STDMETHODIMP	EndOfStream(void);
+HRESULT			CheckMediaType(const CMediaType *);
+HRESULT			BreakConnect();
+STDMETHODIMP	ReceiveCanBlock();
+
 private:
 	CFilter *m_pRenderer;
 	CCritSec *m_pInterfaceLock;
