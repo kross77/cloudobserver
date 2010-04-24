@@ -193,7 +193,7 @@ namespace CMS
     public string setMyNewPassword(string key, string userEmail, string curentUserPass, string newUserPass)
     {
         WebClient client = new WebClient();
-        var result = client.DownloadString((address + string.Format("method=createPassword&key={0}&userEmail={1}&curentUserPass={2}&newUserPass={3}", key, userEmail, curentUserPass, newUserPass)).ToString());
+        var result = client.DownloadString((address + string.Format("method=setMyNewPassword&key={0}&userEmail={1}&curentUserPass={2}&newUserPass={3}", key, userEmail, curentUserPass, newUserPass)).ToString());
         return result;
     }
         /// <summary>
@@ -233,7 +233,7 @@ namespace CMS
     public string deleteUser(string key, string userName, string userEmail, string userPass)
     {
         WebClient client = new WebClient();
-        var result = client.DownloadString((address + string.Format("method=deleteStream&key={0}&userName={1}&userEmail={2}&userPass={3}", key, userName, userEmail, userPass)).ToString());
+        var result = client.DownloadString((address + string.Format("method=deleteUser&key={0}&userName={1}&userEmail={2}&userPass={3}", key, userName, userEmail, userPass)).ToString());
         return result;
     }
         #endregion
