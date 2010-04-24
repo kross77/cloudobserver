@@ -5,9 +5,13 @@
 #include "cloud_ds_interfaces.h"
 
 
+
+
 //We must implement 2 functions CheckMediaType and DoRenderSample
 class CFilter : public CBaseRenderer, ICloudInetControl
 {
+//	friend class CInputPin;
+
 public:
 	//Function create one more instance for this filter. Specified in Called by system
 	static CUnknown * WINAPI CreateInstance(LPUNKNOWN punk, HRESULT *phr);

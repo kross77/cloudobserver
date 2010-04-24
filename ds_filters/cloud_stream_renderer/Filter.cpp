@@ -10,8 +10,8 @@ CFilter::CFilter(TCHAR *tszName, LPUNKNOWN punk, HRESULT *phr) :
 {
 	// Class Constructor makes all routines for 
 	// preparation to samples sendings via sockets
-	WBADDRESS = OLESTR("127.0.0.1");
-	PORT = 31123;
+	//WBADDRESS = OLESTR("127.0.0.1");
+	//PORT = 31123;
 
 
 	Connect(WBADDRESS,PORT);
@@ -78,6 +78,12 @@ HRESULT CFilter::SetAddress( LPCOLESTR pszAddress, int port)
 	WBADDRESS = pszAddress;
 	return NOERROR;
 }
+
+//STDMETHODIMP CInputPin::EndOfStream(void)
+//{
+//	return CRendererInputPin::EndOfStream();
+//}
+
 #include "cloud_ctrl_h.h"
 //
 // NonDelegatingQueryInterface
