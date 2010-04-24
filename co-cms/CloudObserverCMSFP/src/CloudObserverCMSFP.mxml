@@ -12,10 +12,12 @@
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
 			
+			import services.gateway.Gateway;
+			
 			import spark.components.VSlider;
 			
 			[Bindable]
-			public var gatewayUri:String;
+			public var gatewayUri:String = new String();
 			[Bindable]
 			public var contentIdsArray:Array;
 			[Bindable]
@@ -47,7 +49,8 @@
 							break;
 					}
 				}
-				if (gatewayUri != null) {
+				if (gatewayUri.length >= 12) {
+					var gateway:Gateway = new Gateway;
 				gateway.serviceStart(gatewayUri);
 				gateway.showBusyCursor = true;
 				gateway.addEventListener(FaultEvent.FAULT, gatewayInactive);
@@ -163,24 +166,23 @@
 		]]>
 	</fx:Script>
 	<fx:Declarations>
-		<gateway:Gateway id="gateway" />
+	<!--	<gateway:Gateway id="gateway" /> -->
 		<s:CallResponder id="IWannaReadResult"  result="IWannaReadResult_resultHandler(event)"/>
 <!--		<s:CallResponder id="GetWorkBlockResult"  result="GetWorkBlockResult_resultHandler(event)"/>
 		<workblock:WorkBlock id="workBlock" />
 		<s:CallResponder id="GetTcpStreamUriToReadResult"  result="GetTcpStreamUriToReadResult_resultHandler(event)"/>-->
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
-	<ns1:CloudSoundVisual width="600" height="308" x="58" y="125"/>
-	<mx:Form id="form"  x="46" y="17" width="554" height="260">
-		<mx:FormHeading label="Проверка работоспособности сервисов" width="408"/>
-		<mx:FormHeading label="(проводится при инициализации)"/>
+	<ns1:CloudSoundVisual width="529" height="308" x="76" y="120"/>
+	<mx:Form id="form"  x="46" y="17" width="559" height="260" borderAlpha="0" backgroundAlpha="0.8">
+		<mx:FormHeading label="Проверка работоспособности сервисов (проводится при инициализации)" width="100%"/>
 	<!--	<mx:FormItem label="GetWorkBlock" width="519">
 			<s:TextInput id="getWorkBlockTextInput" text="{GetWorkBlockResult.lastResult as String}" width="100%"/>
 		</mx:FormItem>
 		<mx:FormItem label="GetTcpStreamUriToRead" width="519">
 			<s:TextInput id="getTcpStreamUriToReadTextInput" text="{GetTcpStreamUriToReadResult.lastResult as String}" width="100%"/>
 		</mx:FormItem>-->
-		<s:TextArea width="100%" text="Лог операций:" id="textArea" height="100%" borderVisible="false" borderAlpha="0.83" contentBackgroundAlpha="0.9"/>
+		<s:TextArea width="100%" text="Лог операций:" id="textArea" height="100%"  borderVisible="false" borderAlpha="0.83" contentBackgroundAlpha="0.9"/>
 	</mx:Form>
 	<mx:Form x="49" y="356" width="557" height="142">
 		<mx:FormHeading label="Проверка работоспособности МП3 плеера" width="408"/>
@@ -194,9 +196,9 @@
 			<s:Button label="Проиграть мелодию slap.mp3,KCDX" click="buttonReNewSoundUrl_clickHandler(event)" width="99%"/>
 		</mx:FormItem>
 	</mx:Form>
-	<mx:FormHeading label="Если все тесты пройдены корректно, можно тестировать версию без UI." width="465" x="46" y="494"/>
-	<s:VSlider x="10" y="279" value="90" minimum="1" creationComplete="volumetr_creationCompleteHandler(event)" change="volumetr_changeHandler(event)" maximum="100" stepSize="1" id="volumetr"/>
-	<s:Label x="30" y="298" text="Громкость" rotationX="0" rotationY="0" rotationZ="90"/>
+	<mx:FormHeading label="Если все тесты пройдены корректно, можно тестировать версию без UI." width="465" x="46" y="501"/>
+	<s:VSlider x="10" y="269" value="90" minimum="1" creationComplete="volumetr_creationCompleteHandler(event)" change="volumetr_changeHandler(event)" maximum="100" stepSize="1" id="volumetr"/>
+	<s:Label x="30" y="293" text="Громкость" rotationX="0" rotationY="0" rotationZ="90"/>
 	
 	
 </s:Application>
