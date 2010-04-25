@@ -24,9 +24,9 @@
 		});
 	</script>
 		<script type="text/javascript" src="js/ui.formValidator.js"></script>
-		<script src="AC_OETags.js" language="javascript"></script>
+		<script src="media/AC_OETags.js" language="javascript"></script>
 		<link rel="stylesheet" type="text/css" href="history/history.css" />
-		<script src="history/history.js" language="javascript"></script>
+		<script src="media/history/history.js" language="javascript"></script>
 		<script language="JavaScript" type="text/javascript">
 
 // -----------------------------------------------------------------------------
@@ -85,7 +85,7 @@ if ( hasProductInstall && !hasRequestedVersion ) {
     var MMdoctitle = document.title;
 
 	AC_FL_RunContent(
-		"src", "playerProductInstall",
+		"src", "media/playerProductInstall",
 		"FlashVars", "MMredirectURL="+MMredirectURL+'&MMplayerType='+MMPlayerType+'&MMdoctitle='+MMdoctitle+"",
 		"width", "100%",
 		"height", "100%",
@@ -102,7 +102,7 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 	// if we've detected an acceptable version
 	// embed the Flash Content SWF when all tests are passed
 	AC_FL_RunContent(
-			"src", "CloudObserverCMSFP",
+			"src", "media/CloudObserverCMSFP",
 			   "flashVars", "<?php
 			 
 
@@ -139,7 +139,7 @@ for ($i = 0; $i < $count; $i++) {
   	<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
 			id="CloudObserverCMSFP" width="100%" height="100%"
 			codebase="http://fpdownload.macromedia.com/get/flashplayer/current/swflash.cab">
-			<param name="movie" value="CloudObserverCMSFP.swf" />
+			<param name="movie" value="media/CloudObserverCMSFP.swf" />
 			<param name="quality" value="high" />
 			<param name="bgcolor" value="#ffffff" />
 			<param name="allowScriptAccess" value="sameDomain" />
@@ -156,7 +156,7 @@ for ($i = 0; $i < $count; $i++) {
 if($i <= $count - 2){echo ",";} else{}
 
 }}?>'/>
-			<embed src="CloudObserverCMSFP.swf" quality="high" bgcolor="#ffffff"
+			<embed src="media/CloudObserverCMSFP.swf" quality="high" bgcolor="#ffffff"
 				width="100%" height="100%" name="CloudObserverCMSFP" align="middle"
 				play="true"
 				loop="false"
