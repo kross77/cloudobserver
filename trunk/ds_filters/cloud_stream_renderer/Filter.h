@@ -27,9 +27,9 @@ public:
 
 	HRESULT STDMETHODCALLTYPE SetAddress(/* [in] */ LPCOLESTR pszAddress,int port);
 
-	void Connect (LPCOLESTR WBADDRESS, int PORT);
+	
 
-	void Disconnect ();
+	
 
 private:
 	// Overriden to say what interfaces we support where
@@ -38,6 +38,9 @@ private:
 	//Privite constructor. All object must be created from CreateInstance function
 	CFilter(TCHAR *tszName, LPUNKNOWN punk, HRESULT *phr);
 	~CFilter();
+
+	int Connect (LPCOLESTR WBADDRESS, int PORT);
+	void Disconnect ();
 
 //	void SendSample(BYTE *buff, int length);
 
