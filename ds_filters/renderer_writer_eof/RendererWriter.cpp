@@ -15,8 +15,24 @@ CInputPin::CInputPin(TCHAR *pObjectName, CFilter *pRenderer,
 
 STDMETHODIMP CInputPin::EndOfStream(void)
 {
-	CloseHandle(m_pRenderer->m_hFile);
-	return CRendererInputPin::EndOfStream();
+    HANDLE hFile = m_pRenderer->m_hFile;
+    m_pRenderer->m_hFile = NULL;
+    CloseHandle(hFile);
+    MessageBox(NULL, "Blin", TEXT("Dump Filter failure"), MB_ICONEXCLAMATION);
+    return CRendererInputPin::EndOfStream();
+}
+
+STDMETHODIMP CInputPin::Receive(IMediaSample *pMediaSample)
+{
+	DWORD lpCount;
+	BYTE *buff;
+	pMediaSample->GetPointer(&buff);
+	if (FALSE == WriteFile(m_pRenderer->m_hFile, buff, pMediaSample->GetActualDataLength(), &lpCount, NULL))
+	{
+		return NOERROR;
+	}
+
+	return NOERROR;
 }
 
 //////////////////////////////
@@ -39,7 +55,7 @@ CFilter::CFilter(TCHAR *tszName, LPUNKNOWN punk, HRESULT *phr) :
                        NULL);                  // no attr. template
 	if (m_hFile == INVALID_HANDLE_VALUE) 
     { 
-	m_hFile = CreateFile("c:/br_br_br.avi",       // name of the write
+	m_hFile = CreateFile("c:/br_br_br.avi",    // name of the write
                        GENERIC_WRITE,          // open for writing
                        0,                      // do not share
                        NULL,                   // default security
@@ -73,13 +89,16 @@ HRESULT CFilter::CheckMediaType(const CMediaType *pmt)
 
 HRESULT CFilter::DoRenderSample(IMediaSample *pMediaSample)
 {
-	DWORD lpCount;
-	BYTE *buff;
-	pMediaSample->GetPointer(&buff);
-	if (FALSE == WriteFile(m_hFile, buff, pMediaSample->GetActualDataLength(), &lpCount, NULL))
-	{
-		return NOERROR;
-	}
+    DWORD lpCount;
+    BYTE *buff;
+    pMediaSample->GetPointer(&buff);
+    if (m_hFile == NULL)
+        return NOERROR;
 
-	return NOERROR;
+    if (FALSE == WriteFile(m_hFile, buff, pMediaSample->GetActualDataLength(), &lpCount, NULL))
+    {
+        return NOERROR;
+    }
+
+    return NOERROR;
 }

@@ -13,6 +13,7 @@ public:
 		LPCWSTR pPinName);              // This pins identification
 
 	STDMETHODIMP EndOfStream(void);
+	STDMETHODIMP Receive(IMediaSample *pMediaSample);
 private:
 	CFilter *m_pRenderer;
 	CCritSec *m_pInterfaceLock;
