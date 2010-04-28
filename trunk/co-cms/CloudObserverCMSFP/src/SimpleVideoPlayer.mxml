@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="600" minHeight="600" creationComplete="application1_creationCompleteHandler(event)">
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.core.FlexGlobals;
+			import mx.events.FlexEvent;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			import services.gateway.Gateway;
+			
+			import spark.components.VSlider;
+			
+			[Bindable]
+			public var videoAddr:String = new String();
+			
+			protected function application1_creationCompleteHandler(event:FlexEvent):void
+			{
+				for (var s:String in FlexGlobals.topLevelApplication.parameters)
+				{
+					switch (s)
+					{
+						case "videourl":
+							var ss:String = FlexGlobals.topLevelApplication.parameters[s]  as String;
+							videoAddr = ss;
+							textArea.text += " \n ПРИНЯТЫЙ ОТ HTML Video URL: " + videoAddr;
+							break;
+						default:
+							textArea.text += " \n остальные посланные аргументы: " + s + " " + FlexGlobals.topLevelApplication.parameters[s] + "; ";
+							break;
+					}
+				}
+				if (videoAddr.length >= 8) {
+					PV();
+				} else {
+					textArea.text += " Не был указан адресс откуда играть видео. Укажите и нажмите Enter. например такой http://localhost:8080/stream.flv";
+				}
+			}
+ 			public function PV():void{
+				VideoBox.source = videoAddr;
+				VideoBox.play();
+			}
+
+			protected function textArea_enterHandler(event:FlexEvent):void
+			{
+				var ss:String =	textArea.text.toString();
+				videoAddr = ss;
+				PV();
+			}
+
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:VideoPlayer right="10" left="10" top="40" bottom="10" id="VideoBox"/>
+	<s:TextInput id="textArea"  enter="textArea_enterHandler(event)" text="Лог операций:"   top="10" right="10" height="20" left="10"/>
+	
+</s:Application>

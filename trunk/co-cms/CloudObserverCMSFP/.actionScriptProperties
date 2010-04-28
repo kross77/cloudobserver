@@ -16,7 +16,10 @@
   </compiler>
   <theme themeIsDefault="false" themeIsSDK="true" themeLocation="${SDK_THEMES_DIR}/samples/themes/cobalt"/>
   <applications>
+    <application path="SimpleVideoPlayer.mxml"/>
     <application path="CloudObserverCMSFP.mxml"/>
+    <application path="WSDLTools.mxml"/>
+    <application path="ToolsAndPlayer.mxml"/>
   </applications>
   <modules/>
   <buildCSSFiles/>

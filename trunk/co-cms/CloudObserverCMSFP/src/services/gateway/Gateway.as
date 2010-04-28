@@ -38,6 +38,10 @@ public class Gateway extends WebServiceWrapper
 				operation.resultType = String; 		 
 				operations["IWannaRead"] = operation;
 				
+				operation = new mx.rpc.soap.mxml.Operation(null, "IWannaWrite");
+				operation.resultType = String; 		 
+				operations["IWannaWrite"] = operation;
+				
 				_serviceControl.operations = operations;
 				try
 				{
@@ -46,32 +50,26 @@ public class Gateway extends WebServiceWrapper
 				catch (e: Error)
 				{ /* Flex 3.4 and eralier does not support the convertResultHandler functionality. */ }
 				
-				
-				
 				_serviceControl.service = "Gateway";
 				_serviceControl.port = "BasicHttpBinding_IGateway";         
 		
 				_serviceControl.wsdl = serviceURL;
 				_serviceControl.loadWSDL();			
-			}
-			
-			/**
-			 * This method is a generated wrapper used to call the 'GetWorkBlock' operation. It returns an AsyncToken whose 
-			 * result property will be populated with the result of the operation when the server response is received. 
-			 * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value. 
-			 * You can then bind to CallResponder.lastResult or listen for the CallResponder.result or fault events.
-			 *
-			 * @see mx.rpc.AsyncToken
-			 * @see mx.rpc.CallResponder 
-			 *
-			 * @return an AsyncToken whose result property will be populated with the result of the operation when the server response is received.
-			 */          
+			}       
 			public function IWannaRead(contentIds:Array) : mx.rpc.AsyncToken
 			{
 				var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("IWannaRead");
 				var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(contentIds) ;
 				return _internal_token;
 			}   
+			public function IWannaWrite(contentId:int) : mx.rpc.AsyncToken
+			{
+				model_internal::loadWSDLIfNecessary();
+				var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("IWannaWrite");
+				var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(contentId) ;
+				
+				return _internal_token;
+			}  
 			
 			
 		}
