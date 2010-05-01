@@ -114,11 +114,20 @@ STDMETHODIMP CFilter::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
 
     // Do we have this interface
 
-	if (riid == IID_IFileSinkFilter) {
-        return GetInterface((IFileSinkFilter *) this, ppv);
-    } 
-    if (riid == IID_ICloudInetControl) {
+
+    if (riid == IID_ICloudInetControl ) {
         return GetInterface((ICloudInetControl *) this, ppv);
     }
+	if (riid == IID_IBaseFilter)
+	{
+		return GetInterface((IBaseFilter *) this, ppv);
+	}
+	/*we must return the same way || riid == IID_IMediaFilter || riid == IID_IMediaPosition */
+	/*if (riid == IID_IBaseFilter)
+	{
+		return GetInterface((IBaseFilter *) this, ppv);
+	}
+	*/
+	/* return all not support interfaces */
 	return CBaseRenderer::NonDelegatingQueryInterface(riid,ppv);
 }
