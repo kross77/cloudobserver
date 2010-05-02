@@ -38,7 +38,7 @@ switch($_GET["method"])
         break;
         
         case "createPassword":
-   			if((int)$_GET[streamId] != null && (string)$_GET[userName] != null && (string)$_GET[userEmail] != null && (string)$_GET[userPass] != null)
+   			if((int)$_GET[key] != null && (string)$_GET[userEmail] != null && (string)$_GET[newUserPass] != null)
  			{
  				
  			}
@@ -51,7 +51,7 @@ switch($_GET["method"])
         // Log
         
         case "logIn":
-   			if((int)$_GET[streamId] != null && (string)$_GET[userName] != null && (string)$_GET[userEmail] != null && (string)$_GET[userPass] != null)
+   			if((int)$_GET[userEmail] != null && (string)$_GET[userPass] != null)
  			{
  				
  			}
@@ -62,7 +62,14 @@ switch($_GET["method"])
         break;
         
         case "logOut":
-        echo "";
+    			if((int)$_GET[userEmail] != null && (string)$_GET[key] != null)
+ 			{
+ 				
+ 			}
+			else
+ 			{
+ 				echo $error;
+ 			}
         break;
         
         // GET
