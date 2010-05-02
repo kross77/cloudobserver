@@ -1,63 +1,47 @@
 <?php  require_once( ".." . DIRECTORY_SEPARATOR . "includes" . DIRECTORY_SEPARATOR . "constants.php");?>
-
-<?php // mysql oriented DB creation
+<?php
+$dn  = DB_NAME;
+// HERE WE CAN NOT USE CRYSTAL - this part is DB type dependent.
+// mysql oriented DB creation
 $connection = mysql_connect(DB_SERVER,DB_USER,DB_PASS);
 if (!$connection) {
-	die("Database connection failed: " . mysql_error());
+		$errors .= "Database connection failed: " . mysql_error();
 }
-
 $query = "CREATE DATABASE  `" . DB_NAME ."` ;";
 $subject_set = mysql_query($query, $connection);
-// 
-?>
+// $errors .= " <br/> " . mysql_error(); // some Debug info...
+$message = "The " . $dn . " database was Created. ";
+	
+// Here we could use CRYSTAL but there is no actual need in it and I do not know how to say to create something with param "NULL DEFAULT NULL" in it with crystal
+$db_select = mysql_select_db(DB_NAME,$connection);
+if (!$db_select) {
+ $errors .= " <br/> " . mysql_error(); // some Debug info...
+}
 
-<?php  require_once(".." . DIRECTORY_SEPARATOR . "includes" . DIRECTORY_SEPARATOR . "crystal" . DIRECTORY_SEPARATOR . "Crystal.php"); ?>
 
-<?php
-
-
-		$dn = DB_NAME;
-		$manipulation = Crystal::manipulation();
-		//$manipulation->create_database($dn)->execute();
-
-//		
-//$fields = array(
-//				'id' => array('type' => 'int', 'auto_increment' => TRUE, 'unsigned' => TRUE, 'primary_key' => TRUE),
-//                'username' => array('type' => 'varchar', 'constraint' => '128' , 'NOT NULL' => TRUE),
-//                'hashed_password' => array('type' => 'varchar', 'constraint' => '128', 'NULL DEFAULT'=>'NULL' ),
-//				'email' => array('type' => 'varchar', 'constraint' => '128', 'NULL DEFAULT'=>'NULL' ),
-//				'CG' => array('type' => 'varchar', 'constraint' => '128' , 'NOT NULL DEFAULT' => TRUE ),
-//				'TIMESTAMP' => array('type' => 'TIMESTAMP', 'NOT NULL DEFAULT' => TRUE, 'CURRENT_TIMESTAMP' => TRUE )
-//                );
-//$table_options = array('engine' => 'MYISAM', 'char_set' => 'utf8','collation' => 'utf8_general_ci');
-//   
-//$manipulation->create_table('test_table', $table_options)->with_fields($fields)->execute();
-		
-		
-/////////////////	
-//					$query = "CREATE TABLE `user` (
-//		`id` INT( 11 ) NOT NULL AUTO_INCREMENT ,
-//		`username` VARCHAR( 100 ) NOT NULL ,
-//		`hashed_password` VARCHAR( 100 ) NULL DEFAULT NULL ,
-//		`email` VARCHAR( 100 ) NULL DEFAULT NULL ,
-//		`CG` VARCHAR( 100 ) NULL DEFAULT NULL ,
-//		`TIMESTAMP` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
-//		PRIMARY KEY (  `id` )
-//		) ENGINE = MYISAM ; ";
-//					$result_set = mysql_query($query);
-//					confirm_query($result_set);			
-//					$message = "The USER table was successfully created.";
-//					
-//								$query = "CREATE TABLE   `streams` (
-//		`id` INT( 11 ) NOT NULL AUTO_INCREMENT ,
-//		`userID` INT( 11 ) NOT NULL ,
-//		`streamID` INT( 11 ) NOT NULL ,
-//		`LastSeen` DATETIME NOT NULL ,
-//		PRIMARY KEY (  `id` )
-//		) ENGINE = MYISAM ; ";
-//					$result_set = mysql_query($query);
-//					confirm_query($result_set);			
-//					$message = "The STREAMS table was successfully created.";
+					$query = "CREATE TABLE `user` (
+		`id` INT( 11 ) NOT NULL AUTO_INCREMENT ,
+		`username` VARCHAR( 100 ) NOT NULL ,
+		`hashed_password` VARCHAR( 100 ) NULL DEFAULT NULL ,
+		`email` VARCHAR( 100 ) NULL DEFAULT NULL ,
+		`CG` VARCHAR( 100 ) NULL DEFAULT NULL ,
+		`TIMESTAMP` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+		PRIMARY KEY (  `id` )
+		) ENGINE = MYISAM ; ";
+$subject_set = mysql_query($query, $connection);
+ // $errors .= " <br/> " . mysql_error(); //some Debug info...	
+					$message .= " <br/> The USER table was successfully created.";
+					
+		$query = "CREATE TABLE   `streams` (
+		`id` INT( 11 ) NOT NULL AUTO_INCREMENT ,
+		`userID` INT( 11 ) NOT NULL ,
+		`streamID` INT( 11 ) NOT NULL ,
+		`LastSeen` DATETIME NOT NULL ,
+		PRIMARY KEY (  `id` )
+		) ENGINE = MYISAM ; ";
+$subject_set = mysql_query($query, $connection);
+	// $errors .= " <br/> " . mysql_error(); //some Debug info...		
+					$message .= " <br/> The STREAMS table was successfully created.";
 
 		?>
 <?php include("header.php"); ?>
@@ -88,10 +72,10 @@ $subject_set = mysql_query($query, $connection);
 		<div id="content" style="padding-top:100px;">
 			<form id="form1" action="index.php" method="post">
 	<fieldset class="ui-widget-content ui-corner-all">
-			<legend class="ui-widget-header ui-corner-all">message</legend>
+			<legend class="ui-widget-header ui-corner-all">MESSAGE</legend>
 
 			<?php if (!empty($message)) {echo " <p class=\"message\">" . $message . "</p>";} ?>
-			<?php if (!empty($errors)) { display_errors($errors); } ?>
+<?php if (!empty($errors)) { echo " <p class=\"message\">" . $errors . "</p>";} ?>
 				</fieldset>	
 	</form>
 

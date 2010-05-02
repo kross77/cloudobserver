@@ -1,22 +1,33 @@
-<?php  require_once( ".." . DIRECTORY_SEPARATOR . "includes" . DIRECTORY_SEPARATOR . "constants.php"); ?>
 <?php 
-$dn  = DB_NAME;
-// HERE WE CAN USE CRYSTAL - But it is not what we need because it dies with error if BD is already deleted.
-// See crystal code 
-// require_once(".." . DIRECTORY_SEPARATOR . "includes" . DIRECTORY_SEPARATOR . "crystal" . DIRECTORY_SEPARATOR . "Crystal.php");  
-// $manipulation = Crystal::manipulation();
-// $manipulation->drop_database($dn)->execute();
-// So if you want - just uncomment=)
+///////////////////////////////////////////
+// TO DO
+// ADD A BUTTON AND A WORNING.
+// ADD DB CLEANING CALL FIRST
+// THAN
+//USE THIS CODE TO PERFORM DELETE PROCESS
+//    function rmdir_r ( $dir, $DeleteMe = TRUE )
+//    {
+//        if ( ! $dh = @opendir ( $dir ) ) return;
+//        while ( false !== ( $obj = readdir ( $dh ) ) )
+//    {
+//    if ( $obj == '.' || $obj == '..') continue;
+//    if ( ! @unlink ( $dir . '/' . $obj ) ) rmdir_r ( $dir . '/' . $obj, true );
+//        }
+//
+//    closedir ( $dh );
+//    if ( $DeleteMe )
+//        {
+//            @rmdir ( $dir );
+//        }
+//    }
+////use like this:
+//
+//rmdir_r( 'abc' );
+// ADD DB CLEANING CALL FIRST
+////////////////////////////////////////////
 
-// mysql oriented DB delite
-$connection = mysql_connect(DB_SERVER,DB_USER,DB_PASS);
-if (!$connection) {
-	$errors .= "Database connection failed: " . mysql_error();
-}
-$query = "DROP DATABASE  `" . DB_NAME ."` ;";
-$subject_set = mysql_query($query, $connection);
-// $errors .= " \n " . mysql_error(); some Debug info...
-$message = "The " . $dn . " database was deleted.";
+
+$message = "NOT IMPLEMENTED YET USE HANDS, BEACH!";
 ?>
 <?php include("header.php"); ?>
 <div id="toppanel" style="position: fixed">
@@ -27,7 +38,7 @@ $message = "The " . $dn . " database was deleted.";
 <div class="tab">
 <ul class="login">
 	<li class="left">&nbsp;</li>
-	<li>UNINSTALL DB Module</li>
+	<li>DELETE ALL CMS AND ITS CONTENTS Module</li>
 	<li class="sep">|</li>
 	<li id="toggle"><a href="index.php">Go to Run Once And Delete
 	Module Packet Index Page </a></li>
@@ -54,6 +65,6 @@ $message = "The " . $dn . " database was deleted.";
 <!-- / content --></div>
 <!-- / container -->
 
-<body></body>
+</body>
 </div>
 </div>
