@@ -1,22 +1,31 @@
-<?php  require_once( ".." . DIRECTORY_SEPARATOR . "includes" . DIRECTORY_SEPARATOR . "constants.php"); ?>
 <?php 
-$dn  = DB_NAME;
-// HERE WE CAN USE CRYSTAL - But it is not what we need because it dies with error if BD is already deleted.
-// See crystal code 
-// require_once(".." . DIRECTORY_SEPARATOR . "includes" . DIRECTORY_SEPARATOR . "crystal" . DIRECTORY_SEPARATOR . "Crystal.php");  
-// $manipulation = Crystal::manipulation();
-// $manipulation->drop_database($dn)->execute();
-// So if you want - just uncomment=)
+///////////////////////////////////////////
+// TO DO
+// ADD A FORM AND PRESENT AN OPTION TO CALL NEW DB CREATION IMMIDIATLY.
+// THAN
+//USE THIS CODE TO PERFORM DELETE PROCESS
+//		FILE_TO_REPLACE_IN.php:
+//		
+//		<?php
+//		define("DB_SERVER", "{DB_SERVER}");
+//		define("DB_USER", "{DB_USER}");
+//		define("DB_PASS", "{DB_PASS}");
+//		define("DB_NAME", "{DB_NAME}");
+//		SCRIPT_TO_CHANGE_WITH.php:
+//		
+//		<?php
+//		
+//		$searchF  = array('{DB_SERVER}','{DB_USER}','{DB_PASS}','{DB_NAME}');
+//		$replaceW = array('localhost',  'user',     'pass',     'db');
+//		
+//		$fh = fopen("FILE_TO_REPLACE_IN.php", 'w');
+//		$file = file_get_contents($fh);
+//		$file = str_replace($searchF, $replaceW, $file);
+//		fwrite($fh, $file);
+////////////////////////////////////////////
 
-// mysql oriented DB delite
-$connection = mysql_connect(DB_SERVER,DB_USER,DB_PASS);
-if (!$connection) {
-	$errors .= "Database connection failed: " . mysql_error();
-}
-$query = "DROP DATABASE  `" . DB_NAME ."` ;";
-$subject_set = mysql_query($query, $connection);
-// $errors .= " \n " . mysql_error(); some Debug info...
-$message = "The " . $dn . " database was deleted.";
+
+$message = "NOT IMPLEMENTED YET USE HANDS, You, Fucking Moron!";
 ?>
 <?php include("header.php"); ?>
 <div id="toppanel" style="position: fixed">
@@ -27,7 +36,7 @@ $message = "The " . $dn . " database was deleted.";
 <div class="tab">
 <ul class="login">
 	<li class="left">&nbsp;</li>
-	<li>UNINSTALL DB Module</li>
+	<li>CHANGE CONFIG OPTIONS Module</li>
 	<li class="sep">|</li>
 	<li id="toggle"><a href="index.php">Go to Run Once And Delete
 	Module Packet Index Page </a></li>
@@ -54,6 +63,6 @@ $message = "The " . $dn . " database was deleted.";
 <!-- / content --></div>
 <!-- / container -->
 
-<body></body>
+</body>
 </div>
 </div>
