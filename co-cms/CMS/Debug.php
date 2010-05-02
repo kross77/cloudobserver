@@ -4,18 +4,18 @@
 <?php $adress = CLOUD_OBSERVER_GATEWAY_ADDRESS; ?>
 
 <head> 
-	<link rel="stylesheet" href="css/common.css" type="text/css" />
-	<link type="text/css" rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/base/ui.all.css" />
+    <link rel="stylesheet" href="css/common.css" type="text/css" />
 	<link type="text/css" href="css/ui.multiselect.css" rel="stylesheet" />
-		<link type="text/css" href="css/ui-darkness/jquery-ui.css" rel="stylesheet" />	
+
 		
+			<link type="text/css" href="css/style.css" rel="stylesheet" />
   	<link rel="stylesheet" href="css/slide.css" type="text/css" media="screen" />
-		
+		<link type="text/css" href="css/ui-darkness/jquery-ui.css" rel="stylesheet" />	
 		<script type="text/javascript" src="js/jquery-1.4.1.js"></script>
 	<script type="text/javascript" src="js/jquery-ui-1.7.1.custom.min.js"></script>
-	<script type="text/javascript" src="js/plugins/localisation/jquery.localisation-min.js"></script>
+	<script type="text/javascript" src="js/plugins/localisation/jquery.localisation-min.js"></script>   
 	<script type="text/javascript" src="js/plugins/scrollTo/jquery.scrollTo-min.js"></script>
-	<script type="text/javascript" src="js/ui.multiselect.js"></script>
+		<script type="text/javascript" src="js/ui.multiselect.js"></script>
 	<script type="text/javascript">
 		$(function(){
 			$.localise('ui-multiselect', {/*language: 'en',*/ path: 'js/locale/'});
@@ -63,7 +63,8 @@ while ($row = mysql_fetch_array($streams_set)){
 } ?>
       </select>
       <br/>
-      <input type="submit" class="ui-state-default ui-corner-all" name="submitForm" id="submitForm"  value="Play Stream from selected URL's!"/>    
+      <input type="submit"  name="submitForm" id="submitForm"  value="Play selected streams!"/>    
+     <input type="submit" class="ui-state-default ui-corner-all" name="submitForm" id="submitForm"  value="Save selected streams!"/>    
   </fieldset>
 </form>
 </div>
