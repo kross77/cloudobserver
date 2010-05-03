@@ -103,9 +103,7 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 	// embed the Flash Content SWF when all tests are passed
 	AC_FL_RunContent(
 			"src", "media/CloudObserverCMSFP",
-			   "flashVars", " 
-			   
-<?php
+			   "flashVars", "<?php
 			 
 
   if (isset($_POST['submitForm'])){
@@ -117,9 +115,7 @@ for ($i = 0; $i < $count; $i++) {
  echo $array[$i];
  if($i <= $count - 2){echo ",";} else{}
 
-}}?>
-
-",
+}}?>",
 			"width", "100%",
 			"height", "100%",
 			"align", "middle",
