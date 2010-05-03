@@ -1,5 +1,6 @@
 <?php
-
+require_once(  "includes" . DIRECTORY_SEPARATOR . "constants.php");
+require_once(  "includes" . DIRECTORY_SEPARATOR . "crystal" . DIRECTORY_SEPARATOR . "Crystal.php");  
 // Errors Array
 
 $error = "API USER YOU MADE AN ERROR! YOU MESSED WITH ME! AND NOW YOU'LL BE PUNISHED! I WILL COME AND KILL YOU! OH! Error Code 1000: Epic Fail - You called an API with wrong attributes - GO FUCK YOUR SELF, API USER!";
