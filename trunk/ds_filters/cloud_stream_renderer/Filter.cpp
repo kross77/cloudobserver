@@ -10,22 +10,24 @@ CFilter::CFilter(TCHAR *tszName, LPUNKNOWN punk, HRESULT *phr) :
 {
 	// Class Constructor makes all routines for 
 	// preparation to samples sendings via sockets
-	WBADDRESS = OLESTR("127.0.0.1");
-	PORT = 8001;
 
-	    WORD wVersionRequested;
-
-		WSADATA wsaData;
-		wVersionRequested = MAKEWORD(2, 2);
-
+	m_serverAddress = OLESTR("127.0.0.1");
+	m_portNmber= 8001;
+	//init socket lib
+	WORD wVersionRequested;	
+	WSADATA wsaData;
+	wVersionRequested = MAKEWORD(2, 2);
 	WSAStartup(wVersionRequested, &wsaData);
 
-//	Connect(WBADDRESS,PORT);
+
+//default connection
+	Connect(m_serverAddress, m_portNmber);
 
 }
 CFilter::~CFilter()
 {
 	Disconnect();
+	WSACleanup ();
 }
 
 CUnknown * WINAPI CFilter::CreateInstance(LPUNKNOWN punk, HRESULT *phr)
@@ -49,50 +51,78 @@ HRESULT CFilter::CheckMediaType(const CMediaType *pmt)
 
 HRESULT CFilter::DoRenderSample(IMediaSample *pMediaSample)
 {
-	BYTE *buff;
+	if (NULL == m_socket)
+	{
+		//drop  this frame (we hasn't conneted yet)
+		return NOERROR;
+	}
+	BYTE * buff;
 	pMediaSample->GetPointer(&buff);
-/*
-hr = pAsfWriter->QueryInterface(IID_ICoudInetControl, (void **)
-&m_FileSink);
-m_FileSink->SetFileName(tfilename, NULL)
-*/
-	//send ( Socket,(const char *) buff, pMediaSample->GetActualDataLength(), 0 ) ;
 
+	if (NULL == buff)
+	{
+		return NOERROR;
+	}
+	//BYTE b[1024];
+	//int i;
+
+	//for (i = 0; i< 1024; i++)
+	//	b[i] = buff[i];
+	//
+
+	//send (m_socket,(const char *) b, pMediaSample->GetActualDataLength(), 0 );
+	//Disconnect();
+
+	if(SOCKET_ERROR == send (m_socket,(const char *) buff, pMediaSample->GetActualDataLength(), 0 ))
+	{
+		Disconnect();
+		return ErrorInfo();
+	}
+	
 	return NOERROR;
+}
+
+int CFilter::ErrorInfo()
+{
+	return -1;
 }
 
 int CFilter::Connect(LPCOLESTR addr, int port)
 {
-	int sock;
 	struct sockaddr_in socketaddr;
 	memset((char *)&socketaddr, NULL, sizeof(socketaddr));
 	socketaddr.sin_family = AF_INET;
 	socketaddr.sin_addr.s_addr = inet_addr("127.0.0.1");
-	socketaddr.sin_port = htons(port);
-	sock = socket(AF_INET,SOCK_STREAM, IPPROTO_TCP);
+	socketaddr.sin_port = htons(m_portNmber);
+	m_socket = socket(AF_INET,SOCK_STREAM, IPPROTO_TCP);
 
-	if (sock == INVALID_SOCKET)
+	if (m_socket == INVALID_SOCKET)
 	{
-		return -1;
+		m_socket= NULL;
+		return ErrorInfo();
+	}
+	
+	if (connect(m_socket,(LPSOCKADDR)&socketaddr, sizeof(socketaddr)))
+	{
+		Disconnect();
+		return ErrorInfo();
 	}
 
-	int size=sizeof(socketaddr);
-
-	sock = connect(sock,(LPSOCKADDR)&socketaddr,size);
+	return 0;
 }
 
 void CFilter::Disconnect()
 {
-	closesocket (Socket);
-	WSACleanup ();	
+	if (NULL != m_socket) {
+		closesocket (m_socket);
+		m_socket = NULL; 
+	}	
 }
 
 
 HRESULT CFilter::SetAddress( LPCOLESTR pszAddress, int port) 
 {
-	//PORT = port;
-	//WBADDRESS = pszAddress;
-	Connect(WBADDRESS,PORT);
+	Connect(pszAddress,port);
 	return NOERROR;
 }
 
