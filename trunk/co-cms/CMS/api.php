@@ -1,11 +1,18 @@
+<?php require_once("includes/connection.php"); ?>
+<?php require_once("includes/functions.php"); ?>
 <?php
+include_once("includes/form_functions.php");
 require_once(  "includes" . DIRECTORY_SEPARATOR . "constants.php");
 require_once(  "includes" . DIRECTORY_SEPARATOR . "crystal" . DIRECTORY_SEPARATOR . "Crystal.php");  
 // Errors Array
 
 $error = "API USER YOU MADE AN ERROR! YOU MESSED WITH ME! AND NOW YOU'LL BE PUNISHED! I WILL COME AND KILL YOU! OH! Error Code 1000: Epic Fail - You called an API with wrong attributes - GO FUCK YOUR SELF, API USER!";
 
-// API Processor
+// SPECIAL FUNCTIONS
+
+
+
+// API POST\GET Processor
 
 switch($_GET["method"])
  {
@@ -19,18 +26,40 @@ switch($_GET["method"])
  			}
  			elseif((int)$_GET[streamId] != null && (string)$_GET[userName] != null )
  			{
- 			$data = array(
-					'streamId' => $_GET[streamId],
-					'userName' => $_GET[userName]
-			);
- 			$rules = array(
- 				'userName' => array('regexp: (/^[\p{L}_]{5,20}+$/u), message : This email is already taken'), 
- 			    'streamId' => array('numeric, message: Please supply a valid number | required')
- 			);
- 			$validation = Crystal::validation($rules, $data);
-			if($validation->passed == TRUE)
-				{
-				echo "No errors";
+			// Crapy Crystal way
+ 			///////////////////////////////////////////////////////////////////////////////////
+			//			 			$data = array(
+			//								'streamId' => $_GET[streamId],
+			//								'userName' => $_GET[userName]
+			//						);
+			//			 			$rules = array(
+			//			 				//'userName' => array('regexp: (/^[\p{L}_-]{5,20}+$/u), message : This email is already taken'), 
+			//			 			    'streamId' => array('numeric, message: Please supply a valid number | required ')
+			//			 			);
+			//			 			$validation = Crystal::validation($rules, $data);
+			//						if($validation->passed == TRUE)
+			//							{
+			//				//	echo "No errors"; // Debug Info
+			//					$db = Crystal::db();
+			//					$rand_val = md5(uniqid() + mt_rand());
+			//					$key = trim(mysql_prep($rand_val));
+			//				//	$hashed_password = sha1($password); // NOTE SHA1! 	
+			//					$data = array('username' =>  $_GET[userName], 'CG' => $key );
+			//					$db->insert('user', $data)->execute();
+			//					$last_insert_user_id = $db->last_insert_id();
+			//				//	echo " Last inserted user id " . $last_insert_user_id . "."; // Debug Info
+			//				//  UserGenerated
+			//				//////////
+			//					$data = array('userID' => $last_insert_user_id, 'streamID' =>  $_GET[streamId] );
+			//					$db->insert('streams', $data)->execute();
+			//					$last_insert_stream_id = $db->last_insert_id();
+			//				//	echo " Last inserted stream id " . $last_insert_stream_id . "."; // Debug Info
+			//				//  StreamGenerated
+			//				//	echo " Key: " . $key . "."; // Debug Info
+			///////////////////////////////////////////////////////////////////////////////////////////////////////
+			
+		echo $key;
+
 				}
 			else
 				{
