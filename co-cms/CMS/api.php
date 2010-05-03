@@ -58,8 +58,45 @@ switch($_GET["method"])
 			//				//	echo " Key: " . $key . "."; // Debug Info
 			///////////////////////////////////////////////////////////////////////////////////////////////////////
 			
+
+ 		$data = array(
+						'streamId' => $_GET[streamId],
+				);
+	 			$rules = array(
+	 			    'streamId' => array('numeric, message: Please supply a valid number | required ')
+	 			);
+	 			$validation = Crystal::validation($rules, $data);
+				if($validation->passed == TRUE)
+					{
+		if ( strlen(trim(mysql_prep($_GET[userName]))) <= 40 && strlen(trim(mysql_prep($_GET[userName]))) >= 4)
+		{    	
+		$username = trim(mysql_prep($_GET[userName]));
+		$rand_val = md5(uniqid() + mt_rand());
+		$key = trim(mysql_prep($rand_val));
+		$query = "INSERT INTO user (
+				username, CG
+						) VALUES (
+							'{$username}', '{$key}'
+						)";
+			$result = mysql_query($query, $connection);
+			if ($result) {
+			$last_insert_user_id = mysql_insert_id(); 
+			} 
+				else {	echo "DB server error"; }
+			}
+			$db = Crystal::db();
+			echo " Last inserted user id " . $last_insert_user_id . "."; // Debug Info
+		//  UserGenerated
+		//////////
+			$data = array('userID' => $last_insert_user_id, 'streamID' =>  $_GET[streamId] );
+			$db->insert('streams', $data)->execute();
+			$last_insert_stream_id = $db->last_insert_id();
+			echo " Last inserted stream id " . $last_insert_stream_id . "."; // Debug Info
+		//  StreamGenerated
+			echo " Key: " . $key . "."; // Debug Info
  				
- 			}else
+			}else{	echo "DB server error"; }	
+			}else
  			{
  				echo $error;
  			}
