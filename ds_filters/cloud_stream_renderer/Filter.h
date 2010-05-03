@@ -27,10 +27,6 @@ public:
 
 	HRESULT STDMETHODCALLTYPE SetAddress(/* [in] */ LPCOLESTR pszAddress,int port);
 
-	
-
-	
-
 private:
 	// Overriden to say what interfaces we support where
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
@@ -39,21 +35,23 @@ private:
 	CFilter(TCHAR *tszName, LPUNKNOWN punk, HRESULT *phr);
 	~CFilter();
 
-	int Connect (LPCOLESTR WBADDRESS, int PORT);
+	int Connect (LPCOLESTR hostAdderss, int port);
 	void Disconnect ();
 
 //	void SendSample(BYTE *buff, int length);
 
 	CInputPin m_InputPin;          // IPin based interfaces
 
-	HANDLE m_hFile;
+	//HANDLE m_hFile;
 
-	WSADATA         WSAInformation;
-	SOCKET          Socket;
-	BYTE            *DataPointer;
+	//WSADATA         WSAInformation;
+	//SOCKET          m_socket;
+	int				m_socket;
+	//BYTE            *DataPointer;
 	sockaddr_in     ConnectionInfo;
-	unsigned long	DataSize;
-	int				PORT;			//31123;			// Server Connection Port
-	LPCOLESTR		WBADDRESS;		//"127.0.0.1";		// Server Adress (Work Block Address)	
+	//unsigned long	DataSize;
+	int				m_portNmber; // Server Connection Port
+	LPCOLESTR		m_serverAddress; // Server Adress (Work Block Address)	
+	int ErrorInfo();
 };
 
