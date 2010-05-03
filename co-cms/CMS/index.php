@@ -93,6 +93,28 @@ if (logged_in()) {
 				$_SESSION['username'] = $username;
 				$_SESSION['email'] = $email;
 				$message = "The user was successfully created.";
+			////////////
+			
+					$query = "SELECT id, username, email ";
+			$query .= "FROM user ";
+			$query .= "WHERE email = '{$email}' ";
+			$query .= "AND hashed_password = '{$hashed_password}' ";
+			$query .= "LIMIT 1";
+			$result_set = mysql_query($query);
+			confirm_query($result_set);
+			if (mysql_num_rows($result_set) == 1) {
+				// username/password authenticated
+				// and only 1 match
+				$found_user = mysql_fetch_array($result_set);
+				$_SESSION['user_id'] = $found_user['id'];
+				$_SESSION['username'] = $found_user['username'];
+				$_SESSION['email'] = $found_user['email'];
+				
+					$message = "The user was successfully LogedIn.";
+		redirect_to("Registred.php");
+			}
+				
+			///////////	
 			} else {
 				$message = "The user could not be created.";
 				$message .= "<br />" . mysql_error();
