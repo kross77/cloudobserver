@@ -15,11 +15,29 @@ switch($_GET["method"])
  		case "createUserWithStream":
  			if((int)$_GET[streamId] != null && (string)$_GET[userName] != null && (string)$_GET[userEmail] != null && (string)$_GET[userPass] != null)
  			{
- 				
+
  			}
  			elseif((int)$_GET[streamId] != null && (string)$_GET[userName] != null )
  			{
- 				
+ 			$data = array(
+					'streamId' => $_GET[streamId],
+					'userName' => $_GET[userName]
+			);
+ 			$rules = array(
+ 				'userName' => array('regexp: (/^[\p{L}_]{5,20}+$/u), message : This email is already taken'), 
+ 			    'streamId' => array('numeric, message: Please supply a valid number | required')
+ 			);
+ 			$validation = Crystal::validation($rules, $data);
+			if($validation->passed == TRUE)
+				{
+				echo "No errors";
+				}
+			else
+				{
+				print_r($validation->errors);
+				}
+ 			
+ 			
  			}else
  			{
  				echo $error;

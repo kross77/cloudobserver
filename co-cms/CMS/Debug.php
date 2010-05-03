@@ -25,7 +25,7 @@
 	</script>
 		<script type="text/javascript" src="js/ui.formValidator.js"></script>
 		<script src="media/AC_OETags.js" language="javascript"></script>
-		<link rel="stylesheet" type="text/css" href="history/history.css" />
+		<link rel="stylesheet" type="text/css" href="media/history/history.css" />
 		<script src="media/history/history.js" language="javascript"></script>
 		<script language="JavaScript" type="text/javascript">
 
