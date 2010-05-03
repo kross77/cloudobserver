@@ -58,15 +58,7 @@ switch($_GET["method"])
 			//				//	echo " Key: " . $key . "."; // Debug Info
 			///////////////////////////////////////////////////////////////////////////////////////////////////////
 			
-		echo $key;
-
-				}
-			else
-				{
-				print_r($validation->errors);
-				}
- 			
- 			
+ 				
  			}else
  			{
  				echo $error;
