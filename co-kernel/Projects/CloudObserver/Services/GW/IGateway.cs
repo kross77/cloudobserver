@@ -9,10 +9,12 @@ namespace CloudObserver.Services.GW
         //string GetWorkBlock();
 
         [OperationContract]
-        string IWannaRead(int[] contentIds);
+        string IWannaRead(int[] ids, out string contentTypes);
 
         [OperationContract]
-        string IWannaWrite(int contentId);
+        string IWannaWrite(int id);
+
+        [OperationContract]
+        string IWannaWriteCustom(int id, string contentType);
     }
 }
- 
