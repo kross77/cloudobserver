@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserver.WriterClient"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserver.CloudStart", "..\Projects\CloudObserver.CloudStart\CloudObserver.CloudStart.csproj", "{A6C8F21A-A7EB-4EE1-9FEF-97EDF59A37D7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserver.StreamProxy", "..\Projects\CloudObserver.StreamProxy\CloudObserver.StreamProxy.csproj", "{48EC9CC8-B1CC-4961-A477-02BDB34F8544}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,10 @@ Global
 		{A6C8F21A-A7EB-4EE1-9FEF-97EDF59A37D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6C8F21A-A7EB-4EE1-9FEF-97EDF59A37D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A6C8F21A-A7EB-4EE1-9FEF-97EDF59A37D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48EC9CC8-B1CC-4961-A477-02BDB34F8544}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48EC9CC8-B1CC-4961-A477-02BDB34F8544}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48EC9CC8-B1CC-4961-A477-02BDB34F8544}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48EC9CC8-B1CC-4961-A477-02BDB34F8544}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
