@@ -21,26 +21,38 @@ namespace CloudObserver.Services.GW
             port = 4774;
         }
 
-        public string IWannaRead(int[] ids)
+        public string IWannaRead(int[] ids, out string contentTypes)
         {
             StringBuilder stringBuilder = new StringBuilder();
+            StringBuilder contentTypesBuilder = new StringBuilder();
             for (int i = 0; i < ids.Length; i++)
                 if (contents.ContainsKey(ids[i]))
                 {
                     stringBuilder.Append(contents[ids[i]].SenderAddress);
+                    contentTypesBuilder.Append(contents[ids[i]].ContentType);
                     if (i < ids.Length - 1)
-                        stringBuilder.Append(','); 
+                    {
+                        stringBuilder.Append(',');
+                        contentTypesBuilder.Append(',');
+                    }
                 }
+            contentTypes = contentTypesBuilder.ToString();
             return stringBuilder.ToString();
         }
 
         public string IWannaWrite(int id)
+        {
+            return IWannaWriteCustom(id, "audio/mpeg");
+        }
+
+        public string IWannaWriteCustom(int id, string contentType)
         {
             if (contents.ContainsKey(id))
                 contents[id].Close();
 
             Content content = new Content(id, ip, ref port);
             content.Open();
+            content.ContentType = contentType;
             contents[id] = content;
             return content.ReceiverAddress;
         }

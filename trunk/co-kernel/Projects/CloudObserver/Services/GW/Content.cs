@@ -11,7 +11,6 @@ namespace CloudObserver.Services.GW
     {
         private const int bufferSize = 8192;
         private const int sleepInterval = 100;
-        private const string responseHeader = "HTTP/1.0 200 OK\r\nContent-Type: audio/mpeg\r\n\r\n";
 
         private TcpListener receiver;
         private Thread receiverThread;
@@ -27,6 +26,13 @@ namespace CloudObserver.Services.GW
         public string SenderAddress
         {
             get { return senderAddress; }
+        }
+
+        private string contentType;
+        public string ContentType
+        {
+            get { return contentType; }
+            set { contentType = value; }
         }
 
         private List<TcpClient> readers;
@@ -101,6 +107,7 @@ namespace CloudObserver.Services.GW
 
                 NetworkStream readerStream = reader.GetStream();
                 readersStreams.Add(readerStream);
+                string responseHeader = "HTTP/1.0 200 OK\r\nContent-Type: " + contentType + "\r\nCache-Control: no-cache\r\n\r\n";
                 byte[] header = Encoding.UTF8.GetBytes(responseHeader);
                 readerStream.Write(header, 0, header.Length);
             }
