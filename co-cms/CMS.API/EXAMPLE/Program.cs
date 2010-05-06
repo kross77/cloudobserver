@@ -18,8 +18,11 @@ namespace EXAMPLE
             Console.WindowHeight = 50;
 
             Console.WriteLine("\n Create Methods");
-            Console.WriteLine("create user with NO pass and NO email " + ap.createUserWithStream(random.Next(1, 100000), "userWithNoPass"));
-            Console.WriteLine("create user with pass and email " + ap.createUserWithStream(random.Next(1, 100000), "userRegistred", "suk@suchok.su", "pass"));
+            // Ready to go
+            Console.WriteLine("create user with NO pass and NO email but with Stream! Key Returned for further operations: " + ap.createUserWithStream(random.Next(1, 100000), "userWithNoPass"));
+            Console.WriteLine("create user with pass and email and with Stream! Key Returned for further operations: " + ap.createUserWithStream(random.Next(1, 100000), "userRegistred", "suk@suchok.su", "pass"));
+        
+            // Not ready to go =(
             Console.WriteLine("create password for a user with NO password and NO email" + ap.createPassword(ap.createUserWithStream(random.Next(1, 100000), "userWithNoPass2"), "myRealEmail@real.life", "myPass"));
           
             Console.WriteLine("\n Log Methods");
