@@ -34,7 +34,7 @@ namespace CMS
         /// <summary>
         /// Initializes a new instance of the CMS.API class with the localhost/cms/api.php address.
         /// </summary>
-        public API() : this("http://localhost/cms3/api.php?") { }
+        public API() : this("http://localhost/cms5/api.php?") { }
 
         /// <summary>
         /// Initializes a new instance of the CMS.API class with the provided address. NOTE! all returns are Strings
