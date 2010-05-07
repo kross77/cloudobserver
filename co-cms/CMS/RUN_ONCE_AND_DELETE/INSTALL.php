@@ -19,7 +19,7 @@ if (!$db_select) {
 }
 
 
-					$query = "CREATE TABLE `user` (
+		$query = "CREATE TABLE `user` (
 		`id` INT( 11 ) NOT NULL AUTO_INCREMENT ,
 		`username` VARCHAR( 100 ) NOT NULL ,
 		`hashed_password` VARCHAR( 100 ) NULL DEFAULT NULL ,
@@ -27,7 +27,7 @@ if (!$db_select) {
 		`CG` VARCHAR( 100 ) NULL DEFAULT NULL ,
 		`TIMESTAMP` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
 		PRIMARY KEY (  `id` )
-		) ENGINE = MYISAM ; ";
+		) ENGINE = MYISAM CHARACTER SET utf8 COLLATE utf8_unicode_ci;  ";
 $subject_set = mysql_query($query, $connection);
  // $errors .= " <br/> " . mysql_error(); //some Debug info...	
 					$message .= " <br/> The USER table was successfully created.";
@@ -38,8 +38,8 @@ $subject_set = mysql_query($query, $connection);
 		`streamID` INT( 11 ) NOT NULL ,
 		`LastSeen` DATETIME NOT NULL ,
 		PRIMARY KEY (  `id` )
-		) ENGINE = MYISAM ; ";
-$subject_set = mysql_query($query, $connection);
+		) ENGINE =  MYISAM CHARACTER SET utf8 COLLATE utf8_unicode_ci; ";
+$subject_set = mysql_query($query, $connection); // SET NAMES utf8;
 	// $errors .= " <br/> " . mysql_error(); //some Debug info...		
 					$message .= " <br/> The STREAMS table was successfully created.";
 

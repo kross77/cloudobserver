@@ -52,7 +52,7 @@ var requiredRevision = 0;
 SELECT s.streamId, s.userId, u.username
 FROM streams AS s
 JOIN user AS u ON s.userId = u.id
-LIMIT 0 , 30
+LIMIT 0 , 99
   ";
 $streams_set = mysql_query($query, $connection);
     confirm_query($streams_set);    
