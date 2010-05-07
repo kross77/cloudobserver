@@ -13,40 +13,28 @@ CInputPin::CInputPin(TCHAR *pObjectName, CFilter *pRenderer,
 {
 }
 
-STDMETHODIMP CInputPin::EndOfStream(void)
-{
-    HANDLE hFile = m_pRenderer->m_hFile;
-    m_pRenderer->m_hFile = NULL;
-    CloseHandle(hFile);
-    MessageBox(NULL, "Blin", TEXT("Dump Filter failure"), MB_ICONEXCLAMATION);
-    return CRendererInputPin::EndOfStream();
-}
-
-STDMETHODIMP CInputPin::Receive(IMediaSample *pMediaSample)
-{
-	DWORD lpCount;
-	BYTE *buff;
-	pMediaSample->GetPointer(&buff);
-	if (FALSE == WriteFile(m_pRenderer->m_hFile, buff, pMediaSample->GetActualDataLength(), &lpCount, NULL))
-	{
-		return NOERROR;
-	}
-
-	return NOERROR;
-}
-
-//////////////////////////////
-//////////////////////////////
-
-
-
 EXTERN_C const GUID CLSID_RendererSkelet;
 
 CFilter::CFilter(TCHAR *tszName, LPUNKNOWN punk, HRESULT *phr) :
     CBaseRenderer(CLSID_RendererSkelet, tszName, punk, phr),
 		m_InputPin(NAME("Input Pin"),this,&m_InterfaceLock,phr,L"Input")
 {
-	m_hFile = CreateFile("c:/br_br.avi",       // name of the write
+}
+CFilter::~CFilter()
+{
+}
+
+HRESULT CFilter::OnStopStreaming()
+{
+	CloseHandle(m_hFile);
+return NOERROR;
+}
+
+HRESULT	CFilter::OnStartStreaming()
+{
+ //ResetStreamingTimes();
+
+ m_hFile = CreateFile("c:/NewFile.mp3",       // name of the write
                        GENERIC_WRITE,          // open for writing
                        0,                      // do not share
                        NULL,                   // default security
@@ -55,20 +43,17 @@ CFilter::CFilter(TCHAR *tszName, LPUNKNOWN punk, HRESULT *phr) :
                        NULL);                  // no attr. template
 	if (m_hFile == INVALID_HANDLE_VALUE) 
     { 
-	m_hFile = CreateFile("c:/br_br_br.avi",    // name of the write
+	m_hFile = CreateFile("c:/NewFile1.mp3",    // name of the write
                        GENERIC_WRITE,          // open for writing
                        0,                      // do not share
                        NULL,                   // default security
                        CREATE_NEW,             // create new file only
                        FILE_ATTRIBUTE_NORMAL,  // normal file
                        NULL);                  // no attr. template
-    }
-
-
+    }   
+ return NOERROR;
 }
-CFilter::~CFilter()
-{
-}
+
 
 CUnknown * WINAPI CFilter::CreateInstance(LPUNKNOWN punk, HRESULT *phr)
 {
