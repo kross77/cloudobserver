@@ -119,10 +119,10 @@ namespace CMS
         /// <param name="userEmail"></param>
         /// <param name="key"></param>
         /// <returns></returns>
-    public string logOut(string userEmail, string key)
+    public string logOut(string key)
     {
         WebClient client = new WebClient();
-        var result = client.DownloadString((address + string.Format("method=logOut&userEmail={0}&key={1}", userEmail, key)).ToString());
+        var result = client.DownloadString((address + string.Format("method=logOut&key={0}",  key)).ToString());
         return result;
     }
     #endregion

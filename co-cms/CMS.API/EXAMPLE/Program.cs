@@ -11,8 +11,9 @@ namespace EXAMPLE
         static void Main(string[] args)
         {
             API ap = new API();
-
+            
             Random random = new Random();
+            String str = random.Next(1, 100000).ToString();
 
             Console.WindowWidth = 120;
             Console.WindowHeight = 50;
@@ -22,11 +23,11 @@ namespace EXAMPLE
             Console.WriteLine("create user with NO pass and NO email but with Stream! Key Returned for further operations: " + ap.createUserWithStream(random.Next(1, 100000), "userWithNoPass"));
             Console.WriteLine("create user with pass and email and with Stream! Key Returned for further operations: " + ap.createUserWithStream(random.Next(1, 100000), "userRegistred" , "suk" + random.Next(1, 100000).ToString() + "@suchok.su", "pass"));
             Console.WriteLine("create user with pass and email. Key Returned for further operations: " + ap.createUser("userRegistred", "suk" + random.Next(1, 100000).ToString() + "@suchok.su", "pass"));
-            Console.WriteLine("create password for a user with NO password and NO email " + ap.createPassword(ap.createUserWithStream(random.Next(1, 100000), "userWithNoPass2"), "myRealEmail@real.su", "myPass"));
+            Console.WriteLine("create password for a user with NO password and NO email " + ap.createPassword(ap.createUserWithStream(random.Next(1, 100000), "userWithNoPass" + str), "myRealEmail" + str + "@real.su", "myPass"));
             // Not ready to go =(  
             Console.WriteLine("\n Log Methods");
-            Console.WriteLine("log In" + ap.logIn("myRealEmail@real.life", "myPass"));
-            Console.WriteLine("log Out" + ap.logOut("myRealEmail@real.life", ap.logIn("myRealEmail@real.life", "myPass")));
+            Console.WriteLine("log In " + ap.logIn("myRealEmail" + str + "@real.su", "myPass"));
+            Console.WriteLine("log Out " + ap.logOut(ap.logIn("myRealEmail" + str + "@real.su", "myPass")));
         
             Console.WriteLine("\n Get Methods");
             Console.WriteLine("get Kernel Gateway Address (Yes! you should get Kernel address by calling CMS)" + ap.getGatewayAddress(ap.logIn("myRealEmail@real.life", "myPass")));
