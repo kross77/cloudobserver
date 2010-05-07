@@ -20,11 +20,10 @@ namespace EXAMPLE
             Console.WriteLine("\n Create Methods");
             // Ready to go
             Console.WriteLine("create user with NO pass and NO email but with Stream! Key Returned for further operations: " + ap.createUserWithStream(random.Next(1, 100000), "userWithNoPass"));
-            Console.WriteLine("create user with pass and email and with Stream! Key Returned for further operations: " + ap.createUserWithStream(random.Next(1, 100000), "userRegistred", "suk@suchok.su", "pass"));
-        
-            // Not ready to go =(
-            Console.WriteLine("create password for a user with NO password and NO email" + ap.createPassword(ap.createUserWithStream(random.Next(1, 100000), "userWithNoPass2"), "myRealEmail@real.life", "myPass"));
-          
+            Console.WriteLine("create user with pass and email and with Stream! Key Returned for further operations: " + ap.createUserWithStream(random.Next(1, 100000), "userRegistred" , "suk" + random.Next(1, 100000).ToString() + "@suchok.su", "pass"));
+            Console.WriteLine("create user with pass and email. Key Returned for further operations: " + ap.createUser("userRegistred", "suk" + random.Next(1, 100000).ToString() + "@suchok.su", "pass"));
+            Console.WriteLine("create password for a user with NO password and NO email " + ap.createPassword(ap.createUserWithStream(random.Next(1, 100000), "userWithNoPass2"), "myRealEmail@real.su", "myPass"));
+            // Not ready to go =(  
             Console.WriteLine("\n Log Methods");
             Console.WriteLine("log In" + ap.logIn("myRealEmail@real.life", "myPass"));
             Console.WriteLine("log Out" + ap.logOut("myRealEmail@real.life", ap.logIn("myRealEmail@real.life", "myPass")));
