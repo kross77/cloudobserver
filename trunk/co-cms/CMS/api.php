@@ -1,5 +1,5 @@
 <?php
-include_once("includes/form_functions.php");
+// ВРЕМЕННО: Для проверки содержимого таблиц смотри http://localhost/cms/includes/crystal/Ctest.php Потом ТАск файл должно переместить или удалить
 require_once(  "includes" . DIRECTORY_SEPARATOR . "constants.php");
 require_once(  "includes" . DIRECTORY_SEPARATOR . "crystal" . DIRECTORY_SEPARATOR . "Crystal.php");
 // Errors Array
@@ -36,10 +36,14 @@ function resetBacicConnection()
 
 function mysql_prep( $value ) {
 	$value = stripslashes( $value );
-	$value = mysql_real_escape_string( $value );
+	//$value = mysql_real_escape_string( $value ); // Внимание - одному богу известно как АПИ будет реагировать на стрранные знаки... Таск - проверить как ону будет реагировать.
 	return $value;
 }
-
+	function confirm_query($result_set) {
+		if (!$result_set) {
+			die("Database query failed: " . mysql_error());
+		}
+	}
 function getKey($userID = "00") 
 {
 	$rand_val = $userID . md5(uniqid() + mt_rand());
@@ -54,7 +58,8 @@ function validName( $userName ) {
 }
 
 function validPass( $userPass ) {
-	$userPass = trim(mysql_prep($userPass));
+	
+	$userPass = trim(mysql_prep((string)($userPass)));
 		if ( strlen($userPass) <= 40 && strlen($userPass) >= 4)
 			{return $userPass;} else {	die( "Password langth is invalid "); }	// Pass langth
 }
@@ -86,7 +91,7 @@ function validEmail( $userEmail ) {
 }
 
 function validKey( $key ) {
-	
+		if ( strlen($key) <= 100 && strlen($key) >= 6){
 			$query = "SELECT id, email ";
 			$query .= "FROM user ";
 			$query .= "WHERE CG = '{$key}' ";
@@ -99,7 +104,7 @@ function validKey( $key ) {
 			
 			$result_set = mysql_query($query);
 			if (mysql_num_rows($result_set) == 1) {
-				$found_user = mysql_fetch_array($result_set);  $userID = $found_user['id']; return $userID; } else {	 die( " Key is invalid " ); }// Not Valid Email
+				$found_user = mysql_fetch_array($result_set);  $userID = $found_user['id']; return $userID; } else {	 die( " Key is invalid " ); } } else { die( " Key is invalid (langth)" ); }// Not Valid Email
 	
 }
 function userIsNotRegistred($userID) {
@@ -201,13 +206,49 @@ $db->update('user', $data)->where('id',$userID)->execute();
 echo $key;
 
 }
+function logIn($userEmail, $userPass) {
+	$userPass = validPass($userPass);
+	$userEmail = validEmail($userEmail);
+	$hashed_password = sha1($userPass); 
+			$query = "SELECT id, CG ";
+			$query .= "FROM user ";
+			$query .= "WHERE email = '{$userEmail}' AND hashed_password = '{$hashed_password}' ";
+			
+	$connection = mysql_connect(DB_SERVER,DB_USER,DB_PASS);
+	if (!$connection) { die("Database connection failed: " . mysql_error()); }
+
+	$db_select = mysql_select_db(DB_NAME,$connection);
+	if (!$db_select) {die( "Database selection failed: " . mysql_error()); }
+			
+			$result_set = mysql_query($query);
+			confirm_query($result_set);
+			if (mysql_num_rows($result_set) == 1) { // Прогнозируемый баг - можно зайти под любого юзера с любым паролем. Таск Протестить надо повесить... Но скорее всего все хорошо=)
+				$found_user = mysql_fetch_array($result_set);  
+				$userID = $found_user['id']; 
+				$key = getKey($userID) ;
+ 				$db = Crystal::db();
+ 				$data = array('CG' => $key);
+$db->update('user', $data)->where('id',$userID)->execute();
+			echo $key;	return $key; 
+			} else {	 die( "  Something Went Wrong. Please Try Again, Muther Fucker. " ); } 
+	
+}
+function logOut($key) {
+	$userID = validKey( $key );
+	$key = "NULL";
+ 	$db = Crystal::db();
+ 	$data = array('CG' => $key);
+$db->update('user', $data)->where('id',$userID)->execute();
+echo $key;
+}
 
 
 function getMyName($streamID, $userID) {
 
 }
-function gegGatewayAddress()
+function getGatewayAddress($key)
 {
+	$userID = validKey( $key );
 	$adress = CLOUD_OBSERVER_GATEWAY_ADDRESS;
 	echo $adress;
 }
@@ -268,9 +309,10 @@ case "createPassword":
 	// Log
 
 case "logIn":
-	if((int)$_GET[userEmail] != null && (string)$_GET[userPass] != null)
+	if((string)$_GET[userEmail] != null && (string)$_GET[userPass] != null)
 	{
-			
+	// You can Call  something like http://localhost/cms/api.php?method=logIn&userEmail=Email@emcorp.com&userPass=000000
+	$key = logIn($_GET[userEmail], $_GET[userPass])	;	
 	}
 	else
 	{
@@ -279,9 +321,10 @@ case "logIn":
 	break;
 
 case "logOut":
-	if((int)$_GET[userEmail] != null && (string)$_GET[key] != null)
+	if((string)$_GET[key] != null)
 	{
-			
+		// You can Call once  something like http://localhost/cms/api.php?method=logOut&key=Your_Key
+		$key = logOut($_GET[key])	;
 	}
 	else
 	{
@@ -303,9 +346,9 @@ case "getMyName":
 	break;
 
 case "getGatewayAddress":
-	if((int)$_GET[streamId] != null && (string)$_GET[userName] != null && (string)$_GET[userEmail] != null && (string)$_GET[userPass] != null)
-	{
-			
+	if( (string)$_GET[key] != null)
+	{	// You can Call once  something like http://localhost/cms/api.php?method=getGatewayAddress&key=Your_Key
+		$adress = getGatewayAddress($_GET[key]);
 	}
 	else
 	{
