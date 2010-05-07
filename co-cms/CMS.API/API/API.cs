@@ -91,7 +91,6 @@ namespace CMS
         return result;
     }
     //........................................................cp
-     
     public string createPassword(string key, string userEmail, string newUserPass)
     {
         WebClient client = new WebClient();
