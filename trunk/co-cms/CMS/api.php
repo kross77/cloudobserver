@@ -40,7 +40,7 @@ function mysql_prep( $value ) {
 	return $value;
 }
 
-function getKey($userID = 00) 
+function getKey($userID = "00") 
 {
 	$rand_val = $userID . md5(uniqid() + mt_rand());
 	$rand_val = trim(mysql_prep($rand_val));
@@ -60,7 +60,7 @@ function validPass( $userPass ) {
 }
 
 
-function validEmail( $userEmail ) {
+function validNewEmail( $userEmail ) {
 	$db = Crystal::db();
 	$data = array(
  			 		'userEmail' => $userEmail
@@ -72,7 +72,53 @@ function validEmail( $userEmail ) {
 		if($validation->passed == TRUE)
 	{ return $userEmail; } else {	print_r($validation->errors); die( " Email is invalid " ); }// Not Valid Email
 }
+function validEmail( $userEmail ) {
+	$db = Crystal::db();
+	$data = array(
+ 			 		'userEmail' => $userEmail
+	);
+	$rules = array(
+	 			'userEmail' => array('valid_email, message: Please provide valid email address')
+	);
+	$validation = Crystal::validation($rules, $data, $db);
+		if($validation->passed == TRUE)
+	{ return $userEmail; } else {	print_r($validation->errors); die( " Email is invalid " ); }// Not Valid Email
+}
 
+function validKey( $key ) {
+	
+			$query = "SELECT id, email ";
+			$query .= "FROM user ";
+			$query .= "WHERE CG = '{$key}' ";
+			
+	$connection = mysql_connect(DB_SERVER,DB_USER,DB_PASS);
+	if (!$connection) { die("Database connection failed: " . mysql_error()); }
+
+	$db_select = mysql_select_db(DB_NAME,$connection);
+	if (!$db_select) {die( "Database selection failed: " . mysql_error()); }
+			
+			$result_set = mysql_query($query);
+			if (mysql_num_rows($result_set) == 1) {
+				$found_user = mysql_fetch_array($result_set);  $userID = $found_user['id']; return $userID; } else {	 die( " Key is invalid " ); }// Not Valid Email
+	
+}
+function userIsNotRegistred($userID) {
+			$query = "SELECT hashed_password, email ";
+			$query .= "FROM user ";
+			$query .= "WHERE id = '{$userID}' ";
+			
+	$connection = mysql_connect(DB_SERVER,DB_USER,DB_PASS);
+	if (!$connection) { die("Database connection failed: " . mysql_error()); }
+
+	$db_select = mysql_select_db(DB_NAME,$connection);
+	if (!$db_select) {die( "Database selection failed: " . mysql_error()); }
+			
+			$result_set = mysql_query($query);
+			if (mysql_num_rows($result_set) == 1) {
+				$found_user = mysql_fetch_array($result_set); 
+				if ($found_user['hashed_password'] == NULL &&  $found_user['email'] == NULL ) { return $userID; } else {	 die( " User is Registred " ); }} else {	 die( " UserID is invalid " ); }// Not Valid Email
+	
+}
 // API FUNCTIONS
 
 function validStreamId( $streamID ) {
@@ -110,7 +156,7 @@ function createUnregedUser( $userName ) {
 	}  
 
 function createUser($userEmail, $userName, $userPass) {
-				$email = validEmail($userEmail);
+				$email = validNewEmail($userEmail);
 				$name = validName($userName);
 				$password = validPass($userPass);
 				$key = getKey();
@@ -139,15 +185,31 @@ function createStream($streamID, $userID) {
 				$data = array('userID' => $userID, 'streamID' => $streamID );
 				$db->insert('streams', $data)->execute();
 }
-function createPassword($key, $userEmail) {
+
+function createPassword($key, $userEmail, $userPass) {
+	$userID = validKey( $key );
+	$userPass = validPass($userPass);
+	$userID = userIsNotRegistred($userID);
+	$hashed_password = sha1($userPass); 
+	$userEmail = validEmail($userEmail );
+	$key = getKey($userID) ;
+ 	$db = Crystal::db();
+ 	$data = array('email' => $userEmail,
+'hashed_password' => $hashed_password,
+ 	'CG' => $key);
+$db->update('user', $data)->where('id',$userID)->execute();
+echo $key;
 
 }
-function setPassword($key, $userEmail, $userPass) {
 
-}
 
 function getMyName($streamID, $userID) {
 
+}
+function gegGatewayAddress()
+{
+	$adress = CLOUD_OBSERVER_GATEWAY_ADDRESS;
+	echo $adress;
 }
 // API POST\GET Processor
 
@@ -169,8 +231,8 @@ switch($_GET["method"])
           }
 		elseif((int)$_GET[streamId] != null && (string)$_GET[userName] != null )
 		{
-		 // create user with NO pass and NO email But with Stream! (Stream ID should be uniqe and beter be confermed somehow by kernel)
-		// You can Call once something like http://localhost/cms/api.php?method=createUserWithStream&streamId=4&userName=Ol%D0%AFDgr and go to http://localhost/cms5/includes/crystal/Ctest.php to see what has happened	
+		// create user with NO pass and NO email But with Stream! (Stream ID should be uniqe and beter be confermed somehow by kernel)
+	    // You can Call once something like http://localhost/cms/api.php?method=createUserWithStream&streamId=4&userName=Ol%D0%AFDgr and go to http://localhost/cms5/includes/crystal/Ctest.php to see what has happened	
 		$streamID = validStreamId($_GET[streamId]);
 		$userID  =	createUnregedUser($_GET[userName]);
 		createStream($streamID, $userID);
@@ -179,13 +241,12 @@ switch($_GET["method"])
 		{
 			echo $error;
 		}
-
 		break;
 
 case "createUser":
-	if((int)$_GET[streamId] != null && (string)$_GET[userName] != null && (string)$_GET[userEmail] != null && (string)$_GET[userPass] != null)
+	if( (string)$_GET[userName] != null && (string)$_GET[userEmail] != null && (string)$_GET[userPass] != null)
 	{
-			
+	$userID = createUser($_GET[userEmail], $_GET[userName], $_GET[userPass]);		
 	}
 	else
 	{
@@ -194,9 +255,9 @@ case "createUser":
 	break;
 
 case "createPassword":
-	if((int)$_GET[key] != null && (string)$_GET[userEmail] != null && (string)$_GET[newUserPass] != null)
-	{
-			
+	if($_GET[key] != null && (string)$_GET[userEmail] != null && (string)$_GET[newUserPass] != null)
+	{		
+	$userPass =	createPassword($_GET[key], $_GET[userEmail], $_GET[newUserPass]);
 	}
 	else
 	{
