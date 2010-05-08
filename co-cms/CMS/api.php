@@ -53,14 +53,14 @@ function getKey($userID = "00")
 
 function validName( $userName ) {
 	$userName = trim(mysql_prep($userName));
-	if ( strlen($userName) <= 40 && strlen($userName) >= 4)
+	if ( strlen($userName) <= 99 && strlen($userName) >= 4)
 		{return $userName; } else {	die( "Name langth is invalid "); }	// Name Langth
 }
 
 function validPass( $userPass ) {
 	
 	$userPass = trim(mysql_prep((string)($userPass)));
-		if ( strlen($userPass) <= 40 && strlen($userPass) >= 4)
+		if ( strlen($userPass) <= 99 && strlen($userPass) >= 4)
 			{return $userPass;} else {	die( "Password langth is invalid "); }	// Pass langth
 }
 
@@ -142,6 +142,12 @@ function userIsNotRegistred($userID) {
 				if ($found_user['hashed_password'] == NULL &&  $found_user['email'] == NULL ) { return $userID; } else {	 die( " User is Registred " ); }} else {	 die( " UserID is invalid " ); }// Not Valid Email
 	
 }
+function deleteAllUserStreams($userID)
+{
+$db = Crystal::db();
+$db->delete('streams')->where('userID',$userID)->execute();
+echo " All USER streams DELETED; "; return $userID;
+}
 // API FUNCTIONS
 
 function validStreamId( $streamID ) {
@@ -155,6 +161,18 @@ function validStreamId( $streamID ) {
 	$validation = Crystal::validation($rules, $data, $db);
 		if($validation->passed == TRUE)
 	{ return $streamID; } else {	print_r($validation->errors); die( " Stream ID is invalid " ); }// Not Valid Email
+}
+function streamIdExists( $streamID ) {
+	$db = Crystal::db();
+	$data = array(
+			'streamId' => $streamID,
+	);
+	$rules = array(
+	  'streamId' => array('numeric, message: Please supply a valid number | unique , table: streams, field: streamID, message : This streamID is already taken '),
+	 	);
+	$validation = Crystal::validation($rules, $data, $db);
+		if($validation->passed == FALSE)
+	{ return $streamID; } else {	print_r($validation->errors); die( " Stream ID does not existin DB  " ); }// Not Valid Email
 }
 
 function createUnregedUser( $userName ) {
@@ -311,6 +329,26 @@ $db = Crystal::db();
 $db->insert('streams', $data)->execute();
 echo "true";
 }
+function deleteStream($key, $streamId)
+{
+$userID = validKey( $key );
+$streamId =	streamIdExists( $streamId );
+$db = Crystal::db();
+$db->delete('streams')->where('userID',$userID)->and('streamID', $streamId)->execute();
+echo " DELETED ";
+}
+
+function deleteUser($key, $pass)
+{
+
+$userID = validKey( $key );
+$userPass = validPass($pass);
+$hashed_password = sha1($userPass);
+$db = Crystal::db();
+$db->delete('user')->where('id',$userID)->and('hashed_password', $hashed_password)->execute();
+deleteAllUserStreams($userID);
+echo " USER DELETED ";
+}
 // API POST\GET Processor
 
 switch($_GET["method"])
@@ -464,9 +502,9 @@ case "setStream":
 	// Delete
 
 case "deleteStream":
-	if((int)$_GET[streamId] != null && (string)$_GET[userName] != null && (string)$_GET[userEmail] != null && (string)$_GET[userPass] != null)
-	{
-			
+	if((int)$_GET[streamId] && (string)$_GET[key] != null)
+	{ // You can Call once  something like http://localhost/cms/api.php?method=deleteStream&streamId=12&key=Your_Key
+		deleteStream($_GET[key], $_GET[streamId])	;
 	}
 	else
 	{
@@ -475,9 +513,10 @@ case "deleteStream":
 	break;
 
 case "deleteUser":
-	if((int)$_GET[streamId] != null && (string)$_GET[userName] != null && (string)$_GET[userEmail] != null && (string)$_GET[userPass] != null)
-	{
-			
+	if((string)$_GET[key] != null && (string)$_GET[userPass] != null)
+	{// You can Call once  something like http://localhost/cms/api.php?method=deleteUser&userPass=Uour_Pass&key=Your_Key
+	
+			deleteUser((string)$_GET[key], (string)$_GET[userPass]);
 	}
 	else
 	{
