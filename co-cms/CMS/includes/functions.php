@@ -1,7 +1,33 @@
+<?php 
+    function win2utf($s)    {
+   for($i=0, $m=strlen($s); $i<$m; $i++)    {
+       $c=ord($s[$i]);
+       if ($c<=127) {$t.=chr($c); continue; }
+       if ($c>=192 && $c<=207)    {$t.=chr(208).chr($c-48); continue; }
+       if ($c>=208 && $c<=239) {$t.=chr(208).chr($c-48); continue; }
+       if ($c>=240 && $c<=255) {$t.=chr(209).chr($c-112); continue; }
+       if ($c==184) { $t.=chr(209).chr(209); continue; };
+            if ($c==168) { $t.=chr(208).chr(129);  continue; };
+            if ($c==184) { $t.=chr(209).chr(145); continue; }; #¸
+            if ($c==168) { $t.=chr(208).chr(129); continue; }; #¨
+            if ($c==179) { $t.=chr(209).chr(150); continue; }; #³
+            if ($c==178) { $t.=chr(208).chr(134); continue; }; #²
+            if ($c==191) { $t.=chr(209).chr(151); continue; }; #¿
+            if ($c==175) { $t.=chr(208).chr(135); continue; }; #¿
+            if ($c==186) { $t.=chr(209).chr(148); continue; }; #º
+            if ($c==170) { $t.=chr(208).chr(132); continue; }; #ª
+            if ($c==180) { $t.=chr(210).chr(145); continue; }; #´
+            if ($c==165) { $t.=chr(210).chr(144); continue; }; #¥
+            if ($c==184) { $t.=chr(209).chr(145); continue; }; #¥            
+   }
+   return $t;
+}
+?>
 <?php
 	// This file is the place to store all basic functions
 
 	function mysql_prep( $value ) {
+	$value = win2utf($value);
 		$magic_quotes_active = get_magic_quotes_gpc();
 		$new_enough_php = function_exists( "mysql_real_escape_string" ); // i.e. PHP >= v4.3.0
 		if( $new_enough_php ) { // PHP v4.3.0 or higher

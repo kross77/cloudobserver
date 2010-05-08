@@ -63,7 +63,7 @@ if (logged_in()) {
 		$required_fields = array('username', 'password', 'email');
 		$errors = array_merge($errors, check_required_fields($required_fields, $_POST));
 
-		$fields_with_lengths = array('username' => 40, 'password' => 40, 'email' => 40 );
+		$fields_with_lengths = array( 'password' => 40, 'email' => 40 );
 		$errors = array_merge($errors, check_max_field_lengths($fields_with_lengths, $_POST));
          	
 		$username = trim(mysql_prep($_POST['username']));
