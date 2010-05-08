@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8D115571-F1F0-40A4-9E3B-520B3C576D82}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CloudObserver.Clients.Auxiliaries</RootNamespace>
+    <AssemblyName>cloudaux</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\Binaries\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\Binaries\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.DirectX.DirectSound, Version=1.0.2902.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.ServiceModel">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.ServiceModel.Web">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Capture\ChunkCapturedEventArgs.cs" />
+    <Compile Include="Capture\DirectSound\DirectSoundCapture.cs" />
+    <Compile Include="Capture\DirectSound\DirectSoundCaptureDevice.cs" />
+    <Compile Include="Capture\ICapture.cs" />
+    <Compile Include="Formats\Audio\AudioFormatAttribute.cs" />
+    <Compile Include="Formats\Audio\AudioFormatBase.cs" />
+    <Compile Include="Formats\Audio\IAudioFormat.cs" />
+    <Compile Include="Formats\Audio\Mp3\LameEncoder.cs" />
+    <Compile Include="Formats\Audio\Mp3\Mp3AudioFormat.cs" />
+    <Compile Include="Formats\Audio\Mp3\Mp3BitRate.cs" />
+    <Compile Include="Formats\Audio\Mp3\Mp3Sharp\Converter\RiffFile.cs" />
+    <Compile Include="Formats\Audio\Mp3\Mp3Sharp\Converter\WaveFile.cs" />
+    <Compile Include="Formats\Audio\Mp3\Mp3Sharp\Converter\WaveFileObuffer.cs" />
+    <Compile Include="Formats\Audio\Mp3\Mp3Sharp\Decoder\BackStream.cs" />
+    <Compile Include="Formats\Audio\Mp3\Mp3Sharp\Decoder\BitReserve.cs" />
+    <Compile Include="Formats\Audio\Mp3\Mp3Sharp\Decoder\Bitstream.cs" />
+    <Compile Include="Formats\Audio\Mp3\Mp3Sharp\Decoder\BitstreamErrors.cs" />
+    <Compile Include="Formats\Audio\Mp3\Mp3Sharp\Decoder\BitstreamException.cs" />
+    <Compile Include="Formats\Audio\Mp3\Mp3Sharp\Decoder\Control.cs" />
+    <Compile Include="Formats\Audio\Mp3\Mp3Sharp\Decoder\Crc16.cs" />
+    <Compile Include="Formats\Audio\Mp3\Mp3Sharp\Decoder\Decoder.cs" />
+    <Compile Include="Formats\Audio\Mp3\Mp3Sharp\Decoder\DecoderErrors.cs" />
+    <Compile Include="Formats\Audio\Mp3\Mp3Sharp\Decoder\DecoderException.cs" />
+    <Compile Include="Formats\Audio\Mp3\Mp3Sharp\Decoder\Equalizer.cs" />
+    <Compile Include="Formats\Audio\Mp3\Mp3Sharp\Decoder\FrameDecoder.cs" />
+    <Compile Include="Formats\Audio\Mp3\Mp3Sharp\Decoder\Header.cs" />
+    <Compile Include="Formats\Audio\Mp3\Mp3Sharp\Decoder\Huffcodetab.cs" />
+    <Compile Include="Formats\Audio\Mp3\Mp3Sharp\Decoder\InputStreamSource.cs" />
+    <Compile Include="Formats\Audio\Mp3\Mp3Sharp\Decoder\JavaLayerError.cs" />
+    <Compile Include="Formats\Audio\Mp3\Mp3Sharp\Decoder\JavaLayerErrors.cs" />
+    <Compile Include="Formats\Audio\Mp3\Mp3Sharp\Decoder\JavaLayerException.cs" />
+    <Compile Include="Formats\Audio\Mp3\Mp3Sharp\Decoder\JavaLayerHook.cs" />
+    <Compile Include="Formats\Audio\Mp3\Mp3Sharp\Decoder\JavaLayerUtils.cs" />
+    <Compile Include="Formats\Audio\Mp3\Mp3Sharp\Decoder\LayerIDecoder.cs" />
+    <Compile Include="Formats\Audio\Mp3\Mp3Sharp\Decoder\LayerIIDecoder.cs" />
+    <Compile Include="Formats\Audio\Mp3\Mp3Sharp\Decoder\LayerIIIDecoder.cs" />
+    <Compile Include="Formats\Audio\Mp3\Mp3Sharp\Decoder\Manager.cs" />
+    <Compile Include="Formats\Audio\Mp3\Mp3Sharp\Decoder\Obuffer.cs" />
+    <Compile Include="Formats\Audio\Mp3\Mp3Sharp\Decoder\OutputChannels.cs" />
+    <Compile Include="Formats\Audio\Mp3\Mp3Sharp\Decoder\SampleBuffer.cs" />
+    <Compile Include="Formats\Audio\Mp3\Mp3Sharp\Decoder\Source.cs" />
+    <Compile Include="Formats\Audio\Mp3\Mp3Sharp\Decoder\SynthesisFilter.cs" />
+    <Compile Include="Formats\Audio\Mp3\Mp3Sharp\Mp3Stream.cs" />
+    <Compile Include="Formats\Audio\Mp3\Mp3Sharp\Support\SupportClass.cs" />
+    <Compile Include="Formats\Audio\Mp3\MpegFrame.cs" />
+    <Compile Include="Formats\Audio\Mp3\MpegLayer3WaveFormatEx.cs" />
+    <Compile Include="Formats\Audio\Mp3\MpegVersion.cs" />
+    <Compile Include="Formats\Audio\Mp3\PcmAudioFormatExtensions.cs" />
+    <Compile Include="Formats\Audio\PcmAudioFormat.cs" />
+    <Compile Include="Formats\Audio\WaveFormat.cs" />
+    <Compile Include="Formats\Audio\WaveFormatEx.cs" />
+    <Compile Include="Formats\Audio\WaveFormats.cs" />
+    <Compile Include="Formats\FormatIdentifiers.cs" />
+    <Compile Include="Multimedia\ConnectionsUpdatedEventArgs.cs" />
+    <Compile Include="Multimedia\ConnectionsUpdatedEventHandler.cs" />
+    <Compile Include="Multimedia\DXUtil.cs" />
+    <Compile Include="Multimedia\EventRaisingSoundBuffer.cs" />
+    <Compile Include="Multimedia\Player.cs" />
+    <Compile Include="Multimedia\SoundUtil.cs" />
+    <Compile Include="Multimedia\StreamedMp3Sound.cs" />
+    <Compile Include="Multimedia\StreamedSound.cs" />
+    <Compile Include="Multimedia\Transmitter.cs" />
+    <Compile Include="Multimedia\WaveFormat.cs" />
+    <Compile Include="Policies\IPolicyRetriever.cs" />
+    <Compile Include="Policies\PoliciesManager.cs" />
+    <Compile Include="Policies\PolicyRetriever.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Services\GW\IGateway.cs" />
+    <Compile Include="Tools\BitTools.cs" />
+    <Compile Include="Tools\StringExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="lame_enc.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\clientaccesspolicy.xml" />
+    <Content Include="Resources\crossdomain.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
