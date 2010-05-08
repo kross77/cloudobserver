@@ -107,6 +107,24 @@ function validKey( $key ) {
 				$found_user = mysql_fetch_array($result_set);  $userID = $found_user['id']; return $userID; } else {	 die( " Key is invalid " ); } } else { die( " Key is invalid (langth)" ); }// Not Valid Email
 	
 }
+
+function validKeyReturnName( $key ) {
+		if ( strlen($key) <= 100 && strlen($key) >= 6){
+			$query = "SELECT id, username ";
+			$query .= "FROM user ";
+			$query .= "WHERE CG = '{$key}' ";
+			
+	$connection = mysql_connect(DB_SERVER,DB_USER,DB_PASS);
+	if (!$connection) { die("Database connection failed: " . mysql_error()); }
+
+	$db_select = mysql_select_db(DB_NAME,$connection);
+	if (!$db_select) {die( "Database selection failed: " . mysql_error()); }
+			
+			$result_set = mysql_query($query);
+			if (mysql_num_rows($result_set) == 1) {
+				$found_user = mysql_fetch_array($result_set);  $userName = $found_user['username']; return $userName; } else {	 die( " Key is invalid " ); } } else { die( " Key is invalid (langth)" ); }// Not Valid Email
+	
+}
 function userIsNotRegistred($userID) {
 			$query = "SELECT hashed_password, email ";
 			$query .= "FROM user ";
@@ -243,14 +261,36 @@ echo $key;
 }
 
 
-function getMyName($streamID, $userID) {
-
+function getMyName($key) {
+$userName = validKeyReturnName( $key );
+echo $userName;
+return $userName;
 }
 function getGatewayAddress($key)
 {
 	$userID = validKey( $key );
 	$adress = CLOUD_OBSERVER_GATEWAY_ADDRESS;
 	echo $adress;
+}
+function getStreamsFromAll($key)
+{
+	$userID = validKey( $key );
+$db = Crystal::db();
+$generated_table = $db->sql('select a.username, b.streamID
+from user a, streams b
+where a.id = b.userID;')->fetch_all();
+print_r($generated_table);
+}
+
+function getMyStreams($key)
+{
+$userID = validKey( $key );
+$db = Crystal::db();
+$task = "select a.username, b.streamID
+from user a, streams b
+where " . $userID . " = a.id = b.userID;";
+$generated_table = $db->sql($task)->fetch_all();
+print_r($generated_table);
 }
 // API POST\GET Processor
 
@@ -335,9 +375,9 @@ case "logOut":
 	// GET
 
 case "getMyName":
-	if((int)$_GET[streamId] != null && (string)$_GET[userName] != null && (string)$_GET[userEmail] != null && (string)$_GET[userPass] != null)
-	{
-			
+   if((string)$_GET[key] != null)
+	{ // You can Call once  something like http://localhost/cms/api.php?method=getMyName&key=Your_Key
+			$userName = getMyName($_GET[key]);
 	}
 	else
 	{
@@ -347,7 +387,7 @@ case "getMyName":
 
 case "getGatewayAddress":
 	if( (string)$_GET[key] != null)
-	{	// You can Call once  something like http://localhost/cms/api.php?method=getGatewayAddress&key=Your_Key
+	{	// You can Call  something like http://localhost/cms/api.php?method=getGatewayAddress&key=Your_Key
 		$adress = getGatewayAddress($_GET[key]);
 	}
 	else
@@ -357,9 +397,9 @@ case "getGatewayAddress":
 	break;
 
 case "getStreamsFromAll":
-	if((int)$_GET[streamId] != null && (string)$_GET[userName] != null && (string)$_GET[userEmail] != null && (string)$_GET[userPass] != null)
-	{
-			
+	if( (string)$_GET[key] != null)
+	{ // You can Call once  something like http://localhost/cms/api.php?method=getStreamsFromAll&key=Your_Key
+			getStreamsFromAll($_GET[key]);
 	}
 	else
 	{
@@ -368,9 +408,9 @@ case "getStreamsFromAll":
 	break;
 
 case "getMyStreams":
-	if((int)$_GET[streamId] != null && (string)$_GET[userName] != null && (string)$_GET[userEmail] != null && (string)$_GET[userPass] != null)
+	if( (string)$_GET[key] != null)
 	{
-			
+		getMyStreams($_GET[key])	;	
 	}
 	else
 	{
