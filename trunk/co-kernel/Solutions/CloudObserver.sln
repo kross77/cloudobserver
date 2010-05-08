@@ -7,12 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserver.Gui", "..\Pro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserver.ServiceHostApplication", "..\Projects\CloudObserver.ServiceHostApplication\CloudObserver.ServiceHostApplication.csproj", "{81013536-0743-4773-82BE-B5226AEE39CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserver.TestClient", "..\Projects\CloudObserver.TestClient\CloudObserver.TestClient.csproj", "{F601E494-F332-409C-8C13-537A34BCEB59}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mp3Sharp", "..\Projects\Mp3Sharp\Mp3Sharp.csproj", "{834CAB58-648D-47CC-AC6F-D01C08C809A4}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserver.WriterClient", "..\Projects\CloudObserver.WriterClient\CloudObserver.WriterClient.csproj", "{8B43DE39-49B8-4883-A745-7C84DE5DCE0B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserver.CloudStart", "..\Projects\CloudObserver.CloudStart\CloudObserver.CloudStart.csproj", "{A6C8F21A-A7EB-4EE1-9FEF-97EDF59A37D7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserver.StreamProxy", "..\Projects\CloudObserver.StreamProxy\CloudObserver.StreamProxy.csproj", "{48EC9CC8-B1CC-4961-A477-02BDB34F8544}"
@@ -31,16 +25,6 @@ Global
 		{A4FEB97C-4A4C-4FC1-9A72-39F6B0814952}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81013536-0743-4773-82BE-B5226AEE39CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{81013536-0743-4773-82BE-B5226AEE39CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F601E494-F332-409C-8C13-537A34BCEB59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F601E494-F332-409C-8C13-537A34BCEB59}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{834CAB58-648D-47CC-AC6F-D01C08C809A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{834CAB58-648D-47CC-AC6F-D01C08C809A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{834CAB58-648D-47CC-AC6F-D01C08C809A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{834CAB58-648D-47CC-AC6F-D01C08C809A4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8B43DE39-49B8-4883-A745-7C84DE5DCE0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8B43DE39-49B8-4883-A745-7C84DE5DCE0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8B43DE39-49B8-4883-A745-7C84DE5DCE0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8B43DE39-49B8-4883-A745-7C84DE5DCE0B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A6C8F21A-A7EB-4EE1-9FEF-97EDF59A37D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A6C8F21A-A7EB-4EE1-9FEF-97EDF59A37D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6C8F21A-A7EB-4EE1-9FEF-97EDF59A37D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
