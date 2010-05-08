@@ -30,10 +30,10 @@ namespace EXAMPLE
             Console.WriteLine("log Out " + ap.logOut(ap.logIn("myRealEmail" + str + "@real.su", "myPass")));
         
             Console.WriteLine("\n Get Methods");
-            Console.WriteLine("get Kernel Gateway Address (Yes! you should get Kernel address by calling CMS)" + ap.getGatewayAddress(ap.logIn("myRealEmail@real.life", "myPass")));
-            Console.WriteLine("get user name by KEY" + ap.getMyName(ap.logIn("myRealEmail@real.life", "myPass")));
-            Console.WriteLine("get users streams (KEY, AMMOUNT, ORDER (none = default, DO NOT CHANGE until CMS v3.5))" + ap.getMyStreams(ap.logIn("myRealEmail@real.life", "myPass"), 30, "none"));
-            Console.WriteLine("get NOT user streams  (KEY, AMMOUNT, ORDER (none = default, DO NOT CHANGE until CMS v3.4))" + ap.getStreamsFromAll(ap.logIn("myRealEmail@real.life", "myPass"), 35, "none"));
+            Console.WriteLine("get Kernel Gateway Address (Yes! you should get Kernel address by calling CMS) " + ap.getGatewayAddress(ap.logIn("myRealEmail" + str + "@real.su", "myPass")));
+            Console.WriteLine("get user name by KEY " + ap.getMyName(ap.logIn("myRealEmail" + str + "@real.su", "myPass")));
+            Console.WriteLine("get users streams (KEY, AMMOUNT, ORDER (none = default, DO NOT CHANGE until CMS v3.5)) \n " + ap.getMyStreams(ap.logIn("myRealEmail" + str + "@real.su", "myPass"), 30, "none"));
+            Console.WriteLine("get NOT user streams  (KEY, AMMOUNT, ORDER (none = default, DO NOT CHANGE until CMS v3.4)) \n " + ap.getStreamsFromAll(ap.logIn("myRealEmail" + str + "@real.su", "myPass"), 35, "none"));
       
             Console.WriteLine("\n Set Methods");   
             Console.WriteLine("set a new user name" + ap.setMyName(ap.logIn("myRealEmail@real.life", "myPass"), "myName"));
