@@ -292,6 +292,25 @@ where " . $userID . " = a.id = b.userID;";
 $generated_table = $db->sql($task)->fetch_all();
 print_r($generated_table);
 }
+
+function setMyName($key, $name)
+{
+$userID = validKey( $key );
+$db = Crystal::db();
+$data = array('username' => $name);
+$db->update('user', $data)->where('id',$userID)->execute();
+echo "true";
+}
+function setStream($key, $streamId)
+{
+	$userID = validKey( $key );
+$streamId =	validStreamId( $streamId );
+$data = array('userID' => $userID,
+          'streamID' => $streamId);
+$db = Crystal::db();
+$db->insert('streams', $data)->execute();
+echo "true";
+}
 // API POST\GET Processor
 
 switch($_GET["method"])
@@ -421,20 +440,9 @@ case "getMyStreams":
 	// SET
 
 case "setMyName":
-	if((int)$_GET[streamId] != null && (string)$_GET[userName] != null && (string)$_GET[userEmail] != null && (string)$_GET[userPass] != null)
-	{
-			
-	}
-	else
-	{
-		echo $error;
-	}
-	break;
-
-case "setMyNewPassword":
-	if((int)$_GET[streamId] != null && (string)$_GET[userName] != null && (string)$_GET[userEmail] != null && (string)$_GET[userPass] != null)
-	{
-			
+	if( (string)$_GET[key] != null && (string)$_GET[newUserName] != null)
+	{ // You can Call once  something like http://localhost/cms/api.php?method=setMyName&newUserName=Jon&key=Your_Key
+		setMyName($_GET[key], $_GET[newUserName]);
 	}
 	else
 	{
@@ -443,9 +451,9 @@ case "setMyNewPassword":
 	break;
 
 case "setStream":
-	if((int)$_GET[streamId] != null && (string)$_GET[userName] != null && (string)$_GET[userEmail] != null && (string)$_GET[userPass] != null)
-	{
-			
+		if( (string)$_GET[key] != null && (int)$_GET[streamId] != null )
+	{ // You can Call once  something like http://localhost/cms/api.php?method=setStream&streamId=1234554321&key=Your_Key
+			setStream($_GET[key], $_GET[streamId]);
 	}
 	else
 	{
