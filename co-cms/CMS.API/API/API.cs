@@ -186,21 +186,17 @@ namespace CMS
     public string setMyName(string key, string userName)
     {
         WebClient client = new WebClient();
-        var result = client.DownloadString((address + string.Format("method=setMyName&key={0}&userName={1}", key, userName)).ToString());
+        var result = client.DownloadString((address + string.Format("method=setMyName&key={0}&newUserName={1}", key, userName)).ToString());
         return result;
     }
-    public string setMyNewPassword(string key, string userEmail, string curentUserPass, string newUserPass)
+  /* // method canceled - not part of 3.1 spec.
+   * public string setMyNewPassword(string key, string userEmail, string curentUserPass, string newUserPass)
     {
         WebClient client = new WebClient();
         var result = client.DownloadString((address + string.Format("method=setMyNewPassword&key={0}&userEmail={1}&curentUserPass={2}&newUserPass={3}", key, userEmail, curentUserPass, newUserPass)).ToString());
         return result;
-    }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="streamId"></param>
-        /// <returns></returns>
+    } */
+
     public string setStream(string key, int streamId)
     {
         WebClient client = new WebClient();
