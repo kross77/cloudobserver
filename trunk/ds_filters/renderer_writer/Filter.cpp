@@ -61,3 +61,25 @@ HRESULT CFilter::DoRenderSample(IMediaSample *pMediaSample)
 
 	return NOERROR;
 }
+
+STDMETHODIMP CFilter::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
+{
+    CheckPointer(ppv,E_POINTER);
+ //   CAutoLock lock(&m_Lock);
+
+    // Do we have this interface
+
+
+	if (riid == IID_IBaseFilter)
+	{
+		return GetInterface((IBaseFilter *) this, ppv);
+	}
+	/*we must return the same way || riid == IID_IMediaFilter || riid == IID_IMediaPosition */
+	/*if (riid == IID_IBaseFilter)
+	{
+		return GetInterface((IBaseFilter *) this, ppv);
+	}
+	*/
+	/* return all not support interfaces */
+	return CBaseRenderer::NonDelegatingQueryInterface(riid,ppv);
+}
