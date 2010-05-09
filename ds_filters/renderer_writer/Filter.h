@@ -17,6 +17,9 @@ public:
 	HRESULT DoRenderSample(IMediaSample *pMediaSample);
 
 private:
+	// Overriden to say what interfaces we support where
+    STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
+	
 	//Privite constructor. All object must be created from CreateInstance function
 	CFilter(TCHAR *tszName, LPUNKNOWN punk, HRESULT *phr);
 	~CFilter();
