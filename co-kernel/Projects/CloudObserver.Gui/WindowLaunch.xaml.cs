@@ -1,4 +1,4 @@
-﻿using CloudObserver.Services.RM;
+﻿using CloudObserver.Kernel.Services;
 using CloudObserver.Gui.Controls;
 using System;
 using System.ComponentModel;
@@ -19,7 +19,7 @@ namespace CloudObserver.Gui
         /// <summary>
         /// A filename of the Cloud Observer Service Host application.
         /// </summary>
-        private const string serviceHostProcessFileName = "csvchost.exe";
+        private const string serviceHostProcessFileName = "coresmgr.exe";
 
         /// <summary>
         /// The number of milliseconds for a service to start.
@@ -31,6 +31,7 @@ namespace CloudObserver.Gui
         /// </summary>
         private string gatewayAddress;
 
+        private const string resourceManagerIp = "localhost";
         private const string resourceManagerAddress = "http://localhost:4773/rm";
 
         private OperationStage operationStage1 = null;
@@ -86,7 +87,7 @@ namespace CloudObserver.Gui
             operationStage1.Start();
             ProcessStartInfo serviceHostProcessStartInfo = new ProcessStartInfo();
             serviceHostProcessStartInfo.FileName = serviceHostProcessFileName;
-            serviceHostProcessStartInfo.Arguments = resourceManagerAddress + " RM";
+            serviceHostProcessStartInfo.Arguments = resourceManagerIp;
             serviceHostProcessStartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             Process serviceHostProcess = new Process();
             serviceHostProcess.StartInfo = serviceHostProcessStartInfo;
@@ -95,12 +96,12 @@ namespace CloudObserver.Gui
 
             // Stage 2: Launch the gateway service.
             operationStage2.Start();
-            using (ChannelFactory<IResourceManager> channelFactory = new ChannelFactory<IResourceManager>(new BasicHttpBinding(), resourceManagerAddress))
+            using (ChannelFactory<IResourcesManager> channelFactory = new ChannelFactory<IResourcesManager>(new BasicHttpBinding(), resourceManagerAddress))
             {
-                IResourceManager resourceManager = channelFactory.CreateChannel();
+                IResourcesManager resourceManager = channelFactory.CreateChannel();
                 try
                 {
-                    resourceManager.StartCloudObserverInstance(gatewayAddress);
+                    resourceManager.StartCloudObserver();
                     Thread.Sleep(5000);
                     operationStage2.Succeed();
                 }

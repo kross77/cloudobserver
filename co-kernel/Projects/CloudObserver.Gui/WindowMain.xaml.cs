@@ -108,9 +108,14 @@ namespace CloudObserver.Gui
 
         private void LinkLabelTerminateServices_Click(object sender, RoutedEventArgs e)
         {
-            ProcessStartInfo cmdProcessStartInfo = new ProcessStartInfo("cmd", @"/c ""taskkill /im csvchost.exe""");
-            cmdProcessStartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            Process.Start(cmdProcessStartInfo);
+            ProcessStartInfo cmdProcessStartInfo1 = new ProcessStartInfo("cmd", @"/c ""taskkill /im cosvchst.exe""");
+            cmdProcessStartInfo1.WindowStyle = ProcessWindowStyle.Hidden;
+            Process.Start(cmdProcessStartInfo1);
+
+            ProcessStartInfo cmdProcessStartInfo2 = new ProcessStartInfo("cmd", @"/c ""taskkill /im coresmgr.exe""");
+            cmdProcessStartInfo2.WindowStyle = ProcessWindowStyle.Hidden;
+            Process.Start(cmdProcessStartInfo2);
+
             MessageBox.Show("All running Cloud Observer system services have been terminated.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
