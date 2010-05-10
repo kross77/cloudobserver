@@ -28,14 +28,13 @@ public class WorkBlock extends WebServiceWrapper
 		var operations:Object = new Object();
 		var operation:Operation;         
 		
-		operation = new Operation(null, "GetTcpStreamUriToRead");
+		operation = new mx.rpc.soap.mxml.Operation(null, "IWannaRead");
 		operation.resultType = String; 		 
-		operations["GetTcpStreamUriToRead"] = operation;
+		operations["IWannaRead"] = operation;
 		
 		_serviceControl.operations = operations;              
 		
-		
-		
+
 		_serviceControl.service = "WorkBlock";
 		_serviceControl.port = "BasicHttpBinding_IWorkBlock";
 		_serviceControl.wsdl = serviceURL;
@@ -52,14 +51,14 @@ public class WorkBlock extends WebServiceWrapper
 	 *
 	 * @return an AsyncToken whose result property will be populated with the result of the operation when the server response is received.
 	 */          
-	public function GetTcpStreamUriToRead(contentIds:ArrayCollection) : AsyncToken
+	public function IWannaRead(ids:Array) : mx.rpc.AsyncToken
 	{
-		model_internal::loadWSDLIfNecessary();
-		var _internal_operation:AbstractOperation = _serviceControl.getOperation("GetTcpStreamUriToRead");
-		var _internal_token:AsyncToken = _internal_operation.send(contentIds) ;
+		//model_internal::loadWSDLIfNecessary();
+		var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("IWannaRead");
+		var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(ids) ;
 		
 		return _internal_token;
-	}   
+	} 
                
 }
 
