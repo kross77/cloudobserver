@@ -37,6 +37,14 @@ namespace CloudObserver.Kernel.Services
             return true;
         }
 
+        public bool SupportCloudObserver(string controllerAddress)
+        {
+            if (!ConnectDeviceToController(deviceAddress, controllerAddress))
+                return false;
+
+            return true;
+        }
+
         public string HostWorkBlock()
         {
             string workBlockAddress = deviceAddress + "wb-" + workBlocksCounter++;

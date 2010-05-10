@@ -9,6 +9,9 @@ namespace CloudObserver.Kernel.Services
         bool StartCloudObserver();
 
         [OperationContract]
+        bool SupportCloudObserver(string controllerAddress);
+
+        [OperationContract]
         string HostWorkBlock();
 
         [OperationContract]
