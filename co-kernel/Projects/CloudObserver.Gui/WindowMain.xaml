@@ -8,14 +8,17 @@
         <controls:LinkLabel x:Name="linkLabelNewInstance" Click="LinkLabelNewInstance_Click" Content="Configure and launch a new instance of the Cloud Observer system." />
         <StackPanel x:Name="stackPanelNewInstance" Style="{DynamicResource ExpandablePanel}" Height="0">
         	<Grid>
-        		<Label Content="_Gateway Address:" HorizontalAlignment="Left" Target="{Binding ElementName=textBoxNewInstanceGatewayAddress}" VerticalAlignment="Top"  />
-        		<TextBox x:Name="textBoxNewInstanceGatewayAddress" Margin="107.667,0,0,0" Text="http://localhost:4773/cloudobserver" VerticalAlignment="Top" Height="21.96" />
-        		<CheckBox Content="_Default Configuration" HorizontalAlignment="Left" Margin="8,28.96,0,0" IsChecked="True" IsEnabled="False" VerticalAlignment="Top" />
-        		<Button x:Name="buttonNewInstanceLaunch" Content="_Launch" Click="ButtonNewInstanceLaunch_Click" HorizontalAlignment="Right" Margin="0,25.96,0,0" VerticalAlignment="Top" Width="75" />
+        		<CheckBox Content="_Default Configuration" HorizontalAlignment="Left" IsChecked="True" IsEnabled="False" VerticalAlignment="Top" Margin="8,3,0,0" />
+        		<Button x:Name="buttonNewInstanceLaunch" Content="_Launch" Click="ButtonNewInstanceLaunch_Click" HorizontalAlignment="Right" VerticalAlignment="Top" Width="75" Margin="0,0,8,0" />
         	</Grid>
 		</StackPanel>
-        <controls:LinkLabel Content="Add this machine to an existing Cloud Observer infrastructure." IsEnabled="False" />
-        <StackPanel Style="{DynamicResource ExpandablePanel}">
+        <controls:LinkLabel x:Name="linkLabelConnect" Click="LinkLabelConnect_Click" Content="Connect this machine to an existing Cloud Observer infrastructure." />
+        <StackPanel x:Name="stackPanelConnect" Style="{DynamicResource ExpandablePanel}" Height="0">
+        	<Grid>
+        		<Label Content="_Controller Address:" HorizontalAlignment="Left" Target="{Binding ElementName=textBoxNewInstanceGatewayAddress}" VerticalAlignment="Top" Margin="8,0,0,0"  />
+        		<TextBox x:Name="textBoxControllerAddressToConnect" Margin="123.18,2,87,0" Text="http://localhost:4773/" VerticalAlignment="Top" Height="21.96" />
+        		<Button x:Name="buttonConnect" Content="_Connect" Click="ButtonConnect_Click" HorizontalAlignment="Right" VerticalAlignment="Top" Width="75" Margin="0,2,8,0" />
+        	</Grid>
         </StackPanel>
         <controls:LinkLabel Click="LinkLabelExistingConnections_Click" Content="Modify or remove connections to an existing Cloud Observer systems." />
         <StackPanel x:Name="stackPanelExistingConnections" Style="{DynamicResource ExpandablePanel}" Height="0">
