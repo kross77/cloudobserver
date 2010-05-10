@@ -117,12 +117,12 @@
 			
 			public function stopFun():void
 			{
-				SoundMixer.stopAll();
+			//	SoundMixer.stopAll();
 			}
 			
 			private function funError(e:IOErrorEvent):void
 			{
-				stopFun();
+			//	stopFun();
 			}
 			
 			private function onPlaybackComplete(event:Event):void
