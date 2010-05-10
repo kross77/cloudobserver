@@ -1,6 +1,5 @@
 
-static const WCHAR g_wszName[] = L"Sample Filter Renderer Skelet";
-
+const WCHAR g_wszName[] = FILTER_WCHAR_NAME;
 
 const AMOVIESETUP_MEDIATYPE pinSubtypes = 
 { 
