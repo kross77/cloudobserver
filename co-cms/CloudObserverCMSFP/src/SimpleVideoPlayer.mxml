@@ -36,6 +36,7 @@
 				if (videoAddr.length >= 8) {
 					PV();
 				} else {
+					textArea.visible = true;
 					textArea.text += " Не был указан адресс откуда играть видео. Укажите и нажмите Enter. например такой http://localhost:8080/stream.flv";
 				}
 			}
@@ -56,7 +57,7 @@
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
-	<s:VideoPlayer right="10" left="10" top="40" bottom="10" id="VideoBox"/>
-	<s:TextInput id="textArea"  enter="textArea_enterHandler(event)" text="Лог операций:"   top="10" right="10" height="20" left="10"/>
+	<s:VideoPlayer right="10" left="10" top="10" bottom="10" id="VideoBox"/>
+	<s:TextInput id="textArea" visible="false" enter="textArea_enterHandler(event)" text="Лог операций:"   top="10" right="10" height="20" left="10"/>
 	
 </s:Application>

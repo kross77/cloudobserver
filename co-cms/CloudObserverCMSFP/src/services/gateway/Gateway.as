@@ -34,13 +34,9 @@ public class Gateway extends WebServiceWrapper
 				var operations:Object = new Object();
 				var operation:mx.rpc.soap.mxml.Operation;    
 				
-				operation = new mx.rpc.soap.mxml.Operation(null, "IWannaRead");
+				operation = new mx.rpc.soap.mxml.Operation(null, "GetWorkBlock");
 				operation.resultType = String; 		 
-				operations["IWannaRead"] = operation;
-				
-				operation = new mx.rpc.soap.mxml.Operation(null, "IWannaWrite");
-				operation.resultType = String; 		 
-				operations["IWannaWrite"] = operation;
+				operations["GetWorkBlock"] = operation;
 				
 				_serviceControl.operations = operations;
 				try
@@ -50,26 +46,21 @@ public class Gateway extends WebServiceWrapper
 				catch (e: Error)
 				{ /* Flex 3.4 and eralier does not support the convertResultHandler functionality. */ }
 				
-				_serviceControl.service = "Gateway";
-				_serviceControl.port = "BasicHttpBinding_IGateway";         
+				_serviceControl.service = "CloudController";
+				_serviceControl.port = "BasicHttpBinding_ICloudController";       
 		
 				_serviceControl.wsdl = serviceURL;
 				_serviceControl.loadWSDL();			
 			}       
-			public function IWannaRead(contentIds:Array) : mx.rpc.AsyncToken
+
+			public function GetWorkBlock() : mx.rpc.AsyncToken
 			{
-				var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("IWannaRead");
-				var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(contentIds) ;
-				return _internal_token;
-			}   
-			public function IWannaWrite(contentId:int) : mx.rpc.AsyncToken
-			{
-				model_internal::loadWSDLIfNecessary();
-				var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("IWannaWrite");
-				var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(contentId) ;
+			
+				var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("GetWorkBlock");
+				var _internal_token:mx.rpc.AsyncToken = _internal_operation.send() ;
 				
 				return _internal_token;
-			}  
+			}   
 			
 			
 		}

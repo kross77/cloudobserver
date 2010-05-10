@@ -13,6 +13,7 @@
 			import mx.rpc.events.ResultEvent;
 			
 			import services.gateway.Gateway;
+			import services.workblock.WorkBlock;
 			
 			import spark.components.VSlider;
 			
@@ -23,8 +24,8 @@
 			[Bindable]
 			public var contentMp3UrlsArray:Array;
 			
-/* 			[Bindable]
-			public var workBlockUri:String =  new String(); */
+			[Bindable]
+			public var workBlockUri:String =  new String(); 
 			[Bindable]
 			public var mp3Uris:String =  new String();	
 			
@@ -54,7 +55,8 @@
 				gateway.serviceStart(gatewayUri);
 				gateway.showBusyCursor = true;
 				gateway.addEventListener(FaultEvent.FAULT, gatewayInactive);
-				IWannaReadResult.token = 	gateway.IWannaRead(contentIdsArray);
+				GetWorkBlockResult.token = gateway.GetWorkBlock();
+				//IWannaReadResult.token = 	//gateway.IWannaRead(contentIdsArray);
 				} else {
 					textArea.text += " Не был указан адресс ядрышка.";
 				}
@@ -70,19 +72,20 @@
 				startFun(mp3Uris);
 				
 			}
-			/* protected function GetWorkBlockResult_resultHandler(event:ResultEvent):void
+			 protected function GetWorkBlockResult_resultHandler(event:ResultEvent):void
 			{
 				workBlockUri = event.result as String;
 				workBlockUri += "?wsdl";
 				textArea.text +=  " \n Принятый Work Block Uri: " + workBlockUri;
+				var workBlock:WorkBlock = new WorkBlock;
 				workBlock.serviceStart(workBlockUri);
 				workBlock.showBusyCursor = true;
-				var contentIds:ArrayCollection = new ArrayCollection(contentIdsArray);
-				textArea.text +=  " \n Переведенный в ArrayCollection массив идентификаторов потока: " + contentIds.toString();
-				GetTcpStreamUriToReadResult.token = workBlock.GetTcpStreamUriToRead(contentIds);
+				// var contentIds:ArrayCollection = new ArrayCollection(contentIdsArray);
+				//textArea.text +=  " \n Переведенный в ArrayCollection массив идентификаторов потока: " + contentIds.toString();
+				IWannaReadResult.token = workBlock.IWannaRead(contentIdsArray);
 				
 			} 
-			
+			/*
 			protected function GetTcpStreamUriToReadResult_resultHandler(event:ResultEvent):void
 			{
 				var streamUri:String = event.result as String;
@@ -168,8 +171,8 @@
 	<fx:Declarations>
 	<!--	<gateway:Gateway id="gateway" /> -->
 		<s:CallResponder id="IWannaReadResult"  result="IWannaReadResult_resultHandler(event)"/>
-<!--		<s:CallResponder id="GetWorkBlockResult"  result="GetWorkBlockResult_resultHandler(event)"/>
-		<workblock:WorkBlock id="workBlock" />
+		<s:CallResponder id="GetWorkBlockResult"  result="GetWorkBlockResult_resultHandler(event)"/>
+	<!--	<workblock:WorkBlock id="workBlock" />
 		<s:CallResponder id="GetTcpStreamUriToReadResult"  result="GetTcpStreamUriToReadResult_resultHandler(event)"/>-->
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
