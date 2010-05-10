@@ -1,5 +1,8 @@
-﻿using System;
+﻿using CloudObserver.Kernel.Services;
+using System;
 using System.Diagnostics;
+using System.ServiceModel;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -9,6 +12,19 @@ namespace CloudObserver.Gui
 {
     public partial class WindowMain : Window
     {
+        /// <summary>
+        /// A filename of the Cloud Observer Service Host application.
+        /// </summary>
+        private const string resourcesManagerProcessFileName = "coresmgr.exe";
+
+        /// <summary>
+        /// The number of milliseconds for a service to start.
+        /// </summary>
+        private const int serviceStartTimeout = 2000;
+
+        private const string resourceManagerIp = "localhost";
+        private const string resourceManagerAddress = "http://localhost:4773/rm";
+
         /// <summary>
         /// The number of milliseconds for a panel to collapse or expand.
         /// </summary>
@@ -70,19 +86,6 @@ namespace CloudObserver.Gui
             // Disable the new instance button.
             buttonNewInstanceLaunch.IsEnabled = false;
 
-            // Try to get a new instance gateway uri.
-            Uri instanceUri = null;
-            try
-            {
-                instanceUri = new Uri(textBoxNewInstanceGatewayAddress.Text);
-            }
-            catch (UriFormatException)
-            {
-                MessageBox.Show("Invalid gateway address. Please, enter a correct http address.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                buttonNewInstanceLaunch.IsEnabled = true;
-                return;
-            }
-
             // Display License Agreement window.
             if (new WindowLicenseAgreement().ShowDialog() == false)
             {
@@ -91,13 +94,60 @@ namespace CloudObserver.Gui
             }
 
             // Start the new instance launch process.
-            new WindowLaunch(instanceUri).ShowDialog();
+            new WindowLaunch().ShowDialog();
 
             // Collapse the new instance panel.
             ExpandPanel(stackPanelNewInstance);
 
             // Enable the new instance button.
             buttonNewInstanceLaunch.IsEnabled = true;
+        }
+
+        private void LinkLabelConnect_Click(object sender, RoutedEventArgs e)
+        {
+            ExpandPanel(stackPanelConnect);
+        }
+
+        private void ButtonConnect_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ProcessStartInfo serviceHostProcessStartInfo = new ProcessStartInfo();
+                serviceHostProcessStartInfo.FileName = resourcesManagerProcessFileName;
+                serviceHostProcessStartInfo.Arguments = resourceManagerIp;
+                serviceHostProcessStartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                Process serviceHostProcess = new Process();
+                serviceHostProcess.StartInfo = serviceHostProcessStartInfo;
+                serviceHostProcess.Start();
+            }
+            catch (Exception)
+            {
+            }
+
+            using (ChannelFactory<IResourcesManager> channelFactory = new ChannelFactory<IResourcesManager>(new BasicHttpBinding(), textBoxControllerAddressToConnect.Text + "rm"))
+            {
+                IResourcesManager resourceManager = channelFactory.CreateChannel();
+                try
+                {
+                    resourceManager.SupportCloudObserver(resourceManagerAddress);
+                    MessageBox.Show("The machine was successfully connected to an existing Cloud Observer infrastructure at " + textBoxControllerAddressToConnect.Text + ".", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Failed to connect this machine to an existing Cloud Observer infrastructure at " + textBoxControllerAddressToConnect.Text + ".", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                finally
+                {
+                    try
+                    {
+                        ((IClientChannel)resourceManager).Close();
+                    }
+                    catch (Exception)
+                    {
+                        ((IClientChannel)resourceManager).Abort();
+                    }
+                }
+            }
         }
 
         private void LinkLabelExistingConnections_Click(object sender, RoutedEventArgs e)

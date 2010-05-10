@@ -19,17 +19,12 @@ namespace CloudObserver.Gui
         /// <summary>
         /// A filename of the Cloud Observer Service Host application.
         /// </summary>
-        private const string serviceHostProcessFileName = "coresmgr.exe";
+        private const string resourcesManagerProcessFileName = "coresmgr.exe";
 
         /// <summary>
         /// The number of milliseconds for a service to start.
         /// </summary>
         private const int serviceStartTimeout = 2000;
-
-        /// <summary>
-        /// The instance gateway address.
-        /// </summary>
-        private string gatewayAddress;
 
         private const string resourceManagerIp = "localhost";
         private const string resourceManagerAddress = "http://localhost:4773/rm";
@@ -47,12 +42,10 @@ namespace CloudObserver.Gui
         [DllImport("user32.dll")]
         private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
 
-        public WindowLaunch(Uri instanceGatewayUri)
+        public WindowLaunch()
         {
             InitializeComponent();
             InitializeOperations();
-
-            this.gatewayAddress = instanceGatewayUri.ToString();
         }
 
         private void InitializeOperations()
@@ -85,13 +78,19 @@ namespace CloudObserver.Gui
         {
             // Stage 1: Prepare the launch configuration.
             operationStage1.Start();
-            ProcessStartInfo serviceHostProcessStartInfo = new ProcessStartInfo();
-            serviceHostProcessStartInfo.FileName = serviceHostProcessFileName;
-            serviceHostProcessStartInfo.Arguments = resourceManagerIp;
-            serviceHostProcessStartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            Process serviceHostProcess = new Process();
-            serviceHostProcess.StartInfo = serviceHostProcessStartInfo;
-            serviceHostProcess.Start();
+            try
+            {
+                ProcessStartInfo serviceHostProcessStartInfo = new ProcessStartInfo();
+                serviceHostProcessStartInfo.FileName = resourcesManagerProcessFileName;
+                serviceHostProcessStartInfo.Arguments = resourceManagerIp;
+                serviceHostProcessStartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                Process serviceHostProcess = new Process();
+                serviceHostProcess.StartInfo = serviceHostProcessStartInfo;
+                serviceHostProcess.Start();
+            }
+            catch (Exception)
+            {
+            }
             operationStage1.Succeed();
 
             // Stage 2: Launch the gateway service.
