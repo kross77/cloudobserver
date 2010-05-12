@@ -32,7 +32,10 @@ namespace StreamReceiver
                     while (true)
                     {
                         int k = s.Receive(b);
-                        sw.Write(b, 0, k);                        
+                        if (k == 0)
+                            break;
+                        else
+                            sw.Write(b, 0, k);                        
                     }
                     sw.Close();
                 }
