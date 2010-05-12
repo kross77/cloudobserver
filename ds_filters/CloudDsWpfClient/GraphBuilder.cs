@@ -6,6 +6,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using DirectShowLib;
+using System.Xml;
 
 using CloudObserver.DirectShow;
 
@@ -13,10 +14,60 @@ using CloudObserver.DirectShow.Filters;
 
 namespace CloudObserver.DirectShow.Graphs
 {
-    class FileWriterGraphBuilder
+    public static class CloudGraphFactory
     {
-        private IGraphBuilder graph;
-        private IMediaControl mediaControl;
+        public static ICloudGraphBuilder Create(XmlDocument xDoc)
+        {
+            XmlNodeList xBuilder = xDoc.GetElementsByTagName("Builder");
+            XmlNodeList xFileName = xDoc.GetElementsByTagName("FileName");
+            switch (xBuilder[0].InnerText)
+            {
+                case "CloudFileWriter":
+                    return (ICloudGraphBuilder)new FileWriterGraphBuilder();
+                default:
+                    return null;
+            }
+        }
+    }
+
+    public interface ICloudGraphBuilder
+    {
+        int Start();
+        int Stop();
+    }
+
+    class CloudGraphBuilder : ICloudGraphBuilder
+    {
+        protected IGraphBuilder graph = (IGraphBuilder)new FilterGraph();
+        protected IMediaControl mediaControl = null;
+
+        public int Start()
+        {
+            int hr = mediaControl.Run();
+            Utils.checkHR(hr, "Can't run the graph.");
+            return 0;
+        }
+
+        public int Stop()
+        {
+            mediaControl.Pause();
+            mediaControl.StopWhenReady();
+            return 0;
+        }
+
+        protected IBaseFilter CreateDeviceFilter(DsDevice device)
+        {
+            Guid guid = typeof(IBaseFilter).GUID;
+            object obj;
+            device.Mon.BindToObject(null, null, ref guid, out obj);
+            return (IBaseFilter)obj;
+        }
+    }
+
+    class FileWriterGraphBuilder : CloudGraphBuilder
+    {
+       // private IGraphBuilder graph;
+       // private IMediaControl mediaControl;
         
         private Guid CLSID_LAMEAudioEncoder = new Guid("{B8D27088-FF5F-4B7C-98DC-0E91A1696286}"); // lame.ax
         //private Guid CLSID_CloudStreamRenderer = new Guid("{37AC047C-BED1-49ef-AB43-BB906A158DD6}");
@@ -26,11 +77,8 @@ namespace CloudObserver.DirectShow.Graphs
         }
         public int CreateFilter(DsDevice audioInputDevice, string fileName)
         {
-            if (null != graph)
-                return 0;
-
             int hr = 0;
-            graph = (IGraphBuilder)new FilterGraph();
+
             ICaptureGraphBuilder2 pBuilder = (ICaptureGraphBuilder2)new CaptureGraphBuilder2();
             hr = pBuilder.SetFiltergraph(graph);            
             Utils.checkHR(hr, "Can't set filtergraph.");
@@ -73,7 +121,7 @@ namespace CloudObserver.DirectShow.Graphs
             mediaControl = (IMediaControl)graph;
             return 0;
         }
-
+/*
         public void StartCapture()
         {
             int hr = mediaControl.Run();
@@ -85,6 +133,7 @@ namespace CloudObserver.DirectShow.Graphs
             mediaControl.Pause();
             mediaControl.StopWhenReady();
         }
+ * */
 /*
         private void checkHR(int hr, string message)
         {
@@ -95,13 +144,14 @@ namespace CloudObserver.DirectShow.Graphs
             }
         }
  * */
-        private IBaseFilter CreateDeviceFilter(DsDevice device)
+  /*      private IBaseFilter CreateDeviceFilter(DsDevice device)
         {
             Guid guid = typeof(IBaseFilter).GUID;
             object obj;
             device.Mon.BindToObject(null, null, ref guid, out obj);
             return (IBaseFilter)obj;
         }
+   * -*/
         /*
         private IPin GetPin(IBaseFilter filter, string pinname)
         {

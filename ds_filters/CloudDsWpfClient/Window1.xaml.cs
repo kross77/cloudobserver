@@ -13,6 +13,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using DirectShowLib;
 using CloudObserver.DirectShow.Graphs;
+using System.Xml;
 
 
 
@@ -63,6 +64,12 @@ namespace CloudDsWpfClient
 
         private void comboBoxDestination_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            XmlDocument xDoc = new XmlDocument();
+            xDoc.LoadXml("<?xml version='1.0' ?>" +
+                "<CloudClientGraph></CloudClientGraph>");
+            XmlElement xElem;
+            XmlText xText;
+            
             ComboBox cb = (ComboBox) sender;
             switch (cb.SelectedIndex)
             {
@@ -79,7 +86,24 @@ namespace CloudDsWpfClient
                     {
                         // Open document
                         fileName = openFileDialog1.FileName;
-                        labelDestinationProperties.Content = "Filter File writer:\nFile: " + fileName;
+
+                        xElem = xDoc.CreateElement("Builder");
+                        xText= xDoc.CreateTextNode("CloudFileWriter");
+                        xDoc.DocumentElement.AppendChild(xElem);
+                        xDoc.DocumentElement.LastChild.AppendChild(xText);
+
+                        xElem = xDoc.CreateElement("FileName");
+                        xText = xDoc.CreateTextNode(fileName);
+                        xDoc.DocumentElement.AppendChild(xElem);
+                        xDoc.DocumentElement.LastChild.AppendChild(xText);
+
+                        XmlNodeList xBuilder = xDoc.GetElementsByTagName("Builder");
+                        XmlNodeList xFileName = xDoc.GetElementsByTagName("FileName");
+
+                        labelDestinationProperties.Content = "CloudClientBuilder:\n    " + xBuilder[0].InnerText
+                            + "\n\nFileName:\n    " + xFileName[0].InnerText;
+
+                        CloudGraphFactory.Create(xDoc);
                     }
 
                     break;
@@ -94,7 +118,7 @@ namespace CloudDsWpfClient
         {
             if (capturing)
             {
-                graph.StartCapture();
+                graph.Stop();
                 buttonStart.Content = "Start";
             }
             else
@@ -103,7 +127,7 @@ namespace CloudDsWpfClient
                 buttonStart.IsEnabled = false;
 
                 graph.CreateFilter(audioInputDevices[comboBoxAudioSources.SelectedIndex], fileName);
-                graph.StartCapture();
+                graph.Start();
 
                 buttonStart.Content = "Stop Capture";
                 buttonStart.IsEnabled = true;
