@@ -9,7 +9,7 @@
             <Label Canvas.Left="0" Canvas.Top="61" Height="75" Name="labelSourceProperties" Width="188"></Label>
         </Canvas>
         <Canvas Background="Azure" Margin="0,3,0,126" Name="canvasDestination" HorizontalAlignment="Right" Width="188">
-            <Label Canvas.Left="0" Canvas.Top="0" Height="31" Name="labelDestination" Width="188">Destanation</Label>
+            <Label Canvas.Left="0" Canvas.Top="0" Height="31" Name="labelDestination" Width="188">Destination</Label>
             <ComboBox Canvas.Left="0" Canvas.Top="29" Height="23" Name="comboBoxDestination" Width="188" SelectionChanged="comboBoxDestination_SelectionChanged" />
             <Label Canvas.Left="0" Canvas.Top="58" Height="75" Name="labelDestinationProperties" Width="188">not set</Label>
         </Canvas>
