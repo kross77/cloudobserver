@@ -25,6 +25,10 @@ public:
 	
 	HRESULT DoRenderSample(IMediaSample *pMediaSample);
 
+	// Filter Start/Stop control
+	HRESULT OnStartStreaming();
+	HRESULT OnStopStreaming();
+
 	HRESULT STDMETHODCALLTYPE SetAddress(/* [in] */ LPCOLESTR pszAddress,int port);
 
 private:

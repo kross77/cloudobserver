@@ -21,13 +21,24 @@ CFilter::CFilter(TCHAR *tszName, LPUNKNOWN punk, HRESULT *phr) :
 
 
 //default connection
-	Connect(m_serverAddress, m_portNmber);
-
+//	Connect(m_serverAddress, m_portNmber);
 }
 CFilter::~CFilter()
 {
-	Disconnect();
+	//Disconnect();
 	WSACleanup ();
+}
+HRESULT CFilter::OnStartStreaming()
+{
+	Connect(m_serverAddress, m_portNmber);
+
+	return NOERROR;
+}
+HRESULT CFilter::OnStopStreaming()
+{
+	Disconnect();
+
+    return NOERROR;
 }
 
 CUnknown * WINAPI CFilter::CreateInstance(LPUNKNOWN punk, HRESULT *phr)
