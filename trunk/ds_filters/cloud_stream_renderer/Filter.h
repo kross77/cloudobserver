@@ -1,12 +1,7 @@
 #pragma once
 #include "InputPin.h"
 #include "cloud_ctrl_h.h"
-
 #include "cloud_ds_interfaces.h"
-
-
-
-
 //We must implement 2 functions CheckMediaType and DoRenderSample
 class CFilter : public CBaseRenderer, ICloudInetControl
 {
@@ -29,7 +24,12 @@ public:
 	HRESULT OnStartStreaming();
 	HRESULT OnStopStreaming();
 
-	HRESULT STDMETHODCALLTYPE SetAddress(/* [in] */ LPCOLESTR pszAddress,int port);
+	HRESULT STDMETHODCALLTYPE SetAddress(/* [in] */ OLECHAR* pszAddress,int port);
+
+	int				m_portNumber;		// Server Connection Port
+	OLECHAR*		m_serverAddr;		// Server Address
+	int				m_socket;
+	sockaddr_in     ConnectionInfo;
 
 private:
 	// Overriden to say what interfaces we support where
@@ -38,24 +38,14 @@ private:
 	//Privite constructor. All object must be created from CreateInstance function
 	CFilter(TCHAR *tszName, LPUNKNOWN punk, HRESULT *phr);
 	~CFilter();
+	
+	//Server connection functions 
+	int		Connect (OLECHAR* hostAddress, int port);
+	void	Disconnect();
+	int		ErrorInfo();
+	
+	CInputPin       m_InputPin;			// IPin based interfaces		
 
-	int Connect (LPCOLESTR hostAdderss, int port);
-	void Disconnect ();
-
-//	void SendSample(BYTE *buff, int length);
-
-	CInputPin m_InputPin;          // IPin based interfaces
-
-	//HANDLE m_hFile;
-
-	//WSADATA         WSAInformation;
-	//SOCKET          m_socket;
-	int				m_socket;
-	//BYTE            *DataPointer;
-	sockaddr_in     ConnectionInfo;
-	//unsigned long	DataSize;
-	int				m_portNmber; // Server Connection Port
-	LPCOLESTR		m_serverAddress; // Server Adress (Work Block Address)	
-	int ErrorInfo();
+	
 };
 
