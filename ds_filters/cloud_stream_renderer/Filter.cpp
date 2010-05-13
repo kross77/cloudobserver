@@ -2,35 +2,23 @@
 #include "guids.h"
 #include "Filter.h"
 #include "dll.h"
+#include "ole2.h"
 #include <winsock.h>
 
 CFilter::CFilter(TCHAR *tszName, LPUNKNOWN punk, HRESULT *phr) :
     CBaseRenderer(CLSID_Filter, tszName, punk, phr),
 		m_InputPin(NAME("Input Pin"),this,&m_InterfaceLock,phr,L"Input")
 {
-	// Class Constructor makes all routines for 
-	// preparation to samples sendings via sockets
-
-	m_serverAddress = OLESTR("127.0.0.1");
-	m_portNmber= 8001;
-	//init socket lib
-	WORD wVersionRequested;	
-	WSADATA wsaData;
-	wVersionRequested = MAKEWORD(2, 2);
-	WSAStartup(wVersionRequested, &wsaData);
-
-
-//default connection
-//	Connect(m_serverAddress, m_portNmber);
+	//Default Connection Data
+	m_serverAddr = OLESTR("127.0.0.1");
+	m_portNumber= 8001;
 }
 CFilter::~CFilter()
 {
-	//Disconnect();
-	WSACleanup ();
 }
 HRESULT CFilter::OnStartStreaming()
 {
-	Connect(m_serverAddress, m_portNmber);
+	Connect(m_serverAddr, m_portNumber);
 
 	return NOERROR;
 }
@@ -64,7 +52,7 @@ HRESULT CFilter::DoRenderSample(IMediaSample *pMediaSample)
 {
 	if (NULL == m_socket)
 	{
-		//drop  this frame (we hasn't conneted yet)
+		//drop  this frame (we haven't conneted yet)
 		return NOERROR;
 	}
 	BYTE * buff;
@@ -74,15 +62,6 @@ HRESULT CFilter::DoRenderSample(IMediaSample *pMediaSample)
 	{
 		return NOERROR;
 	}
-	//BYTE b[1024];
-	//int i;
-
-	//for (i = 0; i< 1024; i++)
-	//	b[i] = buff[i];
-	//
-
-	//send (m_socket,(const char *) b, pMediaSample->GetActualDataLength(), 0 );
-	//Disconnect();
 
 	if(SOCKET_ERROR == send (m_socket,(const char *) buff, pMediaSample->GetActualDataLength(), 0 ))
 	{
@@ -98,13 +77,25 @@ int CFilter::ErrorInfo()
 	return -1;
 }
 
-int CFilter::Connect(LPCOLESTR addr, int port)
+int CFilter::Connect(OLECHAR* ole_addr, int port)
 {
+	//We will need this to convert Address from OLECHAR* to char*
+	char*	char_addr = NULL;
+	//Conversion function
+	wcstombs(char_addr,ole_addr,sizeof(char_addr));
+
+	//init socket library
+	WORD wVersionRequested;	
+	WSADATA wsaData;
+	wVersionRequested = MAKEWORD(2, 2);
+	WSAStartup(wVersionRequested, &wsaData);		
 	struct sockaddr_in socketaddr;
 	memset((char *)&socketaddr, NULL, sizeof(socketaddr));
+	
+	//Fill connection information
 	socketaddr.sin_family = AF_INET;
-	socketaddr.sin_addr.s_addr = inet_addr("127.0.0.1");
-	socketaddr.sin_port = htons(m_portNmber);
+	socketaddr.sin_addr.s_addr = inet_addr(char_addr);	// here we use "usual char" address
+	socketaddr.sin_port = htons(m_portNumber);
 	m_socket = socket(AF_INET,SOCK_STREAM, IPPROTO_TCP);
 
 	if (m_socket == INVALID_SOCKET)
@@ -128,12 +119,16 @@ void CFilter::Disconnect()
 		closesocket (m_socket);
 		m_socket = NULL; 
 	}	
+	WSACleanup ();
 }
 
 
-HRESULT CFilter::SetAddress( LPCOLESTR pszAddress, int port) 
+HRESULT CFilter::SetAddress( OLECHAR* pszAddress, int port) 
 {
-	Connect(pszAddress,port);
+//	Connect(pszAddress,port);
+	m_serverAddr = pszAddress;
+	m_portNumber = port;
+
 	return NOERROR;
 }
 
