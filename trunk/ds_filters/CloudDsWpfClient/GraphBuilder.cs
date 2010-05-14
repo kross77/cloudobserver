@@ -24,6 +24,10 @@ namespace CloudObserver.DirectShow.Graphs
             {
                 case "CloudFileWriter":
                     return (ICloudGraphBuilder)new FileWriterGraphBuilder();
+                case "CloudSocketRenderer":
+                    return (ICloudGraphBuilder)new CloudSocketRendererGraphBuilder();
+                case "CloudClientToServer":
+                    return (ICloudGraphBuilder)new CloudClientToServerGraphBuilder();
                 default:
                     return null;
             }
@@ -121,75 +125,17 @@ namespace CloudObserver.DirectShow.Graphs
             mediaControl = (IMediaControl)graph;
             return 0;
         }
-/*
-        public void StartCapture()
+    }
+    class CloudSocketRendererGraphBuilder : CloudGraphBuilder
+    {
+        public CloudSocketRendererGraphBuilder()
         {
-            int hr = mediaControl.Run();
-            Utils.checkHR(hr, "Can't run the graph.");
         }
-
-        public void StopCapture()
+    }
+    class CloudClientToServerGraphBuilder : CloudGraphBuilder
+    {
+        public CloudClientToServerGraphBuilder()
         {
-            mediaControl.Pause();
-            mediaControl.StopWhenReady();
         }
- * */
-/*
-        private void checkHR(int hr, string message)
-        {
-            if (hr < 0)
-            {
-                MessageBox.Show(message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                DsError.ThrowExceptionForHR(hr);
-            }
-        }
- * */
-  /*      private IBaseFilter CreateDeviceFilter(DsDevice device)
-        {
-            Guid guid = typeof(IBaseFilter).GUID;
-            object obj;
-            device.Mon.BindToObject(null, null, ref guid, out obj);
-            return (IBaseFilter)obj;
-        }
-   * -*/
-        /*
-        private IPin GetPin(IBaseFilter filter, string pinname)
-        {
-            IEnumPins epins;
-            int hr = filter.EnumPins(out epins);
-            checkHR(hr, "Can't enumerate pins.");
-            IntPtr fetched = Marshal.AllocCoTaskMem(4);
-            IPin[] pins = new IPin[1];
-            while (epins.Next(1, pins, fetched) == 0)
-            {
-                PinInfo pinfo;
-                pins[0].QueryPinInfo(out pinfo);
-                bool found = (pinfo.name == pinname);
-                DsUtils.FreePinInfo(pinfo);
-                if (found) return pins[0];
-            }
-            checkHR(-1, "Pin not found.");
-            return null;
-        }
-
-        private IPin GetFirstOutputPin(IBaseFilter filter)
-        {
-            IEnumPins epins;
-            int hr = filter.EnumPins(out epins);
-            checkHR(hr, "Can't enumerate pins.");
-            IntPtr fetched = Marshal.AllocCoTaskMem(4);
-            IPin[] pins = new IPin[1];
-            while (epins.Next(1, pins, fetched) == 0)
-            {
-                PinInfo pinfo;
-                pins[0].QueryPinInfo(out pinfo);
-                bool found = (pinfo.dir == PinDirection.Output);
-                DsUtils.FreePinInfo(pinfo);
-                if (found) return pins[0];
-            }
-            checkHR(-1, "Pin not found.");
-            return null;
-        }
-         * */
     }
 }
