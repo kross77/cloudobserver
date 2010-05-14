@@ -24,11 +24,11 @@ namespace CloudDsWpfClient
     /// </summary>
     public partial class Window1 : Window
     {
-        private DsDevice[] audioInputDevices = null;
         private Microsoft.Win32.OpenFileDialog openFileDialog1 = new Microsoft.Win32.OpenFileDialog();
-        private string fileName;
+        private string fileName = null, bulderName = null, audioInputName = null;
         private bool capturing;
-        FileWriterGraphBuilder graph = new FileWriterGraphBuilder();
+        ICloudGraphBuilder graph = null;
+        XmlDocument xDoc = new XmlDocument();
 
 
         public Window1()
@@ -39,14 +39,13 @@ namespace CloudDsWpfClient
         }
         private void EnumerateAudioInputDevices()
         {
-            audioInputDevices = DsDevice.GetDevicesOfCat(FilterCategory.AudioInputDevice);
-            foreach (DsDevice device in audioInputDevices)
-                comboBoxAudioSources.Items.Add(device.Name);
-            if (audioInputDevices.Length > 0)
+
+            List<string> listName = CloudGraphFactory.EnumerateAudioInputDevices();
+            foreach (string name in listName)
             {
-                comboBoxAudioSources.IsEnabled = true;
-                comboBoxAudioSources.SelectedIndex = 0;
+                comboBoxAudioSources.Items.Add(name);
             }
+
         }
         private void EnumarateDestinationTargets()
         {
@@ -54,17 +53,18 @@ namespace CloudDsWpfClient
             comboBoxDestination.Items.Add("Local File");
             comboBoxDestination.Items.Add("Local Socket");
 
-           // comboBoxDestination.SelectedIndex = 0;
+
         }
 
         private void comboBoxAudioSources_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            ComboBox cb = (ComboBox)sender;
+            audioInputName = (string)cb.Items[cb.SelectedIndex];
         }
 
         private void comboBoxDestination_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            XmlDocument xDoc = new XmlDocument();
+            //XmlDocument xDoc = new XmlDocument();
             xDoc.LoadXml("<?xml version='1.0' ?>" +
                 "<CloudClientGraph></CloudClientGraph>");
             XmlElement xElem;
@@ -86,9 +86,10 @@ namespace CloudDsWpfClient
                     {
                         // Open document
                         fileName = openFileDialog1.FileName;
+                        bulderName = "CloudFileWriter";
 
                         xElem = xDoc.CreateElement("Builder");
-                        xText= xDoc.CreateTextNode("CloudFileWriter");
+                        xText = xDoc.CreateTextNode(bulderName);
                         xDoc.DocumentElement.AppendChild(xElem);
                         xDoc.DocumentElement.LastChild.AppendChild(xText);
 
@@ -103,7 +104,7 @@ namespace CloudDsWpfClient
                         labelDestinationProperties.Content = "CloudClientBuilder:\n    " + xBuilder[0].InnerText
                             + "\n\nFileName:\n    " + xFileName[0].InnerText;
 
-                        CloudGraphFactory.Create(xDoc);
+                        
                     }
 
                     break;
@@ -116,6 +117,9 @@ namespace CloudDsWpfClient
 
         private void buttonStart_Click(object sender, RoutedEventArgs e)
         {
+            XmlElement xElem;
+            XmlText xText;
+
             if (capturing)
             {
                 graph.Stop();
@@ -123,10 +127,26 @@ namespace CloudDsWpfClient
             }
             else
             {
+                if (comboBoxAudioSources.SelectedIndex == -1)
+                {
+                    MessageBox.Show("Choose Input Device\n");
+                    return;
+                }
+                if (null == bulderName)
+                {
+                    MessageBox.Show("Choose GraphBuilder\n");
+                    return;
+                }
                 buttonStart.Content = "Starting...";
                 buttonStart.IsEnabled = false;
 
-                graph.CreateFilter(audioInputDevices[comboBoxAudioSources.SelectedIndex], fileName);
+                xElem = xDoc.CreateElement("AudioInput");
+                xText = xDoc.CreateTextNode(audioInputName);
+                xDoc.DocumentElement.AppendChild(xElem);
+                xDoc.DocumentElement.LastChild.AppendChild(xText);
+
+                graph = CloudGraphFactory.Create(xDoc);
+                //graph.CreateFilter(audioInputDevices[comboBoxAudioSources.SelectedIndex], fileName);
                 graph.Start();
 
                 buttonStart.Content = "Stop Capture";

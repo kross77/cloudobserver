@@ -20,10 +20,13 @@ namespace CloudObserver.DirectShow.Graphs
         {
             XmlNodeList xBuilder = xDoc.GetElementsByTagName("Builder");
             XmlNodeList xFileName = xDoc.GetElementsByTagName("FileName");
+            XmlNodeList xAudioDevName = xDoc.GetElementsByTagName("AudioInput");
             switch (xBuilder[0].InnerText)
             {
-                case "CloudFileWriter":
-                    return (ICloudGraphBuilder)new FileWriterGraphBuilder();
+                case "CloudFileWriter":                    
+                    FileWriterGraphBuilder builder = new FileWriterGraphBuilder();
+                    builder.CreateFilter(GetAudioInputDevicesByName(xAudioDevName[0].InnerText), xFileName[0].InnerText);
+                    return (ICloudGraphBuilder)builder;
                 case "CloudSocketRenderer":
                     return (ICloudGraphBuilder)new CloudSocketRendererGraphBuilder();
                 case "CloudClientToServer":
@@ -31,6 +34,36 @@ namespace CloudObserver.DirectShow.Graphs
                 default:
                     return null;
             }
+        }
+        private static DsDevice []audioInputDevices = null;
+        private static List<string> listNames = new List<string>();
+        public static  List<string> EnumerateAudioInputDevices()
+        {
+            if (null == audioInputDevices)
+            {
+                audioInputDevices = DsDevice.GetDevicesOfCat(FilterCategory.AudioInputDevice);
+
+                foreach (DsDevice device in audioInputDevices)
+                {
+                    listNames.Add(device.Name);
+                }
+
+            }
+            return listNames;
+        }
+        private static DsDevice GetAudioInputDevicesByName(string name)
+        {
+            if (null == audioInputDevices)
+            {
+                return null;
+
+            }
+            foreach (DsDevice device in audioInputDevices)
+            {
+                if (device.Name == name)
+                    return device;
+            }
+            return null;
         }
     }
 
