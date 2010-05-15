@@ -9,6 +9,7 @@ CFilter::CFilter(TCHAR *tszName, LPUNKNOWN punk, HRESULT *phr) :
     CBaseRenderer(CLSID_RendererSkelet, tszName, punk, phr),
 		m_InputPin(NAME("Input Pin"),this,&m_InterfaceLock,phr,L"Input")
 {
+	m_hFile = NULL;
 
 }
 
@@ -22,7 +23,7 @@ CFilter::~CFilter()
 CUnknown * WINAPI CFilter::CreateInstance(LPUNKNOWN punk, HRESULT *phr)
 {
 	ASSERT(phr);    
-	CFilter *pNewObject = new CFilter(FILTER_TCHAR_NAME, punk, phr);
+	CFilter *pNewObject = new CFilter(NAME(FILTER_TCHAR_NAME), punk, phr);
     if (pNewObject == NULL) {
         if (phr)
             *phr = E_OUTOFMEMORY;
@@ -96,18 +97,18 @@ HRESULT	CFilter::FileOpen()
 {
     TCHAR *pFileName = NULL;
 
-    // Is the file already opened
-    if (m_hFile != INVALID_HANDLE_VALUE) {
+   // Is the file already opened
+    if (m_hFile != NULL) {
         return NOERROR;
     }
 
     // Has a filename been set yet
-    if (m_pFileName == NULL) {
+   if (m_pFileName == NULL) {
         return ERROR_INVALID_NAME;
     }
 
     // Convert the UNICODE filename if necessary
-
+#if 0
 #if defined(WIN32) && !defined(UNICODE)
     char convert[MAX_PATH];
 
@@ -118,12 +119,12 @@ HRESULT	CFilter::FileOpen()
 #else
     pFileName = m_pFileName;
 #endif
-
+#endif
+	pFileName = m_pFileName;
     // Try to open the file
-
     m_hFile = CreateFile((LPCTSTR) pFileName,   // The filename
                          GENERIC_WRITE,         // File access
-                         FILE_SHARE_READ,       // Share access
+                         0,       // Share access
                          NULL,                  // Security
                          CREATE_ALWAYS,         // Open flags
                          (DWORD) 0,             // More flags
@@ -162,7 +163,7 @@ STDMETHODIMP CFilter::SetFileName(LPCOLESTR pszFileName,const AM_MEDIA_TYPE *pmt
 {
     // Is this a valid filename supplied
 
-    CheckPointer(pszFileName,E_POINTER);
+CheckPointer(pszFileName,E_POINTER);
     if(wcslen(pszFileName) > MAX_PATH)
         return ERROR_FILENAME_EXCED_RANGE;
 
@@ -185,7 +186,8 @@ STDMETHODIMP CFilter::SetFileName(LPCOLESTR pszFileName,const AM_MEDIA_TYPE *pmt
     hr = FileOpen();
     FileClose();
 
-    return hr;
+
+	return hr;
 
 } // SetFileName
 
