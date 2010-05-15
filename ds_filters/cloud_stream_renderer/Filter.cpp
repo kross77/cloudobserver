@@ -34,7 +34,7 @@ CUnknown * WINAPI CFilter::CreateInstance(LPUNKNOWN punk, HRESULT *phr)
 	ASSERT(phr); 
 
 
-	CFilter *pNewObject = new CFilter(FILTER_TCHAR_NAME, punk, phr);
+	CFilter *pNewObject = new CFilter(NAME(FILTER_TCHAR_NAME), punk, phr);
     if (pNewObject == NULL) 
 	{
         if (phr)
