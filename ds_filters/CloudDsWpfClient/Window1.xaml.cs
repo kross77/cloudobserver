@@ -25,9 +25,10 @@ namespace CloudDsWpfClient
     public partial class Window1 : Window
     {
         private Microsoft.Win32.OpenFileDialog openFileDialog1 = new Microsoft.Win32.OpenFileDialog();
-        private string fileName = null, bulderName = null, audioInputName = null;
+        private string fileName = null, bulderName = null, audioInputName = null, hostAddress = null, hostPort = null;
         private bool capturing;
         ICloudGraphBuilder graph = null;
+        
         XmlDocument xDoc = new XmlDocument();
 
 
@@ -69,6 +70,7 @@ namespace CloudDsWpfClient
                 "<CloudClientGraph></CloudClientGraph>");
             XmlElement xElem;
             XmlText xText;
+            Nullable<bool> result;
             
             ComboBox cb = (ComboBox) sender;
             switch (cb.SelectedIndex)
@@ -79,7 +81,7 @@ namespace CloudDsWpfClient
                     break;
                 case 1: //locale file (file name)
                     // Show open file dialog box
-                    Nullable<bool> result = openFileDialog1.ShowDialog();
+                    result = openFileDialog1.ShowDialog();
 
                     // Process open file dialog box results
                     if (result == true)
@@ -109,12 +111,70 @@ namespace CloudDsWpfClient
 
                     break;
                 case 2: // file throught socket (socket and file name)
+                    // Show open file dialog box
+                    result = openFileDialog1.ShowDialog();
+
+                    // Process open file dialog box results
+                    if (result == true)
+                    {
+                        // Open document
+                        fileName = openFileDialog1.FileName;
+                        bulderName = "CloudSocketRenderer";
+
+                        xElem = xDoc.CreateElement("Builder");
+                        xText = xDoc.CreateTextNode(bulderName);
+                        xDoc.DocumentElement.AppendChild(xElem);
+                        xDoc.DocumentElement.LastChild.AppendChild(xText);
+
+                        xElem = xDoc.CreateElement("FileName");
+                        xText = xDoc.CreateTextNode(fileName);
+                        xDoc.DocumentElement.AppendChild(xElem);
+                        xDoc.DocumentElement.LastChild.AppendChild(xText);
+
+                        if (-1 == SetHostAddress())
+                        {
+                            MessageBox.Show("wrong host address");
+                            return;
+                        }
+
+                        xElem = xDoc.CreateElement("HostAddress");
+                        xText = xDoc.CreateTextNode(hostAddress);
+                        xDoc.DocumentElement.AppendChild(xElem);
+                        xDoc.DocumentElement.LastChild.AppendChild(xText);
+
+                        xElem = xDoc.CreateElement("HostPort");
+                        xText = xDoc.CreateTextNode(hostPort);
+                        xDoc.DocumentElement.AppendChild(xElem);
+                        xDoc.DocumentElement.LastChild.AppendChild(xText);
+
+
+                        XmlNodeList xBuilder = xDoc.GetElementsByTagName("Builder");
+                        XmlNodeList xFileName = xDoc.GetElementsByTagName("FileName");
+                        XmlNodeList xHostAddress = xDoc.GetElementsByTagName("HostAddress");
+                        XmlNodeList xHostPort = xDoc.GetElementsByTagName("HostPort");
+
+                        labelDestinationProperties.Content =
+                            "CloudClientBuilder:\n    " + xBuilder[0].InnerText
+                            + "\n\nFileName:\n    " + xFileName[0].InnerText +
+                            "\n\nDestinationAddress:\n    " + xHostAddress[0].InnerText + ":" + xHostPort[0].InnerText;
+                    }
+
                     break;
                 default:
                     break;
             }
         }
-
+        private int SetHostAddress()
+        {
+            ConfigWindow configWindow = new ConfigWindow();
+            
+            configWindow.ShowDialog();
+            if ("" == (hostAddress = configWindow.GetHostAddress()))
+                return -1;
+            if ("" == (hostPort = configWindow.GetHostPort()))
+                return -1;
+            return 0;
+        }
         private void buttonStart_Click(object sender, RoutedEventArgs e)
         {
             XmlElement xElem;
@@ -146,7 +206,6 @@ namespace CloudDsWpfClient
                 xDoc.DocumentElement.LastChild.AppendChild(xText);
 
                 graph = CloudGraphFactory.Create(xDoc);
-                //graph.CreateFilter(audioInputDevices[comboBoxAudioSources.SelectedIndex], fileName);
                 graph.Start();
 
                 buttonStart.Content = "Stop Capture";
