@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using System.Security;
 using DirectShowLib;
 using System.Windows.Forms;
+using CloudObserver.DirectShow.Interfaces;
 
 namespace CloudObserver.DirectShow.Interfaces
 {
@@ -11,7 +12,7 @@ namespace CloudObserver.DirectShow.Interfaces
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     public interface ICloudInetControl
     {
-        int SetAddress(out string pszAddress, int port);
+        int SetAddress(string pszAddress, int port);
     }
 }
 
@@ -19,12 +20,30 @@ namespace CloudObserver.DirectShow.Filters
 {
 
     //[Guid("37AC047C-BED1-49ef-AB43-BB906A158DD6")]
-    public class StreamRenderer
+    public class CloudStreamRenderer
     {
-        private Guid CLSID_CloudStreamRenderer = new Guid("{37AC047C-BED1-49ef-AB43-BB906A158DD6}");
-        public StreamRenderer()
-        {
+        private static Guid CLSID_CloudStreamRenderer = new Guid("{37AC047C-BED1-49ef-AB43-BB906A158DD6}");
+        private static IBaseFilter baseFilter;
 
+        public static IBaseFilter BaseFilter
+        {
+            get
+            {
+                if (null == CloudStreamRenderer.baseFilter)
+                {
+                    CloudStreamRenderer.baseFilter = (IBaseFilter)Activator.CreateInstance(Type.GetTypeFromCLSID(CLSID_CloudStreamRenderer));
+                }
+                return CloudStreamRenderer.baseFilter;
+            }
+        }
+        public static int SetAddress(string hostAddr, int port)
+        {
+            ICloudInetControl ctrlInterface = CloudStreamRenderer.BaseFilter as ICloudInetControl;
+            if (null == ctrlInterface)
+                return -1;
+
+            return ctrlInterface.SetAddress(hostAddr, port);
+                //.SetFileName(fileName, port);
         }
     }
     //37AF7C74-9887-42bd-858A-FF4D4035ED47
