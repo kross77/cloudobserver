@@ -18,9 +18,12 @@ namespace EXAMPLE
 
             Console.WindowWidth = 120;
             Console.WindowHeight = 50;
-
-            Console.WriteLine("\n Create Methods");
             // Ready to go
+
+            ap.setResponseEncoding(API.DataFormat.PRINTR); // I tested on API.DataFormat.XML and API.DataFormat.JSON if not specified is set to API default (XML) 
+            
+            Console.WriteLine("\n Create Methods");
+           
             Console.WriteLine("create user with NO pass and NO email but with Stream! Key Returned for further operations: " + ap.createUserWithStream(random.Next(1, 100000), "userWithNoPass"));
             Console.WriteLine("create user with pass and email and with Stream! Key Returned for further operations: " + ap.createUserWithStream(random.Next(1, 100000), "userRegistred" , "suk" + random.Next(1, 100000).ToString() + "@suchok.su", "pass"));
             Console.WriteLine("create user with pass and email. Key Returned for further operations: " + ap.createUser("userRegistred", "suk" + random.Next(1, 100000).ToString() + "@suchok.su", "pass"));
