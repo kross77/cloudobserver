@@ -29,7 +29,7 @@ $db->get('streams')->print_as_table();
 <h1>User-Streams Mix - Generated Table. Specialy for user ¹1</h1>
 <br/>
 <?php 
-$db->sql('select a.username, b.streamID
+$db->sql('select  b.streamID
 from user a, streams b
 where 1 = a.id = b.userID;')->print_as_table();
 ?>
