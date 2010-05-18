@@ -3,26 +3,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Net;
-////////////////////////////////
+
+///////////////////////////////////////.
 // THIS IS  C# .NET WRAPPER FOR CO-CMS API BY OJ in 2010
 // IDEA -  to provide C# programmers way to interact with CMS PHP API
 // 14 methods for using CMS 3.* methods. Methods are divided into GET SET DELETE LOG and CREATE regions
-// 2 methods return objects in JSON format(*): getStreamsFromAll and getMyStreams
-// TO PARSE RETURNED JSON STRINGS USE(**)
-/*
-JavaScriptSerializer JSS = new JavaScriptSerializer();
-T obj = JSS.Deserialize<T>(String);
-*/
-//or
-/*
-DataContractJsonSerializer serializer = 
-    new DataContractJsonSerializer(typeof(YourObjectType));
+////////////////////////////////////////
 
-YourObjectType = (YourObjectType)serializer.ReadObject(jsonStream);
- */
+////////////////////////////////////////
+// PHP API READS ESCAPED STRINGS FROM C# CORRECTLY? only god knows... so go test IT! (To Do)
+////////////////////////////////////////
+
+///////////////////////////////////////
+// there are 2 methods that return objects in JSON , XML or PRINT_R  : getStreamsFromAll and getMyStreams
+// Default return tupe is set in Constants.php CLOUD_OBSERVER_CMS_API_RETURN_FORMAT by default XML.
+// To change Return Format for one C# class instance use Wrapper's function setResponseEncoding()
+// To parse XML use your head
+// To pars PRINT_R use for example such method (REG exps) (**)
+// TO PARSE RETURNED JSON STRINGS USE(***)
+//////////////////////////////////////
+
+////////////////////////////////////
+// (ToDo) Check this out If it does not  http://stackoverflow.com/questions/2760035/how-to-turn-string-into-readable-by-php-server-way if it steel will not tell OJ
 //  (*) JSON is nice string; referense http://www.json.org/
-// (**) Code examples are from here: referense http://stackoverflow.com/questions/2859753/what-is-simpliest-c-function-to-parse-json-string-into-object
+//  (**) referense: http://stackoverflow.com/questions/2757239/how-to-turn-such-string-into-a-data-grid-c-net 
+// (***) referense http://stackoverflow.com/questions/2859753/what-is-simpliest-c-function-to-parse-json-string-into-object
 /////////////////////////////////
+
 namespace CMS
 {
     public class API
@@ -59,9 +66,20 @@ namespace CMS
         /// Initializes a new instance of the CMS.API class with the provided address. NOTE! all returns are Strings
         /// </summary>
         /// <param name="address">An address at which API methods can be called.</param>
+   
         public API(string address)
         {
             this.address = address;
+
+        }
+        #endregion
+
+        #region ApiSetUp Methods
+        public enum DataFormat { JSON = 0, XML = 1, PRINTR = 2 }
+        public void setResponseEncoding(DataFormat format){
+          if( DataFormat.JSON == format ) {  this.address = address + "returnFormat=JSON&" ; }
+          if( DataFormat.XML == format ) {   this.address = address + "returnFormat=XML&" ;}
+          if( DataFormat.PRINTR == format ) { this.address = address + "returnFormat=PRINT_R&" ;}
         }
         #endregion
 
