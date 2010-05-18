@@ -3,7 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Net;
+////////////////////////////////
+// THIS IS  C# .NET WRAPPER FOR CO-CMS API BY OJ in 2010
+// IDEA -  to provide C# programmers way to interact with CMS PHP API
+// 14 methods for using CMS 3.* methods. Methods are divided into GET SET DELETE LOG and CREATE regions
+// 2 methods return objects in JSON format(*): getStreamsFromAll and getMyStreams
+// TO PARSE RETURNED JSON STRINGS USE(**)
+/*
+JavaScriptSerializer JSS = new JavaScriptSerializer();
+T obj = JSS.Deserialize<T>(String);
+*/
+//or
+/*
+DataContractJsonSerializer serializer = 
+    new DataContractJsonSerializer(typeof(YourObjectType));
 
+YourObjectType = (YourObjectType)serializer.ReadObject(jsonStream);
+ */
+//  (*) JSON is nice string; referense http://www.json.org/
+// (**) Code examples are from here: referense http://stackoverflow.com/questions/2859753/what-is-simpliest-c-function-to-parse-json-string-into-object
+/////////////////////////////////
 namespace CMS
 {
     public class API
@@ -34,7 +53,7 @@ namespace CMS
         /// <summary>
         /// Initializes a new instance of the CMS.API class with the localhost/cms/api.php address.
         /// </summary>
-        public API() : this("http://localhost/cms5/api.php?") { }
+        public API() : this("http://localhost/cms/api.php?") { }
 
         /// <summary>
         /// Initializes a new instance of the CMS.API class with the provided address. NOTE! all returns are Strings
