@@ -264,17 +264,10 @@ if (logged_in()) {
 			<?php if (!empty($errors)) { display_errors($errors); } ?>
 			<div>
 				
-		<H1> USER STREAMS CAN BE LISTENED BY EVERY ONE!</H1>
-  <form id="form4"  method="post">
-	<fieldset class="ui-widget-content ui-corner-all">
-			<legend class="ui-widget-header ui-corner-all">All user's streams!</legend>
-  <iframe  src="Debug.php"   width="100%" height="240"  class="ui-widget-content ui-corner-all" align="center"
-   align="right" SCROLLING="NO"></iframe>
-   
+    
 				</fieldset>	
 	</form>
 
-<?php include("includes/DebugComponentAd.php"); ?>
 
 
 
