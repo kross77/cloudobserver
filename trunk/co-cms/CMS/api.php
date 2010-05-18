@@ -150,7 +150,7 @@ function  returnFormat($s)
 	if($returnFormatval == "XML")
 	{
 		 $xml = new array2xml('result');
-		 $xml->createNode( $array );
+		 $xml->createNode( $s );
 		 echo $xml;
 	}
     elseif($returnFormatval == "JSON")
@@ -166,7 +166,7 @@ function  returnFormat($s)
 	if(CLOUD_OBSERVER_CMS_API_RETURN_FORMAT == "XML")
 	{
 		 $xml = new array2xml('result');
-		 $xml->createNode( $array );
+		 $xml->createNode( $s );
 		 echo $xml;
 	}
     elseif(CLOUD_OBSERVER_CMS_API_RETURN_FORMAT == "JSON")
