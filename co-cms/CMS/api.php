@@ -1,4 +1,107 @@
 <?php
+
+/**
+ *
+ * Array 2 XML class
+ * Convert an array or multi-dimentional array to XML
+ *
+ * @author Kevin Waterson
+ * @copyright 2009 PHPRO.ORG
+ *
+ */
+class array2xml extends DomDocument
+{
+
+    public $nodeName;
+
+    private $xpath;
+
+    private $root;
+
+    private $node_name;
+
+
+    /**
+    * Constructor, duh
+    *
+    * Set up the DOM environment
+    *
+    * @param    string    $root        The name of the root node
+    * @param    string    $nod_name    The name numeric keys are called
+    *
+    */
+    public function __construct($root='root', $node_name='node')
+    {
+        parent::__construct();
+
+        /*** set the encoding ***/
+        $this->encoding = "ISO-8859-1";
+
+        /*** format the output ***/
+        $this->formatOutput = true;
+
+        /*** set the node names ***/
+        $this->node_name = $node_name;
+
+        /*** create the root element ***/
+        $this->root = $this->appendChild($this->createElement( $root ));
+
+        $this->xpath = new DomXPath($this);
+    }
+
+    /*
+    * creates the XML representation of the array
+    *
+    * @access    public
+    * @param    array    $arr    The array to convert
+    * @aparam    string    $node    The name given to child nodes when recursing
+    *
+    */
+    public function createNode( $arr, $node = null)
+    {
+        if (is_null($node))
+        {
+            $node = $this->root;
+        }
+        foreach($arr as $element => $value) 
+        {
+            $element = is_numeric( $element ) ? $this->node_name : $element;
+
+            $child = $this->createElement($element, (is_array($value) ? null : $value));
+            $node->appendChild($child);
+
+            if (is_array($value))
+            {
+                self::createNode($value, $child);
+            }
+        }
+    }
+    /*
+    * Return the generated XML as a string
+    *
+    * @access    public
+    * @return    string
+    *
+    */
+    public function __toString()
+    {
+        return $this->saveXML();
+    }
+
+    /*
+    * array2xml::query() - perform an XPath query on the XML representation of the array
+    * @param str $query - query to perform
+    * @return mixed
+    */
+    public function query($query)
+    {
+        return $this->xpath->evaluate($query);
+    }
+
+} // end of class
+
+?>
+<?php
 // ВРЕМЕННО: Для проверки содержимого таблиц смотри http://localhost/cms/includes/crystal/Ctest.php Потом ТАск файл должно переместить или удалить
 require_once(  "includes" . DIRECTORY_SEPARATOR . "constants.php");
 require_once(  "includes" . DIRECTORY_SEPARATOR . "crystal" . DIRECTORY_SEPARATOR . "Crystal.php");
@@ -33,6 +136,12 @@ function resetBacicConnection()
 	$db_select = mysql_select_db(DB_NAME,$connection);
 	if (!$db_select) {die( "Database selection failed: " . mysql_error()); }
 }
+function unescape($s) {
+    $s= preg_replace('/%u(....)/', '&#x$1;', $s);
+    $s= preg_replace('/%(..)/', '&#x$1;', $s);
+  //  $s= html_entity_decode($s, ENT_COMPAT, 'utf-8');
+return $s;
+}
 
 function mysql_prep( $value ) {
 	$value = stripslashes( $value );
@@ -65,6 +174,7 @@ function validPass( $userPass ) {
 }
 
 
+
 function validNewEmail( $userEmail ) {
 	$db = Crystal::db();
 	$data = array(
@@ -77,6 +187,19 @@ function validNewEmail( $userEmail ) {
 		if($validation->passed == TRUE)
 	{ return $userEmail; } else {	print_r($validation->errors); die( " Email is invalid " ); }// Not Valid Email
 }
+function streamIdExists( $streamID ) {
+	$db = Crystal::db();
+	$data = array(
+			'streamId' => $streamID,
+	);
+	$rules = array(
+	  'streamId' => array('numeric, message: Please supply a valid number | unique , table: streams, field: streamID, message : This streamID is already taken '),
+	 	);
+	$validation = Crystal::validation($rules, $data, $db);
+		if($validation->passed == FALSE)
+	{ return $streamID; } else {	print_r($validation->errors); die( " Stream ID does not existin DB  " ); }// Not Valid Email
+}
+
 function validEmail( $userEmail ) {
 	$db = Crystal::db();
 	$data = array(
@@ -161,18 +284,6 @@ function validStreamId( $streamID ) {
 	$validation = Crystal::validation($rules, $data, $db);
 		if($validation->passed == TRUE)
 	{ return $streamID; } else {	print_r($validation->errors); die( " Stream ID is invalid " ); }// Not Valid Email
-}
-function streamIdExists( $streamID ) {
-	$db = Crystal::db();
-	$data = array(
-			'streamId' => $streamID,
-	);
-	$rules = array(
-	  'streamId' => array('numeric, message: Please supply a valid number | unique , table: streams, field: streamID, message : This streamID is already taken '),
-	 	);
-	$validation = Crystal::validation($rules, $data, $db);
-		if($validation->passed == FALSE)
-	{ return $streamID; } else {	print_r($validation->errors); die( " Stream ID does not existin DB  " ); }// Not Valid Email
 }
 
 function createUnregedUser( $userName ) {
@@ -266,7 +377,7 @@ function logIn($userEmail, $userPass) {
  				$data = array('CG' => $key);
 $db->update('user', $data)->where('id',$userID)->execute();
 			echo $key;	return $key; 
-			} else {	 die( "  Something Went Wrong. Please Try Again, Muther Fucker. " ); } 
+			} else {	 die( "  Something Went Wrong. Please Try Again, Muther Fucker дфые вшу. " ); } 
 	
 }
 function logOut($key) {
@@ -297,7 +408,10 @@ $db = Crystal::db();
 $generated_table = $db->sql('select a.username, b.streamID
 from user a, streams b
 where a.id = b.userID;')->fetch_all();
-print_r($generated_table);
+echo json_encode($generated_table);
+  //  $xml = new array2xml('my_node');
+  //  $xml->createNode( $array );
+   // echo $xml;
 }
 
 function getMyStreams($key)
@@ -364,7 +478,7 @@ switch($_GET["method"])
          // create user with pass and email and with Stream! (Stream ID should be uniqe and beter be confermed somehow by kernel)
          // You can Call once something like http://localhost/cms/api.php?method=createUserWithStream&streamId=5&userName=Olgr2&userEmail=Email@emcorp.com&userPass=000000  and go to http://localhost/cms5/includes/crystal/Ctest.php to see what has happened	
         $streamID = validStreamId($_GET[streamId]);
-		$userID =createUser($_GET[userEmail], $_GET[userName], $_GET[userPass]);
+		$userID =createUser($_GET[userEmail],unescape($_GET[userName]) , unescape($_GET[userPass]));
 		createStream($streamID, $userID);
           }
 		elseif((int)$_GET[streamId] != null && (string)$_GET[userName] != null )
@@ -372,7 +486,7 @@ switch($_GET["method"])
 		// create user with NO pass and NO email But with Stream! (Stream ID should be uniqe and beter be confermed somehow by kernel)
 	    // You can Call once something like http://localhost/cms/api.php?method=createUserWithStream&streamId=4&userName=Ol%D0%AFDgr and go to http://localhost/cms5/includes/crystal/Ctest.php to see what has happened	
 		$streamID = validStreamId($_GET[streamId]);
-		$userID  =	createUnregedUser($_GET[userName]);
+		$userID  =	createUnregedUser(unescape($_GET[userName]));
 		createStream($streamID, $userID);
 		}
 		else
@@ -384,7 +498,7 @@ switch($_GET["method"])
 case "createUser":
 	if( (string)$_GET[userName] != null && (string)$_GET[userEmail] != null && (string)$_GET[userPass] != null)
 	{
-	$userID = createUser($_GET[userEmail], $_GET[userName], $_GET[userPass]);		
+	$userID = createUser($_GET[userEmail],unescape($_GET[userName]) , unescape($_GET[userPass]));		
 	}
 	else
 	{
@@ -395,7 +509,7 @@ case "createUser":
 case "createPassword":
 	if($_GET[key] != null && (string)$_GET[userEmail] != null && (string)$_GET[newUserPass] != null)
 	{		
-	$userPass =	createPassword($_GET[key], $_GET[userEmail], $_GET[newUserPass]);
+	$userPass =	createPassword($_GET[key], $_GET[userEmail], unescape($_GET[newUserPass]));
 	}
 	else
 	{
@@ -409,7 +523,7 @@ case "logIn":
 	if((string)$_GET[userEmail] != null && (string)$_GET[userPass] != null)
 	{
 	// You can Call  something like http://localhost/cms/api.php?method=logIn&userEmail=Email@emcorp.com&userPass=000000
-	$key = logIn($_GET[userEmail], $_GET[userPass])	;	
+	$key = logIn($_GET[userEmail],  unescape($_GET[userPass]))	;	
 	}
 	else
 	{
@@ -480,7 +594,7 @@ case "getMyStreams":
 case "setMyName":
 	if( (string)$_GET[key] != null && (string)$_GET[newUserName] != null)
 	{ // You can Call once  something like http://localhost/cms/api.php?method=setMyName&newUserName=Jon&key=Your_Key
-		setMyName($_GET[key], $_GET[newUserName]);
+		setMyName($_GET[key], unescape($_GET[newUserName]) );
 	}
 	else
 	{
@@ -499,6 +613,7 @@ case "setStream":
 	}
 	break;
 
+
 	// Delete
 
 case "deleteStream":
@@ -516,7 +631,7 @@ case "deleteUser":
 	if((string)$_GET[key] != null && (string)$_GET[userPass] != null)
 	{// You can Call once  something like http://localhost/cms/api.php?method=deleteUser&userPass=Uour_Pass&key=Your_Key
 	
-			deleteUser((string)$_GET[key], (string)$_GET[userPass]);
+			deleteUser((string)$_GET[key], unescape($_GET[userPass]));
 	}
 	else
 	{
