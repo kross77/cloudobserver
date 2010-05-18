@@ -142,6 +142,42 @@ function unescape($s) {
   //  $s= html_entity_decode($s, ENT_COMPAT, 'utf-8');
 return $s;
 }
+function  returnFormat($s)
+{
+	if($_GET["returnFormat"])
+	{
+		$returnFormatval = $_GET["returnFormat"];
+	if($returnFormatval == "XML")
+	{
+		 $xml = new array2xml('result');
+		 $xml->createNode( $array );
+		 echo $xml;
+	}
+    elseif($returnFormatval == "JSON")
+    {
+    	 echo json_encode($s);
+    }
+    elseif($returnFormatval == "PRINT_R")
+    {
+    	print_r($s); 
+    }
+	}
+	else{
+	if(CLOUD_OBSERVER_CMS_API_RETURN_FORMAT == "XML")
+	{
+		 $xml = new array2xml('result');
+		 $xml->createNode( $array );
+		 echo $xml;
+	}
+    elseif(CLOUD_OBSERVER_CMS_API_RETURN_FORMAT == "JSON")
+    {
+    	 echo json_encode($s);
+    }
+    elseif(CLOUD_OBSERVER_CMS_API_RETURN_FORMAT == "PRINT_R")
+    {
+    	print_r($s); 
+    }}
+}
 
 function mysql_prep( $value ) {
 	$value = stripslashes( $value );
@@ -408,40 +444,19 @@ $db = Crystal::db();
 $generated_table = $db->sql('select a.username, b.streamID
 from user a, streams b
 where a.id = b.userID;')->fetch_all();
-//////////
-// old way
-// print_r($generated_table); old way...
-//////////
-// JSON way
-echo json_encode($generated_table);
-//////////
-// XML way
-//  $xml = new array2xml('my_node');
-//  $xml->createNode( $array );
-// echo $xml;
-//////////
+returnFormat($generated_table); 
 }
 
 function getMyStreams($key)
 {
 $userID = validKey( $key );
 $db = Crystal::db();
-$task = "select a.username, b.streamID
+$task = "select b.streamID
 from user a, streams b
 where " . $userID . " = a.id = b.userID;";
 $generated_table = $db->sql($task)->fetch_all();
-//////////
-// old way
-// print_r($generated_table); old way...
-//////////
-// JSON way
-echo json_encode($generated_table);
-//////////
-// XML way
-//  $xml = new array2xml('my_node');
-//  $xml->createNode( $array );
-// echo $xml;
-//////////
+returnFormat($generated_table); 
+
 }
 
 function setMyName($key, $name)
