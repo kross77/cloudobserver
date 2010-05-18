@@ -408,10 +408,18 @@ $db = Crystal::db();
 $generated_table = $db->sql('select a.username, b.streamID
 from user a, streams b
 where a.id = b.userID;')->fetch_all();
+//////////
+// old way
+// print_r($generated_table); old way...
+//////////
+// JSON way
 echo json_encode($generated_table);
-  //  $xml = new array2xml('my_node');
-  //  $xml->createNode( $array );
-   // echo $xml;
+//////////
+// XML way
+//  $xml = new array2xml('my_node');
+//  $xml->createNode( $array );
+// echo $xml;
+//////////
 }
 
 function getMyStreams($key)
@@ -422,7 +430,18 @@ $task = "select a.username, b.streamID
 from user a, streams b
 where " . $userID . " = a.id = b.userID;";
 $generated_table = $db->sql($task)->fetch_all();
-print_r($generated_table);
+//////////
+// old way
+// print_r($generated_table); old way...
+//////////
+// JSON way
+echo json_encode($generated_table);
+//////////
+// XML way
+//  $xml = new array2xml('my_node');
+//  $xml->createNode( $array );
+// echo $xml;
+//////////
 }
 
 function setMyName($key, $name)
