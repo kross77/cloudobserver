@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009"     
 					   xmlns:s="library://ns.adobe.com/flex/spark" 
-					   xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:api="services.api.*">
+					   xmlns:mx="library://ns.adobe.com/flex/mx"  minHeight="500" xmlns:api="services.api.*" creationComplete="windowedapplication1_creationCompleteHandler(event)" width="400">
+	<fx:Style source="Main.css"/>
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
@@ -119,6 +120,18 @@
 				getUserData();
 			}
 
+
+			protected function windowedapplication1_creationCompleteHandler(event:FlexEvent):void
+			{
+				DebugWindow.enabled =false; 
+				this.addEventListener(KeyboardEvent.KEY_UP, EnableDebuger);
+			}
+			protected function EnableDebuger(e:KeyboardEvent):void
+			{
+			//	labelName.text = e.keyCode.toString();
+				if (e.keyCode.toString() == "49"){ DebugWindow.enabled = true;}
+			}
+
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -131,60 +144,149 @@
 		<s:CallResponder id="IWannaReadResult"  result="IWannaReadResult_resultHandler(event)"/>
 		<s:CallResponder id="GetWorkBlockResult"  result="GetWorkBlockResult_resultHandler(event)"/>
 	</fx:Declarations>
+	<mx:TabNavigator  left="0" right="0" bottom="0" top="0"   id="tabnav">
+		<s:NavigatorContent label="Start" width="100%" backgroundAlpha="0" height="100%"  >
+			<s:layout>
+				<s:BasicLayout/>
+			</s:layout>
+			<mx:TabNavigator right="0" left="0" top="0" bottom="0" id="start1">
+				<s:NavigatorContent label="Welcome" width="100%" height="100%">
+					<mx:Form horizontalCenter="0" verticalCenter="0">
+						<mx:FormHeading label="Welcome to CO writter"/>
+						<s:Button label="Log In" width="100%" click="start1.selectedIndex = 1"/>
+						<s:Button label="Sign UP" width="100%" click="start1.selectedIndex = 2"/>
+					</mx:Form>
+				</s:NavigatorContent>
+				<s:NavigatorContent label="Log In" width="100%" height="100%">
+					<mx:Form width="326" defaultButton="{LogIn}" height="136" horizontalCenter="0" verticalCenter="0">
+						<mx:FormHeading label="Log In"/>
+						<mx:FormItem label="Email" width="100%" id="TF">
+							<s:TextInput width="100%" id="emailTF" text="Example@Example.com"/>
+						</mx:FormItem>
+						<mx:FormItem label="Password" width="100%">
+							<s:TextInput    id="passwordTF"    
+											maxChars="16"
+											displayAsPassword="true"
+											focusIn="passwordTF.displayAsPassword = false;"
+											focusOut="passwordTF.displayAsPassword = true;" width="100%" text="000000"/>
+						</mx:FormItem>
+						<mx:Button label=" Log In" width="100%" id="LogIn" click="LogIn_clickHandler(event)"/>
+					</mx:Form>
+				</s:NavigatorContent>
+				<s:NavigatorContent label="Sign Up" width="100%" height="100%">
+					<mx:Form width="326" defaultButton="{SignUp}" height="168" horizontalCenter="0" verticalCenter="0">
+						<mx:FormHeading label="Sign Up"/>
+						<mx:FormItem label="Name" width="100%" id="TF1">
+							<s:TextInput width="100%" id="nameSUTF" text="Name Example"/>
+						</mx:FormItem>
+						<mx:FormItem label="Email" width="100%" id="TF0">
+							<s:TextInput width="100%" id="emailSUTF" text="Example@Example.com"/>
+						</mx:FormItem>
+						<mx:FormItem label="Password" width="100%">
+							<s:TextInput    id="passwordSUTF"    
+											maxChars="16"
+											displayAsPassword="true"
+											focusIn="passwordTF.displayAsPassword = false;"
+											focusOut="passwordTF.displayAsPassword = true;" width="100%" text="000000"/>
+						</mx:FormItem>
+						<mx:Button label="Sign Up" width="100%" id="SignUp" click="LogIn_clickHandler(event)"/>
+					</mx:Form>
+				</s:NavigatorContent>
+			</mx:TabNavigator>
+			
+		</s:NavigatorContent>
+		<s:NavigatorContent label="Select" width="100%" height="100%" id="maintab">
+			<mx:TabNavigator left="0" right="0" top="0" bottom="0" id="select1">
+				<s:NavigatorContent label="Broadcast" width="100%" height="100%">
+					<mx:Form horizontalCenter="0" verticalCenter="0">
+						<mx:FormHeading label=" {'Welcome ' + String(getMyNameResult.lastResult)}" width="100%" textAlign="center"/>
+						<mx:FormHeading label="How do you want to broadcast?" width="100%" textAlign="center"/>
+						<s:Button label="On to New Stream" width="100%" click="select1.selectedIndex = 1"/>
+						<s:Button label="On to Existing Stream" width="100%" click="select1.selectedIndex = 2"/>
+						<s:Button label="On to last Stream I broadcasted" width="100%" enabled="false"/>
+					</mx:Form>
+					
+				</s:NavigatorContent>
+				<s:NavigatorContent label="On to old stream" width="100%" height="100%" click="select1.selectedIndex = 2">
+					<mx:Form width="326" height="163" horizontalCenter="0" verticalCenter="0">
+						<mx:FormItem label="Yours Id's List" width="100%" height="88">
+							<s:List click="list_clickHandler(event)" id="list" width="100%" height="100%">
+								<s:AsyncListView list="{getDataResult.lastResult}"/>
+							</s:List>
+						</mx:FormItem>
+						<mx:FormItem label="Stream onto selected SID">
+							<s:Button label="Stream!"/>
+						</mx:FormItem>
+					</mx:Form>
+				</s:NavigatorContent>
+				<s:NavigatorContent label="On to New stream" width="100%" height="100%">
+					<mx:Form width="326" height="70" horizontalCenter="0" verticalCenter="0">
+						<mx:FormItem label="Gen New Stream">
+							<s:Button label="Stream onto new stream"/>
+						</mx:FormItem>
+					</mx:Form>
+				</s:NavigatorContent>
+			</mx:TabNavigator>
+			<s:Button label="Log Out" bottom="10" right="10" click="tabnav.selectedIndex = 0; start1.selectedIndex = 0;"/>
+		</s:NavigatorContent>
+		<s:NavigatorContent label="View" width="100%" height="100%" skinClass="cobalt.skins.SkinnableContainerSkin" click="select1.selectedIndex = 1;">
+			<s:VideoPlayer skinClass="VPS" right="0" left="0" top="0" bottom="0"/>
+		</s:NavigatorContent>
+		<s:NavigatorContent label="Debug" width="100%" height="100%" id="DebugWindow">
 
-	<mx:Form width="311" right="10" bottom="10" height="80">
-		<mx:FormHeading label="Your API key"/>
-		<mx:FormItem label="Key" width="100%">
-			<s:TextInput id="keyTextInput" width="100%" text="{userKey}" enter="userKey = keyTextInput.text; getUserData();"/>
-		</mx:FormItem>
-	</mx:Form>
-	<mx:Form left="10" top="10" width="326" defaultButton="{LogIn}">
-		<mx:FormHeading label="Log In"/>
-		<mx:FormItem label="Name" width="100%" id="TF">
-			<s:TextInput width="100%" id="emailTF" text="Example@Example.com"/>
-		</mx:FormItem>
-		<mx:FormItem label="Password" width="100%">
-			<s:TextInput    id="passwordTF"    
-							maxChars="16"
-							displayAsPassword="true"
-							focusIn="passwordTF.displayAsPassword = false;"
-							focusOut="passwordTF.displayAsPassword = true;" width="100%" text="000000"/>
-		</mx:FormItem>
-		<mx:Button label=" Log In" width="100%" id="LogIn" click="LogIn_clickHandler(event)"/>
-	</mx:Form>
-	<mx:VDividedBox width="311" top="10" right="10" bottom="98">
-		<mx:Form x="377" y="10" width="100%" height="100%">
-			<mx:FormHeading label="CO Writer: Write on ID"/>
-			<mx:FormItem label="GW adr :" width="100%">
-				<s:TextInput id="gatewayUritf" text="{getCOADRResult.lastResult}" width="100%"/>
-			</mx:FormItem>
-			<mx:FormItem label="ID to write :" width="100%">
-				<s:TextInput id="contentToWriteIdtf" text="Will be selected from a list" width="100%"/>
-			</mx:FormItem>
-			<mx:FormItem label="Content type :" width="100%">
-				<s:TextInput id="ContentTypetf" text="audio/mpeg" width="100%"/>
-			</mx:FormItem>
-			<s:Button label="Go Cloud!" width="100%" id="Go" click="Go_clickHandler(event)"/>
-		</mx:Form>
-		<mx:Form x="376" y="200" width="100%" height="40%">
-			<mx:FormHeading label="CO Writer Console"/>
-			<mx:FormItem label="Uri" width="100%" height="100%">
-				<s:TextInput id="textArea" width="100%" height="100%"/>
-			</mx:FormItem>
-		</mx:Form>
-	</mx:VDividedBox>
-	<mx:Form  width="326" left="10" bottom="10" top="155">
-		<mx:FormHeading label="Some Data About You"/>
-		<mx:FormItem label="Your Name" width="100%" height="100%">
-			<s:TextInput id="YourNameTF" text="{getMyNameResult.lastResult}" width="100%"/>
-		</mx:FormItem>
-		<mx:FormItem label="Cloud Adress" width="100%" height="100%">
-			<s:TextInput id="CloudAdressTF" text="{getCOADRResult.lastResult}" width="100%"/>
-		</mx:FormItem>
-		<mx:FormItem label="Yours Id's List" width="100%" height="100%">
-			<s:List click="list_clickHandler(event)" id="list" width="100%" height="100%">
-				<s:AsyncListView list="{getDataResult.lastResult}"/>
-			</s:List>
-		</mx:FormItem>
-	</mx:Form>
+			<mx:TabNavigator right="0" left="0" top="0" bottom="0" id="debug1">
+				<s:NavigatorContent  label="You Entered THE debug mode" width="100%" height="100%">
+					<mx:Form horizontalCenter="0" verticalCenter="0">
+						<mx:FormHeading label=" {'Welcome to debug mode ' + String(getMyNameResult.lastResult)}" width="100%" textAlign="center"/>
+						<mx:FormHeading label="What do you want to know" width="100%" textAlign="center"/>
+						<s:Button label="How CMS is interacting with Kernel" width="100%" click="debug1.selectedIndex = 1;"/>
+						<s:Button label="What Strings are used now by VLC and Lift" width="100%" click="debug1.selectedIndex = 2;"/>
+					</mx:Form>
+				</s:NavigatorContent>
+				<s:NavigatorContent label="CMS-Kernel" width="100%" height="100%">
+					
+					<mx:Form y="99" width="326" height="173" horizontalCenter="0">
+						<mx:FormHeading label="CO Writer: Write on ID"/>
+						<mx:FormItem label="GW adr :" width="100%">
+							<s:TextInput id="gatewayUritf" text="{getCOADRResult.lastResult}" width="100%"/>
+						</mx:FormItem>
+						<mx:FormItem label="ID to write :" width="100%">
+							<s:TextInput id="contentToWriteIdtf" text="Will be selected from a list" width="100%"/>
+						</mx:FormItem>
+						<mx:FormItem label="Content type :" width="100%">
+							<s:TextInput id="ContentTypetf" text="audio/mpeg" width="100%"/>
+						</mx:FormItem>
+						<s:Button label="Go Cloud!" width="100%" id="Go" click="Go_clickHandler(event)"/>
+					</mx:Form>
+					<mx:Form width="326" height="97" y="283" horizontalCenter="1">
+						<mx:FormHeading label="CO Writer Console"/>
+						<mx:FormItem label="Uri" width="100%" height="100%">
+							<s:TextInput id="textArea" width="100%" height="100%"/>
+						</mx:FormItem>
+					</mx:Form>
+					
+					<mx:Form width="326" height="80" horizontalCenter="0" top="10">
+						<mx:FormHeading label="Your API key"/>
+						<mx:FormItem label="Key" width="100%">
+							<s:TextInput id="keyTextInput" width="100%" text="{userKey}" enter="userKey = keyTextInput.text; getUserData();"/>
+						</mx:FormItem>
+					</mx:Form>
+				</s:NavigatorContent>
+				<s:NavigatorContent label="Vlc-Lift" width="100%" height="100%">
+					<mx:Form x="10" y="10" width="376" height="120">
+						<mx:FormItem label="VLC string" width="100%" height="100%">
+							<s:TextInput width="100%" height="100%"/>
+						</mx:FormItem>
+					</mx:Form>
+					<mx:Form x="12" y="155" width="376" height="120">
+						<mx:FormItem label="Lift string" width="100%" height="100%">
+							<s:TextInput width="100%" height="100%"/>
+						</mx:FormItem>
+					</mx:Form>
+				</s:NavigatorContent>
+			</mx:TabNavigator>
+		</s:NavigatorContent>
+	</mx:TabNavigator>
+	<s:Label text="{getMyNameResult.lastResult}" textAlign="center" verticalAlign="middle" right="2" top="2" id="labelName"/>
+
 </s:WindowedApplication>
