@@ -30,6 +30,10 @@
 			[Bindable]
 			public var gatewayUri:String = new String(); 
 			[Bindable]
+			public var VLCString:String = new String(); 
+			[Bindable]
+			public var LIFTString:String = new String(); 
+			[Bindable]
 			public var contentIdsArray:Array;
 			[Bindable]
 			public var contentToWriteId:int;
@@ -68,10 +72,9 @@
 			} 
 			protected function IWannaWriteResult_resultHandler(event:ResultEvent):void
 			{
-				//mp3Uris = event.result as String;
-				//textArea.text +=  " \n Принятые MP3 Uri's: " + mp3Uris;		
+				startVLC();	
 			}
-			
+
 			
 			protected function Go_clickHandler(event:MouseEvent):void
 			{
@@ -126,8 +129,8 @@
 
 			protected function windowedapplication1_creationCompleteHandler(event:FlexEvent):void
 			{
-				//DebugWindow.enabled =false; 
-				//AntSnewstream.enabled = false;
+				DebugWindow.enabled =false; 
+				//
 				SignUpP.enabled = false;
 				this.addEventListener(KeyboardEvent.KEY_UP, EnableDebuger);
 				
@@ -165,6 +168,29 @@
 				labelName.text = "you just logged out";
 			}
 
+
+			protected function AntSnewstream_creationCompleteHandler(event:FlexEvent):void
+			{
+				AntSnewstream.enabled = false;
+			}
+			protected function startVLC():void
+			{
+			var VLC_Folder_on_C_x64:File = File.userDirectory.resolvePath('C:/Program Files (x86)/VideoLAN/VLC/');
+			var VLC_Folder_on_C_x86:File = File.userDirectory.resolvePath('C:/Program Files/VideoLAN/VLC/');
+			
+			if(VLC_Folder_on_C_x64.isDirectory)
+			{
+				
+			}
+			else if(VLC_Folder_on_C_x86.isDirectory)
+			{
+				
+			}
+			else if (!VLC_Folder_on_C_x86.isDirectory && !VLC_Folder_on_C_x64.isDirectory)
+			{
+				Alert.show("VLC is not installed on your PC; There is no Any folder like VideoLAN near by this app .exe file");
+			}
+			}
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -252,7 +278,7 @@
 						</mx:FormItem>
 					</mx:Form>
 				</s:NavigatorContent>
-				<s:NavigatorContent label="On to New stream" width="100%" height="100%"  id="AntSnewstream">
+				<s:NavigatorContent label="On to New stream" creationComplete="AntSnewstream_creationCompleteHandler(event)" width="100%" height="100%"  id="AntSnewstream">
 					<mx:Form width="326" height="70" horizontalCenter="0" verticalCenter="0">
 						<mx:FormItem label="Gen New Stream">
 							<s:Button label="Stream onto new stream"/>
@@ -308,12 +334,12 @@
 				<s:NavigatorContent label="Vlc-Lift" width="100%" height="100%">
 					<mx:Form x="10" y="10" width="376" height="120">
 						<mx:FormItem label="VLC string" width="100%" height="100%">
-							<s:TextInput width="100%" height="100%"/>
+							<s:TextInput width="100%" height="100%" text="{VLCString}"/>
 						</mx:FormItem>
 					</mx:Form>
 					<mx:Form x="12" y="155" width="376" height="120">
 						<mx:FormItem label="Lift string" width="100%" height="100%">
-							<s:TextInput width="100%" height="100%"/>
+							<s:TextInput width="100%" height="100%" text="{LIFTString}"/>
 						</mx:FormItem>
 					</mx:Form>
 				</s:NavigatorContent>
