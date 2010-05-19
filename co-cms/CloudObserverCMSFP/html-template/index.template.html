@@ -79,7 +79,7 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 	// embed the Flash Content SWF when all tests are passed
 	AC_FL_RunContent(
 			"src", "${swf}",
-			   "flashVars", "url=http://localhost:4773/&sid=12,32,44",
+			   "flashVars", "url=http://localhost:4773/&sid=12,32,44&videourl=http://localhost:8080/stream.flv",
 			"width", "${width}",
 			"height", "${height}",
 			"align", "middle",
@@ -109,7 +109,7 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 			<param name="quality" value="high" /> 
 			<param name="bgcolor" value="${bgcolor}" /> 
 			<param name="allowScriptAccess" value="sameDomain" /> 
-			 <param name='flashVars' value='url=http://localhost:4773/,sid=12,32,44'/> 
+			 <param name='flashVars' value='url=http://localhost:4773/,sid=12,32,44&videourl=http://localhost:8080/stream.flv'/> 
 			<embed src="${swf}.swf" quality="high" bgcolor="${bgcolor}"
 
 				width="${width}" height="${height}" name="${application}" align="middle"
