@@ -18,6 +18,7 @@
   <applications>
     <application path="SimpleVideoPlayer.mxml"/>
     <application path="CloudObserverCMSFP.mxml"/>
+    <application path="Writer.mxml"/>
   </applications>
   <modules/>
   <buildCSSFiles/>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600">
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.core.FlexGlobals;
+			import mx.events.FlexEvent;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			import services.gateway.Gateway;
+			import services.workblock.WorkBlock;
+			
+			import spark.components.VSlider;
+			
+			[Bindable]
+			public var gatewayUri:String = new String();
+			[Bindable]
+			public var contentIdsArray:Array;
+			[Bindable]
+			public var contentToWriteId:int;
+			[Bindable]
+			public var contentMp3UrlsArray:Array;
+			[Bindable]
+			public var workBlockUri:String =  new String(); 			
+			[Bindable]
+			public var ContentType:String =  new String(); 
+			[Bindable]
+			public var mp3Uris:String =  new String();	
+			
+			protected function application_creationCompleteHandler(event:FlexEvent):void
+			{
+				
+				// start process
+				
+				//IWannaReadResult.token = 	//gateway.IWannaRead(contentIdsArray);
+			}
+			protected function gatewayInactive(event:FaultEvent):void{
+				textArea.text += " Был указан адресс ядрышка. По данному адресу ядрышко не пашет";
+			}
+			protected function GetWorkBlockResult_resultHandler(event:ResultEvent):void
+			{
+				workBlockUri = event.result as String;
+				workBlockUri += "?wsdl";
+				textArea.text +=  " \n Принятый Work Block Uri: " + workBlockUri;
+				contentToWriteId =  int(contentToWriteIdtf.text);
+				ContentType = ContentTypetf.text;
+				var workBlock:WorkBlock = new WorkBlock;
+				workBlock.addEventListener(FaultEvent.FAULT, gatewayInactive);
+				workBlock.serviceStart(workBlockUri);
+				workBlock.showBusyCursor = true;
+				textArea.text +=  " \n Принятый Work Block Uri: " + workBlockUri;
+				// var contentIds:ArrayCollection = new ArrayCollection(contentIdsArray);
+				//textArea.text +=  " \n Переведенный в ArrayCollection массив идентификаторов потока: " + contentIds.toString();
+				IWannaReadResult.token = workBlock.IWannaWrite(contentToWriteId, ContentType);
+				
+			} 
+			protected function IWannaReadResult_resultHandler(event:ResultEvent):void
+			{
+				mp3Uris = event.result as String;
+				textArea.text +=  " \n Принятые MP3 Uri's: " + mp3Uris;		
+			}
+			
+			
+			protected function Go_clickHandler(event:MouseEvent):void
+			{
+				gatewayUri = gatewayUritf.text + "?wsdl";
+				textArea.text +=  " \n Принятый GW Uri : " + gatewayUri;	
+				var gateway:Gateway = new Gateway;
+				gateway.serviceStart(gatewayUri);
+				gateway.showBusyCursor = true;
+				gateway.addEventListener(FaultEvent.FAULT, gatewayInactive);
+				GetWorkBlockResult.token = gateway.GetWorkBlock();
+		//		textArea.text +=  "GetWorkBlockResult.token = gateway.GetWorkBlock() ";
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!--	<gateway:Gateway id="gateway" /> -->
+		<s:CallResponder id="IWannaReadResult"  result="IWannaReadResult_resultHandler(event)"/>
+		<s:CallResponder id="GetWorkBlockResult"  result="GetWorkBlockResult_resultHandler(event)"/>
+		<!--	<workblock:WorkBlock id="workBlock" />
+		<s:CallResponder id="GetTcpStreamUriToReadResult"  result="GetTcpStreamUriToReadResult_resultHandler(event)"/>-->
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<mx:Form x="18" y="13" width="270" height="186">
+		<mx:FormHeading label="CO Writer: Write on ID"/>
+		<mx:FormItem label="GW adr :">
+			<s:TextInput id="gatewayUritf" text="http://93.100.45.201:4773/"/>
+		</mx:FormItem>
+		<mx:FormItem label="ID to write :">
+			<s:TextInput id="contentToWriteIdtf" text="12"/>
+		</mx:FormItem>
+		<mx:FormItem label="Content type :">
+			<s:TextInput id="ContentTypetf" text="audio/mpeg"/>
+		</mx:FormItem>
+		<mx:FormItem width="100%">
+			<s:Button label="Go Cloud!" width="100%" id="Go" click="Go_clickHandler(event)"/>
+		</mx:FormItem>
+	</mx:Form>
+	<mx:Form x="18" y="207" width="295" height="207">
+		<mx:FormHeading label="CO Writer Console"/>
+		<mx:FormItem label="Uri" width="100%" height="100%">
+			<s:TextInput id="textArea" width="100%" height="100%"/>
+		</mx:FormItem>
+	</mx:Form>
+</s:Application>

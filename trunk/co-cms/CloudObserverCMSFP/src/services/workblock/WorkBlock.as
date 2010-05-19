@@ -30,11 +30,15 @@ public class WorkBlock extends WebServiceWrapper
 		
 		operation = new mx.rpc.soap.mxml.Operation(null, "IWannaRead");
 		operation.resultType = String; 		 
-		operations["IWannaRead"] = operation;
+		operations["IWannaRead"] = operation;         		 
+
+		operation = new mx.rpc.soap.mxml.Operation(null, "IWannaWrite");
+		operation.resultType = String; 		 
+		operations["IWannaWrite"] = operation;
 		
 		_serviceControl.operations = operations;              
 		
-
+		
 		_serviceControl.service = "WorkBlock";
 		_serviceControl.port = "BasicHttpBinding_IWorkBlock";
 		_serviceControl.wsdl = serviceURL;
@@ -59,7 +63,15 @@ public class WorkBlock extends WebServiceWrapper
 		
 		return _internal_token;
 	} 
-               
+	public function IWannaWrite(id:int, contentType:String) : mx.rpc.AsyncToken
+	{
+			model_internal::loadWSDLIfNecessary();
+		var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("IWannaWrite");
+		var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(id,contentType) ;
+		
+		return _internal_token;
+	}           
+	
 }
 
 }
