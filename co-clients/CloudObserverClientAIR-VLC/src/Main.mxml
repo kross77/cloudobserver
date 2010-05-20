@@ -4,13 +4,14 @@
 					   xmlns:mx="library://ns.adobe.com/flex/mx" 
 					   minHeight="500"
 					   xmlns:api="services.api.*"
-					   creationComplete="windowedapplication1_creationCompleteHandler(event)" width="400">
+					   creationComplete="windowedapplication1_creationCompleteHandler(event)"
+					   windowComplete="windowedapplication1_windowCompleteHandler(event)"
+					   width="400">
 	<fx:Style source="Main.css"/>
 	<fx:Script>
 		<![CDATA[
-			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
-			import mx.core.FlexGlobals;
+			import mx.events.AIREvent;
 			import mx.events.FlexEvent;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
@@ -18,8 +19,6 @@
 			import services.api.Api;
 			import services.gateway.Gateway;
 			import services.workblock.WorkBlock;
-			
-			import spark.components.VSlider;
 			
 			[Bindable]
 			public var api:Api = new Api();
@@ -45,9 +44,10 @@
 			public var ContentType:String =  "video/x-flv"; 
 			[Bindable]
 			public var mp3Uris:String =  new String();	
-
-	
-
+			[Bindable]
+			public var VLC_EXE_File:File = new File;
+			[Bindable]
+			public var CO_Lift_EXE_File:File = new File;
 
 
 			protected function gatewayInactive(event:FaultEvent):void{
@@ -75,14 +75,6 @@
 				startVLC();	
 			}
 
-			
-			protected function Go_clickHandler(event:MouseEvent):void
-			{
-				gatewayUri = gatewayUritf.text;
-				ContentType = ContentTypetf.text;
-				contentToWriteId = int(contentToWriteIdtf.text);
-				goCloud();
-			}
 			protected function goCloud():void
 			{
 			
@@ -97,10 +89,6 @@
 	
 			}
 
-
-
-
-			
 			protected function LogIn_clickHandler(event:MouseEvent):void
 			{
 				api = new Api();
@@ -116,9 +104,6 @@
 				getCOADRResult.token = api.getGatewayAddress(userKey);
 				
 			}
-			
-			
-
 
 			protected function LogInResult_resultHandler(event:ResultEvent):void
 			{
@@ -126,22 +111,21 @@
 				getUserData();
 			}
 
-
 			protected function windowedapplication1_creationCompleteHandler(event:FlexEvent):void
 			{
 				DebugWindow.enabled =false; 
-				//
 				SignUpP.enabled = false;
 				this.addEventListener(KeyboardEvent.KEY_UP, EnableDebuger);
-				
 			}
+			
+			
+		
 			protected function EnableDebuger(e:KeyboardEvent):void
 			{
 			//	labelName.text = e.keyCode.toString() + " " + flash.system.Capabilities.cpuArchitecture.toString();
 				if (e.keyCode.toString() == "49"){ DebugWindow.enabled = true;}
 			}
-
-
+			
 			protected function streamFromListBut_clickHandler(event:MouseEvent):void
 			{
 				contentToWriteId = int(list.selectedItem);
@@ -149,12 +133,10 @@
 				goCloud();	
 			}
 
-
 			protected function getCOADRResult_resultHandler(event:ResultEvent):void
 			{
 				gatewayUri = String(getCOADRResult.lastResult);
 			}
-
 
 			protected function button1_clickHandler(event:MouseEvent):void
 			{
@@ -162,35 +144,51 @@
 				tabnav.selectedIndex = 0; start1.selectedIndex = 0;
 			}
 
-
 			protected function LogOut_resultHandler(event:ResultEvent):void
 			{
 				labelName.text = "you just logged out";
 			}
 
-
 			protected function AntSnewstream_creationCompleteHandler(event:FlexEvent):void
 			{
 				AntSnewstream.enabled = false;
 			}
+			
+			
+			protected function Go_clickHandler(event:MouseEvent):void
+			{
+				gatewayUri = gatewayUritf.text;
+				ContentType = ContentTypetf.text;
+				contentToWriteId = int(contentToWriteIdtf.text);
+				goCloud();
+			}
+			
+			protected function checkVLCandFFMpeg():void
+			{
+			
+				Alert.show("VLC+FFMPEG is not installed in this programm folder so we will download it...");
+			
+			}
+			protected function checkLift():void
+			{
+				Alert.show("Lift is not installed in this programm folder so we will download it...");
+			}
 			protected function startVLC():void
 			{
-			var VLC_Folder_on_C_x64:File = File.userDirectory.resolvePath('C:/Program Files (x86)/VideoLAN/VLC/');
-			var VLC_Folder_on_C_x86:File = File.userDirectory.resolvePath('C:/Program Files/VideoLAN/VLC/');
-			
-			if(VLC_Folder_on_C_x64.isDirectory)
-			{
 				
 			}
-			else if(VLC_Folder_on_C_x86.isDirectory)
+
+			protected function previewFromCloud_creationCompleteHandler(event:FlexEvent):void
 			{
-				
+				previewFromCloud.enabled = false;
 			}
-			else if (!VLC_Folder_on_C_x86.isDirectory && !VLC_Folder_on_C_x64.isDirectory)
+
+
+			protected function windowedapplication1_windowCompleteHandler(event:AIREvent):void
 			{
-				Alert.show("VLC is not installed on your PC; There is no Any folder like VideoLAN near by this app .exe file");
+				checkVLCandFFMpeg();
 			}
-			}
+
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -289,7 +287,26 @@
 			<s:Button label="Log Out" bottom="10" right="10" click="button1_clickHandler(event)"/>
 		</s:NavigatorContent>
 		<s:NavigatorContent label="View" width="100%" height="100%" skinClass="cobalt.skins.SkinnableContainerSkin" click="select1.selectedIndex = 1;">
-			<s:VideoPlayer skinClass="VPS" right="0" left="0" top="0" bottom="0"/>
+			<mx:TabNavigator right="0" left="0" top="0" bottom="0" id="stackView">
+				<s:NavigatorContent label="Preview" width="100%" height="100%">
+					<mx:Form width="326" horizontalCenter="0" textAlign="center" verticalCenter="0">
+						<mx:FormHeading label="View options" width="100%"/>
+						<mx:FormHeading label="Select Prewiew" width="100%"/>
+						<mx:FormItem label="Prewiew from" width="100%">
+							<s:Button label="Local network" width="100%" click="stackView.selectedIndex=1"/>
+						</mx:FormItem>
+						<mx:FormItem label="Prewiew from" width="100%">
+							<s:Button label="Cloud network" width="100%" click="stackView.selectedIndex=2" enabled="false"/>
+						</mx:FormItem>
+					</mx:Form>
+				</s:NavigatorContent>
+				<s:NavigatorContent label="Local" width="100%" height="100%">
+					<s:VideoPlayer skinClass="VPS" left="0" right="0" top="0" bottom="0"/>
+				</s:NavigatorContent>
+				<s:NavigatorContent label="From Cloud" width="100%" creationComplete="previewFromCloud_creationCompleteHandler(event)" height="100%" id="previewFromCloud">
+					<s:VideoPlayer skinClass="VPS" left="0" right="0" top="0" bottom="0"/>
+				</s:NavigatorContent>
+			</mx:TabNavigator>
 		</s:NavigatorContent>
 		<s:NavigatorContent label="Debug" width="100%" height="100%" id="DebugWindow">
 
@@ -344,6 +361,15 @@
 					</mx:Form>
 				</s:NavigatorContent>
 			</mx:TabNavigator>
+		</s:NavigatorContent>
+		<s:NavigatorContent label="Options" width="100%" height="100%">
+			<mx:Form x="78" y="72">
+				<mx:FormHeading label="View options"/>
+				<mx:FormItem label="Label">
+					<mx:ToggleButtonBar>
+					</mx:ToggleButtonBar>
+				</mx:FormItem>
+			</mx:Form>
 		</s:NavigatorContent>
 	</mx:TabNavigator>
 	<s:Label text="{getMyNameResult.lastResult}" textAlign="center" verticalAlign="middle" right="2" top="2" id="labelName"/>
