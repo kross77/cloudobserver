@@ -6,7 +6,7 @@
 					   xmlns:api="services.api.*"
 					   creationComplete="windowedapplication1_creationCompleteHandler(event)"
 					   windowComplete="windowedapplication1_windowCompleteHandler(event)"
-					   width="400">
+					   width="400" minWidth="340"   maxWidth="440" maxHeight="600">
 	<fx:Style source="Main.css"/>
 	<fx:Script>
 		<![CDATA[
@@ -50,8 +50,8 @@
 			public var VLC_EXE_File:File = new File;
 			[Bindable]
 			public var CO_Lift_EXE_File:File = new File;
-
-
+			
+			
 			protected function gatewayInactive(event:FaultEvent):void{
 				textArea.text += " Был указан адресс ядрышка. По данному адресу ядрышко не пашет";
 			}
@@ -77,10 +77,10 @@
 				startVLC();	
 				tabnav.selectedIndex = 2;
 			}
-
+			
 			protected function goCloud():void
 			{
-			
+				
 				gatewayUri = gatewayUri + "?wsdl";
 				//textArea.text +=  " \n Принятый GW Uri : " + gatewayUri;	
 				var gateway:Gateway = new Gateway;
@@ -89,17 +89,18 @@
 				gateway.addEventListener(FaultEvent.FAULT, gatewayInactive);
 				GetWorkBlockResult.token = gateway.GetWorkBlock();
 				//		textArea.text +=  "GetWorkBlockResult.token = gateway.GetWorkBlock() ";
-	
+				
 			}
-
+			
 			protected function LogIn_clickHandler(event:MouseEvent):void
 			{
 				api = new Api();
-				api.showBusyCursor = true;
+				
 				api.serviceStart(apiUri);
+				api.showBusyCursor = true;
 				LogInResult.token = api.LogIn(emailTF.text, passwordTF.text);
 				tabnav.selectedIndex=1;
-
+				
 			}
 			protected function getUserData():void
 			{
@@ -108,13 +109,13 @@
 				getCOADRResult.token = api.getGatewayAddress(userKey);
 				
 			}
-
+			
 			protected function LogInResult_resultHandler(event:ResultEvent):void
 			{
 				userKey = LogInResult.lastResult;
 				getUserData();
 			}
-
+			
 			protected function windowedapplication1_creationCompleteHandler(event:FlexEvent):void
 			{
 				//DebugWindow.enabled =false; 
@@ -124,10 +125,10 @@
 			}
 			
 			
-		
+			
 			protected function EnableDebuger(e:KeyboardEvent):void
 			{
-			//	labelName.text = e.keyCode.toString() + " " + flash.system.Capabilities.cpuArchitecture.toString();
+				//	labelName.text = e.keyCode.toString() + " " + flash.system.Capabilities.cpuArchitecture.toString();
 				if (e.keyCode.toString() == "49"){ 
 					DebugWindow.enabled = true;
 				}
@@ -149,23 +150,23 @@
 				goCloud();	
 				
 			}
-
+			
 			protected function getCOADRResult_resultHandler(event:ResultEvent):void
 			{
 				gatewayUri = String(getCOADRResult.lastResult);
 			}
-
+			
 			protected function button1_clickHandler(event:MouseEvent):void
 			{
 				LogOut.token = api.getGatewayAddress(userKey);
 				tabnav.selectedIndex = 0; start1.selectedIndex = 0;
 			}
-
+			
 			protected function LogOut_resultHandler(event:ResultEvent):void
 			{
 				labelName.text = "you just logged out";
 			}
-
+			
 			protected function AntSnewstream_creationCompleteHandler(event:FlexEvent):void
 			{
 				AntSnewstream.enabled = false;
@@ -182,9 +183,9 @@
 			
 			protected function checkVLCandFFMpeg():void
 			{
-			
-			//	Alert.show("VLC+FFMPEG is not installed in this programm folder so we will download it...");
-			
+				
+				//	Alert.show("VLC+FFMPEG is not installed in this programm folder so we will download it...");
+				
 			}
 			protected function checkLift():void
 			{
@@ -194,39 +195,39 @@
 			{
 				
 			}
-
+			
 			protected function previewFromCloud_creationCompleteHandler(event:FlexEvent):void
 			{
 				//previewFromCloud.enabled = false;
 			}
-
-
+			
+			
 			protected function windowedapplication1_windowCompleteHandler(event:AIREvent):void
 			{
 				checkVLCandFFMpeg();
 			}
-
-
+			
+			
 			protected function textinput1_changeHandler(event:TextOperationEvent):void
 			{
 				apiUri = APISTR.text;
 				
 			}
-
-
+			
+			
 			protected function APISTR_enterHandler(event:FlexEvent):void
 			{
 				apiUri = APISTR.text;
 				tabnav.selectedIndex = 0;
 			}
-
-
+			
+			
 			protected function button2_clickHandler(event:MouseEvent):void
 			{
 				apiUri = APISTR.text;
 				tabnav.selectedIndex = 0;
 			}
-
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -339,7 +340,7 @@
 							<s:Button label="Cloud network" width="100%" click="stackView.selectedIndex=2" enabled="true"/>
 						</mx:FormItem>
 					</mx:Form>
-					<s:Button label="Select another stream for broadcast" width="224"  click="tabnav.selectedIndex = 2"  right="6" bottom="7"/>
+					<s:Button label="Select another stream for broadcast" width="224"  click="tabnav.selectedIndex = 1"  right="6" bottom="7"/>
 				</s:NavigatorContent>
 				<s:NavigatorContent label="Local" width="100%" height="100%">
 					
@@ -351,11 +352,11 @@
 					<s:Button x="331" y="7" label="Log Out" click="button1_clickHandler(event)"/>
 					<s:Button x="9" y="7" click="stackView.selectedIndex = 0" label="Return to preview form selection"/>
 					<s:VideoPlayer skinClass="VPS" left="0" right="0" top="35" bottom="0"/>
-						</s:NavigatorContent>
+				</s:NavigatorContent>
 			</mx:TabNavigator>
 		</s:NavigatorContent>
 		<s:NavigatorContent label="Debug" width="100%" height="100%" id="DebugWindow">
-
+			
 			<mx:TabNavigator right="0" left="0" top="0" bottom="0" id="debug1">
 				<s:NavigatorContent  label="You Entered THE debug mode" width="100%" height="100%">
 					<mx:Form horizontalCenter="0" verticalCenter="0">
@@ -422,5 +423,5 @@
 		</s:NavigatorContent>
 	</mx:TabNavigator>
 	<s:Label text="{getMyNameResult.lastResult}" textAlign="center" blendMode="invert" verticalAlign="middle" right="2" top="2" id="labelName"/>
-
+	
 </s:WindowedApplication>
