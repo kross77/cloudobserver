@@ -20,10 +20,12 @@
 			import services.gateway.Gateway;
 			import services.workblock.WorkBlock;
 			
+			import spark.events.TextOperationEvent;
+			
 			[Bindable]
 			public var api:Api = new Api();
 			[Bindable]
-			public var apiUri:String = "http://localhost/cms5/api.php";
+			public var apiUri:String = "http://localhost/cms/api.php";
 			[Bindable]
 			public var userKey:String = new String();
 			[Bindable]
@@ -73,6 +75,7 @@
 			protected function IWannaWriteResult_resultHandler(event:ResultEvent):void
 			{
 				startVLC();	
+				tabnav.selectedIndex = 2;
 			}
 
 			protected function goCloud():void
@@ -113,9 +116,10 @@
 
 			protected function windowedapplication1_creationCompleteHandler(event:FlexEvent):void
 			{
-				DebugWindow.enabled =false; 
-				SignUpP.enabled = false;
+				//DebugWindow.enabled =false; 
+				//SignUpP.enabled = false;
 				this.addEventListener(KeyboardEvent.KEY_UP, EnableDebuger);
+				tabnav.top = -50;
 			}
 			
 			
@@ -123,7 +127,18 @@
 			protected function EnableDebuger(e:KeyboardEvent):void
 			{
 			//	labelName.text = e.keyCode.toString() + " " + flash.system.Capabilities.cpuArchitecture.toString();
-				if (e.keyCode.toString() == "49"){ DebugWindow.enabled = true;}
+				if (e.keyCode.toString() == "49"){ 
+					DebugWindow.enabled = true;
+				}
+				if (e.keyCode.toString() == "50"){ 
+					DebugWindow.enabled = false;
+				}
+				if (e.keyCode.toString() == "51"){ 
+					tabnav.top = 0;
+				}
+				if (e.keyCode.toString() == "52"){ 
+					tabnav.top = -50;
+				}
 			}
 			
 			protected function streamFromListBut_clickHandler(event:MouseEvent):void
@@ -131,6 +146,7 @@
 				contentToWriteId = int(list.selectedItem);
 				
 				goCloud();	
+				
 			}
 
 			protected function getCOADRResult_resultHandler(event:ResultEvent):void
@@ -166,12 +182,12 @@
 			protected function checkVLCandFFMpeg():void
 			{
 			
-				Alert.show("VLC+FFMPEG is not installed in this programm folder so we will download it...");
+			//	Alert.show("VLC+FFMPEG is not installed in this programm folder so we will download it...");
 			
 			}
 			protected function checkLift():void
 			{
-				Alert.show("Lift is not installed in this programm folder so we will download it...");
+				//Alert.show("Lift is not installed in this programm folder so we will download it...");
 			}
 			protected function startVLC():void
 			{
@@ -180,13 +196,34 @@
 
 			protected function previewFromCloud_creationCompleteHandler(event:FlexEvent):void
 			{
-				previewFromCloud.enabled = false;
+				//previewFromCloud.enabled = false;
 			}
 
 
 			protected function windowedapplication1_windowCompleteHandler(event:AIREvent):void
 			{
 				checkVLCandFFMpeg();
+			}
+
+
+			protected function textinput1_changeHandler(event:TextOperationEvent):void
+			{
+				apiUri = APISTR.text;
+				
+			}
+
+
+			protected function APISTR_enterHandler(event:FlexEvent):void
+			{
+				apiUri = APISTR.text;
+				tabnav.selectedIndex = 0;
+			}
+
+
+			protected function button2_clickHandler(event:MouseEvent):void
+			{
+				apiUri = APISTR.text;
+				tabnav.selectedIndex = 0;
 			}
 
 		]]>
@@ -201,7 +238,7 @@
 		<s:CallResponder id="IWannaWriteResult"  result="IWannaWriteResult_resultHandler(event)"/>
 		<s:CallResponder id="GetWorkBlockResult"  result="GetWorkBlockResult_resultHandler(event)"/>
 	</fx:Declarations>
-	<mx:TabNavigator  left="0" right="0" bottom="0" top="0"   id="tabnav">
+	<mx:TabNavigator  left="0" right="0" bottom="0" top="0"   id="tabnav" selectedIndex="5">
 		<s:NavigatorContent label="Start" width="100%" backgroundAlpha="0" height="100%"  >
 			<s:layout>
 				<s:BasicLayout/>
@@ -275,6 +312,7 @@
 							<s:Button label="Stream!" id="streamFromListBut" click="streamFromListBut_clickHandler(event)"/>
 						</mx:FormItem>
 					</mx:Form>
+					<s:Button label="Select another broadcast method" width="195" click="select1.selectedIndex=0" bottom="10" right="83"/>
 				</s:NavigatorContent>
 				<s:NavigatorContent label="On to New stream" creationComplete="AntSnewstream_creationCompleteHandler(event)" width="100%" height="100%"  id="AntSnewstream">
 					<mx:Form width="326" height="70" horizontalCenter="0" verticalCenter="0">
@@ -282,11 +320,12 @@
 							<s:Button label="Stream onto new stream"/>
 						</mx:FormItem>
 					</mx:Form>
+					<s:Button label="Select another broadcast method" width="195" click="select1.selectedIndex=0" right="83" top="420"/>
 				</s:NavigatorContent>
 			</mx:TabNavigator>
 			<s:Button label="Log Out" bottom="10" right="10" click="button1_clickHandler(event)"/>
 		</s:NavigatorContent>
-		<s:NavigatorContent label="View" width="100%" height="100%" skinClass="cobalt.skins.SkinnableContainerSkin" click="select1.selectedIndex = 1;">
+		<s:NavigatorContent label="View" width="100%" height="100%" skinClass="cobalt.skins.SkinnableContainerSkin" >
 			<mx:TabNavigator right="0" left="0" top="0" bottom="0" id="stackView">
 				<s:NavigatorContent label="Preview" width="100%" height="100%">
 					<mx:Form width="326" horizontalCenter="0" textAlign="center" verticalCenter="0">
@@ -296,16 +335,21 @@
 							<s:Button label="Local network" width="100%" click="stackView.selectedIndex=1"/>
 						</mx:FormItem>
 						<mx:FormItem label="Prewiew from" width="100%">
-							<s:Button label="Cloud network" width="100%" click="stackView.selectedIndex=2" enabled="false"/>
+							<s:Button label="Cloud network" width="100%" click="stackView.selectedIndex=2" enabled="true"/>
 						</mx:FormItem>
 					</mx:Form>
 				</s:NavigatorContent>
 				<s:NavigatorContent label="Local" width="100%" height="100%">
-					<s:VideoPlayer skinClass="VPS" left="0" right="0" top="0" bottom="0"/>
+					
+					<s:Button x="331" y="7" label="Log Out" click="button1_clickHandler(event)"/>
+					<s:Button x="9" y="7" click="stackView.selectedIndex = 0" label="Return to preview form selection"/>
+					<s:VideoPlayer skinClass="VPS" left="0" right="0" top="25" bottom="0"/>
 				</s:NavigatorContent>
 				<s:NavigatorContent label="From Cloud" width="100%" creationComplete="previewFromCloud_creationCompleteHandler(event)" height="100%" id="previewFromCloud">
-					<s:VideoPlayer skinClass="VPS" left="0" right="0" top="0" bottom="0"/>
-				</s:NavigatorContent>
+					<s:Button x="331" y="7" label="Log Out" click="button1_clickHandler(event)"/>
+					<s:Button x="9" y="7" click="stackView.selectedIndex = 0" label="Return to preview form selection"/>
+					<s:VideoPlayer skinClass="VPS" left="0" right="0" top="25" bottom="0"/>
+						</s:NavigatorContent>
 			</mx:TabNavigator>
 		</s:NavigatorContent>
 		<s:NavigatorContent label="Debug" width="100%" height="100%" id="DebugWindow">
@@ -363,11 +407,14 @@
 			</mx:TabNavigator>
 		</s:NavigatorContent>
 		<s:NavigatorContent label="Options" width="100%" height="100%">
-			<mx:Form x="78" y="72">
-				<mx:FormHeading label="View options"/>
-				<mx:FormItem label="Label">
-					<mx:ToggleButtonBar>
-					</mx:ToggleButtonBar>
+			<mx:Form horizontalCenter="0" verticalCenter="0" width="326">
+				<mx:FormHeading label="API options" width="100%" textAlign="center"/>
+				<mx:FormHeading label="В релизе будет запрятано глубже"/>
+				<mx:FormItem label="CMS URL" width="100%">
+					<s:TextInput x="47" y="9" change="textinput1_changeHandler(event)" enter="APISTR_enterHandler(event)" id="APISTR" text="http://localhost/cms/api.php" width="100%"/>
+				</mx:FormItem>
+				<mx:FormItem>
+					<s:Button label="Start using adress!" click="button2_clickHandler(event)"/>
 				</mx:FormItem>
 			</mx:Form>
 		</s:NavigatorContent>
