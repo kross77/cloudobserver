@@ -86,11 +86,7 @@
 			{
 				workBlockUri = event.result as String;
 				workBlockUri += "?wsdl";
-				//textArea.text +=  " \n Принятый Work Block Uri: " + workBlockUri;
-				//contentToWriteId =  int(contentToWriteIdtf.text);
-				//ContentType = "video/x-flv"; //ContentTypetf.text;
-				var workBlock:WorkBlock = new WorkBlock;
-				
+				var workBlock:WorkBlock = new WorkBlock;		
 				workBlock.addEventListener(FaultEvent.FAULT, gatewayInactive);
 				workBlock.serviceStart(workBlockUri);
 				workBlock.showBusyCursor = true;
@@ -100,7 +96,6 @@
 			protected function IWannaWriteResult_resultHandler(event:ResultEvent):void
 			{
 				tabnav.selectedIndex = 2;
-			///	READY_FOR_LIFTING2 = "1"
 				var minuteTimer:Timer = new Timer(10000, 1); 
 				minuteTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onTimerComplete); 
 				minuteTimer.start(); 	
@@ -262,8 +257,7 @@
 			}
 			public function onTimerComplete(event:TimerEvent):void 
 			{ 
-				runLift();
-			//	READY_FOR_LIFTING = "1";	
+				runLift();	
 			} 
 			private function runVLC():void
 			{
@@ -300,7 +294,7 @@
 				if (!file.exists){
 				var fs:FileStream = new FileStream();
 				fs.open(file, FileMode.WRITE);
-				fs.writeUTFBytes( 'taskkill /F /IM vlc1.exe' );			
+				fs.writeUTFBytes( 'taskkill /F /IM vlc1.exe' + ' \n ' + 'DEL "%~f0"' );		
 				fs.close();
 				}
 				BATKiller_EXE_File = file.nativePath;
@@ -315,6 +309,7 @@
 				args.push('"' + BATKiller_EXE_File + '"' );
 				nativeProcessStartupInfo.arguments = args;
 				process.start(nativeProcessStartupInfo);
+				VLC_ON = "0";
 			} 
 			protected function windowedapplication1_closingHandler(event:Event):void
 			{
@@ -324,7 +319,7 @@
 				file =File.userDirectory.resolvePath("./AIR-VLC-CLIENT/Kill.bat");
 				var fs:FileStream = new FileStream();
 				fs.open(file, FileMode.WRITE);
-				fs.writeUTFBytes( 'taskkill /F /IM vlc1.exe' );			
+				fs.writeUTFBytes( 'taskkill /F /IM vlc1.exe' + ' \n ' + 'DEL "%~f0"' );			
 				fs.close();
 				BATKiller_EXE_File = file.nativePath;
 				file= File.applicationDirectory;
