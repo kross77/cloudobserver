@@ -12,8 +12,18 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "renderer_writer", "renderer_writer\renderer_writer.vcproj", "{7ED11236-6F3F-454F-8636-E1962EF2D341}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cloud_stream_renderer", "cloud_stream_renderer\cloud_stream_renderer.vcproj", "{8632F0A2-B568-484C-B5FB-274C3C440A86}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B0828B64-2C72-46E6-90F8-EF0CF6BB6DFF} = {B0828B64-2C72-46E6-90F8-EF0CF6BB6DFF}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test_ictrl", "test_ictrl\test_ictrl.csproj", "{7BDC7550-974B-4C80-951F-20FD95036FC1}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CloudInterfacesLib", "CloudInterfacesLib\CloudInterfacesLib.vcproj", "{B0828B64-2C72-46E6-90F8-EF0CF6BB6DFF}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CloudInterfacesLibPS", "CloudInterfacesLib\CloudInterfacesLibPS.vcproj", "{EC435E67-5659-4565-9804-407BCDF98294}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B0828B64-2C72-46E6-90F8-EF0CF6BB6DFF} = {B0828B64-2C72-46E6-90F8-EF0CF6BB6DFF}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -95,6 +105,22 @@ Global
 		{7BDC7550-974B-4C80-951F-20FD95036FC1}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{7BDC7550-974B-4C80-951F-20FD95036FC1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{7BDC7550-974B-4C80-951F-20FD95036FC1}.Release|Win32.ActiveCfg = Release|Any CPU
+		{B0828B64-2C72-46E6-90F8-EF0CF6BB6DFF}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{B0828B64-2C72-46E6-90F8-EF0CF6BB6DFF}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{B0828B64-2C72-46E6-90F8-EF0CF6BB6DFF}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{B0828B64-2C72-46E6-90F8-EF0CF6BB6DFF}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B0828B64-2C72-46E6-90F8-EF0CF6BB6DFF}.Debug|Win32.Build.0 = Debug|Win32
+		{B0828B64-2C72-46E6-90F8-EF0CF6BB6DFF}.Release|Any CPU.ActiveCfg = Release|Win32
+		{B0828B64-2C72-46E6-90F8-EF0CF6BB6DFF}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{B0828B64-2C72-46E6-90F8-EF0CF6BB6DFF}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{B0828B64-2C72-46E6-90F8-EF0CF6BB6DFF}.Release|Win32.ActiveCfg = Release|Win32
+		{B0828B64-2C72-46E6-90F8-EF0CF6BB6DFF}.Release|Win32.Build.0 = Release|Win32
+		{EC435E67-5659-4565-9804-407BCDF98294}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{EC435E67-5659-4565-9804-407BCDF98294}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{EC435E67-5659-4565-9804-407BCDF98294}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EC435E67-5659-4565-9804-407BCDF98294}.Release|Any CPU.ActiveCfg = Release|Win32
+		{EC435E67-5659-4565-9804-407BCDF98294}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{EC435E67-5659-4565-9804-407BCDF98294}.Release|Win32.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

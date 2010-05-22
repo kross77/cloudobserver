@@ -1,7 +1,7 @@
 #pragma once
 #include "InputPin.h"
-#include "cloud_ctrl_h.h"
-#include "cloud_ds_interfaces.h"
+#include "CloudInterfacesLib_i.h"
+
 //We must implement 2 functions CheckMediaType and DoRenderSample
 class CFilter : public CBaseRenderer, ICloudInetControl
 {

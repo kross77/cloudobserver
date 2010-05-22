@@ -42,7 +42,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(DIRECTX_BASECLASSES_DIR)"
+				AdditionalIncludeDirectories="$(DIRECTX_BASECLASSES_DIR);$(SolutionDir)\InterfacesDefinition; "
 				PreprocessorDefinitions="WIN32;_DEBUG"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -64,10 +64,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="oleaut32.lib  strmbasd.lib  winmm.lib  ws2_32.lib"
+				AdditionalDependencies="CloudInterfacesLib.lib oleaut32.lib  strmbasd.lib  winmm.lib  ws2_32.lib "
 				OutputFile="$(OutDir)\cloud_stream_renderer.ax"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="C:\Program Files\Microsoft SDKs\Windows\v6.1\Samples\Multimedia\DirectShow\BaseClasses\Debug_MBCS"
+				AdditionalLibraryDirectories="$(SolutionDir)\InterfacesDefinition; C:\Program Files\Microsoft SDKs\Windows\v6.1\Samples\Multimedia\DirectShow\BaseClasses\Debug_MBCS"
 				ModuleDefinitionFile="dll.def"
 				GenerateDebugInformation="true"
 				AssemblyDebug="0"
@@ -194,7 +194,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\cloud_ctrl_i.c"
+				RelativePath="..\InterfacesDefinition\CloudInterfacesLib_i.c"
 				>
 			</File>
 			<File
@@ -239,14 +239,6 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
-			<File
-				RelativePath=".\cloud_ctrl.idl"
-				>
-			</File>
-			<File
-				RelativePath=".\cloud_ds_interfaces.h"
-				>
-			</File>
 			<File
 				RelativePath=".\dll.h"
 				>

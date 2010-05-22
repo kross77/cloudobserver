@@ -129,12 +129,7 @@ HRESULT CFilter::SetAddress( LPCOLESTR pszAddress, int port)
 	return NOERROR;
 }
 
-//STDMETHODIMP CInputPin::EndOfStream(void)
-//{
-//	return CRendererInputPin::EndOfStream();
-//}
 
-#include "cloud_ctrl_h.h"
 //
 // NonDelegatingQueryInterface
 //
