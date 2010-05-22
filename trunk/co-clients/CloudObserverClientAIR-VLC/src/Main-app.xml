@@ -88,21 +88,21 @@
     <!-- devices supported by AIR. If you wish to restrict deployment -->
     <!-- (i.e., to only mobile devices) then add this element and list -->
     <!-- only the profiles which your application does support. -->
-   <supportedProfiles>desktop extendedDesktop</supportedProfiles>
+   <supportedProfiles>extendedDesktop</supportedProfiles>
 	<!-- The subpath of the standard default installation location to use. Optional. -->
 	<!-- <installFolder></installFolder> -->
 
 	<!-- The subpath of the Programs menu to use. (Ignored on operating systems without a Programs menu.) Optional. -->
-	<!-- <programMenuFolder></programMenuFolder> -->
+	 <programMenuFolder>./AIR-VLC-CLIENT</programMenuFolder> 
 
 	<!-- The icon the system uses for the application. For at least one resolution,
 		 specify the path to a PNG file included in the AIR package. Optional. -->
-	<!-- <icon>
-		<image16x16></image16x16>
-		<image32x32></image32x32>
-		<image48x48></image48x48>
-		<image128x128></image128x128>
-	</icon> -->
+	<icon>
+		<image16x16>icons/AIRApp_16.png</image16x16>
+		<image32x32>icons/AIRApp_32.png</image32x32>
+		<image48x48>icons/AIRApp_48.png</image48x48>
+		<image128x128>icons/AIRApp_128.png</image128x128>
+	</icon>
 
 	<!-- Whether the application handles the update when a user double-clicks an update version
 	of the AIR file (true), or the default AIR application installer handles the update (false).

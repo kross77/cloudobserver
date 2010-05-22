@@ -3,6 +3,7 @@
 					   xmlns:s="library://ns.adobe.com/flex/spark" 
 					   xmlns:mx="library://ns.adobe.com/flex/mx" 
 					   minHeight="500"
+					   showStatusBar="false"
 					   xmlns:api="services.api.*"
 					   creationComplete="windowedapplication1_creationCompleteHandler(event)"
 					   windowComplete="windowedapplication1_windowCompleteHandler(event)"
@@ -31,7 +32,7 @@
 			[Bindable]
 			public var gatewayUri:String = new String(); 
 			[Bindable]
-			public var VLCString:String = new String(); 
+			public var VLCString:String = '-vvv -I rc dshow:// vdev adev size="640x480" --sout="#transcode{vcodec=FLV1,acodec=mp3,ab=128,channels=2,samplerate=44100}:duplicate{dst=std{access=http{mime=video/x-flv},mux=ffmpeg{flv},dst=:8080/stream.flv}}"' ;
 			[Bindable]
 			public var LIFTString:String = new String(); 
 			[Bindable]
@@ -47,13 +48,22 @@
 			[Bindable]
 			public var mp3Uris:String =  new String();	
 			[Bindable]
-			public var VLC_EXE_File:File = new File;
+			public var VLC_EXE_File:String = new String();
+			[Bindable]
+			public var VLCstring:String = new String(); 
 			[Bindable]
 			public var CO_Lift_EXE_File:File = new File;
+			[Bindable]
+			public var LiftString:String = new String();
 			
+			
+			private var process:NativeProcess;	
+			private var nativeProcessStartupInfo:NativeProcessStartupInfo;
+			private var fs:FileStream;
+			private var file:File;
 			
 			protected function gatewayInactive(event:FaultEvent):void{
-				textArea.text += " Был указан адресс ядрышка. По данному адресу ядрышко не пашет";
+				Alert.show(" Был указан адресс ядрышка. По данному адресу ядрышко не пашет");
 			}
 			protected function GetWorkBlockResult_resultHandler(event:ResultEvent):void
 			{
@@ -63,6 +73,7 @@
 				//contentToWriteId =  int(contentToWriteIdtf.text);
 				//ContentType = "video/x-flv"; //ContentTypetf.text;
 				var workBlock:WorkBlock = new WorkBlock;
+				
 				workBlock.addEventListener(FaultEvent.FAULT, gatewayInactive);
 				workBlock.serviceStart(workBlockUri);
 				workBlock.showBusyCursor = true;
@@ -74,16 +85,21 @@
 			} 
 			protected function IWannaWriteResult_resultHandler(event:ResultEvent):void
 			{
-				startVLC();	
+				//startVLC();	
 				tabnav.selectedIndex = 2;
+				
+				localVideoBox.source = "http://localhost:8080/stream.flv";
+				localVideoBox.play();
 			}
 			
 			protected function goCloud():void
 			{
-				
+				runVLC();
 				gatewayUri = gatewayUri + "?wsdl";
 				//textArea.text +=  " \n Принятый GW Uri : " + gatewayUri;	
 				var gateway:Gateway = new Gateway;
+				gateway.addEventListener(FaultEvent.FAULT, gatewayFAULT)
+				
 				gateway.serviceStart(gatewayUri);
 				gateway.showBusyCursor = true;
 				gateway.addEventListener(FaultEvent.FAULT, gatewayInactive);
@@ -95,25 +111,33 @@
 			protected function LogIn_clickHandler(event:MouseEvent):void
 			{
 				api = new Api();
-				
+				api.addEventListener(FaultEvent.FAULT, apiFAULT);
 				api.serviceStart(apiUri);
+				
 				api.showBusyCursor = true;
 				LogInResult.token = api.LogIn(emailTF.text, passwordTF.text);
-				tabnav.selectedIndex=1;
 				
+				
+			}
+			protected function apiFAULT(e:FaultEvent):void{
+				Alert.show("api fault");
+			}
+			protected function gatewayFAULT(e:FaultEvent):void{
+				Alert.show("gateway fault");
 			}
 			protected function getUserData():void
 			{
 				getDataResult.token = api.getData(userKey);
 				getMyNameResult.token = api.getMyName(userKey);
 				getCOADRResult.token = api.getGatewayAddress(userKey);
-				
+				tabnav.selectedIndex=1;
 			}
 			
 			protected function LogInResult_resultHandler(event:ResultEvent):void
 			{
 				userKey = LogInResult.lastResult;
 				getUserData();
+				
 			}
 			
 			protected function windowedapplication1_creationCompleteHandler(event:FlexEvent):void
@@ -122,19 +146,25 @@
 				//SignUpP.enabled = false;
 				this.addEventListener(KeyboardEvent.KEY_UP, EnableDebuger);
 				tabnav.top = -50;
+				//if ( NativeProcess.isSupported ){
+					startCommunication(); //}
 			}
-			
+			protected function startCommunication():void
+			{
+				startVLC();
+				startLift();
+			}
 			
 			
 			protected function EnableDebuger(e:KeyboardEvent):void
 			{
 				//	labelName.text = e.keyCode.toString() + " " + flash.system.Capabilities.cpuArchitecture.toString();
-				if (e.keyCode.toString() == "49"){ 
-					DebugWindow.enabled = true;
-				}
-				if (e.keyCode.toString() == "50"){ 
-					DebugWindow.enabled = false;
-				}
+			//	if (e.keyCode.toString() == "49"){ 
+			//		DebugWindow.enabled = true;
+			//	}
+			//	if (e.keyCode.toString() == "50"){ 
+			//		DebugWindow.enabled = false;
+			//	}
 				if (e.keyCode.toString() == "51"){ 
 					tabnav.top = 0;
 				}
@@ -164,7 +194,7 @@
 			
 			protected function LogOut_resultHandler(event:ResultEvent):void
 			{
-				labelName.text = "you just logged out";
+				 Alert.show("you just logged out");
 			}
 			
 			protected function AntSnewstream_creationCompleteHandler(event:FlexEvent):void
@@ -193,7 +223,70 @@
 			}
 			protected function startVLC():void
 			{
+				var file:File = File.applicationDirectory;
+				file = file.resolvePath("apps/VLC");
+				file = file.resolvePath("vlc.exe");
+				nativeProcessStartupInfo = new NativeProcessStartupInfo();
+				nativeProcessStartupInfo.executable = file;
+				process = new NativeProcess();
+				process.addEventListener(ProgressEvent.STANDARD_ERROR_DATA, onErrorData);
+				Alert.show(file.nativePath);
+				VLC_EXE_File = file.nativePath;
+				Alert.show("Run VLC started");
+				createBAT();
+			}
+
+			
+			public function createBAT():void
+			{
+			// get a file reference to the storage directory
+			var file:File =File.userDirectory.resolvePath("./AIR-VLC-CLIENT/config.bat");
+			
+			
+			// create a file stream
+			var fs:FileStream = new FileStream();
+			
+			// open the stream for writting
+			fs.open(file, FileMode.WRITE);
+			
+			
+			// write the string data down to the file
+			fs.writeUTFBytes( '"' + VLC_EXE_File + '"' +' -vvv -I rc dshow:// vdev adev size="640x480" --sout="#transcode{vcodec=FLV1,acodec=mp3,ab=128,channels=2,samplerate=44100}:duplicate{dst=std{access=http{mime=video/x-flv},mux=ffmpeg{flv},dst=:8080/stream.flv}}"');			
+			
+			// ok close the file stream
+			fs.close();
+			
+			
+			// show the path to the file we have saved using Alert
+			Alert.show(file.nativePath);
+			}
+		
+			protected function startLift():void
+			{
+				var file:File = File.applicationDirectory;
+				file = file.resolvePath("apps/Lift");
+				file = file.resolvePath("lift.exe");
+				nativeProcessStartupInfo = new NativeProcessStartupInfo();
+				nativeProcessStartupInfo.executable = file;
+				process = new NativeProcess();
+				process.addEventListener(ProgressEvent.STANDARD_ERROR_DATA, onErrorData);
+				Alert.show(file.nativePath);
+			}
+			private function runVLC():void
+			{
+				createBAT();
+				var args:Vector.<String> = new Vector.<String>;
+				// optional parameters
+
+						args.push(VLCString);
+							// ********************
+				nativeProcessStartupInfo.arguments = args;
+				process.start(nativeProcessStartupInfo);
 				
+			}
+			private function onErrorData ( e:ProgressEvent ):void
+			{
+		//		Alert.show( process.standardError.readUTFBytes(process.standardError.bytesAvailable));
 			}
 			
 			protected function previewFromCloud_creationCompleteHandler(event:FlexEvent):void
@@ -228,6 +321,12 @@
 				tabnav.selectedIndex = 0;
 			}
 			
+
+			protected function textinput2_changeHandler(event:TextOperationEvent):void
+			{
+				VLCString = VCA.text;
+			}
+
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -346,7 +445,7 @@
 					
 					<s:Button x="331" y="7" label="Log Out" click="button1_clickHandler(event)"/>
 					<s:Button x="9" y="7" click="stackView.selectedIndex = 0" label="Return to preview form selection"/>
-					<s:VideoPlayer skinClass="VPS" left="0" right="0" top="35" bottom="0"/>
+					<s:VideoPlayer skinClass="VPS" left="0" right="0" top="35"  bottom="0" id="localVideoBox"/>
 				</s:NavigatorContent>
 				<s:NavigatorContent label="From Cloud" width="100%" creationComplete="previewFromCloud_creationCompleteHandler(event)" height="100%" id="previewFromCloud">
 					<s:Button x="331" y="7" label="Log Out" click="button1_clickHandler(event)"/>
@@ -398,7 +497,7 @@
 				<s:NavigatorContent label="Vlc-Lift" width="100%" height="100%">
 					<mx:Form x="10" y="10" width="376" height="120">
 						<mx:FormItem label="VLC string" width="100%" height="100%">
-							<s:TextInput width="100%" height="100%" text="{VLCString}"/>
+							<s:TextInput width="100%" height="100%" text="{VLCString}" change="textinput2_changeHandler(event)" id="VCA"/>
 						</mx:FormItem>
 					</mx:Form>
 					<mx:Form x="12" y="155" width="376" height="120">
@@ -422,6 +521,5 @@
 			</mx:Form>
 		</s:NavigatorContent>
 	</mx:TabNavigator>
-	<s:Label text="{getMyNameResult.lastResult}" textAlign="center" blendMode="invert" verticalAlign="middle" right="2" top="2" id="labelName"/>
 	
 </s:WindowedApplication>
