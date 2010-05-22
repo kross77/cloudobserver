@@ -65,7 +65,7 @@ public class WorkBlock extends WebServiceWrapper
 	} 
 	public function IWannaWrite(id:int, contentType:String) : mx.rpc.AsyncToken
 	{
-			model_internal::loadWSDLIfNecessary();
+		//	model_internal::loadWSDLIfNecessary();
 		var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("IWannaWrite");
 		var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(id,contentType) ;
 		

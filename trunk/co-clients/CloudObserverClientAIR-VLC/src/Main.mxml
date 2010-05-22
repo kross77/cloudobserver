@@ -3,7 +3,8 @@
 					   xmlns:s="library://ns.adobe.com/flex/spark" 
 					   xmlns:mx="library://ns.adobe.com/flex/mx" 
 					   minHeight="500"
-					   showStatusBar="false"
+					   showStatusBar="false" 
+					   closing="windowedapplication1_closingHandler(event)"
 					   xmlns:api="services.api.*"
 					   creationComplete="windowedapplication1_creationCompleteHandler(event)"
 					   windowComplete="windowedapplication1_windowCompleteHandler(event)"
@@ -32,7 +33,9 @@
 			[Bindable]
 			public var gatewayUri:String = new String(); 
 			[Bindable]
-			public var VLCString:String = '-vvv -I rc dshow:// vdev adev size="640x480" --sout="#transcode{vcodec=FLV1,acodec=mp3,ab=128,channels=2,samplerate=44100}:duplicate{dst=std{access=http{mime=video/x-flv},mux=ffmpeg{flv},dst=:8080/stream.flv}}"' ;
+			public var VLCRESXString:String = new String(); 
+			[Bindable]
+			public var VLCRESYString:String = new String(); 
 			[Bindable]
 			public var LIFTString:String = new String(); 
 			[Bindable]
@@ -50,7 +53,17 @@
 			[Bindable]
 			public var VLC_EXE_File:String = new String();
 			[Bindable]
+			public var VLC_ON:String = new String();
+			[Bindable]
+			public var GWADR_ISSET:String = new String();
+			[Bindable]
+			public var BAT_EXE_File:String = new String();
+			[Bindable]
+			public var BATKiller_EXE_File:String = new String();
+			[Bindable]
 			public var VLCstring:String = new String(); 
+			[Bindable]
+			public var gateway:Gateway = new Gateway;
 			[Bindable]
 			public var CO_Lift_EXE_File:File = new File;
 			[Bindable]
@@ -77,35 +90,31 @@
 				workBlock.addEventListener(FaultEvent.FAULT, gatewayInactive);
 				workBlock.serviceStart(workBlockUri);
 				workBlock.showBusyCursor = true;
-				//textArea.text +=  " \n Принятый Work Block Uri: " + workBlockUri;
-				// var contentIds:ArrayCollection = new ArrayCollection(contentIdsArray);
-				//textArea.text +=  " \n Переведенный в ArrayCollection массив идентификаторов потока: " + contentIds.toString();
 				IWannaWriteResult.token = workBlock.IWannaWrite(contentToWriteId, ContentType);
 				
 			} 
 			protected function IWannaWriteResult_resultHandler(event:ResultEvent):void
 			{
-				//startVLC();	
 				tabnav.selectedIndex = 2;
-				
-				localVideoBox.source = "http://localhost:8080/stream.flv";
-				localVideoBox.play();
 			}
 			
 			protected function goCloud():void
 			{
+			//	KillVLC();
+				if(VLC_ON != "1")
+				{
 				runVLC();
+				}
+				if(GWADR_ISSET != "1")
+				{
 				gatewayUri = gatewayUri + "?wsdl";
-				//textArea.text +=  " \n Принятый GW Uri : " + gatewayUri;	
-				var gateway:Gateway = new Gateway;
-				gateway.addEventListener(FaultEvent.FAULT, gatewayFAULT)
-				
+				GWADR_ISSET = "1";
+				gateway = new Gateway;
+				gateway.addEventListener(FaultEvent.FAULT, gatewayFAULT);
 				gateway.serviceStart(gatewayUri);
-				gateway.showBusyCursor = true;
-				gateway.addEventListener(FaultEvent.FAULT, gatewayInactive);
-				GetWorkBlockResult.token = gateway.GetWorkBlock();
-				//		textArea.text +=  "GetWorkBlockResult.token = gateway.GetWorkBlock() ";
-				
+				gateway.showBusyCursor = true;	
+				}
+				GetWorkBlockResult.token = gateway.GetWorkBlock();		
 			}
 			
 			protected function LogIn_clickHandler(event:MouseEvent):void
@@ -151,7 +160,7 @@
 			}
 			protected function startCommunication():void
 			{
-				startVLC();
+				
 				startLift();
 			}
 			
@@ -223,22 +232,18 @@
 			}
 			protected function startVLC():void
 			{
-				var file:File = File.applicationDirectory;
-				file = file.resolvePath("apps/VLC");
-				file = file.resolvePath("vlc.exe");
-				nativeProcessStartupInfo = new NativeProcessStartupInfo();
-				nativeProcessStartupInfo.executable = file;
-				process = new NativeProcess();
-				process.addEventListener(ProgressEvent.STANDARD_ERROR_DATA, onErrorData);
-				Alert.show(file.nativePath);
-				VLC_EXE_File = file.nativePath;
-				Alert.show("Run VLC started");
+
 				createBAT();
 			}
 
 			
 			public function createBAT():void
 			{
+				VLC_ON = "1";
+				var fileVLC:File = File.applicationDirectory;
+				fileVLC = fileVLC.resolvePath("apps/VLC");
+				fileVLC = fileVLC.resolvePath("vlc1.exe");
+				VLC_EXE_File = fileVLC.nativePath;
 			// get a file reference to the storage directory
 			var file:File =File.userDirectory.resolvePath("./AIR-VLC-CLIENT/config.bat");
 			
@@ -251,38 +256,49 @@
 			
 			
 			// write the string data down to the file
-			fs.writeUTFBytes( '"' + VLC_EXE_File + '"' +' -vvv -I rc dshow:// vdev adev size="640x480" --sout="#transcode{vcodec=FLV1,acodec=mp3,ab=128,channels=2,samplerate=44100}:duplicate{dst=std{access=http{mime=video/x-flv},mux=ffmpeg{flv},dst=:8080/stream.flv}}"');			
+			fs.writeUTFBytes( '@echo off \n' + '"' + VLC_EXE_File + '"' +' -I -o dshow:// vdev adev size="640x480" --sout="#transcode{vcodec=FLV1,acodec=mp3,ab=128,channels=2,samplerate=44100}:duplicate{dst=std{access=http{mime=video/x-flv},mux=ffmpeg{flv},dst=:8080/stream.flv}}"');			
 			
 			// ok close the file stream
 			fs.close();
 			
 			
 			// show the path to the file we have saved using Alert
-			Alert.show(file.nativePath);
+			BAT_EXE_File = file.nativePath;
+			startBAT();
 			}
-		
-			protected function startLift():void
+
+			protected function startBAT():void
 			{
 				var file:File = File.applicationDirectory;
+				file = file.resolvePath("apps");
+				file = file.resolvePath("Start.exe");
+				nativeProcessStartupInfo = new NativeProcessStartupInfo();
+				nativeProcessStartupInfo.executable = file;
+				process = new NativeProcess();
+				process.addEventListener(ProgressEvent.STANDARD_ERROR_DATA, onErrorData);
+				var args:Vector.<String> = new Vector.<String>;
+				// optional parameters
+				args.push('"' + BAT_EXE_File + '"' );
+				nativeProcessStartupInfo.arguments = args;
+				process.start(nativeProcessStartupInfo);
+				
+			}
+
+			
+			protected function startLift():void
+			{
+/* 				var file:File = File.applicationDirectory;
 				file = file.resolvePath("apps/Lift");
 				file = file.resolvePath("lift.exe");
 				nativeProcessStartupInfo = new NativeProcessStartupInfo();
 				nativeProcessStartupInfo.executable = file;
 				process = new NativeProcess();
 				process.addEventListener(ProgressEvent.STANDARD_ERROR_DATA, onErrorData);
-				Alert.show(file.nativePath);
+				Alert.show(file.nativePath); */
 			}
 			private function runVLC():void
 			{
-				createBAT();
-				var args:Vector.<String> = new Vector.<String>;
-				// optional parameters
-
-						args.push(VLCString);
-							// ********************
-				nativeProcessStartupInfo.arguments = args;
-				process.start(nativeProcessStartupInfo);
-				
+				createBAT();	
 			}
 			private function onErrorData ( e:ProgressEvent ):void
 			{
@@ -324,7 +340,66 @@
 
 			protected function textinput2_changeHandler(event:TextOperationEvent):void
 			{
-				VLCString = VCA.text;
+			//	VLCString = VCA.text;
+			}
+			protected function KillVLC():void
+			{
+				
+				file =File.userDirectory.resolvePath("./AIR-VLC-CLIENT/Kill.bat");
+				if (!file.exists){
+				var fs:FileStream = new FileStream();
+				fs.open(file, FileMode.WRITE);
+				fs.writeUTFBytes( 'taskkill /F /IM vlc1.exe' );			
+				fs.close();
+				}
+				BATKiller_EXE_File = file.nativePath;
+				file= File.applicationDirectory;
+				file = file.resolvePath("apps");
+				file = file.resolvePath("Start.exe");
+				nativeProcessStartupInfo = new NativeProcessStartupInfo();
+				nativeProcessStartupInfo.executable = file;
+				process = new NativeProcess();
+				process.addEventListener(ProgressEvent.STANDARD_ERROR_DATA, onErrorData);
+				var args:Vector.<String> = new Vector.<String>;
+				args.push('"' + BATKiller_EXE_File + '"' );
+				nativeProcessStartupInfo.arguments = args;
+				process.start(nativeProcessStartupInfo);
+			} 
+
+			protected function windowedapplication1_closingHandler(event:Event):void
+			{
+				if(VLC_ON != "1"){
+				var file:File =File.userDirectory.resolvePath("./AIR-VLC-CLIENT/config.bat");
+				file.deleteFile();
+				file =File.userDirectory.resolvePath("./AIR-VLC-CLIENT/Kill.bat");
+				var fs:FileStream = new FileStream();
+				fs.open(file, FileMode.WRITE);
+				fs.writeUTFBytes( 'taskkill /F /IM vlc1.exe' );			
+				fs.close();
+				BATKiller_EXE_File = file.nativePath;
+				file= File.applicationDirectory;
+				file = file.resolvePath("apps");
+				file = file.resolvePath("Start.exe");
+				nativeProcessStartupInfo = new NativeProcessStartupInfo();
+				nativeProcessStartupInfo.executable = file;
+				process = new NativeProcess();
+				process.addEventListener(ProgressEvent.STANDARD_ERROR_DATA, onErrorData);
+				var args:Vector.<String> = new Vector.<String>;
+				args.push('"' + BATKiller_EXE_File + '"' );
+				nativeProcessStartupInfo.arguments = args;
+				process.start(nativeProcessStartupInfo);
+				}
+				//file =File.userDirectory.resolvePath("./AIR-VLC-CLIENT/Kill.bat");
+				//file.deleteFile();
+				
+				
+			}
+
+
+			protected function localVideoBox_creationCompleteHandler(event:FlexEvent):void
+			{
+				localVideoBox.source = "http://localhost:8080/stream.flv";
+				localVideoBox.play();
 			}
 
 		]]>
@@ -435,9 +510,6 @@
 						<mx:FormItem label="Prewiew from" width="100%">
 							<s:Button label="Local network" width="100%" click="stackView.selectedIndex=1"/>
 						</mx:FormItem>
-						<mx:FormItem label="Prewiew from" width="100%">
-							<s:Button label="Cloud network" width="100%" click="stackView.selectedIndex=2" enabled="true"/>
-						</mx:FormItem>
 					</mx:Form>
 					<s:Button label="Select another stream for broadcast" width="224"  click="tabnav.selectedIndex = 1"  right="6" bottom="7"/>
 				</s:NavigatorContent>
@@ -445,12 +517,7 @@
 					
 					<s:Button x="331" y="7" label="Log Out" click="button1_clickHandler(event)"/>
 					<s:Button x="9" y="7" click="stackView.selectedIndex = 0" label="Return to preview form selection"/>
-					<s:VideoPlayer skinClass="VPS" left="0" right="0" top="35"  bottom="0" id="localVideoBox"/>
-				</s:NavigatorContent>
-				<s:NavigatorContent label="From Cloud" width="100%" creationComplete="previewFromCloud_creationCompleteHandler(event)" height="100%" id="previewFromCloud">
-					<s:Button x="331" y="7" label="Log Out" click="button1_clickHandler(event)"/>
-					<s:Button x="9" y="7" click="stackView.selectedIndex = 0" label="Return to preview form selection"/>
-					<s:VideoPlayer skinClass="VPS" left="0" right="0" top="35" bottom="0"/>
+					<s:VideoPlayer skinClass="VPS" left="0" right="0" top="35" creationComplete="localVideoBox_creationCompleteHandler(event)"  bottom="0" id="localVideoBox"/>
 				</s:NavigatorContent>
 			</mx:TabNavigator>
 		</s:NavigatorContent>
@@ -494,17 +561,15 @@
 						</mx:FormItem>
 					</mx:Form>
 				</s:NavigatorContent>
-				<s:NavigatorContent label="Vlc-Lift" width="100%" height="100%">
-					<mx:Form x="10" y="10" width="376" height="120">
-						<mx:FormItem label="VLC string" width="100%" height="100%">
-							<s:TextInput width="100%" height="100%" text="{VLCString}" change="textinput2_changeHandler(event)" id="VCA"/>
-						</mx:FormItem>
-					</mx:Form>
-					<mx:Form x="12" y="155" width="376" height="120">
-						<mx:FormItem label="Lift string" width="100%" height="100%">
-							<s:TextInput width="100%" height="100%" text="{LIFTString}"/>
-						</mx:FormItem>
-					</mx:Form>
+				<s:NavigatorContent label="Vlc-CO-Kernel" width="100%" height="100%">
+					<mx:HDividedBox right="0" left="0" top="25" bottom="0">
+						
+					
+					<s:VideoPlayer skinClass="VPS" top="35" bottom="0" width="100%" right="0" height="100%"/>
+					<s:VideoPlayer skinClass="VPS" left="0" top="35" bottom="0" width="100%" height="100%"/>
+					</mx:HDividedBox>
+					<s:Label text="Local" left="10" top="10"/>
+					<s:Label text="From CO Kernel" right="10" top="10"/>
 				</s:NavigatorContent>
 			</mx:TabNavigator>
 		</s:NavigatorContent>
