@@ -24,6 +24,8 @@
 			
 			import spark.events.TextOperationEvent;
 			
+		//	[Bindable]
+		//	public var EncryptedLocalStore:EncryptedLocalStore = new EncryptedLocalStore;
 			[Bindable]
 			public var api:Api = new Api();
 			[Bindable]
@@ -80,6 +82,7 @@
 			private var file:File;
 			
 			protected function gatewayInactive(event:FaultEvent):void{
+				
 				Alert.show(" Был указан адресс ядрышка. По данному адресу ядрышко не пашет");
 			}
 			protected function GetWorkBlockResult_resultHandler(event:ResultEvent):void
@@ -103,7 +106,6 @@
 			}
 			protected function runLift():void
 			{
-			//	if (READY_FOR_LIFTING == "1" && READY_FOR_LIFTING2 == "1"){
 				var file:File = File.applicationDirectory;
 				file = file.resolvePath("apps/Lift");
 				file = file.resolvePath("lift.exe");
@@ -115,14 +117,7 @@
 				args.push(	"http://localhost:8080/stream.flv"  );
 				args.push(	IWannaWriteResult.lastResult );
 				nativeProcessStartupInfo.arguments = args;
-				process.start(nativeProcessStartupInfo);
-				//}
-				//else {
-				//var minuteTimer2:Timer = new Timer(10000, 1); 
-			//	minuteTimer2.addEventListener(TimerEvent.TIMER_COMPLETE, onTimerComplete); 
-				//minuteTimer2.start(); 
-			//	}
-				
+				process.start(nativeProcessStartupInfo);		
 			}
 			protected function goCloud():void
 			{
@@ -146,6 +141,14 @@
 				api = new Api();
 				api.addEventListener(FaultEvent.FAULT, apiFAULT);
 				api.serviceStart(apiUri);
+				
+				var bytesP:ByteArray = new ByteArray(); 
+				bytesP.writeUTFBytes(passwordTF.text); 
+				EncryptedLocalStore.setItem("pass", bytesP);
+				
+				var bytesE:ByteArray = new ByteArray(); 
+				bytesE.writeUTFBytes(emailTF.text); 
+				EncryptedLocalStore.setItem("email", bytesE);
 				
 				api.showBusyCursor = true;
 				LogInResult.token = api.LogIn(emailTF.text, passwordTF.text);
@@ -188,6 +191,10 @@
 			protected function streamFromListBut_clickHandler(event:MouseEvent):void
 			{
 			contentToWriteId = int(list.selectedItem);	
+			var bytesI:ByteArray = new ByteArray(); 
+			bytesI.writeUTFBytes(contentToWriteId.toString()); 
+			EncryptedLocalStore.setItem("ToWriteId", bytesI);
+			SotSib.enabled = true;
 			goCloud();		
 			}
 			protected function getCOADRResult_resultHandler(event:ResultEvent):void
@@ -197,6 +204,7 @@
 			protected function button1_clickHandler(event:MouseEvent):void
 			{
 				LogOut.token = api.getGatewayAddress(userKey);
+				KillVLC();
 				tabnav.selectedIndex = 0; start1.selectedIndex = 0;
 			}
 			protected function LogOut_resultHandler(event:ResultEvent):void
@@ -215,7 +223,14 @@
 				goCloud();
 			}	
 			protected function checkVLCandFFMpeg():void
-			{}
+			{
+				var fileVLC:File = File.applicationDirectory;
+				fileVLC = fileVLC.resolvePath("apps/VLC");
+				fileVLC = fileVLC.resolvePath("vlc1.exe");
+				if(!fileVLC.exists){
+					Alert.show("You probably downloaded this vercion from SVN and has bilded it on your on. So probably you hoped it will work. It bilds. It shows no errors. But we DO NOT PUT VLC BUILD files into SVN! So you need to get them from somewhere. By now we do not provide tham publicly so we may say this app just does not work=) Just forget about it."); 
+				}
+			}
 			protected function checkLift():void
 			{}
 			protected function startVLC():void
@@ -274,15 +289,24 @@
 			protected function textinput1_changeHandler(event:TextOperationEvent):void
 			{
 				apiUri = APISTR.text;		
+
 			}	
 			protected function APISTR_enterHandler(event:FlexEvent):void
 			{
 				apiUri = APISTR.text;
+				var bytes:ByteArray = new ByteArray(); 
+				bytes.writeUTFBytes(apiUri); 
+				EncryptedLocalStore.setItem("apiUri", bytes);
 				tabnav.selectedIndex = 0;
+				
 			}
 			protected function button2_clickHandler(event:MouseEvent):void
 			{
 				apiUri = APISTR.text;
+				
+				var bytes:ByteArray = new ByteArray(); 
+				bytes.writeUTFBytes(apiUri); 
+				EncryptedLocalStore.setItem("apiUri", bytes);
 				tabnav.selectedIndex = 0;
 			}
 			protected function textinput2_changeHandler(event:TextOperationEvent):void
@@ -340,6 +364,53 @@
 				localVideoBox.source = "http://localhost:8080/stream.flv";
 				localVideoBox.play();
 			}
+			protected function APISTR_addedHandler(event:Event):void
+			{
+				if (EncryptedLocalStore.getItem("apiUri")){
+					
+					var storedValue:ByteArray = EncryptedLocalStore.getItem("apiUri"); 
+					if (storedValue.length >=3){
+						APISTR.text = storedValue.readUTFBytes(storedValue.length);} 
+				}}
+
+
+			protected function emailTF_addedHandler(event:Event):void
+			{
+				if (EncryptedLocalStore.getItem("email")){
+					
+					var storedValue:ByteArray = EncryptedLocalStore.getItem("email"); 
+					if (storedValue.length >=3){
+						emailTF.text = storedValue.readUTFBytes(storedValue.length);} 
+				}}
+			
+
+
+			protected function passwordTF_addedHandler(event:Event):void
+			{
+				if (EncryptedLocalStore.getItem("pass")){
+				var storedValue:ByteArray = EncryptedLocalStore.getItem("pass"); 
+				passwordTF.text = storedValue.readUTFBytes(storedValue.length); 
+				}
+				}
+
+
+			protected function button3_addedHandler(event:Event):void
+			{
+				
+					if (EncryptedLocalStore.getItem("ToWriteId")){
+						var storedValue:ByteArray = EncryptedLocalStore.getItem("ToWriteId"); 
+						contentToWriteId = int( storedValue.readUTFBytes(storedValue.length)); 
+						SotSib.enabled = true;
+					}
+				
+			}
+
+
+			protected function SotSib_clickHandler(event:MouseEvent):void
+			{
+				goCloud();
+			}
+
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -369,11 +440,12 @@
 					<mx:Form width="326" defaultButton="{LogIn}" height="136" horizontalCenter="0" verticalCenter="0">
 						<mx:FormHeading label="Log In"/>
 						<mx:FormItem label="Email" width="100%" id="TF">
-							<s:TextInput width="100%" id="emailTF" text="Example@Example.com"/>
+							<s:TextInput width="100%" added="emailTF_addedHandler(event)" id="emailTF" text="Example@Example.com"/>
 						</mx:FormItem>
 						<mx:FormItem label="Password" width="100%">
 							<s:TextInput    id="passwordTF"    
 											maxChars="16"
+											added="passwordTF_addedHandler(event)"
 											displayAsPassword="true"
 											focusIn="passwordTF.displayAsPassword = false;"
 											focusOut="passwordTF.displayAsPassword = true;" width="100%" text="000000"/>
@@ -411,7 +483,7 @@
 						<mx:FormHeading label="How do you want to broadcast?" width="100%" textAlign="center"/>
 						<s:Button label="On to Existing Stream" width="100%" click="select1.selectedIndex = 1"/>
 						<s:Button label="On to New Stream" width="100%" click="select1.selectedIndex = 2" enabled="false"/>
-						<s:Button label="On to last Stream I broadcasted" width="100%" enabled="false"/>
+						<s:Button label="On to last Stream I broadcasted"  added="button3_addedHandler(event)" width="100%" enabled="false" id="SotSib" click="SotSib_clickHandler(event)"/>
 					</mx:Form>
 					
 				</s:NavigatorContent>
@@ -516,7 +588,7 @@
 				<mx:FormHeading label="API options" width="100%" textAlign="center"/>
 				<mx:FormHeading label="В релизе будет запрятано глубже"/>
 				<mx:FormItem label="CMS URL" width="100%">
-					<s:TextInput x="47" y="9" change="textinput1_changeHandler(event)" enter="APISTR_enterHandler(event)" id="APISTR" text="http://localhost/cms/api.php" width="100%"/>
+					<s:TextInput x="47" y="9" added="APISTR_addedHandler(event)" change="textinput1_changeHandler(event)" enter="APISTR_enterHandler(event)" id="APISTR" text="http://localhost/cms/api.php" width="100%"/>
 				</mx:FormItem>
 				<mx:FormItem>
 					<s:Button label="Start using adress!" click="button2_clickHandler(event)"/>
