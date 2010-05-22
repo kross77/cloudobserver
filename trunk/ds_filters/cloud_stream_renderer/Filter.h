@@ -24,10 +24,10 @@ public:
 	HRESULT OnStartStreaming();
 	HRESULT OnStopStreaming();
 
-	HRESULT STDMETHODCALLTYPE SetAddress(/* [in] */ OLECHAR* pszAddress,int port);
+	HRESULT STDMETHODCALLTYPE SetAddress(/* [in] */ LPCOLESTR pszAddress,int port);
 
 	int				m_portNumber;		// Server Connection Port
-	OLECHAR*		m_serverAddr;		// Server Address
+	LPCOLESTR		m_serverAddress;		// Server Address
 	int				m_socket;
 	sockaddr_in     ConnectionInfo;
 
@@ -40,7 +40,7 @@ private:
 	~CFilter();
 	
 	//Server connection functions 
-	int		Connect (OLECHAR* hostAddress, int port);
+	int		Connect (LPCOLESTR hostAddress, int port);
 	void	Disconnect();
 	int		ErrorInfo();
 	
