@@ -2,23 +2,36 @@
 #include "guids.h"
 #include "Filter.h"
 #include "dll.h"
-#include "ole2.h"
 #include <winsock.h>
 
 CFilter::CFilter(TCHAR *tszName, LPUNKNOWN punk, HRESULT *phr) :
     CBaseRenderer(CLSID_Filter, tszName, punk, phr),
 		m_InputPin(NAME("Input Pin"),this,&m_InterfaceLock,phr,L"Input")
 {
-	//Default Connection Data
-	m_serverAddr = OLESTR("127.0.0.1");
+	// Class Constructor makes all routines for 
+	// preparation to samples sendings via sockets
+
+	m_serverAddress = OLESTR("127.0.0.1");
 	m_portNumber= 8001;
+	//init socket lib
+	WORD wVersionRequested;	
+	WSADATA wsaData;
+	wVersionRequested = MAKEWORD(2, 2);
+	WSAStartup(wVersionRequested, &wsaData);
+
+
+//default connection
+	Connect(m_serverAddress, m_portNumber);
+
 }
 CFilter::~CFilter()
 {
+	Disconnect();
+	WSACleanup ();
 }
 HRESULT CFilter::OnStartStreaming()
 {
-	Connect(m_serverAddr, m_portNumber);
+	Connect(m_serverAddress, m_portNumber);
 
 	return NOERROR;
 }
@@ -77,24 +90,12 @@ int CFilter::ErrorInfo()
 	return -1;
 }
 
-int CFilter::Connect(OLECHAR* ole_addr, int port)
+int CFilter::Connect(LPCOLESTR addr, int port)
 {
-	//We will need this to convert Address from OLECHAR* to char*
-	char*	char_addr = NULL;
-	//Conversion function
-	wcstombs(char_addr,ole_addr,sizeof(char_addr));
-
-	//init socket library
-	WORD wVersionRequested;	
-	WSADATA wsaData;
-	wVersionRequested = MAKEWORD(2, 2);
-	WSAStartup(wVersionRequested, &wsaData);		
 	struct sockaddr_in socketaddr;
 	memset((char *)&socketaddr, NULL, sizeof(socketaddr));
-	
-	//Fill connection information
 	socketaddr.sin_family = AF_INET;
-	socketaddr.sin_addr.s_addr = inet_addr(char_addr);	// here we use "usual char" address
+	socketaddr.sin_addr.s_addr = inet_addr("127.0.0.1");
 	socketaddr.sin_port = htons(m_portNumber);
 	m_socket = socket(AF_INET,SOCK_STREAM, IPPROTO_TCP);
 
@@ -119,16 +120,12 @@ void CFilter::Disconnect()
 		closesocket (m_socket);
 		m_socket = NULL; 
 	}	
-	WSACleanup ();
 }
 
 
-HRESULT CFilter::SetAddress( OLECHAR* pszAddress, int port) 
+HRESULT CFilter::SetAddress( LPCOLESTR pszAddress, int port) 
 {
-//	Connect(pszAddress,port);
-	m_serverAddr = pszAddress;
-	m_portNumber = port;
-
+	//Connect(pszAddress,port);
 	return NOERROR;
 }
 
