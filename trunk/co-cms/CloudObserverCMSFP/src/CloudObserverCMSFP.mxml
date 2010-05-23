@@ -20,7 +20,8 @@
 			import services.workblock.WorkBlock;
 			
 			import spark.components.VSlider;
-			
+			[Bindable]
+			public var baseUri:String = new String();
 			[Bindable]
 			public var gatewayUri:String = new String();
 			[Bindable]
@@ -36,7 +37,7 @@
 			[Bindable]
 			public var contentMp3UrlsArray:Array;
 			[Bindable]
-			public var contentNotMp3UrlsArray:Array;
+			public var contentFlvUrlsArray:Array;
 			[Bindable]
 			public var workBlockUri:String =  new String(); 
 			[Bindable]
@@ -63,6 +64,10 @@
 							contentIdsArray = String(FlexGlobals.topLevelApplication.parameters[s]).split(/,/);
 							contentIdsArraylangth = contentIdsArray.length;
 							break;
+						case "baseuri":
+							textArea.text += " \n ПРИНЯТый адрес для открытия новых окон: " + FlexGlobals.topLevelApplication.parameters[s];
+							baseUri = String(FlexGlobals.topLevelApplication.parameters[s]);
+							break;
 						default:
 							textArea.text += " \n остальные посланные аргументы: " + s + " " + FlexGlobals.topLevelApplication.parameters[s] + "; ";
 							break;
@@ -77,17 +82,13 @@
 						} else {
 					textArea.text += " Не был указан адресс ядрышка.";
 				}
-				
-				
-			
 			}
-			
 			protected function openURL(id:String, url:String):void
 			{
-				var base_url_str:String = "http://superior0.narod.ru/index.html?";
+				var base_url_str:String = escape(baseUri);
 				url = escape(url);
 				id = escape(id);
-				var url_str:String = base_url_str + 'sid=' + id + '&' + 'videourl=' +url ;
+				var url_str:String = base_url_str + '?' + 'sid=' + id + '&' + 'videourl=' +url ;
 				if (ExternalInterface.available)
 				{
 					ExternalInterface.call( "window.open", url_str, "new" );
@@ -104,15 +105,12 @@
 			protected function IWannaReadResult_resultHandler(event:ResultEvent):void
 			{
 				content = event.result as String;
-				Alert.show(" \n Принятые данные " + content);
 				contentUrlsArray = new Array();
 				contentTypesArray = new Array();
 				contentArray = new Array();
-				
-				// 
+				contentMp3UrlsArray = new Array();
+				contentFlvUrlsArray  = new Array();
 				contentArray = String(content).split(/,/);
-				Alert.show(" \n Принятые распарсеные данные " + contentArray.toString());
-				
 				for(var i:int = 0 ;i <= contentIdsArraylangth; i++ ){
 					 contentUrlsArray.push(contentArray[i].toString());
 					//i++;
@@ -121,10 +119,40 @@
 					contentTypesArray.push(contentArray[v].toString());
 					//v++;
 				}
-				Alert.show(" \n Принятые урлки " + contentUrlsArray.toString());
-				Alert.show(" \n Принятые типы " + contentTypesArray.toString());
-				//startFun(contentMp3UrlsArray);
+				for(var u:int = 0; u <= int(contentIdsArraylangth-1); u++){
 				
+					if (contentTypesArray[u].toString() == 'video/x-flv'	)
+					{
+						contentFlvUrlsArray.push(contentUrlsArray[u]);
+					}
+					else if (contentTypesArray[u].toString() == 'audio/mpeg'	)
+					{	
+						contentMp3UrlsArray.push(contentUrlsArray[u]);
+					}
+					else if (contentTypesArray[u].toString() == 'none'	)
+					{
+					}
+					else
+					{
+					}		
+				}
+				playMp3s(contentMp3UrlsArray);
+				openVindowsWithVideo(contentMp3UrlsArray);
+				textArea.text += " \n Принятые урлки " + contentUrlsArray.toString();
+				textArea.text += " \n Принятые типы " + contentTypesArray.toString();
+				textArea.text += " \n Принятые MP3 урлки " + contentMp3UrlsArray.toString();
+				textArea.text += " \n Принятые FLV урлки  " + contentFlvUrlsArray.toString();		
+			}
+			
+			public function openVindowsWithVideo(sUris:Array):void
+			{
+				for ( var i:String in sUris){
+					var streamUri:String = new String();
+					streamUri = sUris[i].toString();
+					textArea.text += " \n Урлка послана на открытие в новой страницэ: " + streamUri;
+					openURL(contentIdsArray[i].toString(), streamUri);
+				}
+
 			}
 			 protected function GetWorkBlockResult_resultHandler(event:ResultEvent):void
 			{
@@ -134,21 +162,15 @@
 				var workBlock:WorkBlock = new WorkBlock;
 				workBlock.serviceStart(workBlockUri);
 				workBlock.showBusyCursor = true;
-				// var contentIds:ArrayCollection = new ArrayCollection(contentIdsArray);
-				//textArea.text +=  " \n Переведенный в ArrayCollection массив идентификаторов потока: " + contentIds.toString();
 				IWannaReadResult.token = workBlock.IWannaRead(contentIdsArray);
 				
 			} 
-			
-			
-			//Ниже функции проигрывателя, в том числе ловящие ошибки и сьедающие их.
-			public function startFun(sUris:Array):void
+			public function playMp3s(sUris:Array):void
 			{
-			
 				stopFun();
 				for ( var i:String in sUris){
 					var streamUri:String = new String();
-					streamUri = contentMp3UrlsArray[i].toString();
+					streamUri = sUris[i].toString();
 					var request:URLRequest = new URLRequest(streamUri);
 					trace(streamUri);
 					var sound:Sound = new Sound();
@@ -160,36 +182,24 @@
 					channel.addEventListener(Event.SOUND_COMPLETE, onPlaybackComplete);
 					channel = sound.play();		
 				}
-				//testSoundUriTextInput.text = streamUri;
-			}
-			
+			}	
 			public function stopFun():void
 			{
 			//	SoundMixer.stopAll();
-			}
-			
+			}	
 			private function funError(e:IOErrorEvent):void
-			{
-			
-			}
-			
+			{}
 			private function onPlaybackComplete(event:Event):void
-			{
-			}
+			{}
 			public function volumefun(volnumber:Number):void
 			{
 				var transform:SoundTransform=new SoundTransform(volnumber, 0);
 				SoundMixer.soundTransform=transform;
 			}
-
-			
-			
 			protected function volumetr_changeHandler(event:Event):void
 			{
 				volumefun(volumetr.value/100);
 			}
-			
-			
 			protected function volumetr_creationCompleteHandler(event:FlexEvent):void
 			{
 				volumefun(volumetr.value/100);
@@ -206,6 +216,4 @@
 	</mx:Form>
 	<s:VSlider value="90" minimum="1" creationComplete="volumetr_creationCompleteHandler(event)" change="volumetr_changeHandler(event)" maximum="100" stepSize="1" id="volumetr" left="10" verticalCenter="0"/>
 	<s:Label text="Громкость" rotationX="0" rotationY="0" rotationZ="90" verticalCenter="0" left="20"/>
-	
-	
 </s:Application>

@@ -79,7 +79,7 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 	// embed the Flash Content SWF when all tests are passed
 	AC_FL_RunContent(
 			"src", "${swf}",
-			   "flashVars", "url=http://localhost:4773/&sid=12,32,44&videourl=http://localhost:8080/stream.flv",
+			   "flashVars", "url=http://localhost:4773/&baseuri=SimpleVideoPlayer.html&sid=12,32,44&videourl=http://localhost:8080/stream.flv",
 			"width", "${width}",
 			"height", "${height}",
 			"allowFullScreen", "true",
