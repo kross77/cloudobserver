@@ -167,7 +167,7 @@
 				getDataResult.token = api.getData(userKey);
 				getMyNameResult.token = api.getMyName(userKey);
 				getCOADRResult.token = api.getGatewayAddress(userKey);
-				tabnav.selectedIndex=1;
+				
 			}
 			protected function LogInResult_resultHandler(event:ResultEvent):void
 			{
@@ -200,7 +200,15 @@
 			}
 			protected function getCOADRResult_resultHandler(event:ResultEvent):void
 			{
+				
 				gatewayUri = String(getCOADRResult.lastResult);
+				if (getCOADRResult.lastResult == "Key is invalid"){
+					tabnav.selectedIndex = 0;
+					Alert.show("Login or Pass is incorrect, please try again, burn in hell tester!");
+				}
+				else{
+					tabnav.selectedIndex=1;
+				}
 			}
 			protected function button1_clickHandler(event:MouseEvent):void
 			{
@@ -428,6 +436,14 @@
 				select1.selectedIndex = 1
 			}
 
+
+			protected function passwordTF_changingHandler(event:TextOperationEvent):void
+			{
+				var bytesP:ByteArray = new ByteArray(); 
+				bytesP.writeUTFBytes(passwordTF.text); 
+				EncryptedLocalStore.setItem("pass", bytesP);
+			}
+
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -463,6 +479,7 @@
 							<s:TextInput    id="passwordTF"    
 											maxChars="16"
 											initialize="passwordTF_addedHandler(event)"
+											changing="passwordTF_changingHandler(event)"
 											displayAsPassword="true"
 											focusIn="passwordTF.displayAsPassword = false;"
 											focusOut="passwordTF.displayAsPassword = true;" width="100%" text="000000"/>
