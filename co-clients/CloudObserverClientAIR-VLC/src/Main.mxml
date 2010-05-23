@@ -68,6 +68,7 @@
 			public var BATKiller_EXE_File:String = new String();
 			[Bindable]
 			public var VLCstring:String = new String(); 
+			
 			[Bindable]
 			public var gateway:Gateway = new Gateway;
 			[Bindable]
@@ -456,12 +457,12 @@
 					<mx:Form width="326" defaultButton="{LogIn}" height="136" horizontalCenter="0" verticalCenter="0">
 						<mx:FormHeading label="Log In"/>
 						<mx:FormItem label="Email" width="100%" id="TF">
-							<s:TextInput width="100%" added="emailTF_addedHandler(event)" id="emailTF" text="Example@Example.com"/>
+							<s:TextInput width="100%" initialize="emailTF_addedHandler(event)" id="emailTF" text="Example@Example.com"/>
 						</mx:FormItem>
 						<mx:FormItem label="Password" width="100%">
 							<s:TextInput    id="passwordTF"    
 											maxChars="16"
-											added="passwordTF_addedHandler(event)"
+											initialize="passwordTF_addedHandler(event)"
 											displayAsPassword="true"
 											focusIn="passwordTF.displayAsPassword = false;"
 											focusOut="passwordTF.displayAsPassword = true;" width="100%" text="000000"/>
@@ -608,7 +609,7 @@
 				<mx:FormHeading label="API options" width="100%" textAlign="center"/>
 				<mx:FormHeading label="В релизе будет запрятано глубже"/>
 				<mx:FormItem label="CMS URL" width="100%">
-					<s:TextInput x="47" y="9" added="APISTR_addedHandler(event)" change="textinput1_changeHandler(event)" enter="APISTR_enterHandler(event)" id="APISTR" text="http://localhost/cms/api.php" width="100%"/>
+					<s:TextInput x="47" y="9"  initialize="APISTR_addedHandler(event)" change="textinput1_changeHandler(event)" enter="APISTR_enterHandler(event)" id="APISTR" text="http://localhost/cms/api.php" width="100%"/>
 				</mx:FormItem>
 				<mx:FormItem>
 					<s:Button label="Start using adress!" click="button2_clickHandler(event)"/>
