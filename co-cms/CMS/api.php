@@ -452,8 +452,8 @@ function getMyStreams($key)
 $userID = validKey( $key );
 $db = Crystal::db();
 $task = "select b.streamID
-from user a, streams b
-where " . $userID . " = a.id = b.userID;";
+from streams b
+where " . $userID . " = b.userID;";
 $generated_table = $db->sql($task)->fetch_all();
 returnFormat($generated_table); 
 
@@ -615,6 +615,7 @@ case "getStreamsFromAll":
 case "getMyStreams":
 	if( (string)$_GET[key] != null)
 	{
+		// You can Call once  something like http://localhost/cms/api.php?method=getMyStreams&key=Your_Key
 		getMyStreams($_GET[key])	;	
 	}
 	else
