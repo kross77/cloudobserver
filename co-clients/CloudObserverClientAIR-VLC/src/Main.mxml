@@ -211,10 +211,7 @@
 			{
 				 Alert.show("you just logged out");
 			}
-			protected function AntSnewstream_creationCompleteHandler(event:FlexEvent):void
-			{
-				AntSnewstream.enabled = false;
-			}
+
 			protected function Go_clickHandler(event:MouseEvent):void
 			{
 				gatewayUri = gatewayUritf.text;
@@ -411,6 +408,25 @@
 				goCloud();
 			}
 
+			protected function button4_clickHandler(event:MouseEvent):void
+			{
+				
+				contentToWriteId = int(Math.abs(Math.round(Math.random() * (1000000000 - 10)) + 10));	
+				var bytesI:ByteArray = new ByteArray(); 
+				bytesI.writeUTFBytes(contentToWriteId.toString()); 
+				EncryptedLocalStore.setItem("ToWriteId", bytesI);
+				SotSib.enabled = true;
+				api.setStream(userKey, contentToWriteId.toString()); 
+				goCloud();
+			}
+
+
+			protected function button5_clickHandler(event:MouseEvent):void
+			{
+				api.getData(userKey);
+				select1.selectedIndex = 1
+			}
+
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -481,8 +497,8 @@
 					<mx:Form horizontalCenter="0" verticalCenter="0">
 						<mx:FormHeading label=" {'Welcome ' + String(getMyNameResult.lastResult)}" width="100%" textAlign="center"/>
 						<mx:FormHeading label="How do you want to broadcast?" width="100%" textAlign="center"/>
-						<s:Button label="On to Existing Stream" width="100%" click="select1.selectedIndex = 1"/>
-						<s:Button label="On to New Stream" width="100%" click="select1.selectedIndex = 2" enabled="false"/>
+						<s:Button label="On to Existing Stream" width="100%" click="button5_clickHandler(event)"/>
+						<s:Button label="On to New Stream" width="100%" click="select1.selectedIndex = 2" enabled="true"/>
 						<s:Button label="On to last Stream I broadcasted"  added="button3_addedHandler(event)" width="100%" enabled="false" id="SotSib" click="SotSib_clickHandler(event)"/>
 					</mx:Form>
 					
@@ -490,7 +506,7 @@
 				<s:NavigatorContent label="On to old stream" width="100%" height="100%" >
 					<mx:Form width="326" height="163" horizontalCenter="0" verticalCenter="0">
 						<mx:FormItem label="Yours Id's List" width="100%" height="88">
-							<s:List  id="list" width="100%" height="100%">
+							<s:List  id="list" width="100%" height="84">
 								<s:AsyncListView list="{getDataResult.lastResult}"/>
 							</s:List>
 						</mx:FormItem>
@@ -500,13 +516,17 @@
 					</mx:Form>
 					<s:Button label="Select another broadcast method" width="195" click="select1.selectedIndex=0" bottom="10" right="83"/>
 				</s:NavigatorContent>
-				<s:NavigatorContent label="On to New stream" creationComplete="AntSnewstream_creationCompleteHandler(event)" width="100%" height="100%"  id="AntSnewstream">
+				<s:NavigatorContent label="On to New stream" width="100%" height="100%"  id="AntSnewstream">
 					<mx:Form width="326" height="70" horizontalCenter="0" verticalCenter="0">
 						<mx:FormItem label="Gen New Stream">
-							<s:Button label="Stream onto new stream"/>
+							<s:Button label="Stream onto new stream" click="button4_clickHandler(event)"/>
 						</mx:FormItem>
 					</mx:Form>
-					<s:Button label="Select another broadcast method" width="195" click="select1.selectedIndex=0" right="83" top="420"/>
+					<s:Button label="Select another broadcast method" width="195" click="select1.selectedIndex=0" right="83" bottom="10"/>
+					<mx:Form horizontalCenter="0" verticalCenter="-80">
+						<mx:FormHeading label="Если бы мы давали потоку имя и прочюю лабуду..."/>
+						<mx:FormHeading label="Мы бы делали это здесь" textAlign="center"/>
+					</mx:Form>
 				</s:NavigatorContent>
 			</mx:TabNavigator>
 			<s:Button label="Log Out" bottom="10" right="10" click="button1_clickHandler(event)"/>
