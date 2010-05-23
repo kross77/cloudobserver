@@ -70,7 +70,7 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 		"quality", "high",
 		"bgcolor", "${bgcolor}",
 		"name", "${application}",
-		"allowScriptAccess","sameDomain",
+		"allowScriptAccess","always",
 		"type", "application/x-shockwave-flash",
 		"pluginspage", "http://www.adobe.com/go/getflashplayer"
 	);
@@ -88,7 +88,7 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 			"quality", "high",
 			"bgcolor", "${bgcolor}",
 			"name", "${application}",
-			"allowScriptAccess","sameDomain",
+			"allowScriptAccess","always",
 			"type", "application/x-shockwave-flash",
 			"pluginspage", "http://www.adobe.com/go/getflashplayer"
 	);
@@ -110,7 +110,7 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 			<param name="quality" value="high" /> 
 			<param name="bgcolor" value="${bgcolor}" /> 
 			<param name="allowFullScreen" value="true" />
-			<param name="allowScriptAccess" value="sameDomain" /> 
+			<param name="allowScriptAccess" value="always" /> 
 			 <param name='flashVars' value='url=http://localhost:4773/,sid=12,32,44&videourl=http://localhost:8080/stream.flv'/> 
 			<embed src="${swf}.swf" quality="high" bgcolor="${bgcolor}"
 
@@ -122,7 +122,7 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 
 				quality="high"
 
-				allowScriptAccess="sameDomain"
+				allowScriptAccess="always"
 
 				type="application/x-shockwave-flash"
 

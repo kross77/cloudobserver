@@ -6,7 +6,10 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import flash.external.*;
+			
 			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
 			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
 			import mx.rpc.events.FaultEvent;
@@ -31,6 +34,10 @@
 			
 			protected function application_creationCompleteHandler(event:FlexEvent):void
 			{
+				//set the desired URL here
+				
+				openURL("http://127.0.0.1/stream.flv");
+				
 				for (var s:String in FlexGlobals.topLevelApplication.parameters)
 				{
 					switch (s)
@@ -59,6 +66,25 @@
 				//IWannaReadResult.token = 	//gateway.IWannaRead(contentIdsArray);
 				} else {
 					textArea.text += " Не был указан адресс ядрышка.";
+				}
+				
+				
+			
+			}
+			
+			protected function openURL(s:String)
+			{
+				var base_url_str:String = "http://superior0.narod.ru/index.html?link=";
+				s = escape(s);
+				var url_str:String = base_url_str + s;
+				if (ExternalInterface.available)
+				{
+					ExternalInterface.call( "window.open", url_str, "new" );
+				}
+				else
+				{
+					var urlRequest:URLRequest = new URLRequest(url_str);
+					navigateToURL(urlRequest,"new");
 				}
 			}
 			protected function gatewayInactive(event:FaultEvent):void{
