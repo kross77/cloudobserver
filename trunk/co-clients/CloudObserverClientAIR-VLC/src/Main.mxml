@@ -143,13 +143,6 @@
 				api.addEventListener(FaultEvent.FAULT, apiFAULT);
 				api.serviceStart(apiUri);
 				
-				var bytesP:ByteArray = new ByteArray(); 
-				bytesP.writeUTFBytes(passwordTF.text); 
-				EncryptedLocalStore.setItem("pass", bytesP);
-				
-				var bytesE:ByteArray = new ByteArray(); 
-				bytesE.writeUTFBytes(emailTF.text); 
-				EncryptedLocalStore.setItem("email", bytesE);
 				
 				api.showBusyCursor = true;
 				LogInResult.token = api.LogIn(emailTF.text, passwordTF.text);
@@ -157,7 +150,9 @@
 				
 			}
 			protected function apiFAULT(e:FaultEvent):void{
-				Alert.show("api fault");
+				
+				tabnav.selectedIndex = 4;
+			Alert.show("api fault. Try to enter another API URL");
 			}
 			protected function gatewayFAULT(e:FaultEvent):void{
 				Alert.show("gateway fault");
@@ -192,10 +187,7 @@
 			protected function streamFromListBut_clickHandler(event:MouseEvent):void
 			{
 			contentToWriteId = int(list.selectedItem);	
-			var bytesI:ByteArray = new ByteArray(); 
-			bytesI.writeUTFBytes(contentToWriteId.toString()); 
-			EncryptedLocalStore.setItem("ToWriteId", bytesI);
-			SotSib.enabled = true;
+			//SotSib.enabled = true;
 			goCloud();		
 			}
 			protected function getCOADRResult_resultHandler(event:ResultEvent):void
@@ -272,9 +264,7 @@
 				// optional parameters
 				args.push('"' + BAT_EXE_File + '"' );
 				nativeProcessStartupInfo.arguments = args;
-				process.start(nativeProcessStartupInfo);
-
-				
+				process.start(nativeProcessStartupInfo);	
 			}
 			public function onTimerComplete(event:TimerEvent):void 
 			{ 
@@ -300,23 +290,14 @@
 			protected function APISTR_enterHandler(event:FlexEvent):void
 			{
 				apiUri = APISTR.text;
-				var bytes:ByteArray = new ByteArray(); 
-				bytes.writeUTFBytes(apiUri); 
-				EncryptedLocalStore.setItem("apiUri", bytes);
 				tabnav.selectedIndex = 0;
 				
 			}
 			protected function button2_clickHandler(event:MouseEvent):void
 			{
 				apiUri = APISTR.text;
-				
-				var bytes:ByteArray = new ByteArray(); 
-				bytes.writeUTFBytes(apiUri); 
-				EncryptedLocalStore.setItem("apiUri", bytes);
 				tabnav.selectedIndex = 0;
 			}
-			protected function textinput2_changeHandler(event:TextOperationEvent):void
-			{}
 			protected function KillVLC():void
 			{
 				
@@ -369,48 +350,7 @@
 			{
 				localVideoBox.source = "http://localhost:8080/stream.flv";
 				localVideoBox.play();
-			}
-			protected function APISTR_addedHandler(event:Event):void
-			{
-				if (EncryptedLocalStore.getItem("apiUri")){
-					
-					var storedValue:ByteArray = EncryptedLocalStore.getItem("apiUri"); 
-					if (storedValue.length >=3){
-						APISTR.text = storedValue.readUTFBytes(storedValue.length);} 
-				}}
-
-
-			protected function emailTF_addedHandler(event:Event):void
-			{
-				if (EncryptedLocalStore.getItem("email")){
-					
-					var storedValue:ByteArray = EncryptedLocalStore.getItem("email"); 
-					if (storedValue.length >=3){
-						emailTF.text = storedValue.readUTFBytes(storedValue.length);} 
-				}}
-			
-
-
-			protected function passwordTF_addedHandler(event:Event):void
-			{
-				if (EncryptedLocalStore.getItem("pass")){
-				var storedValue:ByteArray = EncryptedLocalStore.getItem("pass"); 
-				passwordTF.text = storedValue.readUTFBytes(storedValue.length); 
-				}
-				}
-
-
-			protected function button3_addedHandler(event:Event):void
-			{
-				
-					if (EncryptedLocalStore.getItem("ToWriteId")){
-						var storedValue:ByteArray = EncryptedLocalStore.getItem("ToWriteId"); 
-						contentToWriteId = int( storedValue.readUTFBytes(storedValue.length)); 
-						SotSib.enabled = true;
-					}
-				
-			}
-
+			}	
 
 			protected function SotSib_clickHandler(event:MouseEvent):void
 			{
@@ -421,10 +361,7 @@
 			{
 				
 				contentToWriteId = int(Math.abs(Math.round(Math.random() * (1000000000 - 10)) + 10));	
-				var bytesI:ByteArray = new ByteArray(); 
-				bytesI.writeUTFBytes(contentToWriteId.toString()); 
-				EncryptedLocalStore.setItem("ToWriteId", bytesI);
-				SotSib.enabled = true;
+			//	SotSib.enabled = true;
 				api.setStream(userKey, contentToWriteId.toString()); 
 				goCloud();
 			}
@@ -437,12 +374,7 @@
 			}
 
 
-			protected function passwordTF_changingHandler(event:TextOperationEvent):void
-			{
-				var bytesP:ByteArray = new ByteArray(); 
-				bytesP.writeUTFBytes(passwordTF.text); 
-				EncryptedLocalStore.setItem("pass", bytesP);
-			}
+
 
 		]]>
 	</fx:Script>
@@ -473,13 +405,11 @@
 					<mx:Form width="326" defaultButton="{LogIn}" height="136" horizontalCenter="0" verticalCenter="0">
 						<mx:FormHeading label="Log In"/>
 						<mx:FormItem label="Email" width="100%" id="TF">
-							<s:TextInput width="100%" initialize="emailTF_addedHandler(event)" id="emailTF" text="Example@Example.com"/>
+							<s:TextInput width="100%" id="emailTF" text="Example@Example.com"/>
 						</mx:FormItem>
 						<mx:FormItem label="Password" width="100%">
 							<s:TextInput    id="passwordTF"    
 											maxChars="16"
-											initialize="passwordTF_addedHandler(event)"
-											changing="passwordTF_changingHandler(event)"
 											displayAsPassword="true"
 											focusIn="passwordTF.displayAsPassword = false;"
 											focusOut="passwordTF.displayAsPassword = true;" width="100%" text="000000"/>
@@ -517,7 +447,7 @@
 						<mx:FormHeading label="How do you want to broadcast?" width="100%" textAlign="center"/>
 						<s:Button label="On to Existing Stream" width="100%" click="button5_clickHandler(event)"/>
 						<s:Button label="On to New Stream" width="100%" click="select1.selectedIndex = 2" enabled="true"/>
-						<s:Button label="On to last Stream I broadcasted"  added="button3_addedHandler(event)" width="100%" enabled="false" id="SotSib" click="SotSib_clickHandler(event)"/>
+						<s:Button label="On to last Stream I broadcasted"  width="100%" enabled="false" id="SotSib" click="SotSib_clickHandler(event)"/>
 					</mx:Form>
 					
 				</s:NavigatorContent>
@@ -626,7 +556,7 @@
 				<mx:FormHeading label="API options" width="100%" textAlign="center"/>
 				<mx:FormHeading label="В релизе будет запрятано глубже"/>
 				<mx:FormItem label="CMS URL" width="100%">
-					<s:TextInput x="47" y="9"  initialize="APISTR_addedHandler(event)" change="textinput1_changeHandler(event)" enter="APISTR_enterHandler(event)" id="APISTR" text="http://localhost/cms/api.php" width="100%"/>
+					<s:TextInput x="47" y="9"   enter="APISTR_enterHandler(event)" id="APISTR" text="http://localhost/cms/api.php" width="100%"/>
 				</mx:FormItem>
 				<mx:FormItem>
 					<s:Button label="Start using adress!" click="button2_clickHandler(event)"/>
