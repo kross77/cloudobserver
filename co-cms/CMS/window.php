@@ -95,9 +95,9 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 	// embed the Flash Content SWF when all tests are passed
 	AC_FL_RunContent(
 			"src", "media/SimpleVideoPlayer",
-			   "flashVars", "<?php  	echo "url=" , $adress;	  	echo "&baseuri=" , $windowadress;	echo "&videourl" , $vidtoopen;?>",
+			   "flashVars", "<?php  	echo "url=" , $adress;	  	echo "&baseuri=" , $windowadress;	echo "&videourl=" , $vidtoopen;?>",
 			"width", "100%",
-			"height", "300",
+			"height", "100%",
 			"align", "middle",
 			"id", "SimpleVideoPlayer",
 			"quality", "high",
@@ -117,15 +117,15 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 </script>
 <noscript>
   	<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
-			id="SimpleVideoPlayer" width="100%" height="300"
+			id="SimpleVideoPlayer" width="100%" height="100%"
 			codebase="http://fpdownload.macromedia.com/get/flashplayer/current/swflash.cab">
 			<param name="movie" value="media/SimpleVideoPlayer.swf" />
 			<param name="quality" value="high" />
 			<param name="bgcolor" value="#ffffff" />
 			<param name="allowScriptAccess" value="always" />
-			 <param name='flashVars' value='<?php  	echo ",url=" , $adress;  	echo ",baseuri" , $windowadress;	  	echo ",videourl" , $vidtoopen; ?>'/> 
+			 <param name='flashVars' value='<?php  	echo ",url=" , $adress;  	echo ",baseuri=" , $windowadress;	  	echo ",videourl=" , $vidtoopen; ?>'/> 
 			<embed src="media/SimpleVideoPlayer.swf" quality="high" bgcolor="#ffffff"
-				width="100%" height="300" name="SimpleVideoPlayer" align="middle"
+				width="100%" height="100%" name="SimpleVideoPlayer" align="middle"
 				play="true"
 				loop="false"
 				quality="high"
