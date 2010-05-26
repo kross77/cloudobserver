@@ -91,12 +91,21 @@
 				var url_str:String = base_url_str + '?' + 'sid=' + id + '&' + 'videourl=' +url ;
 				if (ExternalInterface.available)
 				{
+					try {
 					ExternalInterface.call( "window.open", url_str, "new" );
-				}
+					} catch(e:Error) {
+						Alert.show(e.toString());
+					}
+					
+					}
 				else
 				{
+					try {
 					var urlRequest:URLRequest = new URLRequest(url_str);
 					navigateToURL(urlRequest,"new");
+				} catch(e:Error) {
+					Alert.show(e.toString());
+				}
 				}
 			}
 			protected function gatewayInactive(event:FaultEvent):void{
