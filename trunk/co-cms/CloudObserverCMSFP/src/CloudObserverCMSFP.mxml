@@ -137,7 +137,7 @@
 					}		
 				}
 				playMp3s(contentMp3UrlsArray);
-				openVindowsWithVideo(contentMp3UrlsArray);
+				openVindowsWithVideo(contentFlvUrlsArray);
 				textArea.text += " \n Принятые урлки " + contentUrlsArray.toString();
 				textArea.text += " \n Принятые типы " + contentTypesArray.toString();
 				textArea.text += " \n Принятые MP3 урлки " + contentMp3UrlsArray.toString();
