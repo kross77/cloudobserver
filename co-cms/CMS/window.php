@@ -82,11 +82,11 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 		"width", "100%",
 		"height", "100%",
 		"align", "middle",
-		"id", "CloudObserverCMSFP",
+		"id", "SimpleVideoPlayer",
 		"quality", "high",
 		"bgcolor", "#ffffff",
-		"name", "CloudObserverCMSFP",
-		"allowScriptAccess","sameDomain",
+		"name", "SimpleVideoPlayer",
+		"allowScriptAccess","always",
 		"type", "application/x-shockwave-flash",
 		"pluginspage", "http://www.adobe.com/go/getflashplayer"
 	);
@@ -94,30 +94,16 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 	// if we've detected an acceptable version
 	// embed the Flash Content SWF when all tests are passed
 	AC_FL_RunContent(
-			"src", "media/CloudObserverCMSFP",
-			   "flashVars", "
-			   <?php
-  if (isset($_POST['submitForm'])){
-	  	echo "url=" , $adress;
-	  	echo "&baseuri=" , $windowadress;
-	  		echo "&videourl" , $vidtoopen;
-	  $array =	$_POST[Streams];
-$count = count($array);
-echo "&sid=" ;
-for ($i = 0; $i < $count; $i++) {
- echo $array[$i];
- if($i <= $count - 2){echo ",";} else{}
-
-}}?>
-",
+			"src", "media/SimpleVideoPlayer",
+			   "flashVars", "<?php  	echo "url=" , $adress;	  	echo "&baseuri=" , $windowadress;	echo "&videourl" , $vidtoopen;?>",
 			"width", "100%",
 			"height", "300",
 			"align", "middle",
-			"id", "CloudObserverCMSFP",
+			"id", "SimpleVideoPlayer",
 			"quality", "high",
 			"bgcolor", "#ffffff",
-			"name", "CloudObserverCMSFP",
-			"allowScriptAccess","sameDomain",
+			"name", "SimpleVideoPlayer",
+			"allowScriptAccess","always",
 			"type", "application/x-shockwave-flash",
 			"pluginspage", "http://www.adobe.com/go/getflashplayer"
 	);
@@ -131,33 +117,19 @@ for ($i = 0; $i < $count; $i++) {
 </script>
 <noscript>
   	<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
-			id="CloudObserverCMSFP" width="100%" height="300"
+			id="SimpleVideoPlayer" width="100%" height="300"
 			codebase="http://fpdownload.macromedia.com/get/flashplayer/current/swflash.cab">
-			<param name="movie" value="media/CloudObserverCMSFP.swf" />
+			<param name="movie" value="media/SimpleVideoPlayer.swf" />
 			<param name="quality" value="high" />
 			<param name="bgcolor" value="#ffffff" />
-			<param name="allowScriptAccess" value="sameDomain" />
-			 <param name='flashVars' value='<?php
-			 
-
-  if (isset($_POST['submitForm'])){
-	  	echo ",url=" , $adress;
-	  	echo ",baseuri" , $windowadress;
-	  	echo ",videourl" , $vidtoopen;
-	  $array =	$_POST[Streams];
-$count = count($array);
-echo ",sid=" ;
-for ($i = 0; $i < $count; $i++) {
- echo $array[$i];
-if($i <= $count - 2){echo ",";} else{}
-
-}}?>'/> 
-			<embed src="media/CloudObserverCMSFP.swf" quality="high" bgcolor="#ffffff"
-				width="100%" height="300" name="CloudObserverCMSFP" align="middle"
+			<param name="allowScriptAccess" value="always" />
+			 <param name='flashVars' value='<?php  	echo ",url=" , $adress;  	echo ",baseuri" , $windowadress;	  	echo ",videourl" , $vidtoopen; ?>'/> 
+			<embed src="media/SimpleVideoPlayer.swf" quality="high" bgcolor="#ffffff"
+				width="100%" height="300" name="SimpleVideoPlayer" align="middle"
 				play="true"
 				loop="false"
 				quality="high"
-				allowScriptAccess="sameDomain"
+				allowScriptAccess="always"
 				type="application/x-shockwave-flash"
 				pluginspage="http://www.adobe.com/go/getflashplayer">
 			</embed>
