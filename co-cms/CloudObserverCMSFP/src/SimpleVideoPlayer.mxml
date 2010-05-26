@@ -25,9 +25,10 @@
 					}
 				}
 				if (videoAddr.length >= 8) {
-				//	PV(videoAddr);
+					PV(videoAddr);
 				} else {
-					//	textArea.text += " Не был указан адресс откуда играть видео. Укажите и нажмите Enter. например такой http://localhost:8080/stream.flv";
+					textArea.text += " Не был указан адресс откуда играть видео. Укажите и нажмите Enter. например такой http://localhost:8080/stream.flv";
+					textArea.visible = true;
 				}
 			} 
 			public function PV(streamUri:String):void{
@@ -36,13 +37,11 @@
 			}
 			protected function textArea_enterHandler(event:FlexEvent):void
 			{
-			var ss:String =	textArea.text.toString();
-			videoAddr = ss;
-			PV(ss);
+			PV(textArea.text);
 			} 
 		]]>
 	</fx:Script>
-	<s:VideoPlayer right="10" source="" left="10" top="10" bottom="10" id="VideoBox"  skinClass="VPS"/>
-	 <s:TextInput id="textArea"  enter="textArea_enterHandler(event)" text="Лог операций:"    top="10" right="10" height="22" left="10"/> 
+	<s:VideoPlayer right="10" left="10" top="10" bottom="10" id="VideoBox"  skinClass="VPS"/>
+	 <s:TextInput id="textArea" visible="false"  enter="textArea_enterHandler(event)" text="Лог операций:"    top="10" right="10" height="22" left="10"/> 
 	
 </s:Application>
