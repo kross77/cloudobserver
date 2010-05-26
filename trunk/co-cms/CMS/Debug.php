@@ -4,6 +4,7 @@
 <?php require_once("includes/functions.php"); ?>
 <?php confirm_logged_in(); ?>
 <?php $adress = CLOUD_OBSERVER_GATEWAY_ADDRESS;?>
+<?php $windowadress = "window.php"; ?>
 
 <head> 
 	<link rel="stylesheet" href="css/common.css" type="text/css" />
@@ -92,7 +93,7 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 		"src", "media/playerProductInstall",
 		"FlashVars", "MMredirectURL="+MMredirectURL+'&MMplayerType='+MMPlayerType+'&MMdoctitle='+MMdoctitle+"",
 		"width", "100%",
-		"height", "100%",
+		"height", "300",
 		"align", "middle",
 		"id", "CloudObserverCMSFP",
 		"quality", "high",
@@ -112,6 +113,7 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 
   if (isset($_POST['submitForm'])){
 	  	echo "&url=" , $adress;
+	  	echo "&baseuri=" , $windowadress;
 	  $array =	$_POST[Streams];
 $count = count($array);
 echo "&sid=" ;
@@ -121,7 +123,7 @@ for ($i = 0; $i < $count; $i++) {
 
 }}?>",
 			"width", "100%",
-			"height", "100%",
+			"height", "300",
 			"align", "middle",
 			"id", "CloudObserverCMSFP",
 			"quality", "high",
@@ -141,7 +143,7 @@ for ($i = 0; $i < $count; $i++) {
 </script>
 <noscript>
   	<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
-			id="CloudObserverCMSFP" width="100%" height="100%"
+			id="CloudObserverCMSFP" width="100%" height="300"
 			codebase="http://fpdownload.macromedia.com/get/flashplayer/current/swflash.cab">
 			<param name="movie" value="media/CloudObserverCMSFP.swf" />
 			<param name="quality" value="high" />
@@ -152,6 +154,7 @@ for ($i = 0; $i < $count; $i++) {
 
   if (isset($_POST['submitForm'])){
 	  	echo ",url=" , $adress;
+	  	 	echo ",baseuri=" , $windowadress;
 	  $array =	$_POST[Streams];
 $count = count($array);
 echo ",sid=" ;
@@ -161,7 +164,7 @@ if($i <= $count - 2){echo ",";} else{}
 
 }}?>'/> 
 			<embed src="media/CloudObserverCMSFP.swf" quality="high" bgcolor="#ffffff"
-				width="100%" height="100%" name="CloudObserverCMSFP" align="middle"
+				width="100%" height="300" name="CloudObserverCMSFP" align="middle"
 				play="true"
 				loop="false"
 				quality="high"
