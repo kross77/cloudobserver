@@ -1,6 +1,7 @@
 <?php require_once("includes/session.php"); ?>
 <?php require_once("includes/connection.php"); ?>
 <?php require_once("includes/functions.php"); ?>
+<?php confirm_logged_in(); ?>
 <?php $adress = CLOUD_OBSERVER_GATEWAY_ADDRESS; ?>
 
 <head> 
@@ -155,7 +156,7 @@ for ($i = 0; $i < $count; $i++) {
  echo $array[$i];
 if($i <= $count - 2){echo ",";} else{}
 
-}}?>'/>
+}}?>'/> 
 			<embed src="media/CloudObserverCMSFP.swf" quality="high" bgcolor="#ffffff"
 				width="100%" height="100%" name="CloudObserverCMSFP" align="middle"
 				play="true"
