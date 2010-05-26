@@ -1,8 +1,9 @@
+<?php header("Cache-Control: no-cache, must-revalidate"); ?>
 <?php require_once("includes/session.php"); ?>
 <?php require_once("includes/connection.php"); ?>
 <?php require_once("includes/functions.php"); ?>
 <?php confirm_logged_in(); ?>
-<?php $adress = CLOUD_OBSERVER_GATEWAY_ADDRESS; ?>
+<?php $adress = CLOUD_OBSERVER_GATEWAY_ADDRESS;?>
 
 <head> 
 	<link rel="stylesheet" href="css/common.css" type="text/css" />
@@ -41,6 +42,8 @@ var requiredRevision = 0;
 // -----------------------------------------------------------------------------
 
 </script>
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="Expires" CONTENT="-1">
 </head>
 <body>
 

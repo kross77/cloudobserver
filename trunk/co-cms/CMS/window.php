@@ -1,3 +1,4 @@
+<?php header("Cache-Control: no-cache, must-revalidate"); ?>
 <?php require_once("includes/session.php"); ?>
 <?php require_once("includes/connection.php"); ?>
 <?php require_once("includes/functions.php"); ?>
@@ -52,6 +53,8 @@ var requiredRevision = 0;
 // -----------------------------------------------------------------------------
 
 </script>
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="Expires" CONTENT="-1">
 </head>
 
 <body>
