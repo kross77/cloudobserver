@@ -9,7 +9,7 @@
 						xmlns:cloudobserverbroadcastservice="services.cloudobserverbroadcastservice.*" 
 						xmlns:broadcastservice="services.broadcastservice.*"
 						xmlns:mxmlY="http://www.yahoo.com/astra/2006/mxml"
-	 z="0">
+	 z="0" viewSourceURL="srcview/index.html">
 	
 	<fx:Script>
 		<![CDATA[
