@@ -11,24 +11,22 @@ CFilter::CFilter(TCHAR *tszName, LPUNKNOWN punk, HRESULT *phr) :
 	// Class Constructor makes all routines for 
 	// preparation to samples sendings via sockets
 
-	m_serverAddress = OLESTR("127.0.0.1");
-	m_portNumber= 8001;
+	//m_serverAddress = LPOLESTR("127.0.0.1");
+	//m_portNumber= 8001;
+	SetAddress(LPCOLESTR("127.0.0.1"), 8001);
 	//init socket lib
 	WORD wVersionRequested;	
 	WSADATA wsaData;
 	wVersionRequested = MAKEWORD(2, 2);
 	WSAStartup(wVersionRequested, &wsaData);
-
-
-//default connection
-	Connect(m_serverAddress, m_portNumber);
-
 }
+
 CFilter::~CFilter()
 {
 	Disconnect();
 	WSACleanup ();
 }
+
 HRESULT CFilter::OnStartStreaming()
 {
 	Connect(m_serverAddress, m_portNumber);
@@ -92,10 +90,14 @@ int CFilter::ErrorInfo()
 
 int CFilter::Connect(LPCOLESTR addr, int port)
 {
+	char blin[100];
+
+	CharToOem(m_serverAddress, blin);
+
 	struct sockaddr_in socketaddr;
 	memset((char *)&socketaddr, NULL, sizeof(socketaddr));
 	socketaddr.sin_family = AF_INET;
-	socketaddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+	socketaddr.sin_addr.s_addr = inet_addr((const char *)blin);
 	socketaddr.sin_port = htons(m_portNumber);
 	m_socket = socket(AF_INET,SOCK_STREAM, IPPROTO_TCP);
 
@@ -122,13 +124,45 @@ void CFilter::Disconnect()
 	}	
 }
 
-
-HRESULT CFilter::SetAddress( LPCOLESTR pszAddress, int port) 
+STDMETHODIMP CFilter::SetAddress( LPCOLESTR pszAddress, int port) 
 {
-	//Connect(pszAddress,port);
-	return NOERROR;
+	CheckPointer(pszAddress,E_POINTER);
+    if(wcslen(pszAddress) > MAX_PATH)
+        return ERROR_FILENAME_EXCED_RANGE;
+
+    // Take a copy of the filename
+
+    size_t len = 1+lstrlenW(pszAddress);
+    m_serverAddress = new WCHAR[len];
+    if (m_serverAddress == 0)
+        return E_OUTOFMEMORY;
+
+    HRESULT hr = StringCchCopyW(m_serverAddress, len, pszAddress);
+
+	m_portNumber = port;
+	return S_OK;
 }
 
+STDMETHODIMP CFilter::GetAddress(/* [out] */ LPOLESTR *pszAddress, int *port)
+{
+	CheckPointer(pszAddress, E_POINTER);
+    *pszAddress = NULL;
+
+    if (m_serverAddress != NULL) 
+    {
+        size_t len = 1+lstrlenW(m_serverAddress);
+        *pszAddress = (LPOLESTR)QzTaskMemAlloc(sizeof(WCHAR) * (len));
+
+        if (*pszAddress != NULL) 
+        {
+            HRESULT hr = StringCchCopyW(*pszAddress, len, m_serverAddress);
+        }
+    }
+
+	*port = m_portNumber;
+
+    return S_OK;
+}
 
 //
 // NonDelegatingQueryInterface
@@ -149,6 +183,11 @@ STDMETHODIMP CFilter::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
 	if (riid == IID_IBaseFilter)
 	{
 		return GetInterface((IBaseFilter *) this, ppv);
+	}
+
+	if (riid == IID_IMediaFilter) 
+	{
+		return GetInterface((IMediaFilter *) this, ppv);
 	}
 	/*we must return the same way || riid == IID_IMediaFilter || riid == IID_IMediaPosition */
 	/*if (riid == IID_IBaseFilter)

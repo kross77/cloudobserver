@@ -24,12 +24,8 @@ public:
 	HRESULT OnStartStreaming();
 	HRESULT OnStopStreaming();
 
-	HRESULT STDMETHODCALLTYPE SetAddress(/* [in] */ LPCOLESTR pszAddress,int port);
-
-	int				m_portNumber;		// Server Connection Port
-	LPCOLESTR		m_serverAddress;		// Server Address
-	int				m_socket;
-	sockaddr_in     ConnectionInfo;
+	STDMETHODIMP SetAddress(/* [in] */ LPCOLESTR pszAddress,int port);
+	STDMETHODIMP GetAddress(/* [out] */ LPOLESTR *pszAddress,int *port);
 
 private:
 	// Overriden to say what interfaces we support where
@@ -46,6 +42,10 @@ private:
 	
 	CInputPin       m_InputPin;			// IPin based interfaces		
 
+	int				m_portNumber;		// Server Connection Port
+	LPOLESTR 		m_serverAddress;		// Server Address
+	int				m_socket;
+	sockaddr_in     ConnectionInfo;
 	
 };
 
