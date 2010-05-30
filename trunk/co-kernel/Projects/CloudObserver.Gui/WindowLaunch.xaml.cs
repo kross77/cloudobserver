@@ -26,8 +26,8 @@ namespace CloudObserver.Gui
         /// </summary>
         private const int serviceStartTimeout = 2000;
 
-        private const string resourceManagerIp = "localhost";
-        private const string resourceManagerAddress = "http://localhost:4773/rm";
+        private string resourceManagerIp;
+        private string resourceManagerAddress;
 
         private OperationStage operationStage1 = null;
         private OperationStage operationStage2 = null;
@@ -42,10 +42,13 @@ namespace CloudObserver.Gui
         [DllImport("user32.dll")]
         private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
 
-        public WindowLaunch()
+        public WindowLaunch(string publicIpAddress)
         {
             InitializeComponent();
             InitializeOperations();
+
+            resourceManagerIp = publicIpAddress;
+            resourceManagerAddress = "http://" + publicIpAddress + ":4773/rm";
         }
 
         private void InitializeOperations()
