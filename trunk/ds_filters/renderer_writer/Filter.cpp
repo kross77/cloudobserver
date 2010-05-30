@@ -108,7 +108,7 @@ HRESULT	CFilter::FileOpen()
     }
 
     // Convert the UNICODE filename if necessary
-#if 0
+
 #if defined(WIN32) && !defined(UNICODE)
     char convert[MAX_PATH];
 
@@ -119,8 +119,7 @@ HRESULT	CFilter::FileOpen()
 #else
     pFileName = m_pFileName;
 #endif
-#endif
-	pFileName = m_pFileName;
+
     // Try to open the file
     m_hFile = CreateFile((LPCTSTR) pFileName,   // The filename
                          GENERIC_WRITE,         // File access
