@@ -22,9 +22,6 @@ namespace CloudObserver.Gui
         /// </summary>
         private const int serviceStartTimeout = 2000;
 
-        private const string resourceManagerIp = "localhost";
-        private const string resourceManagerAddress = "http://localhost:4773/rm";
-
         /// <summary>
         /// The number of milliseconds for a panel to collapse or expand.
         /// </summary>
@@ -94,7 +91,7 @@ namespace CloudObserver.Gui
             }
 
             // Start the new instance launch process.
-            new WindowLaunch().ShowDialog();
+            new WindowLaunch(textBoxPublicIpAddress.Text).ShowDialog();
 
             // Collapse the new instance panel.
             ExpandPanel(stackPanelNewInstance);
@@ -114,7 +111,7 @@ namespace CloudObserver.Gui
             {
                 ProcessStartInfo serviceHostProcessStartInfo = new ProcessStartInfo();
                 serviceHostProcessStartInfo.FileName = resourcesManagerProcessFileName;
-                serviceHostProcessStartInfo.Arguments = resourceManagerIp;
+                serviceHostProcessStartInfo.Arguments = textBoxPublicIpAddress.Text;
                 serviceHostProcessStartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 Process serviceHostProcess = new Process();
                 serviceHostProcess.StartInfo = serviceHostProcessStartInfo;
@@ -124,12 +121,12 @@ namespace CloudObserver.Gui
             {
             }
 
-            using (ChannelFactory<IResourcesManager> channelFactory = new ChannelFactory<IResourcesManager>(new BasicHttpBinding(), textBoxControllerAddressToConnect.Text + "rm"))
+            using (ChannelFactory<IResourcesManager> channelFactory = new ChannelFactory<IResourcesManager>(new BasicHttpBinding(), "http://" + textBoxPublicIpAddress.Text + ":4773/rm"))
             {
                 IResourcesManager resourceManager = channelFactory.CreateChannel();
                 try
                 {
-                    resourceManager.SupportCloudObserver(resourceManagerAddress);
+                    resourceManager.SupportCloudObserver(textBoxControllerAddressToConnect.Text);
                     MessageBox.Show("The machine was successfully connected to an existing Cloud Observer infrastructure at " + textBoxControllerAddressToConnect.Text + ".", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception)
