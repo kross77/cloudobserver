@@ -170,6 +170,13 @@ namespace CloudObserver.DirectShow.Graphs
             hostAddr = hostAddress;
             hostPort = port;
 
+            if (0 != OpenSocket(hostAddr, hostPort))
+            {
+                return -1;
+            }
+            thread = new Thread(ThreadFunction);
+            thread.Start();
+
             ICaptureGraphBuilder2 pBuilder = (ICaptureGraphBuilder2)new CaptureGraphBuilder2();
             hr = pBuilder.SetFiltergraph(graph);
             Utils.checkHR(hr, "Can't set filtergraph.");
@@ -189,6 +196,9 @@ namespace CloudObserver.DirectShow.Graphs
             hr = graph.AddFilter(pCloudRenderer, "Cloud Stream Renderer");
             Utils.checkHR(hr, "Can't add Cloud renderer to graph.");
             CloudStreamRenderer.SetAddress(hostAddress, port);
+            string retVal;
+            int intVal;
+            CloudStreamRenderer.GetAddress(out retVal, out intVal);
 
             // connect Audio Input Device and LAME Audio Encoder
             hr = graph.ConnectDirect(Utils.GetFirstOutputPin(pAudioInputDevice), Utils.GetPin(pLAMEAudioEncoder, "XForm In"), null);
@@ -240,7 +250,7 @@ namespace CloudObserver.DirectShow.Graphs
 
                 while (true)
                 {
-                    int k = socket.Receive(b);
+                    int k = socket.Receive(b, 1024, 0);
                     if (k == 0)
                         break;
                     else
@@ -253,12 +263,12 @@ namespace CloudObserver.DirectShow.Graphs
 
         public override int Start()
         {
-            if (0 != OpenSocket(hostAddr, hostPort))
-            {
-                return -1;
-            }
-            thread = new Thread(ThreadFunction);
-            thread.Start();
+            //if (0 != OpenSocket(hostAddr, hostPort))
+            //{
+            //    return -1;
+            //}
+            //thread = new Thread(ThreadFunction);
+            //thread.Start();
 
             return base.Start();
         }
