@@ -1,8 +1,10 @@
-﻿using System;
+﻿using CloudObserver.Kernel.Policies;
+using System;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.ServiceModel;
+using System.ServiceModel.Description;
 using System.Threading;
 
 namespace CloudObserver.Kernel.Services
@@ -24,6 +26,16 @@ namespace CloudObserver.Kernel.Services
         {
             this.ipAddress = ipAddress;
             deviceAddress = "http://" + ipAddress + ":4773/";
+
+            ServiceHost policyRetriever = new ServiceHost(typeof(PolicyRetriever), new Uri("http://" + ipAddress + ":843/"));
+            policyRetriever.AddServiceEndpoint(typeof(IPolicyRetriever), new WebHttpBinding(), "").Behaviors.Add(new WebHttpBehavior());
+            try
+            {
+                policyRetriever.Open();
+            }
+            catch
+            {
+            }
         }
 
         public bool StartCloudObserver()
