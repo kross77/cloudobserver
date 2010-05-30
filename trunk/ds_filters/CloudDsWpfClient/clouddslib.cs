@@ -12,7 +12,8 @@ namespace CloudObserver.DirectShow.Interfaces
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     public interface ICloudInetControl
     {
-        int SetAddress(string pszAddress, int port);
+        Int32 SetAddress([In, MarshalAs(UnmanagedType.LPWStr)] string pszAddress, int port);
+        Int32 GetAddress([Out, MarshalAs(UnmanagedType.LPWStr)] out string hostAddr, out int port);
     }
 }
 
@@ -43,7 +44,16 @@ namespace CloudObserver.DirectShow.Filters
                 return -1;
 
             return ctrlInterface.SetAddress(hostAddr, port);
-                //.SetFileName(fileName, port);
+        }
+        public static int GetAddress(out string hostAddr, out int port)
+        {
+            hostAddr = "                                        ";
+            port = 0;
+            ICloudInetControl ctrlInterface = CloudStreamRenderer.BaseFilter as ICloudInetControl;
+            if (null == ctrlInterface)
+                return -1;
+
+            return ctrlInterface.GetAddress(out hostAddr, out port);
         }
     }
     //37AF7C74-9887-42bd-858A-FF4D4035ED47
