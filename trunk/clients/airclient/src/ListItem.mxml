@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Canvas
-	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:fx="http://ns.adobe.com/mxml/2009"     
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+	xmlns:mx="library://ns.adobe.com/flex/mx" 
 	xmlns:mxmlY="http://www.yahoo.com/astra/2006/mxml"
 	xmlns:broadcastservice="services.broadcastservice.*" 
 	creationComplete="init(event)"  
@@ -9,18 +11,14 @@
 	verticalScrollPolicy="off" 
 	horizontalScrollPolicy="off" 
 	>
-	
+	<fx:Declarations>
 	<broadcastservice:BroadcastService
 		id="broadcastService"
 		fault="Alert.show('Вещание приостановленно. По причине ошибки. Сообщите об ошибке Вашему администратору. ' + event.fault.faultString  ); timerSetNextFrames.stop(); Selector1.selectedIndex = -1; Broad.selected = false;"
 		showBusyCursor="false"
 		/>
 	
-	<mx:CallResponder
-		id="WriteFrameResult"
-		result="WriteFrameResult_resultHandler(event)"
-		fault="'Сервер не отвечает. Вещание приостановленно. По причине ошибки. Сообщите об ошибке Вашему администратору. ' + event.fault.faultString  ); timerSetNextFrames.stop(); Selector1.selectedIndex = -1; Broad.selected = false;"
-		/>
+	<s:CallResponder id="WriteFrameResult" result="WriteFrameResult_resultHandler(event)" fault="'Сервер не отвечает. Вещание приостановленно. По причине ошибки. Сообщите об ошибке Вашему администратору. ' + event.fault.faultString; timerSetNextFrames.stop(); Selector1.selectedIndex = -1; Broad.selected = false;" />
 	
 	<mx:Fade 
 		id="fadeOut"
@@ -44,80 +42,29 @@
 		target="{WSDLAddress}"
 		minCharsForCompletion="0"
 		/>
-	
-	<mx:Script>
+		</fx:Declarations>
+	<fx:Script>
 		<![CDATA[
 		
-	import mx.events.StateChangeEvent;
-	import mx.graphics.codec.PNGEncoder;
-	import spark.components.ToggleButton;
-	import flashx.textLayout.events.SelectionEvent;
-	import mx.events.IndexChangedEvent;
-	import mx.events.NumericStepperEvent;
-	import mx.events.NumericStepperEvent;
-	import mx.events.ItemClickEvent;
-	import mx.events.FlexEvent;
-	import mx.events.ResourceEvent;
-	import mx.rpc.events.ResultEvent;
 	import com.adobe.images.JPGEncoder;
+	
 	import flash.display.*;
 	import flash.events.*;
-	import flash.geom.Rectangle;
 	import flash.net.*;
 	import flash.text.*;
-	import flash.utils.ByteArray;
-	import flash.utils.getTimer;
+	
 	import hurlant.jpeg.as3_jpeg_wrapper;
-    import mx.controls.Alert;
-    import mx.utils.ObjectUtil;
-    import mx.binding.utils.BindingUtils;
-    import mx.graphics.codec.JPEGEncoder; 
-    import mx.controls.Image; 
-    import flash.filesystem.File;
-    import flash.filesystem.FileMode;
-    import flash.filesystem.FileStream;
-    import mx.core.UIComponent;
-    import mx.controls.Alert;
-    import mx.controls.SWFLoader;
-    import com.adobe.images.JPGEncoder;
-    import mx.rpc.events.FaultEvent;
-    import mx.rpc.events.ResultEvent;
-    import flash.display.BitmapData;
-	import flash.geom.Matrix;
-	import flash.utils.ByteArray;
-	import flash.utils.Endian;
-    import flash.media.Camera;
-    import mx.controls.Alert;
-    import mx.events.ListEvent;
-    import mx.utils.ObjectUtil;
-  	import flash.media.Video;
-  	import mx.core.UIComponent; 	
-  	import flash.display.Bitmap;
-    import mx.events.CloseEvent;
-    import flash.display.Sprite;
-    import flash.text.TextField;
-    import flash.text.TextFieldAutoSize;
-    import flash.utils.Timer;
-    import flash.events.TimerEvent;
-    import flash.events.ActivityEvent;
-	import flash.utils.Timer;
-    import flash.events.TimerEvent;
-    import flash.display.Sprite;
-    import mx.core.Window;
-    import flash.media.Camera;
-    import mx.controls.Alert;
-    import mx.events.ListEvent;
-    import mx.utils.ObjectUtil;
-  	import flash.media.Video;
-  	import mx.core.UIComponent; 	
-  	import flash.display.Bitmap;
-    import mx.events.CloseEvent;
-    import flash.display.Sprite;
-    import flash.text.TextField;
-    import flash.text.TextFieldAutoSize;
-    import flash.utils.Timer;
-    import flash.events.TimerEvent;
-    import flash.events.ActivityEvent;
+	
+	import mx.controls.Alert;
+	import mx.controls.Image;
+	import mx.core.UIComponent;
+	import mx.core.Window;
+	import mx.events.FlexEvent;
+	import mx.events.ItemClickEvent;
+	import mx.events.NumericStepperEvent;
+	import mx.graphics.codec.PNGEncoder;
+	import mx.rpc.events.ResultEvent;
+
     
     private var camera2:Camera;
 	private var fr:FileReference;
@@ -451,7 +398,7 @@
 		}
 
 	]]>
-	</mx:Script>
+	</fx:Script>
 	
 	<mx:ApplicationControlBar 
 		dock="false"
@@ -556,13 +503,13 @@
 					
 					<mx:dataProvider>
 						
-						<mx:Array>
+						<fx:Array>
 							
-							<mx:String>BMP</mx:String>
-							<mx:String>JPEG</mx:String>
-							<mx:String>PNG</mx:String>
+							<fx:String>BMP</fx:String>
+							<fx:String>JPEG</fx:String>
+							<fx:String>PNG</fx:String>
 							
-						</mx:Array>
+						</fx:Array>
 						
 					</mx:dataProvider>
 					
@@ -706,11 +653,11 @@
 		
 		<mx:dataProvider>
 			
-			<mx:Array>
+			<fx:Array>
 				
-				<mx:String>Потоковое вещание</mx:String>
+				<fx:String>Потоковое вещание</fx:String>
 				
-			</mx:Array>
+			</fx:Array>
 			
 		</mx:dataProvider>
 		
@@ -724,9 +671,7 @@
 		backgroundAlpha="0.0"
 		x="4" 
 		y="8"
-		horizontalAlign="center"
-		verticalAlign="middle"
-		>
+>
 		
 		<mx:Image  
 			source="assets/TV.png" 

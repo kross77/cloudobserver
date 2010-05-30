@@ -1,37 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:WindowedApplication 
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009"     
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   xmlns:mx="library://ns.adobe.com/flex/mx" 
 						showStatusBar="false"
 						title="Cloud Observer AIR Client"
-						xmlns:mx="http://www.adobe.com/2006/mxml"
 						creationComplete="init(event);" 
-						width="450"
-						verticalScrollPolicy="off" 	
-						horizontalScrollPolicy="off"  
-						layout="absolute" 
-						backgroundGradientAlphas="[1.0, 1.0]"
-						backgroundGradientColors="[#CBCBCB, #6E6E6E]" 
+						width="450" 
 						xmlns:cloudobserverbroadcastservice="services.cloudobserverbroadcastservice.*" 
 						xmlns:broadcastservice="services.broadcastservice.*"
 						xmlns:mxmlY="http://www.yahoo.com/astra/2006/mxml"
-	>
+	 z="0">
 	
-	<mx:Script>
+	<fx:Script>
 		<![CDATA[
-				
-    import flash.media.Camera;
-    import mx.controls.Alert;
-    import mx.events.ListEvent;
-    import mx.utils.ObjectUtil;
-  	import flash.media.Video;
-  	import mx.core.UIComponent; 	
-  	import flash.display.Bitmap;
-    import mx.events.CloseEvent;
-    import flash.display.Sprite;
-    import flash.text.TextField;
-    import flash.text.TextFieldAutoSize;
-    import flash.utils.Timer;
-    import flash.events.TimerEvent;
-    import flash.events.ActivityEvent;
 
 	[Bindable]
 	private var array:Array = new Array(Camera.names.length);
@@ -61,17 +42,19 @@
             {
                openedWindows[i].close();
             }
-    	}
+		}
 	]]>
-	</mx:Script>
+	</fx:Script>
 	
 	<mx:Panel layout="absolute"
+			  verticalScrollPolicy="off"
+			  horizontalScrollPolicy="off"
 			  left="10" 
 			  right="10" 
 			  top="10" 
 			  bottom="10" 
 			  title="{'Камеры ' + Camera.names.length.toString() + ' штуки имеются в наличии' }"
-		>
+		 z="0">
 		
 		<mx:List id="list" 
 				 itemRenderer="ListItem"    
@@ -79,9 +62,9 @@
 				 width="100%"
 				 height="100%"
 				 y="16"
-				 x="0" alternatingItemColors="[#CEB9B9, #692E2E]"
+				 x="0" alternatingItemColors="[#B8C1CD, #2D2D68]"
 			/>
 			
 	</mx:Panel>
 	
-</mx:WindowedApplication>
+</s:WindowedApplication>
