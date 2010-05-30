@@ -1,0 +1,34 @@
+// CloudInterfacesLib.idl : IDL source for CloudInterfacesLib
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (CloudInterfacesLib.tlb) and marshalling code.
+
+#ifndef AM_LOCAL
+#define AM_LOCAL local,
+#define AM_ANNOTATION(_x_) ,annotation(_x_)
+#endif
+
+import "oaidl.idl";
+import "ocidl.idl";
+[
+	uuid(102F875D-883F-44D7-BE57-E490957589E7),
+	version(1.0),
+	helpstring("CloudInterfacesLib 1.0 Type Library")
+]
+ 
+library CloudInterfacesLibLib
+{
+	importlib("stdole2.tlb");	
+	[
+		object,
+		uuid(80AE3F22-17DE-4d6c-BC3E-F2A38AFC53CC),
+		pointer_default(unique)
+	] 
+	interface ICloudInetControl : IUnknown
+	{
+		HRESULT SetAddress([in] LPCOLESTR pszAddress, [in] int port) = 0;
+		HRESULT GetAddress([out] LPOLESTR *pszAddress, [out] int *port) = 0;
+	};
+};
+
