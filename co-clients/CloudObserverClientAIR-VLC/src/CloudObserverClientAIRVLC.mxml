@@ -82,12 +82,13 @@
 			private var fs:FileStream;
 			private var file:File;
 			
+			
 			public function SavaData(Data:String, Name:String):void
 			{
 				var str:String = Data; 
 				var bytes:ByteArray = new ByteArray(); 
 				bytes.writeUTFBytes(str); 
-				EncryptedLocalStore.setItem(Name, bytes);
+				EncryptedLocalStore.setItem(Name, bytes, true);
 			}
 			public function RetriveData(Name:String):String
 			{
@@ -310,14 +311,17 @@
 			}	
 			protected function APISTR_enterHandler(event:FlexEvent):void
 			{
-				apiUri = APISTR.text;
-				tabnav.selectedIndex = 0;
-				
+				APIURLSUBMIT();
 			}
 			protected function button2_clickHandler(event:MouseEvent):void
 			{
+				APIURLSUBMIT();
+			}
+			protected function APIURLSUBMIT():void
+			{
+				SavaData(APISTR.text, "APISTR");
 				apiUri = APISTR.text;
-				tabnav.selectedIndex = 0;
+				tabnav.selectedIndex = 0;	
 			}
 			protected function KillVLC():void
 			{
@@ -396,6 +400,12 @@
 
 
 
+
+
+			protected function APIURL_creationCompleteHandler(event:FlexEvent):void
+			{
+				APISTR.text = RetriveData("APISTR");
+			}
 
 		]]>
 	</fx:Script>
@@ -573,7 +583,7 @@
 			</mx:TabNavigator>
 		</s:NavigatorContent>
 		<s:NavigatorContent label="Options" width="100%" height="100%">
-			<mx:Form horizontalCenter="0" verticalCenter="0" width="326">
+			<mx:Form horizontalCenter="0" creationComplete="APIURL_creationCompleteHandler(event)" id="APIURL" verticalCenter="0" width="326">
 				<mx:FormHeading label="API options" width="100%" textAlign="center"/>
 				<mx:FormHeading label="В релизе будет запрятано глубже"/>
 				<mx:FormItem label="CMS URL" width="100%">
