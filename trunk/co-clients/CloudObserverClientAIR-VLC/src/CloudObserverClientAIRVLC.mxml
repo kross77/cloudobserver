@@ -82,6 +82,27 @@
 			private var fs:FileStream;
 			private var file:File;
 			
+			public function SavaData(Data:String, Name:String):void
+			{
+				var str:String = Data; 
+				var bytes:ByteArray = new ByteArray(); 
+				bytes.writeUTFBytes(str); 
+				EncryptedLocalStore.setItem(Name, bytes);
+			}
+			public function RetriveData(Name:String):String
+			{
+				var storedValue:ByteArray = EncryptedLocalStore.getItem(Name); 
+				return storedValue.readUTFBytes(storedValue.length); 
+			}
+			public function RemoveData(Name:String):void
+			{
+				EncryptedLocalStore.removeItem(Name); 
+			}
+			public function CleareStoredData(Name:String):void
+			{
+				EncryptedLocalStore.reset(); 
+			}
+			
 			protected function gatewayInactive(event:FaultEvent):void{
 				
 				Alert.show(" Был указан адресс ядрышка. По данному адресу ядрышко не пашет");
