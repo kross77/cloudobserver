@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CloudObserver.Kernel.Contents;
+using System;
 using System.ServiceModel;
 using System.Text;
 
@@ -43,8 +44,16 @@ namespace CloudObserver.Kernel.Services
             if (content != null)
                 content.Close();
 
-            content = new Content(id, ip, GetFreePort(), GetFreePort());
-            content.ContentType = contentType;
+            switch (contentType)
+            {
+                case "video/x-flv":
+                    content = new FLVContent(id, contentType, ip, GetFreePort(), GetFreePort());
+                    break;
+                default:
+                    content = new UnknownContent(id, contentType, ip, GetFreePort(), GetFreePort());
+                    break;
+            }
+
             content.Open();
             RegisterStream(id, content.SenderAddress, contentType);
 
