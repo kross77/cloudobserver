@@ -10,14 +10,15 @@ namespace CloudObserver.Kernel.Contents
     public class UnknownContent : Content
     {
         private const int bufferSize = 8192;
-        private const int sleepInterval = 100;
 
         private List<Stream> readers;
+        private List<Stream> disconnectedReaders;
 
         public UnknownContent(int id, string contentType, string ipAddress, int receiverPort, int senderPort)
             : base(id, contentType, ipAddress, receiverPort, senderPort)
         {
             readers = new List<Stream>();
+            disconnectedReaders = new List<Stream>();
         }
 
         protected override void OnReaderConnected(Stream stream)
@@ -31,9 +32,19 @@ namespace CloudObserver.Kernel.Contents
             while (true)
             {
                 int read = stream.Read(buffer, 0, bufferSize);
-                for (int i = 0; i < readers.Count; i++)
-                    readers[i].Write(buffer, 0, read);
-                Thread.Sleep(sleepInterval);
+                foreach (Stream reader in readers)
+                    try
+                    {
+                        reader.Write(buffer, 0, read);
+                    }
+                    catch (Exception)
+                    {
+                        disconnectedReaders.Add(reader);
+                    }
+
+                foreach (Stream disconnectedReader in disconnectedReaders)
+                    readers.Remove(disconnectedReader);
+                disconnectedReaders.Clear();
             }
         }
 

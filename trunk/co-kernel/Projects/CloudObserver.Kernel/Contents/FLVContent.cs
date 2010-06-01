@@ -9,6 +9,7 @@ namespace CloudObserver.Kernel.Contents
     public class FLVContent : Content
     {
         private List<FLVReader> readers;
+        private List<FLVReader> disconnectedReaders;
 
         private byte[] header;
         private List<byte[]> scriptData;
@@ -31,6 +32,7 @@ namespace CloudObserver.Kernel.Contents
             : base(id, contentType, ipAddress, receiverPort, senderPort)
         {
             readers = new List<FLVReader>();
+            disconnectedReaders = new List<FLVReader>();
             scriptData = new List<byte[]>();
             buffer = new List<byte[]>();
             bufferedTimestamp = 0;
@@ -133,9 +135,20 @@ namespace CloudObserver.Kernel.Contents
                         tagHeader[6] = newTimestampValue[0];
 
                         // Write tag.
-                        reader.stream.Write(tagHeader, 0, tagHeader.Length);
-                        reader.stream.Write(tagData, 0, tagData.Length);
+                        try
+                        {
+                            reader.stream.Write(tagHeader, 0, tagHeader.Length);
+                            reader.stream.Write(tagData, 0, tagData.Length);
+                        }
+                        catch (Exception)
+                        {
+                            disconnectedReaders.Add(reader);
+                        }
                     }
+
+                    foreach (FLVReader disconnectedReader in disconnectedReaders)
+                        readers.Remove(disconnectedReader);
+                    disconnectedReaders.Clear();
                 }
             }
         }
