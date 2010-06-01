@@ -53,11 +53,13 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\CloudController.cs" />
+    <Compile Include="Contents\FLVContent.cs" />
     <Compile Include="Services\ICloudController.cs" />
-    <Compile Include="Services\Content.cs" />
+    <Compile Include="Contents\Content.cs" />
     <Compile Include="Services\IResourcesManager.cs" />
     <Compile Include="Services\ResourcesManager.cs" />
     <Compile Include="Services\IWorkBlock.cs" />
+    <Compile Include="Contents\UnknownContent.cs" />
     <Compile Include="Services\WorkBlock.cs" />
     <Compile Include="StreamInfromation.cs" />
   </ItemGroup>

@@ -1,19 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Text;
 
-namespace CloudObserver.Kernel.Services
+namespace CloudObserver.Kernel.Contents
 {
-    public class Content
+    public abstract class Content
     {
-        private const int bufferSize = 8192;
-        private const int sleepInterval = 100;
+        private string contentType;
+        private byte[] header;
+        private byte[] notFoundResponse;
 
         private TcpListener receiver;
         private Thread receiverThread;
+        private bool receiverConnected;
         private string receiverAddress;
         public string ReceiverAddress
         {
@@ -28,30 +30,26 @@ namespace CloudObserver.Kernel.Services
             get { return senderAddress; }
         }
 
-        private string contentType;
-        public string ContentType
+        public Content(int id, string contentType, string ipAddress, int receiverPort, int senderPort)
         {
-            get { return contentType; }
-            set { contentType = value; }
-        }
+            this.contentType = contentType;
 
-        private List<TcpClient> readers;
-        private List<NetworkStream> readersStreams;
+            string responseHeader = "HTTP/1.0 200 OK\r\nContent-type: " + contentType + "\r\nCache-Control: no-cache\r\n\r\n";
+            header = Encoding.UTF8.GetBytes(responseHeader);
 
-        public Content(int id, string ipAddress, int receiverPort, int senderPort)
-        {
+            string notFound = "HTTP/1.0 404 Not Found\r\n\r\n";
+            notFoundResponse = Encoding.UTF8.GetBytes(notFound);
+
             receiverAddress = "http://" + ipAddress + ":" + receiverPort + "/";
             receiver = new TcpListener(new IPEndPoint(IPAddress.Any, receiverPort));
             receiverThread = new Thread(ReceiverLoop);
             receiverThread.IsBackground = true;
+            receiverConnected = false;
 
             senderAddress = "http://" + ipAddress + ":" + senderPort + "/";
             sender = new TcpListener(new IPEndPoint(IPAddress.Any, senderPort));
             senderThread = new Thread(SenderLoop);
             senderThread.IsBackground = true;
-
-            readers = new List<TcpClient>();
-            readersStreams = new List<NetworkStream>();
         }
 
         public void Open()
@@ -80,20 +78,13 @@ namespace CloudObserver.Kernel.Services
                 {
                     TcpClient writer = receiver.AcceptTcpClient();
                     NetworkStream writerStream = writer.GetStream();
-                    while (true)
-                    {
-                        if (writerStream.DataAvailable)
-                        {
-                            byte[] buffer = new byte[bufferSize];
-                            int read = writerStream.Read(buffer, 0, bufferSize);
-                            for (int i = 0; i < readersStreams.Count; i++)
-                                readersStreams[i].Write(buffer, 0, read);
-                        }
-                        Thread.Sleep(sleepInterval);
-                    }
+                    receiverConnected = true;
+                    OnWriterConnected(writerStream);
                 }
                 catch (Exception)
                 {
+                    receiverConnected = false;
+                    Reset();
                 }
             }
         }
@@ -102,15 +93,29 @@ namespace CloudObserver.Kernel.Services
         {
             while (true)
             {
-                TcpClient reader = sender.AcceptTcpClient();
-                readers.Add(reader);
-
-                NetworkStream readerStream = reader.GetStream();
-                readersStreams.Add(readerStream);
-                string responseHeader = "HTTP/1.0 200 OK\r\nContent-Type: " + contentType + "\r\nCache-Control: no-cache\r\n\r\n";
-                byte[] header = Encoding.UTF8.GetBytes(responseHeader);
-                readerStream.Write(header, 0, header.Length);
+                try
+                {
+                    TcpClient reader = sender.AcceptTcpClient();
+                    NetworkStream readerStream = reader.GetStream();
+                    if (!receiverConnected)
+                    {
+                        readerStream.Write(notFoundResponse, 0, notFoundResponse.Length);
+                        readerStream.Close();
+                        continue;
+                    }
+                    readerStream.Write(header, 0, header.Length);
+                    OnReaderConnected(readerStream);
+                }
+                catch (Exception)
+                {
+                }
             }
         }
+
+        protected abstract void Reset();
+
+        protected abstract void OnReaderConnected(Stream stream);
+
+        protected abstract void OnWriterConnected(Stream stream);
     }
 }
