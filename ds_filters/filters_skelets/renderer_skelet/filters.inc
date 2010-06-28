@@ -1,5 +1,5 @@
 
-static const WCHAR g_wszName[] = L"Sample Filter Renderer Skelet";
+static const WCHAR g_wszName[] = FILTER_WCHAR_NAME;
 
 
 const AMOVIESETUP_MEDIATYPE pinSubtypes = 
@@ -24,7 +24,7 @@ const AMOVIESETUP_PIN AMSPins[]=
 
 const AMOVIESETUP_FILTER AMSFilter =
 {
-    &CLSID_RendererSkelet,  // Filter CLSID
+    &CLSID_Filter,  // Filter CLSID
     g_wszName,     // String name
     MERIT_DO_NOT_USE,      // Filter merit
     sizeof(AMSPins)/sizeof(AMSPins[0]),                     // Number pins
@@ -38,7 +38,7 @@ CFactoryTemplate g_Templates[] =
 {
     {
         g_wszName,
-        &CLSID_RendererSkelet,
+        &CLSID_Filter,
         CFilter::CreateInstance,
         NULL,
         &AMSFilter

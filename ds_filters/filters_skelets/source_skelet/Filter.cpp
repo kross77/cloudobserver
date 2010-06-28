@@ -3,11 +3,9 @@
 #include "Filter.h"
 #include "OutputPin.h"
 
-EXTERN_C const GUID CLSID_SourceSkelet;
-
 
 CFilter::CFilter(LPUNKNOWN lpunk, HRESULT *phr) :
-CSource(NAME((LPCTSTR)g_wszName), lpunk, CLSID_SourceSkelet)    
+CSource(NAME((LPCTSTR)g_wszName), lpunk, CLSID_Filter)    
 {
 	CAutoLock cAutoLock(&m_cStateLock);
 
