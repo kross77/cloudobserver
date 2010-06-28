@@ -21,7 +21,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
-			CharacterSet="2"
+			CharacterSet="1"
 			ManagedExtensions="0"
 			>
 			<Tool
@@ -68,7 +68,7 @@
 				OutputFile="$(OutDir)\renderer.ax"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="C:\Program Files\Microsoft SDKs\Windows\v6.1\Samples\Multimedia\DirectShow\BaseClasses\Debug_MBCS"
-				ModuleDefinitionFile="renderer.def"
+				ModuleDefinitionFile="dll.def"
 				GenerateDebugInformation="true"
 				AssemblyDebug="0"
 				EntryPointSymbol="DllEntryPoint@12"
@@ -198,15 +198,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\dll.def"
+				>
+			</File>
+			<File
 				RelativePath=".\Filter.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\InputPin.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\renderer.def"
 				>
 			</File>
 			<File
@@ -235,6 +235,10 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath=".\dll.h"
+				>
+			</File>
 			<File
 				RelativePath=".\Filter.h"
 				>

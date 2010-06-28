@@ -68,7 +68,7 @@
 				OutputFile="$(OutDir)\transform.ax"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="C:\Program Files\Microsoft SDKs\Windows\v6.1\Samples\Multimedia\DirectShow\BaseClasses\Debug_MBCS"
-				ModuleDefinitionFile="transform.def"
+				ModuleDefinitionFile="dll.def"
 				GenerateDebugInformation="true"
 				AssemblyDebug="0"
 				EntryPointSymbol="DllEntryPoint@12"
@@ -198,7 +198,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\FilterTransform.cpp"
+				RelativePath=".\dll.def"
+				>
+			</File>
+			<File
+				RelativePath=".\Filter.cpp"
 				>
 			</File>
 			<File
@@ -221,10 +225,6 @@
 					/>
 				</FileConfiguration>
 			</File>
-			<File
-				RelativePath=".\transform.def"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -232,11 +232,15 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\filters.inc"
+				RelativePath=".\dll.h"
 				>
 			</File>
 			<File
-				RelativePath=".\FilterTransform.h"
+				RelativePath=".\Filter.h"
+				>
+			</File>
+			<File
+				RelativePath=".\filters.inc"
 				>
 			</File>
 			<File

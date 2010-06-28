@@ -1,23 +1,21 @@
+// This is the main DLL file.
+
 #include "stdafx.h"
 #include"guids.h"
 #include "dll.h"
 #include "Filter.h"
 
 
-
 CFilter::CFilter(TCHAR *tszName, LPUNKNOWN punk, HRESULT *phr) :
-    CBaseRenderer(CLSID_Filter, tszName, punk, phr),
-		m_InputPin(NAME("Input Pin"),this,&m_InterfaceLock,phr,L"Input")
+    CTransInPlaceFilter(tszName, punk, CLSID_Filter, phr, true)
 {
 }
-
 CFilter::~CFilter()
 {
 }
 
 CUnknown * WINAPI CFilter::CreateInstance(LPUNKNOWN punk, HRESULT *phr)
 {
-	ASSERT(phr);    
 	CFilter *pNewObject = new CFilter(NAME(FILTER_TCHAR_NAME), punk, phr);
     if (pNewObject == NULL) {
         if (phr)
@@ -27,20 +25,18 @@ CUnknown * WINAPI CFilter::CreateInstance(LPUNKNOWN punk, HRESULT *phr)
     return pNewObject;
 }
 
-HRESULT CFilter::CheckMediaType(const CMediaType *pmt)
+
+HRESULT CFilter::CheckInputType(const CMediaType* mtIn)
 {
-	return NOERROR;
+	return E_INVALIDARG;
 }
 
-HRESULT CFilter::DoRenderSample(IMediaSample *pMediaSample)
+STDMETHODIMP CFilter::JoinFilterGraph(IFilterGraph *pGraph, LPCWSTR pName)
 {
-	//we can get pointer to data is renrered
+	return CBaseFilter::JoinFilterGraph(pGraph,pName);
+}
 
-//	BYTE *buff;
-//	pMediaSample->GetPointer(&buff);
-
-	//we can get actual size of data is saved in buffer
-	//pMediaSample->GetActualDataLength();
-	
+HRESULT CFilter::Transform(IMediaSample *pMediaSample)
+{
 	return NOERROR;
 }

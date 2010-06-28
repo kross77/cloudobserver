@@ -18,6 +18,8 @@
 #include "stdafx.h"
 #include "Filter.h"
 #include "guids.h"
+#include "dll.h"
+
 #include "filters.inc"
 
 #define CreateComObject(clsid, iid, var) CoCreateInstance( clsid, NULL, CLSCTX_INPROC_SERVER, iid, (void **)&var);

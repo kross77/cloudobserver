@@ -2,7 +2,7 @@
 // for filter using in this project.
 
 //Defines filter name. It is shown in list of filters in GraphEdit util.
-static const WCHAR g_wszName[] = L"Sample Filter Transform Skelet";
+static const WCHAR g_wszName[] = FILTER_WCHAR_NAME;
 
 //Pin's type specification.
 const AMOVIESETUP_MEDIATYPE pinSubtypes = 
@@ -39,7 +39,7 @@ const AMOVIESETUP_PIN AMSPins[]=
 //Describes filter parameters.
 const AMOVIESETUP_FILTER AMSFilter =
 {
-    &CLSID_TransformSkelet,  // Filter CLSID
+    &CLSID_Filter,  // Filter CLSID
     g_wszName,     // String name
     MERIT_DO_NOT_USE,      // Filter merit
     sizeof(AMSPins)/sizeof(AMSPins[0]),                     // Number pins
@@ -53,7 +53,7 @@ CFactoryTemplate g_Templates[] =
 {
     {
         g_wszName,
-        &CLSID_TransformSkelet,
+        &CLSID_Filter,
         CFilter::CreateInstance,
         NULL,
         &AMSFilter
