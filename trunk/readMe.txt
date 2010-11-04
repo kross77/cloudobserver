@@ -1,0 +1,74 @@
+General Simple Video Transmitter solution
+
+Solution is using crossplatform opensource librarys.
+
+OpenCV
+OpenAL
+FFmpeg
+Boost
+
+Solution consists of 4 test projects - individual "hello world" like projects for each of OpenCV OpenAL FFmpeg libs, one for testing encoding into file and previewing
+Solution contains project called as solution - main project, independent from others, can stream encoded live video+audio stream inside container onto cloud server via TCP connection.
+
+
+
+
+
+
+
+
+
+
+How to install lib into IDE  (	let us look at OpenCV as an example, we use .Lib files - not DLLs!)
+
+1) Install OpenCV
+
+Download the OpenCV 2.1.0 Windows installer from SourceForge - "OpenCV-2.1.0-win32-vs2008.exe".
+Install it to a folder (without any spaces in it), say "C:\OpenCV2.1\". This article will refer to this path as $openCVDir
+During installation, enable the option "Add OpenCV to the system PATH for all users".
+
+2) Configure Visual Studio
+
+Open VC++ Directories configuration: Tools > Options > Projects and Solutions > VC++ Directories
+Choose "Show directories for: Include files"
+Add "$openCVDir\include\opencv"
+Choose "Show directories for: Library files"
+Add "$openCVDir\lib"
+Choose "Show directories for: Source files"
+Add "$openCVDir\src\cv"
+Add "$openCVDir\src\cvaux"
+Add "$openCVDir\src\cxcore"
+Add "$openCVDir\src\highgui"
+
+3) Configure your Project
+
+After you've created a project you'll need to add the OpenCV dependencies.
+
+Open Project Properties: Project > %projectName% Properties...
+Open Linker Input properties: Configuration Properties > Linker > Input
+Open the "..." window to edit "Additional Dependencies" and on each line put:
+"cv210.lib"
+"cxcore210.lib"
+"highgui210.lib"
+And any other lib file necessary for your project
+Your project should now build. If you get any errors try restarting Visual Studio and then doing a clean Rebuild.
+
+
+
+FFMpeg Encoder
+
+
+For FFMpeg Lib Includes we use method provided on [1] by adding FFmpeg as additional folder in sln (adding to project external libs path '../ffmpeg/lib/' and additional includes (in C++ tab) '../ffmpeg/include/')
+
+Bibliography:
+
+http://opencv.willowgarage.com/wiki/VisualC%2B%2B_VS2008
+[1]http://unick-soft.ru/Articles.cgi?id=20
+http://nashruddin.com/display-video-from-webcam-with-opencv.html
+http://opensource.creative.com/pipermail/openal/2008-January/010877.html
+
+
+http://connect.creativelabs.com/openal/default.aspx
+http://www.boost.org/
+
+http://ffmpeg.arrozcru.org/autobuilds/
