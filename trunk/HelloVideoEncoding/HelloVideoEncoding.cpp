@@ -11,8 +11,41 @@
 
 #include "VideoEncoder.h"
 #include "Settings.h"
+#include <boost/thread.hpp>
+#include <boost/timer.hpp>
 
+namespace this_thread = boost::this_thread;
 using namespace std;
+
+class BaseThread
+{
+public:
+	BaseThread()
+	{ }
+	virtual ~BaseThread()
+	{ }
+
+	void operator()()
+	{
+		try
+		{
+			for (;;)
+			{
+				// Check if the thread should be interrupted
+				this_thread::interruption_point();
+
+				DoStuff();
+			}
+		}
+		catch (boost::thread_interrupted)
+		{
+			// Thread end
+		}
+	}
+
+protected:
+	virtual void DoStuff() = 0;
+};
 
 
 //variables
@@ -22,10 +55,11 @@ VideoEncoder encoder;
 int w = W_VIDEO;
 int h = H_VIDEO;
 AVFrame* frame;
+AVFrame* readyFrame;
 int nSampleSize;
-int bufferImgSize;
-uint8_t * buffer;
+
 char* sample;
+char* readySample;
 //for OpenAL
 
 //for OpenCV
@@ -36,10 +70,8 @@ IplImage* bluechannel;
 IplImage* redchannel;
 IplImage* greenchannel;
 
-
 int       key;
-
-
+int offset = 0;
 
 //set up OpenCV
 void initOpenCV()
@@ -69,29 +101,42 @@ void initOpenAL()
 }
 
 //set up FFmpeg
-void initFFmpeg(string filename, string container, int w, int  h)
+void initFFmpeg(string filename, string container, int w, int h, int fps)
 {
+	encoder.SetFps(fps);
 	if (!encoder.InitFile(filename, container))
 	{
 		printf("Cannot init file \n" );
 		cin.get();
 	}
 
-	frame = avcodec_alloc_frame();
-	nSampleSize = 2 * 22050.0f / 7.0f; // 1 / 25 sec * FORMAT SIZE(S16)
-	sample = new char[nSampleSize];
-	// Create frame
-	bufferImgSize = avpicture_get_size(PIX_FMT_BGR24, w, h);
-	buffer = (uint8_t*)av_mallocz(bufferImgSize);
-	avpicture_fill((AVPicture*)frame, buffer, PIX_FMT_BGR24, w, h);
+	int bufferImgSize = avpicture_get_size(PIX_FMT_BGR24, w, h);
 
+	// Create frame
+	frame = avcodec_alloc_frame();
+	uint8_t* frameBuffer = (uint8_t*)av_mallocz(bufferImgSize);
+	avpicture_fill((AVPicture*)frame, frameBuffer, PIX_FMT_BGR24, w, h);
+
+	// Create ready frame
+	readyFrame = avcodec_alloc_frame();
+	uint8_t* readyFrameBuffer = (uint8_t*)av_mallocz(bufferImgSize);
+	avpicture_fill((AVPicture*)readyFrame, readyFrameBuffer, PIX_FMT_BGR24, w, h);
+
+	nSampleSize = 2 * 22050.0f / fps; // 1 / fps sec * FORMAT SIZE(S16)
+
+	// Create sample
+	sample = new char[nSampleSize];
+
+	// Create ready sample
+	readySample = new char[nSampleSize];
 }
+
 //set up libs and comps
 void initAll()
 {
 	initOpenCV();
 	initOpenAL();
-	initFFmpeg(FILE_NAME, CONTAINER, w, h);
+	initFFmpeg(FILE_NAME, CONTAINER, w, h, FPS);
 }
 // Create test video frame
 void CreateFrame(char * buffer, int w, int h, int bytespan)
@@ -135,7 +180,7 @@ void CreateFrame(char * buffer, int w, int h, int bytespan)
 }
 
 // Create sample
-void CreateSample(short * buffer, int sampleCount, int offset)
+void CreateSample(short * buffer, int sampleCount)
 {
 	int frequency = 440;
 	int amplitude = 2000; // volume
@@ -167,6 +212,11 @@ void closeFFmpeg()
 	av_free(frame);
 	delete[] sample;
 	sample = NULL;
+
+	av_free(readyFrame->data[0]);
+	av_free(readyFrame);
+	delete[] readySample;
+	readySample = NULL;
 }
 void closeUp()
 {
@@ -174,33 +224,82 @@ void closeUp()
 	closeOpenAL();
 	closeFFmpeg();
 }
+
+
+
+
+
+class ThreadCaptureVideo : public BaseThread
+{
+protected:
+	virtual void DoStuff()
+	{
+		CreateFrame((char *)frame->data[0], w, h, frame->linesize[0]);
+
+		// swap buffers
+		AVFrame* swap = frame;
+		frame = readyFrame;
+		readyFrame = swap;
+
+		//CreateSample((short *)sample, nSampleSize/2, offset);
+		//offset += nSampleSize/2;
+		//	if (offset == 7*nSampleSize/2)
+		//	{
+		//		offset = 0;
+		//		cout << "cleared!"<< endl;
+		//	}
+	}
+};
+class ThreadCaptureAudio : public BaseThread
+{
+protected:
+	virtual void DoStuff()
+	{
+		CreateSample((short *)sample, nSampleSize/2);
+		offset += nSampleSize/2;
+		//	if (offset == 7*nSampleSize/2)
+		//	{
+		//		offset = 0;
+		//		cout << "cleared!"<< endl;
+		//	}
+
+		// swap buffers
+		char* swap = sample;
+		sample = readySample;
+		readySample = swap;
+	}
+};
+
+
 int main()
 {
 	initAll();
 	
-	int offset = 0;
+	ThreadCaptureVideo thread_ThreadCaptureVideo_instance;
+	boost::thread ThreadCaptureVideo = boost::thread(thread_ThreadCaptureVideo_instance);
 
-	while( key != 'q' ) {
+	ThreadCaptureAudio thread_ThreadCaptureAudio_instance;
+	boost::thread ThreadCaptureAudio = boost::thread(thread_ThreadCaptureAudio_instance);
 
-//ready frame перенаправл указателей. 2 буфера. 
-		CreateFrame((char *)frame->data[0], w, h, frame->linesize[0]);
-		CreateSample((short *)sample, nSampleSize/2, offset);  // /2
-		offset += nSampleSize/2;
-	//	if (offset == 7*nSampleSize/2)
-	//	{
-	//		offset = 0;
-	//		cout << "cleared!"<< endl;
-	//	}
+	double desiredTime = 1000.0f / FPS;
+	boost::timer t;
 
-		if (!encoder.AddFrame(frame, sample, nSampleSize))
-		{
+	while(key != 'q')
+	{
+		t.restart();
+
+		if (!encoder.AddFrame(readyFrame, readySample, nSampleSize))
 			printf("Cannot write frame\n");
-		} 
+		
+		double leftTime = desiredTime - t.elapsed();
 
-		/* exit if user press 'q' */
+		if (leftTime>0)
+			this_thread::sleep(boost::posix_time::milliseconds(leftTime));
+
+		/* exit if user press 'q' */		
 		key = cvWaitKey( 1 );
-
 	}
+	
 	closeUp();
 	return 0;
 }
