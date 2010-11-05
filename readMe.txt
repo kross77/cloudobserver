@@ -13,8 +13,6 @@ Solution contains project called as solution - main project, independent from ot
 There is LibsAndHeaders folder avaliable for project developers it contains  Install.ReadMe.txt file with instructions for installing all 4 libs, headers and so on contained in the folder distribution.
 
 
-
-
 --------------------------------------------
 
 In case you want to collect and instal all 4 libs onn your own here are shourt instructions on libs install
@@ -59,16 +57,19 @@ FFMpeg Encoder
 
 
 For FFMpeg Lib Includes we use method provided on [1] by adding FFmpeg as additional folder in sln (adding to project external libs path '../ffmpeg/lib/' and additional includes (in C++ tab) '../ffmpeg/include/')
+For Boost install (in case you want to add it on your own see [2])
 
 Bibliography:
 
 http://opencv.willowgarage.com/wiki/VisualC%2B%2B_VS2008
 [1]http://unick-soft.ru/Articles.cgi?id=20
+[2]http://www.qrck.ru/doc/libs/1_44_0/more/getting_started/windows.html
 http://nashruddin.com/display-video-from-webcam-with-opencv.html
 http://opensource.creative.com/pipermail/openal/2008-January/010877.html
 
 
 http://connect.creativelabs.com/openal/default.aspx
 http://www.boost.org/
+
 
 http://ffmpeg.arrozcru.org/autobuilds/

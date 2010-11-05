@@ -1,31 +1,31 @@
 ========================================================================
-    CONSOLE APPLICATION : HelloVideoEncoding Project Overview
+    CONSOLE APPLICATION : HelloBoost Project Overview
 ========================================================================
 
 This file contains a summary of what you will find in each of the files that
-make up your HelloVideoEncoding application.
+make up your HelloBoost application.
 
 
-HelloVideoEncoding.vcproj
+HelloBoost.vcproj
     This is the main project file for VC++ projects generated using an Application Wizard.
     It contains information about the version of Visual C++ that generated the file, and
     information about the platforms, configurations, and project features selected with the
     Application Wizard.
 
-HelloVideoEncoding.cpp
+HelloBoost.cpp
     This is the main application source file.
-    Ment for testing and creating HelloWorld style code base for FFmpeg+Boost+OpenCV+OpenAL libs. Simple WebCam live video + live mic audio multyformat recorder.
+    Ment for testing and creating HelloWorld style code base for Boost libs such as timer, sockets and Thread Management.
 
 /////////////////////////////////////////////////////////////////////////////
 Other standard files:
 
 StdAfx.h, StdAfx.cpp
     These files are used to build a precompiled header (PCH) file
-    named HelloVideoEncoding.pch and a precompiled types file named StdAfx.obj.
+    named HelloBoost.pch and a precompiled types file named StdAfx.obj.
 
 /////////////////////////////////////////////////////////////////////////////
 Other notes:
 
-Add threads, add mic support, make FPS constant, make it setable by user when main app is started, add timers for not triing to capture and ecode more frames than required by FPS constant.
+Add sample for Time, Threads, Sockets
 
 /////////////////////////////////////////////////////////////////////////////
