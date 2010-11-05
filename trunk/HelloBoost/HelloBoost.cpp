@@ -91,4 +91,5 @@ int main()
 
 	threadA.interrupt();
 	threadA.join();
+	std::cin.get();
 }
