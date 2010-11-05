@@ -33,7 +33,7 @@ class VideoEncoder
   // audio buffer and size
   uint8_t * pAudioEncodeBuffer;
   int nSizeAudioEncodeBuffer;
-
+	
 
   // count of sample
   int audioInputSampleSize;
@@ -46,7 +46,7 @@ class VideoEncoder
   int   nAudioBufferSizeCurrent;
 
   public:
-  
+  int fps;
   VideoEncoder() 
   {
     pOutFormat = NULL;
@@ -61,13 +61,15 @@ class VideoEncoder
     nAudioBufferSize = 1024 * 1024 * 4;
     audioBuffer      = new char[nAudioBufferSize];
     nAudioBufferSizeCurrent = 0;
+	fps = 7;
   }
   
   virtual ~VideoEncoder() 
   {
     Finish();
   }
-
+  //set fps
+  void SetFps(int UserFps);
   // init output file
   bool InitFile(std::string& inputFile, std::string& container);
   // Add video and audio data

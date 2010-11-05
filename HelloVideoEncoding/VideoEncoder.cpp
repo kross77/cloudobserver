@@ -11,6 +11,10 @@
 
 #define MAX_AUDIO_PACKET_SIZE (128 * 1024)
 
+void VideoEncoder::SetFps( int UserFps )
+{
+	fps = UserFps;
+}
 
 bool VideoEncoder::InitFile(std::string& inputFile, std::string& container)
 {
@@ -322,7 +326,7 @@ AVStream *VideoEncoder::AddVideoStream(AVFormatContext *pContext, CodecID codec_
      of which frame timestamps are represented. for fixed-fps content,
      timebase should be 1/framerate and timestamp increments should be
      identically 1. */
-  pCodecCxt->time_base.den = 7;
+  pCodecCxt->time_base.den = fps;
   pCodecCxt->time_base.num = 1;
   pCodecCxt->gop_size = 12; // emit one intra frame every twelve frames at most
 
@@ -556,4 +560,5 @@ bool VideoEncoder::AddAudioSample(AVFormatContext *pFormatContext, AVStream *pSt
 
   return res;
 }
+
 
