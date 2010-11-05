@@ -7,17 +7,17 @@ OpenAL
 FFmpeg
 Boost
 
-Solution consists of 4 test projects - individual "hello world" like projects for each of OpenCV OpenAL FFmpeg libs, one for testing encoding into file and previewing
+Solution consists of 3 test projects - individual "hello world" like projects for each of OpenCV OpenAL FFmpeg libs, one for testing encoding into file and previewing
 Solution contains project called as solution - main project, independent from others, can stream encoded live video+audio stream inside container onto cloud server via TCP connection.
 
+There is LibsAndHeaders folder avaliable for project developers it contains  Install.ReadMe.txt file with instructions for installing all 4 libs, headers and so on contained in the folder distribution.
 
 
 
 
+--------------------------------------------
 
-
-
-
+In case you want to collect and instal all 4 libs onn your own here are shourt instructions on libs install
 
 How to install lib into IDE  (	let us look at OpenCV as an example, we use .Lib files - not DLLs!)
 
