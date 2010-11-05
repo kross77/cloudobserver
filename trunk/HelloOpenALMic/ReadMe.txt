@@ -16,6 +16,7 @@ HelloOpenALMic.vcproj
 
 HelloOpenALMic.cpp
     This is the main application source file.
+    Provides basic mic echo functional
 
 /////////////////////////////////////////////////////////////////////////////
 Other standard files:
@@ -27,7 +28,6 @@ StdAfx.h, StdAfx.cpp
 /////////////////////////////////////////////////////////////////////////////
 Other notes:
 
-AppWizard uses "TODO:" comments to indicate parts of the source code you
-should add to or customize.
+Add  timing based Frames system.
 
 /////////////////////////////////////////////////////////////////////////////
