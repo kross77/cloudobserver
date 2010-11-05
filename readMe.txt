@@ -12,7 +12,9 @@ Solution contains project called as solution - main project, independent from ot
 
 There is LibsAndHeaders folder avaliable for project developers it contains  Install.ReadMe.txt file with instructions for installing all 4 libs, headers and so on contained in the folder distribution.
 
+Worning! Developer - be aware not all boost libs are inclided into LibsAndHeaders folder! Only ones required for current build!  So be ready for compiler linker errors.
 
+Worning! Developer - Do not belive to your own eyes!=) Good luck!
 --------------------------------------------
 
 In case you want to collect and instal all 4 libs onn your own here are shourt instructions on libs install
