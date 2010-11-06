@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "VideoEncoder.h"
 #include "Settings.h"
-#include <windows.h>
+//#include <windows.h>
 #include <stdio.h>
 
 // FFmpeg
@@ -174,15 +174,14 @@ void GenerateSample(short* buffer, int sampleCount)
 	soundWaveOffset %= AUDIO_SAMPLE_RATE;
 }
 
-char *  CaptureSample()
+char* CaptureSample()
 {
 	/* Check how much audio data has been captured (note that 'val' is the
 	* number of frames, not bytes) */
 	alcGetIntegerv(dev[1], ALC_CAPTURE_SAMPLES, 1, &iSamplesAvailable);
 	// When we would have enough data to fill our BUFFERSIZE byte buffer, will grab the samples, so now we should wait
-	while(iSamplesAvailable < (nSampleSize / nBlockAlign)){
+	while(iSamplesAvailable < (nSampleSize / nBlockAlign))
 		alcGetIntegerv(dev[1], ALC_CAPTURE_SAMPLES, 1, &iSamplesAvailable);
-	}
 	// Consume Samples 
 	if (iSamplesAvailable >= (nSampleSize / nBlockAlign))
 	{
@@ -274,28 +273,13 @@ int main()
 	ThreadCaptureVideo threadCaptureVideo;
 	boost::thread ThreadCaptureVideo = boost::thread(threadCaptureVideo);
 
-	boost::timer t;
 	int key = 0;
 	double desiredTime = 1000.0f / VIDEO_FRAME_RATE;
 
 	while(key != 'q')
-	{
-		t.restart();
-
-		//GenerateSample((short *)sample, nSampleSize / 2);
-		
+	{	
 		if (!encoder.AddFrame(readyFrame, CaptureSample(), nSampleSize))
 			printf("Cannot write frame!\n");
-
-		double sleepTime = desiredTime - t.elapsed();
-		cout << sleepTime;
-		if (sleepTime>=0){
-			boost::this_thread::sleep(boost::posix_time::milliseconds(sleepTime));
-		}
-
-		if (sleepTime<0)
-			cout << " delayed";
-		cout << endl;
 
 		key = cvWaitKey(1);
 	}
