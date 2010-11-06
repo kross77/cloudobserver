@@ -373,7 +373,7 @@ AVStream * VideoEncoder::AddAudioStream(AVFormatContext *pContext, CodecID codec
   pCodecCxt->codec_type = CODEC_TYPE_AUDIO;
   // Set format
   pCodecCxt->bit_rate    = 128000;
-  pCodecCxt->sample_rate = 22050;
+  pCodecCxt->sample_rate = AUDIO_SAMPLE_RATE;
   pCodecCxt->channels    = 1;
   pCodecCxt->sample_fmt  = SAMPLE_FMT_S16;
 
