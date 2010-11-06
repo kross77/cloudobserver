@@ -30,6 +30,9 @@ char* sample;
 // OpenCV
 CvCapture* capture;
 
+// Samples Generator
+int soundWaveOffset = 0;
+
 void initOpenCV()
 {
 	/* initialize camera */
@@ -119,12 +122,15 @@ void CaptureFrame(char* buffer, int w, int h, int bytespan)
 	cvShowImage("HelloVideoEncoding", destination);
 }
 
-void GenerateSample(short* buffer, int sampleCount, int offset)
+void GenerateSample(short* buffer, int sampleCount)
 {
 	double amplitude = 20.0 * pow(10, VOLUME / 20.0);
 	double angularFrequency =  2 * M_PI * FREQUENCY / SAMPLE_RATE;
 	for (int i = 0; i < sampleCount; i++)
-		buffer[i] = amplitude * sin(angularFrequency * (offset + i));
+		buffer[i] = amplitude * sin(angularFrequency * (soundWaveOffset + i));
+
+	soundWaveOffset += sampleCount;
+	soundWaveOffset %= SAMPLE_RATE;
 }
 
 void closeOpenCV()
@@ -210,15 +216,13 @@ int main()
 
 	boost::timer t;
 	int key = 0;
-	int offset = 0;
 	double desiredTime = 1000.0f / FRAME_RATE;
 
 	while(key != 'q')
 	{
 		t.restart();
 
-		GenerateSample((short *)sample, nSampleSize / 2, offset);
-		offset += nSampleSize / 2;
+		GenerateSample((short *)sample, nSampleSize / 2);
 
 		if (!encoder.AddFrame(readyFrame, sample, nSampleSize))
 			printf("Cannot write frame!\n");
