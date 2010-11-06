@@ -78,7 +78,7 @@ void init()
 {
 	initOpenCV();
 	initOpenAL();
-	initFFmpeg(FILE_NAME, CONTAINER, W_VIDEO, H_VIDEO, FPS);
+	initFFmpeg(FILE_NAME, CONTAINER, W_VIDEO, H_VIDEO, FRAME_RATE);
 }
 
 void CaptureFrame(char* buffer, int w, int h, int bytespan)
@@ -212,7 +212,7 @@ int main()
 	boost::timer t;
 	int key = 0;
 	int offset = 0;
-	double desiredTime = 1000.0f / FPS;
+	double desiredTime = 1000.0f / FRAME_RATE;
 
 	while(key != 'q')
 	{
