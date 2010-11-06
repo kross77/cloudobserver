@@ -121,11 +121,10 @@ void CaptureFrame(char* buffer, int w, int h, int bytespan)
 
 void GenerateSample(short* buffer, int sampleCount, int offset)
 {
-	int frequency = 440;
-	int amplitude = 2000;
-	double temp =  3.14 * frequency / sampleCount;
+	double amplitude = 20.0 * pow(10, VOLUME / 20.0);
+	double angularFrequency =  2 * M_PI * FREQUENCY / SAMPLE_RATE;
 	for (int i = 0; i < sampleCount; i++)
-		buffer[i] = amplitude * sin(temp * (offset + i));
+		buffer[i] = amplitude * sin(angularFrequency * (offset + i));
 }
 
 void closeOpenCV()
