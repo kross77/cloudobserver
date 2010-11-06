@@ -16,6 +16,9 @@ Worning! Developer - be aware not all boost libs are inclided into LibsAndHeader
 
 Worning! Developer - Do not belive to your own eyes!=) Good luck!
 --------------------------------------------
+Nearest Project Steps:
+Enable Socket streaming into cloud core.
+--------------------------------------------
 
 In case you want to collect and instal all 4 libs onn your own here are shourt instructions on libs install
 
