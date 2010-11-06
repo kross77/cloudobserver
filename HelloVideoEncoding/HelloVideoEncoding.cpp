@@ -81,7 +81,7 @@ void init()
 {
 	initOpenCV();
 	initOpenAL();
-	initFFmpeg(FILE_NAME, CONTAINER, W_VIDEO, H_VIDEO, FRAME_RATE);
+	initFFmpeg(OUTPUT_FILE_NAME, OUTPUT_CONTAINER, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_FRAME_RATE);
 }
 
 void CaptureFrame(char* buffer, int w, int h, int bytespan)
@@ -124,13 +124,13 @@ void CaptureFrame(char* buffer, int w, int h, int bytespan)
 
 void GenerateSample(short* buffer, int sampleCount)
 {
-	double amplitude = 20.0 * pow(10, VOLUME / 20.0);
-	double angularFrequency =  2 * M_PI * FREQUENCY / SAMPLE_RATE;
+	double amplitude = 20.0 * pow(10, AUDIO_VOLUME / 20.0);
+	double angularFrequency =  2 * M_PI * AUDIO_FREQUENCY / AUDIO_SAMPLE_RATE;
 	for (int i = 0; i < sampleCount; i++)
 		buffer[i] = amplitude * sin(angularFrequency * (soundWaveOffset + i));
 
 	soundWaveOffset += sampleCount;
-	soundWaveOffset %= SAMPLE_RATE;
+	soundWaveOffset %= AUDIO_SAMPLE_RATE;
 }
 
 void closeOpenCV()
@@ -198,7 +198,7 @@ class ThreadCaptureVideo : public BaseThread
 protected:
 	virtual void DoStuff()
 	{
-		CaptureFrame((char *)frame->data[0], W_VIDEO, H_VIDEO, frame->linesize[0]);
+		CaptureFrame((char *)frame->data[0], VIDEO_WIDTH, VIDEO_HEIGHT, frame->linesize[0]);
 
 		// swap buffers
 		AVFrame* swap = frame;
@@ -216,7 +216,7 @@ int main()
 
 	boost::timer t;
 	int key = 0;
-	double desiredTime = 1000.0f / FRAME_RATE;
+	double desiredTime = 1000.0f / VIDEO_FRAME_RATE;
 
 	while(key != 'q')
 	{

@@ -320,8 +320,8 @@ AVStream *VideoEncoder::AddVideoStream(AVFormatContext *pContext, CodecID codec_
   // Put sample parameters.
   pCodecCxt->bit_rate = 2000000;
   // Resolution must be a multiple of two.
-  pCodecCxt->width  = W_VIDEO;
-  pCodecCxt->height = H_VIDEO;
+  pCodecCxt->width  = VIDEO_WIDTH;
+  pCodecCxt->height = VIDEO_HEIGHT;
   /* time base: this is the fundamental unit of time (in seconds) in terms
      of which frame timestamps are represented. for fixed-fps content,
      timebase should be 1/framerate and timestamp increments should be
