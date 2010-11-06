@@ -1,18 +1,23 @@
 #include "stdafx.h"
 #include "VideoEncoder.h"
 #include "Settings.h"
+#include <windows.h>
+#include <stdio.h>
 
 // FFmpeg
 #include <avcodec.h>
 #include <avformat.h>
 #include <swscale.h>
-#include <windows.h>
 #include <iostream>
 
 // OpenCV
 #include <cv.h>
 #include <cxcore.h>
 #include <highgui.h>
+
+// OpenAL
+#include <al.h>
+#include <alc.h>
 
 // Boost
 #include <boost/thread.hpp>
@@ -33,6 +38,16 @@ CvCapture* capture;
 // Samples Generator
 int soundWaveOffset = 0;
 
+// OpenAL
+ALCdevice *dev[2];
+ALCcontext *ctx;
+ALuint source, buffers[3];
+ALchar			*Buffer;
+ALuint buf;
+ALint val;
+ALint			iSamplesAvailable;
+int nBlockAlign;
+
 void initOpenCV()
 {
 	/* initialize camera */
@@ -49,8 +64,34 @@ void initOpenCV()
 	cvNamedWindow("HelloVideoEncoding", CV_WINDOW_AUTOSIZE);
 }
 
-void initOpenAL()
+void initOpenAL(int fps)
 {
+	nSampleSize = 2.0f * AUDIO_SAMPLE_RATE / fps;
+//5000
+	Buffer = new ALchar[nSampleSize];
+	dev[0] = alcOpenDevice(NULL);
+	ctx = alcCreateContext(dev[0], NULL);
+	alcMakeContextCurrent(ctx);
+
+//	alGenSources(1, &source);
+//	alGenBuffers(3, buffers);
+
+	/* Setup some initial silent data to play out of the source */
+//	alBufferData(buffers[0], AL_FORMAT_MONO16, Buffer, nSampleSize, AUDIO_SAMPLE_RATE);
+//	alBufferData(buffers[1], AL_FORMAT_MONO16, Buffer, nSampleSize, AUDIO_SAMPLE_RATE);
+//	alBufferData(buffers[2], AL_FORMAT_MONO16, Buffer, nSampleSize, AUDIO_SAMPLE_RATE);
+//	alSourceQueueBuffers(source, 3, buffers);
+
+	/* If you don't need 3D spatialization, this should help processing time */
+	alDistanceModel(AL_NONE); 
+
+	dev[1] = alcCaptureOpenDevice(NULL, AUDIO_SAMPLE_RATE, AL_FORMAT_MONO16, nSampleSize/2);
+
+	/* Start playback and capture, and enter the audio loop */
+	//alSourcePlay(source);
+	alcCaptureStart(dev[1]);
+	//ToDo: Refactor nBlockAlign == number of channels * Bits per sample / 8 ; btw: why /8?
+	nBlockAlign = 1 * 16 / 8;
 }
 
 void initFFmpeg(string filename, string container, int w, int h, int fps)
@@ -73,15 +114,15 @@ void initFFmpeg(string filename, string container, int w, int h, int fps)
 	uint8_t* readyFrameBuffer = (uint8_t*)av_mallocz(bufferImgSize);
 	avpicture_fill((AVPicture*)readyFrame, readyFrameBuffer, PIX_FMT_BGR24, w, h);
 
-	nSampleSize = 2 * 22050.0f / fps;
 	sample = new char[nSampleSize];
 }
 
 void init()
 {
 	initOpenCV();
-	initOpenAL();
+	initOpenAL(VIDEO_FRAME_RATE);
 	initFFmpeg(OUTPUT_FILE_NAME, OUTPUT_CONTAINER, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_FRAME_RATE);
+	
 }
 
 void CaptureFrame(char* buffer, int w, int h, int bytespan)
@@ -132,7 +173,63 @@ void GenerateSample(short* buffer, int sampleCount)
 	soundWaveOffset += sampleCount;
 	soundWaveOffset %= AUDIO_SAMPLE_RATE;
 }
+void cpystr(char *instr, char *outstr)
+{
+	while( *outstr++ = *instr++);
+}
+void CaptureSample(char* buffer, int sampleCount)
+{
+			// Release some CPU time ...
+			//Sleep(1);
 
+        /* Check if any queued buffers are finished */
+        alGetSourcei(source, AL_BUFFERS_PROCESSED, &val);
+      
+		//		if(val <= 0)
+		//         continue;
+
+        /* Check how much audio data has been captured (note that 'val' is the
+        * number of frames, not bytes) */
+        alcGetIntegerv(dev[1], ALC_CAPTURE_SAMPLES, 1, &val);
+
+			// When we have enough data to fill our BUFFERSIZE byte buffer, grab the samples
+			if (iSamplesAvailable > (sampleCount / nBlockAlign))
+			{
+				// Consume Samples
+				alcCaptureSamples(dev[1], Buffer, nSampleSize / nBlockAlign);
+		
+				// Write the audio data to a file
+				//fwrite(Buffer, BUFFERSIZE, 1, pFile);
+
+				// Write the audio data to a given buffer
+				cpystr(Buffer, buffer);
+				
+				// Record total amount of data recorded
+				//iDataSize += BUFFERSIZE;
+				
+				val = nSampleSize / nBlockAlign;
+
+				/* Pop the oldest finished buffer, fill it with the new capture data,
+				then re-queue it to play on the source */
+			// ÂÎÑÏÐÎÈÇÂÅÄÅÍÈÅ ÍÈÆÅ
+				//	alSourceUnqueueBuffers(source, 1, &buf);
+				//	alBufferData(buf, AL_FORMAT_MONO16, dev[1], val*2 /* bytes here, not
+//																frames */, AUDIO_SAMPLE_RATE);
+				//alSourceQueueBuffers(source, 1, &buf);
+
+				/* Make sure the source is still playing */
+
+
+				//alGetSourcei(source, AL_SOURCE_STATE, &val);
+
+				//if(val != AL_PLAYING)
+				//{
+
+				//	alSourcePlay(source);
+				//}
+
+			}
+}
 void closeOpenCV()
 {
 	cvDestroyWindow("HelloVideoEncoding");
@@ -207,6 +304,8 @@ protected:
 	}
 };
 
+
+
 int main()
 {
 	init();
@@ -223,14 +322,19 @@ int main()
 		t.restart();
 
 		GenerateSample((short *)sample, nSampleSize / 2);
-
+		//CaptureSample(sample, nSampleSize);
 		if (!encoder.AddFrame(readyFrame, sample, nSampleSize))
 			printf("Cannot write frame!\n");
 
 		double sleepTime = desiredTime - t.elapsed();
-
-		if (sleepTime>0)
+		cout << sleepTime;
+		if (sleepTime>=0){
 			boost::this_thread::sleep(boost::posix_time::milliseconds(sleepTime));
+		}
+			
+		if (sleepTime<0)
+			cout << " delayed";
+		cout << endl;
 
 		key = cvWaitKey(1);
 	}
