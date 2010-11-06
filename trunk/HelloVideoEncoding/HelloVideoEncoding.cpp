@@ -59,7 +59,7 @@ AVFrame* readyFrame;
 int nSampleSize;
 
 char* sample;
-char* readySample;
+//char* readySample;
 //for OpenAL
 
 //for OpenCV
@@ -128,7 +128,7 @@ void initFFmpeg(string filename, string container, int w, int h, int fps)
 	sample = new char[nSampleSize];
 
 	// Create ready sample
-	readySample = new char[nSampleSize];
+	//readySample = new char[nSampleSize];
 }
 
 //set up libs and comps
@@ -215,8 +215,8 @@ void closeFFmpeg()
 
 	av_free(readyFrame->data[0]);
 	av_free(readyFrame);
-	delete[] readySample;
-	readySample = NULL;
+	//delete[] readySample;
+	//readySample = NULL;
 }
 void closeUp()
 {
@@ -250,25 +250,25 @@ protected:
 		//	}
 	}
 };
-class ThreadCaptureAudio : public BaseThread
-{
-protected:
-	virtual void DoStuff()
-	{
-		CreateSample((short *)sample, nSampleSize/2);
-		offset += nSampleSize/2;
-		//	if (offset == 7*nSampleSize/2)
-		//	{
-		//		offset = 0;
-		//		cout << "cleared!"<< endl;
-		//	}
-
-		// swap buffers
-		char* swap = sample;
-		sample = readySample;
-		readySample = swap;
-	}
-};
+//class ThreadCaptureAudio : public BaseThread
+//{
+//protected:
+//	virtual void DoStuff()
+//	{
+//		CreateSample((short *)sample, nSampleSize/2);
+//		offset += nSampleSize/2;
+//		//	if (offset == 7*nSampleSize/2)
+//		//	{
+//		//		offset = 0;
+//		//		cout << "cleared!"<< endl;
+//		//	}
+//
+//		// swap buffers
+//		char* swap = sample;
+//		sample = readySample;
+//		readySample = swap;
+//	}
+//};
 
 
 int main()
@@ -278,8 +278,8 @@ int main()
 	ThreadCaptureVideo thread_ThreadCaptureVideo_instance;
 	boost::thread ThreadCaptureVideo = boost::thread(thread_ThreadCaptureVideo_instance);
 
-	ThreadCaptureAudio thread_ThreadCaptureAudio_instance;
-	boost::thread ThreadCaptureAudio = boost::thread(thread_ThreadCaptureAudio_instance);
+	//ThreadCaptureAudio thread_ThreadCaptureAudio_instance;
+	//boost::thread ThreadCaptureAudio = boost::thread(thread_ThreadCaptureAudio_instance);
 
 	double desiredTime = 1000.0f / FPS;
 	boost::timer t;
@@ -288,7 +288,10 @@ int main()
 	{
 		t.restart();
 
-		if (!encoder.AddFrame(readyFrame, readySample, nSampleSize))
+		CreateSample((short *)sample, nSampleSize/2);
+		offset += nSampleSize/2;
+
+		if (!encoder.AddFrame(readyFrame, sample, nSampleSize))
 			printf("Cannot write frame\n");
 		
 		double leftTime = desiredTime - t.elapsed();
