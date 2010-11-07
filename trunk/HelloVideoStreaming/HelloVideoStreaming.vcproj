@@ -46,7 +46,7 @@
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				UsePrecompiledHeader="2"
+				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="4"
 			/>
@@ -61,8 +61,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="avcodec.lib avdevice.lib avformat.lib avutil.lib swscale.lib cv210.lib cxcore210.lib highgui210.lib openal32.lib winmm.lib"
+				AdditionalDependencies="avcodec-52.lib avdevice-52.lib avformat-52.lib avutil-50.lib swscale-0.lib cv210.lib cxcore210.lib highgui210.lib openal32.lib winmm.lib"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="../ffmpeg/lib/"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"

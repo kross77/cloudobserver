@@ -210,7 +210,6 @@ AVFrame * VideoEncoder::CreateFFmpegPicture(int pix_fmt, int nWidth, int nHeight
   }
   
   size = avpicture_get_size(pix_fmt, nWidth, nHeight);
-
   picture_buf = (uint8_t *) av_malloc(size);
 
   if (!picture_buf) 
