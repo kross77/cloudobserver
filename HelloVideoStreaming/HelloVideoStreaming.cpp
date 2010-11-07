@@ -98,7 +98,7 @@ void initOpenAL(int fps)
 void initFFmpeg(string url ,string container, int w, int h, int fps)
 {
 
-	//cout <<  endl;
+	cout << " 1 "<< endl;
 	encoder.SetFps(fps);
 
 	if (!encoder.InitUrl(container, url))
@@ -106,7 +106,7 @@ void initFFmpeg(string url ,string container, int w, int h, int fps)
 		printf("Cannot initialize file!\n");
 		cin.get();
 	}
-
+	cout << " 2 "<< endl;
 	int bufferImgSize = avpicture_get_size(PIX_FMT_BGR24, w, h);
 
 	frame = avcodec_alloc_frame();
