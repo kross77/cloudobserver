@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HelloBoost", "HelloBoost\HelloBoost.vcproj", "{356FE7F9-6512-4CD2-A9EE-7457C588C13D}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HelloVideoStreaming", "HelloVideoStreaming\HelloVideoStreaming.vcproj", "{0293F071-7A00-413C-8C6E-5D5D44465B65}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -54,6 +56,12 @@ Global
 		{356FE7F9-6512-4CD2-A9EE-7457C588C13D}.Release|Any CPU.ActiveCfg = Release|Win32
 		{356FE7F9-6512-4CD2-A9EE-7457C588C13D}.Release|Win32.ActiveCfg = Release|Win32
 		{356FE7F9-6512-4CD2-A9EE-7457C588C13D}.Release|Win32.Build.0 = Release|Win32
+		{0293F071-7A00-413C-8C6E-5D5D44465B65}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{0293F071-7A00-413C-8C6E-5D5D44465B65}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0293F071-7A00-413C-8C6E-5D5D44465B65}.Debug|Win32.Build.0 = Debug|Win32
+		{0293F071-7A00-413C-8C6E-5D5D44465B65}.Release|Any CPU.ActiveCfg = Release|Win32
+		{0293F071-7A00-413C-8C6E-5D5D44465B65}.Release|Win32.ActiveCfg = Release|Win32
+		{0293F071-7A00-413C-8C6E-5D5D44465B65}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

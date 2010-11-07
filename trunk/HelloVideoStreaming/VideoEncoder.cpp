@@ -68,8 +68,8 @@ bool VideoEncoder::InitFile(std::string& inputFile, std::string& container)
 
         if (res && !(pOutFormat->flags & AVFMT_NOFILE)) 
         {
-          if (url_fopen(&pFormatContext->pb, filename, URL_WRONLY)  < 0) 
-          { 
+          if (url_fopen(&pFormatContext->pb, filename, URL_WRONLY)  < 0) // http://wiki.aasimon.org/doku.php?id=ffmpeg:url_fopen 
+          { //http://cekirdek.uludag.org.tr/~ismail/ffmpeg-docs/structByteIOContext.html
             res = false;
             printf("Cannot open file\n");
           }
