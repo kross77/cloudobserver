@@ -68,7 +68,7 @@ bool VideoEncoder::InitUrl(std::string& container, std::string& tcpUrl)
 
 				if (res)
 				{
-					url_open_dyn_buf (&pFormatContext -> pb);
+					url_open_dyn_buf(&pFormatContext -> pb);
 					av_write_header(pFormatContext);
 					unsigned char *pb_buffer;
 					int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
@@ -359,7 +359,7 @@ AVStream * VideoEncoder::AddAudioStream(AVFormatContext *pContext, CodecID codec
     printf("Cannot add new audio stream\n");
     return NULL;
   }
-
+printf("added new audio stream\n");
   // Codec.
   pCodecCxt = pStream->codec;
   pCodecCxt->codec_id = codec_id;
@@ -462,7 +462,8 @@ bool VideoEncoder::AddVideoFrame(AVFormatContext *pFormatContext, AVFrame * pOut
     pkt.data= (uint8_t *) pOutputFrame;
     pkt.size= sizeof(AVPicture);
 
-    res = av_write_frame(pFormatContext, &pkt);
+	url_open_dyn_buf(&pFormatContext -> pb);
+    res = av_interleaved_write_frame(pFormatContext, &pkt);
 	unsigned char *pb_buffer;
 	int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
 	url_write (url_context, (unsigned char *)pb_buffer, len);
@@ -480,8 +481,8 @@ bool VideoEncoder::AddVideoFrame(AVFormatContext *pFormatContext, AVFrame * pOut
 
       if (pVideoCodec->coded_frame->pts != AV_NOPTS_VALUE)
       {
-        pkt.pts = av_rescale_q(pVideoCodec->coded_frame->pts, 
-          pVideoCodec->time_base, pVideoStream->time_base);
+       pkt.pts = av_rescale_q(pVideoCodec->coded_frame->pts, 
+         pVideoCodec->time_base, pVideoStream->time_base);
       }
 
       if(pVideoCodec->coded_frame->key_frame)
@@ -493,7 +494,8 @@ bool VideoEncoder::AddVideoFrame(AVFormatContext *pFormatContext, AVFrame * pOut
       pkt.size         = nOutputSize;
 
       // Write frame
-      res = (av_write_frame(pFormatContext, &pkt) == 0);
+	  url_open_dyn_buf(&pFormatContext -> pb);
+      res = (av_interleaved_write_frame(pFormatContext, &pkt) == 0);
 	  unsigned char *pb_buffer;
 	  int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
 	  url_write (url_context, (unsigned char *)pb_buffer, len);
@@ -543,7 +545,8 @@ bool VideoEncoder::AddAudioSample(AVFormatContext *pFormatContext, AVStream *pSt
     pkt.data = pAudioEncodeBuffer;
 
     // Write the compressed frame in the media file.
-    if (av_write_frame(pFormatContext, &pkt) != 0) 
+	url_open_dyn_buf(&pFormatContext -> pb);
+    if (av_interleaved_write_frame(pFormatContext, &pkt) != 0) 
     {
       res = false;
       break;
