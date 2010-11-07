@@ -15,7 +15,7 @@
 
 #define AUDIO_BUFFERSIZE    4410 // size of audio char array
 
-#define OUTPUT_URL	"tcp://hostname:port"
+#define OUTPUT_URL	"tcp://127.0.0.1:4778/"
 #define OUTPUT_CONTAINER	"flv"
 
 
