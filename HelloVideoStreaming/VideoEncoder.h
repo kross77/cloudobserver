@@ -29,7 +29,7 @@ class VideoEncoder
   // encode buffer and size
   uint8_t * pVideoEncodeBuffer;
   int nSizeVideoEncodeBuffer;
-
+	
   // audio buffer and size
   uint8_t * pAudioEncodeBuffer;
   int nSizeAudioEncodeBuffer;
@@ -46,9 +46,11 @@ class VideoEncoder
   int   nAudioBufferSizeCurrent;
 
   public:
+	  URLContext * url_context;
   int fps;
   VideoEncoder() 
   {
+	//  url_context = NULL;
     pOutFormat = NULL;
     pFormatContext = NULL;
     pVideoStream = NULL;
@@ -70,13 +72,12 @@ class VideoEncoder
   }
   //set fps
   void SetFps(int UserFps);
-  // init output file
-  bool InitFile(std::string& inputFile, std::string& container);
+  // init output stream 
+  bool InitUrl(std::string& container, std::string& tcpUrl);
   // Add video and audio data
   bool AddFrame(AVFrame* frame, const char* soundBuffer, int soundBufferSize);
   // end of output
   bool Finish();
-
   private: 
   
   // Add video stream
@@ -94,11 +95,10 @@ class VideoEncoder
   // close audio stream
   void CloseAudio(AVFormatContext *pContext, AVStream *pStream);
   // Add video frame
-  bool AddVideoFrame(AVFrame * frame, AVCodecContext *pVideoCodec);
+bool AddVideoFrame(AVFormatContext *pFormatContext, AVFrame * pOutputFrame, AVCodecContext *pVideoCodec);
   // Add audio samples
-  bool AddAudioSample(AVFormatContext *pFormatContext, 
-    AVStream *pStream, const char* soundBuffer, int soundBufferSize);
-  // Free resourses.
+  bool AddAudioSample(AVFormatContext *pFormatContext,  AVStream *pStream, const char* soundBuffer, int soundBufferSize);
+  // Free recourses. ToDo: Check, if it all works fine kill it.
   void Free();
   bool NeedConvert();
 };
