@@ -15,7 +15,7 @@
 
 #define AUDIO_BUFFERSIZE    4410 // size of audio char array
 
-#define OUTPUT_FILE_NAME	"HelloVideoEncoding.flv"
+#define OUTPUT_URL	"tcp://hostname:port"
 #define OUTPUT_CONTAINER	"flv"
 
 

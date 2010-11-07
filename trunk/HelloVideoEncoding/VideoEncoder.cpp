@@ -92,6 +92,8 @@ bool VideoEncoder::InitFile(std::string& inputFile, std::string& container)
 
   return res;
 }
+
+
    
 
 bool VideoEncoder::AddFrame(AVFrame* frame, const char* soundBuffer, int soundBufferSize)

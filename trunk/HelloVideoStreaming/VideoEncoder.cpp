@@ -15,84 +15,78 @@ void VideoEncoder::SetFps( int UserFps )
 {
 	fps = UserFps;
 }
-
-bool VideoEncoder::InitFile(std::string& inputFile, std::string& container)
+bool VideoEncoder::InitUrl(std::string& container, std::string& tcpUrl)
 {
-  bool res = false;
+	bool res = false;
 
-  const char * filename = inputFile.c_str();
-  outputFilename = inputFile;
+	// Initialize libavcodec
+	av_register_all();
 
-  // Initialize libavcodec
-  av_register_all();
 
-  if (container == std::string("auto"))
-  {
-    // Create format
-    pOutFormat = guess_format(NULL, filename, NULL);
-  }
-  else
-  {
-    // use contanier
-    pOutFormat = guess_format(container.c_str(), NULL, NULL);
-  }
+	// use contanier
+	pOutFormat = guess_format(container.c_str(), NULL, NULL);
 
-  if (pOutFormat) 
-  {
-    // allocate context
-    pFormatContext = avformat_alloc_context();
-    if (pFormatContext) 
-    {    
-      pFormatContext->oformat = pOutFormat;
-      memcpy(pFormatContext->filename, filename, min(strlen(filename), 
-        sizeof(pFormatContext->filename))); 
 
-      // Add video and audio stream
-      pVideoStream   = AddVideoStream(pFormatContext, pOutFormat->video_codec);
-      pAudioStream   = AddAudioStream(pFormatContext, pOutFormat->audio_codec);
+	if (pOutFormat) 
+	{
+		// allocate context
+		pFormatContext = avformat_alloc_context();
+		if (pFormatContext) 
+		{    
+			pFormatContext->oformat = pOutFormat;
+			//memcpy(pFormatContext->filename, inputUrlContext->filename, min(strlen(inputUrlContext->filename), 
+			//	sizeof(pFormatContext->filename))); 
 
-      // Set the output parameters (must be done even if no
-      // parameters).
-      if (av_set_parameters(pFormatContext, NULL) >=0) 
-      {
-        dump_format(pFormatContext, 0, filename, 1);
+			// Add video and audio stream
+			pVideoStream   = AddVideoStream(pFormatContext, pOutFormat->video_codec);
+			pAudioStream   = AddAudioStream(pFormatContext, pOutFormat->audio_codec);
 
-        // Open Video and Audio stream
-        res = false;
-        if (pVideoStream)
-        {
-          res = OpenVideo(pFormatContext, pVideoStream);
-        }
+			// Set the output parameters (must be done even if no
+			// parameters).
+			if (av_set_parameters(pFormatContext, NULL) >=0) 
+			{
+				//dump_format(pFormatContext, 0, filename, 1);
 
-        res = OpenAudio(pFormatContext, pAudioStream);
+				// Open Video and Audio stream
+				res = false;
+				if (pVideoStream)
+				{
+					res = OpenVideo(pFormatContext, pVideoStream);
+					printf("OpenVideo \n");
+				}
 
-        if (res && !(pOutFormat->flags & AVFMT_NOFILE)) 
-        {
-          if (url_fopen(&pFormatContext->pb, filename, URL_WRONLY)  < 0) // http://wiki.aasimon.org/doku.php?id=ffmpeg:url_fopen 
-          { //http://cekirdek.uludag.org.tr/~ismail/ffmpeg-docs/structByteIOContext.html
-            res = false;
-            printf("Cannot open file\n");
-          }
-        }
+				res = OpenAudio(pFormatContext, pAudioStream);
 
-        if (res)
-        {
-          av_write_header(pFormatContext);
-          res = true;
-        }
-      }    
-    }   
-  }
+				if (res && !(pOutFormat->flags & AVFMT_NOFILE)) 
+				{
+					if (url_open( &url_context, tcpUrl.c_str(), URL_WRONLY)  < 0) 
+					{ 
+						res = false;
+						printf("Cannot open stream\n");
+					}
+				}
 
-  if (!res)
-  {
-    Free();
-    printf("Cannot init file\n");
-  }
+				if (res)
+				{
+					url_open_dyn_buf (&pFormatContext -> pb);
+					av_write_header(pFormatContext);
+					unsigned char *pb_buffer;
+					int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
+					url_write (url_context, (unsigned char *)pb_buffer, len);
+					res = true;
+				}
+			}    
+		}   
+	}
 
-  return res;
+	if (!res)
+	{
+		Free();
+		printf("Cannot init stream\n");
+	}
+
+	return res;
 }
-   
 
 bool VideoEncoder::AddFrame(AVFrame* frame, const char* soundBuffer, int soundBufferSize)
 {
@@ -128,7 +122,7 @@ bool VideoEncoder::AddFrame(AVFrame* frame, const char* soundBuffer, int soundBu
         0, pVideoCodec->height, pCurrentPicture->data, pCurrentPicture->linesize);      
     }
 
-    res = AddVideoFrame(pCurrentPicture, pVideoStream->codec);
+    res = AddVideoFrame(pFormatContext, pCurrentPicture, pVideoStream->codec);
 
     // Free temp frame
     av_free(pCurrentPicture->data[0]);
@@ -453,7 +447,7 @@ void VideoEncoder::CloseAudio(AVFormatContext *pContext, AVStream *pStream)
 }
 
 
-bool VideoEncoder::AddVideoFrame(AVFrame * pOutputFrame, AVCodecContext *pVideoCodec)
+bool VideoEncoder::AddVideoFrame(AVFormatContext *pFormatContext, AVFrame * pOutputFrame, AVCodecContext *pVideoCodec)
 {
   bool res = false;
 
@@ -469,7 +463,10 @@ bool VideoEncoder::AddVideoFrame(AVFrame * pOutputFrame, AVCodecContext *pVideoC
     pkt.data= (uint8_t *) pOutputFrame;
     pkt.size= sizeof(AVPicture);
 
-    res = av_interleaved_write_frame(pFormatContext, &pkt);
+    res = av_write_frame(pFormatContext, &pkt);
+	unsigned char *pb_buffer;
+	int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
+	url_write (url_context, (unsigned char *)pb_buffer, len);
     res = true;
   } 
   else 
@@ -497,7 +494,10 @@ bool VideoEncoder::AddVideoFrame(AVFrame * pOutputFrame, AVCodecContext *pVideoC
       pkt.size         = nOutputSize;
 
       // Write frame
-      res = (av_interleaved_write_frame(pFormatContext, &pkt) == 0);
+      res = (av_write_frame(pFormatContext, &pkt) == 0);
+	  unsigned char *pb_buffer;
+	  int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
+	  url_write (url_context, (unsigned char *)pb_buffer, len);
     }
     else 
     {
@@ -544,14 +544,17 @@ bool VideoEncoder::AddAudioSample(AVFormatContext *pFormatContext, AVStream *pSt
     pkt.data = pAudioEncodeBuffer;
 
     // Write the compressed frame in the media file.
-    if (av_interleaved_write_frame(pFormatContext, &pkt) != 0) 
+    if (av_write_frame(pFormatContext, &pkt) != 0) 
     {
       res = false;
       break;
     }
+	unsigned char *pb_buffer;
+	int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
+	url_write (url_context, (unsigned char *)pb_buffer, len);
 
     nCurrentSize -= packSizeInSize;  
-    pSoundBuffer += packSizeInSize;      
+    pSoundBuffer += packSizeInSize;  
   }
 
   // save excess

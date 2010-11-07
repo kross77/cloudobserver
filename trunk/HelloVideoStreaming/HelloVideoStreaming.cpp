@@ -31,6 +31,7 @@ AVFrame* frame;
 AVFrame* readyFrame;
 int nSampleSize;
 char* sample;
+URLContext* StreamToUrl;
 
 // OpenCV
 CvCapture* capture;
@@ -94,11 +95,13 @@ void initOpenAL(int fps)
 	nBlockAlign = 1 * 16 / 8;
 }
 
-void initFFmpeg(string filename, string container, int w, int h, int fps)
+void initFFmpeg(string url ,string container, int w, int h, int fps)
 {
+
+	//cout <<  endl;
 	encoder.SetFps(fps);
 
-	if (!encoder.InitFile(filename, container))
+	if (!encoder.InitUrl(container, url))
 	{
 		printf("Cannot initialize file!\n");
 		cin.get();
@@ -121,7 +124,7 @@ void init()
 {
 	initOpenCV();
 	initOpenAL(VIDEO_FRAME_RATE);
-	initFFmpeg(OUTPUT_FILE_NAME, OUTPUT_CONTAINER, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_FRAME_RATE);
+	initFFmpeg(OUTPUT_URL, OUTPUT_CONTAINER, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_FRAME_RATE);
 
 }
 
@@ -218,7 +221,7 @@ void close()
 {
 	closeOpenCV();
 	closeOpenAL();
-	closeFFmpeg();
+	// closeFFmpeg();
 }
 
 class BaseThread
