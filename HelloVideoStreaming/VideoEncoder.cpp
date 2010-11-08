@@ -8,7 +8,9 @@
 #include <math.h>
 #include "VideoEncoder.h"
 #include "Settings.h"
-
+// Boost
+#include <boost/thread.hpp>
+#include <boost/timer.hpp>
 #define MAX_AUDIO_PACKET_SIZE (128 * 1024)
 
 void VideoEncoder::SetFps( int UserFps )
@@ -498,7 +500,11 @@ bool VideoEncoder::AddVideoFrame(AVFormatContext *pFormatContext, AVFrame * pOut
       res = (av_interleaved_write_frame(pFormatContext, &pkt) == 0);
 	  unsigned char *pb_buffer;
 	  int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
-	  url_write (url_context, (unsigned char *)pb_buffer, len);
+	  if (frameSendingFinished)
+	  {
+		boost::thread (&VideoEncoder::UrlWriteFrame, this, url_context, (unsigned char *)pb_buffer, len); //  boost::thread UrlWriteFrame(url_context, (unsigned char *)pb_buffer, len);
+	  }
+	  
     }
     else 
     {
@@ -566,4 +572,12 @@ bool VideoEncoder::AddAudioSample(AVFormatContext *pFormatContext, AVStream *pSt
   return res;
 }
 
+void VideoEncoder::UrlWriteFrame( URLContext *h, const unsigned char *buf, int size )
+{
+	frameSendingFinished =false;
+	url_write (h, (unsigned char *)buf, size);
+	frameSendingFinished =true;
+	
+
+}
 

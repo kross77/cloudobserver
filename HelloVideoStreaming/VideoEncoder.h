@@ -9,7 +9,9 @@
 #include "ffmpegInclude.h"
 #include <Windows.h>
 #include <string>
-
+// Boost
+//#include <boost/thread.hpp>
+//#include <boost/timer.hpp>
 class VideoEncoder
 {
   private:
@@ -44,8 +46,9 @@ class VideoEncoder
   char* audioBuffer;
   int   nAudioBufferSize;
   int   nAudioBufferSizeCurrent;
-
+	
   public:
+	  bool frameSendingFinished;
 	  URLContext * url_context;
   int fps;
   VideoEncoder() 
@@ -64,6 +67,7 @@ class VideoEncoder
     audioBuffer      = new char[nAudioBufferSize];
     nAudioBufferSizeCurrent = 0;
 	fps = 7;
+	frameSendingFinished = true;
   }
   
   virtual ~VideoEncoder() 
@@ -78,8 +82,9 @@ class VideoEncoder
   bool AddFrame(AVFrame* frame, const char* soundBuffer, int soundBufferSize);
   // end of output
   bool Finish();
+   void UrlWriteFrame(URLContext *h, const unsigned char *buf, int size );
   private: 
-  
+ 
   // Add video stream
   AVStream *AddVideoStream(AVFormatContext *pContext, CodecID codec_id);
   // Open Video Stream
