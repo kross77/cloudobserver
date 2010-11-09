@@ -64,6 +64,7 @@ FFMpeg Encoder
 For FFMpeg Lib Includes we use method provided on [1] by adding FFmpeg as additional folder in sln (adding to project external libs path '../ffmpeg/lib/' and additional includes (in C++ tab) '../ffmpeg/include/')
 For Boost install (in case you want to add it on your own see [2])
 For TCP streaming with FFmpeg see [3]
+For boost managed queue see [4]
 Bibliography:
 
 http://opencv.willowgarage.com/wiki/VisualC%2B%2B_VS2008
@@ -72,7 +73,7 @@ http://opencv.willowgarage.com/wiki/VisualC%2B%2B_VS2008
 [3]http://lab.dyne.org/Ffmpeg/UseUrlProtocol
 http://nashruddin.com/display-video-from-webcam-with-opencv.html
 http://opensource.creative.com/pipermail/openal/2008-January/010877.html
-
+[4]http://www.justsoftwaresolutions.co.uk/threading/implementing-a-thread-safe-queue-using-condition-variables.html
 
 http://connect.creativelabs.com/openal/default.aspx
 http://www.boost.org/
