@@ -97,7 +97,7 @@ void initOpenAL(int fps)
 	/* If you don't need 3D spatialization, this should help processing time */
 	alDistanceModel(AL_NONE); 
 
-	dev[1] = alcCaptureOpenDevice(NULL, audioSampleRate, AL_FORMAT_MONO16, nSampleSize/2);
+	dev[microphoneInt] = alcCaptureOpenDevice(NULL, audioSampleRate, AL_FORMAT_MONO16, nSampleSize/2);
 	alcCaptureStart(dev[microphoneInt]);
 	//ToDo: Refactor nBlockAlign == number of channels * Bits per sample / 8 ; btw: why /8?
 	nBlockAlign = 1 * 16 / 8;
@@ -299,7 +299,6 @@ int main(int argc, char* argv[])
 
 	//for(int i = 1 ; i<argc; i++) 
 	//	cout<<argv[i]<<endl;
-
 
 	//increment argv first, thus skip the program’s name 
 
