@@ -590,37 +590,37 @@ void VideoEncoder::UrlWriteData()
 		switch (AudioSamples.empty()){
 		case true : 
 			switch(VideoSamples.empty()){
-				case true : Sleep(1); break;
-				case false : 	
-					VideoSample * newVideoSample = new VideoSample;
-					VideoSamples.wait_and_pop(newVideoSample);
-					url_write (url_context, (unsigned char *)newVideoSample->buffer, newVideoSample->len);
-					break;
+		case true : Sleep(1); break;
+		case false : 	
+			VideoSample * newVideoSample = new VideoSample;
+			VideoSamples.wait_and_pop(newVideoSample);
+			url_write (url_context, (unsigned char *)newVideoSample->buffer, newVideoSample->len);
+			break;
 			} break;
 		case false :  	break;
 		}
 	}
 }
-	void VideoEncoder::AddSampleToQueue(const unsigned char *buf, int size )
-	{
-		AudioSample * newAudioSample = new AudioSample;
-		newAudioSample->buffer = buf;
-		newAudioSample->len = size;
-		AudioSamples.push(newAudioSample);
-		AudioSamples.wait_and_pop(newAudioSample);
-		url_write (url_context, (unsigned char *)newAudioSample->buffer, newAudioSample->len);
-	}
-	void VideoEncoder::AddFrameToQueue(const unsigned char *buf, int size )
-	{
-		VideoSample * newVideoSample = new VideoSample;
-		VideoSamples.try_pop(newVideoSample);
+void VideoEncoder::AddSampleToQueue(const unsigned char *buf, int size )
+{
+	AudioSample * newAudioSample = new AudioSample;
+	newAudioSample->buffer = buf;
+	newAudioSample->len = size;
+	AudioSamples.push(newAudioSample);
+	AudioSamples.wait_and_pop(newAudioSample);
+	url_write (url_context, (unsigned char *)newAudioSample->buffer, newAudioSample->len);
+}
+void VideoEncoder::AddFrameToQueue(const unsigned char *buf, int size )
+{
+	VideoSample * newVideoSample = new VideoSample;
+	VideoSamples.try_pop(newVideoSample);
 
-		newVideoSample->buffer = buf;
-		newVideoSample->len = size;
-		VideoSamples.push(newVideoSample);
-		//free(newVideoSample->buffer);
-		//delete newVideoSample;
-	}
+	newVideoSample->buffer = buf;
+	newVideoSample->len = size;
+	VideoSamples.push(newVideoSample);
+	//free(newVideoSample->buffer);
+	//delete newVideoSample;
+}
 
 
 

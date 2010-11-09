@@ -15,6 +15,8 @@ There is LibsAndHeaders folder avaliable for project developers it contains  Ins
 Worning! Developer - be aware not all boost libs are inclided into LibsAndHeaders folder! Only ones required for current build!  So be ready for compiler linker errors.
 
 Worning! Developer - Do not belive to your own eyes!=) Good luck!
+
+Worning! Required to update boost libs to build as release!
 --------------------------------------------
 Nearest Project Steps:
 Enable Socket streaming into cloud core.

@@ -303,7 +303,7 @@ int main(int argc, char* argv[])
 	//increment argv first, thus skip the program’s name 
 
 	// cameraInt;  videoFrameRate; videoWidth; videoHeight; microphoneInt; audioSampleRate; outputUrl; outputContainer;
-	if(argc = 8){
+	if(argc >= 8){
 		cameraInt = atoi(argv[1]);
 		videoFrameRate = atoi(argv[2]);
 		videoWidth = atoi(argv[3]);
@@ -315,10 +315,12 @@ int main(int argc, char* argv[])
 		cout<<cameraInt<<  videoFrameRate<< videoWidth<< videoHeight<< microphoneInt<< audioSampleRate<< outputUrl<< outputContainer << endl;
 
 	}else{
-		cout << " cameraInt;  videoFrameRate; videoWidth; videoHeight; microphoneInt; audioSampleRate; outputUrl; outputContainer;" << endl << "1 24 640 480 1 44100 tcp://127.0.0.1:4774/ flv" << endl;
+		cout << "Worning: No humans allowed!" << endl << " cameraInt;  videoFrameRate; videoWidth; videoHeight; microphoneInt; audioSampleRate; outputUrl; outputContainer;" << endl << "0 24 640 480 1 44100 tcp://127.0.0.1:4774/ flv" << endl;
+		cin.get();
+		return 0;
 	}
- init();
-   
+	init();
+
 	ThreadCaptureVideo threadCaptureVideo;
 	boost::thread ThreadCaptureVideo = boost::thread(threadCaptureVideo);
 
