@@ -62,7 +62,7 @@ class VideoEncoder
 		  int VideoFrameLen;
 	  
 
-	  std::queue<AudioSample> AudioSamples;
+	  std::queue< AudioSample * > AudioSamples;
 
 
 	  bool sampleSendingFinished;
