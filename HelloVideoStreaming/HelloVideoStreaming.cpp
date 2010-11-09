@@ -25,6 +25,19 @@
 
 using namespace std;
 
+//cmndlVars
+int cameraInt;
+int microphoneInt;
+int frameRate;
+int videoWidth;	// pixels
+int videoHeight	;	// pixels
+int videoFrameRate;	// hertz
+
+int audioSampleRate	;	// hertz
+
+string outputUrl ;
+string outputContainer	;
+
 // FFmpeg
 VideoEncoder encoder;
 AVFrame* frame;
@@ -37,7 +50,7 @@ URLContext* StreamToUrl;
 CvCapture* capture;
 
 IplImage* CVframe;
-	/* display current frame */
+/* display current frame */
 //	IplImage* destination;
 
 
@@ -58,7 +71,7 @@ int nBlockAlign;
 void initOpenCV()
 {
 	/* initialize camera */
-	capture = cvCaptureFromCAM(0);
+	capture = cvCaptureFromCAM(cameraInt);
 
 	/* always check */
 	if (!capture)
@@ -68,35 +81,24 @@ void initOpenCV()
 	}
 
 	/* create a window for the video */
-	cvNamedWindow("HelloVideoEncoding", CV_WINDOW_AUTOSIZE);
+	//cvNamedWindow("HelloVideoEncoding", CV_WINDOW_AUTOSIZE);
 }
 
 void initOpenAL(int fps)
 {
-	nSampleSize = 2.0f * AUDIO_SAMPLE_RATE / fps;
+	nSampleSize = 2.0f * audioSampleRate / fps;
 	//5000
 	Buffer = new ALchar[nSampleSize];
 	dev[0] = alcOpenDevice(NULL);
 	ctx = alcCreateContext(dev[0], NULL);
 	alcMakeContextCurrent(ctx);
 
-	//	alGenSources(1, &source);
-	//	alGenBuffers(3, buffers);
-
-	/* Setup some initial silent data to play out of the source */
-	//	alBufferData(buffers[0], AL_FORMAT_MONO16, Buffer, nSampleSize, AUDIO_SAMPLE_RATE);
-	//	alBufferData(buffers[1], AL_FORMAT_MONO16, Buffer, nSampleSize, AUDIO_SAMPLE_RATE);
-	//	alBufferData(buffers[2], AL_FORMAT_MONO16, Buffer, nSampleSize, AUDIO_SAMPLE_RATE);
-	//	alSourceQueueBuffers(source, 3, buffers);
 
 	/* If you don't need 3D spatialization, this should help processing time */
 	alDistanceModel(AL_NONE); 
 
-	dev[1] = alcCaptureOpenDevice(NULL, AUDIO_SAMPLE_RATE, AL_FORMAT_MONO16, nSampleSize/2);
-
-	/* Start playback and capture, and enter the audio loop */
-	//alSourcePlay(source);
-	alcCaptureStart(dev[1]);
+	dev[1] = alcCaptureOpenDevice(NULL, audioSampleRate, AL_FORMAT_MONO16, nSampleSize/2);
+	alcCaptureStart(dev[microphoneInt]);
 	//ToDo: Refactor nBlockAlign == number of channels * Bits per sample / 8 ; btw: why /8?
 	nBlockAlign = 1 * 16 / 8;
 }
@@ -105,7 +107,7 @@ void initFFmpeg(string url ,string container, int w, int h, int fps)
 {
 
 	cout << " 1 "<< endl;
-	encoder.SetFps(fps);
+	encoder.SetConstants(fps, videoWidth, videoHeight, audioSampleRate);
 
 	if (!encoder.InitUrl(container, url))
 	{
@@ -129,15 +131,15 @@ void initFFmpeg(string url ,string container, int w, int h, int fps)
 void init()
 {
 	initOpenCV();
-	initOpenAL(VIDEO_FRAME_RATE);
-	initFFmpeg(OUTPUT_URL, OUTPUT_CONTAINER, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_FRAME_RATE);
+	initOpenAL(videoFrameRate);
+	initFFmpeg(outputUrl, outputContainer, videoWidth, videoHeight, videoFrameRate);
 
 }
 
 void CaptureFrame(char* buffer, int w, int h, int bytespan)
 {
 	/* get a frame */
-	
+
 	if(!cvGrabFrame(capture)){              // capture a frame 
 		printf("Could not grab a frame\n\7");
 		//exit(0);
@@ -157,7 +159,7 @@ void CaptureFrame(char* buffer, int w, int h, int bytespan)
 	//use cvResize to resize source to a destination image
 	cvResize(CVframe, destination);
 
-//	cvReleaseImage(&CVframe);
+	//	cvReleaseImage(&CVframe);
 
 	IplImage* redchannel = cvCreateImage(cvGetSize(destination), 8, 1);
 	IplImage* greenchannel = cvCreateImage(cvGetSize(destination), 8, 1);
@@ -179,36 +181,36 @@ void CaptureFrame(char* buffer, int w, int h, int bytespan)
 	cvReleaseImage(&greenchannel);
 	cvReleaseImage(&bluechannel);
 	cvReleaseImage(&destination);
-	
-	
-//cvShowImage("HelloVideoEncoding", destination);
 
-//
+
+	//cvShowImage("HelloVideoEncoding", destination);
+
+	//
 }
 
 void GenerateSample(short* buffer, int sampleCount)
 {
 	double amplitude = 20.0 * pow(10, AUDIO_VOLUME / 20.0);
-	double angularFrequency =  2 * M_PI * AUDIO_FREQUENCY / AUDIO_SAMPLE_RATE;
+	double angularFrequency =  2 * M_PI * AUDIO_FREQUENCY / audioSampleRate;
 	for (int i = 0; i < sampleCount; i++)
 		buffer[i] = amplitude * sin(angularFrequency * (soundWaveOffset + i));
 
 	soundWaveOffset += sampleCount;
-	soundWaveOffset %= AUDIO_SAMPLE_RATE;
+	soundWaveOffset %= audioSampleRate;
 }
 
 char* CaptureSample()
 {
 	/* Check how much audio data has been captured (note that 'val' is the
 	* number of frames, not bytes) */
-	alcGetIntegerv(dev[1], ALC_CAPTURE_SAMPLES, 1, &iSamplesAvailable);
+	alcGetIntegerv(dev[microphoneInt], ALC_CAPTURE_SAMPLES, 1, &iSamplesAvailable);
 	// When we would have enough data to fill our BUFFERSIZE byte buffer, will grab the samples, so now we should wait
 	while(iSamplesAvailable < (nSampleSize / nBlockAlign))
-		alcGetIntegerv(dev[1], ALC_CAPTURE_SAMPLES, 1, &iSamplesAvailable);
+		alcGetIntegerv(dev[microphoneInt], ALC_CAPTURE_SAMPLES, 1, &iSamplesAvailable);
 	// Consume Samples 
 	if (iSamplesAvailable >= (nSampleSize / nBlockAlign))
 	{
-		alcCaptureSamples(dev[1], Buffer, nSampleSize / nBlockAlign);
+		alcCaptureSamples(dev[microphoneInt], Buffer, nSampleSize / nBlockAlign);
 		return  (char *)Buffer;
 	}
 }
@@ -281,7 +283,7 @@ class ThreadCaptureVideo : public BaseThread
 protected:
 	virtual void DoStuff()
 	{
-		CaptureFrame((char *)frame->data[0], VIDEO_WIDTH, VIDEO_HEIGHT, frame->linesize[0]);
+		CaptureFrame((char *)frame->data[0], videoWidth, videoHeight, frame->linesize[0]);
 
 		// swap buffers
 		AVFrame* swap = frame;
@@ -292,10 +294,32 @@ protected:
 
 
 
-int main()
+int main(int argc, char* argv[])
 {
-	init();
 
+	//for(int i = 1 ; i<argc; i++) 
+	//	cout<<argv[i]<<endl;
+
+
+	//increment argv first, thus skip the program’s name 
+
+	// cameraInt;  videoFrameRate; videoWidth; videoHeight; microphoneInt; audioSampleRate; outputUrl; outputContainer;
+	if(argc = 8){
+		cameraInt = atoi(argv[1]);
+		videoFrameRate = atoi(argv[2]);
+		videoWidth = atoi(argv[3]);
+		videoHeight =  atoi(argv[4]);
+		microphoneInt = atoi(argv[5]);
+		audioSampleRate = atoi(argv[6]);
+		outputUrl += argv[7];
+		outputContainer +=argv[8];
+		cout<<cameraInt<<  videoFrameRate<< videoWidth<< videoHeight<< microphoneInt<< audioSampleRate<< outputUrl<< outputContainer << endl;
+
+	}else{
+		cout << " cameraInt;  videoFrameRate; videoWidth; videoHeight; microphoneInt; audioSampleRate; outputUrl; outputContainer;" << endl << "1 24 640 480 1 44100 tcp://127.0.0.1:4774/ flv" << endl;
+	}
+ init();
+   
 	ThreadCaptureVideo threadCaptureVideo;
 	boost::thread ThreadCaptureVideo = boost::thread(threadCaptureVideo);
 
