@@ -196,7 +196,7 @@ void VideoEncoder::Free()
 
     if (!(pFormatContext->flags & AVFMT_NOFILE) && pFormatContext->pb) 
     {
-      url_fclose(pFormatContext->pb);
+     // url_fclose(pFormatContext->pb);
     }
 
     // Free the stream.
@@ -614,9 +614,12 @@ void VideoEncoder::AddFrameToQueue(const unsigned char *buf, int size )
 {
 	VideoSample * newVideoSample = new VideoSample;
 	VideoSamples.try_pop(newVideoSample);
+
 	newVideoSample->buffer = buf;
 	newVideoSample->len = size;
 	VideoSamples.push(newVideoSample);
+	//free(newVideoSample->buffer);
+	//delete newVideoSample;
 }
 
 
