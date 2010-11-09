@@ -18,9 +18,12 @@
 #define MAX_AUDIO_PACKET_SIZE (128 * 1024)
 
 
-void VideoEncoder::SetFps( int UserFps )
+void VideoEncoder::SetConstants( int UserFps , int UserWidth, int UserHeight, int UserAudioSampleRate)
 {
 	fps = UserFps;
+	width = UserWidth;
+	height = UserHeight;
+	audioSampleRate = UserAudioSampleRate;
 }
 bool VideoEncoder::InitUrl(std::string& container, std::string& tcpUrl)
 {
@@ -322,8 +325,8 @@ AVStream *VideoEncoder::AddVideoStream(AVFormatContext *pContext, CodecID codec_
   // Put sample parameters.
   pCodecCxt->bit_rate = 2000000;
   // Resolution must be a multiple of two.
-  pCodecCxt->width  = VIDEO_WIDTH;
-  pCodecCxt->height = VIDEO_HEIGHT;
+  pCodecCxt->width  = width;
+  pCodecCxt->height = height;
   /* time base: this is the fundamental unit of time (in seconds) in terms
      of which frame timestamps are represented. for fixed-fps content,
      timebase should be 1/framerate and timestamp increments should be
@@ -375,7 +378,7 @@ printf("added new audio stream\n");
   pCodecCxt->codec_type = CODEC_TYPE_AUDIO;
   // Set format
   pCodecCxt->bit_rate    = 128000;
-  pCodecCxt->sample_rate = AUDIO_SAMPLE_RATE;
+  pCodecCxt->sample_rate = audioSampleRate;
   pCodecCxt->channels    = 1;
   pCodecCxt->sample_fmt  = SAMPLE_FMT_S16;
 
