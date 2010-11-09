@@ -585,16 +585,21 @@ void VideoEncoder::UrlWriteData()
 	while(1){
 		if (AudioSamples.empty() && VideoFrameBuffer == NULL)
 		{
-			Sleep(1);
+			Sleep(10);
 		}
 		else if(!AudioSamples.empty())
 		{
-			struct AudioSample newAudioSample = AudioSamples.front();
-			url_write (url_context, (unsigned char *)newAudioSample.buffer, newAudioSample.len);
+		//	 AudioSamples.front();
+			 AudioSample * newAudioSample = new AudioSample;
+			   newAudioSample = AudioSamples.front();
+			url_write (url_context, (unsigned char *)newAudioSample->buffer, newAudioSample->len);
+		//	free(&newAudioSample);
 		}
 		else if (AudioSamples.empty() && VideoFrameBuffer != NULL)
 		{
 			url_write (url_context, (unsigned char *)VideoFrameBuffer, VideoFrameLen);
+			//free(&VideoFrameBuffer);
+			VideoFrameBuffer = NULL;
 		}
 	}
 
@@ -602,10 +607,12 @@ void VideoEncoder::UrlWriteData()
 void VideoEncoder::AddSampleToQueue(const unsigned char *buf, int size )
 {
 
-	struct AudioSample newAudioSample;
-	newAudioSample.buffer = buf;
-	newAudioSample.len = size;
+	AudioSample * newAudioSample = new AudioSample;
+	newAudioSample->buffer = buf;
+	newAudioSample->len = size;
 	AudioSamples.push(newAudioSample);
+//	free(&buf);
+//   free(&newAudioSample);
 }
 void VideoEncoder::AddFrameToQueue(const unsigned char *buf, int size )
 {
