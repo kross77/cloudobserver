@@ -11,7 +11,12 @@
 // Boost
 #include <boost/thread.hpp>
 #include <boost/timer.hpp>
+#include <queue>
+#include <iostream>
+
+
 #define MAX_AUDIO_PACKET_SIZE (128 * 1024)
+
 
 void VideoEncoder::SetFps( int UserFps )
 {
@@ -86,7 +91,7 @@ bool VideoEncoder::InitUrl(std::string& container, std::string& tcpUrl)
 		Free();
 		printf("Cannot init stream\n");
 	}
-
+	 boost::thread (&VideoEncoder::UrlWriteData, this);
 	return res;
 }
 
@@ -95,6 +100,12 @@ bool VideoEncoder::AddFrame(AVFrame* frame, const char* soundBuffer, int soundBu
   bool res = true;
   int nOutputSize = 0;
   AVCodecContext *pVideoCodec = NULL;
+
+  // Add sound
+  if (soundBuffer && soundBufferSize > 0)
+  {
+    res = AddAudioSample(pFormatContext, pAudioStream, soundBuffer, soundBufferSize);
+  }
 
   if (pVideoStream && frame && frame->data[0])
   {
@@ -132,11 +143,7 @@ bool VideoEncoder::AddFrame(AVFrame* frame, const char* soundBuffer, int soundBu
     pCurrentPicture = NULL;
   }
 
-  // Add sound
-  if (soundBuffer && soundBufferSize > 0)
-  {
-    res = AddAudioSample(pFormatContext, pAudioStream, soundBuffer, soundBufferSize);
-  }
+
 
   return res;
 }
@@ -148,7 +155,7 @@ bool VideoEncoder::Finish()
 
   if (pFormatContext)
   {
-    av_write_trailer(pFormatContext);
+   // av_write_trailer(pFormatContext);
     Free();
   }
 
@@ -468,7 +475,9 @@ bool VideoEncoder::AddVideoFrame(AVFormatContext *pFormatContext, AVFrame * pOut
     res = av_interleaved_write_frame(pFormatContext, &pkt);
 	unsigned char *pb_buffer;
 	int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
-	url_write (url_context, (unsigned char *)pb_buffer, len);
+	
+	AddFrameToQueue((unsigned char *)pb_buffer, len);
+
     res = true;
   } 
   else 
@@ -500,10 +509,8 @@ bool VideoEncoder::AddVideoFrame(AVFormatContext *pFormatContext, AVFrame * pOut
       res = (av_interleaved_write_frame(pFormatContext, &pkt) == 0);
 	  unsigned char *pb_buffer;
 	  int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
-	  if (frameSendingFinished)
-	  {
-		boost::thread (&VideoEncoder::UrlWriteFrame, this, url_context, (unsigned char *)pb_buffer, len); //  boost::thread UrlWriteFrame(url_context, (unsigned char *)pb_buffer, len);
-	  }
+
+	  AddFrameToQueue((unsigned char *)pb_buffer, len);
 	  
     }
     else 
@@ -559,7 +566,8 @@ bool VideoEncoder::AddAudioSample(AVFormatContext *pFormatContext, AVStream *pSt
     }
 	unsigned char *pb_buffer;
 	int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
-	url_write (url_context, (unsigned char *)pb_buffer, len);
+	
+AddSampleToQueue((unsigned char *)pb_buffer, len);
 
     nCurrentSize -= packSizeInSize;  
     pSoundBuffer += packSizeInSize;  
@@ -572,12 +580,38 @@ bool VideoEncoder::AddAudioSample(AVFormatContext *pFormatContext, AVStream *pSt
   return res;
 }
 
-void VideoEncoder::UrlWriteFrame( URLContext *h, const unsigned char *buf, int size )
+void VideoEncoder::UrlWriteData()
 {
-	frameSendingFinished =false;
-	url_write (h, (unsigned char *)buf, size);
-	frameSendingFinished =true;
-	
+	while(1){
+		if (AudioSamples.empty() && VideoFrameBuffer == NULL)
+		{
+			Sleep(1);
+		}
+		else if(!AudioSamples.empty())
+		{
+			struct AudioSample newAudioSample = AudioSamples.front();
+			url_write (url_context, (unsigned char *)newAudioSample.buffer, newAudioSample.len);
+		}
+		else if (AudioSamples.empty() && VideoFrameBuffer != NULL)
+		{
+			url_write (url_context, (unsigned char *)VideoFrameBuffer, VideoFrameLen);
+		}
+	}
 
 }
+void VideoEncoder::AddSampleToQueue(const unsigned char *buf, int size )
+{
+
+	struct AudioSample newAudioSample;
+	newAudioSample.buffer = buf;
+	newAudioSample.len = size;
+	AudioSamples.push(newAudioSample);
+}
+void VideoEncoder::AddFrameToQueue(const unsigned char *buf, int size )
+{
+	VideoFrameBuffer = buf;
+	VideoFrameLen = size;
+}
+
+
 

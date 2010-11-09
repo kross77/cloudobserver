@@ -5,9 +5,9 @@
 #ifndef __SETTINGS_H_
 #define __SETTINGS_H_
 
-#define VIDEO_WIDTH			320		// pixels
-#define VIDEO_HEIGHT		240		// pixels
-#define VIDEO_FRAME_RATE	25		// hertz
+#define VIDEO_WIDTH			640		// pixels
+#define VIDEO_HEIGHT		480		// pixels
+#define VIDEO_FRAME_RATE	15		// hertz
 
 #define AUDIO_SAMPLE_RATE	44100	// hertz
 #define AUDIO_FREQUENCY		440		// hertz

@@ -9,6 +9,9 @@
 #include "ffmpegInclude.h"
 #include <Windows.h>
 #include <string>
+#include <queue>
+#include <iostream>
+
 // Boost
 //#include <boost/thread.hpp>
 //#include <boost/timer.hpp>
@@ -48,7 +51,23 @@ class VideoEncoder
   int   nAudioBufferSizeCurrent;
 	
   public:
+
+	  struct AudioSample
+	  {	
+		const unsigned char * buffer;
+		  int len;
+	  };
+
+		  const unsigned char * VideoFrameBuffer;
+		  int VideoFrameLen;
+	  
+
+	  std::queue<AudioSample> AudioSamples;
+
+
+	  bool sampleSendingFinished;
 	  bool frameSendingFinished;
+	 
 	  URLContext * url_context;
   int fps;
   VideoEncoder() 
@@ -62,6 +81,7 @@ class VideoEncoder
     pVideoEncodeBuffer = NULL;
     nSizeVideoEncodeBuffer = 0;
     pAudioEncodeBuffer = NULL;
+	VideoFrameBuffer = NULL;
     nSizeAudioEncodeBuffer = 0;
     nAudioBufferSize = 1024 * 1024 * 4;
     audioBuffer      = new char[nAudioBufferSize];
@@ -83,6 +103,7 @@ class VideoEncoder
   // end of output
   bool Finish();
    void UrlWriteFrame(URLContext *h, const unsigned char *buf, int size );
+     void UrlWriteSample( URLContext *h, const unsigned char *buf, int size );
   private: 
  
   // Add video stream
@@ -106,6 +127,9 @@ bool AddVideoFrame(AVFormatContext *pFormatContext, AVFrame * pOutputFrame, AVCo
   // Free recourses. ToDo: Check, if it all works fine kill it.
   void Free();
   bool NeedConvert();
+  void UrlWriteData();
+  void AddSampleToQueue(const unsigned char *buf, int size );
+  void AddFrameToQueue(const unsigned char *buf, int size );
 };
 
 #endif // __VIDEO_ENCODER_H__

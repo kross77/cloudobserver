@@ -36,6 +36,12 @@ URLContext* StreamToUrl;
 // OpenCV
 CvCapture* capture;
 
+IplImage* CVframe;
+	/* display current frame */
+//	IplImage* destination;
+
+
+
 // Samples Generator
 int soundWaveOffset = 0;
 
@@ -131,7 +137,12 @@ void init()
 void CaptureFrame(char* buffer, int w, int h, int bytespan)
 {
 	/* get a frame */
-	IplImage* CVframe = cvQueryFrame(capture);
+	
+	if(!cvGrabFrame(capture)){              // capture a frame 
+		printf("Could not grab a frame\n\7");
+		//exit(0);
+	}
+	CVframe =cvRetrieveFrame(capture);           // retrieve the captured frame
 
 	/* always check */
 	if (!CVframe)
@@ -145,6 +156,8 @@ void CaptureFrame(char* buffer, int w, int h, int bytespan)
 
 	//use cvResize to resize source to a destination image
 	cvResize(CVframe, destination);
+
+//	cvReleaseImage(&CVframe);
 
 	IplImage* redchannel = cvCreateImage(cvGetSize(destination), 8, 1);
 	IplImage* greenchannel = cvCreateImage(cvGetSize(destination), 8, 1);
@@ -162,8 +175,15 @@ void CaptureFrame(char* buffer, int w, int h, int bytespan)
 			line += 3;
 		}
 	}
+	cvReleaseImage(&redchannel);
+	cvReleaseImage(&greenchannel);
+	cvReleaseImage(&bluechannel);
+	cvReleaseImage(&destination);
+	
+	
+//cvShowImage("HelloVideoEncoding", destination);
 
-	cvShowImage("HelloVideoEncoding", destination);
+//
 }
 
 void GenerateSample(short* buffer, int sampleCount)
@@ -197,6 +217,9 @@ void closeOpenCV()
 {
 	cvDestroyWindow("HelloVideoEncoding");
 	cvReleaseCapture(&capture);
+
+
+
 }
 
 void closeOpenAL()
@@ -221,7 +244,7 @@ void close()
 {
 	closeOpenCV();
 	closeOpenAL();
-	// closeFFmpeg();
+	closeFFmpeg();
 }
 
 class BaseThread
@@ -277,7 +300,7 @@ int main()
 	boost::thread ThreadCaptureVideo = boost::thread(threadCaptureVideo);
 
 	int key = 0;
-	double desiredTime = 1000.0f / VIDEO_FRAME_RATE;
+	//double desiredTime = 1000.0f / VIDEO_FRAME_RATE;
 
 	while(key != 'q')
 	{	
