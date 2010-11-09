@@ -476,7 +476,7 @@ bool VideoEncoder::AddVideoFrame(AVFormatContext *pFormatContext, AVFrame * pOut
 	unsigned char *pb_buffer;
 	int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
 	
-	AddFrameToQueue((unsigned char *)pb_buffer, len);
+		 boost::thread (&VideoEncoder::AddFrameToQueue, this,(unsigned char *)pb_buffer, len);
 
     res = true;
   } 
@@ -510,8 +510,8 @@ bool VideoEncoder::AddVideoFrame(AVFormatContext *pFormatContext, AVFrame * pOut
 	  unsigned char *pb_buffer;
 	  int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
 
-	  AddFrameToQueue((unsigned char *)pb_buffer, len);
-	  
+	  boost::thread (&VideoEncoder::AddFrameToQueue, this,(unsigned char *)pb_buffer, len);
+  
     }
     else 
     {
@@ -567,7 +567,8 @@ bool VideoEncoder::AddAudioSample(AVFormatContext *pFormatContext, AVStream *pSt
 	unsigned char *pb_buffer;
 	int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
 	
-AddSampleToQueue((unsigned char *)pb_buffer, len);
+	boost::thread (&VideoEncoder::AddSampleToQueue, this,(unsigned char *)pb_buffer, len);
+
 
     nCurrentSize -= packSizeInSize;  
     pSoundBuffer += packSizeInSize;  
@@ -583,41 +584,39 @@ AddSampleToQueue((unsigned char *)pb_buffer, len);
 void VideoEncoder::UrlWriteData()
 {
 	while(1){
-		if (AudioSamples.empty() && VideoFrameBuffer == NULL)
+		if (AudioSamples.empty() && VideoSamples.empty())
 		{
 			Sleep(10);
 		}
 		else if(!AudioSamples.empty())
 		{
-		//	 AudioSamples.front();
 			 AudioSample * newAudioSample = new AudioSample;
-			   newAudioSample = AudioSamples.front();
+			AudioSamples.wait_and_pop(newAudioSample);
 			url_write (url_context, (unsigned char *)newAudioSample->buffer, newAudioSample->len);
-		//	free(&newAudioSample);
 		}
-		else if (AudioSamples.empty() && VideoFrameBuffer != NULL)
+		else if (AudioSamples.empty() && !VideoSamples.empty())
 		{
-			url_write (url_context, (unsigned char *)VideoFrameBuffer, VideoFrameLen);
-			//free(&VideoFrameBuffer);
-			VideoFrameBuffer = NULL;
+			 VideoSample * newVideoSample = new VideoSample;
+			VideoSamples.wait_and_pop(newVideoSample);
+			url_write (url_context, (unsigned char *)newVideoSample->buffer, newVideoSample->len);
 		}
 	}
 
 }
 void VideoEncoder::AddSampleToQueue(const unsigned char *buf, int size )
 {
-
 	AudioSample * newAudioSample = new AudioSample;
 	newAudioSample->buffer = buf;
 	newAudioSample->len = size;
 	AudioSamples.push(newAudioSample);
-//	free(&buf);
-//   free(&newAudioSample);
 }
 void VideoEncoder::AddFrameToQueue(const unsigned char *buf, int size )
 {
-	VideoFrameBuffer = buf;
-	VideoFrameLen = size;
+	VideoSample * newVideoSample = new VideoSample;
+	VideoSamples.try_pop(newVideoSample);
+	newVideoSample->buffer = buf;
+	newVideoSample->len = size;
+	VideoSamples.push(newVideoSample);
 }
 
 

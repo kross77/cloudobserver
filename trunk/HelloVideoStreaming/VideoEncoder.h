@@ -12,9 +12,68 @@
 #include <queue>
 #include <iostream>
 
-// Boost
-//#include <boost/thread.hpp>
-//#include <boost/timer.hpp>
+ // Boost
+#include <boost/thread.hpp>
+#include <boost/timer.hpp>
+
+template<typename Data>
+ class concurrent_queue
+ {
+ private:
+	 std::queue<Data> the_queue;
+	 mutable boost::mutex the_mutex;
+	 boost::condition_variable the_condition_variable;
+ public:
+	 void push(Data const& data)
+	 {
+		 boost::mutex::scoped_lock lock(the_mutex);
+		 the_queue.push(data);
+		 lock.unlock();
+		 the_condition_variable.notify_one();
+	 }
+
+	 bool empty() const
+	 {
+		 boost::mutex::scoped_lock lock(the_mutex);
+		 return the_queue.empty();
+	 }
+
+	 bool try_pop(Data& popped_value)
+	 {
+		 boost::mutex::scoped_lock lock(the_mutex);
+		 if(the_queue.empty())
+		 {
+			 return false;
+		 }
+
+		 popped_value=the_queue.front();
+		 the_queue.pop();
+		 return true;
+	 }
+
+	 void wait_and_pop(Data& popped_value)
+	 {
+		 boost::mutex::scoped_lock lock(the_mutex);
+		 while(the_queue.empty())
+		 {
+			 the_condition_variable.wait(lock);
+		 }
+
+		 popped_value=the_queue.front();
+		 the_queue.pop();
+	 }
+	
+	 Data& front()
+	 {
+		 boost::mutex::scoped_lock lock(the_mutex);
+		 return the_queue.front();
+	 }
+
+
+
+ };
+
+
 class VideoEncoder
 {
   private:
@@ -58,11 +117,17 @@ class VideoEncoder
 		  int len;
 	  };
 
-		  const unsigned char * VideoFrameBuffer;
-		  int VideoFrameLen;
-	  
+	  struct VideoSample
+	  {	
+		  const unsigned char * buffer;
+		  int len;
+	  };
 
-	  std::queue< AudioSample * > AudioSamples;
+		 // const unsigned char * VideoFrameBuffer;
+		//  int VideoFrameLen;
+	  concurrent_queue<AudioSample * > AudioSamples;
+	  concurrent_queue<VideoSample * > VideoSamples;
+	 
 
 
 	  bool sampleSendingFinished;
@@ -81,7 +146,6 @@ class VideoEncoder
     pVideoEncodeBuffer = NULL;
     nSizeVideoEncodeBuffer = 0;
     pAudioEncodeBuffer = NULL;
-	VideoFrameBuffer = NULL;
     nSizeAudioEncodeBuffer = 0;
     nAudioBufferSize = 1024 * 1024 * 4;
     audioBuffer      = new char[nAudioBufferSize];
@@ -131,5 +195,6 @@ bool AddVideoFrame(AVFormatContext *pFormatContext, AVFrame * pOutputFrame, AVCo
   void AddSampleToQueue(const unsigned char *buf, int size );
   void AddFrameToQueue(const unsigned char *buf, int size );
 };
+
 
 #endif // __VIDEO_ENCODER_H__
