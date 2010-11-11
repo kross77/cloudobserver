@@ -51,9 +51,6 @@ CvCapture* capture;
 
 IplImage* CVframe;
 /* display current frame */
-//	IplImage* destination;
-
-
 
 // Samples Generator
 int soundWaveOffset = 0;
@@ -68,6 +65,10 @@ ALint val;
 ALint			iSamplesAvailable;
 int nBlockAlign;
 
+double desiredTime;
+double spendedTime;
+boost::timer t;
+
 void initOpenCV()
 {
 	/* initialize camera */
@@ -80,8 +81,6 @@ void initOpenCV()
 		cin.get();
 	}
 
-	/* create a window for the video */
-	//cvNamedWindow("HelloVideoEncoding", CV_WINDOW_AUTOSIZE);
 }
 
 void initOpenAL(int fps)
@@ -92,7 +91,6 @@ void initOpenAL(int fps)
 	dev[0] = alcOpenDevice(NULL);
 	ctx = alcCreateContext(dev[0], NULL);
 	alcMakeContextCurrent(ctx);
-
 
 	/* If you don't need 3D spatialization, this should help processing time */
 	alDistanceModel(AL_NONE); 
@@ -133,13 +131,11 @@ void init()
 	initOpenCV();
 	initOpenAL(videoFrameRate);
 	initFFmpeg(outputUrl, outputContainer, videoWidth, videoHeight, videoFrameRate);
-
 }
 
 void CaptureFrame(char* buffer, int w, int h, int bytespan)
 {
 	/* get a frame */
-
 	if(!cvGrabFrame(capture)){              // capture a frame 
 		printf("Could not grab a frame\n\7");
 		//exit(0);
@@ -158,8 +154,6 @@ void CaptureFrame(char* buffer, int w, int h, int bytespan)
 
 	//use cvResize to resize source to a destination image
 	cvResize(CVframe, destination);
-
-	//	cvReleaseImage(&CVframe);
 
 	IplImage* redchannel = cvCreateImage(cvGetSize(destination), 8, 1);
 	IplImage* greenchannel = cvCreateImage(cvGetSize(destination), 8, 1);
@@ -181,11 +175,6 @@ void CaptureFrame(char* buffer, int w, int h, int bytespan)
 	cvReleaseImage(&greenchannel);
 	cvReleaseImage(&bluechannel);
 	cvReleaseImage(&destination);
-
-
-	//cvShowImage("HelloVideoEncoding", destination);
-
-	//
 }
 
 void GenerateSample(short* buffer, int sampleCount)
@@ -219,9 +208,6 @@ void closeOpenCV()
 {
 	cvDestroyWindow("HelloVideoEncoding");
 	cvReleaseCapture(&capture);
-
-
-
 }
 
 void closeOpenAL()
@@ -283,26 +269,21 @@ class ThreadCaptureVideo : public BaseThread
 protected:
 	virtual void DoStuff()
 	{
+		t.restart();
 		CaptureFrame((char *)frame->data[0], videoWidth, videoHeight, frame->linesize[0]);
-
-		// swap buffers
 		AVFrame* swap = frame;
 		frame = readyFrame;
 		readyFrame = swap;
+		spendedTime = t.elapsed();
+		if(spendedTime < desiredTime){
+			boost::this_thread::sleep(boost::posix_time::milliseconds(desiredTime - spendedTime));
+		}
 	}
 };
 
-
-
 int main(int argc, char* argv[])
-{
-
-	//for(int i = 1 ; i<argc; i++) 
-	//	cout<<argv[i]<<endl;
-
-	//increment argv first, thus skip the program’s name 
-
-	// cameraInt;  videoFrameRate; videoWidth; videoHeight; microphoneInt; audioSampleRate; outputUrl; outputContainer;
+{	
+	
 	if(argc >= 8){
 		cameraInt = atoi(argv[1]);
 		videoFrameRate = atoi(argv[2]);
@@ -314,8 +295,10 @@ int main(int argc, char* argv[])
 		outputContainer +=argv[8];
 		cout<<cameraInt<<  videoFrameRate<< videoWidth<< videoHeight<< microphoneInt<< audioSampleRate<< outputUrl<< outputContainer << endl;
 
+		desiredTime = 1000.0f / videoFrameRate;
+
 	}else{
-		cout << "Worning: No humans allowed!" << endl << " cameraInt;  videoFrameRate; videoWidth; videoHeight; microphoneInt; audioSampleRate; outputUrl; outputContainer;" << endl << "0 24 640 480 1 44100 tcp://127.0.0.1:4774/ flv" << endl;
+		cout << "Warning: No humans allowed!" << endl << " cameraInt;  videoFrameRate; videoWidth; videoHeight; microphoneInt; audioSampleRate; outputUrl; outputContainer;" << endl << "0 24 640 480 1 44100 tcp://127.0.0.1:4774/ flv" << endl;
 		cin.get();
 		return 0;
 	}
@@ -324,15 +307,11 @@ int main(int argc, char* argv[])
 	ThreadCaptureVideo threadCaptureVideo;
 	boost::thread ThreadCaptureVideo = boost::thread(threadCaptureVideo);
 
-	int key = 0;
-	//double desiredTime = 1000.0f / VIDEO_FRAME_RATE;
-
-	while(key != 'q')
+	while(1)
 	{	
 		if (!encoder.AddFrame(readyFrame, CaptureSample(), nSampleSize))
 			printf("Cannot write frame!\n");
 
-		key = cvWaitKey(1);
 	}
 
 	close();
