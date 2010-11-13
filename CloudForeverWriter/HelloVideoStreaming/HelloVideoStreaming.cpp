@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "VideoEncoder.h"
 #include "Settings.h"
-//#include <windows.h>
+#include <windows.h>
 #include <stdio.h>
 
 // FFmpeg
@@ -65,9 +65,14 @@ ALint val;
 ALint			iSamplesAvailable;
 int nBlockAlign;
 
-double desiredTime;
-double spendedTime;
-boost::timer t;
+double desiredTimeForCaptureFame;
+double spendedTimeForCaptureFame;
+
+double desiredTimeForMain;
+double spendedTimeForMain;
+
+boost::timer timerForCaptureFame;
+boost::timer timerForMain;
 
 void initOpenCV()
 {
@@ -111,7 +116,7 @@ void initFFmpeg(string url ,string container, int w, int h, int fps)
 	{
 		printf("Cannot initialize file!\n");
 		cin.get();
-	}
+	} 
 	cout << " 2 "<< endl;
 	int bufferImgSize = avpicture_get_size(PIX_FMT_BGR24, w, h);
 
@@ -155,6 +160,7 @@ void CaptureFrame(char* buffer, int w, int h, int bytespan)
 	//use cvResize to resize source to a destination image
 	cvResize(CVframe, destination);
 
+	// buffer = destination->imageData;
 	IplImage* redchannel = cvCreateImage(cvGetSize(destination), 8, 1);
 	IplImage* greenchannel = cvCreateImage(cvGetSize(destination), 8, 1);
 	IplImage* bluechannel = cvCreateImage(cvGetSize(destination), 8, 1);
@@ -235,56 +241,27 @@ void close()
 	closeFFmpeg();
 }
 
-class BaseThread
-{
-public:
-	BaseThread() { }
-
-	virtual ~BaseThread() { }
-
-	void operator()()
+ void ThreadCaptureFrame()
 	{
-		try
-		{
-			for (;;)
-			{
-				// Check if the thread should be interrupted
-				boost::this_thread::interruption_point();
-
-				DoStuff();
-			}
-		}
-		catch (boost::thread_interrupted)
-		{
-			// Thread end
-		}
-	}
-
-protected:
-	virtual void DoStuff() = 0;
-};
-
-class ThreadCaptureVideo : public BaseThread
-{
-protected:
-	virtual void DoStuff()
-	{
-		t.restart();
+		while(1){
+		timerForCaptureFame.restart();
 		CaptureFrame((char *)frame->data[0], videoWidth, videoHeight, frame->linesize[0]);
 		AVFrame* swap = frame;
 		frame = readyFrame;
 		readyFrame = swap;
-		spendedTime = t.elapsed();
-		if(spendedTime < desiredTime){
-			boost::this_thread::sleep(boost::posix_time::milliseconds(desiredTime - spendedTime));
+		spendedTimeForCaptureFame = timerForCaptureFame.elapsed();
+		if(spendedTimeForCaptureFame < desiredTimeForCaptureFame){
+			Sleep(desiredTimeForCaptureFame - spendedTimeForCaptureFame);
 		}
 	}
-};
+ }
+
 
 int main(int argc, char* argv[])
 {	
 	
 	if(argc >= 8){
+
 		cameraInt = atoi(argv[1]);
 		videoFrameRate = atoi(argv[2]);
 		videoWidth = atoi(argv[3]);
@@ -295,7 +272,8 @@ int main(int argc, char* argv[])
 		outputContainer +=argv[8];
 		cout<<cameraInt<<  videoFrameRate<< videoWidth<< videoHeight<< microphoneInt<< audioSampleRate<< outputUrl<< outputContainer << endl;
 
-		desiredTime = 1000.0f / videoFrameRate;
+		desiredTimeForCaptureFame = 1000.0f / videoFrameRate;
+		desiredTimeForMain = 1000.0f / videoFrameRate;
 
 	}else{
 		cout << "Warning: No humans allowed!" << endl << " cameraInt;  videoFrameRate; videoWidth; videoHeight; microphoneInt; audioSampleRate; outputUrl; outputContainer;" << endl << "0 24 640 480 1 44100 tcp://127.0.0.1:4774/ flv" << endl;
@@ -304,14 +282,20 @@ int main(int argc, char* argv[])
 	}
 	init();
 
-	ThreadCaptureVideo threadCaptureVideo;
-	boost::thread ThreadCaptureVideo = boost::thread(threadCaptureVideo);
+	boost::thread workerThread(ThreadCaptureFrame);
 
 	while(1)
 	{	
+		timerForMain.restart();
+		
 		if (!encoder.AddFrame(readyFrame, CaptureSample(), nSampleSize))
 			printf("Cannot write frame!\n");
 
+		spendedTimeForMain = timerForMain.elapsed();
+
+		if(spendedTimeForMain < desiredTimeForMain)
+			Sleep(desiredTimeForMain - spendedTimeForMain);
+		
 	}
 
 	close();
