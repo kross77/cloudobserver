@@ -587,28 +587,36 @@ bool VideoEncoder::AddAudioSample(AVFormatContext *pFormatContext, AVStream *pSt
 void VideoEncoder::UrlWriteData()
 {
 	while(1){
-		switch (AudioSamples.empty()){
-		case true : 
+		switch(AudioSamples.empty()){	
+		case false :{
+			AudioSample * newAudioSample = new AudioSample;
+			AudioSamples.try_pop(newAudioSample); 
+			url_write (url_context, (unsigned char *)newAudioSample->buffer, newAudioSample->len);
+					} break;
+		case true :	
 			switch(VideoSamples.empty()){
-		case true : Sleep(1); break;
-		case false : 	
+		case true : Sleep(2); break;
+		case false : {	
 			VideoSample * newVideoSample = new VideoSample;
-			VideoSamples.wait_and_pop(newVideoSample); //возможны помехи. Причина: запись звука не смотрит на мутексы видео.
+			VideoSamples.wait_and_pop(newVideoSample);
 			url_write (url_context, (unsigned char *)newVideoSample->buffer, newVideoSample->len);
-			break;
-			} break;
-		case false :  	break;
+					 }break;
+			}break;
+
+
 		}
-	}
+	}	
 }
+
+
 void VideoEncoder::AddSampleToQueue(const unsigned char *buf, int size )
 {
 	AudioSample * newAudioSample = new AudioSample;
 	newAudioSample->buffer = buf;
 	newAudioSample->len = size;
 	AudioSamples.push(newAudioSample);
-	url_write (url_context, (unsigned char *)newAudioSample->buffer, newAudioSample->len);
-	AudioSamples.try_pop(newAudioSample);
+	//url_write (url_context, (unsigned char *)newAudioSample->buffer, newAudioSample->len);
+	//AudioSamples.try_pop(newAudioSample);
 	//ToDo: память не чистим newAudioSample, newAudioSample->buffer.
 }
 
