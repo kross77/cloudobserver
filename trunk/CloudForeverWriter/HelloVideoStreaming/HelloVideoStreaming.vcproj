@@ -181,6 +181,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\LSD.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.cpp"
 				>
 				<FileConfiguration
@@ -216,6 +220,10 @@
 			</File>
 			<File
 				RelativePath=".\ffmpeginclude.h"
+				>
+			</File>
+			<File
+				RelativePath=".\LSD.h"
 				>
 			</File>
 			<File

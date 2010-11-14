@@ -23,6 +23,9 @@
 #include <boost/thread.hpp>
 #include <boost/timer.hpp>
 
+// LSD - take it for fun
+#include "LSD.h"
+
 using namespace std;
 
 //cmndlVars
@@ -183,6 +186,88 @@ void CaptureFrame(char* buffer, int w, int h, int bytespan)
 	cvReleaseImage(&destination);
 }
 
+void CaptureFrameAddLsd(char* buffer, int w, int h, int bytespan)
+{
+	/* get a frame */
+
+
+	if(!cvGrabFrame(capture)){              // capture a frame 
+		printf("Could not grab a frame\n\7");
+		//exit(0);
+	}
+	CVframe =cvRetrieveFrame(capture);           // retrieve the captured frame
+
+	/* always check */
+	if (!CVframe)
+	{
+		printf("No CV frame captured!\n");
+		cin.get();
+	}
+
+	/* display current frame */
+	IplImage* destination = cvCreateImage(cvSize(w, h), CVframe->depth, CVframe->nChannels);
+
+	//use cvResize to resize source to a destination image
+	cvResize(CVframe, destination);
+
+	IplImage *destinationForLSD = cvCreateImage(cvSize(w, h),IPL_DEPTH_8U,1);
+	cvCvtColor(destination,destinationForLSD,CV_RGB2GRAY);
+	
+	image_double lsdImage;
+	ntuple_list lsdOut;
+	unsigned int x,y,i,j;
+	lsdImage = new_image_double(w,h);
+
+	
+	for(x=0;x<w;x++)
+		for(y=0;y<h;y++)
+			lsdImage->data[ x + y * lsdImage->xsize ] = cvGetReal2D(destinationForLSD, y, x);/* image(x,y) */
+
+
+	
+	/* call LSD */
+	lsdOut = lsd(lsdImage);
+	
+	
+
+	for(i=0;i<lsdOut->size;i++)
+	{
+		CvPoint pt1 = { lsdOut->values[ i * lsdOut->dim + 0 ], lsdOut->values[ i * lsdOut->dim + 1]};
+		CvPoint pt2 = { lsdOut->values[ i * lsdOut->dim + 2 ], lsdOut->values[ i * lsdOut->dim + 3 ] };
+		cvLine(destination, pt1, pt2, CV_RGB(240, 255, 255), 1, CV_AA,0);
+	}
+	
+
+	// buffer = destination->imageData;
+	IplImage* redchannel = cvCreateImage(cvGetSize(destination), 8, 1);
+	IplImage* greenchannel = cvCreateImage(cvGetSize(destination), 8, 1);
+	IplImage* bluechannel = cvCreateImage(cvGetSize(destination), 8, 1);
+
+	cvSplit(destination, bluechannel, greenchannel, redchannel, NULL);
+
+	
+	for(int y = 0; y < destination->height; y++)
+	{
+		char* line = buffer + y * bytespan;
+		for(int x = 0; x < destination->width; x++)
+		{
+			line[0] = cvGetReal2D(redchannel, y, x);
+			line[1] = cvGetReal2D(greenchannel, y, x);
+			line[2] = cvGetReal2D(bluechannel, y, x);
+			line += 3;
+		}
+	}
+	
+	cvReleaseImage(&destinationForLSD);
+	cvReleaseImage(&redchannel);
+	cvReleaseImage(&greenchannel);
+	cvReleaseImage(&bluechannel);
+	cvReleaseImage(&destination);
+	
+	free_image_double(lsdImage);
+	free_ntuple_list(lsdOut);
+}
+
 void GenerateSample(short* buffer, int sampleCount)
 {
 	double amplitude = 20.0 * pow(10, AUDIO_VOLUME / 20.0);
@@ -245,7 +330,8 @@ void close()
 	{
 		while(1){
 		timerForCaptureFame.restart();
-		CaptureFrame((char *)frame->data[0], videoWidth, videoHeight, frame->linesize[0]);
+		/*CaptureFrame((char *)frame->data[0], videoWidth, videoHeight, frame->linesize[0]);*/
+		CaptureFrameAddLsd((char *)frame->data[0], videoWidth, videoHeight, frame->linesize[0]);
 		AVFrame* swap = frame;
 		frame = readyFrame;
 		readyFrame = swap;
