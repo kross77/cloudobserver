@@ -66,8 +66,8 @@ public:
 		int len;
 	};
 
-	ConcurrentQueue<AudioSample * > AudioSamples;
-	ConcurrentQueue<VideoSample * > VideoSamples;
+	ConcurrentQueue< AudioSample * > AudioSamples;
+	ConcurrentQueue< VideoSample * > VideoSamples;
 
 	bool sampleSendingFinished;
 	bool frameSendingFinished;

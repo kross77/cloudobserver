@@ -590,14 +590,14 @@ void VideoEncoder::UrlWriteData()
 		switch (AudioSamples.empty()){
 		case true : 
 			switch(VideoSamples.empty()){
-		case true : Sleep(5); break;
+		case true : Sleep(1); break;
 		case false : 	
 			VideoSample * newVideoSample = new VideoSample;
-			VideoSamples.wait_and_pop(newVideoSample);
+			VideoSamples.wait_and_pop(newVideoSample); //возможны помехи так как запись звука не смотрит на мутексы видео
 			url_write (url_context, (unsigned char *)newVideoSample->buffer, newVideoSample->len);
 			break;
 			} break;
-		case false :  Sleep(3);  	break;
+		case false :  	break;
 		}
 	}
 }
@@ -608,9 +608,7 @@ void VideoEncoder::AddSampleToQueue(const unsigned char *buf, int size )
 	newAudioSample->len = size;
 	AudioSamples.push(newAudioSample);
 	url_write (url_context, (unsigned char *)newAudioSample->buffer, newAudioSample->len);
-	AudioSamples.wait_and_pop(newAudioSample);
-	delete newAudioSample;
-}
+	AudioSamples.wait_and_pop(newAudioSample);}
 void VideoEncoder::AddFrameToQueue(const unsigned char *buf, int size )
 {
 	VideoSample * newVideoSample = new VideoSample;
@@ -620,6 +618,6 @@ void VideoEncoder::AddFrameToQueue(const unsigned char *buf, int size )
 	newVideoSample->len = size;
 	VideoSamples.push(newVideoSample);
 	//free(newVideoSample->buffer);
-	delete newVideoSample;
+	//delete newVideoSample;
 }
 
