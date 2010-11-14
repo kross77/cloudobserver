@@ -593,7 +593,7 @@ void VideoEncoder::UrlWriteData()
 		case true : Sleep(1); break;
 		case false : 	
 			VideoSample * newVideoSample = new VideoSample;
-			VideoSamples.wait_and_pop(newVideoSample); //возможны помехи так как запись звука не смотрит на мутексы видео
+			VideoSamples.wait_and_pop(newVideoSample); //возможны помехи. Причина: запись звука не смотрит на мутексы видео.
 			url_write (url_context, (unsigned char *)newVideoSample->buffer, newVideoSample->len);
 			break;
 			} break;
@@ -608,7 +608,10 @@ void VideoEncoder::AddSampleToQueue(const unsigned char *buf, int size )
 	newAudioSample->len = size;
 	AudioSamples.push(newAudioSample);
 	url_write (url_context, (unsigned char *)newAudioSample->buffer, newAudioSample->len);
-	AudioSamples.wait_and_pop(newAudioSample);}
+	AudioSamples.try_pop(newAudioSample);
+	//ToDo: память не чистим newAudioSample, newAudioSample->buffer.
+}
+
 void VideoEncoder::AddFrameToQueue(const unsigned char *buf, int size )
 {
 	VideoSample * newVideoSample = new VideoSample;
@@ -617,7 +620,7 @@ void VideoEncoder::AddFrameToQueue(const unsigned char *buf, int size )
 	newVideoSample->buffer = buf;
 	newVideoSample->len = size;
 	VideoSamples.push(newVideoSample);
-	//free(newVideoSample->buffer);
-	//delete newVideoSample;
+	//ToDo: память не чистим newVideoSample, newVideoSample->buffer.
+
 }
 
