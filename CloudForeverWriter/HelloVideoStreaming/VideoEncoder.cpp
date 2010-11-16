@@ -78,6 +78,12 @@ bool VideoEncoder::InitUrl(std::string& container, std::string& tcpUrl)
 
 				if (res)
 				{
+
+					const char header[27] = "GET /write HTTP/1.1\nId: 1\n"; // по моему он забывает на новую строку перейти...
+					std::cout << header << std::endl << sizeof(header) << std::endl;
+					url_write (url_context, (unsigned char *)header, 27);
+
+
 					url_open_dyn_buf(&pFormatContext -> pb);
 					av_write_header(pFormatContext);
 					unsigned char *pb_buffer;
@@ -382,7 +388,7 @@ AVStream * VideoEncoder::AddAudioStream(AVFormatContext *pContext, CodecID codec
 	pCodecCxt->channels    = 1;
 	pCodecCxt->sample_fmt  = SAMPLE_FMT_S16;
 
-	nSizeAudioEncodeBuffer = 4 * MAX_AUDIO_PACKET_SIZE;
+	nSizeAudioEncodeBuffer = 4 * MAX_AUDIO_PACKET_SIZE; // »««ј Ё“ќќ ј”ƒ»ќ   ’”яћ ћќ∆≈“ Ћ≈“≈“№
 	if (pAudioEncodeBuffer == NULL)
 	{      
 		pAudioEncodeBuffer = (uint8_t * )av_malloc(nSizeAudioEncodeBuffer);
