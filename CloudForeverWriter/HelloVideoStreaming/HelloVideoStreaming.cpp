@@ -41,6 +41,9 @@ int audioSampleRate	;	// hertz
 string outputUrl ;
 string outputContainer	;
 
+//liveCMDvar
+bool useLSD;
+//mutable boost::mutex the_mutex;
 // FFmpeg
 VideoEncoder encoder;
 AVFrame* frame;
@@ -51,7 +54,6 @@ URLContext* StreamToUrl;
 
 // OpenCV
 CvCapture* capture;
-
 IplImage* CVframe;
 /* display current frame */
 
@@ -212,23 +214,23 @@ void CaptureFrameAddLsd(char* buffer, int w, int h, int bytespan)
 
 	IplImage *destinationForLSD = cvCreateImage(cvSize(w, h),IPL_DEPTH_8U,1);
 	cvCvtColor(destination,destinationForLSD,CV_RGB2GRAY);
-	
+
 	image_double lsdImage;
 	ntuple_list lsdOut;
 	unsigned int x,y,i,j;
 	lsdImage = new_image_double(w,h);
 
-	
+
 	for(x=0;x<w;x++)
 		for(y=0;y<h;y++)
 			lsdImage->data[ x + y * lsdImage->xsize ] = cvGetReal2D(destinationForLSD, y, x);/* image(x,y) */
 
 
-	
+
 	/* call LSD */
 	lsdOut = lsd(lsdImage);
-	
-	
+
+
 
 	for(i=0;i<lsdOut->size;i++)
 	{
@@ -236,7 +238,7 @@ void CaptureFrameAddLsd(char* buffer, int w, int h, int bytespan)
 		CvPoint pt2 = { lsdOut->values[ i * lsdOut->dim + 2 ], lsdOut->values[ i * lsdOut->dim + 3 ] };
 		cvLine(destination, pt1, pt2, CV_RGB(240, 255, 255), 1, CV_AA,0);
 	}
-	
+
 
 	// buffer = destination->imageData;
 	IplImage* redchannel = cvCreateImage(cvGetSize(destination), 8, 1);
@@ -245,7 +247,7 @@ void CaptureFrameAddLsd(char* buffer, int w, int h, int bytespan)
 
 	cvSplit(destination, bluechannel, greenchannel, redchannel, NULL);
 
-	
+
 	for(int y = 0; y < destination->height; y++)
 	{
 		char* line = buffer + y * bytespan;
@@ -257,13 +259,13 @@ void CaptureFrameAddLsd(char* buffer, int w, int h, int bytespan)
 			line += 3;
 		}
 	}
-	
+
 	cvReleaseImage(&destinationForLSD);
 	cvReleaseImage(&redchannel);
 	cvReleaseImage(&greenchannel);
 	cvReleaseImage(&bluechannel);
 	cvReleaseImage(&destination);
-	
+
 	free_image_double(lsdImage);
 	free_ntuple_list(lsdOut);
 }
@@ -326,12 +328,18 @@ void close()
 	closeFFmpeg();
 }
 
- void ThreadCaptureFrame()
-	{
-		while(1){
+void ThreadCaptureFrame()
+{
+	while(1){
 		timerForCaptureFame.restart();
-		/*CaptureFrame((char *)frame->data[0], videoWidth, videoHeight, frame->linesize[0]);*/
-		CaptureFrameAddLsd((char *)frame->data[0], videoWidth, videoHeight, frame->linesize[0]);
+		switch(useLSD){
+		case false:{
+			CaptureFrame((char *)frame->data[0], videoWidth, videoHeight, frame->linesize[0]);
+				   } break;
+		case true:{
+			CaptureFrameAddLsd((char *)frame->data[0], videoWidth, videoHeight, frame->linesize[0]);
+				  } break;
+		}
 		AVFrame* swap = frame;
 		frame = readyFrame;
 		readyFrame = swap;
@@ -340,12 +348,26 @@ void close()
 			Sleep(desiredTimeForCaptureFame - spendedTimeForCaptureFame);
 		}
 	}
- }
+}
+void ThreadSaveFrame()
+{
+	while(1)
+	{
+		timerForMain.restart();
 
+		if (!encoder.AddFrame(readyFrame, CaptureSample(), nSampleSize))
+			printf("Cannot write frame!\n");
+
+		spendedTimeForMain = timerForMain.elapsed();
+
+		if(spendedTimeForMain < desiredTimeForMain)
+			Sleep(desiredTimeForMain - spendedTimeForMain);
+	}
+}
 
 int main(int argc, char* argv[])
 {	
-	
+
 	if(argc >= 8){
 
 		cameraInt = atoi(argv[1]);
@@ -369,19 +391,21 @@ int main(int argc, char* argv[])
 	init();
 
 	boost::thread workerThread(ThreadCaptureFrame);
-
+	boost::thread workerThread2(ThreadSaveFrame);
 	while(1)
-	{	
-		timerForMain.restart();
-		
-		if (!encoder.AddFrame(readyFrame, CaptureSample(), nSampleSize))
-			printf("Cannot write frame!\n");
+	{
+		int i;
+		cin >> i;
+		if(i == 1)
+		{
+			useLSD = true;
+		}
+		if(i == 0)
+		{
+			useLSD = false;
+		}
+		Sleep(250);
 
-		spendedTimeForMain = timerForMain.elapsed();
-
-		if(spendedTimeForMain < desiredTimeForMain)
-			Sleep(desiredTimeForMain - spendedTimeForMain);
-		
 	}
 
 	close();

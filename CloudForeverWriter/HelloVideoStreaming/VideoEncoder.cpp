@@ -602,8 +602,6 @@ void VideoEncoder::UrlWriteData()
 			url_write (url_context, (unsigned char *)newVideoSample->buffer, newVideoSample->len);
 					 }break;
 			}break;
-
-
 		}
 	}	
 }
