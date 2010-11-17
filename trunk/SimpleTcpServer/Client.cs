@@ -7,49 +7,74 @@ namespace SimpleTcpServer
 {
     public class Client
     {
-        private Server server;
-        private TcpClient client;
         private uint clientNumber;
+        private TcpClient client;
+        private StreamWriter logWriter;
 
-        public Client(Server server, TcpClient client, uint clientNumber)
+        public Client(uint clientNumber, TcpClient client)
         {
-            this.server = server;
-            this.client = client;
             this.clientNumber = clientNumber;
+            this.client = client;
+            this.logWriter = new StreamWriter(File.Create("client-" + this.clientNumber.ToString() + "-log.txt"));
         }
 
         public void Process()
         {
-            byte[] buffer = new byte[this.client.ReceiveBufferSize];
+            this.WriteLog("Client " + this.clientNumber.ToString() + " connected.");
 
-            this.server.WriteLog("Client " + this.clientNumber.ToString() + " connected. Incoming data will be written into file 'client-" + this.clientNumber.ToString() + ".dat'.");
             FileStream fileStream = File.Create("client-" + this.clientNumber.ToString() + ".dat");
             NetworkStream networkStream = this.client.GetStream();
 
+            int totalBytesReceived = 0;
+            byte[] buffer = new byte[this.client.ReceiveBufferSize];
+
             try
             {
-                int count = 0;
-                int read = 0;
                 do
                 {
-                    read = networkStream.Read(buffer, 0, buffer.Length);
-                    count += read;
-                    fileStream.Write(buffer, 0, read);
-                }
-                while (networkStream.DataAvailable);
-                this.server.WriteLog("Client " + this.clientNumber.ToString() + " disconnected. Bytes recieved: " + count.ToString());
+                    int bytesReceived = 0;
+                    do
+                    {
+                        int bytesRead = networkStream.Read(buffer, 0, buffer.Length);
+                        bytesReceived += bytesRead;
+                        fileStream.Write(buffer, 0, bytesRead);
+                    }
+                    while (networkStream.DataAvailable);
+
+                    if (bytesReceived > 0)
+                    {
+                        this.WriteLog("Client " + this.clientNumber.ToString() + " received " + bytesReceived.ToString() + ((bytesReceived == 1) ? " byte" : " bytes"));
+                        totalBytesReceived += bytesReceived;
+                    }
+                    else
+                        this.client.Close();
+                } while (client.Connected);
+            }
+            catch (IOException)
+            {
             }
             catch (Exception e)
             {
-                this.server.WriteLog("Client " + this.clientNumber.ToString() + " has an error: " + e.ToString());
+                this.WriteLog("Client " + this.clientNumber.ToString() + " caught " + e.ToString());
             }
             finally
             {
+                this.WriteLog("Client " + this.clientNumber.ToString() + " disconnected. Total bytes received: " + totalBytesReceived.ToString());
+
                 networkStream.Close();
                 fileStream.Close();
-                client.Close();
+                this.logWriter.Close();
+                this.client.Close();
                 Thread.CurrentThread.Abort();
             }
+        }
+
+        private void WriteLog(string message)
+        {
+            message = DateTime.Now.ToString() + ": " + message;
+
+            this.logWriter.WriteLine(message);
+            Console.WriteLine(message);
         }
     }
 }
