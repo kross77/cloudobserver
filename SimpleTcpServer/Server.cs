@@ -19,7 +19,7 @@ namespace SimpleTcpServer
 
         public void Listen()
         {
-            this.listener = new TcpListener(IPAddress.Loopback, this.port);
+            this.listener = new TcpListener(IPAddress.Any, this.port);
             this.listener.Start();
             Console.WriteLine("Server started. Waiting for connections...");
 
