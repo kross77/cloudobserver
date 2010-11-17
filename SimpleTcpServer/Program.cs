@@ -10,7 +10,7 @@ namespace SimpleTcpServer
 
         static void Main(string[] args)
         {
-            Console.WriteLine("Simple TCP Server 1.0");
+            Console.WriteLine("Simple TCP Server 1.0.1");
             Console.WriteLine("by CloudForever (c) team");
             Console.WriteLine();
 

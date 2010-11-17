@@ -21,11 +21,11 @@ namespace SimpleTcpServer
         {
             this.listener = new TcpListener(IPAddress.Loopback, this.port);
             this.listener.Start();
-            WriteLog("Listening on port: " + this.port.ToString());
+            Console.WriteLine("Server started. Waiting for connections...");
 
             while (true)
             {
-                Client client = new Client(this, this.listener.AcceptTcpClient(), ++this.clientsCount);
+                Client client = new Client(++this.clientsCount, this.listener.AcceptTcpClient());
                 Thread clientThread = new Thread(new ThreadStart(client.Process));
                 clientThread.Name = "Client " + this.clientsCount.ToString();
                 clientThread.IsBackground = true;
@@ -44,12 +44,9 @@ namespace SimpleTcpServer
         public void Stop()
         {
             this.listener.Stop();
-            this.thread.Abort();
-        }
+            Console.WriteLine("Server stopped.");
 
-        public void WriteLog(string message)
-        {
-            Console.WriteLine(message);
+            this.thread.Abort();
         }
     }
 }
