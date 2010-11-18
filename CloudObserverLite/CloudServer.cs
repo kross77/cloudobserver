@@ -84,6 +84,27 @@ namespace CloudObserverLite
 
         public void OnResponse(ref HttpRequestStruct httpRequest, ref HttpResponseStruct httpResponse)
         {
+            if ((httpRequest.execute) && (httpRequest.arguments["action"] != null))
+            {
+                string action = Convert.ToString(httpRequest.arguments["action"]);
+                switch (action)
+                {
+                    default:
+                        httpResponse.status = (int)ResponseState.BAD_REQUEST;
+                        string bodyString = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n";
+                        bodyString += "<HTML><HEAD>\n";
+                        bodyString += "<META http-equiv=Content-Type content=\"text/html; charset=windows-1252\">\n";
+                        bodyString += "</HEAD>\n";
+                        bodyString += "<BODY>Unknown action \"";
+                        bodyString += action;
+                        bodyString += "\"!</BODY></HTML>\n";
+
+                        httpResponse.bodyData = Encoding.ASCII.GetBytes(bodyString);
+                        break;
+                }
+                return;
+            }
+
             string path = Directory.GetCurrentDirectory() + "\\" + httpRequest.url.Replace("/", "\\");
 
             if (Directory.Exists(path))
