@@ -359,6 +359,7 @@ if(string(argv[i]) == "-useLSD" ) {useLSD = atoi(argv[i+1]);}
 if(string(argv[i]) == "-streamBitRate" ) {streamBitRate = atoi(argv[i+1]);} 
 	// example -server http://127.0.0.1:4773 -nickname vasia 
 		}	
+	Sleep(1000);
 	desiredTimeForCaptureFame = 1000.0f / videoFrameRate;
 	desiredTimeForMain = 1000.0f / videoFrameRate;
 
