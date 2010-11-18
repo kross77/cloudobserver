@@ -78,11 +78,8 @@ bool VideoEncoder::InitUrl(std::string& container, std::string& tcpUrl)
 
 				if (res)
 				{
-
-					const char header[27] = "GET /write HTTP/1.1\nId: 1\n"; // по моему он забывает на новую строку перейти...
-					std::cout << header << std::endl << sizeof(header) << std::endl;
-					url_write (url_context, (unsigned char *)header, 27);
-
+					std::string header = "GET / HTTP/1.1\r\nContent-Length: stream\r\n\r\n";
+					url_write(url_context, (unsigned char*)header.c_str(), header.length());
 
 					url_open_dyn_buf(&pFormatContext -> pb);
 					av_write_header(pFormatContext);
