@@ -344,18 +344,19 @@ int main(int argc, char* argv[])
 	audioSampleRate = 44100;
 	outputContainer +="flv";
 	streamBitRate = 250000;
-	for(int i = 1; i>=argc; i++){
-if(argv[i] == "-camera") {cameraInt = atoi(argv[i+1]);} 
-if(argv[i] == "-framerate" ){videoFrameRate = atoi(argv[i+1]);} 
-if(argv[i] == "-width" ) {videoWidth = atoi(argv[i+1]);} 
-if(argv[i] == "-height" ) {videoHeight = atoi(argv[i+1]);} 
-if(argv[i] == "-microphone" ) {microphoneInt = atoi(argv[i+1]);} 
-if(argv[i] == "-samplerate" ) {audioSampleRate = atoi(argv[i+1]);} 
-if(argv[i] == "-server" ) {outputUrl = (argv[i+1]);} 
-if(argv[i] == "-container" ) {outputContainer = (argv[i+1]);} 
-if(argv[i] == "-nickname" ) {outputUserName = (argv[i+1]);} 
-if(argv[i] == "-useLSD" ) {useLSD = atoi(argv[i+1]);} 
-if(argv[i] == "-streamBitRate" ) {streamBitRate = atoi(argv[i+1]);} 
+	for(int i = 1; i<argc; i=i+2){
+	//	cout << "i = " << i << "; argv[i] = " << argv[i] << endl;
+if(string(argv[i]) == "-camera") {cameraInt = atoi(argv[i+1]);} 
+if(string(argv[i]) == "-framerate" ){videoFrameRate = atoi(argv[i+1]);} 
+if(string(argv[i]) == "-width" ) {videoWidth = atoi(argv[i+1]);} 
+if(string(argv[i]) == "-height" ) {videoHeight = atoi(argv[i+1]);} 
+if(string(argv[i]) == "-microphone" ) {microphoneInt = atoi(argv[i+1]);} 
+if(string(argv[i]) == "-samplerate" ) {audioSampleRate = atoi(argv[i+1]);} 
+if(string(argv[i]) == "-server" ) {outputUrl = (argv[i+1]);} 
+if(string(argv[i]) == "-container" ) {outputContainer = (argv[i+1]);} 
+if(string(argv[i]) == "-nickname" ) {outputUserName = (argv[i+1]);} 
+if(string(argv[i]) == "-useLSD" ) {useLSD = atoi(argv[i+1]);} 
+if(string(argv[i]) == "-streamBitRate" ) {streamBitRate = atoi(argv[i+1]);} 
 	// example -server http://127.0.0.1:4773 -nickname vasia 
 		}	
 	desiredTimeForCaptureFame = 1000.0f / videoFrameRate;
