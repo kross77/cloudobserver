@@ -10,8 +10,6 @@ namespace CloudObserverLite
 {
     public class CloudClient
     {
-        public const string SERVER_NAME = "CloudObserverLite";
-
         private CloudServer server;
         private uint clientNumber;
         private TcpClient client;
@@ -225,7 +223,7 @@ namespace CloudObserverLite
 
 
                         this.httpResponse.headers = new Hashtable();
-                        this.httpResponse.headers.Add("Server", SERVER_NAME);
+                        this.httpResponse.headers.Add("Server", server.Name);
                         this.httpResponse.headers.Add("Date", DateTime.Now.ToString("r"));
 
                         if (httpResponse.status == (int)ResponseState.OK)

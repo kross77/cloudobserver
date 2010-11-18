@@ -21,6 +21,14 @@ namespace CloudObserverLite
         private uint clientsCount;
         private LogWriter logWriter;
 
+        public string Name
+        {
+            get
+            {
+                return this.name;
+            }
+        }
+
         public CloudServer() : this(DEFAULT_NAME, DEFAULT_PORT) { }
 
         public CloudServer(string name) : this(name, DEFAULT_PORT) { }
