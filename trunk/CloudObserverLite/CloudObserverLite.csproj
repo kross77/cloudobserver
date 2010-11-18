@@ -38,7 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CloudClient.cs" />
-    <Compile Include="CloudKernel.cs" />
+    <Compile Include="CloudServer.cs" />
     <Compile Include="HttpRequestStruct.cs" />
     <Compile Include="HttpResponseStruct.cs" />
     <Compile Include="LogWriter.cs" />
