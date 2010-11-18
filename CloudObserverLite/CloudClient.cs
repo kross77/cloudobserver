@@ -5,7 +5,6 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Web;
-using Microsoft.Win32;
 
 namespace CloudObserverLite
 {
@@ -13,6 +12,7 @@ namespace CloudObserverLite
     {
         public const string SERVER_NAME = "CloudObserverLite";
 
+        private CloudServer server;
         private uint clientNumber;
         private TcpClient client;
         private HttpRequestStruct httpRequest;
@@ -20,8 +20,9 @@ namespace CloudObserverLite
 
         private LogWriter logWriter;
 
-        public CloudClient(uint clientNumber, TcpClient client)
+        public CloudClient(CloudServer server, uint clientNumber, TcpClient client)
         {
+            this.server = server;
             this.clientNumber = clientNumber;
             this.client = client;
 
@@ -228,7 +229,7 @@ namespace CloudObserverLite
                         this.httpResponse.headers.Add("Date", DateTime.Now.ToString("r"));
 
                         if (httpResponse.status == (int)ResponseState.OK)
-                            this.OnResponse(ref this.httpRequest, ref this.httpResponse);
+                            this.server.OnResponse(ref this.httpRequest, ref this.httpResponse);
 
                         string headersString = this.httpResponse.version + " " + ResponseStatus.GetInstance()[this.httpResponse.status] + "\n";
                         foreach (DictionaryEntry header in this.httpResponse.headers)
@@ -272,60 +273,6 @@ namespace CloudObserverLite
                 if (this.httpResponse.fileStream != null)
                     this.httpResponse.fileStream.Close();
                 Thread.CurrentThread.Abort();
-            }
-        }
-
-        private void OnResponse(ref HttpRequestStruct httpRequest, ref HttpResponseStruct httpResponse)
-        {
-            string path = Directory.GetCurrentDirectory() + "\\" + httpRequest.url.Replace("/", "\\");
-
-            if (Directory.Exists(path))
-            {
-                if (File.Exists(path + "index.html"))
-                    path += "\\index.html";
-                else
-                {
-                    string[] dirs = Directory.GetDirectories(path);
-                    string[] files = Directory.GetFiles(path);
-
-                    string bodyStr = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n";
-                    bodyStr += "<HTML><HEAD>\n";
-                    bodyStr += "<META http-equiv=Content-Type content=\"text/html; charset=windows-1252\">\n";
-                    bodyStr += "</HEAD>\n";
-                    bodyStr += "<BODY><p>Folder listing, to do not see this add a 'index.html' document\n<p>\n";
-                    for (int i = 0; i < dirs.Length; i++)
-                        bodyStr += "<br><a href = \"" + httpRequest.url + Path.GetFileName(dirs[i]) + "/\">[" + Path.GetFileName(dirs[i]) + "]</a>\n";
-                    for (int i = 0; i < files.Length; i++)
-                        bodyStr += "<br><a href = \"" + httpRequest.url + Path.GetFileName(files[i]) + "\">" + Path.GetFileName(files[i]) + "</a>\n";
-                    bodyStr += "</BODY></HTML>\n";
-
-                    httpResponse.bodyData = Encoding.ASCII.GetBytes(bodyStr);
-                    return;
-                }
-            }
-
-            if (File.Exists(path))
-            {
-                RegistryKey registryKey = Registry.ClassesRoot.OpenSubKey(Path.GetExtension(path), true);
-                string registryValue = (string)registryKey.GetValue("Content Type");
-
-                httpResponse.fileStream = File.Open(path, FileMode.Open);
-                if (registryValue != "")
-                    httpResponse.headers["Content-type"] = registryValue;
-
-                httpResponse.headers["Content-Length"] = httpResponse.fileStream.Length;
-            }
-            else
-            {
-                httpResponse.status = (int)ResponseState.NOT_FOUND;
-
-                string bodyStr = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n";
-                bodyStr += "<HTML><HEAD>\n";
-                bodyStr += "<META http-equiv=Content-Type content=\"text/html; charset=windows-1252\">\n";
-                bodyStr += "</HEAD>\n";
-                bodyStr += "<BODY>File not found!</BODY></HTML>\n";
-
-                httpResponse.bodyData = Encoding.ASCII.GetBytes(bodyStr);
             }
         }
     }

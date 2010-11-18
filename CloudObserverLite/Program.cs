@@ -38,12 +38,12 @@ namespace CloudObserverLite
                 Console.WriteLine("Using default port: " + DEFAULT_PORT.ToString());
             }
 
-            CloudKernel kernel = new CloudKernel(port);
+            CloudServer server = new CloudServer(port);
             Console.WriteLine("Cloud Observer is now starting. Press any key to stop and exit...");
             Console.WriteLine();
-            kernel.Start();
+            server.Start();
             Console.ReadKey();
-            kernel.Stop();
+            server.Stop();
         }
     }
 }
