@@ -40,7 +40,8 @@ int audioSampleRate	;	// hertz
 
 string outputUrl ;
 string outputContainer	;
-
+string outputUserName	;
+int streamBitRate;
 //liveCMDvar
 bool useLSD;
 //mutable boost::mutex the_mutex;
@@ -78,7 +79,25 @@ double spendedTimeForMain;
 
 boost::timer timerForCaptureFame;
 boost::timer timerForMain;
-
+void replace_or_merge(std::string &a, const std::string &b, const std::string &c)
+{
+	const std::string::size_type pos_b_in_a = a.find(b);
+	if(pos_b_in_a == std::string::npos) {
+		a.insert(0, c);
+	}
+	else {
+		a.replace(pos_b_in_a, b.length(), c);
+	}
+}
+void getAdress(){
+	cout << "Please input stream URL (ex. http://127.0.0.1:4773/ )\n";
+	cin >> outputUrl;
+	replace_or_merge(outputUrl, "http://", "tcp://");
+}
+void getName(){
+	cout << "Please your name (ex. georg.vasiliev )\n";
+	cin >> outputUserName;
+}
 void initOpenCV()
 {
 	/* initialize camera */
@@ -111,16 +130,24 @@ void initOpenAL(int fps)
 	nBlockAlign = 1 * 16 / 8;
 }
 
-void initFFmpeg(string url ,string container, int w, int h, int fps)
+void initFFmpeg(string container, int w, int h, int fps)
 {
 
 	cout << " 1 "<< endl;
-	encoder.SetConstants(fps, videoWidth, videoHeight, audioSampleRate);
-
-	if (!encoder.InitUrl(container, url))
+	encoder.SetConstants(fps, videoWidth, videoHeight, audioSampleRate, streamBitRate);
+	top:
+int encoderIU = encoder.InitUrl(container, outputUrl, outputUserName);
+	if (encoderIU == -1)
 	{
-		printf("Cannot initialize file!\n");
-		cin.get();
+		cout << "Cannot open stream URL\n";
+		getAdress();
+		  goto top;
+	} 
+	if (encoderIU == 0)
+	{
+		printf("Cannot open stream for selected name\n");
+		getName();
+		  goto top;
 	} 
 	cout << " 2 "<< endl;
 	int bufferImgSize = avpicture_get_size(PIX_FMT_BGR24, w, h);
@@ -138,19 +165,16 @@ void initFFmpeg(string url ,string container, int w, int h, int fps)
 
 void init()
 {
+	initFFmpeg(outputContainer, videoWidth, videoHeight, videoFrameRate);
 	initOpenCV();
 	initOpenAL(videoFrameRate);
-	initFFmpeg(outputUrl, outputContainer, videoWidth, videoHeight, videoFrameRate);
+	
 }
 
-void CaptureFrame(char* buffer, int w, int h, int bytespan)
+void CaptureFrame(int w, int h, char* buffer, int bytespan)
 {
 	/* get a frame */
-	if(!cvGrabFrame(capture)){              // capture a frame 
-		printf("Could not grab a frame\n\7");
-		//exit(0);
-	}
-	CVframe =cvRetrieveFrame(capture);           // retrieve the captured frame
+	CVframe = cvQueryFrame(capture);
 
 	/* always check */
 	if (!CVframe)
@@ -165,6 +189,40 @@ void CaptureFrame(char* buffer, int w, int h, int bytespan)
 	//use cvResize to resize source to a destination image
 	cvResize(CVframe, destination);
 
+	switch(useLSD){
+		case false:{} break;
+		case true:{
+			IplImage *destinationForLSD = cvCreateImage(cvSize(w, h),IPL_DEPTH_8U,1);
+			cvCvtColor(destination,destinationForLSD,CV_RGB2GRAY);
+
+			image_double lsdImage;
+			ntuple_list lsdOut;
+			unsigned int x,y,i,j;
+			lsdImage = new_image_double(w,h);
+
+
+			for(x=0;x<w;x++)
+				for(y=0;y<h;y++)
+					lsdImage->data[ x + y * lsdImage->xsize ] = cvGetReal2D(destinationForLSD, y, x);/* image(x,y) */
+
+
+
+			/* call LSD */
+			lsdOut = lsd(lsdImage);
+
+
+
+			for(i=0;i<lsdOut->size;i++)
+			{
+				CvPoint pt1 = { lsdOut->values[ i * lsdOut->dim + 0 ], lsdOut->values[ i * lsdOut->dim + 1]};
+				CvPoint pt2 = { lsdOut->values[ i * lsdOut->dim + 2 ], lsdOut->values[ i * lsdOut->dim + 3 ] };
+				cvLine(destination, pt1, pt2, CV_RGB(240, 255, 255), 1, CV_AA,0);
+			}
+			cvReleaseImage(&destinationForLSD);
+			free_image_double(lsdImage);
+			free_ntuple_list(lsdOut);
+				  } break;
+	}
 	// buffer = destination->imageData;
 	IplImage* redchannel = cvCreateImage(cvGetSize(destination), 8, 1);
 	IplImage* greenchannel = cvCreateImage(cvGetSize(destination), 8, 1);
@@ -186,88 +244,6 @@ void CaptureFrame(char* buffer, int w, int h, int bytespan)
 	cvReleaseImage(&greenchannel);
 	cvReleaseImage(&bluechannel);
 	cvReleaseImage(&destination);
-}
-
-void CaptureFrameAddLsd(char* buffer, int w, int h, int bytespan)
-{
-	/* get a frame */
-
-
-	if(!cvGrabFrame(capture)){              // capture a frame 
-		printf("Could not grab a frame\n\7");
-		//exit(0);
-	}
-	CVframe =cvRetrieveFrame(capture);           // retrieve the captured frame
-
-	/* always check */
-	if (!CVframe)
-	{
-		printf("No CV frame captured!\n");
-		cin.get();
-	}
-
-	/* display current frame */
-	IplImage* destination = cvCreateImage(cvSize(w, h), CVframe->depth, CVframe->nChannels);
-
-	//use cvResize to resize source to a destination image
-	cvResize(CVframe, destination);
-
-	IplImage *destinationForLSD = cvCreateImage(cvSize(w, h),IPL_DEPTH_8U,1);
-	cvCvtColor(destination,destinationForLSD,CV_RGB2GRAY);
-
-	image_double lsdImage;
-	ntuple_list lsdOut;
-	unsigned int x,y,i,j;
-	lsdImage = new_image_double(w,h);
-
-
-	for(x=0;x<w;x++)
-		for(y=0;y<h;y++)
-			lsdImage->data[ x + y * lsdImage->xsize ] = cvGetReal2D(destinationForLSD, y, x);/* image(x,y) */
-
-
-
-	/* call LSD */
-	lsdOut = lsd(lsdImage);
-
-
-
-	for(i=0;i<lsdOut->size;i++)
-	{
-		CvPoint pt1 = { lsdOut->values[ i * lsdOut->dim + 0 ], lsdOut->values[ i * lsdOut->dim + 1]};
-		CvPoint pt2 = { lsdOut->values[ i * lsdOut->dim + 2 ], lsdOut->values[ i * lsdOut->dim + 3 ] };
-		cvLine(destination, pt1, pt2, CV_RGB(240, 255, 255), 1, CV_AA,0);
-	}
-
-
-	// buffer = destination->imageData;
-	IplImage* redchannel = cvCreateImage(cvGetSize(destination), 8, 1);
-	IplImage* greenchannel = cvCreateImage(cvGetSize(destination), 8, 1);
-	IplImage* bluechannel = cvCreateImage(cvGetSize(destination), 8, 1);
-
-	cvSplit(destination, bluechannel, greenchannel, redchannel, NULL);
-
-
-	for(int y = 0; y < destination->height; y++)
-	{
-		char* line = buffer + y * bytespan;
-		for(int x = 0; x < destination->width; x++)
-		{
-			line[0] = cvGetReal2D(redchannel, y, x);
-			line[1] = cvGetReal2D(greenchannel, y, x);
-			line[2] = cvGetReal2D(bluechannel, y, x);
-			line += 3;
-		}
-	}
-
-	cvReleaseImage(&destinationForLSD);
-	cvReleaseImage(&redchannel);
-	cvReleaseImage(&greenchannel);
-	cvReleaseImage(&bluechannel);
-	cvReleaseImage(&destination);
-
-	free_image_double(lsdImage);
-	free_ntuple_list(lsdOut);
 }
 
 void GenerateSample(short* buffer, int sampleCount)
@@ -332,14 +308,7 @@ void ThreadCaptureFrame()
 {
 	while(1){
 		timerForCaptureFame.restart();
-		switch(useLSD){
-		case false:{
-			CaptureFrame((char *)frame->data[0], videoWidth, videoHeight, frame->linesize[0]);
-				   } break;
-		case true:{
-			CaptureFrameAddLsd((char *)frame->data[0], videoWidth, videoHeight, frame->linesize[0]);
-				  } break;
-		}
+		CaptureFrame( videoWidth, videoHeight, (char *)frame->data[0],frame->linesize[0]);
 		AVFrame* swap = frame;
 		frame = readyFrame;
 		readyFrame = swap;
@@ -366,46 +335,50 @@ void ThreadSaveFrame()
 }
 
 int main(int argc, char* argv[])
-{	
+{
+	cameraInt = 0;
+	videoFrameRate = 15;
+	videoWidth = 320;
+	videoHeight =  240;
+	microphoneInt = 1;
+	audioSampleRate = 44100;
+	outputContainer +="flv";
+	streamBitRate = 250000;
+	for(int i = 1; i>=argc; i++){
+if(argv[i] == "-camera") {cameraInt = atoi(argv[i+1]);} 
+if(argv[i] == "-framerate" ){videoFrameRate = atoi(argv[i+1]);} 
+if(argv[i] == "-width" ) {videoWidth = atoi(argv[i+1]);} 
+if(argv[i] == "-height" ) {videoHeight = atoi(argv[i+1]);} 
+if(argv[i] == "-microphone" ) {microphoneInt = atoi(argv[i+1]);} 
+if(argv[i] == "-samplerate" ) {audioSampleRate = atoi(argv[i+1]);} 
+if(argv[i] == "-server" ) {outputUrl = (argv[i+1]);} 
+if(argv[i] == "-container" ) {outputContainer = (argv[i+1]);} 
+if(argv[i] == "-nickname" ) {outputUserName = (argv[i+1]);} 
+if(argv[i] == "-useLSD" ) {useLSD = atoi(argv[i+1]);} 
+if(argv[i] == "-streamBitRate" ) {streamBitRate = atoi(argv[i+1]);} 
+	// example -server http://127.0.0.1:4773 -nickname vasia 
+		}	
+	desiredTimeForCaptureFame = 1000.0f / videoFrameRate;
+	desiredTimeForMain = 1000.0f / videoFrameRate;
 
-	if(argc >= 8){
-
-		cameraInt = atoi(argv[1]);
-		videoFrameRate = atoi(argv[2]);
-		videoWidth = atoi(argv[3]);
-		videoHeight =  atoi(argv[4]);
-		microphoneInt = atoi(argv[5]);
-		audioSampleRate = atoi(argv[6]);
-		outputUrl += argv[7];
-		outputContainer +=argv[8];
-		cout<<cameraInt<<  videoFrameRate<< videoWidth<< videoHeight<< microphoneInt<< audioSampleRate<< outputUrl<< outputContainer << endl;
-
-		desiredTimeForCaptureFame = 1000.0f / videoFrameRate;
-		desiredTimeForMain = 1000.0f / videoFrameRate;
-
+	if(outputUrl == ""){
+		cout << "Warning: No Colud Observer server url found!" << endl ;
+		getAdress();
 	}else{
-		cout << "Warning: No humans allowed!" << endl << " cameraInt;  videoFrameRate; videoWidth; videoHeight; microphoneInt; audioSampleRate; outputUrl; outputContainer;" << endl << "0 24 640 480 1 44100 tcp://127.0.0.1:4774/ flv" << endl;
-		cin.get();
-		return 0;
+		replace_or_merge(outputUrl, "http://", "tcp://");
 	}
+	if(outputUrl == ""){
+		cout << "Please provide us with your user name" << endl ;
+		getName();
+	}
+
 	init();
 
 	boost::thread workerThread(ThreadCaptureFrame);
 	boost::thread workerThread2(ThreadSaveFrame);
 	while(1)
 	{
-		int i;
-		cin >> i;
-		if(i == 1)
-		{
-			useLSD = true;
-		}
-		if(i == 0)
-		{
-			useLSD = false;
-		}
 		Sleep(250);
-
 	}
 
 	close();

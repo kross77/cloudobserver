@@ -77,6 +77,8 @@ public:
 	int width;	// pixels
 	int height	;	// pixels
 	int audioSampleRate	;	// hertz
+	int vbr;
+		std::string userName;
 	VideoEncoder() 
 	{
 		//  url_context = NULL;
@@ -101,10 +103,11 @@ public:
 		Finish();
 	}
 	//set constants
-	void SetConstants( int UserFps , int UserWidth, int UserHeight, int UserAudioSampleRate);
+	void SetConstants( int UserFps , int UserWidth, int UserHeight, int UserAudioSampleRate, int videoBitRate);
 	// init output stream 
-	bool InitUrl(std::string& container, std::string& tcpUrl);
+	int InitUrl(std::string& container, std::string& tcpUrl, std::string& username); // 1 all is ok, 0 not correct user name, -1 not correct URL
 	// Add video and audio data
+
 	bool AddFrame(AVFrame* frame, const char* soundBuffer, int soundBufferSize);
 	// end of output
 	bool Finish();
