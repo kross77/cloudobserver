@@ -18,17 +18,19 @@ FFmpeg simple Encoder
 #define MAX_AUDIO_PACKET_SIZE (128 * 1024)
 
 
-void VideoEncoder::SetConstants( int UserFps , int UserWidth, int UserHeight, int UserAudioSampleRate)
+void VideoEncoder::SetConstants( int UserFps , int UserWidth, int UserHeight, int UserAudioSampleRate, int videoBitRate)
 {
+	vbr = videoBitRate;
 	fps = UserFps;
 	width = UserWidth;
 	height = UserHeight;
 	audioSampleRate = UserAudioSampleRate;
 }
-bool VideoEncoder::InitUrl(std::string& container, std::string& tcpUrl)
+int VideoEncoder::InitUrl(std::string& container, std::string& tcpUrl, std::string& username)
 {
+	int intConnection;
 	bool res = false;
-
+	userName = username;
 	// Initialize libavcodec
 	av_register_all();
 
@@ -62,43 +64,66 @@ bool VideoEncoder::InitUrl(std::string& container, std::string& tcpUrl)
 				if (pVideoStream)
 				{
 					res = OpenVideo(pFormatContext, pVideoStream);
-					printf("OpenVideo \n");
+				//	printf("OpenVideo \n");
 				}
 
 				res = OpenAudio(pFormatContext, pAudioStream);
 
 				if (res && !(pOutFormat->flags & AVFMT_NOFILE)) 
 				{
+				//	printf("1.5\n");
 					if (url_open( &url_context, tcpUrl.c_str(), URL_WRONLY)  < 0) 
 					{ 
+					//	printf("1.51\n");
 						res = false;
-						printf("Cannot open stream\n");
+						printf("Cannot open stream URL\n");
+					//	printf("1.52\n");
+						intConnection = -1; 
+					//	printf("1.53\n");
 					}
 				}
 
 				if (res)
 				{
-					std::string header = "GET / HTTP/1.1\r\nContent-Length: stream\r\n\r\n";
-					url_write(url_context, (unsigned char*)header.c_str(), header.length());
-
+					//printf("1.6\n");
+					std::string header = "GET /";
+					header += userName;
+					header += "?action=write HTTP/1.1\r\nContent-Length: stream\r\n\r\n";
+					url_write (url_context, (unsigned char *)header.c_str(),header.length() );
+					Sleep(250);
 					url_open_dyn_buf(&pFormatContext -> pb);
 					av_write_header(pFormatContext);
 					unsigned char *pb_buffer;
 					int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
-					url_write (url_context, (unsigned char *)pb_buffer, len);
-					res = true;
+					int weCanWrite =  url_write (url_context, (unsigned char *)pb_buffer, len);
+					if(weCanWrite > 0){
+						res = true;}
+					if(weCanWrite < 0){
+						res = false;
+						printf("Cannot open stream for selected name\n");
+						intConnection = 0; 
+					}
+
 				}
 			}    
 		}   
 	}
-
+	//printf("1.7\n");
 	if (!res)
 	{
+	//	printf("1.8\n");
 		Free();
 		printf("Cannot init stream\n");
+
 	}
 	boost::thread (&VideoEncoder::UrlWriteData, this);
-	return res;
+	if(res == true){
+		return 1;
+	}
+	else{
+		return intConnection;
+	}
+
 }
 
 bool VideoEncoder::AddFrame(AVFrame* frame, const char* soundBuffer, int soundBufferSize)
