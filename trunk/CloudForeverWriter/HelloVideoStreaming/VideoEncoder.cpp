@@ -326,7 +326,7 @@ AVStream *VideoEncoder::AddVideoStream(AVFormatContext *pContext, CodecID codec_
 	pCodecCxt->codec_type = CODEC_TYPE_VIDEO;
 	pCodecCxt->frame_number = 0;
 	// Put sample parameters.
-	pCodecCxt->bit_rate = 2000000;
+	pCodecCxt->bit_rate = 250000;
 	// Resolution must be a multiple of two.
 	pCodecCxt->width  = width;
 	pCodecCxt->height = height;
@@ -336,7 +336,7 @@ AVStream *VideoEncoder::AddVideoStream(AVFormatContext *pContext, CodecID codec_
 	identically 1. */
 	pCodecCxt->time_base.den = fps;
 	pCodecCxt->time_base.num = 1;
-	pCodecCxt->gop_size = 12; // emit one intra frame every twelve frames at most
+	pCodecCxt->gop_size = 5; // emit one intra frame every twelve frames at most
 
 	pCodecCxt->pix_fmt = PIX_FMT_YUV420P;
 	if (pCodecCxt->codec_id == CODEC_ID_MPEG2VIDEO) 
