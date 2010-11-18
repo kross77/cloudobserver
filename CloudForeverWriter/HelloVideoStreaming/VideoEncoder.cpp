@@ -186,7 +186,11 @@ bool VideoEncoder::Finish()
 
 	if (pFormatContext)
 	{
-		// av_write_trailer(pFormatContext);
+		url_open_dyn_buf(&pFormatContext -> pb);
+		av_write_trailer(pFormatContext);
+		unsigned char *pb_buffer;
+		int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
+		url_write (url_context, (unsigned char *)pb_buffer, len);
 		Free();
 	}
 
@@ -227,7 +231,7 @@ void VideoEncoder::Free()
 
 		if (!(pFormatContext->flags & AVFMT_NOFILE) && pFormatContext->pb) 
 		{
-			// url_fclose(pFormatContext->pb);
+			 url_close(url_context);
 		}
 
 		// Free the stream.
