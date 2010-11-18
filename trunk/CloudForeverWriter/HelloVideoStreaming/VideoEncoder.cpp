@@ -90,7 +90,7 @@ int VideoEncoder::InitUrl(std::string& container, std::string& tcpUrl, std::stri
 					header += userName;
 					header += "?action=write HTTP/1.1\r\nContent-Length: stream\r\n\r\n";
 					url_write (url_context, (unsigned char *)header.c_str(),header.length() );
-					Sleep(250);
+					Sleep(550);
 					url_open_dyn_buf(&pFormatContext -> pb);
 					av_write_header(pFormatContext);
 					unsigned char *pb_buffer;
