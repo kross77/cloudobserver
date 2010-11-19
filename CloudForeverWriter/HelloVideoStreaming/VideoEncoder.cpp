@@ -2,21 +2,22 @@
 FFmpeg simple Encoder
 */
 #include "stdafx.h"
+#include <Windows.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "ffmpegInclude.h"
 #include <math.h>
 #include "VideoEncoder.h"
 #include "Settings.h"
-// Boost
+// Boost#include <boost/asio.hpp>
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
-#include <boost/asio.hpp>
+
 #include <boost/thread.hpp>
 #include <boost/timer.hpp>
 #include <queue>
-using boost::asio::ip::tcp;
+
 using namespace std;
 #define MAX_AUDIO_PACKET_SIZE (128 * 1024)
 
@@ -33,27 +34,7 @@ vbr = videoBitRate;
 int VideoEncoder::InitUrl(std::string& container, std::string& tcpUrl, std::string& username)
 {
 	
-// 	try
-// 	{
-// 		std::string addr;
-// 		std::string port;
-//         sscanf(tcpUrl.c_str(), "tcp://%[^:]:%d", &addr, &port);
-// 
-// 		boost::asio::io_service io_service;
-// 
-// 		tcp::resolver resolver(io_service);
-// 		tcp::resolver::query query(tcp::v4(), addr.c_str(), port.c_str());
-// 		tcp::resolver::iterator iterator = resolver.resolve(query);
-// 
-// 		tcp::socket s(io_service);
-// 		s.connect(*iterator);
-//         Sleep(250);
-// 		s.close();
-// 	}
-// 	catch (std::exception& e)
-// 	{
-// 		return -1;
-// 	}
+
 	int intConnection;
 	bool res = false;
 	userName = username;
@@ -111,7 +92,7 @@ int VideoEncoder::InitUrl(std::string& container, std::string& tcpUrl, std::stri
 
 				if (res)
 				{
-					printf("1.6\n");
+				//	printf("1.6\n");
 					std::string header = "STREAM /";
 					header += userName;
 					header += "?action=write HTTP/1.1\r\n\r\n";
