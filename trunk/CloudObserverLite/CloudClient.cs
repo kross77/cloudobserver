@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Web;
+using Microsoft.Win32;
 
 namespace CloudObserverLite
 {
@@ -15,6 +16,9 @@ namespace CloudObserverLite
         private TcpClient client;
         private HttpRequestStruct httpRequest;
         private HttpResponseStruct httpResponse;
+
+        private string nickname;
+        private FileStream videoStream;
 
         private LogWriter logWriter;
 
@@ -31,7 +35,6 @@ namespace CloudObserverLite
         {
             this.logWriter.WriteLog("Client " + this.clientNumber.ToString() + " connected.");
 
-            FileStream fileStream = File.Create("client-" + this.clientNumber.ToString() + ".dat");
             NetworkStream networkStream = this.client.GetStream();
 
             int totalBytesReceived = 0;
@@ -150,15 +153,9 @@ namespace CloudObserverLite
                                         index++;
                                         if (this.httpRequest.headers["Content-Length"] != null)
                                         {
-                                            if (Convert.ToString(this.httpRequest.headers["Content-Length"]) == "stream")
-                                                parserState = ParserState.STREAM;
-                                            else
-                                            {
-                                                this.httpRequest.bodySize = Convert.ToInt32(this.httpRequest.headers["Content-Length"]);
-                                                this.httpRequest.bodyData = new byte[this.httpRequest.bodySize];
-                                                parserState = ParserState.BODY;
-                                            }
-
+                                            this.httpRequest.bodySize = Convert.ToInt32(this.httpRequest.headers["Content-Length"]);
+                                            this.httpRequest.bodyData = new byte[this.httpRequest.bodySize];
+                                            parserState = ParserState.BODY;
                                         }
                                         else
                                             parserState = ParserState.OK;
@@ -195,11 +192,11 @@ namespace CloudObserverLite
                                     if (this.httpRequest.bodySize <= bodyDataIndex)
                                         parserState = ParserState.OK;
                                     break;
-                                case ParserState.STREAM:
-                                    fileStream.Write(buffer, index, bytesRead - index);
+                                case ParserState.OK:
                                     index = bytesRead;
                                     break;
-                                case ParserState.OK:
+                                case ParserState.STREAM:
+                                    videoStream.Write(buffer, index, bytesRead - index);
                                     index = bytesRead;
                                     break;
                             }
@@ -221,13 +218,12 @@ namespace CloudObserverLite
                         this.httpResponse.version = "HTTP/1.1";
                         this.httpResponse.status = (int)((parserState == ParserState.OK) ? ResponseState.OK : ResponseState.BAD_REQUEST);
 
-
                         this.httpResponse.headers = new Hashtable();
                         this.httpResponse.headers.Add("Server", server.Name);
                         this.httpResponse.headers.Add("Date", DateTime.Now.ToString("r"));
 
                         if (httpResponse.status == (int)ResponseState.OK)
-                            this.server.OnResponse(ref this.httpRequest, ref this.httpResponse);
+                            this.OnResponse(ref this.httpRequest, ref this.httpResponse);
 
                         string headersString = this.httpResponse.version + " " + ResponseStatus.GetInstance()[this.httpResponse.status] + "\n";
                         foreach (DictionaryEntry header in this.httpResponse.headers)
@@ -250,7 +246,13 @@ namespace CloudObserverLite
                                 this.httpResponse.fileStream.Close();
                             }
 
-                        break;
+                        if ((httpRequest.method == "STREAM") && (httpResponse.status == (int)ResponseState.OK))
+                        {
+                            parserState = ParserState.STREAM;
+                            videoStream = File.Create(this.nickname + "-" + this.GetSafeDateTime() + ".flv");
+                        }
+                        else
+                            break;
                     }
                 } while (this.client.Connected);
             }
@@ -266,11 +268,148 @@ namespace CloudObserverLite
                 this.logWriter.WriteLog("Client " + this.clientNumber.ToString() + " disconnected. Total bytes received: " + totalBytesReceived.ToString());
 
                 networkStream.Close();
-                fileStream.Close();
+                if (this.videoStream != null)
+                {
+                    server.streams.Remove(nickname);
+                    this.videoStream.Close();
+                }
                 this.client.Close();
                 if (this.httpResponse.fileStream != null)
                     this.httpResponse.fileStream.Close();
                 Thread.CurrentThread.Abort();
+            }
+        }
+
+        private bool CheckNickname(string nickname)
+        {
+            if (nickname == String.Empty)
+                return false;
+
+            bool result = true;
+            for (int i = 0; i < nickname.Length; i++)
+                if (!Char.IsLetterOrDigit(nickname, i))
+                    result = false;
+
+            return result;
+        }
+
+        private string GetSafeDateTime()
+        {
+            string result = DateTime.Now.ToString();
+            result = result.Replace(' ', '-');
+            result = result.Replace('.', '-');
+            result = result.Replace(':', '-');
+            return result;
+        }
+
+        private void OnResponse(ref HttpRequestStruct httpRequest, ref HttpResponseStruct httpResponse)
+        {
+            if ((httpRequest.execute) && (httpRequest.arguments["action"] != null))
+            {
+                string action = Convert.ToString(httpRequest.arguments["action"]);
+                string bodyString = "";
+                switch (action)
+                {
+                    case "write":
+                        this.nickname = httpRequest.url.Substring(1);
+                        if (!CheckNickname(this.nickname))
+                        {
+                            httpResponse.status = (int)ResponseState.BAD_REQUEST;
+                            bodyString = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n";
+                            bodyString += "<HTML><HEAD>\n";
+                            bodyString += "<META http-equiv=Content-Type content=\"text/html; charset=windows-1252\">\n";
+                            bodyString += "</HEAD>\n";
+                            bodyString += "<BODY>Nickname \"";
+                            bodyString += this.nickname;
+                            bodyString += "\" is not valid! Nickname must contain only alphabetic characters and decimal digits.</BODY></HTML>\n";
+                        }
+                        else if (server.streams[this.nickname] != null)
+                        {
+                            httpResponse.status = (int)ResponseState.FORBIDDEN;
+                            bodyString = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n";
+                            bodyString += "<HTML><HEAD>\n";
+                            bodyString += "<META http-equiv=Content-Type content=\"text/html; charset=windows-1252\">\n";
+                            bodyString += "</HEAD>\n";
+                            bodyString += "<BODY>Nickname \"";
+                            bodyString += this.nickname;
+                            bodyString += "\" is already in use!</BODY></HTML>\n";
+                        }
+                        else
+                        {
+                            server.streams[this.nickname] = this;
+                            bodyString = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n";
+                            bodyString += "<HTML><HEAD>\n";
+                            bodyString += "<META http-equiv=Content-Type content=\"text/html; charset=windows-1252\">\n";
+                            bodyString += "</HEAD>\n";
+                            bodyString += "<BODY>Ready to receive stream from user with nickname \"";
+                            bodyString += this.nickname;
+                            bodyString += "\".</BODY></HTML>\n";
+                        }
+                        break;
+                    default:
+                        httpResponse.status = (int)ResponseState.BAD_REQUEST;
+                        bodyString = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n";
+                        bodyString += "<HTML><HEAD>\n";
+                        bodyString += "<META http-equiv=Content-Type content=\"text/html; charset=windows-1252\">\n";
+                        bodyString += "</HEAD>\n";
+                        bodyString += "<BODY>Unknown action \"";
+                        bodyString += action;
+                        bodyString += "\"!</BODY></HTML>\n";
+                        break;
+                }
+                httpResponse.bodyData = Encoding.ASCII.GetBytes(bodyString);
+                return;
+            }
+
+            string path = Directory.GetCurrentDirectory() + "\\" + httpRequest.url.Replace("/", "\\");
+
+            if (Directory.Exists(path))
+            {
+                if (File.Exists(path + "index.html"))
+                    path += "\\index.html";
+                else
+                {
+                    string[] directories = Directory.GetDirectories(path);
+                    string[] files = Directory.GetFiles(path);
+
+                    string bodyString = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n";
+                    bodyString += "<HTML><HEAD>\n";
+                    bodyString += "<META http-equiv=Content-Type content=\"text/html; charset=windows-1252\">\n";
+                    bodyString += "</HEAD>\n";
+                    bodyString += "<BODY><p>Folder listing, to do not see this add a 'index.html' document\n<p>\n";
+                    for (int i = 0; i < directories.Length; i++)
+                        bodyString += "<br><a href = \"" + httpRequest.url + Path.GetFileName(directories[i]) + "/\">[" + Path.GetFileName(directories[i]) + "]</a>\n";
+                    for (int i = 0; i < files.Length; i++)
+                        bodyString += "<br><a href = \"" + httpRequest.url + Path.GetFileName(files[i]) + "\">" + Path.GetFileName(files[i]) + "</a>\n";
+                    bodyString += "</BODY></HTML>\n";
+
+                    httpResponse.bodyData = Encoding.ASCII.GetBytes(bodyString);
+                    return;
+                }
+            }
+
+            if (File.Exists(path))
+            {
+                RegistryKey registryKey = Registry.ClassesRoot.OpenSubKey(Path.GetExtension(path), true);
+                string registryValue = (string)registryKey.GetValue("Content Type");
+
+                httpResponse.fileStream = File.Open(path, FileMode.Open);
+                if (registryValue != "")
+                    httpResponse.headers["Content-type"] = registryValue;
+
+                httpResponse.headers["Content-Length"] = httpResponse.fileStream.Length;
+            }
+            else
+            {
+                httpResponse.status = (int)ResponseState.NOT_FOUND;
+
+                string bodyString = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n";
+                bodyString += "<HTML><HEAD>\n";
+                bodyString += "<META http-equiv=Content-Type content=\"text/html; charset=windows-1252\">\n";
+                bodyString += "</HEAD>\n";
+                bodyString += "<BODY>File not found!</BODY></HTML>\n";
+
+                httpResponse.bodyData = Encoding.ASCII.GetBytes(bodyString);
             }
         }
     }
