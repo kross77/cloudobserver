@@ -369,7 +369,7 @@ if(string(argv[i]) == "-streamBitRate" ) {streamBitRate = atoi(argv[i+1]);}
 	}else{
 		replace_or_merge(outputUrl, "http://", "tcp://");
 	}
-	if(outputUrl == ""){
+	if(outputUserName == ""){
 		cout << "Please provide us with your user name" << endl ;
 		getName();
 	}
