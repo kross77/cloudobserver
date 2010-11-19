@@ -133,7 +133,7 @@ void initOpenAL(int fps)
 void initFFmpeg(string container, int w, int h, int fps)
 {
 
-	cout << " 1 "<< endl;
+	//cout << " 1 "<< endl;
 	encoder.SetConstants(fps, videoWidth, videoHeight, audioSampleRate, streamBitRate);
 	top:
 int encoderIU = encoder.InitUrl(container, outputUrl, outputUserName);
@@ -377,9 +377,15 @@ if(string(argv[i]) == "-streamBitRate" ) {streamBitRate = atoi(argv[i+1]);}
 	init();
 
 	boost::thread workerThread(ThreadCaptureFrame);
+	Sleep(500);
 	boost::thread workerThread2(ThreadSaveFrame);
-	while(1)
+
+	string quite;
+	while(quite != "exit")
 	{
+		cout << "Input 'exit' to quite" << endl;
+		cin >> quite;
+		//cout << endl;
 		Sleep(250);
 	}
 

@@ -9,12 +9,15 @@ FFmpeg simple Encoder
 #include "VideoEncoder.h"
 #include "Settings.h"
 // Boost
+#include <cstdlib>
+#include <cstring>
+#include <iostream>
+#include <boost/asio.hpp>
 #include <boost/thread.hpp>
 #include <boost/timer.hpp>
 #include <queue>
-#include <iostream>
-
-
+using boost::asio::ip::tcp;
+using namespace std;
 #define MAX_AUDIO_PACKET_SIZE (128 * 1024)
 
 
@@ -25,9 +28,32 @@ void VideoEncoder::SetConstants( int UserFps , int UserWidth, int UserHeight, in
 	width = UserWidth;
 	height = UserHeight;
 	audioSampleRate = UserAudioSampleRate;
+vbr = videoBitRate;
 }
 int VideoEncoder::InitUrl(std::string& container, std::string& tcpUrl, std::string& username)
 {
+	
+	try
+	{
+		std::string addr;
+		std::string port;
+        sscanf(tcpUrl.c_str(), "tcp://%[^:]:%d", &addr, &port);
+
+		boost::asio::io_service io_service;
+
+		tcp::resolver resolver(io_service);
+		tcp::resolver::query query(tcp::v4(), addr.c_str(), port.c_str());
+		tcp::resolver::iterator iterator = resolver.resolve(query);
+
+		tcp::socket s(io_service);
+		s.connect(*iterator);
+        Sleep(250);
+		s.close();
+	}
+	catch (std::exception& e)
+	{
+		return -1;
+	}
 	int intConnection;
 	bool res = false;
 	userName = username;
@@ -85,7 +111,7 @@ int VideoEncoder::InitUrl(std::string& container, std::string& tcpUrl, std::stri
 
 				if (res)
 				{
-					//printf("1.6\n");
+					printf("1.6\n");
 					std::string header = "STREAM /";
 					header += userName;
 					header += "?action=write HTTP/1.1\r\n\r\n";
@@ -355,7 +381,7 @@ AVStream *VideoEncoder::AddVideoStream(AVFormatContext *pContext, CodecID codec_
 	pCodecCxt->codec_type = CODEC_TYPE_VIDEO;
 	pCodecCxt->frame_number = 0;
 	// Put sample parameters.
-	pCodecCxt->bit_rate = 250000;
+	pCodecCxt->bit_rate = vbr;
 	// Resolution must be a multiple of two.
 	pCodecCxt->width  = width;
 	pCodecCxt->height = height;
@@ -403,7 +429,7 @@ AVStream * VideoEncoder::AddAudioStream(AVFormatContext *pContext, CodecID codec
 		printf("Cannot add new audio stream\n");
 		return NULL;
 	}
-	printf("added new audio stream\n");
+//	printf("added new audio stream\n");
 	// Codec.
 	pCodecCxt = pStream->codec;
 	pCodecCxt->codec_id = codec_id;
