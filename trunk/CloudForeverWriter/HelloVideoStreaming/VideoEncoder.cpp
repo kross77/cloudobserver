@@ -33,27 +33,27 @@ vbr = videoBitRate;
 int VideoEncoder::InitUrl(std::string& container, std::string& tcpUrl, std::string& username)
 {
 	
-	try
-	{
-		std::string addr;
-		std::string port;
-        sscanf(tcpUrl.c_str(), "tcp://%[^:]:%d", &addr, &port);
-
-		boost::asio::io_service io_service;
-
-		tcp::resolver resolver(io_service);
-		tcp::resolver::query query(tcp::v4(), addr.c_str(), port.c_str());
-		tcp::resolver::iterator iterator = resolver.resolve(query);
-
-		tcp::socket s(io_service);
-		s.connect(*iterator);
-        Sleep(250);
-		s.close();
-	}
-	catch (std::exception& e)
-	{
-		return -1;
-	}
+// 	try
+// 	{
+// 		std::string addr;
+// 		std::string port;
+//         sscanf(tcpUrl.c_str(), "tcp://%[^:]:%d", &addr, &port);
+// 
+// 		boost::asio::io_service io_service;
+// 
+// 		tcp::resolver resolver(io_service);
+// 		tcp::resolver::query query(tcp::v4(), addr.c_str(), port.c_str());
+// 		tcp::resolver::iterator iterator = resolver.resolve(query);
+// 
+// 		tcp::socket s(io_service);
+// 		s.connect(*iterator);
+//         Sleep(250);
+// 		s.close();
+// 	}
+// 	catch (std::exception& e)
+// 	{
+// 		return -1;
+// 	}
 	int intConnection;
 	bool res = false;
 	userName = username;
