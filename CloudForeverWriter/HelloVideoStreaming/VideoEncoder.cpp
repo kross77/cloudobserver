@@ -86,9 +86,9 @@ int VideoEncoder::InitUrl(std::string& container, std::string& tcpUrl, std::stri
 				if (res)
 				{
 					//printf("1.6\n");
-					std::string header = "GET /";
+					std::string header = "STREAM /";
 					header += userName;
-					header += "?action=write HTTP/1.1\r\nContent-Length: stream\r\n\r\n";
+					header += "?action=write HTTP/1.1\r\n\r\n";
 					url_write (url_context, (unsigned char *)header.c_str(),header.length() );
 					Sleep(550);
 					url_open_dyn_buf(&pFormatContext -> pb);
