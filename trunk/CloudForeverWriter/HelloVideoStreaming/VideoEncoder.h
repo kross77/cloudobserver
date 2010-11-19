@@ -8,7 +8,7 @@ FFmpeg simple Encoder
 #include "stdafx.h"
 #include "ffmpegInclude.h"
 #include "ConcurrentQueue.h"
-#include <Windows.h>
+//#include <Windows.h>
 #include <string>
 #include <queue>
 #include <iostream>
