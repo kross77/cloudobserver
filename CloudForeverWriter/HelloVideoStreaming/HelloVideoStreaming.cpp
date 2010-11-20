@@ -292,7 +292,7 @@ char* CaptureSample()
 
 void closeOpenCV()
 {
-	cvDestroyWindow("HelloVideoEncoding");
+	//cvDestroyWindow("HelloVideoEncoding");
 	cvReleaseCapture(&capture);
 }
 
