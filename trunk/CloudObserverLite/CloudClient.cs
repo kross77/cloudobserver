@@ -50,6 +50,12 @@ namespace CloudObserverLite
             this.clientNumber = clientNumber;
             this.client = client;
 
+            this.readers = new List<FLVReader>();
+            this.disconnectedReaders = new List<FLVReader>();
+            this.scriptData = new List<byte[]>();
+            this.tagsBuffer = new List<byte[]>();
+            this.bufferedTimestamp = 0;
+
             this.logWriter = LogWriter.GetInstance();
         }
 
@@ -251,98 +257,95 @@ namespace CloudObserverLite
                         this.httpResponse.fileStream.Close();
                     }
 
-                if (clientType == ClientType.ReaderClient)
-                    ((CloudClient)server.streams[nickname]).ConnectReader(networkStream);
-
-                if ((clientType == ClientType.WriterClient) && (httpRequest.method == "STREAM") && (httpResponse.status == (int)ResponseState.OK))
+                if (httpResponse.status == (int)ResponseState.OK)
                 {
-                    readers = new List<FLVReader>();
-                    disconnectedReaders = new List<FLVReader>();
-                    scriptData = new List<byte[]>();
-                    tagsBuffer = new List<byte[]>();
-                    bufferedTimestamp = 0;
+                    if (clientType == ClientType.ReaderClient)
+                        ((CloudClient)server.streams[nickname]).ConnectReader(networkStream);
 
-                    // FLV header
-                    header = ReadBytes(networkStream, HEADER_LENGTH);
-                    // Signature
-                    if ((SIGNATURE1 != header[0]) || (SIGNATURE2 != header[1]) || (SIGNATURE3 != header[2]))
-                        throw new InvalidDataException("Not a valid FLV file!.");
-                    // Version
-                    if (VERSION != header[3])
-                        throw new InvalidDataException("Not a valid FLV file!.");
-                    // TypeFlags
-                    if (0 != (header[4] >> 3))
-                        throw new InvalidDataException("Not a valid FLV file!.");
-                    //audio = (((header[4] & 0x4) >> 2) == 1);
-                    if (0 != ((header[4] & 0x2) >> 1))
-                        throw new InvalidDataException("Not a valid FLV file!.");
-                    //video = ((header[4] & 0x1) == 1);
-                    // DataOffset
-                    uint dataOffset = ToUI32(header, 5);
-                    // PreviousTagSize0
-                    if (0 != ToUI32(header, 9))
-                        throw new InvalidDataException("Not a valid FLV file!.");
-
-                    // FLV body
-                    while (this.client.Connected)
+                    if (clientType == ClientType.WriterClient)
                     {
-                        // FLV tag header
-                        byte[] tagHeader = ReadBytes(networkStream, TAG_HEADER_LENGTH);
-                        // TagType
-                        if ((tagHeader[0] != TAGTYPE_AUDIO) && (tagHeader[0] != TAGTYPE_VIDEO) && (tagHeader[0] != TAGTYPE_DATA))
+                        // FLV header
+                        header = ReadBytes(networkStream, HEADER_LENGTH);
+                        // Signature
+                        if ((SIGNATURE1 != header[0]) || (SIGNATURE2 != header[1]) || (SIGNATURE3 != header[2]))
                             throw new InvalidDataException("Not a valid FLV file!.");
-                        // DataSize
-                        uint dataSize = ToUI24(tagHeader, 1);
-                        // Timestamp
-                        uint timestamp = ToUI24(tagHeader, 4);
-                        // TimestampExtended
-                        //uint timestampExtended = tagHeader[7];
-                        // StreamID
-                        if (0 != ToUI24(tagHeader, 8))
+                        // Version
+                        if (VERSION != header[3])
                             throw new InvalidDataException("Not a valid FLV file!.");
-                        // Data
-                        byte[] tagData = ReadBytes(networkStream, (int)dataSize + 4);
+                        // TypeFlags
+                        if (0 != (header[4] >> 3))
+                            throw new InvalidDataException("Not a valid FLV file!.");
+                        //audio = (((header[4] & 0x4) >> 2) == 1);
+                        if (0 != ((header[4] & 0x2) >> 1))
+                            throw new InvalidDataException("Not a valid FLV file!.");
+                        //video = ((header[4] & 0x1) == 1);
+                        // DataOffset
+                        uint dataOffset = ToUI32(header, 5);
+                        // PreviousTagSize0
+                        if (0 != ToUI32(header, 9))
+                            throw new InvalidDataException("Not a valid FLV file!.");
 
-                        lock (locker)
+                        // FLV body
+                        while (this.client.Connected)
                         {
-                            if ((tagHeader[0] == TAGTYPE_VIDEO) && (1 == (tagData[0] & 0xF0) >> 4))
+                            // FLV tag header
+                            byte[] tagHeader = ReadBytes(networkStream, TAG_HEADER_LENGTH);
+                            // TagType
+                            if ((tagHeader[0] != TAGTYPE_AUDIO) && (tagHeader[0] != TAGTYPE_VIDEO) && (tagHeader[0] != TAGTYPE_DATA))
+                                throw new InvalidDataException("Not a valid FLV file!.");
+                            // DataSize
+                            uint dataSize = ToUI24(tagHeader, 1);
+                            // Timestamp
+                            uint timestamp = ToUI24(tagHeader, 4);
+                            // TimestampExtended
+                            //uint timestampExtended = tagHeader[7];
+                            // StreamID
+                            if (0 != ToUI24(tagHeader, 8))
+                                throw new InvalidDataException("Not a valid FLV file!.");
+                            // Data
+                            byte[] tagData = ReadBytes(networkStream, (int)dataSize + 4);
+
+                            lock (locker)
                             {
-                                tagsBuffer.Clear();
-                                bufferedTimestamp = timestamp;
-                            }
-
-                            if (tagHeader[0] == TAGTYPE_DATA)
-                            {
-                                scriptData.Add(tagHeader);
-                                scriptData.Add(tagData);
-                            }
-
-                            tagsBuffer.Add(tagHeader);
-                            tagsBuffer.Add(tagData);
-
-                            foreach (FLVReader reader in readers)
-                            {
-                                // Update timestamp.
-                                byte[] newTimestampValue = BitConverter.GetBytes(timestamp - reader.timestampDelta);
-                                tagHeader[4] = newTimestampValue[2];
-                                tagHeader[5] = newTimestampValue[1];
-                                tagHeader[6] = newTimestampValue[0];
-
-                                // Write tag.
-                                try
+                                if ((tagHeader[0] == TAGTYPE_VIDEO) && (1 == (tagData[0] & 0xF0) >> 4))
                                 {
-                                    reader.stream.Write(tagHeader, 0, tagHeader.Length);
-                                    reader.stream.Write(tagData, 0, tagData.Length);
+                                    tagsBuffer.Clear();
+                                    bufferedTimestamp = timestamp;
                                 }
-                                catch (IOException)
-                                {
-                                    disconnectedReaders.Add(reader);
-                                }
-                            }
 
-                            foreach (FLVReader disconnectedReader in disconnectedReaders)
-                                readers.Remove(disconnectedReader);
-                            disconnectedReaders.Clear();
+                                if (tagHeader[0] == TAGTYPE_DATA)
+                                {
+                                    scriptData.Add(tagHeader);
+                                    scriptData.Add(tagData);
+                                }
+
+                                tagsBuffer.Add(tagHeader);
+                                tagsBuffer.Add(tagData);
+
+                                foreach (FLVReader reader in readers)
+                                {
+                                    // Update timestamp.
+                                    byte[] newTimestampValue = BitConverter.GetBytes(timestamp - reader.timestampDelta);
+                                    tagHeader[4] = newTimestampValue[2];
+                                    tagHeader[5] = newTimestampValue[1];
+                                    tagHeader[6] = newTimestampValue[0];
+
+                                    // Write tag.
+                                    try
+                                    {
+                                        reader.stream.Write(tagHeader, 0, tagHeader.Length);
+                                        reader.stream.Write(tagData, 0, tagData.Length);
+                                    }
+                                    catch (IOException)
+                                    {
+                                        disconnectedReaders.Add(reader);
+                                    }
+                                }
+
+                                foreach (FLVReader disconnectedReader in disconnectedReaders)
+                                    readers.Remove(disconnectedReader);
+                                disconnectedReaders.Clear();
+                            }
                         }
                     }
                 }
@@ -428,6 +431,14 @@ namespace CloudObserverLite
                             bodyString += "<BODY>Nickname \"";
                             bodyString += this.nickname;
                             bodyString += "\" is already in use!</BODY></HTML>\n";
+                        } if (server.streams.Count >= CloudServer.MAX_STREAMS_COUNT)
+                        {
+                            httpResponse.status = (int)ResponseState.FORBIDDEN;
+                            bodyString = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n";
+                            bodyString += "<HTML><HEAD>\n";
+                            bodyString += "<META http-equiv=Content-Type content=\"text/html; charset=windows-1252\">\n";
+                            bodyString += "</HEAD>\n";
+                            bodyString += "<BODY>You have reached the maximum number of streams available in this demo. Try stopping some streams to create the new ones.</BODY></HTML>\n";
                         }
                         else
                         {
@@ -624,6 +635,7 @@ namespace CloudObserverLite
             result += "<b class=\"rtop\"><b class=\"r1\"></b><b class=\"r2\"></b><b class=\"r3\"></b><b class=\"r4\"></b></b>\n";
             result += "<h1>Cloud Observer Lite [DEMO]</h1>\n";
             result += "<p><b>Live video streaming</b></p>\n";
+            result += "<p>(You can have maximum of " + CloudServer.MAX_STREAMS_COUNT.ToString() + " online users in this demo.)</b></p>\n";
             result += "<b class=\"rbottom\"><b class=\"r4\"></b><b class=\"r3\"></b><b class=\"r2\"></b><b class=\"r1\"></b></b>\n";
             result += "</div>\n";
             result += "<p/>\n";
