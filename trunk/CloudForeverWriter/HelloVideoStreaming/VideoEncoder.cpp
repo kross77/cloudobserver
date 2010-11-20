@@ -40,7 +40,22 @@ void VideoEncoder::SetConstants( int UserFps , int UserWidth, int UserHeight, in
 	audioSampleRate = UserAudioSampleRate;
 	vbr = videoBitRate;
 }
+int VideoEncoder::ReadFromServer()
+{
+	char reply[100];
+	size_t reply_length = boost::asio::read(s, boost::asio::buffer(reply, 26));
+	//std::cout << "Reply is: ";
+	//std::cout.write(reply, reply_length);
+	//std::cout << "\n";
+	string str (reply);
+	string key ("4");
+	size_t found;
 
+	found=str.rfind(key);
+	if (found!=string::npos)
+	{return -1;}
+	else{return 1;}
+}
 int VideoEncoder::ConnectUserToUrl(std::string& tcpUrl, std::string& username)
 {
 	try
@@ -55,9 +70,10 @@ int VideoEncoder::ConnectUserToUrl(std::string& tcpUrl, std::string& username)
 		s.connect(*iterator);
 		Sleep(250);
 		std::string header = "STREAM /";
-		header += userName;
+		header += username;
 		header += "?action=write HTTP/1.1\r\n\r\n";
 		WriteToUrl((unsigned char *)header.c_str(),header.length() );
+		return ReadFromServer();
 	}
 	catch (std::exception& e)
 	{
@@ -83,7 +99,8 @@ boost::asio::write(s, boost::asio::buffer(buf, size));
 }
 catch (std::exception& e)
 {
-	printf("Error happened, please restart application");
+	printf("Internal Error happened, please restart application");
+	cin.get();
 }
 }
 int VideoEncoder::InitUrl(std::string& container, std::string& tcpUrl, std::string& username)
@@ -136,12 +153,13 @@ int VideoEncoder::InitUrl(std::string& container, std::string& tcpUrl, std::stri
 
 					if(ConnectUserToUrl(tcpUrl, username)  < 0) {
 					res = false;
-					printf("Cannot open stream URL\n");
-					intConnection = -1;
+					printf("Cannot open stream for selected name\n");
+					
+					intConnection = 0;
 					}else{
 						if(url_open( &url_context, tcpUrl.c_str(), URL_WRONLY)  < 0) 
 					{ 
-						res = false; printf("Cannot open stream URL\n");
+						printf("Cannot open stream URL\n");
 						intConnection = -1; 
 						}}
 					}
@@ -150,18 +168,17 @@ int VideoEncoder::InitUrl(std::string& container, std::string& tcpUrl, std::stri
 				if (res)
 				{
 				//	printf("1.6\n");
-Sleep(500);
 					url_open_dyn_buf(&pFormatContext -> pb);
 					av_write_header(pFormatContext);
 					unsigned char *pb_buffer;
 					int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
-					int weCanWrite =  TryWriteToUrl((unsigned char *)pb_buffer, len);
-						res = true;
-					if(weCanWrite < 0){
-						res = false;
-						printf("Cannot open stream for selected name\n");
-						intConnection = 0; 
-					}
+					WriteToUrl((unsigned char *)pb_buffer, len);
+					//	res = true;
+					////if(weCanWrite < 0){
+					//	res = false;
+					//	printf("Cannot open stream for selected name\n");
+					//	intConnection = 0; 
+					//}
 
 				}
 			}    
@@ -172,7 +189,7 @@ Sleep(500);
 	{
 	//	printf("1.8\n");
 		Free();
-		printf("Cannot init stream\n");
+	//	printf("Cannot init stream\n");
 
 	}
 	

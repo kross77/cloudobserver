@@ -119,6 +119,7 @@ public:
 	bool Finish();
 
 private: 
+	int ReadFromServer();
 	void UrlWriteFrame(URLContext *h, const unsigned char *buf, int size );
 	void UrlWriteSample( URLContext *h, const unsigned char *buf, int size );
 	int TryWriteToUrl(const unsigned char *buf, int size);
