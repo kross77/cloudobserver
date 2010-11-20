@@ -434,6 +434,7 @@ if(string(argv[i]) == "-streamBitRate" ) {streamBitRate = atoi(argv[i+1]);}
 		Sleep(250);
 	}
 	workerThread2.interrupt();
+	workerThread.interrupt();
 	Sleep(250);
 	close();
 	return 0;

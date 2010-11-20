@@ -6,6 +6,7 @@ FFmpeg simple Encoder
 #ifndef __VIDEO_ENCODER_H__
 #define __VIDEO_ENCODER_H__
 #include "stdafx.h"
+//#include <boost/asio.hpp>
 #include "ffmpegInclude.h"
 #include "ConcurrentQueue.h"
 //#include <Windows.h>
@@ -16,6 +17,9 @@ FFmpeg simple Encoder
 // Boost
 #include <boost/thread.hpp>
 #include <boost/timer.hpp>
+
+using namespace std;
+//using boost::asio::ip::tcp;
 
 class VideoEncoder
 {
@@ -78,7 +82,9 @@ public:
 	int height	;	// pixels
 	int audioSampleRate	;	// hertz
 	int vbr;
-		std::string userName;
+	std::string userName;
+
+		
 	VideoEncoder() 
 	{
 		//  url_context = NULL;
@@ -111,10 +117,14 @@ public:
 	bool AddFrame(AVFrame* frame, const char* soundBuffer, int soundBufferSize);
 	// end of output
 	bool Finish();
+
+private: 
 	void UrlWriteFrame(URLContext *h, const unsigned char *buf, int size );
 	void UrlWriteSample( URLContext *h, const unsigned char *buf, int size );
-private: 
-
+	int TryWriteToUrl(const unsigned char *buf, int size);
+	void WriteToUrl(const unsigned char *buf, int size);
+	int ConnectUserToUrl(std::string& tcpUrl, std::string& username);
+	void tcpExtract(std::string const& ip, std::string& address, std::string& service);
 	// Add video stream
 	AVStream *AddVideoStream(AVFormatContext *pContext, CodecID codec_id);
 	// Open Video Stream
