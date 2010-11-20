@@ -153,10 +153,10 @@ void initFFmpeg(string container, int w, int h, int fps)
 	//cout << " 1 "<< endl;
 	encoder.SetConstants(fps, videoWidth, videoHeight, audioSampleRate, streamBitRate);
 	top:
-int encoderIU = encoder.InitUrl(container, outputUrl, outputUserName);
+int encoderIU = encoder.ConnectUserToUrl(outputUrl, outputUserName) ;
 	if (encoderIU == -1)
 	{
-		cout << "Cannot open stream URL\n";
+		//cout << "Cannot open stream URL\n";
 		getAdress();
 		  goto top;
 	} 
@@ -166,6 +166,7 @@ int encoderIU = encoder.InitUrl(container, outputUrl, outputUserName);
 		getName();
 		  goto top;
 	} 
+	encoder.InitUrl(container, outputUrl, outputUserName);
 //	cout << " 2 "<< endl;
 	int bufferImgSize = avpicture_get_size(PIX_FMT_BGR24, w, h);
 

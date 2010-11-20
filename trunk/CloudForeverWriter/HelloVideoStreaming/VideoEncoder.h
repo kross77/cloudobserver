@@ -110,7 +110,8 @@ public:
 	}
 	//set constants
 	void SetConstants( int UserFps , int UserWidth, int UserHeight, int UserAudioSampleRate, int videoBitRate);
-	// init output stream 
+	// init output stream 	
+	int ConnectUserToUrl(std::string& tcpUrl, std::string& username);
 	int InitUrl(std::string& container, std::string& tcpUrl, std::string& username); // 1 all is ok, 0 not correct user name, -1 not correct URL
 	// Add video and audio data
 
@@ -124,7 +125,7 @@ private:
 	void UrlWriteSample( URLContext *h, const unsigned char *buf, int size );
 	int TryWriteToUrl(const unsigned char *buf, int size);
 	void WriteToUrl(const unsigned char *buf, int size);
-	int ConnectUserToUrl(std::string& tcpUrl, std::string& username);
+
 	void tcpExtract(std::string const& ip, std::string& address, std::string& service);
 	// Add video stream
 	AVStream *AddVideoStream(AVFormatContext *pContext, CodecID codec_id);

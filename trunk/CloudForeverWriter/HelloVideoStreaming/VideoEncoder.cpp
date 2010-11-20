@@ -45,16 +45,17 @@ int VideoEncoder::ReadFromServer()
 	char reply[100];
 	size_t reply_length = boost::asio::read(s, boost::asio::buffer(reply, 26));
 	//std::cout << "Reply is: ";
-	//std::cout.write(reply, reply_length);
-	//std::cout << "\n";
+	std::cout.write(reply, reply_length);
+    std::cout << "\n";
 	string str (reply);
 	string key ("4");
 	size_t found;
 
 	found=str.rfind(key);
 	if (found!=string::npos)
-	{return -1;}
-	else{return 1;}
+	{
+	s.close(); return 0;}
+	else{return 10;}
 }
 int VideoEncoder::ConnectUserToUrl(std::string& tcpUrl, std::string& username)
 {
@@ -110,6 +111,8 @@ int VideoEncoder::InitUrl(std::string& container, std::string& tcpUrl, std::stri
 	int intConnection;
 	bool res = false;
 	userName = username;
+
+
 	// Initialize libavcodec
 	av_register_all();
 
@@ -149,38 +152,16 @@ int VideoEncoder::InitUrl(std::string& container, std::string& tcpUrl, std::stri
 				res = OpenAudio(pFormatContext, pAudioStream);
 
 				if (res && !(pOutFormat->flags & AVFMT_NOFILE)) 
-				{
-
-					if(ConnectUserToUrl(tcpUrl, username)  < 0) {
-					res = false;
-					printf("Cannot open stream for selected name\n");
-					
-					intConnection = 0;
-					}else{
-						if(url_open( &url_context, tcpUrl.c_str(), URL_WRONLY)  < 0) 
+				{	
+				if(url_open( &url_context, tcpUrl.c_str(), URL_WRONLY)  < 0) 
 					{ 
 						printf("Cannot open stream URL\n");
 						intConnection = -1; 
-						}}
+						}
 					}
 				}
 
-				if (res)
-				{
-				//	printf("1.6\n");
-					url_open_dyn_buf(&pFormatContext -> pb);
-					av_write_header(pFormatContext);
-					unsigned char *pb_buffer;
-					int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
-					WriteToUrl((unsigned char *)pb_buffer, len);
-					//	res = true;
-					////if(weCanWrite < 0){
-					//	res = false;
-					//	printf("Cannot open stream for selected name\n");
-					//	intConnection = 0; 
-					//}
 
-				}
 			}    
 		}   
 	
@@ -192,12 +173,19 @@ int VideoEncoder::InitUrl(std::string& container, std::string& tcpUrl, std::stri
 	//	printf("Cannot init stream\n");
 
 	}
-	
+	if (res)
+	{
+		url_open_dyn_buf(&pFormatContext -> pb);
+		av_write_header(pFormatContext);
+		unsigned char *pb_buffer;
+		int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
+		WriteToUrl((unsigned char *)pb_buffer, len);
+	}
 	if(res == true){
 		boost::thread (&VideoEncoder::UrlWriteData, this);
 		return 1;
 	}
-	else{
+	if(res == false){
 		return intConnection;
 	}
 
