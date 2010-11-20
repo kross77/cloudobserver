@@ -444,6 +444,8 @@ namespace CloudObserverLite
                         break;
                     case "read":
                         this.nickname = httpRequest.url.Substring(1);
+                        if (nickname.EndsWith(".flv"))
+                            nickname = nickname.Substring(0, nickname.Length - 4);
                         if (server.streams[this.nickname] == null)
                         {
                             httpResponse.status = (int)ResponseState.NOT_FOUND;
