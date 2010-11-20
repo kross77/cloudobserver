@@ -162,7 +162,7 @@ int encoderIU = encoder.InitUrl(container, outputUrl, outputUserName);
 	} 
 	if (encoderIU == 0)
 	{
-		printf("Cannot open stream for selected name\n");
+		//printf("Cannot open stream for selected name\n");
 		getName();
 		  goto top;
 	} 
