@@ -6,7 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Web;
-using Microsoft.Win32;
+//using Microsoft.Win32;
 
 namespace CloudObserverLite
 {
@@ -477,56 +477,58 @@ namespace CloudObserverLite
                 return;
             }
 
-            string path = Directory.GetCurrentDirectory() + "\\" + httpRequest.url.Replace("/", "\\");
+            httpResponse.bodyData = Encoding.ASCII.GetBytes(GenerateIndexPage());
 
-            if (Directory.Exists(path))
-            {
-                if (File.Exists(path + "index.html"))
-                    path += "\\index.html";
-                else
-                {
-                    string[] directories = Directory.GetDirectories(path);
-                    string[] files = Directory.GetFiles(path);
+            //string path = Directory.GetCurrentDirectory() + "\\" + httpRequest.url.Replace("/", "\\");
 
-                    string bodyString = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n";
-                    bodyString += "<HTML><HEAD>\n";
-                    bodyString += "<META http-equiv=Content-Type content=\"text/html; charset=windows-1252\">\n";
-                    bodyString += "</HEAD>\n";
-                    bodyString += "<BODY><p>Folder listing, to do not see this add a 'index.html' document\n<p>\n";
-                    for (int i = 0; i < directories.Length; i++)
-                        bodyString += "<br><a href = \"" + httpRequest.url + Path.GetFileName(directories[i]) + "/\">[" + Path.GetFileName(directories[i]) + "]</a>\n";
-                    for (int i = 0; i < files.Length; i++)
-                        bodyString += "<br><a href = \"" + httpRequest.url + Path.GetFileName(files[i]) + "\">" + Path.GetFileName(files[i]) + "</a>\n";
-                    bodyString += "</BODY></HTML>\n";
+            //if (Directory.Exists(path))
+            //{
+            //    if (File.Exists(path + "index.html"))
+            //        path += "\\index.html";
+            //    else
+            //    {
+            //        string[] directories = Directory.GetDirectories(path);
+            //        string[] files = Directory.GetFiles(path);
 
-                    httpResponse.bodyData = Encoding.ASCII.GetBytes(bodyString);
-                    return;
-                }
-            }
+            //        string bodyString = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n";
+            //        bodyString += "<HTML><HEAD>\n";
+            //        bodyString += "<META http-equiv=Content-Type content=\"text/html; charset=windows-1252\">\n";
+            //        bodyString += "</HEAD>\n";
+            //        bodyString += "<BODY><p>Folder listing, to do not see this add a 'index.html' document\n<p>\n";
+            //        for (int i = 0; i < directories.Length; i++)
+            //            bodyString += "<br><a href = \"" + httpRequest.url + Path.GetFileName(directories[i]) + "/\">[" + Path.GetFileName(directories[i]) + "]</a>\n";
+            //        for (int i = 0; i < files.Length; i++)
+            //            bodyString += "<br><a href = \"" + httpRequest.url + Path.GetFileName(files[i]) + "\">" + Path.GetFileName(files[i]) + "</a>\n";
+            //        bodyString += "</BODY></HTML>\n";
 
-            if (File.Exists(path))
-            {
-                RegistryKey registryKey = Registry.ClassesRoot.OpenSubKey(Path.GetExtension(path), true);
-                string registryValue = (string)registryKey.GetValue("Content Type");
+            //        httpResponse.bodyData = Encoding.ASCII.GetBytes(bodyString);
+            //        return;
+            //    }
+            //}
 
-                httpResponse.fileStream = File.Open(path, FileMode.Open);
-                if (registryValue != "")
-                    httpResponse.headers["Content-type"] = registryValue;
+            //if (File.Exists(path))
+            //{
+            //    RegistryKey registryKey = Registry.ClassesRoot.OpenSubKey(Path.GetExtension(path), true);
+            //    string registryValue = (string)registryKey.GetValue("Content Type");
 
-                httpResponse.headers["Content-Length"] = httpResponse.fileStream.Length;
-            }
-            else
-            {
-                httpResponse.status = (int)ResponseState.NOT_FOUND;
+            //    httpResponse.fileStream = File.Open(path, FileMode.Open);
+            //    if (registryValue != "")
+            //        httpResponse.headers["Content-type"] = registryValue;
 
-                string bodyString = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n";
-                bodyString += "<HTML><HEAD>\n";
-                bodyString += "<META http-equiv=Content-Type content=\"text/html; charset=windows-1252\">\n";
-                bodyString += "</HEAD>\n";
-                bodyString += "<BODY>File not found!</BODY></HTML>\n";
+            //    httpResponse.headers["Content-Length"] = httpResponse.fileStream.Length;
+            //}
+            //else
+            //{
+            //    httpResponse.status = (int)ResponseState.NOT_FOUND;
 
-                httpResponse.bodyData = Encoding.ASCII.GetBytes(bodyString);
-            }
+            //    string bodyString = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n";
+            //    bodyString += "<HTML><HEAD>\n";
+            //    bodyString += "<META http-equiv=Content-Type content=\"text/html; charset=windows-1252\">\n";
+            //    bodyString += "</HEAD>\n";
+            //    bodyString += "<BODY>File not found!</BODY></HTML>\n";
+
+            //    httpResponse.bodyData = Encoding.ASCII.GetBytes(bodyString);
+            //}
         }
 
         public void ConnectReader(Stream stream)
@@ -585,6 +587,59 @@ namespace CloudObserverLite
         private static uint ToUI32(byte[] value, int startIndex)
         {
             return (uint)(value[startIndex] << 24 | value[startIndex + 1] << 16 | value[startIndex + 2] << 8 | value[startIndex + 3]);
+        }
+
+        private string GenerateIndexPage()
+        {
+            string result = "";
+
+            result += "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n";
+            result += "<html>\n";
+            result += "<head>\n";
+            result += "<title>Cloud Observer Lite</title>\n";
+            result += "<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\">\n";
+            result += "<style type=\"text/css\">";
+            result += "body{padding: 20px;background-color: #FFF;font: 100.01% \"Trebuchet MS\",Verdana,Arial,sans-serif}\n";
+            result += "h1,h2,p{margin: 0 10px}\n";
+            result += "h1{font-size: 250%;color: #FFF}\n";
+            result += "h2{font-size: 200%;color: #f0f0f0}\n";
+            result += "h2{padding-top: 0.3em}\n";
+            result += "div#nifty{ margin: 0 10%;background: #9BD1FA}\n";
+            result += "b.rtop, b.rbottom{display:block;background: #FFF}\n";
+            result += "b.rtop b, b.rbottom b{display:block;height: 1px;overflow: hidden; background: #9BD1FA}\n";
+            result += "b.r1{margin: 0 5px}\n";
+            result += "b.r2{margin: 0 3px}\n";
+            result += "b.r3{margin: 0 2px}\n";
+            result += "b.rtop b.r4, b.rbottom b.r4{margin: 0 1px;height: 2px}\n";
+            result += "h1{color: #fff;text-shadow: 0px 1px 1px #000;}\n";
+            result += "p{color: #000;text-shadow: 0px 1px 1px #fff;padding-bottom:1em}\n";
+            result += "input[type=\"button\"], .eButton {width: 150px;padding: 5px 10px;word-wrap: break-word;height: auto;}\n";
+            result += "</style>\n";
+            result += "</head>\n";
+            result += "<body>\n";
+            result += "<div id=\"nifty\">\n";
+            result += "<b class=\"rtop\"><b class=\"r1\"></b><b class=\"r2\"></b><b class=\"r3\"></b><b class=\"r4\"></b></b>\n";
+            result += "<h1>Cloud Observer Lite [DEMO]</h1>\n";
+            result += "<p><b>Live video streaming</b></p>\n";
+            result += "<b class=\"rbottom\"><b class=\"r4\"></b><b class=\"r3\"></b><b class=\"r2\"></b><b class=\"r1\"></b></b>\n";
+            result += "</div>\n";
+            result += "<p/>\n";
+            result += "<div id=\"nifty\">\n";
+            result += "<b class=\"rtop\"><b class=\"r1\"></b><b class=\"r2\"></b><b class=\"r3\"></b><b class=\"r4\"></b></b>\n";
+            result += "<h1>Users online</h1>\n";
+            result += "<p>You can view user streams by clicking on buttons with their names.</p>\n";
+            result += "<hr>\n";
+            result += "<ul>\n";
+            foreach (string nickname in server.streams.Keys)
+                result += "<li><FORM><INPUT class=\"eButton\" type=\"button\" value=\"" + nickname + "\" onClick=\"window.open('./" + nickname + "?action=read','" + nickname + "','width=400,height=200,left=400,top=100,screenX=400,screenY=100')\"></FORM></li>\n";
+            result += "</ul>\n";
+            result += "<hr>\n";
+            result += "<b class=\"rbottom\"><b class=\"r4\"></b><b class=\"r3\"></b><b class=\"r2\"></b><b class=\"r1\"></b></b>\n";
+            result += "</div>\n";
+            result += "</body>\n";
+            result += "</html>\n";
+
+            return result;
         }
     }
 }
