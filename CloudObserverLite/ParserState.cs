@@ -10,7 +10,6 @@
         HEADERKEY,
         HEADERVALUE,
         BODY,
-        OK,
-        STREAM
+        OK
     }
 }
