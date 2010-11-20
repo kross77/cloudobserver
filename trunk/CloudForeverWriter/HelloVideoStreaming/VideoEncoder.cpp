@@ -150,7 +150,7 @@ int VideoEncoder::InitUrl(std::string& container, std::string& tcpUrl, std::stri
 				if (res)
 				{
 				//	printf("1.6\n");
-
+Sleep(500);
 					url_open_dyn_buf(&pFormatContext -> pb);
 					av_write_header(pFormatContext);
 					unsigned char *pb_buffer;
