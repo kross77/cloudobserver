@@ -477,7 +477,20 @@ namespace CloudObserverLite
                 return;
             }
 
-            httpResponse.bodyData = Encoding.ASCII.GetBytes(GenerateIndexPage());
+            if (httpRequest.url == "/")
+                httpResponse.bodyData = Encoding.ASCII.GetBytes(GenerateIndexPage());
+            else
+            {
+                httpResponse.status = (int)ResponseState.NOT_FOUND;
+
+                string bodyString = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n";
+                bodyString += "<HTML><HEAD>\n";
+                bodyString += "<META http-equiv=Content-Type content=\"text/html; charset=windows-1252\">\n";
+                bodyString += "</HEAD>\n";
+                bodyString += "<BODY>File not found!</BODY></HTML>\n";
+
+                httpResponse.bodyData = Encoding.ASCII.GetBytes(bodyString);
+            }
 
             //string path = Directory.GetCurrentDirectory() + "\\" + httpRequest.url.Replace("/", "\\");
 
@@ -516,18 +529,6 @@ namespace CloudObserverLite
             //        httpResponse.headers["Content-type"] = registryValue;
 
             //    httpResponse.headers["Content-Length"] = httpResponse.fileStream.Length;
-            //}
-            //else
-            //{
-            //    httpResponse.status = (int)ResponseState.NOT_FOUND;
-
-            //    string bodyString = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n";
-            //    bodyString += "<HTML><HEAD>\n";
-            //    bodyString += "<META http-equiv=Content-Type content=\"text/html; charset=windows-1252\">\n";
-            //    bodyString += "</HEAD>\n";
-            //    bodyString += "<BODY>File not found!</BODY></HTML>\n";
-
-            //    httpResponse.bodyData = Encoding.ASCII.GetBytes(bodyString);
             //}
         }
 
