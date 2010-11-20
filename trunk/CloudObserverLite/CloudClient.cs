@@ -630,11 +630,12 @@ namespace CloudObserverLite
             result += "<div id=\"nifty\">\n";
             result += "<b class=\"rtop\"><b class=\"r1\"></b><b class=\"r2\"></b><b class=\"r3\"></b><b class=\"r4\"></b></b>\n";
             result += "<h1>Users online</h1>\n";
-            result += "<p>You can view user streams by clicking on buttons with their names.</p>\n";
+            result += "<p>You can download user streams by clicking on buttons with their names.</p>\n";
             result += "<hr>\n";
             result += "<ul>\n";
             foreach (string nickname in server.streams.Keys)
-                result += "<li><FORM><INPUT class=\"eButton\" type=\"button\" value=\"" + nickname + "\" onClick=\"window.open('./" + nickname + "?action=read','" + nickname + "','width=400,height=200,left=400,top=100,screenX=400,screenY=100')\"></FORM></li>\n";
+                //result += "<li><FORM><INPUT class=\"eButton\" type=\"button\" value=\"" + nickname + "\" onClick=\"window.open('./" + nickname + "?action=read','" + nickname + "','width=400,height=200,left=400,top=100,screenX=400,screenY=100')\"></FORM></li>\n";
+                result += "<li><FORM><INPUT class=\"eButton\" type=\"button\" value=\"" + nickname + "\" onClick=\"window.location.href='./" + nickname + ".flv?action=read'\"></FORM></li>\n";
             result += "</ul>\n";
             result += "<hr>\n";
             result += "<b class=\"rbottom\"><b class=\"r4\"></b><b class=\"r3\"></b><b class=\"r2\"></b><b class=\"r1\"></b></b>\n";
