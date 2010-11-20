@@ -2,12 +2,15 @@
 FFmpeg simple Encoder
 */
 #include "stdafx.h"
+#include "VideoEncoder.h"
+#include <boost/asio.hpp>
+#include <boost/regex.hpp>
 #include <Windows.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "ffmpegInclude.h"
 #include <math.h>
-#include "VideoEncoder.h"
+
 #include "Settings.h"
 // Boost#include <boost/asio.hpp>
 #include <cstdlib>
@@ -19,6 +22,12 @@ FFmpeg simple Encoder
 #include <queue>
 
 using namespace std;
+using boost::asio::ip::tcp;
+
+boost::asio::io_service io_service;
+tcp::resolver resolver(io_service);
+tcp::socket s(io_service);
+
 #define MAX_AUDIO_PACKET_SIZE (128 * 1024)
 
 
@@ -29,7 +38,53 @@ void VideoEncoder::SetConstants( int UserFps , int UserWidth, int UserHeight, in
 	width = UserWidth;
 	height = UserHeight;
 	audioSampleRate = UserAudioSampleRate;
-vbr = videoBitRate;
+	vbr = videoBitRate;
+}
+
+int VideoEncoder::ConnectUserToUrl(std::string& tcpUrl, std::string& username)
+{
+	try
+	{
+		std::string addr;
+		std::string port;
+		tcpExtract(tcpUrl, addr, port);
+
+		tcp::resolver::query query(tcp::v4(), addr.c_str(), port.c_str());
+		tcp::resolver::iterator iterator = resolver.resolve(query);
+	
+		s.connect(*iterator);
+		Sleep(250);
+		std::string header = "STREAM /";
+		header += userName;
+		header += "?action=write HTTP/1.1\r\n\r\n";
+		WriteToUrl((unsigned char *)header.c_str(),header.length() );
+	}
+	catch (std::exception& e)
+	{
+return -1;
+	}
+}
+int VideoEncoder::TryWriteToUrl(const unsigned char *buf, int size)
+{
+	try
+	{
+		boost::asio::write(s, boost::asio::buffer(buf, size));
+	}
+	catch (std::exception& e)
+	{
+		return -1;
+	}
+}
+void VideoEncoder::WriteToUrl(const unsigned char *buf, int size)
+{
+try
+{
+boost::asio::write(s, boost::asio::buffer(buf, size));
+}
+catch (std::exception& e)
+{
+	printf("Error happened, please restart application");
+}
 }
 int VideoEncoder::InitUrl(std::string& container, std::string& tcpUrl, std::string& username)
 {
@@ -78,33 +133,30 @@ int VideoEncoder::InitUrl(std::string& container, std::string& tcpUrl, std::stri
 
 				if (res && !(pOutFormat->flags & AVFMT_NOFILE)) 
 				{
-				//	printf("1.5\n");
-					if (url_open( &url_context, tcpUrl.c_str(), URL_WRONLY)  < 0) 
+
+					if(ConnectUserToUrl(tcpUrl, username)  < 0) {
+					res = false;
+					printf("Cannot open stream URL\n");
+					intConnection = -1;
+					}else{
+						if(url_open( &url_context, tcpUrl.c_str(), URL_WRONLY)  < 0) 
 					{ 
-					//	printf("1.51\n");
-						res = false;
-						printf("Cannot open stream URL\n");
-					//	printf("1.52\n");
+						res = false; printf("Cannot open stream URL\n");
 						intConnection = -1; 
-					//	printf("1.53\n");
+						}}
 					}
 				}
 
 				if (res)
 				{
 				//	printf("1.6\n");
-					std::string header = "STREAM /";
-					header += userName;
-					header += "?action=write HTTP/1.1\r\n\r\n";
-					url_write (url_context, (unsigned char *)header.c_str(),header.length() );
-					Sleep(550);
+
 					url_open_dyn_buf(&pFormatContext -> pb);
 					av_write_header(pFormatContext);
 					unsigned char *pb_buffer;
 					int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
-					int weCanWrite =  url_write (url_context, (unsigned char *)pb_buffer, len);
-					if(weCanWrite > 0){
-						res = true;}
+					int weCanWrite =  TryWriteToUrl((unsigned char *)pb_buffer, len);
+						res = true;
 					if(weCanWrite < 0){
 						res = false;
 						printf("Cannot open stream for selected name\n");
@@ -114,7 +166,7 @@ int VideoEncoder::InitUrl(std::string& container, std::string& tcpUrl, std::stri
 				}
 			}    
 		}   
-	}
+	
 	//printf("1.7\n");
 	if (!res)
 	{
@@ -123,8 +175,9 @@ int VideoEncoder::InitUrl(std::string& container, std::string& tcpUrl, std::stri
 		printf("Cannot init stream\n");
 
 	}
-	boost::thread (&VideoEncoder::UrlWriteData, this);
+	
 	if(res == true){
+		boost::thread (&VideoEncoder::UrlWriteData, this);
 		return 1;
 	}
 	else{
@@ -197,7 +250,7 @@ bool VideoEncoder::Finish()
 		av_write_trailer(pFormatContext);
 		unsigned char *pb_buffer;
 		int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
-		url_write (url_context, (unsigned char *)pb_buffer, len);
+		WriteToUrl( (unsigned char *)pb_buffer, len);
 		Free();
 	}
 
@@ -238,6 +291,7 @@ void VideoEncoder::Free()
 
 		if (!(pFormatContext->flags & AVFMT_NOFILE) && pFormatContext->pb) 
 		{
+			 s.close();
 			 url_close(url_context);
 		}
 
@@ -625,12 +679,13 @@ bool VideoEncoder::AddAudioSample(AVFormatContext *pFormatContext, AVStream *pSt
 
 void VideoEncoder::UrlWriteData()
 {
+	
 	while(1){
 		switch(AudioSamples.empty()){	
 		case false :{
 			AudioSample * newAudioSample = new AudioSample;
 			AudioSamples.try_pop(newAudioSample); 
-			url_write (url_context, (unsigned char *)newAudioSample->buffer, newAudioSample->len);
+			WriteToUrl( (unsigned char *)newAudioSample->buffer, newAudioSample->len);
 					} break;
 		case true :	
 			switch(VideoSamples.empty()){
@@ -638,7 +693,7 @@ void VideoEncoder::UrlWriteData()
 		case false : {	
 			VideoSample * newVideoSample = new VideoSample;
 			VideoSamples.wait_and_pop(newVideoSample);
-			url_write (url_context, (unsigned char *)newVideoSample->buffer, newVideoSample->len);
+			WriteToUrl( (unsigned char *)newVideoSample->buffer, newVideoSample->len);
 					 }break;
 			}break;
 		}
@@ -652,7 +707,7 @@ void VideoEncoder::AddSampleToQueue(const unsigned char *buf, int size )
 	newAudioSample->buffer = buf;
 	newAudioSample->len = size;
 	AudioSamples.push(newAudioSample);
-	//url_write (url_context, (unsigned char *)newAudioSample->buffer, newAudioSample->len);
+	//WriteToUrl( (unsigned char *)newAudioSample->buffer, newAudioSample->len);
 	//AudioSamples.try_pop(newAudioSample);
 	//ToDo: память не чистим newAudioSample, newAudioSample->buffer.
 }
@@ -668,4 +723,16 @@ void VideoEncoder::AddFrameToQueue(const unsigned char *buf, int size )
 	//ToDo: память не чистим newVideoSample, newVideoSample->buffer.
 
 }
-
+void VideoEncoder::tcpExtract(std::string const& ip, std::string& address, std::string& service)
+{
+	boost::regex e("tcp://(.+):(\\d+)/");
+	boost::smatch what;
+	if(boost::regex_match(ip, what, e, boost::match_extra))
+	{
+		boost::smatch::iterator it = what.begin();
+		++it; // skip the first entry..
+		address = *it;
+		++it;
+		service = *it;
+	}
+}
