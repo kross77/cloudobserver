@@ -112,7 +112,7 @@ void getAdress(){
 }
 
 void getName(){
-	cout << "Please your name (ex. georg.vasiliev )\n";
+	cout << "Please your name (ex. georg )\n";
 	cin >> outputUserName;
 }
 void initOpenCV()
@@ -152,20 +152,16 @@ void initFFmpeg(string container, int w, int h, int fps)
 
 	//cout << " 1 "<< endl;
 	encoder.SetConstants(fps, videoWidth, videoHeight, audioSampleRate, streamBitRate);
-	top:
-int encoderIU = encoder.ConnectUserToUrl(outputUrl, outputUserName) ;
-	if (encoderIU == -1)
-	{
-		//cout << "Cannot open stream URL\n";
-		getAdress();
-		  goto top;
-	} 
-	if (encoderIU == 0)
+
+	name:
+	int encoderName = encoder.ConnectUserToUrl(outputUserName) ;
+	if (encoderName == 0)
 	{
 		//printf("Cannot open stream for selected name\n");
 		getName();
-		  goto top;
+		  goto name;
 	} 
+
 	encoder.InitUrl(container, outputUrl, outputUserName);
 //	cout << " 2 "<< endl;
 	int bufferImgSize = avpicture_get_size(PIX_FMT_BGR24, w, h);
@@ -351,34 +347,6 @@ void ThreadSaveFrame()
 			Sleep(desiredTimeForMain - spendedTimeForMain);
 	}
 }
-void tryUrl(){
-	top2:
-//cout << "77" ;
-	try
-	{
-
-		std::string addr;
-		std::string port;
-		extract(outputUrl, addr, port);
-//cout << "87" ;
-//cout << addr.c_str() << port.c_str();
-		boost::asio::io_service io_service;
-
-		tcp::resolver resolver(io_service);
-		tcp::resolver::query query(tcp::v4(), addr.c_str(), port.c_str());
-		tcp::resolver::iterator iterator = resolver.resolve(query);
-
-		tcp::socket s(io_service);
-		s.connect(*iterator);
-		Sleep(250);
-		s.close();
-	}
-	  catch (std::exception& e)
-	{
-		getAdress();
-		goto top2;
-	}
-}
 int main(int argc, char* argv[])
 {
 	cameraInt = 0;
@@ -409,12 +377,19 @@ if(string(argv[i]) == "-streamBitRate" ) {streamBitRate = atoi(argv[i+1]);}
 	desiredTimeForMain = 1000.0f / videoFrameRate;
 
 	if(outputUrl == ""){
-		cout << "Warning: No Colud Observer server url found!" << endl ;
+		cout << "Warning: No Cloud Observer server url found!" << endl ;
 		getAdress();
 	}else{
 		replace_or_merge(outputUrl, "http://", "tcp://");
 	}
-	tryUrl();
+	server:
+	int encoderServer = encoder.ConnectToServer(outputUrl) ;
+	if (encoderServer == -1)
+	{
+		//cout << "Cannot open stream URL\n";
+		getAdress();
+		goto server;
+	}
 	if(outputUserName == ""){
 		cout << "Please provide us with your user name" << endl ;
 		getName();

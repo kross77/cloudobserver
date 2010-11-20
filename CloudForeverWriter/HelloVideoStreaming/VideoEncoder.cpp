@@ -43,33 +43,42 @@ void VideoEncoder::SetConstants( int UserFps , int UserWidth, int UserHeight, in
 int VideoEncoder::ReadFromServer()
 {
 	char reply[100];
-	size_t reply_length = boost::asio::read(s, boost::asio::buffer(reply, 26));
+	size_t reply_length = boost::asio::read(s, boost::asio::buffer(reply, 13));
 	//std::cout << "Reply is: ";
 	std::cout.write(reply, reply_length);
     std::cout << "\n";
 	string str (reply);
-	string key ("4");
+	string key ("200");
 	size_t found;
 
 	found=str.rfind(key);
 	if (found!=string::npos)
-	{
-	s.close(); return 0;}
-	else{return 10;}
+	{return 10;}
+	else{s.close(); return 0;}
 }
-int VideoEncoder::ConnectUserToUrl(std::string& tcpUrl, std::string& username)
+
+int VideoEncoder::ConnectToServer(std::string& tcpUrl)
+{	try
+{
+	std::string addr;
+	std::string port;
+	tcpExtract(tcpUrl, addr, port);
+
+	tcp::resolver::query query(tcp::v4(), addr.c_str(), port.c_str());
+	tcp::resolver::iterator iterator = resolver.resolve(query);
+
+	s.connect(*iterator);
+return 10;
+}
+	catch (std::exception& e)
+	{
+		return -1;
+	}
+}
+int VideoEncoder::ConnectUserToUrl( std::string& username)
 {
 	try
 	{
-		std::string addr;
-		std::string port;
-		tcpExtract(tcpUrl, addr, port);
-
-		tcp::resolver::query query(tcp::v4(), addr.c_str(), port.c_str());
-		tcp::resolver::iterator iterator = resolver.resolve(query);
-	
-		s.connect(*iterator);
-		Sleep(250);
 		std::string header = "STREAM /";
 		header += username;
 		header += "?action=write HTTP/1.1\r\n\r\n";
