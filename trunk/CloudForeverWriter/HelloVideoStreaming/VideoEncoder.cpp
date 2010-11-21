@@ -695,22 +695,15 @@ void VideoEncoder::UrlWriteData()
 {
 	
 	while(1){
-		switch(AudioSamples.empty()){	
-		case false :{
+
 			AudioSample * newAudioSample = new AudioSample;
-			AudioSamples.try_pop(newAudioSample); 
-			WriteToUrl( (unsigned char *)newAudioSample->buffer, newAudioSample->len);
-					} break;
-		case true :	
-			switch(VideoSamples.empty()){
-		case true : Sleep(2); break;
-		case false : {	
+			AudioSamples.wait_and_pop(newAudioSample); 
+			WriteToUrl( (unsigned char *)newAudioSample->buffer, newAudioSample->len);	
 			VideoSample * newVideoSample = new VideoSample;
 			VideoSamples.wait_and_pop(newVideoSample);
 			WriteToUrl( (unsigned char *)newVideoSample->buffer, newVideoSample->len);
-					 }break;
-			}break;
-		}
+			Sleep(1);
+		
 	}	
 }
 
@@ -718,6 +711,8 @@ void VideoEncoder::UrlWriteData()
 void VideoEncoder::AddSampleToQueue(const unsigned char *buf, int size )
 {
 	AudioSample * newAudioSample = new AudioSample;
+	AudioSamples.try_pop(newAudioSample);
+
 	newAudioSample->buffer = buf;
 	newAudioSample->len = size;
 	AudioSamples.push(newAudioSample);

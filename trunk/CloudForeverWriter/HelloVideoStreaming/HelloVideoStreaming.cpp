@@ -82,30 +82,6 @@ double spendedTimeForMain;
 
 boost::timer timerForCaptureFame;
 boost::timer timerForMain;
-bool noMic;
-void closeOpenCV()
-{
-	//cvDestroyWindow("HelloVideoEncoding");
-	cvReleaseCapture(&capture);
-}
-
-void closeOpenAL()
-{
-}
-
-void closeFFmpeg()
-{
-	encoder.Finish();
-
-	av_free(frame->data[0]);
-	av_free(frame);
-
-	av_free(readyFrame->data[0]);
-	av_free(readyFrame);
-
-	delete[] sample;
-	sample = NULL;
-}
 void replace_or_merge(std::string &a, const std::string &b, const std::string &c)
 {
 	const std::string::size_type pos_b_in_a = a.find(b);
@@ -141,41 +117,30 @@ void getName(){
 }
 void initOpenCV()
 {
-try
-{	/* initialize camera */
+	/* initialize camera */
 	capture = cvCaptureFromCAM(cameraInt);
 
 	/* always check */
 	if (!capture)
 	{
-		//closeOpenCV();
-		//closeFFmpeg();
-		fprintf(stderr, "Cannot initialize webcam! Please restart application\n");
-		Sleep(99999999);
+		fprintf(stderr, "Cannot initialize webcam!\n");
 		cin.get();
 	}
+
 }
-catch (exception& e)
-{	
-	//closeOpenCV();
-	//closeFFmpeg();
-	fprintf(stderr, "Error Happened, please restart application\n");
-	Sleep(99999999);
-	cin.get();
-}
-	}
 
 void initOpenAL(int fps)
 {
-
 	nSampleSize = 2.0f * audioSampleRate / fps;
 	//5000
 	Buffer = new ALchar[nSampleSize];
 	dev[0] = alcOpenDevice(NULL);
 	if (NULL == dev[0])
 	{
-		noMic = true;
+		//noMic = true;
 		fprintf(stderr, "No microphone found, please restart application , or continue streaming with out sound\n");
+		Sleep(999999);
+		cin.get();
 		return;
 	}
 	ctx = alcCreateContext(dev[0], NULL);
@@ -188,8 +153,6 @@ void initOpenAL(int fps)
 	alcCaptureStart(dev[microphoneInt]);
 	//ToDo: Refactor nBlockAlign == number of channels * Bits per sample / 8 ; btw: why /8?
 	nBlockAlign = 1 * 16 / 8;
-	
-
 }
 
 void initFFmpeg(string container, int w, int h, int fps)
@@ -226,35 +189,21 @@ void init()
 {
 	initFFmpeg(outputContainer, videoWidth, videoHeight, videoFrameRate);
 	initOpenCV();
-	if(!noMic){
 	initOpenAL(videoFrameRate);
-	}
 	
 }
 
-
 void CaptureFrame(int w, int h, char* buffer, int bytespan)
 {
-	try{
 	/* get a frame */
 	CVframe = cvQueryFrame(capture);
 
 	/* always check */
 	if (!CVframe)
-	{//closeOpenCV();
-	 //closeFFmpeg();
-	fprintf(stderr, "No CV frame captured!, please restart application\n");
-	Sleep(99999999);
+	{
+		printf("No CV frame captured!\n");
 		cin.get();
 	}
-}catch (exception& e)
-{	
-	//closeOpenCV();
-	closeFFmpeg();
-	fprintf(stderr, "Error Happened, please restart application\n");
-	Sleep(99999999);
-	cin.get();
-}
 
 	/* display current frame */
 	IplImage* destination = cvCreateImage(cvSize(w, h), CVframe->depth, CVframe->nChannels);
@@ -319,10 +268,15 @@ void CaptureFrame(int w, int h, char* buffer, int bytespan)
 	cvReleaseImage(&destination);
 }
 
-char* GenerateSample()
-{  
-	return (char *)Buffer;
+void GenerateSample(short* buffer, int sampleCount)
+{
+	double amplitude = 20.0 * pow(10, AUDIO_VOLUME / 20.0);
+	double angularFrequency =  2 * M_PI * AUDIO_FREQUENCY / audioSampleRate;
+	for (int i = 0; i < sampleCount; i++)
+		buffer[i] = amplitude * sin(angularFrequency * (soundWaveOffset + i));
 
+	soundWaveOffset += sampleCount;
+	soundWaveOffset %= audioSampleRate;
 }
 
 char* CaptureSample()
@@ -341,13 +295,35 @@ char* CaptureSample()
 	}
 }
 
+void closeOpenCV()
+{
+	//cvDestroyWindow("HelloVideoEncoding");
+	cvReleaseCapture(&capture);
+}
+
+void closeOpenAL()
+{
+}
+
+void closeFFmpeg()
+{
+	encoder.Finish();
+
+	av_free(frame->data[0]);
+	av_free(frame);
+
+	av_free(readyFrame->data[0]);
+	av_free(readyFrame);
+
+	delete[] sample;
+	sample = NULL;
+}
 
 void close()
-{	closeFFmpeg();
+{
 	closeOpenCV();
-	if(!noMic){
 	closeOpenAL();
-	}	
+	closeFFmpeg();
 }
 
 void ThreadCaptureFrame()
@@ -370,15 +346,8 @@ void ThreadSaveFrame()
 	{
 		timerForMain.restart();
 
-		if (noMic)
-		{
-			if (!encoder.AddFrame(readyFrame, GenerateSample(), nSampleSize))
-				printf("Cannot write frame!\n");
-		}else{
-			if (!encoder.AddFrame(readyFrame, CaptureSample(), nSampleSize))
-				printf("Cannot write frame!\n");
-		}
-
+		if (!encoder.AddFrame(readyFrame, CaptureSample(), nSampleSize))
+			printf("Cannot write frame!\n");
 
 		spendedTimeForMain = timerForMain.elapsed();
 
@@ -387,7 +356,7 @@ void ThreadSaveFrame()
 	}
 }
 int main(int argc, char* argv[])
-{   noMic = false;
+{
 	cameraInt = 0;
 	videoFrameRate = 15;
 	videoWidth = 320;
@@ -409,7 +378,6 @@ if(string(argv[i]) == "-container" ) {outputContainer = (argv[i+1]);}
 if(string(argv[i]) == "-nickname" ) {outputUserName = (argv[i+1]);} 
 if(string(argv[i]) == "-useLSD" ) {useLSD = atoi(argv[i+1]);} 
 if(string(argv[i]) == "-streamBitRate" ) {streamBitRate = atoi(argv[i+1]);} 
-if(string(argv[i]) == "-noMic" ) {noMic = atoi(argv[i+1]);} 
 	// example -server http://127.0.0.1:4773 -nickname vasia 
 		}	
 	Sleep(1000);
@@ -436,7 +404,7 @@ if(string(argv[i]) == "-noMic" ) {noMic = atoi(argv[i+1]);}
 	}
 
 	init();
-	Sleep(500);
+
 	boost::thread workerThread(ThreadCaptureFrame);
 	Sleep(500);
 	boost::thread workerThread2(ThreadSaveFrame);
