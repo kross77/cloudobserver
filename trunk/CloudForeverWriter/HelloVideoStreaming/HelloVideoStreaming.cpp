@@ -82,6 +82,7 @@ double spendedTimeForMain;
 
 boost::timer timerForCaptureFame;
 boost::timer timerForMain;
+bool noMic;
 void closeOpenCV()
 {
 	//cvDestroyWindow("HelloVideoEncoding");
@@ -184,10 +185,11 @@ void initOpenAL(int fps)
 		}catch (exception& e)
 		{	
 			//closeOpenCV();
-			closeFFmpeg();
-			fprintf(stderr, "OpenAL error Happened, please restart application\n");
-			Sleep(99999999);
-			cin.get();
+			//closeFFmpeg();
+			 noMic = true;
+			fprintf(stderr, "No microphone found, please restart application , or continue streaming with out sound\n");
+			
+			 //cin.get();
 		}
 }
 
@@ -229,6 +231,7 @@ void init()
 	
 }
 
+
 void CaptureFrame(int w, int h, char* buffer, int bytespan)
 {
 	try{
@@ -240,7 +243,7 @@ void CaptureFrame(int w, int h, char* buffer, int bytespan)
 	{//closeOpenCV();
 	 //closeFFmpeg();
 	fprintf(stderr, "No CV frame captured!, please restart application\n");
-		 Sleep(99999999);
+	Sleep(99999999);
 		cin.get();
 	}
 }catch (exception& e)
@@ -315,15 +318,10 @@ void CaptureFrame(int w, int h, char* buffer, int bytespan)
 	cvReleaseImage(&destination);
 }
 
-void GenerateSample(short* buffer, int sampleCount)
-{
-	double amplitude = 20.0 * pow(10, AUDIO_VOLUME / 20.0);
-	double angularFrequency =  2 * M_PI * AUDIO_FREQUENCY / audioSampleRate;
-	for (int i = 0; i < sampleCount; i++)
-		buffer[i] = amplitude * sin(angularFrequency * (soundWaveOffset + i));
+char* GenerateSample()
+{  
+	return (char *)Buffer;
 
-	soundWaveOffset += sampleCount;
-	soundWaveOffset %= audioSampleRate;
 }
 
 char* CaptureSample()
@@ -344,10 +342,10 @@ char* CaptureSample()
 
 
 void close()
-{
+{	closeFFmpeg();
 	closeOpenCV();
 	closeOpenAL();
-	closeFFmpeg();
+	
 }
 
 void ThreadCaptureFrame()
@@ -370,8 +368,15 @@ void ThreadSaveFrame()
 	{
 		timerForMain.restart();
 
-		if (!encoder.AddFrame(readyFrame, CaptureSample(), nSampleSize))
-			printf("Cannot write frame!\n");
+		if (noMic)
+		{
+			if (!encoder.AddFrame(readyFrame, GenerateSample(), nSampleSize))
+				printf("Cannot write frame!\n");
+		}else{
+			if (!encoder.AddFrame(readyFrame, CaptureSample(), nSampleSize))
+				printf("Cannot write frame!\n");
+		}
+
 
 		spendedTimeForMain = timerForMain.elapsed();
 
@@ -402,6 +407,7 @@ if(string(argv[i]) == "-container" ) {outputContainer = (argv[i+1]);}
 if(string(argv[i]) == "-nickname" ) {outputUserName = (argv[i+1]);} 
 if(string(argv[i]) == "-useLSD" ) {useLSD = atoi(argv[i+1]);} 
 if(string(argv[i]) == "-streamBitRate" ) {streamBitRate = atoi(argv[i+1]);} 
+if(string(argv[i]) == "-noMic" ) {noMic = atoi(argv[i+1]);} 
 	// example -server http://127.0.0.1:4773 -nickname vasia 
 		}	
 	Sleep(1000);
