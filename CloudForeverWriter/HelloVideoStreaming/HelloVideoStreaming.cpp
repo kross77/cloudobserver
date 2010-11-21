@@ -344,8 +344,9 @@ char* CaptureSample()
 void close()
 {	closeFFmpeg();
 	closeOpenCV();
+	if(!noMic){
 	closeOpenAL();
-	
+	}	
 }
 
 void ThreadCaptureFrame()
@@ -385,7 +386,7 @@ void ThreadSaveFrame()
 	}
 }
 int main(int argc, char* argv[])
-{
+{   noMic = false;
 	cameraInt = 0;
 	videoFrameRate = 15;
 	videoWidth = 320;
