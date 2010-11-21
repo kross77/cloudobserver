@@ -226,7 +226,9 @@ void init()
 {
 	initFFmpeg(outputContainer, videoWidth, videoHeight, videoFrameRate);
 	initOpenCV();
+	if(!noMic){
 	initOpenAL(videoFrameRate);
+	}
 	
 }
 
