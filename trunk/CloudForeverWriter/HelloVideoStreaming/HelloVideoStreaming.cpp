@@ -117,7 +117,8 @@ void getName(){
 }
 void initOpenCV()
 {
-	/* initialize camera */
+try
+{	/* initialize camera */
 	capture = cvCaptureFromCAM(cameraInt);
 
 	/* always check */
@@ -126,8 +127,14 @@ void initOpenCV()
 		fprintf(stderr, "Cannot initialize webcam!\n");
 		cin.get();
 	}
-
 }
+catch (std::exception& e)
+{
+	fprintf(stderr, "Cannot initialize webcam!\n");
+	fprintf(stderr, "Please restart application\n");
+	cin.get();
+}
+	}
 
 void initOpenAL(int fps)
 {
