@@ -17,9 +17,23 @@ Worning! Developer - be aware not all boost libs are inclided into LibsAndHeader
 Worning! Developer - Do not belive to your own eyes!=) Good luck!
 
 Worning! Required to update boost libs to build as release!
+
+--------------------------------------------
+Steps to install LibsAndHeaders
+
+Configure Visual Studio
+
+Open VC++ Directories configuration: Tools > Options > Projects and Solutions > VC++ Directories
+Choose "Show directories for: Include files"
+Add "$LibsAndHeaders\include"
+Choose "Show directories for: Library files"
+Add "$LibsAndHeaders\lib"
+Choose "Show directories for: Executable files"
+Add "$LibsAndHeaders\bin"
+
 --------------------------------------------
 Nearest Project Steps:
-Enable Socket streaming into cloud core.
+Test
 --------------------------------------------
 
 In case you want to collect and instal all 4 libs onn your own here are shourt instructions on libs install
