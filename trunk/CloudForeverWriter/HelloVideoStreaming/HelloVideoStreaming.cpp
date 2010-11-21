@@ -166,6 +166,7 @@ catch (exception& e)
 
 void initOpenAL(int fps)
 {
+		try{
 	nSampleSize = 2.0f * audioSampleRate / fps;
 	//5000
 	Buffer = new ALchar[nSampleSize];
@@ -180,6 +181,14 @@ void initOpenAL(int fps)
 	alcCaptureStart(dev[microphoneInt]);
 	//ToDo: Refactor nBlockAlign == number of channels * Bits per sample / 8 ; btw: why /8?
 	nBlockAlign = 1 * 16 / 8;
+		}catch (exception& e)
+		{	
+			//closeOpenCV();
+			closeFFmpeg();
+			fprintf(stderr, "OpenAL error Happened, please restart application\n");
+			Sleep(99999999);
+			cin.get();
+		}
 }
 
 void initFFmpeg(string container, int w, int h, int fps)
