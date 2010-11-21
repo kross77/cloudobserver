@@ -167,11 +167,17 @@ catch (exception& e)
 
 void initOpenAL(int fps)
 {
-		try{
+
 	nSampleSize = 2.0f * audioSampleRate / fps;
 	//5000
 	Buffer = new ALchar[nSampleSize];
 	dev[0] = alcOpenDevice(NULL);
+	if (NULL == dev[0])
+	{
+		noMic = true;
+		fprintf(stderr, "No microphone found, please restart application , or continue streaming with out sound\n");
+		return;
+	}
 	ctx = alcCreateContext(dev[0], NULL);
 	alcMakeContextCurrent(ctx);
 
@@ -182,15 +188,8 @@ void initOpenAL(int fps)
 	alcCaptureStart(dev[microphoneInt]);
 	//ToDo: Refactor nBlockAlign == number of channels * Bits per sample / 8 ; btw: why /8?
 	nBlockAlign = 1 * 16 / 8;
-		}catch (exception& e)
-		{	
-			//closeOpenCV();
-			//closeFFmpeg();
-			 noMic = true;
-			fprintf(stderr, "No microphone found, please restart application , or continue streaming with out sound\n");
-			
-			 //cin.get();
-		}
+	
+
 }
 
 void initFFmpeg(string container, int w, int h, int fps)
