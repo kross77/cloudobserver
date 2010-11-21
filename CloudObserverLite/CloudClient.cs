@@ -431,7 +431,8 @@ namespace CloudObserverLite
                             bodyString += "<BODY>Nickname \"";
                             bodyString += this.nickname;
                             bodyString += "\" is already in use!</BODY></HTML>\n";
-                        } if (server.streams.Count >= CloudServer.MAX_STREAMS_COUNT)
+                        }
+                        else if (server.streams.Count >= CloudServer.MAX_STREAMS_COUNT)
                         {
                             httpResponse.status = (int)ResponseState.FORBIDDEN;
                             bodyString = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n";
