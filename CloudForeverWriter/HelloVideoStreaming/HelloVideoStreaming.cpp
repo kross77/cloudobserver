@@ -82,6 +82,29 @@ double spendedTimeForMain;
 
 boost::timer timerForCaptureFame;
 boost::timer timerForMain;
+void closeOpenCV()
+{
+	//cvDestroyWindow("HelloVideoEncoding");
+	cvReleaseCapture(&capture);
+}
+
+void closeOpenAL()
+{
+}
+
+void closeFFmpeg()
+{
+	encoder.Finish();
+
+	av_free(frame->data[0]);
+	av_free(frame);
+
+	av_free(readyFrame->data[0]);
+	av_free(readyFrame);
+
+	delete[] sample;
+	sample = NULL;
+}
 void replace_or_merge(std::string &a, const std::string &b, const std::string &c)
 {
 	const std::string::size_type pos_b_in_a = a.find(b);
@@ -124,14 +147,19 @@ try
 	/* always check */
 	if (!capture)
 	{
-		fprintf(stderr, "Cannot initialize webcam!\n");
+		//closeOpenCV();
+		//closeFFmpeg();
+		fprintf(stderr, "Cannot initialize webcam! Please restart application\n");
+		Sleep(99999999);
 		cin.get();
 	}
 }
-catch (std::exception& e)
-{
-	fprintf(stderr, "Cannot initialize webcam!\n");
-	fprintf(stderr, "Please restart application\n");
+catch (exception& e)
+{	
+	//closeOpenCV();
+	//closeFFmpeg();
+	fprintf(stderr, "Error Happened, please restart application\n");
+	Sleep(99999999);
 	cin.get();
 }
 	}
@@ -194,15 +222,26 @@ void init()
 
 void CaptureFrame(int w, int h, char* buffer, int bytespan)
 {
+	try{
 	/* get a frame */
 	CVframe = cvQueryFrame(capture);
 
 	/* always check */
 	if (!CVframe)
-	{
-		printf("No CV frame captured!\n");
+	{//closeOpenCV();
+	 //closeFFmpeg();
+	fprintf(stderr, "No CV frame captured!, please restart application\n");
+		 Sleep(99999999);
 		cin.get();
 	}
+}catch (exception& e)
+{	
+	//closeOpenCV();
+	closeFFmpeg();
+	fprintf(stderr, "Error Happened, please restart application\n");
+	Sleep(99999999);
+	cin.get();
+}
 
 	/* display current frame */
 	IplImage* destination = cvCreateImage(cvSize(w, h), CVframe->depth, CVframe->nChannels);
@@ -294,29 +333,6 @@ char* CaptureSample()
 	}
 }
 
-void closeOpenCV()
-{
-	//cvDestroyWindow("HelloVideoEncoding");
-	cvReleaseCapture(&capture);
-}
-
-void closeOpenAL()
-{
-}
-
-void closeFFmpeg()
-{
-	encoder.Finish();
-
-	av_free(frame->data[0]);
-	av_free(frame);
-
-	av_free(readyFrame->data[0]);
-	av_free(readyFrame);
-
-	delete[] sample;
-	sample = NULL;
-}
 
 void close()
 {
@@ -403,7 +419,7 @@ if(string(argv[i]) == "-streamBitRate" ) {streamBitRate = atoi(argv[i+1]);}
 	}
 
 	init();
-
+	Sleep(500);
 	boost::thread workerThread(ThreadCaptureFrame);
 	Sleep(500);
 	boost::thread workerThread2(ThreadSaveFrame);
