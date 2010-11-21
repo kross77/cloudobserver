@@ -47,8 +47,38 @@
     <Compile Include="ParserState.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="ResponseState.cs" />
     <Compile Include="ResponseStatus.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\framework_4.5.0.17689.swz" />
+    <None Include="Assets\osmf_1.0.0.16316.swz" />
+    <None Include="Assets\rpc_4.5.0.17689.swz" />
+    <None Include="Assets\sparkskins_4.5.0.17689.swz" />
+    <None Include="Assets\spark_4.5.0.17689.swz" />
+    <None Include="Assets\textLayout_2.0.0.139.swz" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\AC_OETags.js" />
+    <Content Include="Assets\history_history.css" />
+    <Content Include="Assets\history_history.js" />
+    <Content Include="Assets\history_historyFrame.html" />
+    <Content Include="Assets\index.html" />
+    <Content Include="Assets\player.html" />
+    <Content Include="Assets\player.swf" />
+    <Content Include="Assets\playerProductInstall.swf" />
+    <Content Include="Assets\swfobject.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
