@@ -693,29 +693,17 @@ bool VideoEncoder::AddAudioSample(AVFormatContext *pFormatContext, AVStream *pSt
 
 void VideoEncoder::UrlWriteData()
 {
-	
-	while(1){
 
-			AudioSample * newAudioSample = new AudioSample;
-			AudioSamples.wait_and_pop(newAudioSample); 
-			WriteToUrl( (unsigned char *)newAudioSample->buffer, newAudioSample->len);	
-			VideoSample * newVideoSample = new VideoSample;
-			VideoSamples.wait_and_pop(newVideoSample);
-			WriteToUrl( (unsigned char *)newVideoSample->buffer, newVideoSample->len);
-			Sleep(1);
-		
-	}	
 }
 
 
 void VideoEncoder::AddSampleToQueue(const unsigned char *buf, int size )
 {
 	AudioSample * newAudioSample = new AudioSample;
-	AudioSamples.try_pop(newAudioSample);
 
 	newAudioSample->buffer = buf;
-	newAudioSample->len = size;
-	AudioSamples.push(newAudioSample);
+	newAudioSample->len = size;		
+	WriteToUrl( (unsigned char *)newAudioSample->buffer, newAudioSample->len);	
 	//WriteToUrl( (unsigned char *)newAudioSample->buffer, newAudioSample->len);
 	//AudioSamples.try_pop(newAudioSample);
 	//ToDo: память не чистим newAudioSample, newAudioSample->buffer.
@@ -724,11 +712,9 @@ void VideoEncoder::AddSampleToQueue(const unsigned char *buf, int size )
 void VideoEncoder::AddFrameToQueue(const unsigned char *buf, int size )
 {
 	VideoSample * newVideoSample = new VideoSample;
-	VideoSamples.try_pop(newVideoSample);
-
 	newVideoSample->buffer = buf;
 	newVideoSample->len = size;
-	VideoSamples.push(newVideoSample);
+WriteToUrl( (unsigned char *)newVideoSample->buffer, newVideoSample->len);
 	//ToDo: память не чистим newVideoSample, newVideoSample->buffer.
 
 }
