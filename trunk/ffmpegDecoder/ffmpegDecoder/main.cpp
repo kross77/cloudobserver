@@ -21,8 +21,14 @@
 #include <boost/thread.hpp>
 #include <boost/timer.hpp>
 //#define FILE_NAME          "c:\\temp\\1.avi"
-#define FILE_NAME          "rtsp://mobile.rayv.com:80/live/rayv2demo?tcp"
-
+//#define FILE_NAME          "rtsp://mobile.rayv.com:80/live/rayv2demo?tcp" // tested +
+//#define FILE_NAME          "rtsp://video1.multicasttech.com/AFTVIndyMoviesH264500.sdp" // tested +
+//#define FILE_NAME          "rtsp://stream01.qt.slamtv.true.nl/slamtv.sdp" // tested +
+//#define FILE_NAME          "rtsp://kassandra.okto.tv:8001/okto.sdp" // tested -
+#define FILE_NAME          "rtsp://video1.multicasttech.com/EspanaFreeH264500.sdp" // tested +
+//#define FILE_NAME          ""
+//#define FILE_NAME          ""
+//#define FILE_NAME          ""
 // OpenCV
 CvCapture* capture;
 IplImage* CVframe ;

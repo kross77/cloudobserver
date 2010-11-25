@@ -71,13 +71,14 @@ bool FFmpegDecoder::CloseFile()
 		av_close_input_file(pFormatCtx);
 		pFormatCtx = NULL;
 	}
-
+  
   return true;
 }
 
 
 AVFrame * FFmpegDecoder::GetNextFrame()
 {
+	printf("getFrame");
   AVFrame * res = NULL;
 
   if (videoStreamIndex != -1)
