@@ -1,23 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!--
-
-ADOBE SYSTEMS INCORPORATED
-Copyright 2009 Adobe Systems Incorporated
-All Rights Reserved.
-
-NOTICE: Adobe permits you to use, modify, and distribute this file
-in accordance with the terms of the license agreement accompanying it.
-
--->
-
-<!--- The default skin class for the Spark VideoPlayer component.  
-
-@langversion 3.0
-@playerversion Flash 10
-@playerversion AIR 1.5
-@productversion Flex 4
--->
 <s:Skin xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark"
 			 xmlns:fb="http://ns.adobe.com/flashbuilder/2009" alpha.disabledStates="0.5" 
 			 >
@@ -26,7 +7,6 @@ in accordance with the terms of the license agreement accompanying it.
 	<fx:Metadata>
 		[HostComponent("spark.components.VideoPlayer")]
 	</fx:Metadata>
-	
 	
 	<!-- states -->
 	<s:states>
@@ -82,13 +62,12 @@ in accordance with the terms of the license agreement accompanying it.
 				<s:Group bottom="0" horizontalCenter="0" left="0" right="0" maxWidth.fullScreenStates="755" id="playerControls">
 					
 					<!--- Defines the label and appearance of the Play/Pause button. -->
-					<s:ToggleButton id="playPauseButton" left="0" bottom="0" 
-									skinClass="cobalt.skins.mediaClasses.normal.VideoPlayerPlayPauseButtonSkin" 
-									skinClass.fullScreenStates="cobalt.skins.mediaClasses.normal.VideoPlayerPlayPauseButtonSkin"
-									focusIn="event.target.depth=1" focusOut="event.target.depth=0" />
+
 					
 					<!-- scrubbar + the playHeadTime/totalTime labels -->
-					<s:Group left="39" right="75" top="0" bottom="0">
+					<s:Group bottom="0"
+							 left="37" right="39" top="0"
+							 bottom.uninitialized="0">
 						<!-- background for scrubbar + the playHeadTime/totalTime -->
 						<s:Rect id="border" left="0" right="0" top="0" bottom="0" >
 							<s:fill>
@@ -172,19 +151,7 @@ in accordance with the terms of the license agreement accompanying it.
 							
 							<!-- spacer -->
 							<s:Rect width="8" height="1" />
-							
-							<s:Label id="currentTimeDisplay" 
-									 color="0xFFFFFF"
-									 color.fullScreenStates="0xFFFFFF" />
-							
-							<s:Label id="timeDivider" text="/" 
-									 color="0xFFFFFF"
-									 color.fullScreenStates="0xFFFFFF" />
-							
-							<s:Label id="durationDisplay" 
-									 color="0xFFFFFF"
-									 color.fullScreenStates="0xFFFFFF" />
-							
+
 							<!-- spacer -->
 							<s:Rect width="8" height="1" />
 						</s:Group>
@@ -192,11 +159,13 @@ in accordance with the terms of the license agreement accompanying it.
 					</s:Group>
 					
 					<!--- Defines the appearance of the volume bar. -->
-					<s:VolumeBar id="volumeBar" snapInterval=".01" stepSize=".01" liveDragging="true"
-								 right="37" bottom="0" 
+					<s:VolumeBar id="volumeBar"  focusIn="event.target.depth=1"
+								 focusOut="event.target.depth=0" liveDragging="true"
 								 skinClass="cobalt.skins.mediaClasses.normal.VideoPlayerVolumeBarSkin"
-								 skinClass.fullScreenStates="cobalt.skins.mediaClasses.fullScreen.VideoPlayerFullScreenVolumeBarSkin"
-								 focusIn="event.target.depth=1" focusOut="event.target.depth=0" />
+								 snapInterval=".01" stepSize=".01" 
+								 left="0" bottom="0"
+								 width="39"	 
+								 />
 					
 					<!--- Defines the label and appearance of the Fullscreen button. -->
 					<s:Button id="fullScreenButton" right="0" bottom="0" label="Fullscreen" 
@@ -221,8 +190,6 @@ in accordance with the terms of the license agreement accompanying it.
 				</s:stroke>
 			</s:Rect>
 			<s:Button includeIn="playbackError" label="Stream is currently ofline. Please try to acsess it later" horizontalCenter="0" verticalCenter="0"/>
-			
-			
 			
 		</s:Group>
 	</s:Group>
