@@ -189,7 +189,7 @@
 					<s:SolidColorStroke color="0x131313" />
 				</s:stroke>
 			</s:Rect>
-			<s:Button includeIn="playbackError" label="Stream is currently ofline. Please try to acsess it later" horizontalCenter="0" verticalCenter="0"/>
+			<s:Button includeIn="playbackError" label="Stream is currently not available. Please, try again." horizontalCenter="0" verticalCenter="0"/>
 			
 		</s:Group>
 	</s:Group>
