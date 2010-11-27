@@ -4,14 +4,20 @@
 <link rel="stylesheet" type="text/css" href="./history/history.css" />
 <script src="./history/history.js" language="javascript"></script>
 <script language="JavaScript" type="text/javascript">
-var requiredMajorVersion = 10; var requiredMinorVersion = 0; var requiredRevision = 0;
+var requiredMajorVersion = 10; var requiredMinorVersion = 1; var requiredRevision = 0;
 </script>
 <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
 <META HTTP-EQUIV="Expires" CONTENT="-1">
+        <style type="text/css" media="screen"> 
+            html, body  { height:100%; }
+            body { margin:0; padding:0; overflow:auto; text-align:center; 
+                   background-color: #ffffff; }   
+            object:focus { outline:none; }
+        </style>
 </head>
 <body>
 <script language="JavaScript" type="text/javascript">
-var loc = "videourl=http://" + window.location.host + "/_NICKNAME_?action=read";
+var loc = "nick=_NICKNAME_";
 var hasProductInstall = DetectFlashVer(6, 0, 65);
 var hasRequestedVersion = DetectFlashVer(requiredMajorVersion, requiredMinorVersion, requiredRevision);
 if ( hasProductInstall && !hasRequestedVersion ) {
@@ -45,6 +51,7 @@ AC_FL_RunContent(
 			"bgcolor", "#ffffff",
 			"name", "SimpleVideoPlayer",
 			"allowScriptAccess","always",
+            "allowfullscreen" , "true",
 			"type", "application/x-shockwave-flash",
 			"pluginspage", "http://www.adobe.com/go/getflashplayer"
 );
