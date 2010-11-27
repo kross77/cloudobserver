@@ -7,11 +7,11 @@ namespace CloudObserverLite
     {
         private static LogWriter instance = null;
 
-        private StreamWriter writer;
+        //private StreamWriter writer;
 
         private LogWriter()
         {
-            this.writer = new StreamWriter(File.Create(DateTime.Now.ToString().Replace(':','.') + ".log"));
+            //this.writer = new StreamWriter(File.Create(DateTime.Now.ToString().Replace(':','.') + ".log"));
         }
 
         public static LogWriter GetInstance()
@@ -26,13 +26,13 @@ namespace CloudObserverLite
         {
             message = DateTime.Now.ToString() + ": " + message;
 
-            this.writer.WriteLine(message);
+            //this.writer.WriteLine(message);
             Console.WriteLine(message);
         }
 
         public void Close()
         {
-            this.writer.Close();
+            //this.writer.Close();
         }
     }
 }
