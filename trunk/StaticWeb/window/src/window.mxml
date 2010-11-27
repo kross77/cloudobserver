@@ -41,7 +41,7 @@
 			} 
 		]]>
 	</fx:Script>
-	<s:VideoPlayer right="10" left="10" top="10" bottom="10" id="VideoBox"  skinClass="VPS"/>
+	<s:VideoPlayer right="5" left="5" top="5" bottom="5" id="VideoBox"  skinClass="VPS"/>
 	<s:TextInput id="textArea" visible="false"  enter="textArea_enterHandler(event)" text="Лог операций:"    top="10" right="10" height="22" left="10"/> 
 	
 </s:Application>
