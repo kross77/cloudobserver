@@ -82,12 +82,13 @@ int CamerasList::SelectFromList()
 	if (i <= 0)
 	{
 		cout <<"No devices found. \n " << endl;
-		cout <<"Please restart application."  << endl;
-		cin.get();
-		Sleep(999999);
+		//cout <<"Please restart application."  << endl;
+		//cin.get();
+		//Sleep(999999);
+	return 999;
 
 	}else if(i == 1){
-			cout <<"Default device will be used" << std::endl;
+			cout <<"Default device will be used\n" << std::endl;
 			SelectedIndex = 0;
 		}else{
 		while(SelectedIndex > i-1 || SelectedIndex < 0)
@@ -106,9 +107,9 @@ int CamerasList::SelectFromList()
 	}else
 	{
 		printf("no Video Devices found. \n") ;
-		cout <<"Please restart application."  << endl;
-		cin.get();
-		Sleep(999999);
+		//cout <<"Please restart application."  << endl;
+		//cin.get();
+		//Sleep(999999);
 		return 999;
 	}
 	return SelectedIndex;
