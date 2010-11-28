@@ -2,7 +2,9 @@
 #include "list.h"
 #include <windows.h>
 #include <dshow.h>
+#include <boost/lexical_cast.hpp>
 #pragma comment(lib, "strmiids")
+using namespace std;
 CamerasList::CamerasList(void)
 {
 }
@@ -31,54 +33,66 @@ HRESULT CamerasList::EnumerateDevices( REFGUID category, IEnumMoniker **ppEnum )
 	return hr;
 }
 
-void CamerasList::DisplayDeviceInformation( IEnumMoniker *pEnum )
-{
-	IMoniker *pMoniker = NULL;
-	int i = 1;
-	while (pEnum->Next(1, &pMoniker, NULL) == S_OK)
-	{
-		IPropertyBag *pPropBag;
-		HRESULT hr = pMoniker->BindToStorage(0, 0, IID_PPV_ARGS(&pPropBag));
-		if (FAILED(hr))
-		{
-			pMoniker->Release();
-			continue;  
-		} 
-
-		VARIANT var;
-		VariantInit(&var);
-
-		// Get description or friendly name.
-		hr = pPropBag->Read(L"Description", &var, 0);
-		if (FAILED(hr))
-		{
-			hr = pPropBag->Read(L"FriendlyName", &var, 0);
-		}
-		if (SUCCEEDED(hr))
-		{
-			std::cout << i;
-			printf(") %S\n", var.bstrVal);
-			i++;
-			VariantClear(&var); 
-		}
-
-		hr = pPropBag->Write(L"FriendlyName", &var);
-
-		pPropBag->Release();
-		pMoniker->Release();
-	}
-}
-
-void CamerasList::PrintList()
-{
+int CamerasList::SelectFromList()
+{	int i = 0;
+    int SelectedIndex;
 	IEnumMoniker *pEnum;
 
 	HRESULT hr;
 	hr = EnumerateDevices(CLSID_VideoInputDeviceCategory, &pEnum);
 	if (SUCCEEDED(hr))
 	{
-		DisplayDeviceInformation(pEnum);
-		pEnum->Release();
-	}
+		IMoniker *pMoniker = NULL;
+		
+		while (pEnum->Next(1, &pMoniker, NULL) == S_OK)
+		{
+			IPropertyBag *pPropBag;
+			HRESULT hr = pMoniker->BindToStorage(0, 0, IID_PPV_ARGS(&pPropBag));
+			if (FAILED(hr))
+			{
+				pMoniker->Release();
+				continue;  
+			} 
 
+			VARIANT var;
+			VariantInit(&var);
+
+			// Get description or friendly name.
+			hr = pPropBag->Read(L"Description", &var, 0);
+			if (FAILED(hr))
+			{
+				hr = pPropBag->Read(L"FriendlyName", &var, 0);
+			}
+			if (SUCCEEDED(hr))
+			{
+				std::cout << i;
+				printf(") %S\n", var.bstrVal);
+				i++;
+				VariantClear(&var); 
+			}
+
+			hr = pPropBag->Write(L"FriendlyName", &var);
+
+			pPropBag->Release();
+			pMoniker->Release();
+
+		}
+ 		SelectedIndex = 999;
+		while(SelectedIndex > i-1 || SelectedIndex < 0)
+		{
+			try{
+			std::cout <<"please input index from 0 to " << i-1 << std::endl;
+			std::string s;
+			std::getline( cin, s, '\n' );
+			SelectedIndex =  boost::lexical_cast<int>(s);
+			}
+			catch(std::exception& e){SelectedIndex = 999;}
+		}
+		pEnum->Release();
+	}else
+	{
+		printf("no Video Devices found. \n") ;
+		return 999;
+	}
+	return SelectedIndex;
 }

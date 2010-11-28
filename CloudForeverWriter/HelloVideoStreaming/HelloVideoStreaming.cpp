@@ -129,9 +129,7 @@ void initOpenCV()
 {
 selectCamera:
 	CamerasList  * CamList  = new CamerasList();
-	cout << "Please input camera index number (ex: 1)" << endl;
-	CamList->PrintList();
-    cin >> cameraInt;
+    cameraInt = CamList->SelectFromList();
 	/* initialize camera */
 	capture = cvCaptureFromCAM(cameraInt);
 
