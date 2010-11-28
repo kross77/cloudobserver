@@ -56,6 +56,7 @@ private:
 	int   nAudioBufferSize;
 	int   nAudioBufferSizeCurrent;
 
+
 public:
 
 	struct AudioSample
@@ -83,7 +84,8 @@ public:
 	int audioSampleRate	;	// hertz
 	int vbr;
 	std::string userName;
-
+	bool hasAudio;
+	bool hasVideo;
 		
 	VideoEncoder() 
 	{
@@ -102,6 +104,8 @@ public:
 		nAudioBufferSizeCurrent = 0;
 		fps = 7;
 		frameSendingFinished = true;
+		hasAudio = false;
+		hasVideo = false;
 	}
 
 	virtual ~VideoEncoder() 
@@ -118,6 +122,8 @@ public:
 	// Add video and audio data
 
 	bool AddFrame(AVFrame* frame, const char* soundBuffer, int soundBufferSize);
+		bool AddFrame(AVFrame* frame);
+			bool AddFrame(const char* soundBuffer, int soundBufferSize);
 	// end of output
 	bool Finish();
 

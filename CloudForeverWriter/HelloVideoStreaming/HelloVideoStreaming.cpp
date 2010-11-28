@@ -1,5 +1,4 @@
 // CamLister.cpp : Defines the entry point for the console application.
-//
 
 #include "stdafx.h"
 #include <boost/regex.hpp>
@@ -138,6 +137,11 @@ void initOpenCV()
 selectCamera:
 	CamerasList  * CamList  = new CamerasList();
     cameraInt = CamList->SelectFromList();
+	if (cameraInt == 999)
+	{
+		encoder.hasVideo = false;
+	}else{
+
 	/* initialize camera */
 	capture = cvCaptureFromCAM(cameraInt);
 
@@ -148,6 +152,8 @@ selectCamera:
 		goto selectCamera;
 	//cin.get();
 
+	}
+	encoder.hasVideo = true;
 	}
 
 }
@@ -196,13 +202,15 @@ void initOpenAL(int fps)
 	 if(i <= 0)
 	 {
 		 cout <<"No devices found. \n " << endl;
-		 cout <<"Please restart application."  << endl;
-		 cin.get();
-		 Sleep(999999);
+		 //cout <<"Please restart application."  << endl;
+		 //cin.get();
+		 //Sleep(999999);
+		 SelectedIndex = 999;
 	 }
 	 else if(i == 1){
 		  cout <<"Default device will be used" << std::endl;
 		 SelectedIndex = 0;
+		 encoder.hasAudio = true;
 	 }else{	
 	 while(SelectedIndex > i-1 || SelectedIndex < 0)
 	 {
@@ -211,9 +219,9 @@ void initOpenAL(int fps)
 			 std::string s;
 			 std::getline( cin, s, '\n' );
 			 SelectedIndex =  boost::lexical_cast<int>(s);
+			 
 			}
 		 catch(std::exception& e){
-
 			 SelectedIndex = 999;
 			}
 	 }
@@ -225,16 +233,28 @@ void initOpenAL(int fps)
 
 
 	/* If you don't need 3D spatialization, this should help processing time */
+	 if (SelectedIndex == 999)
+	 {
+		 encoder.hasAudio = false;
+	 }else{
+		 encoder.hasAudio = true;
 	alDistanceModel(AL_NONE); 
 
 	dev[0] = alcCaptureOpenDevice(bufferList[SelectedIndex], audioSampleRate, AL_FORMAT_MONO16, nSampleSize/2);
 	alcCaptureStart(dev[0]);
 	//ToDo: Refactor nBlockAlign == number of channels * Bits per sample / 8 ; btw: why /8?
 	nBlockAlign = 1 * 16 / 8;
+	 }
 }
 
 void initFFmpeg(string container, int w, int h, int fps)
 {
+	if(!encoder.hasAudio && !encoder.hasVideo){
+		cout << "\nNo audio, and no video data found.\n Please close application.\nConnect some capturing device.\nRestart application\n";
+		cin.get();
+		Sleep(999999);
+		cin.get();
+	}
 
 	//cout << " 1 "<< endl;
 	encoder.SetConstants(fps, videoWidth, videoHeight, audioSampleRate, streamBitRate);
@@ -249,7 +269,13 @@ void initFFmpeg(string container, int w, int h, int fps)
 		  goto name;
 	} 
 
-	encoder.InitUrl(container, outputUrl, outputUserName);
+	if(encoder.InitUrl(container, outputUrl, outputUserName) == -10){
+	cout << "\nNo audio, and no video data found.\n Please close application.\nConnect some capturing device.\nRestart application\n";
+	cin.get();
+	Sleep(999999);
+
+	}
+	
 //	cout << " 2 "<< endl;
 	int bufferImgSize = avpicture_get_size(PIX_FMT_BGR24, w, h);
 
@@ -266,9 +292,10 @@ void initFFmpeg(string container, int w, int h, int fps)
 
 void init()
 {
-	initFFmpeg(outputContainer, videoWidth, videoHeight, videoFrameRate);
+	
 	initOpenCV();
 	initOpenAL(videoFrameRate);
+	initFFmpeg(outputContainer, videoWidth, videoHeight, videoFrameRate);
 	
 }
 
@@ -397,27 +424,46 @@ void close()
 }
 
 void ThreadCaptureFrame()
-{
-	while(1){
-		timerForCaptureFame.restart();
-		CaptureFrame( videoWidth, videoHeight, (char *)frame->data[0],frame->linesize[0]);
-		AVFrame* swap = frame;
-		frame = readyFrame;
-		readyFrame = swap;
-		spendedTimeForCaptureFame = timerForCaptureFame.elapsed();
-		if(spendedTimeForCaptureFame < desiredTimeForCaptureFame){
-			Sleep(desiredTimeForCaptureFame - spendedTimeForCaptureFame);
-		}
+{ if (encoder.hasVideo)
+{	while(1){
+	timerForCaptureFame.restart();
+	CaptureFrame( videoWidth, videoHeight, (char *)frame->data[0],frame->linesize[0]);
+	AVFrame* swap = frame;
+	frame = readyFrame;
+	readyFrame = swap;
+	spendedTimeForCaptureFame = timerForCaptureFame.elapsed();
+	if(spendedTimeForCaptureFame < desiredTimeForCaptureFame){
+		Sleep(desiredTimeForCaptureFame - spendedTimeForCaptureFame);
 	}
+}
+}
+
 }
 void ThreadSaveFrame()
 {
 	while(1)
 	{
 		timerForMain.restart();
+if (!encoder.hasVideo)
+{		if (!encoder.AddFrame( CaptureSample(), nSampleSize))
+printf("Cannot write frame!\n");
+}
 
-		if (!encoder.AddFrame(readyFrame, CaptureSample(), nSampleSize))
-			printf("Cannot write frame!\n");
+if (!encoder.hasAudio)
+{		if (!encoder.AddFrame(readyFrame))
+printf("Cannot write frame!\n");
+}
+
+if (encoder.hasAudio && encoder.hasVideo)
+{	
+	if (!encoder.AddFrame(readyFrame, CaptureSample(), nSampleSize))
+printf("Cannot write frame!\n");
+}
+if (!encoder.hasAudio && !encoder.hasVideo)
+{
+	printf("No data to encode");
+break;
+}
 
 		spendedTimeForMain = timerForMain.elapsed();
 
