@@ -101,6 +101,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
+				CommandLine="copy $(SolutionDir)\distr\*.dll $(TargetDir)"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
