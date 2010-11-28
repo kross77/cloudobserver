@@ -1,18 +1,10 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HelloVideoEncoding", "HelloVideoEncoding\HelloVideoEncoding.vcproj", "{776FAE28-493A-47EA-A574-EA004EAC496C}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HelloOpenALMic", "HelloOpenALMic\HelloOpenALMic.vcproj", "{22948CBD-010F-4248-8301-181EE06BF76B}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HelloFFmpegEncoder", "HelloFFmpegEncoder\HelloFFmpegEncoder.vcproj", "{A00AFE84-3BAF-4BAC-AFAC-31E98C3B39B1}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3DD78BDE-5ED3-4D83-A3BD-E0073039E4C1}"
 	ProjectSection(SolutionItems) = preProject
 		readMe.txt = readMe.txt
 	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HelloBoost", "HelloBoost\HelloBoost.vcproj", "{356FE7F9-6512-4CD2-A9EE-7457C588C13D}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HelloVideoStreaming", "HelloVideoStreaming\HelloVideoStreaming.vcproj", "{0293F071-7A00-413C-8C6E-5D5D44465B65}"
 EndProject
@@ -30,30 +22,6 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{776FAE28-493A-47EA-A574-EA004EAC496C}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{776FAE28-493A-47EA-A574-EA004EAC496C}.Debug|Win32.ActiveCfg = Debug|Win32
-		{776FAE28-493A-47EA-A574-EA004EAC496C}.Debug|Win32.Build.0 = Debug|Win32
-		{776FAE28-493A-47EA-A574-EA004EAC496C}.Release|Any CPU.ActiveCfg = Release|Win32
-		{776FAE28-493A-47EA-A574-EA004EAC496C}.Release|Win32.ActiveCfg = Release|Win32
-		{776FAE28-493A-47EA-A574-EA004EAC496C}.Release|Win32.Build.0 = Release|Win32
-		{22948CBD-010F-4248-8301-181EE06BF76B}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{22948CBD-010F-4248-8301-181EE06BF76B}.Debug|Win32.ActiveCfg = Debug|Win32
-		{22948CBD-010F-4248-8301-181EE06BF76B}.Debug|Win32.Build.0 = Debug|Win32
-		{22948CBD-010F-4248-8301-181EE06BF76B}.Release|Any CPU.ActiveCfg = Release|Win32
-		{22948CBD-010F-4248-8301-181EE06BF76B}.Release|Win32.ActiveCfg = Release|Win32
-		{22948CBD-010F-4248-8301-181EE06BF76B}.Release|Win32.Build.0 = Release|Win32
-		{A00AFE84-3BAF-4BAC-AFAC-31E98C3B39B1}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{A00AFE84-3BAF-4BAC-AFAC-31E98C3B39B1}.Debug|Win32.ActiveCfg = Debug|Win32
-		{A00AFE84-3BAF-4BAC-AFAC-31E98C3B39B1}.Debug|Win32.Build.0 = Debug|Win32
-		{A00AFE84-3BAF-4BAC-AFAC-31E98C3B39B1}.Release|Any CPU.ActiveCfg = Release|Win32
-		{A00AFE84-3BAF-4BAC-AFAC-31E98C3B39B1}.Release|Win32.ActiveCfg = Release|Win32
-		{A00AFE84-3BAF-4BAC-AFAC-31E98C3B39B1}.Release|Win32.Build.0 = Release|Win32
-		{356FE7F9-6512-4CD2-A9EE-7457C588C13D}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{356FE7F9-6512-4CD2-A9EE-7457C588C13D}.Debug|Win32.ActiveCfg = Debug|Win32
-		{356FE7F9-6512-4CD2-A9EE-7457C588C13D}.Debug|Win32.Build.0 = Debug|Win32
-		{356FE7F9-6512-4CD2-A9EE-7457C588C13D}.Release|Any CPU.ActiveCfg = Release|Win32
-		{356FE7F9-6512-4CD2-A9EE-7457C588C13D}.Release|Win32.ActiveCfg = Release|Win32
-		{356FE7F9-6512-4CD2-A9EE-7457C588C13D}.Release|Win32.Build.0 = Release|Win32
 		{0293F071-7A00-413C-8C6E-5D5D44465B65}.Debug|Any CPU.ActiveCfg = Debug|Win32
 		{0293F071-7A00-413C-8C6E-5D5D44465B65}.Debug|Any CPU.Build.0 = Debug|Win32
 		{0293F071-7A00-413C-8C6E-5D5D44465B65}.Debug|Win32.ActiveCfg = Debug|Win32
