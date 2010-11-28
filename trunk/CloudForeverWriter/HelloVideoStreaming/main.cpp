@@ -41,10 +41,8 @@ static boost::thread captureThread;
 void CloseApplication()
 {
 	captureThread.interrupt();
-
-
 	captureThread.join();
-	while(1);
+	exit(0);
 }
 
 void WaitingForExitProgram() 
@@ -59,10 +57,23 @@ void WaitingForExitProgram()
 	CloseApplication();
 }
 
-void SigintHandler(int param)
+BOOL WINAPI ConsoleHandler(DWORD CEvent)
 {
-	cout << "User pressed Ctrl+C\n" << endl;
+    switch(CEvent)
+    {
+    case CTRL_C_EVENT:
+        break;
+    case CTRL_BREAK_EVENT:
+        break;
+    case CTRL_CLOSE_EVENT:
+        break;
+    case CTRL_LOGOFF_EVENT:
+        break;
+    case CTRL_SHUTDOWN_EVENT:
+        break;
+    }
 	CloseApplication();
+    return TRUE;
 }
 
 void CaptureLoop(void) 
@@ -112,7 +123,7 @@ int main(int argc, char* argv[])
 
 	captureThread = boost::thread(&CaptureLoop);
 
-	signal(SIGINT, SigintHandler);
+	SetConsoleCtrlHandler((PHANDLER_ROUTINE)ConsoleHandler,TRUE);
 
 	WaitingForExitProgram();
 
