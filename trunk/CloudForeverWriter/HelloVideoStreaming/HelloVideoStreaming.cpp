@@ -1,16 +1,24 @@
-#include "stdafx.h"
-#include <boost/asio.hpp>
-#include <boost/regex.hpp>
-#include "VideoEncoder.h"
-#include "Settings.h"
-#include <windows.h>
-#include <stdio.h>
+// CamLister.cpp : Defines the entry point for the console application.
+//
 
+#include "stdafx.h"
+#include <boost/regex.hpp>
+#include <boost/asio.hpp>
+#include <windows.h>
+#include <iostream>
+#include <dshow.h>
+
+#pragma comment(lib, "strmiids")
 // FFmpeg
 #include <avcodec.h>
 #include <avformat.h>
 #include <swscale.h>
-#include <iostream>
+#include <boost/thread.hpp>
+#include <boost/timer.hpp>
+
+#pragma comment(lib, "strmiids")
+
+#include "list.h"
 
 // OpenCV
 #include <cv.h>
@@ -25,7 +33,9 @@
 #include <boost/thread.hpp>
 #include <boost/timer.hpp>
 
-#include <Windows.h>
+#include "VideoEncoder.h"
+//#include <iostream>
+
 // LSD - take it for fun
 #include "LSD.h"
 
@@ -117,14 +127,21 @@ void getName(){
 }
 void initOpenCV()
 {
+selectCamera:
+	CamerasList  * CamList  = new CamerasList();
+	cout << "Please input camera index number (ex: 1)" << endl;
+	CamList->PrintList();
+    cin >> cameraInt;
 	/* initialize camera */
 	capture = cvCaptureFromCAM(cameraInt);
 
 	/* always check */
 	if (!capture)
 	{
-		fprintf(stderr, "Cannot initialize webcam!\n");
-		cin.get();
+		fprintf(stderr, "Cannot initialize selected webcam!\n");
+		goto selectCamera;
+	//cin.get();
+
 	}
 
 }
@@ -167,6 +184,7 @@ void initFFmpeg(string container, int w, int h, int fps)
 	{
 		//printf("Cannot open stream for selected name\n");
 		getName();
+		int encoderServer = encoder.ConnectToServer(outputUrl) ;
 		  goto name;
 	} 
 
@@ -268,16 +286,7 @@ void CaptureFrame(int w, int h, char* buffer, int bytespan)
 	cvReleaseImage(&destination);
 }
 
-void GenerateSample(short* buffer, int sampleCount)
-{
-	double amplitude = 20.0 * pow(10, AUDIO_VOLUME / 20.0);
-	double angularFrequency =  2 * M_PI * AUDIO_FREQUENCY / audioSampleRate;
-	for (int i = 0; i < sampleCount; i++)
-		buffer[i] = amplitude * sin(angularFrequency * (soundWaveOffset + i));
 
-	soundWaveOffset += sampleCount;
-	soundWaveOffset %= audioSampleRate;
-}
 
 char* CaptureSample()
 {
