@@ -8,8 +8,10 @@
 //#include <Pthread.h>
 
 #include <boost/thread.hpp>
+#include <signal.h>
 
 using namespace std;
+
 
 int ParseServerName()
 {
@@ -34,25 +36,43 @@ if(outputUserName == ""){
 #endif
 	return 0;
 }
-void ExitProgram() 
+
+static boost::thread captureThread;
+void CloseApplication()
+{
+	captureThread.interrupt();
+
+
+	captureThread.join();
+	while(1);
+}
+
+void WaitingForExitProgram() 
 {
 	string quite;
-		while(quite != "exit")
+	while(quite != "exit")
 	{
 		cout << "Input 'exit' to quite" << endl;
 		cin >> quite;
 		Sleep(250);
 	}
+	CloseApplication();
+}
+
+void SigintHandler(int param)
+{
+	cout << "User pressed Ctrl+C\n" << endl;
+	CloseApplication();
 }
 
 void CaptureLoop(void) 
 {
-	 //printf("thread_function started. Arg was %s\n", (char *)arg);
-     // pause for 3 seconds
-    // sleep(3);
-     // exit and  return a message to another thread
-     // that may be waiting for us to finish
-     //pthread_exit ("thread one all done”);
+	//printf("thread_function started. Arg was %s\n", (char *)arg);
+	// pause for 3 seconds
+	// sleep(3);
+	// exit and  return a message to another thread
+	// that may be waiting for us to finish
+	//pthread_exit ("thread one all done”);
 	while(true)
 	{
 		boost::xtime xt;
@@ -65,9 +85,11 @@ void CaptureLoop(void)
 	}
 }
 
+
+
 int main(int argc, char* argv[])
 {
-//	pthread_t capture_thread;
+	//	pthread_t capture_thread;
 
 	//TODO getopt
 	for(int i = 1; i<argc; i=i+2){
@@ -87,14 +109,12 @@ int main(int argc, char* argv[])
 #endif
 	}	
 	Sleep(1000);
-	//pthread_create (&capture_thread, NULL, capture_loop, (void*)NULL);
 
-	boost::thread workerThread(&CaptureLoop);
-	ExitProgram();
-	workerThread.interrupt();
+	captureThread = boost::thread(&CaptureLoop);
 
+	signal(SIGINT, SigintHandler);
 
-	workerThread.join();
+	WaitingForExitProgram();
 
 	return 0;
 }
