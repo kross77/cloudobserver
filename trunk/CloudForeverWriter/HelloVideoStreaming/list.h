@@ -9,6 +9,5 @@ public:
 	CamerasList(void);
 	~CamerasList(void);
 	HRESULT EnumerateDevices(REFGUID category, IEnumMoniker **ppEnum);
-	void DisplayDeviceInformation(IEnumMoniker *pEnum);
-	void PrintList();
+	int SelectFromList();
 };
