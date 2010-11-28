@@ -1,10 +1,51 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace CloudObserverWriter
 {
     public class Program
     {
+        private static Process vlcProcess;
+
+        [DllImport("Kernel32")]
+        private static extern bool SetConsoleCtrlHandler(HandlerRoutine handler, bool add);
+
+        private delegate bool HandlerRoutine(CtrlTypes ctrlType);
+
+        private enum CtrlTypes
+        {
+            CTRL_C_EVENT,
+            CTRL_BREAK_EVENT,
+            CTRL_CLOSE_EVENT,
+            CTRL_LOGOFF_EVENT,
+            CTRL_SHUTDOWN_EVENT
+        }
+
+        private static bool ConsoleCtrlCheck(CtrlTypes ctrlType)
+        {
+            switch (ctrlType)
+            {
+                case CtrlTypes.CTRL_C_EVENT:
+                case CtrlTypes.CTRL_BREAK_EVENT:
+                case CtrlTypes.CTRL_CLOSE_EVENT:
+                case CtrlTypes.CTRL_LOGOFF_EVENT:
+                case CtrlTypes.CTRL_SHUTDOWN_EVENT:
+                    Close();
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        private static void Close()
+        {
+            if ((vlcProcess != null) && (!vlcProcess.HasExited))
+                vlcProcess.Kill();
+
+            Environment.Exit(0);
+        }
+
         public static void Main(string[] args)
         {
             Console.WriteLine("Cloud Observer Writer 1.0.0");
@@ -72,14 +113,16 @@ namespace CloudObserverWriter
                 Console.WriteLine("Stream will have the following nickname: " + nickname);
             Console.WriteLine();
 
+            HandlerRoutine consoleCtrlHandler = new HandlerRoutine(ConsoleCtrlCheck);
+            SetConsoleCtrlHandler(consoleCtrlHandler, true);
+
             ProcessStartInfo vlcProcessStartInfo = new ProcessStartInfo();
             vlcProcessStartInfo.FileName = @".\VLC\vlc1.exe";
             vlcProcessStartInfo.Arguments = "-I -o " + (webcam ? "dshow:// vdev adev size=\"640x480\"" : ("-R " + url + " --file-caching=10 --rtsp-caching=10 --realrtsp-caching=10 --rtsp-session-timeout=-1")) +
                 " --sout=\"#transcode{vcodec=FLV1,acodec=mp3,ab=128,channels=2,samplerate=44100}:duplicate{dst=std{access=http{mime=video/x-flv},mux=ffmpeg{flv},dst=:8095/stream.flv}}\"";
-            vlcProcessStartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            Process vlcProcess = new Process();
-            vlcProcess.StartInfo = vlcProcessStartInfo;
-            vlcProcess.Start();
+            vlcProcessStartInfo.CreateNoWindow = true;
+
+            vlcProcess = Process.Start(vlcProcessStartInfo);
 
             StreamProxy streamProxy = new StreamProxy(new Uri(server), nickname);
             Console.WriteLine("Your stream is now being broadcasted. Press any key to stop and exit...");
@@ -87,14 +130,7 @@ namespace CloudObserverWriter
             streamProxy.Start();
             Console.ReadKey();
             streamProxy.Stop();
-
-            try
-            {
-                vlcProcess.Kill();
-            }
-            catch (Exception)
-            {
-            }
+            Close();
         }
     }
 }
