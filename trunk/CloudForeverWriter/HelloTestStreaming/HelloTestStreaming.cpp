@@ -15,7 +15,7 @@
 #include <swscale.h>
 #include <boost/thread.hpp>
 #include <boost/timer.hpp>
-#include <boost/date_time.hpp>
+  #include <time.h>
 
 
 #pragma comment(lib, "strmiids")
@@ -71,8 +71,13 @@ char* sample;
 URLContext* StreamToUrl;
 
 // OpenCV
-IplImage* CVframe;
+
 CvFont font;
+IplImage* CVframe;
+IplImage* CVframeWithText ;
+CvPoint UL;
+CvPoint LR;
+
 /* display current frame */
 
 // Samples Generator
@@ -108,6 +113,9 @@ boost::timer timerForMain;
 
 bool rainbow; 
 bool randomSound;
+
+
+
 void replace_or_merge(std::string &a, const std::string &b, const std::string &c)
 {
 	const std::string::size_type pos_b_in_a = a.find(b);
@@ -147,6 +155,13 @@ void initOpenCV()
 
 	encoder.hasVideo = true;
 	    cvInitFont( &font, CV_FONT_HERSHEY_DUPLEX  , 2, 1, 0.0, 3, CV_AA );
+		CvPoint UL = {0,0};
+		CvPoint LR = {videoWidth,videoHeight};
+		 CVframe = cvCreateImage(cvSize(videoWidth, videoHeight),8, 4 );
+		  CVframeWithText = cvCreateImage(cvSize(videoWidth, videoHeight),8, 4 );
+		 cvRectangle( CVframe, UL, LR, CV_RGB(0,254,53), CV_FILLED);
+
+		 cvPutText(CVframe, outputUserName.c_str(), cvPoint(0,videoHeight-10), &font , CV_RGB(1,1,1));
 
 }
 
@@ -222,14 +237,7 @@ void init()
 	initFFmpeg(outputContainer, videoWidth, videoHeight, videoFrameRate);
 	
 }
-int drawRect(IplImage* image, int x1, int y1, int x2, int y2,
-			  CvScalar color)
-{
-	CvPoint UL = {x1,y1};
-	CvPoint LR = {x2,y2};
-	cvRectangle( image, UL, LR, color);
-	return 0;
-}
+
 void CaptureFrame(int w, int h, char* buffer, int bytespan)
 {
 	if(rainbow){
@@ -249,44 +257,32 @@ void CaptureFrame(int w, int h, char* buffer, int bytespan)
 	}
 	seed = seed + 2.2;
 	}else{
-			CVframe = cvCreateImage(cvSize(videoWidth, videoHeight),8, 4 );
 
-		drawRect(CVframe, 0, 0, w, h, CV_RGB(100, 100, 100));
+		
+		//cvZero( CVframe );
+  cvResize(CVframe, CVframeWithText);
 
-		cvPutText(CVframe, outputUserName.c_str(), cvPoint(0,h-10), &font , CV_RGB(0,0,0));
-		std::ostringstream msg;
-		const boost::posix_time::ptime now=
-			boost::posix_time::second_clock::local_time();
-		boost::posix_time::time_facet*const f=
-			new boost::posix_time::time_facet("%H:%M:%S");
-		msg.imbue(std::locale(msg.getloc(),f));
-		msg << now;
-	string cvtext;
-		cvtext += msg.str();
-		cvPutText(CVframe, cvtext.c_str(), cvPoint(0,(h/2+10)), &font , CV_RGB(0,0,0));
 
-IplImage* redchannel = cvCreateImage(cvGetSize(CVframe), 8, 1);
-IplImage* greenchannel = cvCreateImage(cvGetSize(CVframe), 8, 1);
-IplImage* bluechannel = cvCreateImage(cvGetSize(CVframe), 8, 1);
+		char timeStr [9];
+		_strtime( timeStr );
+		//printf( "The current time is %s \n", timeStr);
 
-cvSplit(CVframe, bluechannel, greenchannel, redchannel, NULL);
 
-for(int y = 0; y < CVframe->height; y++)
-{
-	char* line = buffer + y * bytespan;
-	for(int x = 0; x < CVframe->width; x++)
-	{
-		line[0] = cvGetReal2D(redchannel, y, x);
-		line[1] = cvGetReal2D(greenchannel, y, x);
-		line[2] = cvGetReal2D(bluechannel, y, x);
-		line += 3;
-	}
-}
+		string cvtext;
+		cvtext += timeStr;
+		cvPutText(CVframeWithText, cvtext.c_str(), cvPoint(0,(h/2+10)), &font , CV_RGB(1,1,1));
 
-cvReleaseImage(&redchannel);
-cvReleaseImage(&greenchannel);
-cvReleaseImage(&bluechannel);
-cvReleaseImage(&CVframe);
+		for(int i = 0; i < w*4*h; i=i+4)
+		{ 
+
+			buffer[0] = CVframeWithText->imageData[i];
+			buffer[1] = CVframeWithText->imageData[i+1];
+			buffer[2] = CVframeWithText->imageData[i+2];
+			buffer+=3;
+		}
+
+
+//cvReleaseImage(&CVframe);
 
 	}
 
@@ -389,6 +385,9 @@ break;
 }
 int main(int argc, char* argv[])
 {
+
+	rainbow = false;
+	randomSound = false;
 	videoFrameRate = 15;
 	videoWidth = 320;
 	videoHeight =  240;
