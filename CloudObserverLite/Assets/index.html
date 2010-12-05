@@ -18,6 +18,10 @@ p{color: #000;text-shadow: 0px 1px 1px #fff;padding-bottom:1em}
 input[type="button"], .eButton {width: 150px;padding: 5px 10px;word-wrap: break-word;height: auto;}
 </style>
 </head> <body>
+<script>
+var exNames = []; var wins = []; var w=0; var h=0; var maxHeight = 0; var firstRun = 0;
+openWin = function(name, width, height){ var winsJoin = "|" + exNames.join("|") + "|"; var closedWins = []; for (var i = 0; i < wins.length; ++i){ if(wins[i].closed){closedWins.push(exNames[i]);}} var closedJoin = "|" + closedWins.join("|") + "|"; if(winsJoin.indexOf('|'+name+'|') == -1 || closedJoin.indexOf('|'+name+'|') != -1  ){ if(height > maxHeight){ maxHeight = height + 5;} if(window.screenX >= screen.width/2 ){ if(window.screenX + 102 - w - width < 0){w=0;  h=h+maxHeight; top=h+1; maxHeight=0; if(screen.height - h - height < 0){h=0;} } } if(window.screenX < screen.width/2){ if(firstRun == 0){w=window.screenX+330; firstRun=1; } if(screen.width - w - width < 0){w=window.screenX+330;  h=h+maxHeight; top=h+1; maxHeight=0; if(screen.height - h - height < 0){h=0;}}} left=w+1; tops=h+30; w=w+width+7; var file='./'+name+'.flv?action=play'; var settings='width='+width+', height='+height+', left='+left+', top='+tops+', screenX='+left+', screenY='+tops; wins.push(window.open(file, name, settings)); exNames.push(name); } for (var i = 0; i < wins.length; ++i){ wins[i].focus();}}
+</script>
 <div id="nifty">
 <b class="rtop"><b class="r1"></b><b class="r2"></b><b class="r3"></b><b class="r4"></b></b>
 <h1>Cloud Observer</h1> <p><b>Live video streaming</b></p>

@@ -499,7 +499,7 @@ namespace CloudObserverLite
                 case "/":
                     string onlineUsers = "";
                     foreach (string nickname in server.streams.Keys)
-                        onlineUsers += "<li><FORM><INPUT class=\"eButton\" type=\"button\" value=\"" + nickname + "\" onClick=\"window.open('./" + nickname + "?action=play','" + nickname + "','width=400,height=200,left=400,top=100,screenX=400,screenY=100')\"></FORM></li>\n";
+                        onlineUsers += "<li><FORM><INPUT class=\"eButton\" type=\"button\" value=\"" + nickname + "\" onClick=\"openWin('"+ nickname+ "'" + ",320,240)\"></FORM></li>\n";
                     httpResponse.bodyData = Encoding.ASCII.GetBytes(Resources.index_html.Replace("_ONLINE_USERS_", onlineUsers));
                     break;
                 case "/history/history.css":
