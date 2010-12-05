@@ -70,6 +70,9 @@ URLContext* StreamToUrl;
 CvCapture* capture;
 IplImage* CVframe;
 IplImage* destination;
+IplImage* redchannel;
+IplImage* greenchannel ;
+IplImage* bluechannel ;
 /* display current frame */
 
 // Samples Generator
@@ -112,6 +115,14 @@ struct limited_cmp {
 		return (left < right);
 	}
 };
+
+int GetEvan(int number){
+while ( number % 4 != 0)
+{
+	 ++number;
+}
+return number;
+}
 
 void replace_or_merge(std::string &a, const std::string &b, const std::string &c)
 {
@@ -158,12 +169,27 @@ selectCamera:
 
 	/* initialize camera */
 	capture = cvCaptureFromCAM(cameraInt);
+
 	cvSetCaptureProperty(capture, CV_CAP_PROP_FPS   , videoFrameRate );
 	int myArr[] = {320, 640, 1280};
 	std::vector<int> WidthNumbers( myArr, myArr + sizeof(myArr) / sizeof(myArr[0]) );
+	int nearestWidth = *std::max_element(WidthNumbers.begin(), WidthNumbers.end(), limited_cmp(videoWidth));
+	if(nearestWidth == 320){
+	cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH , (double)  320);
+	cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT  , (double) 240);
+	}
+	if(nearestWidth == 640){
+		cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH , (double)  640);
+	
+		cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT  , (double) 480);
+	
+	}
+	if(nearestWidth == 1280){
+		cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH , (double)  1280);
+		cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT  , (double) 720);
+	}
 
-	cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH , (double) *std::max_element(WidthNumbers.begin(), WidthNumbers.end(), limited_cmp(videoWidth)) );
-	//cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT  , double value );
+	//capture = cvCaptureFromCAM(cameraInt);
 
 	/* always check */
 	if (!capture)
@@ -173,9 +199,13 @@ selectCamera:
 	//cin.get();
 
 	}
-	CVframe = cvQueryFrame(capture);
-	 destination = cvCreateImage(cvSize(videoWidth, videoHeight), CVframe->depth, CVframe->nChannels);
 
+	CVframe = cvQueryFrame(capture);
+    //cvSaveImage("test.jpg" ,CVframe);
+	 destination = cvCreateImage(cvSize(videoWidth, videoHeight), CVframe->depth, CVframe->nChannels);
+	  redchannel = cvCreateImage(cvGetSize(destination), 8, 1);
+	  greenchannel = cvCreateImage(cvGetSize(destination), 8, 1);
+	  bluechannel = cvCreateImage(cvGetSize(destination), 8, 1);
 	encoder.hasVideo = true;
 	}
 
@@ -324,9 +354,10 @@ void init()
 
 void CaptureFrame(int w, int h, char* buffer, int bytespan)
 {
+
 	/* get a frame */
 	CVframe = cvQueryFrame(capture);
-
+//cvSaveImage("test1.jpg" ,CVframe);
 	/* always check */
 	if (!CVframe)
 	{
@@ -338,7 +369,7 @@ void CaptureFrame(int w, int h, char* buffer, int bytespan)
 	
 	//use cvResize to resize source to a destination image
 	cvResize(CVframe, destination);
-
+//cvSaveImage("test2.jpg" ,destination);
 	switch(useLSD){
 		case false:{} break;
 		case true:{
@@ -373,7 +404,8 @@ void CaptureFrame(int w, int h, char* buffer, int bytespan)
 			free_ntuple_list(lsdOut);
 				  } break;
 	}
-	for(int i = 0; i < w*3*h; i=i+3)
+	
+	for(int i = 0; i < destination->imageSize; i=i+3)
 	{ 
 
 		buffer[2] = destination->imageData[i];
@@ -381,6 +413,24 @@ void CaptureFrame(int w, int h, char* buffer, int bytespan)
 		buffer[0] = destination->imageData[i+2];
 		buffer+=3;
 	}
+
+
+// 	cvSplit(destination, bluechannel, greenchannel, redchannel, NULL);
+// 	for(int y = 0; y < destination->height; y++)
+// 	{
+// 		char* line = buffer + y * bytespan;
+// 		for(int x = 0; x < destination->width; x++)
+// 		{
+// 			line[0] = cvGetReal2D(redchannel, y, x);
+// 			line[1] = cvGetReal2D(greenchannel, y, x);
+// 			line[2] = cvGetReal2D(bluechannel, y, x);
+// 			line += 3;
+// 		}
+// 	}
+
+// 	for (int i = 0; i < w*h*3; ++i) {
+// 		 buffer[i] = destination->imageData;
+// 	}
 	
 }
 
@@ -406,8 +456,8 @@ void closeOpenCV()
 {
 	//cvDestroyWindow("HelloVideoEncoding");
 	cvReleaseCapture(&capture);
-	cvReleaseImage(&destination);
-	cvReleaseImage(&CVframe);
+//	cvReleaseImage(&destination);
+//	cvReleaseImage(&CVframe);
 }
 
 void closeOpenAL()
@@ -487,12 +537,12 @@ int main(int argc, char* argv[])
 {
 	cameraInt = 0;
 	videoFrameRate = 15;
-	videoWidth = 320;
-	videoHeight =  240;
+	videoWidth = 320; // use at least 640  to get full super HD Qualyty
+	videoHeight =  240; // use at least 480 to get full super HD Qualyty
 	microphoneInt = 1;
 	audioSampleRate = 44100;
 	outputContainer +="flv";
-	streamBitRate = 250000;
+	streamBitRate = 250000; // use at least 700000 to get full super HD Qualyty
 	for(int i = 1; i<argc; i=i+2){
 	//	cout << "i = " << i << "; argv[i] = " << argv[i] << endl;
 if(string(argv[i]) == "-camera") {cameraInt = atoi(argv[i+1]);} 
@@ -508,6 +558,9 @@ if(string(argv[i]) == "-useLSD" ) {useLSD = atoi(argv[i+1]);}
 if(string(argv[i]) == "-streamBitRate" ) {streamBitRate = atoi(argv[i+1]);} 
 	// example -server http://127.0.0.1:4773 -nickname vasia 
 		}	
+
+videoHeight = GetEvan(videoHeight);
+videoWidth = GetEvan(videoWidth);
 	//Sleep(1000);
 	desiredTimeForCaptureFame = 1000.0f / videoFrameRate;
 	desiredTimeForMain = 1000.0f / videoFrameRate;
