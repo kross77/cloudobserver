@@ -69,6 +69,7 @@ URLContext* StreamToUrl;
 // OpenCV
 CvCapture* capture;
 IplImage* CVframe;
+IplImage* destination;
 /* display current frame */
 
 // Samples Generator
@@ -99,6 +100,19 @@ double spendedTimeForMain;
 
 boost::timer timerForCaptureFame;
 boost::timer timerForMain;
+
+struct limited_cmp {
+	int limit;
+	limited_cmp(int a_limit) : limit(a_limit) {
+	}
+	bool operator()(int left, int right) const {
+		if (left <= limit && limit < right) {
+			return false;
+		}
+		return (left < right);
+	}
+};
+
 void replace_or_merge(std::string &a, const std::string &b, const std::string &c)
 {
 	const std::string::size_type pos_b_in_a = a.find(b);
@@ -144,6 +158,12 @@ selectCamera:
 
 	/* initialize camera */
 	capture = cvCaptureFromCAM(cameraInt);
+	cvSetCaptureProperty(capture, CV_CAP_PROP_FPS   , videoFrameRate );
+	int myArr[] = {320, 640, 1280};
+	std::vector<int> WidthNumbers( myArr, myArr + sizeof(myArr) / sizeof(myArr[0]) );
+
+	cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH , (double) *std::max_element(WidthNumbers.begin(), WidthNumbers.end(), limited_cmp(videoWidth)) );
+	//cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT  , double value );
 
 	/* always check */
 	if (!capture)
@@ -153,6 +173,9 @@ selectCamera:
 	//cin.get();
 
 	}
+	CVframe = cvQueryFrame(capture);
+	 destination = cvCreateImage(cvSize(videoWidth, videoHeight), CVframe->depth, CVframe->nChannels);
+
 	encoder.hasVideo = true;
 	}
 
@@ -312,8 +335,7 @@ void CaptureFrame(int w, int h, char* buffer, int bytespan)
 	}
 
 	/* display current frame */
-	IplImage* destination = cvCreateImage(cvSize(w, h), CVframe->depth, CVframe->nChannels);
-
+	
 	//use cvResize to resize source to a destination image
 	cvResize(CVframe, destination);
 
@@ -351,27 +373,15 @@ void CaptureFrame(int w, int h, char* buffer, int bytespan)
 			free_ntuple_list(lsdOut);
 				  } break;
 	}
-	// buffer = destination->imageData;
-	IplImage* redchannel = cvCreateImage(cvGetSize(destination), 8, 1);
-	IplImage* greenchannel = cvCreateImage(cvGetSize(destination), 8, 1);
-	IplImage* bluechannel = cvCreateImage(cvGetSize(destination), 8, 1);
+	for(int i = 0; i < w*3*h; i=i+3)
+	{ 
 
-	cvSplit(destination, bluechannel, greenchannel, redchannel, NULL);
-	for(int y = 0; y < destination->height; y++)
-	{
-		char* line = buffer + y * bytespan;
-		for(int x = 0; x < destination->width; x++)
-		{
-			line[0] = cvGetReal2D(redchannel, y, x);
-			line[1] = cvGetReal2D(greenchannel, y, x);
-			line[2] = cvGetReal2D(bluechannel, y, x);
-			line += 3;
-		}
+		buffer[2] = destination->imageData[i];
+		buffer[1] = destination->imageData[i+1];
+		buffer[0] = destination->imageData[i+2];
+		buffer+=3;
 	}
-	cvReleaseImage(&redchannel);
-	cvReleaseImage(&greenchannel);
-	cvReleaseImage(&bluechannel);
-	cvReleaseImage(&destination);
+	
 }
 
 
@@ -396,6 +406,8 @@ void closeOpenCV()
 {
 	//cvDestroyWindow("HelloVideoEncoding");
 	cvReleaseCapture(&capture);
+	cvReleaseImage(&destination);
+	cvReleaseImage(&CVframe);
 }
 
 void closeOpenAL()
