@@ -513,13 +513,13 @@ AVStream *VideoEncoder::AddVideoStream(AVFormatContext *pContext, CodecID codec_
 	identically 1. */
 	pCodecCxt->time_base.den = fps;
 	pCodecCxt->time_base.num = 1;
-	pCodecCxt->gop_size = 5; // emit one intra frame every twelve frames at most
+	pCodecCxt->gop_size = 10; // emit one intra frame every twelve frames at most
 
 	pCodecCxt->pix_fmt = PIX_FMT_YUV420P;
 	if (pCodecCxt->codec_id == CODEC_ID_MPEG2VIDEO) 
 	{
 		// Just for testing, we also add B frames 
-		pCodecCxt->max_b_frames = 2;
+		pCodecCxt->max_b_frames = 5;
 	}
 	if (pCodecCxt->codec_id == CODEC_ID_MPEG1VIDEO)
 	{
@@ -557,7 +557,7 @@ AVStream * VideoEncoder::AddAudioStream(AVFormatContext *pContext, CodecID codec
 	pCodecCxt->codec_id = codec_id;
 	pCodecCxt->codec_type = CODEC_TYPE_AUDIO;
 	// Set format
-	pCodecCxt->bit_rate    = 128000;
+	pCodecCxt->bit_rate    = MAX_AUDIO_PACKET_SIZE - 1024*10;
 	pCodecCxt->sample_rate = audioSampleRate;
 	pCodecCxt->channels    = 1;
 	pCodecCxt->sample_fmt  = SAMPLE_FMT_S16;
