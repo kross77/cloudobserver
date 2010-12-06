@@ -23,6 +23,9 @@ namespace CloudObserverLite
 
         private string nickname;
 
+        public int width;
+        public int height;
+
         private List<FLVReader> readers;
         private List<FLVReader> disconnectedReaders;
 
@@ -316,6 +319,9 @@ namespace CloudObserverLite
 
                                 if (tagHeader[0] == TAGTYPE_DATA)
                                 {
+                                    width = (int)GetDoubleVariableFromFLVScriptTag(tagData, "width");
+                                    height = (int)GetDoubleVariableFromFLVScriptTag(tagData, "height");
+
                                     scriptData.Add(tagHeader);
                                     scriptData.Add(tagData);
                                 }
@@ -399,6 +405,16 @@ namespace CloudObserverLite
             result = result.Replace('.', '-');
             result = result.Replace(':', '-');
             return result;
+        }
+
+        private double GetDoubleVariableFromFLVScriptTag(byte[] scriptTagData, string variableName)
+        {
+            string temp = Encoding.ASCII.GetString(scriptTagData);
+            int index = temp.IndexOf(variableName) + variableName.Length + 1;
+            byte[] reversed = new byte[8];
+            for (int i = 0; i < 8; i++)
+                reversed[7 - i] = scriptTagData[index + i];
+            return BitConverter.ToDouble(reversed, 0);
         }
 
         private void OnResponse(ref HttpRequestStruct httpRequest, ref HttpResponseStruct httpResponse)
@@ -499,7 +515,7 @@ namespace CloudObserverLite
                 case "/":
                     string onlineUsers = "";
                     foreach (string nickname in server.streams.Keys)
-                        onlineUsers += "<li><FORM><INPUT class=\"eButton\" type=\"button\" value=\"" + nickname + "\" onClick=\"openWin('"+ nickname+ "'" + ",320,240)\"></FORM></li>\n";
+                        onlineUsers += "<li><FORM><INPUT class=\"eButton\" type=\"button\" value=\"" + nickname + "\" onClick=\"openWin('" + nickname + "'" + "," + ((CloudClient)server.streams[nickname]).width + "," + ((CloudClient)server.streams[nickname]).height + ")\"></FORM></li>\n";
                     httpResponse.bodyData = Encoding.ASCII.GetBytes(Resources.index_html.Replace("_ONLINE_USERS_", onlineUsers));
                     break;
                 case "/history/history.css":
