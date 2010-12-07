@@ -106,6 +106,9 @@ void VideoEncoder::WriteToUrl(const unsigned char *buf, int size)
 try
 {
 boost::asio::write(s, boost::asio::buffer(buf, size));
+
+av_free(&buf);
+//buf = NULL;
 }
 catch (std::exception& e)
 {
@@ -208,7 +211,6 @@ int VideoEncoder::InitUrl(std::string& container, std::string& tcpUrl, std::stri
 		WriteToUrl((unsigned char *)pb_buffer, len);
 	}
 	if(res == true){
-		boost::thread (&VideoEncoder::UrlWriteData, this);
 		return 1;
 	}
 	if(res == false){
@@ -659,7 +661,7 @@ bool VideoEncoder::AddVideoFrame(AVFormatContext *pFormatContext, AVFrame * pOut
 		unsigned char *pb_buffer;
 		int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
 
-		AddFrameToQueue((unsigned char *)pb_buffer, len);
+		WriteToUrl((unsigned char *)pb_buffer, len);
 
 		res = true;
 	} 
@@ -693,7 +695,7 @@ bool VideoEncoder::AddVideoFrame(AVFormatContext *pFormatContext, AVFrame * pOut
 			unsigned char *pb_buffer;
 			int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
 
-			AddFrameToQueue((unsigned char *)pb_buffer, len);
+			WriteToUrl((unsigned char *)pb_buffer, len);
 
 		}
 		else 
@@ -750,7 +752,7 @@ bool VideoEncoder::AddAudioSample(AVFormatContext *pFormatContext, AVStream *pSt
 		unsigned char *pb_buffer;
 		int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
 
-		AddSampleToQueue((unsigned char *)pb_buffer, len);
+		WriteToUrl((unsigned char *)pb_buffer, len);
 
 
 		nCurrentSize -= packSizeInSize;  
@@ -764,26 +766,9 @@ bool VideoEncoder::AddAudioSample(AVFormatContext *pFormatContext, AVStream *pSt
 	return res;
 }
 
-void VideoEncoder::UrlWriteData()
-{
-
-}
 
 
-void VideoEncoder::AddSampleToQueue(const unsigned char *buf, int size )
-{	
-WriteToUrl( (unsigned char *)buf, size);
-	//WriteToUrl( (unsigned char *)newAudioSample->buffer, newAudioSample->len);
-	//AudioSamples.try_pop(newAudioSample);
-	//ToDo: память не чистим newAudioSample, newAudioSample->buffer.
-}
 
-void VideoEncoder::AddFrameToQueue(const unsigned char *buf, int size )
-{
-WriteToUrl( (unsigned char *)buf, size);
-	//ToDo: память не чистим newVideoSample, newVideoSample->buffer.
-
-}
 void VideoEncoder::tcpExtract(std::string const& ip, std::string& address, std::string& service)
 {
 	boost::regex e("tcp://(.+):(\\d+)/");

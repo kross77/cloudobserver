@@ -257,21 +257,10 @@ void CaptureFrame(int w, int h, char* buffer, int bytespan)
 	}
 	seed = seed + 2.2;
 	}else{
-
-		
-		//cvZero( CVframe );
   cvResize(CVframe, CVframeWithText);
-
-
 		char timeStr [9];
 		_strtime( timeStr );
-		//printf( "The current time is %s \n", timeStr);
-
-
-		string cvtext;
-		cvtext += timeStr;
-		cvPutText(CVframeWithText, cvtext.c_str(), cvPoint(0,(h/2+10)), &font , CV_RGB(1,1,1));
-
+		cvPutText(CVframeWithText, timeStr, cvPoint(0,(h/2+10)), &font , CV_RGB(1,1,1));
 		for(int i = 0; i < w*4*h; i=i+4)
 		{ 
 
@@ -280,10 +269,6 @@ void CaptureFrame(int w, int h, char* buffer, int bytespan)
 			buffer[2] = CVframeWithText->imageData[i+2];
 			buffer+=3;
 		}
-
-
-//cvReleaseImage(&CVframe);
-
 	}
 
 }
@@ -294,7 +279,6 @@ char* CaptureSample()
 {
 
 	if(randomSound){
-	                     // simulate rolling a die
 	for (int i = 0; i < nSampleSize / nBlockAlign; i ++)
 	{
 		// Sound :)
@@ -305,9 +289,7 @@ char* CaptureSample()
 }
 
 void closeOpenCV()
-{
-	//cvDestroyWindow("HelloVideoEncoding");
-	
+{	
 }
 
 void closeOpenAL()
@@ -340,7 +322,7 @@ void ThreadCaptureFrame()
 {	while(1){
 	timerForCaptureFame.restart();
 	CaptureFrame( videoWidth, videoHeight, (char *)frame->data[0],frame->linesize[0]);
-	AVFrame* swap = frame;
+AVFrame* swap = frame;
 	frame = readyFrame;
 	readyFrame = swap;
 	spendedTimeForCaptureFame = timerForCaptureFame.elapsed();
@@ -389,11 +371,11 @@ int main(int argc, char* argv[])
 	rainbow = false;
 	randomSound = false;
 	videoFrameRate = 15;
-	videoWidth = 320;
-	videoHeight =  240;
+	videoWidth = 1280;
+	videoHeight =  720;
 	audioSampleRate = 44100;
 	outputContainer +="flv";
-	streamBitRate = 250000;
+	streamBitRate = 1280000;
 	rainbow = false;
 	for(int i = 1; i<argc; i=i+2){
 	//	cout << "i = " << i << "; argv[i] = " << argv[i] << endl;
