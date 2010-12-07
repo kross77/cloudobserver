@@ -156,9 +156,8 @@ private:
 	// Free recourses. ToDo: Check, if it all works fine kill it.
 	void Free();
 	bool NeedConvert();
-	void UrlWriteData();
-	void AddSampleToQueue(const unsigned char *buf, int size );
-	void AddFrameToQueue(const unsigned char *buf, int size );
+
+
 
 };
 
