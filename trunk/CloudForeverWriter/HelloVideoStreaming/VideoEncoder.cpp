@@ -208,7 +208,6 @@ int VideoEncoder::InitUrl(std::string& container, std::string& tcpUrl, std::stri
 		WriteToUrl((unsigned char *)pb_buffer, len);
 	}
 	if(res == true){
-		boost::thread (&VideoEncoder::UrlWriteData, this);
 		return 1;
 	}
 	if(res == false){
@@ -514,12 +513,11 @@ AVStream *VideoEncoder::AddVideoStream(AVFormatContext *pContext, CodecID codec_
 	pCodecCxt->time_base.den = fps;
 	pCodecCxt->time_base.num = 1;
 	pCodecCxt->gop_size = 10; // emit one intra frame every twelve frames at most
-
 	pCodecCxt->pix_fmt = PIX_FMT_YUV420P;
 	if (pCodecCxt->codec_id == CODEC_ID_MPEG2VIDEO) 
 	{
 		// Just for testing, we also add B frames 
-		pCodecCxt->max_b_frames = 5;
+		pCodecCxt->max_b_frames = 2;
 	}
 	if (pCodecCxt->codec_id == CODEC_ID_MPEG1VIDEO)
 	{
@@ -659,8 +657,8 @@ bool VideoEncoder::AddVideoFrame(AVFormatContext *pFormatContext, AVFrame * pOut
 		unsigned char *pb_buffer;
 		int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
 
-		AddFrameToQueue((unsigned char *)pb_buffer, len);
-
+		WriteToUrl((unsigned char *)pb_buffer, len);
+	//	free(&pb_buffer);
 		res = true;
 	} 
 	else 
@@ -693,7 +691,7 @@ bool VideoEncoder::AddVideoFrame(AVFormatContext *pFormatContext, AVFrame * pOut
 			unsigned char *pb_buffer;
 			int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
 
-			AddFrameToQueue((unsigned char *)pb_buffer, len);
+			WriteToUrl((unsigned char *)pb_buffer, len);
 
 		}
 		else 
@@ -750,7 +748,7 @@ bool VideoEncoder::AddAudioSample(AVFormatContext *pFormatContext, AVStream *pSt
 		unsigned char *pb_buffer;
 		int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
 
-		AddSampleToQueue((unsigned char *)pb_buffer, len);
+		WriteToUrl((unsigned char *)pb_buffer, len);
 
 
 		nCurrentSize -= packSizeInSize;  
@@ -764,26 +762,6 @@ bool VideoEncoder::AddAudioSample(AVFormatContext *pFormatContext, AVStream *pSt
 	return res;
 }
 
-void VideoEncoder::UrlWriteData()
-{
-
-}
-
-
-void VideoEncoder::AddSampleToQueue(const unsigned char *buf, int size )
-{	
-WriteToUrl( (unsigned char *)buf, size);
-	//WriteToUrl( (unsigned char *)newAudioSample->buffer, newAudioSample->len);
-	//AudioSamples.try_pop(newAudioSample);
-	//ToDo: память не чистим newAudioSample, newAudioSample->buffer.
-}
-
-void VideoEncoder::AddFrameToQueue(const unsigned char *buf, int size )
-{
-WriteToUrl( (unsigned char *)buf, size);
-	//ToDo: память не чистим newVideoSample, newVideoSample->buffer.
-
-}
 void VideoEncoder::tcpExtract(std::string const& ip, std::string& address, std::string& service)
 {
 	boost::regex e("tcp://(.+):(\\d+)/");

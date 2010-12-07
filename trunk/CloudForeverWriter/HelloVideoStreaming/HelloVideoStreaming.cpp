@@ -171,9 +171,12 @@ selectCamera:
 	capture = cvCaptureFromCAM(cameraInt);
 
 	cvSetCaptureProperty(capture, CV_CAP_PROP_FPS   , videoFrameRate );
-	int myArr[] = {320, 640, 1280};
-	std::vector<int> WidthNumbers( myArr, myArr + sizeof(myArr) / sizeof(myArr[0]) );
-	int nearestWidth = *std::max_element(WidthNumbers.begin(), WidthNumbers.end(), limited_cmp(videoWidth));
+
+	
+	if(	cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH , (double)  videoWidth) == 0){
+		int myArr[] = {320, 640, 1280};
+		std::vector<int> WidthNumbers( myArr, myArr + sizeof(myArr) / sizeof(myArr[0]) );
+		int nearestWidth = *std::max_element(WidthNumbers.begin(), WidthNumbers.end(), limited_cmp(videoWidth));
 	if(nearestWidth == 320){
 	cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH , (double)  320);
 	cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT  , (double) 240);
@@ -188,7 +191,7 @@ selectCamera:
 		cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH , (double)  1280);
 		cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT  , (double) 720);
 	}
-
+	}
 	//capture = cvCaptureFromCAM(cameraInt);
 
 	/* always check */
@@ -537,12 +540,12 @@ int main(int argc, char* argv[])
 {
 	cameraInt = 0;
 	videoFrameRate = 15;
-	videoWidth = 320; // use at least 640  to get full super HD Qualyty
-	videoHeight =  240; // use at least 480 to get full super HD Qualyty
+	videoWidth = 1024; // default for WSVGA and XGA // use at least 640  to get full super HD Qualyty
+	videoHeight =  768; // default for XGA // use at least 480 to get full super HD Qualyty
 	microphoneInt = 1;
 	audioSampleRate = 44100;
 	outputContainer +="flv";
-	streamBitRate = 250000; // use at least 700000 to get full super HD Qualyty
+	streamBitRate = 1.5 * videoWidth * 1024;  /*videoWidth * 150*/; // use at least 700000 to get full super HD Qualyty
 	for(int i = 1; i<argc; i=i+2){
 	//	cout << "i = " << i << "; argv[i] = " << argv[i] << endl;
 if(string(argv[i]) == "-camera") {cameraInt = atoi(argv[i+1]);} 
@@ -556,7 +559,7 @@ if(string(argv[i]) == "-container" ) {outputContainer = (argv[i+1]);}
 if(string(argv[i]) == "-nickname" ) {outputUserName = (argv[i+1]);} 
 if(string(argv[i]) == "-useLSD" ) {useLSD = atoi(argv[i+1]);} 
 if(string(argv[i]) == "-streamBitRate" ) {streamBitRate = atoi(argv[i+1]);} 
-	// example -server http://127.0.0.1:4773 -nickname vasia 
+	// example -server http://127.0.0.1:4773 -nickname vasia  // if you change w and h do not forget about stream bit rate!!!
 		}	
 
 videoHeight = GetEvan(videoHeight);
