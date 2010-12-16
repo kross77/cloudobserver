@@ -518,6 +518,12 @@ namespace CloudObserverLite
                         onlineUsers += "<li><FORM><INPUT class=\"eButton\" type=\"button\" value=\"" + nickname + "\" onClick=\"openWin('" + nickname + "'" + "," + ((CloudClient)server.streams[nickname]).width + "," + ((CloudClient)server.streams[nickname]).height + ")\"></FORM></li>\n";
                     httpResponse.bodyData = Encoding.ASCII.GetBytes(Resources.index_html.Replace("_ONLINE_USERS_", onlineUsers));
                     break;
+                case "/buttons.html":
+                    string buttons = "";
+                    foreach (string nickname in server.streams.Keys)
+                        buttons += "<li><FORM><INPUT class=\"eButton\" type=\"button\" value=\"" + nickname + "\" onClick=\"openWin('" + nickname + "'" + "," + ((CloudClient)server.streams[nickname]).width + "," + ((CloudClient)server.streams[nickname]).height + ")\"></FORM></li>\n";
+                    httpResponse.bodyData = Encoding.ASCII.GetBytes(buttons);
+                    break;
                 case "/history/history.css":
                     httpResponse.bodyData = Resources.history_history_css;
                     break;
