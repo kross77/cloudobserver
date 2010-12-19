@@ -3,17 +3,19 @@
 
 #include <stdio.h>
 #include <unistd.h>
+#include <string.h>
+#include <iostream>
 #include <fcntl.h>
 #include <sys/ioctl.h>
-#include <linux/videodev.h>
-#include <boost/lexical_cast.hpp>
+#include <linux/videodev2.h>
+//#include <boost/lexical_cast.hpp>
 
-  #include "videodev.h"
-  #include "videodev2.h"
+ // #include "videodev.h"
+  //#include "videodev2.h"
   
- #include "struct-dump.h"
-  #include "struct-v4l.h"
-  #include "struct-v4l2.h"
+ //#include "struct-dump.h"
+ // #include "struct-v4l.h"
+ // #include "struct-v4l2.h"
 
 using namespace std;
 int main(){
@@ -59,8 +61,10 @@ int main(){
 		{
 			try{		
 			std::string s;
-			std::getline( cin, s, '\n' );
-			SelectedIndex =  boost::lexical_cast<int>(s);
+	
+	  cin >>	SelectedIndex;
+		//	std::getline( cin, s, '\n' );
+		//	SelectedIndex =  boost::lexical_cast<int>(s);
 			}
 			catch(std::exception& e){
 				std::cout <<"please input index from 0 to " << i-1 << std::endl;
@@ -68,7 +72,6 @@ int main(){
 			}
 		}}
 		
-	}
-
+   cin.get();
     return SelectedIndex;
 }
