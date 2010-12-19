@@ -34,9 +34,12 @@ int main(){
 	
     while((fd = open(devIndexName.c_str(), O_RDONLY)) != -1){
     	struct v4l2_capability  capability;
-
-         memset(&capability,0,sizeof(capability));
-        if (-1 == ioctl(fd,VIDIOC_QUERYCAP,&capability)){}
+   printf("general info\n");
+       memset(&capability,0,sizeof(capability));
+     if (-1 == ioctl(fd,VIDIOC_QUERYCAP,&capability)) {}
+         printf("    VIDIOC_QUERYCAP\n");
+         print_struct(stdout,desc_v4l2_capability,&capability,"",tab);
+       printf("\n");
        // попробуем вывести имя амеры
        cout << capability.card << endl;  
     devIndexName = "/dev/video";
