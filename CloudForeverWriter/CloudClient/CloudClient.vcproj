@@ -179,6 +179,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\OutStream.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\SourceStream.cpp"
 				>
 			</File>
@@ -210,6 +214,10 @@
 			>
 			<File
 				RelativePath=".\Application.h"
+				>
+			</File>
+			<File
+				RelativePath=".\OutStream.h"
 				>
 			</File>
 			<File

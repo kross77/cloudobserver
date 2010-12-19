@@ -37,6 +37,11 @@ void CApplication::MainLoop()
 	{
 		cout << "Input 'exit' to quite" << endl;
 		cin >> quite;
+		if (quite == "add") {
+			int videoId = SourceStream::startStream();
+		}
+
+
 		Sleep(250);
 	}
 	CloseApplication();

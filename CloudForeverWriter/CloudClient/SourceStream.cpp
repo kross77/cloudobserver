@@ -19,7 +19,26 @@ void SourceStream::run() {
 		boost::thread::sleep(xt);
 	}
 }
+
 void SourceStream::stopAll() {
 	//interrupt
 	//join
+}
+
+int SourceStream::stopStream(int id) {
+	//interrupt
+	//join
+	return 0;
+}
+
+int SourceStream::pauseStream(int id) {
+	return 0;
+}
+
+int SourceStream::resumeStream(int id) {
+	return 0;
+}
+
+int SourceStream::startStream() {
+	return 0;
 }
