@@ -8,6 +8,7 @@
 #include <fcntl.h>
 #include <sys/ioctl.h>
 #include <linux/videodev2.h>
+#include <linux/struct-v4l2.h>
 //#include <boost/lexical_cast.hpp>
 
  // #include "videodev.h"
