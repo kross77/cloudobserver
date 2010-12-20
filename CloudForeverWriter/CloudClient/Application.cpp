@@ -41,7 +41,6 @@ void CApplication::MainLoop()
 			int videoId = SourceStream::startStream();
 		}
 
-
 		Sleep(250);
 	}
 	CloseApplication();
