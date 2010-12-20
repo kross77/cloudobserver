@@ -60,6 +60,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="winmm.lib"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -183,6 +184,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ResourcesList.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\SourceStream.cpp"
 				>
 			</File>
@@ -222,6 +227,10 @@
 			</File>
 			<File
 				RelativePath=".\Parameters.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ResourcesList.h"
 				>
 			</File>
 			<File
