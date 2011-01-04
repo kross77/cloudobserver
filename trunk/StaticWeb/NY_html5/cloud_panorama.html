@@ -1,245 +1,248 @@
 <!DOCTYPE HTML>
 <html>
-	<head>
-		<title>Cloud Observer</title>
-		<style type="text/css">
-		
-		
-			body {
-				background-color: rgb(200,200,200);
-				  
-				margin: 0px;
-				overflow: hidden;
-				font: 100.01% "Trebuchet MS",Verdana,Arial,sans-serif;
-			}
-
-			#info {
-				position: absolute;
-				top: 0px; width: 100%;
-				color: #ffffff;
-				padding: 5px;
-				font-family:Monospace;
-				font-size:13px;
-				font-weight: bold;
-				text-align:center;
-			}
-
-			a {
-				color: #ffffff;
-			}
-		
-h1,h2,p{margin: 0 10px}
-h1{font-size: 250%;color: #FFF; text-shadow: 0px 1px 1px #000;}
-h2{font-size: 200%;color: #f0f0f0;padding-top: 0.3em}
-div#nifty{ margin: 0 10%;background: rgba(250, 250, 250, 0.1); -moz-border-radius: 15px;
-border-radius: 15px;}
-b.rtop, b.rbottom{display:block;background: #FFF; }
-b.rtop b, b.rbottom b{display:block;height: 1px;overflow: hidden; background: #9BD1FA}
-b.r1{margin: 0 5px}
-b.r2{margin: 0 3px}
-b.r3{margin: 0 2px}
-b.rtop b.r4, b.rbottom b.r4{margin: 0 1px;height: 2px}
-p, ul{color: #000;text-shadow: 0px 1px 1px rgba(255,255,255,0.6);padding-bottom:1em}
-input[type="button"], .eButton {width: 150px;padding: 5px 10px;word-wrap: break-word;height: auto;}
-hr{color: rgba(0, 0, 0, 0.0); height: 1px; background-color: rgba(0, 0, 0, 0);}
-		</style>
-	</head>
-	<body>
-
-		<div id="container"></div> 
-		<div id="info">
-		<p/>
-		<div id="nifty">
+    
+    <head>
+        <title>
+            Cloud Observer
+        </title>
+        <style type="text/css">
+            body { background-color: rgb(200,200,200); margin: 0px; overflow: hidden;
+            font: 100.01% "Trebuchet MS",Verdana,Arial,sans-serif; } #info { position:
+            absolute; top: 0px; width: 100%; color: #ffffff; padding: 5px; font-family:Monospace;
+            font-size:13px; font-weight: bold; text-align:center; } a { color: #ffffff;
+            } h1,h2,p{margin: 0 10px} h1{font-size: 250%;color: #FFF; text-shadow:
+            0px 1px 1px #000;} h2{font-size: 200%;color: #f0f0f0;padding-top: 0.3em}
+            div#nifty{ margin: 0 10%;background: rgba(250, 250, 250, 0.1); -moz-border-radius:
+            15px; border-radius: 15px;} b.rtop, b.rbottom{display:block;background:
+            #FFF; } b.rtop b, b.rbottom b{display:block;height: 1px;overflow: hidden;
+            background: #9BD1FA} b.r1{margin: 0 5px} b.r2{margin: 0 3px} b.r3{margin:
+            0 2px} b.rtop b.r4, b.rbottom b.r4{margin: 0 1px;height: 2px} p, ul{color:
+            #000;text-shadow: 0px 1px 1px rgba(255,255,255,0.6);padding-bottom:1em}
+            input[type="button"], .eButton {width: 150px;padding: 5px 10px;word-wrap:
+            break-word;height: auto;} hr{color: rgba(0, 0, 0, 0.0); height: 1px; background-color:
+            rgba(0, 0, 0, 0);}
+        </style>
+    </head>
+    
+    <body>
+        <div id="container"> </div>
+        <div id="info">
+            <p/>
+            <div id="nifty">
+                <h1>
+                    Cloud Observer
+                </h1>
+                <p>
+                    <b>
+                        Live video streaming
+                    </b>
+                </p>
+            </div>
+            <p/>
+            <div id="nifty">
+                <h1>
+                    Users online
+                </h1>
+                <p>
+                    You can watch user streams by clicking on buttons with their names.
+                </p>
+            </div>
+            <p/>
+            <div id="nifty">
+                </p>
+                <hr>
+                <ul id="usersList">
+                    There are currently no online users, please wait.
+                </ul>
+                <hr>
+                </p>
+            </div>
+            <p/>
+            <div id="nifty">
+                <p style="font-size: 8pt">
+                    This is a demo product. Number of broadcasters is limited to 6.
+                    <br/>
+                    Cloud Forever team 2010.
+                </p>
+            </div>
+            <p/>
+        </div>
+        </div>
+        <script type="text/javascript" src="./js/Three.js">
+        </script>
+        <script type="text/javascript" src="./js/Cube.js">
+        </script>
+        <script type="text/javascript">
+            var camera, scene, renderer;
+
+            var fov = 75,
+                texture_placeholder, isUserInteracting = false,
+                onMouseDownMouseX = 0,
+                onMouseDownMouseY = 0,
+                lon = 90,
+                onMouseDownLon = 0,
+                lat = 0,
+                onMouseDownLat = 0,
+                phi = 0,
+                theta = 0;
+
+            init();
+
+            function init() {
+
+                var container, mesh;
+
+                container = document.getElementById('container');
+
+                camera = new THREE.Camera(fov, window.innerWidth / window.innerHeight, 1, 1100);
+
+                scene = new THREE.Scene();
+
+                texture_placeholder = document.createElement('canvas');
+                texture_placeholder.width = 128;
+                texture_placeholder.height = 128;
 
-<h1>Cloud Observer</h1> <p><b>Live video streaming</b></p>
+                var context = texture_placeholder.getContext('2d');
+                context.fillStyle = 'rgb( 200, 200, 200 )';
+                context.fillRect(0, 0, texture_placeholder.width, texture_placeholder.height);
 
-</div> <p/>
-		<div id="nifty">
+                var materials = [
 
-<h1>Users online</h1> <p>You can watch user streams by clicking on buttons with their names.</p>
+                loadTexture('textures/cube/skybox/px.jpg'), // right
+                loadTexture('textures/cube/skybox/nx.jpg'), // left
+                loadTexture('textures/cube/skybox/py.jpg'), // top
+                loadTexture('textures/cube/skybox/ny.jpg'), // bottom
+                loadTexture('textures/cube/skybox/pz.jpg'), // back
+                loadTexture('textures/cube/skybox/nz.jpg') // front
+                ];
 
-</div> <p/>
-		<div id="nifty">
-</p>
-<hr> <ul id="usersList">
-There are currently no online users, please wait.</ul> <hr>
-</p>
-</div> <p/>
+                mesh = new THREE.Mesh(new Cube(300, 300, 300, 7, 7, materials, true), new THREE.MeshFaceMaterial());
+                mesh.overdraw = true;
+                scene.addObject(mesh);
 
-		<div id="nifty">
+                renderer = new THREE.CanvasRenderer();
+                renderer.setSize(window.innerWidth, window.innerHeight);
 
-<p style="font-size: 8pt">This is a demo product. Number of broadcasters is limited to 6. <br/>Cloud Forever team 2010.</p>
+                container.appendChild(renderer.domElement);
 
-</div> <p/></div></div> 
+                document.addEventListener('mousedown', onDocumentMouseDown, false);
+                document.addEventListener('mousemove', onDocumentMouseMove, false);
+                document.addEventListener('mouseup', onDocumentMouseUp, false);
+                document.addEventListener('mousewheel', onDocumentMouseWheel, false);
 
-		<script type="text/javascript" src="./js/Three.js"></script>
+                document.addEventListener('touchstart', onDocumentTouchStart, false);
+                document.addEventListener('touchmove', onDocumentTouchMove, false);
 
-		<script type="text/javascript" src="./js/Cube.js"></script>
+            }
 
-		<script type="text/javascript">
+            function loadTexture(path) {
 
-			var camera, scene, renderer;
+                var material = new THREE.MeshBasicMaterial({
+                    map: new THREE.Texture(texture_placeholder)
+                });
 
-			var fov = 75,
-			texture_placeholder,
-			isUserInteracting = false,
-			onMouseDownMouseX = 0, onMouseDownMouseY = 0,
-			lon = 90, onMouseDownLon = 0,
-			lat = 0, onMouseDownLat = 0,
-			phi = 0, theta = 0;
+                var image = new Image();
 
-			init();
+                image.onload = function() {
 
-			function init() {
+                    this.loaded = true;
+                    material.map.image = this;
+                    render();
 
-				var container, mesh;
+                };
 
-				container = document.getElementById( 'container' );
+                image.src = path;
 
-				camera = new THREE.Camera( fov, window.innerWidth / window.innerHeight, 1, 1100 );
+                return material;
+            }
 
-				scene = new THREE.Scene();
+   
 
-				texture_placeholder = document.createElement( 'canvas' );
-				texture_placeholder.width = 128;
-				texture_placeholder.height = 128;
 
-				var context = texture_placeholder.getContext( '2d' );
-				context.fillStyle = 'rgb( 200, 200, 200 )';
-				context.fillRect( 0, 0, texture_placeholder.width, texture_placeholder.height );
 
-				var materials = [
+            function onDocumentMouseDown(event) {
 
-					loadTexture( 'textures/cube/skybox/px.jpg' ), // right
-					loadTexture( 'textures/cube/skybox/nx.jpg' ), // left
-					loadTexture( 'textures/cube/skybox/py.jpg' ), // top
-					loadTexture( 'textures/cube/skybox/ny.jpg' ), // bottom
-					loadTexture( 'textures/cube/skybox/pz.jpg' ), // back
-					loadTexture( 'textures/cube/skybox/nz.jpg' ) // front
+                event.preventDefault();
 
-				];
+                isUserInteracting = true;
 
-				mesh = new THREE.Mesh( new Cube( 300, 300, 300, 7, 7, materials, true ), new THREE.MeshFaceMaterial() );
-				mesh.overdraw = true;
-				scene.addObject( mesh );
+                onPointerDownPointerX = event.clientX;
+                onPointerDownPointerY = event.clientY;
 
-				renderer = new THREE.CanvasRenderer();
-				renderer.setSize( window.innerWidth, window.innerHeight );
+                onPointerDownLon = lon;
+                onPointerDownLat = lat;
 
-				container.appendChild( renderer.domElement );
+            }
 
-				document.addEventListener( 'mousedown', onDocumentMouseDown, false );
-				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-				document.addEventListener( 'mouseup', onDocumentMouseUp, false );
-				document.addEventListener( 'mousewheel', onDocumentMouseWheel, false );
+            function onDocumentMouseMove(event) {
 
-				document.addEventListener( 'touchstart', onDocumentTouchStart, false );
-				document.addEventListener( 'touchmove', onDocumentTouchMove, false );
+                if (isUserInteracting) {
 
-			}
+                    lon = (onPointerDownPointerX - event.clientX) * 0.1 + onPointerDownLon;
+                    lat = (event.clientY - onPointerDownPointerY) * 0.1 + onPointerDownLat;
+                    
+                    render();
 
-			function loadTexture( path ) {
+                }
+            }
 
-				var material = new THREE.MeshBasicMaterial( { map: new THREE.Texture( texture_placeholder ) } );
+            function onDocumentMouseUp(event) {
 
-				var image = new Image();
+                isUserInteracting = false;
+                render();
 
-				image.onload = function () {
+            }
 
-					this.loaded = true;
-					material.map.image = this;
-					render();
+            function onDocumentMouseWheel(event) {
 
-				};
+                //	fov -= event.wheelDeltaY * 0.05;
+                //	camera.projectionMatrix = THREE.Matrix4.makePerspective( fov, window.innerWidth / window.innerHeight, 1, 1100 );
+                //	render();
+            }
 
-				image.src = path;
 
-				return material;
-			}
+            function onDocumentTouchStart(event) {
 
-			function onDocumentMouseDown( event ) {
+                if (event.touches.length == 1) {
 
-				event.preventDefault();
+                    event.preventDefault();
 
-				isUserInteracting = true;
+                    onPointerDownPointerX = event.touches[0].pageX;
+                    onPointerDownPointerY = event.touches[0].pageY;
 
-				onPointerDownPointerX = event.clientX;
-				onPointerDownPointerY = event.clientY;
+                    onPointerDownLon = lon;
+                    onPointerDownLat = lat;
+                }
+            }
 
-				onPointerDownLon = lon;
-				onPointerDownLat = lat;
+            function onDocumentTouchMove(event) {
 
-			}
+                if (event.touches.length == 1) {
 
-			function onDocumentMouseMove( event ) {
+                    event.preventDefault();
 
-				if ( isUserInteracting ) {
+                    lon = (onPointerDownPointerX - event.touches[0].pageX) * 0.1 + onPointerDownLon;
+                    lat = (event.touches[0].pageY - onPointerDownPointerY) * 0.1 + onPointerDownLat;
 
-					lon = ( onPointerDownPointerX - event.clientX ) * 0.1 + onPointerDownLon;
-					lat = ( event.clientY - onPointerDownPointerY ) * 0.1 + onPointerDownLat;
-					render();
+                    render();
 
-				}
-			}
+                }
+            }
 
-			function onDocumentMouseUp( event ) {
+            function render() {
 
-				isUserInteracting = false;
-				render();
+                lat = Math.max(-85, Math.min(85, lat));
+                phi = (90 - lat) * Math.PI / 180;
+                theta = lon * Math.PI / 180;
 
-			}
+                camera.target.position.x = 500 * Math.sin(phi) * Math.cos(theta);
+                camera.target.position.y = 500 * Math.cos(phi);
+                camera.target.position.z = 500 * Math.sin(phi) * Math.sin(theta);
 
-			function onDocumentMouseWheel( event ) {
+                renderer.render(scene, camera);
 
-			//	fov -= event.wheelDeltaY * 0.05;
-			//	camera.projectionMatrix = THREE.Matrix4.makePerspective( fov, window.innerWidth / window.innerHeight, 1, 1100 );
-			//	render();
+            }
+        </script>
+    </body>
 
-			}
-
-
-			function onDocumentTouchStart( event ) {
-
-				if( event.touches.length == 1 ) {
-
-					event.preventDefault();
-
-					onPointerDownPointerX = event.touches[ 0 ].pageX;
-					onPointerDownPointerY = event.touches[ 0 ].pageY;
-
-					onPointerDownLon = lon;
-					onPointerDownLat = lat;
-				}
-			}
-
-			function onDocumentTouchMove( event ) {
-
-				if( event.touches.length == 1 ) {
-
-					event.preventDefault();
-
-					lon = ( onPointerDownPointerX - event.touches[0].pageX ) * 0.1 + onPointerDownLon;
-					lat = ( event.touches[0].pageY - onPointerDownPointerY ) * 0.1 + onPointerDownLat;
-
-					render();
-
-				}
-			}
-
-			function render() {
-
-				lat = Math.max( - 85, Math.min( 85, lat ) );
-				phi = ( 90 - lat ) * Math.PI / 180;
-				theta = lon * Math.PI / 180;
-
-				camera.target.position.x = 500 * Math.sin( phi ) * Math.cos( theta );
-				camera.target.position.y = 500 * Math.cos( phi );
-				camera.target.position.z = 500 * Math.sin( phi ) * Math.sin( theta );
-
-				renderer.render( scene, camera );
-
-			}
-
-		</script>
-	</body>
 </html>
