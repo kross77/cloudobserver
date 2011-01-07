@@ -11,7 +11,7 @@ namespace CloudObserverLite
         private const string DEFAULT_NAME = "Cloud Observer Lite 1.0.0";
         private const ushort DEFAULT_PORT = 4773;
 
-        public const uint MAX_STREAMS_COUNT = 6;
+        public const uint MAX_STREAMS_COUNT = 10;
 
         private TcpListener listener;
         private Thread thread;
