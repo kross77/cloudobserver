@@ -163,4 +163,40 @@
   <data name="player_swf" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\assets\player.swf;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="js_Cube_js" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\assets\js_cube.js;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="js_Plane_js" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\assets\js_plane.js;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="js_Sphere_js" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\assets\js_sphere.js;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="js_ThreeDebug_js" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\assets\js_threedebug.js;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="js_ThreeExtras_js" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\assets\js_threeextras.js;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="js_Three_js" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\assets\js_three.js;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="textures_cube_skybox_nx_jpg" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\assets\textures_cube_skybox_nx_jpg;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="textures_cube_skybox_ny_jpg" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\assets\textures_cube_skybox_ny_jpg;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="textures_cube_skybox_nz_jpg" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\assets\textures_cube_skybox_nz_jpg;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="textures_cube_skybox_px_jpg" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\assets\textures_cube_skybox_px_jpg;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="textures_cube_skybox_py_jpg" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\assets\textures_cube_skybox_py_jpg;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="textures_cube_skybox_pz_jpg" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\assets\textures_cube_skybox_pz_jpg;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

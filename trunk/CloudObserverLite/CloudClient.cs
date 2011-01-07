@@ -536,6 +536,46 @@ namespace CloudObserverLite
                 case "/AC_OETags.js":
                     httpResponse.bodyData = Resources.AC_OETags_js;
                     break;
+
+                    // JS 3d framework
+                case "/js/Cube.js":
+                    httpResponse.bodyData = Resources.js_Cube_js;
+                    break;
+                case "/js/Plane.js":
+                    httpResponse.bodyData = Resources.js_Plane_js;
+                    break;
+                case "/js/Sphere.js":
+                    httpResponse.bodyData = Resources.js_Sphere_js;
+                    break;
+                case "/js/Three.js":
+                    httpResponse.bodyData = Resources.js_Three_js;
+                    break;
+                case "/js/ThreeDebug.js":
+                    httpResponse.bodyData = Resources.js_ThreeDebug_js;
+                    break;
+                case "/js/ThreeExtras.js":
+                    httpResponse.bodyData = Resources.js_ThreeExtras_js;
+                    break;
+                     // HTML5 UI Assets
+                case "/textures/cube/skybox/nx.jpg":
+                    httpResponse.bodyData = Resources.textures_cube_skybox_nx_jpg;
+                    break;
+                case "/textures/cube/skybox/ny.jpg":
+                    httpResponse.bodyData = Resources.textures_cube_skybox_ny_jpg;
+                    break;
+                case "/textures/cube/skybox/nz.jpg":
+                    httpResponse.bodyData = Resources.textures_cube_skybox_nz_jpg;
+                    break;
+                case "/textures/cube/skybox/px.jpg":
+                    httpResponse.bodyData = Resources.textures_cube_skybox_px_jpg;
+                    break;
+                case "/textures/cube/skybox/py.jpg":
+                    httpResponse.bodyData = Resources.textures_cube_skybox_py_jpg;
+                    break;
+                case "/textures/cube/skybox/pz.jpg":
+                    httpResponse.bodyData = Resources.textures_cube_skybox_pz_jpg;
+                    break;
+
                 case "/framework_4.5.0.17689.swz":
                     httpResponse.bodyData = Resources.framework_4_5_0_17689_swz;
                     break;
