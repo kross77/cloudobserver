@@ -10,8 +10,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CloudObserverLite</RootNamespace>
     <AssemblyName>cloudlite</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkSubset>
+    </TargetFrameworkSubset>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
@@ -56,6 +59,7 @@
     <Compile Include="ResponseStatus.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="Assets\framework_4.5.0.17689.swz" />
     <None Include="Assets\osmf_1.0.0.16316.swz" />
     <None Include="Assets\rpc_4.5.0.17689.swz" />
@@ -69,10 +73,22 @@
     <Content Include="Assets\history_history.js" />
     <Content Include="Assets\history_historyFrame.html" />
     <Content Include="Assets\index.html" />
+    <Content Include="Assets\js_Cube.js" />
+    <Content Include="Assets\js_Plane.js" />
+    <Content Include="Assets\js_Sphere.js" />
+    <Content Include="Assets\js_Three.js" />
+    <Content Include="Assets\js_ThreeDebug.js" />
+    <Content Include="Assets\js_ThreeExtras.js" />
     <Content Include="Assets\player.html" />
     <Content Include="Assets\player.swf" />
     <Content Include="Assets\playerProductInstall.swf" />
     <Content Include="Assets\swfobject.js" />
+    <None Include="Assets\textures_cube_skybox_nx_jpg" />
+    <None Include="Assets\textures_cube_skybox_ny_jpg" />
+    <None Include="Assets\textures_cube_skybox_nz_jpg" />
+    <None Include="Assets\textures_cube_skybox_px_jpg" />
+    <None Include="Assets\textures_cube_skybox_py_jpg" />
+    <None Include="Assets\textures_cube_skybox_pz_jpg" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

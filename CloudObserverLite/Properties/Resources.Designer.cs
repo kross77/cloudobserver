@@ -113,6 +113,48 @@ namespace CloudObserverLite.Properties {
             }
         }
         
+        internal static byte[] js_Cube_js {
+            get {
+                object obj = ResourceManager.GetObject("js_Cube_js", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] js_Plane_js {
+            get {
+                object obj = ResourceManager.GetObject("js_Plane_js", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] js_Sphere_js {
+            get {
+                object obj = ResourceManager.GetObject("js_Sphere_js", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] js_Three_js {
+            get {
+                object obj = ResourceManager.GetObject("js_Three_js", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] js_ThreeDebug_js {
+            get {
+                object obj = ResourceManager.GetObject("js_ThreeDebug_js", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] js_ThreeExtras_js {
+            get {
+                object obj = ResourceManager.GetObject("js_ThreeExtras_js", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         internal static byte[] osmf_1_0_0_16316_swz {
             get {
                 object obj = ResourceManager.GetObject("osmf_1_0_0_16316_swz", resourceCulture);
@@ -127,7 +169,7 @@ namespace CloudObserverLite.Properties {
         ///&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;./history/history.css&quot; /&gt;
         ///&lt;script src=&quot;./history/history.js&quot; language=&quot;javascript&quot;&gt;&lt;/script&gt;
         ///&lt;script language=&quot;JavaScript&quot; type=&quot;text/javascript&quot;&gt;
-        ///var requiredMajorVersion = 10; var requiredMinorVersion = 0; var requiredRevision = 0;
+        ///var requiredMajorVersion = 10; var requiredMinorVersion = 1; var requiredRevision = 0;
         ///&lt;/script&gt;
         ///&lt;META HTTP-EQUIV=&quot;Pragma&quot; CONTENT=&quot;no-cache&quot;&gt;
         ///&lt;META HT [rest of string was truncated]&quot;;.
@@ -183,6 +225,48 @@ namespace CloudObserverLite.Properties {
         internal static byte[] textLayout_2_0_0_139_swz {
             get {
                 object obj = ResourceManager.GetObject("textLayout_2_0_0_139_swz", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] textures_cube_skybox_nx_jpg {
+            get {
+                object obj = ResourceManager.GetObject("textures_cube_skybox_nx_jpg", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] textures_cube_skybox_ny_jpg {
+            get {
+                object obj = ResourceManager.GetObject("textures_cube_skybox_ny_jpg", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] textures_cube_skybox_nz_jpg {
+            get {
+                object obj = ResourceManager.GetObject("textures_cube_skybox_nz_jpg", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] textures_cube_skybox_px_jpg {
+            get {
+                object obj = ResourceManager.GetObject("textures_cube_skybox_px_jpg", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] textures_cube_skybox_py_jpg {
+            get {
+                object obj = ResourceManager.GetObject("textures_cube_skybox_py_jpg", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] textures_cube_skybox_pz_jpg {
+            get {
+                object obj = ResourceManager.GetObject("textures_cube_skybox_pz_jpg", resourceCulture);
                 return ((byte[])(obj));
             }
         }
