@@ -301,6 +301,7 @@ namespace CloudObserverLite
                             uint dataSize = ToUI24(tagHeader, 1);
                             // Timestamp
                             uint timestamp = ToUI24(tagHeader, 4);
+                            networkStream.Write(BitConverter.GetBytes(timestamp), 0, sizeof(uint));
                             // TimestampExtended
                             //uint timestampExtended = tagHeader[7];
                             // StreamID
