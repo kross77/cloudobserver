@@ -201,6 +201,10 @@
 			RelativePath=".\CloudForeverFramewoorkReadMe.txt"
 			>
 		</File>
+		<File
+			RelativePath=".\CloudForeverFramework.cd"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

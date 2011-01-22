@@ -87,7 +87,7 @@ private:
 	}
 
 	// Cast given data to subscribers and clean up given pointer
-	void ÑastData(char * data, int length){
+	void CastData(char * data, int length){
 		for(size_t i = 0 ; i < FuncVec.size(); i++){
 			char* dataCopy = new char[length];
 			memcpy(dataCopy, data, length);
