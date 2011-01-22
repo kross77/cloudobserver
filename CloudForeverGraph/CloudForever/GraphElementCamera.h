@@ -20,6 +20,12 @@ public:
 	{
 		CaptureFrame(bufferRef);
 	}
+
+	void CleanAPI()
+	{
+		closeOpenCV();
+		delete[] bufferRef;
+	}
 private:
 	// Private data object we use in "call" public class function
 	char* bufferRef;

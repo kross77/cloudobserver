@@ -63,13 +63,13 @@ public:
 		result.length = pointerToGetSize;
 		return result;
 	}
-
+	virtual void CleanAPI(){}
 	// Clean up for init
 	void Clean()
 	{
 		GraphWorker.interrupt();
 		GraphWorker.join();
-
+		CleanAPI();
 		delete[] pointerToGet;
 		pointerToGet = 0;
 
