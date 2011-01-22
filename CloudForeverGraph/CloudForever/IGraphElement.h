@@ -24,7 +24,7 @@ public:
 	};
 
 	// Function for preparing class to work 
-	virtual void Init(){}
+	virtual void Init(){ SetSleepTime(1);}
 
 	// initGet sets up a pointer holding a copy of pointer of data we want to return on Get() call
 	void InitGet(char * pointerToUseInGetOperations, int pointerToUseInGetOperationsSize)
@@ -32,7 +32,10 @@ public:
 		pointerToGet = pointerToUseInGetOperations;
 		pointerToGetSize = pointerToUseInGetOperationsSize;
 	}
-
+	void SetSleepTime(int timeMS)
+	{
+		SleepTime = timeMS;
+	}
 	// Function for data update // word virtual makes it possible to overwrite it
 	virtual void updateData(){}
 
@@ -103,7 +106,7 @@ private:
 	mutable boost::mutex GraphItemMutex;
 	boost::condition_variable GraphItemMutexConditionVariable;
 	boost::thread GraphWorker;
-
+	int SleepTime;
 
 	//Here is a main class thread function in infinit loop it calls for updateData function
 	void Call()
@@ -111,6 +114,7 @@ private:
 		try
 		{
 			for(;;){
+				boost::this_thread::sleep(boost::posix_time::milliseconds(SleepTime));
 				boost::mutex::scoped_lock lock(GraphItemMutex);
 				boost::this_thread::interruption_point() ;
 				
