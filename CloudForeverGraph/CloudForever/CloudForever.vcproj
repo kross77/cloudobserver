@@ -148,40 +148,48 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
-			<File
-				RelativePath=".\stdafx.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"
-					/>
-				</FileConfiguration>
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
-			<File
-				RelativePath=".\stdafx.h"
+			<Filter
+				Name="Interfaces"
 				>
-			</File>
-			<File
-				RelativePath=".\targetver.h"
+				<File
+					RelativePath=".\IGraphElement.h"
+					>
+				</File>
+				<File
+					RelativePath=".\interfacesReadMe.txt"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="GraphElements"
 				>
-			</File>
+				<File
+					RelativePath=".\GraphElementExample.h"
+					>
+				</File>
+				<File
+					RelativePath=".\GraphElementsReadMe.txt"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="APIs"
+				>
+				<File
+					RelativePath=".\APIExample.h"
+					>
+				</File>
+				<File
+					RelativePath=".\APIreadMe.txt"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Resource Files"
@@ -190,7 +198,7 @@
 			>
 		</Filter>
 		<File
-			RelativePath=".\ReadMe.txt"
+			RelativePath=".\CloudForeverFramewoorkReadMe.txt"
 			>
 		</File>
 	</Files>
