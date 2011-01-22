@@ -1,8 +1,10 @@
-#ifndef _GraphElementCamera_h_
-#define _GraphElementCamera_h_
 #include "IGraphElement.h"
 #include "APICamera.h"
-#include <iostream>
+
+#ifndef _GraphElementCamera_h_
+#define _GraphElementCamera_h_
+
+//#include <iostream>
 using namespace std ;
 class GraphElementCamera : public IGraphElement, public APICamera
 {

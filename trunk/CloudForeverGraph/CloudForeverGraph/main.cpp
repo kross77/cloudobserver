@@ -2,7 +2,7 @@
 #include <iostream>
 #include "GraphElementCameraPreview.h"
 #include "GraphElementExample.h"
-//#include "GraphElementCamera.h"//
+#include "GraphElementCamera.h"
 
 using namespace std;
 

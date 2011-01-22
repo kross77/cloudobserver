@@ -1,20 +1,22 @@
-#ifndef _IGraphElementBase_h_
-#define _IGraphElementBase_h_
-// This code is my RFC on graph item prototype. 
-// Class API use sample is also provided.
-// This code compiles under VS with use of boost and is Qt compatible
 #include <iostream>
 #include <vector>
 
 // Boost
 #include <boost/thread.hpp>
 
+#ifndef _IGraphElementBase_h_
+#define _IGraphElementBase_h_
+#pragma once
+
 using namespace std ;
 
 class IGraphElementBase {
 
 public:
-
+	boost::thread GraphWorker;
+	mutable boost::mutex GraphItemMutex;
+	boost::condition_variable GraphItemMutexConditionVariable;
+	int SleepTime;
 
 	// Function for preparing class to work 
 	virtual void Init(){ SetSleepTime(1);}
@@ -23,6 +25,7 @@ public:
 	{
 		SleepTime = timeMS;
 	}
+
 	// Function for data update // word virtual makes it possible to overwrite it
 	virtual void updateData(){}
 
@@ -32,10 +35,8 @@ public:
 		GraphWorker = boost::thread(&IGraphElementBase::Call, this);
 	}
 
-	// Returns pointer to copy of current graphItem processed data
-
 	virtual void CleanAPI(){}
-	// Clean up for init
+
 	virtual void Clean()
 	{
 		GraphWorker.interrupt();
@@ -43,15 +44,9 @@ public:
 		CleanAPI();
 
 	}
-	virtual void CastData();
+	virtual void CastData(){}
 
-	boost::thread GraphWorker;
-	mutable boost::mutex GraphItemMutex;
-	boost::condition_variable GraphItemMutexConditionVariable;
-	int SleepTime;
-private:
-
-	//Here is a main class thread function in infinit loop it calls for updateData function
+	//Here is a main class thread function in infinite loop it calls for updateData function
 	void Call()
 	{
 		try
@@ -72,9 +67,7 @@ private:
 		{
 			// Thread end
 		}
-
 	}  
-
 };
 
 #endif // _IGraphElementBase_h_
