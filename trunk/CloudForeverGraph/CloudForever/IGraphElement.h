@@ -9,9 +9,11 @@
 // Boost
 #include <boost/thread.hpp>
 
+#include "IGraphElementBase.h"
+
 using namespace std ;
 
-class IGraphElement {
+class IGraphElement : public IGraphElementBase{
 
 	// We should define prototype of functions that will be subscribers to our data
 	typedef void FuncCharPtr(char*, int) ;
@@ -23,31 +25,17 @@ public:
 		char* ptr;
 	};
 
-	// Function for preparing class to work 
-	virtual void Init(){ SetSleepTime(1);}
-
 	// initGet sets up a pointer holding a copy of pointer of data we want to return on Get() call
 	void InitGet(char * pointerToUseInGetOperations, int pointerToUseInGetOperationsSize)
 	{
 		pointerToGet = pointerToUseInGetOperations;
 		pointerToGetSize = pointerToUseInGetOperationsSize;
 	}
-	void SetSleepTime(int timeMS)
-	{
-		SleepTime = timeMS;
-	}
-	// Function for data update // word virtual makes it possible to overwrite it
-	virtual void updateData(){}
 
 	// Function for adding subscribers functions
 	void Add(FuncCharPtr* f)
 	{
 		FuncVec.push_back(f);
-	}
-
-	void StartThread()
-	{
-		GraphWorker = boost::thread(&IGraphElement::Call, this);
 	}
 
 	// Returns pointer to copy of current graphItem processed data
@@ -63,8 +51,7 @@ public:
 		result.length = pointerToGetSize;
 		return result;
 	}
-	virtual void CleanAPI(){}
-	// Clean up for init
+
 	void Clean()
 	{
 		GraphWorker.interrupt();
@@ -105,8 +92,7 @@ private:
 	// Private class mutex for enabling "Get" on function data
 	mutable boost::mutex GraphItemMutex;
 	boost::condition_variable GraphItemMutexConditionVariable;
-	boost::thread GraphWorker;
-	int SleepTime;
+
 
 	//Here is a main class thread function in infinit loop it calls for updateData function
 	void Call()

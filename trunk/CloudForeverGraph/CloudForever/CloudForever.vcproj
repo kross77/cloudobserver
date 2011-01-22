@@ -162,6 +162,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\IGraphElementBase.h"
+					>
+				</File>
+				<File
 					RelativePath=".\interfacesReadMe.txt"
 					>
 				</File>
@@ -171,6 +175,10 @@
 				>
 				<File
 					RelativePath=".\GraphElementCamera.h"
+					>
+				</File>
+				<File
+					RelativePath=".\GraphElementCameraPreview.h"
 					>
 				</File>
 				<File
@@ -187,6 +195,10 @@
 				>
 				<File
 					RelativePath=".\APICamera.h"
+					>
+				</File>
+				<File
+					RelativePath=".\APICameraPreviewer.h"
 					>
 				</File>
 				<File
@@ -218,7 +230,7 @@
 			>
 		</File>
 		<File
-			RelativePath=".\CloudForeverFramework2.cd"
+			RelativePath=".\CloudForeverFramework.cd"
 			>
 		</File>
 	</Files>
