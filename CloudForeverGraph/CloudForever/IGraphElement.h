@@ -3,11 +3,11 @@
 // This code is my RFC on graph item prototype. 
 // Class API use sample is also provided.
 // This code compiles under VS with use of boost and is Qt compatible
-#include <iostream>
-#include <vector>
+//#include <iostream>
+//#include <vector>
 
 // Boost
-#include <boost/thread.hpp>
+//#include <boost/thread.hpp>
 
 #include "IGraphElementBase.h"
 
@@ -88,35 +88,6 @@ private:
 
 	// Vector to hold subscribed functions
 	vector<FuncCharPtr*> FuncVec ;
-
-	// Private class mutex for enabling "Get" on function data
-	mutable boost::mutex GraphItemMutex;
-	boost::condition_variable GraphItemMutexConditionVariable;
-
-
-	//Here is a main class thread function in infinit loop it calls for updateData function
-	void Call()
-	{
-		try
-		{
-			for(;;){
-				boost::this_thread::sleep(boost::posix_time::milliseconds(SleepTime));
-				boost::mutex::scoped_lock lock(GraphItemMutex);
-				boost::this_thread::interruption_point() ;
-				
-				updateData();
-				
-				lock.unlock();
-				CastData();
-				GraphItemMutexConditionVariable.notify_one();
-			}
-		}
-		catch (boost::thread_interrupted)
-		{
-			// Thread end
-		}
-
-	}  
 
 };
 
