@@ -1,6 +1,7 @@
 // Here we show how to use Graph elements to construct a simple graph.
 #include <iostream>
 #include "GraphElementExample.h"
+//#include "GraphElementCamera.h"//
 using namespace std;
 
 static void f0 (char* a , int l) { cout << "f0" << endl; delete[] a; }
