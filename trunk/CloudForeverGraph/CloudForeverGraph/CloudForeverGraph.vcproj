@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="CloudForever.lib"
+				AdditionalDependencies="CloudForever.lib cv210.lib cxcore210.lib highgui210.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(OutDir)&quot;"
 				GenerateDebugInformation="true"
@@ -186,6 +186,14 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath=".\CameraPreviewTest.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ElementExampleTest.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"

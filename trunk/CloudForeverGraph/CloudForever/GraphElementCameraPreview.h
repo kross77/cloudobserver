@@ -20,7 +20,7 @@ public:
 	// we want to use some costume data update
 	void updateData()
 	{
-		if(key != 1){
+		if(key != 'q'){
 			OpenCVShowFrame(imageGenerator->Get().ptr);
 		}
 		else{

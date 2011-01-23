@@ -8,12 +8,12 @@ class GraphElementExample : public IGraphElement, public APIExample
 {
 public:
 	// we want costume init
-	void Init()
+	void Init(int SleepTime)
 	{
 		cout << "GraphElementExample override of init" << endl;
 		sample = new char[5000];
 		InitGet(sample, 5000); // we need to set this for our subscribers to get correct data
-		SetSleepTime(100);
+		SetSleepTime(SleepTime);
 	}
 	// we want to use some costume data update
 	void updateData()

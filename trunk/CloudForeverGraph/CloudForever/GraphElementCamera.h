@@ -26,7 +26,7 @@ public:
 	void CleanAPI()
 	{
 		closeOpenCV();
-		delete[] bufferRef;
+		//delete[] bufferRef;
 	}
 private:
 	// Private data object we use in "call" public class function

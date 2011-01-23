@@ -2,18 +2,6 @@
 
 #ifndef _IGraphElement_h_
 #define _IGraphElement_h_
-#pragma once
-
-// This code is my RFC on graph item prototype. 
-// Class API use sample is also provided.
-// This code compiles under VS with use of boost and is Qt compatible
-//#include <iostream>
-//#include <vector>
-
-// Boost
-//#include <boost/thread.hpp>
-
-
 
 using namespace std ;
 
@@ -61,8 +49,8 @@ public:
 		GraphWorker.interrupt();
 		GraphWorker.join();
 		CleanAPI();
-		delete[] pointerToGet;
-		pointerToGet = 0;
+		//delete[] pointerToGet;
+		//pointerToGet = 0;
 
 	}
 
@@ -75,25 +63,21 @@ public:
 	}
 
 	// Cast given data to subscribers and clean up given pointer
-/*	void CastData(char * data, int length){
+	void CastData(char * data, int length){
 		for(size_t i = 0 ; i < FuncVec.size(); i++){
 			char* dataCopy = new char[length];
 			memcpy(dataCopy, data, length);
 			FuncVec[i](dataCopy, length);
 		}
-	}*/
+	}
 
 private:
-
 	// Char pointer to hold a copy of pointer of data we want to return on Get() call
 	char* pointerToGet;
 	int pointerToGetSize;
-
-
 
 	// Vector to hold subscribed functions
 	vector<FuncCharPtr*> FuncVec ;
 
 };
-
 #endif // _IGraphElement_h_
