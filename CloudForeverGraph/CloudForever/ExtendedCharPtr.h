@@ -11,6 +11,15 @@ class ExtendedCharPtr
 {
 public:
 	ExtendedCharPtr(): length(0), data(0) {}
+	ExtendedCharPtr(size_t l, char* d): length(0), data(0)
+	{
+		if (!d) { return; }
+
+		data = new char[l]; // this may throw, so we do it first
+
+		length = l;
+		memcpy(data, d, l);
+	}
 	// Swap
 	void swap(ExtendedCharPtr& other)
 	{
