@@ -1,47 +1,48 @@
 #include "IGraphElementBase.h"
 
+// parts of c++0x std
+#include <boost/bind.hpp> 
+#include <boost/function.hpp>
+
 #ifndef _IGraphElement_h_
 #define _IGraphElement_h_
 
 using namespace std ;
-
+template <typename DataType >
 class IGraphElement : public IGraphElementBase{
 
-	// We should define prototype of functions that will be subscribers to our data
-	typedef void FuncCharPtr(char*, int) ;
+	typedef boost::function<void(DataType)>   Function;
+	typedef std::vector<Function>      FunctionSequence;
+    typedef typename FunctionSequence::iterator FunctionIterator; 
+
+private:
+	DataType* dataElement;
+	FunctionSequence funcs;
 
 public:
-	struct GetResultStructure
-	{
-		int length;
-		char* ptr;
-	};
 
 	// initGet sets up a pointer holding a copy of pointer of data we want to return on Get() call
-	void InitGet(char * pointerToUseInGetOperations, int pointerToUseInGetOperationsSize)
+	void InitGet(DataType* DataElement)
 	{
-		pointerToGet = pointerToUseInGetOperations;
-		pointerToGetSize = pointerToUseInGetOperationsSize;
+		dataElement = DataElement;
 	}
 
 	// Function for adding subscribers functions
-	void Add(FuncCharPtr* f)
+	// use something like std::bind(&currentClassName::FunctionToAdd, this, std::placeholders::_1) to add function to vector
+	void Add(Function f)
 	{
-		FuncVec.push_back(f);
+		funcs.push_back(f);
 	}
 
 	// Returns pointer to copy of current graphItem processed data
-	GetResultStructure Get()
+	DataType Get()
 	{
+		DataType dataCopy;
 		boost::mutex::scoped_lock lock(GraphItemMutex);
-		char * dataCopy = new char[pointerToGetSize];
-		memcpy (dataCopy,pointerToGet,pointerToGetSize);
+		dataCopy = *dataElement;
 		lock.unlock();
 		GraphItemMutexConditionVariable.notify_one();
-		GetResultStructure result;
-		result.ptr = dataCopy;
-		result.length = pointerToGetSize;
-		return result;
+		return dataCopy;
 	}
 
 	void Clean()
@@ -49,35 +50,26 @@ public:
 		GraphWorker.interrupt();
 		GraphWorker.join();
 		CleanAPI();
-		//delete[] pointerToGet;
-		//pointerToGet = 0;
-
+		//delete[] dataElement;
 	}
 
 	// Cast data to subscribers and clean up given pointer
-	void CastData(){
-		for (size_t i = 0 ; i < FuncVec.size() ; i++){
-			char * dataCopy = new char[pointerToGetSize];
-			memcpy (dataCopy,pointerToGet,pointerToGetSize);
-			FuncVec[i] (dataCopy, pointerToGetSize) ;}
-	}
-
-	// Cast given data to subscribers and clean up given pointer
-	void CastData(char * data, int length){
-		for(size_t i = 0 ; i < FuncVec.size(); i++){
-			char* dataCopy = new char[length];
-			memcpy(dataCopy, data, length);
-			FuncVec[i](dataCopy, length);
+	virtual void CastData(){
+		for (FunctionIterator it(funcs.begin()); it != funcs.end(); ++it){
+			DataType dataCopy;
+			dataCopy = *dataElement;
+			(*it)(dataCopy);
 		}
 	}
 
-private:
-	// Char pointer to hold a copy of pointer of data we want to return on Get() call
-	char* pointerToGet;
-	int pointerToGetSize;
-
-	// Vector to hold subscribed functions
-	vector<FuncCharPtr*> FuncVec ;
+	// Cast given data to subscribers and clean up given pointer
+	/*void CastData(DataType data){
+		for (FunctionIterator it(funcs.begin()); it != funcs.end(); ++it){
+			DataType dataCopy;
+			dataCopy = data;
+			(*it)(dataCopy);
+		}
+	}*/
 
 };
 #endif // _IGraphElement_h_

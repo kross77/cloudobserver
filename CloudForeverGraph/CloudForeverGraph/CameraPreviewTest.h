@@ -20,7 +20,7 @@ public:
 		camera->Init(buffer, w, h, 15, 230400, 1000/15);
 		camera->StartThread();
 
-		prev->Init((IGraphElement*) camera , WindowName, w, h, 1000/15);
+		prev->Init((IGraphElement<ExtendedCharPtr>*) camera , WindowName, w, h, 1000/15);
 		prev->StartThread();
 
 		boost::this_thread::sleep(boost::posix_time::milliseconds(10000));

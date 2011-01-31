@@ -31,7 +31,7 @@ public:
 		//cvSaveImage("test.jpg" ,destination);
 		
 		cvShowImage(windowName.c_str(), destination);
-		delete[] frame;	
+		//delete[] frame;	
 		
 
 		//destination->imageData = (char*)frame; // возможно понадобится менять последовтельность цветов // надоли потом удалять фрейм?
