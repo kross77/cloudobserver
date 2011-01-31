@@ -190,10 +190,22 @@
 				RelativePath=".\CameraPreviewTest.h"
 				>
 			</File>
-			<File
-				RelativePath=".\ElementExampleTest.h"
+			<Filter
+				Name="GraphElementTutorial"
 				>
-			</File>
+				<File
+					RelativePath=".\GETproducer.h"
+					>
+				</File>
+				<File
+					RelativePath=".\GETrenderer.h"
+					>
+				</File>
+				<File
+					RelativePath=".\GETTest.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Resource Files"

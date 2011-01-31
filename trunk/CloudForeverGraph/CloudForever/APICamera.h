@@ -71,6 +71,15 @@ selectCamera:
 			buffer[0] = destination->imageData[i+2];
 			buffer+=3;
 		}
+	/*	for(int i = 0; i < destination->imageSize; i=i+3)
+		{ 
+
+			buffer[0] = destination->imageData[i];
+			buffer[1] = destination->imageData[i+1];
+			buffer[2] = destination->imageData[i+2];
+			buffer+=3;
+		}*/
+//buffer = destination->imageSize;
 		return buffer;
 
 	}

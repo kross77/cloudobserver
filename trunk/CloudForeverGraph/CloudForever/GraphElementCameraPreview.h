@@ -1,9 +1,9 @@
+#include "ExtendedCharPtr.h"
 #include "IGraphElement.h"
 #include "APICameraPreviewer.h"
 
 #ifndef _GraphElementCameraPreviewer_h_
 #define _GraphElementCameraPreviewer_h_
-
 
 //#include <iostream>
 using namespace std ;
@@ -11,7 +11,7 @@ class GraphElementCameraPreviewer : public IGraphElementBase, public APICameraPr
 {
 public:
 	// we want costume init
-	void Init(IGraphElement* ImageGenerator,  string WindowName, int width, int height, int sleepTime)
+	void Init(IGraphElement<ExtendedCharPtr>* ImageGenerator,  string WindowName, int width, int height, int sleepTime)
 	{
 		createPreviewWindow(WindowName, width, height);
 		imageGenerator = ImageGenerator;
@@ -21,7 +21,7 @@ public:
 	void updateData()
 	{
 		if(key != 'q'){
-			OpenCVShowFrame(imageGenerator->Get().ptr);
+			OpenCVShowFrame(imageGenerator->Get().data);
 		}
 		else{
 			Clean();
@@ -32,7 +32,7 @@ public:
 	{
 		CleanUp();
 	}
-	IGraphElement* imageGenerator;
+	IGraphElement<ExtendedCharPtr>* imageGenerator;
 private:
 	//
 };
