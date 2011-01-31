@@ -28,39 +28,6 @@
       <FileName>CamerasList.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="ExtendedCharPtr">
-    <Position X="7.5" Y="2.5" Width="2.5" />
-    <TypeIdentifier>
-      <HashCode>AQAAAAAAAAAAAAAAAEAAAQAAAAAAAAAAAQAQAAQAAAA=</HashCode>
-      <FileName>ExtendedCharPtr.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="IGraphElement&lt;DataType&gt;">
-    <Position X="4.75" Y="5.25" Width="2.25" />
-    <NestedTypes>
-      <Typedef Name="IGraphElement&lt;DataType&gt;::Function" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>IGraphElement.h</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-      <Typedef Name="IGraphElement&lt;DataType&gt;::FunctionIterator" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>IGraphElement.h</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-    </NestedTypes>
-    <TypeIdentifier>
-      <HashCode>AAMAAAAAAAAAAABAAAAAIACAAAAACAAAAAAAAAAAQAA=</HashCode>
-      <FileName>IGraphElement.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="IGraphElementBase">
-    <Position X="1" Y="1.25" Width="2.5" />
-    <TypeIdentifier>
-      <HashCode>BAAA4AAAAAAAAABAAAAAAAAQEAAACAAAACACAAIAQAA=</HashCode>
-      <FileName>IGraphElementBase.h</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="GraphElementCamera">
     <Position X="5.5" Y="9.5" Width="2.25" />
     <TypeIdentifier>

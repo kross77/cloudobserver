@@ -1,8 +1,8 @@
 #include <iostream>
 #include <vector>
 
-// Boost
 #include <boost/thread.hpp>
+#include <boost/timer.hpp>
 
 #ifndef _IGraphElementBase_h_
 #define _IGraphElementBase_h_
@@ -13,6 +13,8 @@ using namespace std ;
 class IGraphElementBase {
 
 public:
+	boost::timer ElementTimer;
+	double spentTime;
 	boost::thread GraphWorker;
 	mutable boost::mutex GraphItemMutex;
 	boost::condition_variable GraphItemMutexConditionVariable;
@@ -52,7 +54,9 @@ public:
 		try
 		{
 			for(;;){
-				boost::this_thread::sleep(boost::posix_time::milliseconds(SleepTime));
+
+				ElementTimer.restart();
+			
 				boost::mutex::scoped_lock lock(GraphItemMutex);
 				boost::this_thread::interruption_point() ;
 
@@ -60,7 +64,12 @@ public:
 
 				lock.unlock();
 				CastData();
+
 				GraphItemMutexConditionVariable.notify_one();
+				spentTime = ElementTimer.elapsed();
+				if(spentTime < SleepTime){
+					boost::this_thread::sleep(boost::posix_time::milliseconds(SleepTime - spentTime));
+				}
 			}
 		}
 		catch (boost::thread_interrupted)
