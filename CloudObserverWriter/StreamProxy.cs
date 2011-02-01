@@ -13,11 +13,13 @@ namespace CloudObserverWriter
 
         private Thread thread;
 
+        private Uri localUri;
         private Uri serverUri;
         private string nickname;
 
-        public StreamProxy(Uri serverUri, string nickname)
+        public StreamProxy(Uri localUri, Uri serverUri, string nickname)
         {
+            this.localUri = localUri;
             this.serverUri = serverUri;
             this.nickname = nickname;
         }
@@ -27,7 +29,7 @@ namespace CloudObserverWriter
             while (true)
                 try
                 {
-                    Stream vlcStream = WebRequest.Create("http://localhost:8095/stream.flv").GetResponse().GetResponseStream();
+                    Stream vlcStream = WebRequest.Create(localUri).GetResponse().GetResponseStream();
                     NetworkStream networkStream = new TcpClient(serverUri.Host, serverUri.Port).GetStream();
 
                     byte[] header = Encoding.ASCII.GetBytes("GET /" + nickname + "?action=write HTTP/1.1\r\n\r\n");
