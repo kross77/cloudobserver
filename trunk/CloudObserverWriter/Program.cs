@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace CloudObserverWriter
 {
     public class Program
     {
-        private static Process vlcProcess;
+        private static Writer writer;
 
         [DllImport("Kernel32")]
         private static extern bool SetConsoleCtrlHandler(HandlerRoutine handler, bool add);
@@ -40,8 +39,7 @@ namespace CloudObserverWriter
 
         private static void Close()
         {
-            if ((vlcProcess != null) && (!vlcProcess.HasExited))
-                vlcProcess.Kill();
+            writer.Close();
 
             Environment.Exit(0);
         }
@@ -52,8 +50,8 @@ namespace CloudObserverWriter
             Console.WriteLine("by CloudForever (c) team");
             Console.WriteLine();
 
-            string url = "";
-            string server = "";
+            string cameraUrl = "";
+            string serverUrl = "";
             string nickname = "";
             bool webcam = false;
 
@@ -66,11 +64,11 @@ namespace CloudObserverWriter
                         i += 2;
                         break;
                     case "-server":
-                        server = args[i + 1];
+                        serverUrl = args[i + 1];
                         i += 2;
                         break;
                     case "-url":
-                        url = args[i + 1];
+                        cameraUrl = args[i + 1];
                         i += 2;
                         break;
                     case "-webcam":
@@ -83,26 +81,26 @@ namespace CloudObserverWriter
                         break;
                 }
 
-            if (!webcam && (url == string.Empty))
+            if (!webcam && (cameraUrl == string.Empty))
             {
                 Console.Write("Please, enter your camera stream url or type 'webcam' to use your web camera: ");
-                url = Console.ReadLine();
-                if (url == "webcam")
+                cameraUrl = Console.ReadLine();
+                if (cameraUrl == "webcam")
                     webcam = true;
             }
             else
                 if (webcam)
                     Console.WriteLine("Stream will be captured from your default web camera.");
                 else
-                    Console.WriteLine("Camera stream will be captured from the following url: " + url);
+                    Console.WriteLine("Camera stream will be captured from the following url: " + cameraUrl);
 
-            if (server == string.Empty)
+            if (serverUrl == string.Empty)
             {
                 Console.Write("Please, enter Cloud Observer server url: ");
-                server = Console.ReadLine();
+                serverUrl = Console.ReadLine();
             }
             else
-                Console.WriteLine("Stream will be broadcasted to the following Cloud Observer server: " + server);
+                Console.WriteLine("Stream will be broadcasted to the following Cloud Observer server: " + serverUrl);
 
             if (nickname == string.Empty)
             {
@@ -116,20 +114,12 @@ namespace CloudObserverWriter
             HandlerRoutine consoleCtrlHandler = new HandlerRoutine(ConsoleCtrlCheck);
             SetConsoleCtrlHandler(consoleCtrlHandler, true);
 
-            ProcessStartInfo vlcProcessStartInfo = new ProcessStartInfo();
-            vlcProcessStartInfo.FileName = @".\VLC\vlc1.exe";
-            vlcProcessStartInfo.Arguments = "-I -o " + (webcam ? "dshow:// vdev adev size=\"640x480\"" : ("-R " + url + " --file-caching=10 --rtsp-caching=10 --realrtsp-caching=10 --rtsp-session-timeout=-1")) +
-                " --sout=\"#transcode{vcodec=FLV1,acodec=mp3,ab=128,channels=2,samplerate=44100}:duplicate{dst=std{access=http{mime=video/x-flv},mux=ffmpeg{flv},dst=:8095/stream.flv}}\"";
-            vlcProcessStartInfo.CreateNoWindow = true;
+            writer = webcam ? new Writer(serverUrl, nickname) : new Writer(cameraUrl, serverUrl, nickname);
 
-            vlcProcess = Process.Start(vlcProcessStartInfo);
-
-            StreamProxy streamProxy = new StreamProxy(new Uri(server), nickname);
             Console.WriteLine("Your stream is now being broadcasted. Press any key to stop and exit...");
             Console.WriteLine();
-            streamProxy.Start();
+            writer.Start();
             Console.ReadKey();
-            streamProxy.Stop();
             Close();
         }
     }
