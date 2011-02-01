@@ -118,6 +118,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
+				AdditionalIncludeDirectories="..\ffmpeg\include;..\OpenAL\Win32;..\OpenAL\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -136,7 +137,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="avcodec-52.lib avdevice-52.lib avformat-52.lib avutil-50.lib swscale-0.lib cv210.lib cxcore210.lib highgui210.lib openal32.lib winmm.lib"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="../ffmpeg/lib/"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
