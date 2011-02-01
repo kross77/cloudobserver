@@ -25,7 +25,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="mkdir $(TargetDir)&#x0D;&#x0A;copy $(SolutionDir)distr\*.dll $(TargetDir)"
+				CommandLine=""
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -101,7 +101,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="mkdir $(TargetDir)&#x0D;&#x0A;copy $(SolutionDir)distr\*.dll $(TargetDir)"
+				CommandLine="mkdir $(TargetDir)&#x0D;&#x0A;copy $(SolutionDir)distr\*.dll $(TargetDir)&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
