@@ -1,18 +1,20 @@
 #include <iostream>
 #include <cstdlib>
 
+#ifndef _GETproducer_h_
+#define _GETproducer_h_
 using namespace std ;
 // lets write simple API class
-class  simpleProducerLibAPI // here we declare all lib functions with specific for our lib possibilities 
+class simpleProducerLibAPI // here we declare all lib functions with specific for our lib possibilities 
 {
 public:
 	void initSimpleProducerLibAPI(int i) // simple API init
 	{
 		std::srand(i);
 	}
-	
+
 	void genRandomFilledChar(char *s, int len) { // simple function of API
-	 const char alphanum[] =
+		const char alphanum[] =
 			"0123456789"
 			"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 			"abcdefghijklmnopqrstuvwxyz";
@@ -21,6 +23,30 @@ public:
 			s[i] = alphanum[rand() % (sizeof(alphanum) - 1)];
 		}
 
+		s[len] = 0;
+	}
+	void genCharFilledWithCapitals(char *s, int len) { // simple function of API
+		const char alphanum[] =
+			"ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		for (int i = 0; i < len; ++i) {
+			s[i] = alphanum[rand() % (sizeof(alphanum) - 1)];
+		}
+		s[len] = 0;
+	}
+	void genCharFilledWithNumbers(char *s, int len) { // simple function of API
+		const char alphanum[] =
+			"0123456789";
+		for (int i = 0; i < len; ++i) {
+			s[i] = alphanum[rand() % (sizeof(alphanum) - 1)];
+		}
+		s[len] = 0;
+	}
+	void genCharFilledWithLoverCase(char *s, int len) { // simple function of API
+		const char alphanum[] =
+			"abcdefghijklmnopqrstuvwxyz";
+		for (int i = 0; i < len; ++i) {
+			s[i] = alphanum[rand() % (sizeof(alphanum) - 1)];
+		}
 		s[len] = 0;
 	}
 };
@@ -53,8 +79,9 @@ public:
 
 	void CleanAPI()
 	{
-	//	delete localCharPtr;
-	// here we do not have to clean anything but overwrite of this function would be called on graph item clean call.
+		//	delete localCharPtr;
+		// here we do not have to clean anything but overwrite of this function would be called on graph item clean call.
 	}
 
 };
+#endif //_GETproducer_h_

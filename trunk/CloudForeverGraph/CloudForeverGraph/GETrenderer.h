@@ -1,6 +1,10 @@
 #include <iostream>
 #include <cstdlib>
 #include "ExtendedCharPtr.h"
+
+#ifndef _GETrenderer_h_
+#define _GETrenderer_h_
+
 using namespace std ;
 // lets write simple API class
 class  simpleRendererLibAPI // here we declare all lib functions with specific for our lib possibilities 
@@ -30,9 +34,9 @@ public:
 class  simpleRendererGraphElement : public IGraphElementBase, public simpleRendererLibAPI
 {
 public:
-	IGraphElement<ExtendedCharPtr>* charGenerator;
+	CoreEvents<ExtendedCharPtr>* charGenerator;
 	// we owerrite init
-	void Init(IGraphElement<ExtendedCharPtr>* CharGenerator, int sleepTime)
+	void Init(CoreEvents<ExtendedCharPtr>* CharGenerator, int sleepTime)
 	{
 		charGenerator = CharGenerator;
 		charGenerator->Add(boost::bind(&simpleRendererGraphElement::renderCastedData, this, _1)); 
@@ -55,3 +59,4 @@ public:
 	}
 
 };
+#endif //_GETrenderer_h_

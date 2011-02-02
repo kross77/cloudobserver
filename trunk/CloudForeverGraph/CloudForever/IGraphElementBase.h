@@ -4,20 +4,20 @@
 #include <boost/thread.hpp>
 #include <boost/timer.hpp>
 
+#include "CoreItem.h"
+
 #ifndef _IGraphElementBase_h_
 #define _IGraphElementBase_h_
 #pragma once
 
 using namespace std ;
 
-class IGraphElementBase {
+class IGraphElementBase: public CoreItem {
 
 public:
 	boost::timer ElementTimer;
 	double spentTime;
-	boost::thread GraphWorker;
-	mutable boost::mutex GraphItemMutex;
-	boost::condition_variable GraphItemMutexConditionVariable;
+
 	int SleepTime;
 
 	// Function for preparing class to work 

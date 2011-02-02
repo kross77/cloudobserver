@@ -1,5 +1,5 @@
-#include "CastingDataSystem.h"
-
+#include "CoreEvents.h"
+#include "CoreItem.h"
 #include <boost/thread.hpp>
 
 // parts of c++0x std
@@ -11,24 +11,22 @@
 
 using namespace std ;
 template <typename DataType >
-class IPortElement : public CastingDataSystem<DataType> {
-
-private:
-	mutable boost::mutex GraphItemMutex;
-	boost::condition_variable GraphItemMutexConditionVariable;
+class IPortElement : public CoreEvents<DataType>, public CoreItem {
 
 public:
 
 	// sets up a pointer holding a copy of pointer of data we want to return on Get() call
-	void Set(DataType* DataElement)
+	void Set(DataType * DataElement)
 	{
 		boost::mutex::scoped_lock lock(GraphItemMutex);
-		dataElement = DataElement;
+		*dataElement = *DataElement;
+		Cast();
 		lock.unlock();
+		GraphItemMutexConditionVariable.notify_one();
 	}
 
 	// Returns pointer to copy of current graphItem processed data
-	DataType Get()
+	virtual DataType Get()
 	{
 		DataType dataCopy;
 		boost::mutex::scoped_lock lock(GraphItemMutex);
