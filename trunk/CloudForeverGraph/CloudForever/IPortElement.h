@@ -1,27 +1,30 @@
-#include "IGraphElementBase.h"
 #include "CastingDataSystem.h"
+
+#include <boost/thread.hpp>
 
 // parts of c++0x std
 #include <boost/bind.hpp> 
 #include <boost/function.hpp>
 
-#ifndef _IGraphElement_h_
-#define _IGraphElement_h_
+#ifndef _IPortElement_h_
+#define _IPortElement_h_
 
 using namespace std ;
 template <typename DataType >
-class IGraphElement : public IGraphElementBase, public CastingDataSystem<DataType> {
+class IPortElement : public CastingDataSystem<DataType> {
+
+private:
+	mutable boost::mutex GraphItemMutex;
+	boost::condition_variable GraphItemMutexConditionVariable;
 
 public:
 
-	// initGet sets up a pointer holding a copy of pointer of data we want to return on Get() call
-	void InitGet(DataType* DataElement)
+	// sets up a pointer holding a copy of pointer of data we want to return on Get() call
+	void Set(DataType* DataElement)
 	{
+		boost::mutex::scoped_lock lock(GraphItemMutex);
 		dataElement = DataElement;
-	}
-	virtual void CastData()
-	{
-		Cast();
+		lock.unlock();
 	}
 
 	// Returns pointer to copy of current graphItem processed data
@@ -35,12 +38,5 @@ public:
 		return dataCopy;
 	}
 
-	void Clean()
-	{
-		GraphWorker.interrupt();
-		GraphWorker.join();
-		CleanAPI();
-	}
-
 };
-#endif // _IGraphElement_h_
+#endif // _IPortElement_h_
