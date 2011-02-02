@@ -126,9 +126,12 @@ void UseLSD(IplImage* destination)
 	}
 
 	linesFoundOnPicture = 0;
+	cout << endl << "Progress:";
 	for(int j = 1; j < originalUnderLSD->width/roiSize-1; j=j++) {
+		cout << "." ;
 		for(int i = 1; i < originalUnderLSD->height/roiSize-1; i=i++) {    
-			cvSetImageROI(originalUnderLSD, cvRect(j*roiSize, i*roiSize,roiSize, roiSize));
+			
+				cvSetImageROI(originalUnderLSD, cvRect(j*roiSize, i*roiSize,roiSize, roiSize));
 			IplImage *cropSource = cvCreateImage(cvGetSize(originalUnderLSD), originalUnderLSD->depth, originalUnderLSD->nChannels);
 			// cropped image
 			// copy
@@ -140,6 +143,7 @@ void UseLSD(IplImage* destination)
 
 		}
 	}
+	cout << endl;
 	if(useWindows){
 		ProcessLSD(originalUnderLSD);
 		cvNamedWindow( "original Under LSD", CV_WINDOW_AUTOSIZE );
@@ -147,7 +151,9 @@ void UseLSD(IplImage* destination)
 
 		cvNamedWindow( "composed LSD'd Image", CV_WINDOW_AUTOSIZE );
 		cvShowImage( "composed LSD'd Image", composedLSDImageColor );
+		cout << endl<< "We wait for you to press any key on window with image" << endl;
 		cvWaitKey(0);
+		
 	}
 
 	cout << "LSD:line detector found " << linesFoundOnPicture << " lines on picture fragments." << endl;
@@ -172,7 +178,8 @@ void OpenDirectory(string p)
 				if(useWindows){	
 					cvNamedWindow( "Original Image", CV_WINDOW_AUTOSIZE );
 					cvShowImage( "Original Image", original );
-
+					cout << endl<< "We wait for you to press any key on window with image" << endl;
+					cvWaitKey(0);
 					composedLSDImageColor = cvCreateImage(cvGetSize(original), original->depth, original->nChannels);
 					originalUnderLSDColor = cvCreateImage(cvGetSize(original), original->depth, original->nChannels);
 
@@ -180,6 +187,15 @@ void OpenDirectory(string p)
 					cvCopy(original, originalUnderLSDColor, NULL);
 				}			
 				UseLSD(original);
+				string NameLSDOriginal;
+				NameLSDOriginal += itr->path().filename();
+				NameLSDOriginal += "_LSDOriginal.jpg";
+				string NameCompositLSD;
+
+				NameCompositLSD += itr->path().filename();
+				NameCompositLSD += "_CompositLSD.jpg";
+				cvSaveImage(NameCompositLSD.c_str() ,composedLSDImageColor);
+				cvSaveImage(NameLSDOriginal.c_str() ,originalUnderLSDColor);
 				//cvReleaseImage( &original );
 				//cvDestroyWindow( "CurrentImage" );
 
