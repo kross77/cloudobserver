@@ -187,7 +187,7 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\CameraPreviewTest.h"
+				RelativePath=".\TestAllElements.h"
 				>
 			</File>
 			<Filter
@@ -203,6 +203,14 @@
 				</File>
 				<File
 					RelativePath=".\GETTest.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="GraphElementsTests"
+				>
+				<File
+					RelativePath=".\CameraPreviewTest.h"
 					>
 				</File>
 			</Filter>

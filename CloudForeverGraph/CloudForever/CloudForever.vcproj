@@ -211,6 +211,18 @@
 					RelativePath=".\interfacesReadMe.txt"
 					>
 				</File>
+				<File
+					RelativePath=".\IPortElement.h"
+					>
+				</File>
+				<Filter
+					Name="Core"
+					>
+					<File
+						RelativePath=".\CastingDataSystem.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="GraphElements"
