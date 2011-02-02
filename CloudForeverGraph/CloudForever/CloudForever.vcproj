@@ -219,7 +219,11 @@
 					Name="Core"
 					>
 					<File
-						RelativePath=".\CastingDataSystem.h"
+						RelativePath=".\CoreEvents.h"
+						>
+					</File>
+					<File
+						RelativePath=".\CoreItem.h"
 						>
 					</File>
 				</Filter>

@@ -1,5 +1,5 @@
 #include "IGraphElementBase.h"
-#include "CastingDataSystem.h"
+#include "CoreEvents.h"
 
 // parts of c++0x std
 #include <boost/bind.hpp> 
@@ -10,7 +10,7 @@
 
 using namespace std ;
 template <typename DataType >
-class IGraphElement : public IGraphElementBase, public CastingDataSystem<DataType> {
+class IGraphElement : public IGraphElementBase, public CoreEvents<DataType> {
 
 public:
 
@@ -22,10 +22,10 @@ public:
 	virtual void CastData()
 	{
 		Cast();
-	}
+	}   
 
 	// Returns pointer to copy of current graphItem processed data
-	DataType Get()
+	virtual DataType Get()
 	{
 		DataType dataCopy;
 		boost::mutex::scoped_lock lock(GraphItemMutex);

@@ -214,6 +214,18 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="AdvancedGraphElementTutorial"
+				>
+				<File
+					RelativePath=".\AGETgenerator.h"
+					>
+				</File>
+				<File
+					RelativePath=".\AGETTest.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Resource Files"
