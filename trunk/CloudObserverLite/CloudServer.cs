@@ -2,55 +2,32 @@
 using System.Collections;
 using System.Net;
 using System.Net.Sockets;
+using System.ServiceProcess;
 using System.Threading;
+using CloudObserverLite.Properties;
 
 namespace CloudObserverLite
 {
-    public class CloudServer
+    public sealed class CloudServer : ServiceBase
     {
-        private const string DEFAULT_NAME = "Cloud Observer Lite 1.0.0";
-        private const ushort DEFAULT_PORT = 4773;
-
-        public const uint MAX_STREAMS_COUNT = 10;
+        public const string SERVICE_NAME = "Cloud Observer Lite";
 
         private TcpListener listener;
         private Thread thread;
+        private uint clientsCount = 0;
 
-        private string name;
-        private ushort port;
-        private uint clientsCount;
-        private LogWriter logWriter;
+        public Hashtable streams = new Hashtable();
 
-        public Hashtable streams;
-
-        public string Name
+        public CloudServer()
         {
-            get
-            {
-                return this.name;
-            }
+            this.ServiceName = SERVICE_NAME;
         }
 
-        public CloudServer() : this(DEFAULT_NAME, DEFAULT_PORT) { }
-
-        public CloudServer(string name) : this(name, DEFAULT_PORT) { }
-
-        public CloudServer(ushort port) : this(DEFAULT_NAME, port) { }
-
-        public CloudServer(string name, ushort port)
+        private void Listen()
         {
-            this.name = name;
-            this.port = port;
-            this.clientsCount = 0;
-            this.logWriter = LogWriter.GetInstance();
-            this.streams = new Hashtable();
-        }
-
-        public void Listen()
-        {
-            this.listener = new TcpListener(IPAddress.Any, this.port);
+            this.listener = new TcpListener(IPAddress.Any, Settings.Default.ServerPort);
             this.listener.Start();
-            this.logWriter.WriteLog("Server started. Waiting for connections...");
+            this.EventLog.WriteEntry("Server started. Waiting for connections...");
 
             while (true)
             {
@@ -62,13 +39,14 @@ namespace CloudObserverLite
                     clientThread.IsBackground = true;
                     clientThread.Start();
                 }
-                catch (Exception)
+                catch (Exception exception)
                 {
+                    this.EventLog.WriteEntry(exception.ToString());
                 }
             }
         }
 
-        public void Start()
+        protected override void OnStart(string[] args)
         {
             this.thread = new Thread(new ThreadStart(this.Listen));
             this.thread.Name = "Server";
@@ -76,13 +54,15 @@ namespace CloudObserverLite
             this.thread.Start();
         }
 
-        public void Stop()
+        protected override void OnStop()
         {
             this.listener.Stop();
-            this.logWriter.WriteLog("Server stopped.");
-            this.logWriter.Close();
-
             this.thread.Abort();
+        }
+
+        public static void Main()
+        {
+            ServiceBase.Run(new CloudServer());
         }
     }
 }

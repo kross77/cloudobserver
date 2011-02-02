@@ -46,8 +46,6 @@ namespace CloudObserverLite
         private const byte TAGTYPE_VIDEO = 9;
         private const byte TAGTYPE_DATA = 18;
 
-        private LogWriter logWriter;
-
         public CloudClient(CloudServer server, uint clientNumber, TcpClient client)
         {
             this.server = server;
@@ -59,13 +57,11 @@ namespace CloudObserverLite
             this.scriptData = new List<byte[]>();
             this.tagsBuffer = new List<byte[]>();
             this.bufferedTimestamp = 0;
-
-            this.logWriter = LogWriter.GetInstance();
         }
 
         public void Process()
         {
-            this.logWriter.WriteLog("Client " + this.clientNumber.ToString() + " connected.");
+            //this.server.EventLog.WriteEntry("Client " + this.clientNumber.ToString() + " connected.");
 
             NetworkStream networkStream = this.client.GetStream();
 
@@ -234,7 +230,7 @@ namespace CloudObserverLite
                 this.httpResponse.status = (int)((parserState == ParserState.OK) ? ResponseState.OK : ResponseState.BAD_REQUEST);
 
                 this.httpResponse.headers = new Hashtable();
-                this.httpResponse.headers.Add("Server", server.Name);
+                this.httpResponse.headers.Add("Server", Settings.Default.ServerName);
                 this.httpResponse.headers.Add("Date", DateTime.Now.ToString("r"));
 
                 if (httpResponse.status == (int)ResponseState.OK)
@@ -363,13 +359,13 @@ namespace CloudObserverLite
             }
             catch (Exception e)
             {
-                this.logWriter.WriteLog("Client " + this.clientNumber.ToString() + " caught " + e.ToString());
+                //this.server.EventLog.WriteEntry("Client " + this.clientNumber.ToString() + " caught " + e.ToString());
             }
             finally
             {
                 if (clientType != ClientType.ReaderClient)
                 {
-                    this.logWriter.WriteLog("Client " + this.clientNumber.ToString() + " disconnected.");
+                    //this.server.EventLog.WriteEntry("Client " + this.clientNumber.ToString() + " disconnected.");
 
                     networkStream.Close();
                     this.client.Close();
@@ -450,7 +446,7 @@ namespace CloudObserverLite
                             bodyString += this.nickname;
                             bodyString += "\" is already in use!</BODY></HTML>\n";
                         }
-                        else if (server.streams.Count >= CloudServer.MAX_STREAMS_COUNT)
+                        else if (server.streams.Count >= Settings.Default.MaxStreams)
                         {
                             httpResponse.status = (int)ResponseState.FORBIDDEN;
                             bodyString = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n";
