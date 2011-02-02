@@ -6,7 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Web;
-//using Microsoft.Win32;
+using Microsoft.Win32;
 using CloudObserverLite.Properties;
 
 namespace CloudObserverLite
@@ -61,8 +61,6 @@ namespace CloudObserverLite
 
         public void Process()
         {
-            //this.server.EventLog.WriteEntry("Client " + this.clientNumber.ToString() + " connected.");
-
             NetworkStream networkStream = this.client.GetStream();
 
             byte[] buffer = new byte[this.client.ReceiveBufferSize];
@@ -354,19 +352,13 @@ namespace CloudObserverLite
                     }
                 }
             }
-            catch (IOException)
+            catch (Exception)
             {
-            }
-            catch (Exception e)
-            {
-                //this.server.EventLog.WriteEntry("Client " + this.clientNumber.ToString() + " caught " + e.ToString());
             }
             finally
             {
                 if (clientType != ClientType.ReaderClient)
                 {
-                    //this.server.EventLog.WriteEntry("Client " + this.clientNumber.ToString() + " disconnected.");
-
                     networkStream.Close();
                     this.client.Close();
                     if (this.httpResponse.fileStream != null)
@@ -467,7 +459,8 @@ namespace CloudObserverLite
                             bodyString += "\".</BODY></HTML>\n";
                             this.clientType = ClientType.WriterClient;
                         }
-                        break;
+                        httpResponse.bodyData = Encoding.ASCII.GetBytes(bodyString);
+                        return;
                     case "read":
                         if (nickname.EndsWith(".flv"))
                             nickname = nickname.Substring(0, nickname.Length - 4);
@@ -488,6 +481,10 @@ namespace CloudObserverLite
                             httpResponse.headers.Add("Cache-Control", "no-cache");
                             this.clientType = ClientType.ReaderClient;
                         }
+                        httpResponse.bodyData = Encoding.ASCII.GetBytes(bodyString);
+                        return;
+                    case "play":
+                        httpRequest.url = "/player.html";
                         break;
                     default:
                         httpResponse.status = (int)ResponseState.BAD_REQUEST;
@@ -498,158 +495,79 @@ namespace CloudObserverLite
                         bodyString += "<BODY>Unknown action \"";
                         bodyString += action;
                         bodyString += "\"!</BODY></HTML>\n";
-                        break;
-                    case "play":
-                        bodyString = Resources.player_html.Replace("_NICKNAME_", nickname);
-                        break;
+                        httpResponse.bodyData = Encoding.ASCII.GetBytes(bodyString);
+                        return;
                 }
-                httpResponse.bodyData = Encoding.ASCII.GetBytes(bodyString);
-                return;
             }
 
+            string path = (string)Registry.LocalMachine.OpenSubKey("Software\\Cloud Observer Lite").GetValue("InstallLocation") +"htdocs" + httpRequest.url.Replace("/", "\\");
+            if (Directory.Exists(path) && File.Exists(path + "index.html"))
+                path += "\\index.html";
+
+            // dynamic files
             switch (httpRequest.url)
             {
                 case "/":
                     string onlineUsers = "";
                     foreach (string nickname in server.streams.Keys)
                         onlineUsers += "<li><FORM><INPUT class=\"eButton\" type=\"button\" value=\"" + nickname + "\" onClick=\"openWin('" + nickname + "'" + "," + ((CloudClient)server.streams[nickname]).width + "," + ((CloudClient)server.streams[nickname]).height + ")\"></FORM></li>\n";
-                    httpResponse.bodyData = Encoding.ASCII.GetBytes(Resources.index_html.Replace("_ONLINE_USERS_", onlineUsers));
-                    break;
+                    httpResponse.bodyData = Encoding.ASCII.GetBytes(new StreamReader(File.OpenRead(path)).ReadToEnd().Replace("_ONLINE_USERS_", onlineUsers));
+                    return;
                 case "/buttons.html":
                     string buttons = "";
                     foreach (string nickname in server.streams.Keys)
                         buttons += "<li><FORM><INPUT class=\"eButton\" type=\"button\" value=\"" + nickname + "\" onClick=\"openWin('" + nickname + "'" + "," + ((CloudClient)server.streams[nickname]).width + "," + ((CloudClient)server.streams[nickname]).height + ")\"></FORM></li>\n";
                     httpResponse.bodyData = Encoding.ASCII.GetBytes(buttons);
-                    break;
-                case "/history/history.css":
-                    httpResponse.bodyData = Resources.history_history_css;
-                    break;
-                case "/history/history.js":
-                    httpResponse.bodyData = Resources.history_history_js;
-                    break;
-                case "/history/historyFrame.html":
-                    httpResponse.bodyData = Resources.history_historyFrame_html;
-                    break;
-                case "/AC_OETags.js":
-                    httpResponse.bodyData = Resources.AC_OETags_js;
-                    break;
-
-                    // JS 3d framework
-                case "/js/Cube.js":
-                    httpResponse.bodyData = Resources.js_Cube_js;
-                    break;
-                case "/js/Plane.js":
-                    httpResponse.bodyData = Resources.js_Plane_js;
-                    break;
-                case "/js/Sphere.js":
-                    httpResponse.bodyData = Resources.js_Sphere_js;
-                    break;
-                case "/js/Three.js":
-                    httpResponse.bodyData = Resources.js_Three_js;
-                    break;
-                case "/js/ThreeDebug.js":
-                    httpResponse.bodyData = Resources.js_ThreeDebug_js;
-                    break;
-                case "/js/ThreeExtras.js":
-                    httpResponse.bodyData = Resources.js_ThreeExtras_js;
-                    break;
-                     // HTML5 UI Assets
-                case "/textures/cube/skybox/nx.jpg":
-                    httpResponse.bodyData = Resources.textures_cube_skybox_nx_jpg;
-                    break;
-                case "/textures/cube/skybox/ny.jpg":
-                    httpResponse.bodyData = Resources.textures_cube_skybox_ny_jpg;
-                    break;
-                case "/textures/cube/skybox/nz.jpg":
-                    httpResponse.bodyData = Resources.textures_cube_skybox_nz_jpg;
-                    break;
-                case "/textures/cube/skybox/px.jpg":
-                    httpResponse.bodyData = Resources.textures_cube_skybox_px_jpg;
-                    break;
-                case "/textures/cube/skybox/py.jpg":
-                    httpResponse.bodyData = Resources.textures_cube_skybox_py_jpg;
-                    break;
-                case "/textures/cube/skybox/pz.jpg":
-                    httpResponse.bodyData = Resources.textures_cube_skybox_pz_jpg;
-                    break;
-
-                case "/framework_4.5.0.17689.swz":
-                    httpResponse.bodyData = Resources.framework_4_5_0_17689_swz;
-                    break;
-                case "/osmf_1.0.0.16316.swz":
-                    httpResponse.bodyData = Resources.osmf_1_0_0_16316_swz;
-                    break;
-                case "/playerProductInstall.swf":
-                    httpResponse.bodyData = Resources.playerProductInstall_swf;
-                    break;
-                case "/rpc_4.5.0.17689.swz":
-                    httpResponse.bodyData = Resources.rpc_4_5_0_17689_swz;
-                    break;
-                case "/spark_4.5.0.17689.swz":
-                    httpResponse.bodyData = Resources.spark_4_5_0_17689_swz;
-                    break;
-                case "/sparkskins_4.5.0.17689.swz":
-                    httpResponse.bodyData = Resources.sparkskins_4_5_0_17689_swz;
-                    break;
-                case "/swfobject.js":
-                    httpResponse.bodyData = Resources.swfobject_js;
-                    break;
-                case "/textLayout_2.0.0.139.swz":
-                    httpResponse.bodyData = Resources.textLayout_2_0_0_139_swz;
-                    break;
-                case "/window.swf":
-                    httpResponse.bodyData = Resources.player_swf;
-                    break;
+                    return;
+                case "/player.html":
+                    httpResponse.bodyData = Encoding.ASCII.GetBytes(new StreamReader(File.OpenRead(path)).ReadToEnd().Replace("_NICKNAME_", this.nickname));
+                    return;
                 default:
-                    httpResponse.status = (int)ResponseState.NOT_FOUND;
-
-                    string bodyString = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n";
-                    bodyString += "<HTML><HEAD>\n";
-                    bodyString += "<META http-equiv=Content-Type content=\"text/html; charset=windows-1252\">\n";
-                    bodyString += "</HEAD>\n";
-                    bodyString += "<BODY>File not found!</BODY></HTML>\n";
-
-                    httpResponse.bodyData = Encoding.ASCII.GetBytes(bodyString);
                     break;
             }
+            
+            // static files
+            if (File.Exists(path))
+            {
+                RegistryKey registryKey = Registry.ClassesRoot.OpenSubKey(Path.GetExtension(path));
+                string registryValue = (string)registryKey.GetValue("Content Type");
 
-            //string path = Directory.GetCurrentDirectory() + "\\" + httpRequest.url.Replace("/", "\\");
+                httpResponse.fileStream = File.OpenRead(path);
+                if (registryValue != "")
+                    httpResponse.headers["Content-type"] = registryValue;
 
-            //if (Directory.Exists(path))
+                httpResponse.headers["Content-Length"] = httpResponse.fileStream.Length;
+            }
+            else
+            {
+                httpResponse.status = (int)ResponseState.NOT_FOUND;
+
+                string bodyString = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n";
+                bodyString += "<HTML><HEAD>\n";
+                bodyString += "<META http-equiv=Content-Type content=\"text/html; charset=windows-1252\">\n";
+                bodyString += "</HEAD>\n";
+                bodyString += "<BODY>File not found!</BODY></HTML>\n";
+
+                httpResponse.bodyData = Encoding.ASCII.GetBytes(bodyString);
+            }
+
             //{
-            //    if (File.Exists(path + "index.html"))
-            //        path += "\\index.html";
-            //    else
-            //    {
-            //        string[] directories = Directory.GetDirectories(path);
-            //        string[] files = Directory.GetFiles(path);
+            //    string[] directories = Directory.GetDirectories(path);
+            //    string[] files = Directory.GetFiles(path);
 
-            //        string bodyString = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n";
-            //        bodyString += "<HTML><HEAD>\n";
-            //        bodyString += "<META http-equiv=Content-Type content=\"text/html; charset=windows-1252\">\n";
-            //        bodyString += "</HEAD>\n";
-            //        bodyString += "<BODY><p>Folder listing, to do not see this add a 'index.html' document\n<p>\n";
-            //        for (int i = 0; i < directories.Length; i++)
-            //            bodyString += "<br><a href = \"" + httpRequest.url + Path.GetFileName(directories[i]) + "/\">[" + Path.GetFileName(directories[i]) + "]</a>\n";
-            //        for (int i = 0; i < files.Length; i++)
-            //            bodyString += "<br><a href = \"" + httpRequest.url + Path.GetFileName(files[i]) + "\">" + Path.GetFileName(files[i]) + "</a>\n";
-            //        bodyString += "</BODY></HTML>\n";
+            //    string bodyString = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n";
+            //    bodyString += "<HTML><HEAD>\n";
+            //    bodyString += "<META http-equiv=Content-Type content=\"text/html; charset=windows-1252\">\n";
+            //    bodyString += "</HEAD>\n";
+            //    bodyString += "<BODY><p>Folder listing, to do not see this add a 'index.html' document\n<p>\n";
+            //    for (int i = 0; i < directories.Length; i++)
+            //        bodyString += "<br><a href = \"" + httpRequest.url + Path.GetFileName(directories[i]) + "/\">[" + Path.GetFileName(directories[i]) + "]</a>\n";
+            //    for (int i = 0; i < files.Length; i++)
+            //        bodyString += "<br><a href = \"" + httpRequest.url + Path.GetFileName(files[i]) + "\">" + Path.GetFileName(files[i]) + "</a>\n";
+            //    bodyString += "</BODY></HTML>\n";
 
-            //        httpResponse.bodyData = Encoding.ASCII.GetBytes(bodyString);
-            //        return;
-            //    }
-            //}
-
-            //if (File.Exists(path))
-            //{
-            //    RegistryKey registryKey = Registry.ClassesRoot.OpenSubKey(Path.GetExtension(path), true);
-            //    string registryValue = (string)registryKey.GetValue("Content Type");
-
-            //    httpResponse.fileStream = File.Open(path, FileMode.Open);
-            //    if (registryValue != "")
-            //        httpResponse.headers["Content-type"] = registryValue;
-
-            //    httpResponse.headers["Content-Length"] = httpResponse.fileStream.Length;
+            //    httpResponse.bodyData = Encoding.ASCII.GetBytes(bodyString);
+            //    return;
             //}
         }
 
