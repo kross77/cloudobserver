@@ -145,13 +145,14 @@ void UseLSD(IplImage* destination)
 	}
 	cout << endl;
 	if(useWindows){
-		ProcessLSD(originalUnderLSD);
+		ProcessLSD(originalUnderLSD);	
+		cout << endl<< "We wait for you to press any key on window with image" << endl;
 		cvNamedWindow( "original Under LSD", CV_WINDOW_AUTOSIZE );
 		cvShowImage( "original Under LSD", originalUnderLSDColor );
 
 		cvNamedWindow( "composed LSD'd Image", CV_WINDOW_AUTOSIZE );
 		cvShowImage( "composed LSD'd Image", composedLSDImageColor );
-		cout << endl<< "We wait for you to press any key on window with image" << endl;
+
 		cvWaitKey(0);
 		
 	}
@@ -175,10 +176,11 @@ void OpenDirectory(string p)
 				//		if (boost::filesystem::is_regular_file(itr->status())) cout << " [" << file_size(itr->path()) << ']';
 				cout << '\n';
 				original = cvLoadImage( itr->path().string().c_str() );
-				if(useWindows){	
+				if(useWindows){					
+					cout << endl<< "We wait for you to press any key on window with image" << endl;
 					cvNamedWindow( "Original Image", CV_WINDOW_AUTOSIZE );
 					cvShowImage( "Original Image", original );
-					cout << endl<< "We wait for you to press any key on window with image" << endl;
+
 					cvWaitKey(0);
 					composedLSDImageColor = cvCreateImage(cvGetSize(original), original->depth, original->nChannels);
 					originalUnderLSDColor = cvCreateImage(cvGetSize(original), original->depth, original->nChannels);
@@ -231,8 +233,8 @@ int main()
 	ElementTimer.restart();
 
 	OpenDirectory(dn);
-	file << "Time spent on tasks performing" << ElementTimer.elapsed() << endl;
-	cout << endl << "Time spent on tasks performing" << ElementTimer.elapsed() << endl;
+	file << "Time spent on tasks performing " << ElementTimer.elapsed() << endl;
+	cout << endl << "Time spent on tasks performing " << ElementTimer.elapsed() << endl;
 
 	file.close();
 	cin.get();
