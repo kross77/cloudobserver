@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns="http://ns.adobe.com/air/application/1.5.1">
+<id>CloudObserverAIRClient</id>
+<filename>CloudObserverAIRClient</filename>
+<name>Cloud Observer AIR Client</name>
+<version>v4</version>
+<description>Cloud Observer AIR Client. Made For Kernel V0.2 </description> 
+<copyright>Cloud Observer OpenSource Team 2010. OJ.</copyright> 
+<initialWindow>
+	<content>[This value will be overwritten by Flash Builder in the output app.xml]</content>
+	     <title>CloudObserver AIR Client</title> 
+         <minimizable>true</minimizable> 
+	     <maximizable>false</maximizable> 
+		 <resizable>false</resizable> 
+</initialWindow>
+</application>
