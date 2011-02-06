@@ -32,7 +32,10 @@ IplImage* originalUnderLSDColor;
 IplImage* composedLSDImageColor;
 
 bool useWindows;
-
+bool roundUp;
+int round(double a) {
+	return int(a + 0.5);
+}
 
 void ProcessLSD(IplImage* source)
 {
@@ -78,23 +81,39 @@ void ProcessLSD(IplImage* source, int  currentX, int currentY)
 		for(y=0;y<h;y++){
 			double RealColor = cvGetReal2D(source, y, x);
 			lsdImage->data[ x + y * lsdImage->xsize ] = RealColor;/* image(x,y) */
-			file << RealColor << " ";
 		}
-		file << endl;
-	}file << endl;
+	}
 
 	lsdOut = LineSegmentDetection( lsdImage, 1,	1, 0.1,22.0, 0, 0.1,	1280, 60,NULL);//LineSegmentDetection(lsdImage, 1);
 
 	if (lsdOut->size == 0)
 	{
-		file << "0 0 0 0";
+		//file << "0 0 0 0";
 
 	}
 	else
 	{
 		linesFoundOnPicture = linesFoundOnPicture +1;
-		file << lsdOut->values[ 0 * lsdOut->dim + 0 ] << " " <<  lsdOut->values[ 0 * lsdOut->dim + 1] << " ";
-		file << lsdOut->values[ 0 * lsdOut->dim + 2 ] << " " << lsdOut->values[ 0 * lsdOut->dim + 3 ] << " ";
+
+		for(x=0;x<w;x++){
+			for(y=0;y<h;y++){
+				double RealColor = cvGetReal2D(source, y, x);
+				file << RealColor << " ";
+			}
+			file << endl;
+		}file << endl;
+
+
+		if (roundUp)
+		{
+			file << round(lsdOut->values[ 0 * lsdOut->dim + 0 ]) << " " <<  round(lsdOut->values[ 0 * lsdOut->dim + 1]) << " ";
+			file << round(lsdOut->values[ 0 * lsdOut->dim + 2 ]) << " " << round(lsdOut->values[ 0 * lsdOut->dim + 3 ]) << " ";
+		}
+		else
+		{
+			file << (lsdOut->values[ 0 * lsdOut->dim + 0 ]) << " " <<  (lsdOut->values[ 0 * lsdOut->dim + 1]) << " ";
+			file << (lsdOut->values[ 0 * lsdOut->dim + 2 ]) << " " << (lsdOut->values[ 0 * lsdOut->dim + 3 ]) << " ";
+		}
 
 		if(useWindows){
 			currentY =currentY*roiSize;
@@ -130,8 +149,8 @@ void UseLSD(IplImage* destination)
 	for(int j = 1; j < originalUnderLSD->width/roiSize-1; j=j++) {
 		cout << "." ;
 		for(int i = 1; i < originalUnderLSD->height/roiSize-1; i=i++) {    
-			
-				cvSetImageROI(originalUnderLSD, cvRect(j*roiSize, i*roiSize,roiSize, roiSize));
+
+			cvSetImageROI(originalUnderLSD, cvRect(j*roiSize, i*roiSize,roiSize, roiSize));
 			IplImage *cropSource = cvCreateImage(cvGetSize(originalUnderLSD), originalUnderLSD->depth, originalUnderLSD->nChannels);
 			// cropped image
 			// copy
@@ -154,7 +173,7 @@ void UseLSD(IplImage* destination)
 		cvShowImage( "composed LSD'd Image", composedLSDImageColor );
 
 		cvWaitKey(0);
-		
+
 	}
 
 	cout << "LSD:line detector found " << linesFoundOnPicture << " lines on picture fragments." << endl;
@@ -177,11 +196,10 @@ void OpenDirectory(string p)
 				cout << '\n';
 				original = cvLoadImage( itr->path().string().c_str() );
 				if(useWindows){					
-					cout << endl<< "We wait for you to press any key on window with image" << endl;
+					cout << endl<< "Please wait..." << endl;
 					cvNamedWindow( "Original Image", CV_WINDOW_AUTOSIZE );
 					cvShowImage( "Original Image", original );
 
-					cvWaitKey(0);
 					composedLSDImageColor = cvCreateImage(cvGetSize(original), original->depth, original->nChannels);
 					originalUnderLSDColor = cvCreateImage(cvGetSize(original), original->depth, original->nChannels);
 
@@ -189,15 +207,18 @@ void OpenDirectory(string p)
 					cvCopy(original, originalUnderLSDColor, NULL);
 				}			
 				UseLSD(original);
-				string NameLSDOriginal;
-				NameLSDOriginal += itr->path().filename();
-				NameLSDOriginal += "_LSDOriginal.jpg";
-				string NameCompositLSD;
+				if(useWindows){	
+					string NameLSDOriginal;
 
-				NameCompositLSD += itr->path().filename();
-				NameCompositLSD += "_CompositLSD.jpg";
-				cvSaveImage(NameCompositLSD.c_str() ,composedLSDImageColor);
-				cvSaveImage(NameLSDOriginal.c_str() ,originalUnderLSDColor);
+					NameLSDOriginal += itr->path().filename();
+					NameLSDOriginal += "_LSDOriginal.jpg";
+					string NameCompositLSD;
+
+					NameCompositLSD += itr->path().filename();
+					NameCompositLSD += "_CompositLSD.jpg";
+					cvSaveImage(NameCompositLSD.c_str() ,composedLSDImageColor);
+					cvSaveImage(NameLSDOriginal.c_str() ,originalUnderLSDColor);
+				}
 				//cvReleaseImage( &original );
 				//cvDestroyWindow( "CurrentImage" );
 
@@ -209,8 +230,15 @@ void OpenDirectory(string p)
 
 
 
-int main()
+int main(int argc, char* argv[])
 {
+	roundUp = 1;
+	for(int i = 1; i<argc; i=i+2){ 
+		if(string(argv[i]) == "-r") 
+		{
+			roundUp = atoi(argv[i+1]);
+		} 
+	}
 	cout << "Hello dear user." << endl << "I am a program that can take folder with images and perform on tham slysing into peaces of desired size and perform filtering (line searching) algorithm on each peace. This can and will take some time. Data would be outputed into CSV text file." << endl;
 
 	cout << "Please input desired output file name (for example GeneratedTrainingDataSet.txt  )" << endl;
@@ -233,7 +261,7 @@ int main()
 	ElementTimer.restart();
 
 	OpenDirectory(dn);
-	file << "Time spent on tasks performing " << ElementTimer.elapsed() << endl;
+	//	file << "Time spent on tasks performing " << ElementTimer.elapsed() << endl;
 	cout << endl << "Time spent on tasks performing " << ElementTimer.elapsed() << endl;
 
 	file.close();
