@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   creationComplete="application_creationCompleteHandler(event)" minWidth="1024" minHeight="768" xmlns:gateway="services.gateway.*" xmlns:workblock="services.workblock.*" xmlns:ns1="*" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" height="296">
+	
+	<fx:Script>
+		<![CDATA[
+			import flash.external.*;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.core.FlexGlobals;
+			import mx.events.FlexEvent;
+			import mx.messaging.channels.StreamingAMFChannel;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			import services.gateway.Gateway;
+			import services.workblock.WorkBlock;
+			
+			import spark.components.VSlider;
+			[Bindable]
+			public var baseUri:String = new String();
+			[Bindable]
+			public var gatewayUri:String = new String();
+			[Bindable]
+			public var contentIdsArraylangth:int;
+			[Bindable]
+			public var contentIdsArray:Array;
+			[Bindable]
+			public var contentArray:Array;
+			[Bindable]
+			public var contentUrlsArray:Array;
+			[Bindable]
+			public var contentTypesArray:Array;
+			[Bindable]
+			public var contentMp3UrlsArray:Array;
+			[Bindable]
+			public var contentFlvUrlsArray:Array;
+			[Bindable]
+			public var workBlockUri:String =  new String(); 
+			[Bindable]
+			public var content:String =  new String();	
+			
+			protected function application_creationCompleteHandler(event:FlexEvent):void
+			{
+		
+				
+		//		openURL("2344", "http://127.0.0.1/stream.flv"); // tested
+				
+				for (var s:String in FlexGlobals.topLevelApplication.parameters)
+				{
+					switch (s)
+					{
+						case "url":
+							var ss:String = FlexGlobals.topLevelApplication.parameters[s]  as String;
+							ss += "?wsdl";
+							gatewayUri = ss;
+							textArea.text += " \n ПРИНЯТЫЙ ОТ HTML Wsdl Url: " + gatewayUri;							
+						break;
+						case "sid":
+							textArea.text += " \n ПРИНЯТАЯ СТРОКА Cloud Observer Content IDs: " + FlexGlobals.topLevelApplication.parameters[s];
+							contentIdsArray = String(FlexGlobals.topLevelApplication.parameters[s]).split(/,/);
+							contentIdsArraylangth = contentIdsArray.length;
+							break;
+						case "baseuri":
+							textArea.text += " \n ПРИНЯТый адрес для открытия новых окон: " + FlexGlobals.topLevelApplication.parameters[s];
+							baseUri = String(FlexGlobals.topLevelApplication.parameters[s]);
+							break;
+						default:
+							textArea.text += " \n остальные посланные аргументы: " + s + " " + FlexGlobals.topLevelApplication.parameters[s] + "; ";
+							break;
+					}
+				}
+				if (gatewayUri.length >= 12) {
+					var gateway:Gateway = new Gateway;
+				gateway.serviceStart(gatewayUri);
+				gateway.showBusyCursor = true;
+				gateway.addEventListener(FaultEvent.FAULT, gatewayInactive);
+				GetWorkBlockResult.token = gateway.GetWorkBlock();
+						} else {
+					textArea.text += " Не был указан адресс ядрышка.";
+				}
+			}
+			protected function openURL(id:String, url:String):void
+			{
+				var base_url_str:String = escape(baseUri);
+				url = escape(url);
+				id = escape(id);
+				var url_str:String = base_url_str + '?' + 'sid=' + id + '&' + 'videourl=' +url ;
+				if (ExternalInterface.available)
+				{
+					try {
+					ExternalInterface.call( "window.open", url_str, "new" );
+					} catch(e:Error) {
+						Alert.show(e.toString());
+					}
+					
+					}
+				else
+				{
+					try {
+					var urlRequest:URLRequest = new URLRequest(url_str);
+					navigateToURL(urlRequest,"new");
+				} catch(e:Error) {
+					Alert.show(e.toString());
+				}
+				}
+			}
+			protected function gatewayInactive(event:FaultEvent):void{
+				textArea.text += " Был указан адресс ядрышка. По данному адресу ядрышко не пашет";
+			}
+			protected function IWannaReadResult_resultHandler(event:ResultEvent):void
+			{
+				content = event.result as String;
+				contentUrlsArray = new Array();
+				contentTypesArray = new Array();
+				contentArray = new Array();
+				contentMp3UrlsArray = new Array();
+				contentFlvUrlsArray  = new Array();
+				contentArray = String(content).split(/,/);
+				for(var i:int = 0 ;i <= contentIdsArraylangth; i++ ){
+					 contentUrlsArray.push(contentArray[i].toString());
+					//i++;
+				}
+				for(var v:int = contentIdsArraylangth; v <= int(contentIdsArraylangth*2 - 1); v++){
+					contentTypesArray.push(contentArray[v].toString());
+					//v++;
+				}
+				for(var u:int = 0; u <= int(contentIdsArraylangth-1); u++){
+				
+					if (contentTypesArray[u].toString() == 'video/x-flv'	)
+					{
+						contentFlvUrlsArray.push(contentUrlsArray[u]);
+					}
+					else if (contentTypesArray[u].toString() == 'audio/mpeg'	)
+					{	
+						contentMp3UrlsArray.push(contentUrlsArray[u]);
+					}
+					else if (contentTypesArray[u].toString() == 'none'	)
+					{
+					}
+					else
+					{
+					}		
+				}
+				playMp3s(contentMp3UrlsArray);
+				openVindowsWithVideo(contentFlvUrlsArray);
+				textArea.text += " \n Принятые урлки " + contentUrlsArray.toString();
+				textArea.text += " \n Принятые типы " + contentTypesArray.toString();
+				textArea.text += " \n Принятые MP3 урлки " + contentMp3UrlsArray.toString();
+				textArea.text += " \n Принятые FLV урлки  " + contentFlvUrlsArray.toString();		
+			}
+			
+			public function openVindowsWithVideo(sUris:Array):void
+			{
+				for ( var i:String in sUris){
+					var streamUri:String = new String();
+					streamUri = sUris[i].toString();
+					textArea.text += " \n Урлка послана на открытие в новой страницэ: " + streamUri;
+					openURL(contentIdsArray[i].toString(), streamUri);
+				}
+
+			}
+			 protected function GetWorkBlockResult_resultHandler(event:ResultEvent):void
+			{
+				workBlockUri = event.result as String;
+				workBlockUri += "?wsdl";
+				textArea.text +=  " \n Принятый Work Block Uri: " + workBlockUri;
+				var workBlock:WorkBlock = new WorkBlock;
+				workBlock.serviceStart(workBlockUri);
+				workBlock.showBusyCursor = true;
+				IWannaReadResult.token = workBlock.IWannaRead(contentIdsArray);
+				
+			} 
+			public function playMp3s(sUris:Array):void
+			{
+				stopFun();
+				for ( var i:String in sUris){
+					var streamUri:String = new String();
+					streamUri = sUris[i].toString();
+					var request:URLRequest = new URLRequest(streamUri);
+					trace(streamUri);
+					var sound:Sound = new Sound();
+					sound.addEventListener(IOErrorEvent.IO_ERROR, funError);
+					sound.load(request);
+					sound.addEventListener(IOErrorEvent.IO_ERROR, funError);
+					var channel:SoundChannel = new SoundChannel;
+					
+					channel.addEventListener(Event.SOUND_COMPLETE, onPlaybackComplete);
+					channel = sound.play();		
+				}
+			}	
+			public function stopFun():void
+			{
+			//	SoundMixer.stopAll();
+			}	
+			private function funError(e:IOErrorEvent):void
+			{}
+			private function onPlaybackComplete(event:Event):void
+			{}
+			public function volumefun(volnumber:Number):void
+			{
+				var transform:SoundTransform=new SoundTransform(volnumber, 0);
+				SoundMixer.soundTransform=transform;
+			}
+			protected function volumetr_changeHandler(event:Event):void
+			{
+				volumefun(volumetr.value/100);
+			}
+			protected function volumetr_creationCompleteHandler(event:FlexEvent):void
+			{
+				volumefun(volumetr.value/100);
+			}
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<s:CallResponder id="IWannaReadResult"  result="IWannaReadResult_resultHandler(event)"/>
+		<s:CallResponder id="GetWorkBlockResult"  result="GetWorkBlockResult_resultHandler(event)"/>
+</fx:Declarations>
+	<mx:Form id="form" borderAlpha="0" backgroundAlpha="0.8" top="10" bottom="10" left="46" right="10">
+		<mx:FormHeading label="Проверка работоспособности сервисов (проводится при инициализации)" width="100%"/>
+		<s:TextArea width="100%" text="Лог операций:" id="textArea" height="100%"  borderVisible="false" borderAlpha="0.83" contentBackgroundAlpha="0.9"/>
+	</mx:Form>
+	<s:VSlider value="90" minimum="1" creationComplete="volumetr_creationCompleteHandler(event)" change="volumetr_changeHandler(event)" maximum="100" stepSize="1" id="volumetr" left="10" verticalCenter="0"/>
+	<s:Label text="Громкость" rotationX="0" rotationY="0" rotationZ="90" verticalCenter="0" left="20"/>
+</s:Application>

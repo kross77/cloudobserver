@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserver.Clients.Auxiliaries", "..\Projects\CloudObserver.Clients.Auxiliaries\CloudObserver.Clients.Auxiliaries.csproj", "{8D115571-F1F0-40A4-9E3B-520B3C576D82}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserver.Clients.MultimediaPlayer", "..\Projects\CloudObserver.Clients.MultimediaPlayer\CloudObserver.Clients.MultimediaPlayer.csproj", "{6DA07715-6B0A-458D-8C3C-6123FCAA059B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserver.Clients.MultimediaTransmitter", "..\Projects\CloudObserver.Clients.MultimediaTransmitter\CloudObserver.Clients.MultimediaTransmitter.csproj", "{4ED0495F-630B-419A-ADD2-F32276FFE9F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserver.Clients.Writer", "..\Projects\CloudObserver.Clients.Writer\CloudObserver.Clients.Writer.csproj", "{ED550705-6C73-4FF2-9A38-724C6BD6F96B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8D115571-F1F0-40A4-9E3B-520B3C576D82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D115571-F1F0-40A4-9E3B-520B3C576D82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D115571-F1F0-40A4-9E3B-520B3C576D82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D115571-F1F0-40A4-9E3B-520B3C576D82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DA07715-6B0A-458D-8C3C-6123FCAA059B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DA07715-6B0A-458D-8C3C-6123FCAA059B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DA07715-6B0A-458D-8C3C-6123FCAA059B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DA07715-6B0A-458D-8C3C-6123FCAA059B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4ED0495F-630B-419A-ADD2-F32276FFE9F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4ED0495F-630B-419A-ADD2-F32276FFE9F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4ED0495F-630B-419A-ADD2-F32276FFE9F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4ED0495F-630B-419A-ADD2-F32276FFE9F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED550705-6C73-4FF2-9A38-724C6BD6F96B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED550705-6C73-4FF2-9A38-724C6BD6F96B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED550705-6C73-4FF2-9A38-724C6BD6F96B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED550705-6C73-4FF2-9A38-724C6BD6F96B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

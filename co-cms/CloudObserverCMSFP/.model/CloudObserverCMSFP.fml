@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model xmlns="http://ns.adobe.com/Fiber/1.0">
+  <annotation name="ActionScriptGeneration">
+    <item name="FullyQualifyReferences">true</item>
+  </annotation>
+  <service name="WorkBlock">
+    <annotation name="ActionScriptGeneration">
+      <item name="WSDL-service">WorkBlock</item>
+      <item name="ServiceType">WebService</item>
+      <item name="WSDL">http://localhost:4773/cloudobserver/wb-0?wsdl</item>
+      <item name="Package">services.workblock</item>
+      <item name="WSDL-port">BasicHttpBinding_IWorkBlock</item>
+    </annotation>
+    <annotation name="ASFilesGenerated">
+      <item name="ASFilesGenerated">services/workblock/_Super_WorkBlock.as~#~services/workblock/WorkBlock.as~#~</item>
+    </annotation>
+    <annotation name="ServiceTypeGroup">
+      <item name="ServiceBackendType">WebService</item>
+    </annotation>
+    <annotation name="WSDLCollectionElementTypes">
+      <item name="http://schemas.microsoft.com/2003/10/Serialization/Arrays,ArrayOfint">int::http://www.w3.org/2001/XMLSchema,int</item>
+    </annotation>
+    <annotation name="ServiceConfig">
+      <item name="DEFAULT_ENTITY_PACKAGE">valueObjects</item>
+      <item name="WSDL-endpoint">http://localhost:4773/cloudobserver/wb-0</item>
+      <item name="LINKED_FILE"></item>
+    </annotation>
+    <function name="GetTcpStreamUriToRead" arguments="contentIds:integer[]" return-type="string">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="WSDLCollectionTypes">
+        <item name="contentIds">http://schemas.microsoft.com/2003/10/Serialization/Arrays,ArrayOfint</item>
+      </annotation>
+      <annotation name="WSDLName">
+        <item name="SOAPAction">http://tempuri.org/IWorkBlock/GetTcpStreamUriToRead</item>
+        <item name="GetTcpStreamUriToRead">http://tempuri.org/,GetTcpStreamUriToRead</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">integer</item>
+        <item name="returnType">string</item>
+      </annotation>
+    </function>
+  </service>
+  <service name="Gateway">
+    <annotation name="ActionScriptGeneration">
+      <item name="WSDL-service">Gateway</item>
+      <item name="ServiceType">WebService</item>
+      <item name="WSDL">http://localhost:4773/cloudobserver?wsdl</item>
+      <item name="Package">services.gateway</item>
+      <item name="WSDL-port">BasicHttpBinding_IGateway</item>
+    </annotation>
+    <annotation name="ASFilesGenerated">
+      <item name="ASFilesGenerated">services/gateway/_Super_Gateway.as~#~services/gateway/Gateway.as~#~</item>
+    </annotation>
+    <annotation name="ServiceTypeGroup">
+      <item name="ServiceBackendType">WebService</item>
+    </annotation>
+    <annotation name="ServiceConfig">
+      <item name="DEFAULT_ENTITY_PACKAGE">valueObjects</item>
+      <item name="WSDL-endpoint">http://localhost:4773/cloudobserver</item>
+      <item name="LINKED_FILE"></item>
+    </annotation>
+    <function name="GetWorkBlock" return-type="string">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="WSDLName">
+        <item name="GetWorkBlock">http://tempuri.org/,GetWorkBlock</item>
+        <item name="SOAPAction">http://tempuri.org/IGateway/GetWorkBlock</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">string</item>
+      </annotation>
+    </function>
+  </service>
+</model>

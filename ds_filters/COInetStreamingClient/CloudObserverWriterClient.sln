@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserverWriterClient", "CloudObserverWriterClient.csproj", "{A72D6DDE-ED57-438F-A217-DAC7C82118F3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudDsWpfClient", "..\CloudDsWpfClient\CloudDsWpfClient.csproj", "{14CD7E67-6F54-4A3C-83EF-18D628AC741D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A72D6DDE-ED57-438F-A217-DAC7C82118F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A72D6DDE-ED57-438F-A217-DAC7C82118F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A72D6DDE-ED57-438F-A217-DAC7C82118F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A72D6DDE-ED57-438F-A217-DAC7C82118F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14CD7E67-6F54-4A3C-83EF-18D628AC741D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14CD7E67-6F54-4A3C-83EF-18D628AC741D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14CD7E67-6F54-4A3C-83EF-18D628AC741D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14CD7E67-6F54-4A3C-83EF-18D628AC741D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
