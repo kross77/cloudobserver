@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:tns="http://tempuri.org/" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" name="BroadcastService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://10.0.4.74:9000/BroadcastService?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://10.0.4.74:9000/BroadcastService?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="BroadcastServiceContract_GetControllerServiceUri_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetControllerServiceUri" />
+  </wsdl:message>
+  <wsdl:message name="BroadcastServiceContract_GetControllerServiceUri_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetControllerServiceUriResponse" />
+  </wsdl:message>
+  <wsdl:message name="BroadcastServiceContract_SetControllerServiceUri_InputMessage">
+    <wsdl:part name="parameters" element="tns:SetControllerServiceUri" />
+  </wsdl:message>
+  <wsdl:message name="BroadcastServiceContract_SetControllerServiceUri_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SetControllerServiceUriResponse" />
+  </wsdl:message>
+  <wsdl:message name="BroadcastServiceContract_ReadFrame_InputMessage">
+    <wsdl:part name="parameters" element="tns:ReadFrame" />
+  </wsdl:message>
+  <wsdl:message name="BroadcastServiceContract_ReadFrame_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ReadFrameResponse" />
+  </wsdl:message>
+  <wsdl:message name="BroadcastServiceContract_WriteFrame_InputMessage">
+    <wsdl:part name="parameters" element="tns:WriteFrame" />
+  </wsdl:message>
+  <wsdl:message name="BroadcastServiceContract_WriteFrame_OutputMessage">
+    <wsdl:part name="parameters" element="tns:WriteFrameResponse" />
+  </wsdl:message>
+  <wsdl:portType name="BroadcastServiceContract">
+    <wsdl:operation name="GetControllerServiceUri">
+      <wsdl:input wsaw:Action="http://tempuri.org/AbstractServiceContract/GetControllerServiceUri" message="tns:BroadcastServiceContract_GetControllerServiceUri_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/AbstractServiceContract/GetControllerServiceUriResponse" message="tns:BroadcastServiceContract_GetControllerServiceUri_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SetControllerServiceUri">
+      <wsdl:input wsaw:Action="http://tempuri.org/AbstractServiceContract/SetControllerServiceUri" message="tns:BroadcastServiceContract_SetControllerServiceUri_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/AbstractServiceContract/SetControllerServiceUriResponse" message="tns:BroadcastServiceContract_SetControllerServiceUri_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ReadFrame">
+      <wsdl:input wsaw:Action="http://tempuri.org/BroadcastServiceContract/ReadFrame" message="tns:BroadcastServiceContract_ReadFrame_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/BroadcastServiceContract/ReadFrameResponse" message="tns:BroadcastServiceContract_ReadFrame_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="WriteFrame">
+      <wsdl:input wsaw:Action="http://tempuri.org/BroadcastServiceContract/WriteFrame" message="tns:BroadcastServiceContract_WriteFrame_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/BroadcastServiceContract/WriteFrameResponse" message="tns:BroadcastServiceContract_WriteFrame_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_BroadcastServiceContract" type="tns:BroadcastServiceContract">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetControllerServiceUri">
+      <soap:operation soapAction="http://tempuri.org/AbstractServiceContract/GetControllerServiceUri" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetControllerServiceUri">
+      <soap:operation soapAction="http://tempuri.org/AbstractServiceContract/SetControllerServiceUri" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReadFrame">
+      <soap:operation soapAction="http://tempuri.org/BroadcastServiceContract/ReadFrame" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WriteFrame">
+      <soap:operation soapAction="http://tempuri.org/BroadcastServiceContract/WriteFrame" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="BroadcastService">
+    <wsdl:port name="BasicHttpBinding_BroadcastServiceContract" binding="tns:BasicHttpBinding_BroadcastServiceContract">
+      <soap:address location="http://10.0.4.74:9000/BroadcastService" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
