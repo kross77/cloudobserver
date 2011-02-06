@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:tns="http://tempuri.org/" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" name="AuthenticationService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://10.0.4.74:9000/AuthenticationService?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://10.0.4.74:9000/AuthenticationService?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="AuthenticationServiceContract_GetControllerServiceUri_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetControllerServiceUri" />
+  </wsdl:message>
+  <wsdl:message name="AuthenticationServiceContract_GetControllerServiceUri_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetControllerServiceUriResponse" />
+  </wsdl:message>
+  <wsdl:message name="AuthenticationServiceContract_SetControllerServiceUri_InputMessage">
+    <wsdl:part name="parameters" element="tns:SetControllerServiceUri" />
+  </wsdl:message>
+  <wsdl:message name="AuthenticationServiceContract_SetControllerServiceUri_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SetControllerServiceUriResponse" />
+  </wsdl:message>
+  <wsdl:message name="AuthenticationServiceContract_UserCheckEmailAvailability_InputMessage">
+    <wsdl:part name="parameters" element="tns:UserCheckEmailAvailability" />
+  </wsdl:message>
+  <wsdl:message name="AuthenticationServiceContract_UserCheckEmailAvailability_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UserCheckEmailAvailabilityResponse" />
+  </wsdl:message>
+  <wsdl:message name="AuthenticationServiceContract_UserLogin_InputMessage">
+    <wsdl:part name="parameters" element="tns:UserLogin" />
+  </wsdl:message>
+  <wsdl:message name="AuthenticationServiceContract_UserLogin_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UserLoginResponse" />
+  </wsdl:message>
+  <wsdl:message name="AuthenticationServiceContract_UserRegister_InputMessage">
+    <wsdl:part name="parameters" element="tns:UserRegister" />
+  </wsdl:message>
+  <wsdl:message name="AuthenticationServiceContract_UserRegister_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UserRegisterResponse" />
+  </wsdl:message>
+  <wsdl:portType name="AuthenticationServiceContract">
+    <wsdl:operation name="GetControllerServiceUri">
+      <wsdl:input wsaw:Action="http://tempuri.org/AbstractServiceContract/GetControllerServiceUri" message="tns:AuthenticationServiceContract_GetControllerServiceUri_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/AbstractServiceContract/GetControllerServiceUriResponse" message="tns:AuthenticationServiceContract_GetControllerServiceUri_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SetControllerServiceUri">
+      <wsdl:input wsaw:Action="http://tempuri.org/AbstractServiceContract/SetControllerServiceUri" message="tns:AuthenticationServiceContract_SetControllerServiceUri_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/AbstractServiceContract/SetControllerServiceUriResponse" message="tns:AuthenticationServiceContract_SetControllerServiceUri_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UserCheckEmailAvailability">
+      <wsdl:input wsaw:Action="http://tempuri.org/AuthenticationServiceContract/UserCheckEmailAvailability" message="tns:AuthenticationServiceContract_UserCheckEmailAvailability_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/AuthenticationServiceContract/UserCheckEmailAvailabilityResponse" message="tns:AuthenticationServiceContract_UserCheckEmailAvailability_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UserLogin">
+      <wsdl:input wsaw:Action="http://tempuri.org/AuthenticationServiceContract/UserLogin" message="tns:AuthenticationServiceContract_UserLogin_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/AuthenticationServiceContract/UserLoginResponse" message="tns:AuthenticationServiceContract_UserLogin_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UserRegister">
+      <wsdl:input wsaw:Action="http://tempuri.org/AuthenticationServiceContract/UserRegister" message="tns:AuthenticationServiceContract_UserRegister_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/AuthenticationServiceContract/UserRegisterResponse" message="tns:AuthenticationServiceContract_UserRegister_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_AuthenticationServiceContract" type="tns:AuthenticationServiceContract">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetControllerServiceUri">
+      <soap:operation soapAction="http://tempuri.org/AbstractServiceContract/GetControllerServiceUri" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetControllerServiceUri">
+      <soap:operation soapAction="http://tempuri.org/AbstractServiceContract/SetControllerServiceUri" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UserCheckEmailAvailability">
+      <soap:operation soapAction="http://tempuri.org/AuthenticationServiceContract/UserCheckEmailAvailability" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UserLogin">
+      <soap:operation soapAction="http://tempuri.org/AuthenticationServiceContract/UserLogin" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UserRegister">
+      <soap:operation soapAction="http://tempuri.org/AuthenticationServiceContract/UserRegister" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="AuthenticationService">
+    <wsdl:port name="BasicHttpBinding_AuthenticationServiceContract" binding="tns:BasicHttpBinding_AuthenticationServiceContract">
+      <soap:address location="http://10.0.4.74:9000/AuthenticationService" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
