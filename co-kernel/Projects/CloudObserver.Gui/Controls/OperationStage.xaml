@@ -1,9 +1,0 @@
-﻿<UserControl x:Class="CloudObserver.Gui.Controls.OperationStage"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="clr-namespace:CloudObserver.Gui.Controls">
-    <StackPanel x:Name="stackPanel" Height="0" Margin="24,4,0,0" Orientation="Horizontal">
-        <controls:SpinningWait x:Name="spinningWait" />
-        <TextBlock x:Name="textBlock" Margin="4,0,0,0" />
-    </StackPanel>
-</UserControl>
