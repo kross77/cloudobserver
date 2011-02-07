@@ -1,1 +1,0 @@
-APIs a uniqe sets of usefull functions.
