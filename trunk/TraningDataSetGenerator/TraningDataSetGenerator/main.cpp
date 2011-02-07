@@ -312,7 +312,7 @@ int main(int argc, char* argv[])
 		// example -server http://127.0.0.1:4773 -nickname vasia  // if you change w and h do not forget about stream bit rate!!!
 	}
 
-	cout << "Hello dear user." << endl << "I am a program that can take folder with images and perform on tham slysing into peaces of desired size and perform filtering (line searching) algorithm on each peace. This can and will take some time. Data would be outputed into CSV text file." << endl;
+	cout << "Hello dear user." << endl << "I am a program that can take folder with images and perform on them slicing into peaces of desired size and perform filtering (line searching) algorithm on each peace. This can and will take some time. Data would be outputted into CSV text file." << endl;
 
 	cout << "Please input desired output file name (for example GeneratedTrainingDataSet.txt  )" << endl;
 	string fn;
