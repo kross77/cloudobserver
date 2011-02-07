@@ -25,21 +25,20 @@ boost::timer ElementTimer;
 double scale, sigma_scale,  quant, gradientAngleTolerance,  eps,  density_th, max_grad;
 int n_bins;
 image_int * region ;
-ofstream file;
+
 IplImage* original;
 IplImage* originalUnderLSD;
 IplImage* composedLSDImage;
 
 IplImage* originalUnderLSDColor;
 IplImage* composedLSDImageColor;
+IplImage* originalUnderNNlsdColor;
 
 bool useWindows;
 bool roundUp;
 int normalyzeMatrix;
 bool linesOnly;
-int round(double a) {
-	return int(a + 0.5);
-}
+
 
 void ProcessLSD(IplImage* source)
 {
@@ -70,6 +69,10 @@ void ProcessLSD(IplImage* source)
 	free_ntuple_list(lsdOut);
 }
 
+void ProcessNN( IplImage * cropSource, int j, int i ) 
+{
+	//throw std::exception("The method or operation is not implemented.");
+}
 void ProcessLSD(IplImage* source, int  currentX, int currentY)
 {
 	int w = source->width;
@@ -89,114 +92,20 @@ void ProcessLSD(IplImage* source, int  currentX, int currentY)
 	lsdOut = LineSegmentDetection( lsdImage, 1,	1, 0.1,22.0, 0, 0.1,	1280, 60,NULL);//LineSegmentDetection(lsdImage, 1);
 
 	if (lsdOut->size == 0)
-	{
-		if(!linesOnly)
-		{
-			if(normalyzeMatrix <= 1){
-				if(normalyzeMatrix == 0){ // print matrix in form of bool values
-					cvNormalize(source,source,1,0,CV_MINMAX );
-				}
-				for(x=0;x<w;x++){
-					for(y=0;y<h;y++){
-
-						double RealColor = cvGetReal2D(source, y, x);
-						file << RealColor << " ";
-					}
-					file << endl;
-				}file << endl;
-			}
-			if(normalyzeMatrix==2){
-				int maxVal;
-				int minVal;
-				int wh = w*h;
-				int values[1000];
-				for(x=0;x<w;x++){
-					for(y=0;y<h;y++){
-						double RealColor = cvGetReal2D(source, y, x);
-						values[x*h + y] = RealColor; 
-					}
-				}
-				minVal = *min_element(values,(values+wh));
-				maxVal = *max_element(values,(values+wh));
-				float dif = maxVal - minVal;
-				float fminVal;
-				fminVal = minVal;
-				for(x=0;x<w;x++){
-					for(y=0;y<h;y++){
-						float rc = cvGetReal2D(source, y, x);
-						float normRealColor =(rc - fminVal) / dif;
-						file << normRealColor << " ";
-					}
-					file << endl;
-				}file << endl;
-			}
-			file << "0 0 0 0";
-		}	
-	}
+	{	}
 	else
 	{
 		linesFoundOnPicture = linesFoundOnPicture +1;
 
-		if(normalyzeMatrix <= 1){
-			if(normalyzeMatrix == 0){ // print matrix in form of bool values
-				cvNormalize(source,source,1,0,CV_MINMAX );
-			}
-			for(x=0;x<w;x++){
-				for(y=0;y<h;y++){
-
-					double RealColor = cvGetReal2D(source, y, x);
-					file << RealColor << " ";
-				}file << endl;
-			}file << endl;
-		}
-		if(normalyzeMatrix==2){
-			int maxVal;
-			int minVal;
-			int wh = w*h;
-			int values[1000];
-			for(x=0;x<w;x++){
-				for(y=0;y<h;y++){
-					double RealColor = cvGetReal2D(source, y, x);
-					values[x*h + y] = RealColor; 
-				}
-			}
-			minVal = *min_element(values,(values+wh));
-			maxVal = *max_element(values,(values+wh));
-			float dif = maxVal - minVal;
-			float fminVal;
-			fminVal = minVal;
-			for(x=0;x<w;x++){
-				for(y=0;y<h;y++){
-					float rc = cvGetReal2D(source, y, x);
-					float normRealColor =(rc - fminVal) / dif;
-					file << normRealColor << " ";
-				}
-				file << endl;
-			}file << endl;
-		}
-
-		if (roundUp)
-		{
-			file << round(lsdOut->values[ 0 * lsdOut->dim + 0 ]) << " " <<  round(lsdOut->values[ 0 * lsdOut->dim + 1]) << " ";
-			file << round(lsdOut->values[ 0 * lsdOut->dim + 2 ]) << " " << round(lsdOut->values[ 0 * lsdOut->dim + 3 ]) << " ";
-		}
-		else
-		{
-			file << (lsdOut->values[ 0 * lsdOut->dim + 0 ]) << " " <<  (lsdOut->values[ 0 * lsdOut->dim + 1]) << " ";
-			file << (lsdOut->values[ 0 * lsdOut->dim + 2 ]) << " " << (lsdOut->values[ 0 * lsdOut->dim + 3 ]) << " ";
-		}
-
-		if(useWindows){
 			currentY =currentY*roiSize;
 			currentX = currentX*roiSize;
 
 			CvPoint pt1 = {currentX + lsdOut->values[ 0 * lsdOut->dim + 0 ], currentY + lsdOut->values[ 0 * lsdOut->dim + 1]};
 			CvPoint pt2 = {currentX+ lsdOut->values[ 0 * lsdOut->dim + 2 ], currentY + lsdOut->values[ 0 * lsdOut->dim + 3 ] };
 			cvLine(composedLSDImageColor, pt1, pt2, CV_RGB(240, 50, 50), 1, CV_AA,0);
-		}
+		
 	}
-	file << endl;
-	file << endl;
+
 	//	cvReleaseImage(&source);
 	free_image_double(lsdImage);
 	free_ntuple_list(lsdOut);
@@ -208,11 +117,6 @@ void UseLSD(IplImage* destination)
 
 	originalUnderLSD = cvCreateImage(cvSize(w, h),IPL_DEPTH_8U,1);
 	cvCvtColor(destination,originalUnderLSD,CV_RGB2GRAY);
-	if(useWindows){
-		composedLSDImage = cvCreateImage(cvSize(w, h),IPL_DEPTH_8U,1);
-
-		cvCopy(originalUnderLSD, composedLSDImage, NULL);
-	}
 
 	linesFoundOnPicture = 0;
 	cout << endl << "Progress:";
@@ -226,6 +130,7 @@ void UseLSD(IplImage* destination)
 			// copy
 			cvCopy(originalUnderLSD, cropSource, NULL);
 			ProcessLSD(cropSource, j, i);
+			ProcessNN(cropSource, j, i);
 			// ... do what you want with your cropped image ...
 			// always reset the ROI
 			cvResetImageROI(originalUnderLSD);
@@ -233,18 +138,23 @@ void UseLSD(IplImage* destination)
 		}
 	}
 	cout << endl;
-	if(useWindows){
+
 		ProcessLSD(originalUnderLSD);	
 		cout << endl<< "We wait for you to press any key on window with image" << endl;
+
+		cvNamedWindow( "Original Image", CV_WINDOW_AUTOSIZE );
+		cvShowImage( "Original Image", destination );
+
 		cvNamedWindow( "original Under LSD", CV_WINDOW_AUTOSIZE );
 		cvShowImage( "original Under LSD", originalUnderLSDColor );
 
 		cvNamedWindow( "composed LSD'd Image", CV_WINDOW_AUTOSIZE );
 		cvShowImage( "composed LSD'd Image", composedLSDImageColor );
 
-		cvWaitKey(0);
+		cvNamedWindow( "composed NNLSD Image", CV_WINDOW_AUTOSIZE );
+		cvShowImage( "composed NNLSD Image", originalUnderNNlsdColor );
 
-	}
+		cvWaitKey(0);
 
 	cout << "LSD:line detector found " << linesFoundOnPicture << " lines on picture fragments." << endl;
 
@@ -265,37 +175,42 @@ void OpenDirectory(string p)
 				//		if (boost::filesystem::is_regular_file(itr->status())) cout << " [" << file_size(itr->path()) << ']';
 				cout << '\n';
 				original = cvLoadImage( itr->path().string().c_str() );
-				if(useWindows){					
+				 				
 					cout << endl<< "Please wait..." << endl;
-					cvNamedWindow( "Original Image", CV_WINDOW_AUTOSIZE );
-					cvShowImage( "Original Image", original );
+
 
 					composedLSDImageColor = cvCreateImage(cvGetSize(original), original->depth, original->nChannels);
 					originalUnderLSDColor = cvCreateImage(cvGetSize(original), original->depth, original->nChannels);
-
+					originalUnderNNlsdColor = cvCreateImage(cvGetSize(original), original->depth, original->nChannels);
 					cvCopy(original, composedLSDImageColor, NULL);
 					cvCopy(original, originalUnderLSDColor, NULL);
-				}			
+					cvCopy(original, originalUnderNNlsdColor, NULL);
+
 				UseLSD(original);
-				if(useWindows){	
+				 
 					string NameLSDOriginal;
 
 					NameLSDOriginal += itr->path().filename();
 					NameLSDOriginal += "_LSDOriginal.jpg";
+
 					string NameCompositLSD;
 
 					NameCompositLSD += itr->path().filename();
 					NameCompositLSD += "_CompositLSD.jpg";
+
+					string NameNNCompositLSD;
+
+					NameNNCompositLSD += itr->path().filename();
+					NameNNCompositLSD += "_NNCompositLSD.jpg";
+
 					cvSaveImage(NameCompositLSD.c_str() ,composedLSDImageColor);
 					cvSaveImage(NameLSDOriginal.c_str() ,originalUnderLSDColor);
-				}
-				//cvReleaseImage( &original );
-				//cvDestroyWindow( "CurrentImage" );
-
+					cvSaveImage(NameNNCompositLSD.c_str() ,originalUnderNNlsdColor);
+	
 			}
 		}
 	}
-	else {cout << (boost::filesystem::exists(p) ? "Found: " : "Not found: ") << p << '\n'; file << (boost::filesystem::exists(p) ? "Found: " : "Not found: ") << p << '\n';}
+	else {cout << (boost::filesystem::exists(p) ? "Found: " : "Not found: ") << p << '\n'; cout << (boost::filesystem::exists(p) ? "Found: " : "Not found: ") << p << '\n';}
 }
 
 
@@ -312,43 +227,19 @@ int main(int argc, char* argv[])
 		// example -server http://127.0.0.1:4773 -nickname vasia  // if you change w and h do not forget about stream bit rate!!!
 	}
 
-	cout << "Hello dear user." << endl << "I am a program that can take folder with images and perform on tham slysing into peaces of desired size and perform filtering (line searching) algorithm on each peace. This can and will take some time. Data would be outputed into CSV text file." << endl;
+	cout << "Hello dear user." << endl << "I am a program that can take folder with images and perform on them line segments detection. I will use LSD and NNLSD for you to compare results." << endl;
 
-	cout << "Please input desired output file name (for example GeneratedTrainingDataSet.txt  )" << endl;
-	string fn;
-	cin >> fn;
-	file.open (fn.c_str());
-	file.clear();
 	cout << endl << "Please input path to directory with images (for example C:/Temp/TestDir ) " << endl;
 	string dn;
 	cin >> dn;
-	cout << endl << "Please input slices length (for example 10). Slices are square B&W image peaces"<< endl ;
-	string rs;
-	cin >> rs;	
-	roiSize = atoi(rs.c_str());
-	cout << endl << "Please input 1 to use preview mode (you will have to press any key on window with image / or images from time to time) or input 0 for silent mode (best for Training Data Set Generation)" << endl;
-	string model;
-	cin >> model;	
-	useWindows = atoi(model.c_str());
-	cout << endl << "Please input 1 to round up line points coordinates values or input 0 to get doubles as line point coordinates" << endl;
-	string doRound;
-	cin >> doRound;	
-	roundUp = atoi(doRound.c_str());
-	cout << endl << "Please input  1 not to normalize image B&W color values at all or input 0 to get color values as bool, or  input 2 to get color values from 0.01 to 1.0" << endl;
-	string doNormalyze;
-	cin >> doNormalyze;	
-	normalyzeMatrix = atoi(doNormalyze.c_str());
-	cout << endl << "Please input 1 to print only images on which lines were found 0 all found images with  0 0 0 0 in case there was no line" << endl;
-	string doLines;
-	cin >> doLines;	
-	linesOnly = atoi(doLines.c_str());
+
+	roiSize = 8;
+
 	ElementTimer.restart();
 
 	OpenDirectory(dn);
 	//	file << "Time spent on tasks performing " << ElementTimer.elapsed() << endl;
 	cout << endl << "Time spent on tasks performing " << ElementTimer.elapsed() << endl;
-
-	file.close();
 	cin.get();
 
 }
