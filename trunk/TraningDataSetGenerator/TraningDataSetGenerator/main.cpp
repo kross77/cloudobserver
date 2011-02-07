@@ -5,6 +5,8 @@
 #include <string>
 #include <fstream>
 
+#include <algorithm>
+
 #include <boost/filesystem.hpp>
 #include <boost/timer.hpp>
 
@@ -33,6 +35,8 @@ IplImage* composedLSDImageColor;
 
 bool useWindows;
 bool roundUp;
+int normalyzeMatrix;
+bool linesOnly;
 int round(double a) {
 	return int(a + 0.5);
 }
@@ -51,7 +55,6 @@ void ProcessLSD(IplImage* source)
 			double RealColor = cvGetReal2D(source, y, x);
 			lsdImage->data[ x + y * lsdImage->xsize ] = RealColor;/* image(x,y) */
 		}
-
 	}
 
 	lsdOut = LineSegmentDetection( lsdImage, 1,	1, 0.1,22.0, 0, 0.1,	1280, 60,NULL);//LineSegmentDetection(lsdImage, 1);
@@ -76,7 +79,6 @@ void ProcessLSD(IplImage* source, int  currentX, int currentY)
 	unsigned int x,y,i,j;
 	lsdImage = new_image_double(w,h);
 
-
 	for(x=0;x<w;x++){
 		for(y=0;y<h;y++){
 			double RealColor = cvGetReal2D(source, y, x);
@@ -88,21 +90,90 @@ void ProcessLSD(IplImage* source, int  currentX, int currentY)
 
 	if (lsdOut->size == 0)
 	{
-		//file << "0 0 0 0";
+		if(!linesOnly)
+		{
+			if(normalyzeMatrix <= 1){
+				if(normalyzeMatrix == 0){ // print matrix in form of bool values
+					cvNormalize(source,source,1,0,CV_MINMAX );
+				}
+				for(x=0;x<w;x++){
+					for(y=0;y<h;y++){
 
+						double RealColor = cvGetReal2D(source, y, x);
+						file << RealColor << " ";
+					}
+					file << endl;
+				}file << endl;
+			}
+			if(normalyzeMatrix==2){
+				int maxVal;
+				int minVal;
+				int wh = w*h;
+				int values[1000];
+				for(x=0;x<w;x++){
+					for(y=0;y<h;y++){
+						double RealColor = cvGetReal2D(source, y, x);
+						values[x*h + y] = RealColor; 
+					}
+				}
+				minVal = *min_element(values,(values+wh));
+				maxVal = *max_element(values,(values+wh));
+				float dif = maxVal - minVal;
+				float fminVal;
+				fminVal = minVal;
+				for(x=0;x<w;x++){
+					for(y=0;y<h;y++){
+						float rc = cvGetReal2D(source, y, x);
+						float normRealColor =(rc - fminVal) / dif;
+						file << normRealColor << " ";
+					}
+					file << endl;
+				}file << endl;
+			}
+			file << "0 0 0 0";
+		}	
 	}
 	else
 	{
 		linesFoundOnPicture = linesFoundOnPicture +1;
 
-		for(x=0;x<w;x++){
-			for(y=0;y<h;y++){
-				double RealColor = cvGetReal2D(source, y, x);
-				file << RealColor << " ";
+		if(normalyzeMatrix <= 1){
+			if(normalyzeMatrix == 0){ // print matrix in form of bool values
+				cvNormalize(source,source,1,0,CV_MINMAX );
 			}
-			file << endl;
-		}file << endl;
+			for(x=0;x<w;x++){
+				for(y=0;y<h;y++){
 
+				double RealColor = cvGetReal2D(source, y, x);
+					file << RealColor << " ";
+				}file << endl;
+			}file << endl;
+		}
+		 if(normalyzeMatrix==2){
+			int maxVal;
+			int minVal;
+			int wh = w*h;
+			int values[1000];
+			for(x=0;x<w;x++){
+				for(y=0;y<h;y++){
+					double RealColor = cvGetReal2D(source, y, x);
+					values[x*h + y] = RealColor; 
+				}
+			}
+			minVal = *min_element(values,(values+wh));
+			maxVal = *max_element(values,(values+wh));
+			float dif = maxVal - minVal;
+			float fminVal;
+			fminVal = minVal;
+			for(x=0;x<w;x++){
+				for(y=0;y<h;y++){
+					float rc = cvGetReal2D(source, y, x);
+					float normRealColor =(rc - fminVal) / dif;
+					file << normRealColor << " ";
+				}
+				file << endl;
+			}file << endl;
+		}
 
 		if (roundUp)
 		{
@@ -123,7 +194,6 @@ void ProcessLSD(IplImage* source, int  currentX, int currentY)
 			CvPoint pt2 = {currentX+ lsdOut->values[ 0 * lsdOut->dim + 2 ], currentY + lsdOut->values[ 0 * lsdOut->dim + 3 ] };
 			cvLine(composedLSDImageColor, pt1, pt2, CV_RGB(240, 50, 50), 1, CV_AA,0);
 		}
-
 	}
 	file << endl;
 	file << endl;
@@ -232,13 +302,16 @@ void OpenDirectory(string p)
 
 int main(int argc, char* argv[])
 {
-	roundUp = 1;
-	for(int i = 1; i<argc; i=i+2){ 
-		if(string(argv[i]) == "-r") 
-		{
-			roundUp = atoi(argv[i+1]);
-		} 
+	//roundUp = 1;
+	for(int i = 1; i<argc; i=i+2){
+	//	if(string(argv[i]) == "-roiSize" ){roiSize = atoi(argv[i+1]);} 
+	//	if(string(argv[i]) == "-useWindows" ) {useWindows = atoi(argv[i+1]);} 
+	//	if(string(argv[i]) == "-doRound" ) {roundUp = atoi(argv[i+1]);} 
+	//	if(string(argv[i]) == "-normtype" ) {normalyzeMatrix = atoi(argv[i+1]);} 
+	//	if(string(argv[i]) == "-linesOnly" ) {linesOnly = atoi(argv[i+1]);} 
+		// example -server http://127.0.0.1:4773 -nickname vasia  // if you change w and h do not forget about stream bit rate!!!
 	}
+
 	cout << "Hello dear user." << endl << "I am a program that can take folder with images and perform on tham slysing into peaces of desired size and perform filtering (line searching) algorithm on each peace. This can and will take some time. Data would be outputed into CSV text file." << endl;
 
 	cout << "Please input desired output file name (for example GeneratedTrainingDataSet.txt  )" << endl;
@@ -257,7 +330,18 @@ int main(int argc, char* argv[])
 	string model;
 	cin >> model;	
 	useWindows = atoi(model.c_str());
-
+	cout << endl << "Please input 1 to round up line points coordinates values or input 0 to get doubles as line point coordinates" << endl;
+	string doRound;
+	cin >> doRound;	
+	roundUp = atoi(doRound.c_str());
+	cout << endl << "Please input  1 not to normalize image B&W color values at all or input 0 to get color values as bool, or  input 2 to get color values from 0.01 to 1.0" << endl;
+	string doNormalyze;
+	cin >> doNormalyze;	
+	normalyzeMatrix = atoi(doNormalyze.c_str());
+	cout << endl << "Please input 1 to print only images on which lines were found 0 all found images with  0 0 0 0 in case there was no line" << endl;
+	string doLines;
+	cin >> doLines;	
+	linesOnly = atoi(doLines.c_str());
 	ElementTimer.restart();
 
 	OpenDirectory(dn);
