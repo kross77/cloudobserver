@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Window xmlns:mx="http://www.adobe.com/2006/mxml"
+	 type="{NativeWindowType.UTILITY}" 
+	verticalScrollPolicy="off" horizontalScrollPolicy="off" layout="absolute"	 resizable="false" minimizable="false" maximizable="false"	showStatusBar="false"
+	 title="Опции" backgroundColor="#CBCBCB" borderColor="#FF0000">
+	 <mx:Script>
+	 	<![CDATA[
+	 				override public function open(openWindowActive:Boolean=true):void
+			{
+				super.open(openWindowActive);
+				nativeWindow.x = (Capabilities.screenResolutionX - width) / 2;
+				nativeWindow.y = (Capabilities.screenResolutionY - height) / 2;
+			}
+			
+	 	]]>
+	 </mx:Script>
+
+</mx:Window>
