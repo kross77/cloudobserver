@@ -1,0 +1,19 @@
+/* CSS file */
+@namespace s "library://ns.adobe.com/flex/spark";
+@namespace mx "library://ns.adobe.com/flex/halo";
+
+
+mx|Button.ButtCss
+{
+	borderColor: #000000;
+	color: #D1D1D1;
+	cornerRadius: 2;
+	fillAlphas: 1.0, 1.0;
+	fillColors: #353535, #3D3D3D;
+	fontSize: 10;
+	themeColor: #000000;
+}
+global
+{
+
+}

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication showStatusBar="false" 
+						title="CloudObserver Cameras Viewer"
+						xmlns:mx="http://www.adobe.com/2006/mxml"
+						creationComplete="init(event);" 
+						width="450" verticalScrollPolicy="off"  maxWidth="450"  	
+										horizontalScrollPolicy="off"   themeColor="#333333"
+						height="500" 
+						layout="absolute" 
+						backgroundGradientAlphas="[1.0, 1.0]"
+						backgroundGradientColors="[#CBCBCB, #6E6E6E]" 
+						xmlns:cloudobserverbroadcastservice="services.cloudobserverbroadcastservice.*" 
+						xmlns:broadcastservice="services.broadcastservice.*"
+						xmlns:mxmlY="http://www.yahoo.com/astra/2006/mxml">
+	 
+	<mx:Script> 
+		<![CDATA[
+				
+    import flash.media.Camera;
+    import mx.controls.Alert;
+    import mx.events.ListEvent;
+    import mx.utils.ObjectUtil;
+  	import flash.media.Video;
+  	import mx.core.UIComponent; 	
+  	import flash.display.Bitmap;
+    import mx.events.CloseEvent;
+    import flash.display.Sprite;
+    import flash.text.TextField;
+    import flash.text.TextFieldAutoSize;
+    import flash.utils.Timer;
+    import flash.events.TimerEvent;
+    import flash.events.ActivityEvent;
+
+	[Bindable]
+	private var array:Array = new Array(Camera.names.length);
+
+private function init(e:Event):void {
+         
+	var im:int = 0;
+		for (im; im < Camera.names.length; im++ ){
+			var iu:Array = new Array;
+			iu[0] = (im).toString();
+			array[im] = iu.toString();
+		}
+	trace(array);
+	list.dataProvider = array;
+	
+	this.addEventListener(Event.CLOSING, applicationExitHandler);
+}
+private function applicationExitHandler(event:Event):void
+    	{
+			// Close all windows on exit
+            var openedWindows:Array = NativeApplication.nativeApplication.openedWindows;
+            for (var i:int = 0; i < openedWindows.length; i ++) 
+            {
+                openedWindows[i].close();
+            }
+    	}
+	]]>
+	</mx:Script>
+		<mx:Panel layout="absolute" left="10" right="10" top="10" bottom="10" title="{'Камеры ' + Camera.names.length.toString() + ' штуки имеются в наличии' }">
+				<mx:List id="list" 
+					 itemRenderer="CamSendItem"    
+					 allowMultipleSelection="true"                
+					 width="100%"
+					 height="100%"
+					 y="16"
+				 x="0" 
+				 alternatingItemColors="[#FFFFFF, #D1D1D3]"
+				 />
+		</mx:Panel>
+
+	<!--
+	<mx:List id="list" 
+			 itemRenderer="CamSendItem"    
+			 allowMultipleSelection="true"                
+			 dragEnabled="true"
+			 dragMoveEnabled="true"
+			 width="49%"
+			 height="100%"
+			 left="0"
+			 backgroundColor="#CEB9B9" 
+			 y="0"
+		/>
+	<mx:List id="list0"  itemRenderer="CamSendItem"    
+			 allowMultipleSelection="true"                
+			 dragEnabled="true"
+			 dropEnabled="true"
+			 dragMoveEnabled="true"
+			 width="49%" 
+			 height="100%" 
+			 right="8" 
+			 y="0"
+			 backgroundColor="#992D2D"
+		/>-->
+</mx:WindowedApplication>

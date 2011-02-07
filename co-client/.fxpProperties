@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fxpProperties abbreviated="false" authoringTool="Flex Builder" compiles="true" parentProject="a75e4937-b397-45a2-b21a-14df1220827d" projectUUID="a75e4937-b397-45a2-b21a-14df1220827d" sdkVersion="4.0.0" uuid="c4e3c6f0-0b77-4a1d-92e3-9b3eed249317" version="2">
+  <projects/>
+  <src/>
+  <swc>
+    <linked location="sdkPlaceHolder" path="sdkPlaceHolder" position="0" uuid="c4e3c6f0-0b77-4a1d-92e3-9b3eed249317"/>
+    <linked location="C:/Users/Avesta-V/Adobe Flash Builder Beta/COAirBrV2/libs" path="/libs" position="1" uuid="a67946e4-a95b-42dc-b92b-1040fec1989d"/>
+    <linked location="C:/Program Files/Adobe/Flash Builder Beta/plugins/com.adobe.flexbuilder.dcrad_4.0.0.235740/dcradSwcs/libs" path="/linked-swc/libs" position="2" uuid="c4e3c6f0-0b77-4a1d-92e3-9b3eed249317"/>
+    <linked location="C:/Program Files/Adobe/Flash Builder Beta/plugins/com.adobe.flexbuilder.dcrad_4.0.0.235740/dcradSwcs/locale" path="/linked-swc/locale" position="3" uuid="c4e3c6f0-0b77-4a1d-92e3-9b3eed249317"/>
+    <linked location="C:/Program Files/Adobe/Flash Builder Beta/plugins/com.adobe.flexbuilder.dcrad_4.0.0.235740/dcradSwcs/libs" path="/linked-swc/libs4" position="4" uuid="c4e3c6f0-0b77-4a1d-92e3-9b3eed249317"/>
+    <linked location="C:/Program Files/Adobe/Flash Builder Beta/plugins/com.adobe.flexbuilder.dcrad_4.0.0.235740/dcradSwcs/locale" path="/linked-swc/locale4" position="5" uuid="c4e3c6f0-0b77-4a1d-92e3-9b3eed249317"/>
+  </swc>
+  <misc/>
+  <theme/>
+</fxpProperties>
