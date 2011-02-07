@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="TrainingDataSetGenerator"
-	ProjectGUID="{3642E59C-25AD-4D6C-BFB9-34965BC8A8D9}"
-	RootNamespace="TraningDataSetGenerator"
+	Name="NNLineSegmentsDetector"
+	ProjectGUID="{D986ABAB-13C9-4A0F-8B5E-C4EB26F3534C}"
+	RootNamespace="NNLineSegmentsDetector"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
