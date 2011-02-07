@@ -12,7 +12,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.ServiceModel;
 using System.ServiceModel.Description;
-using CloudObserverUserInterface.BroadcastServiceReference;
+using CloudObserverUserInterface.CloudObserverBroadcastServiceReference;
 using CloudObserverUserInterface.CloudObserverAuthorizationServiceReference;
 
 namespace CloudObserverUserInterface
@@ -29,7 +29,7 @@ namespace CloudObserverUserInterface
         private DispatcherTimer fpsTimer;
         private MessageWindow errorMessageWindow;
 
-        BroadcastServiceContractClient broadcastServiceClient;
+        CloudObserverBroadcastServiceClient broadcastServiceClient;
 
 		public CameraControl()
 		{
@@ -40,7 +40,7 @@ namespace CloudObserverUserInterface
             binding.CloseTimeout = TimeSpan.FromMinutes(5);
             binding.ReceiveTimeout = TimeSpan.FromMinutes(30);
             binding.SendTimeout = TimeSpan.FromMinutes(30);
-            broadcastServiceClient = new BroadcastServiceContractClient(binding, new EndpointAddress("http://localhost:9000/BroadcastService"));
+            broadcastServiceClient = new CloudObserverBroadcastServiceClient(binding, new EndpointAddress("http://localhost:9000/CloudObserverBroadcastService"));
             broadcastServiceClient.ReadFrameCompleted += new EventHandler<ReadFrameCompletedEventArgs>(client_ReadFrameCompleted);
             refreshTimer = new DispatcherTimer();
             refreshTimer.Interval = TimeSpan.FromMilliseconds(1000 / 60);
@@ -104,11 +104,6 @@ namespace CloudObserverUserInterface
         private void ButtonCloseCamera_Click(object sender, RoutedEventArgs e)
         {
             ((Blacklight.Controls.DragDockPanelHost)Parent).Items.Remove(this);
-        }
-
-        private void ButtonCloseCamera_Click_1(object sender, RoutedEventArgs e)
-        {
-
         }
 	}
 }

@@ -19,6 +19,8 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="cameraID" type="xs:int" />
         <xs:element minOccurs="0" name="frame" nillable="true" type="xs:base64Binary" />
+        <xs:element minOccurs="0" name="time" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="WriteToDataBase" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
