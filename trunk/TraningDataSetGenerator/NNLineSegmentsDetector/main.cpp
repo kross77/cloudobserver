@@ -22,6 +22,9 @@ int roiSize;
 
 boost::timer ElementTimer;
 
+boost::timer LSDTimer;
+boost::timer NNGTimer;
+
 double scale, sigma_scale,  quant, gradientAngleTolerance,  eps,  density_th, max_grad;
 int n_bins;
 image_int * region ;
@@ -69,9 +72,53 @@ void ProcessLSD(IplImage* source)
 	free_ntuple_list(lsdOut);
 }
 
-void ProcessNN( IplImage * cropSource, int j, int i ) 
+float NN1Y(IplImage* source,  float w0y00, float  w0y01, float  w0y02, float  w0y03, float  w0y04, float  w0y05, float  w0y06, float  w0y07, float  w0y10, float  w0y11, float  w0y12, float  w0y13, float  w0y14, float  w0y15, float  w0y16, float  w0y20, float  w0y21, float  w0y22, float  w0y23, float  w0y24, float  w0y25, float  w0y30, float  w0y31, float  w0y32, float  w0y33, float  w0y34, float  w0y40, float  w0y41, float  w0y42, float  w0y43, float  w0y50, float  w0y51, float  w0y52, float  w0y60, float  w0y61, float  w0y70, float  pn0, float  pn1, float  pn2, float  pn3, float  pn4, float  pn5, float  pn6, float  pn7)
 {
-	//throw std::exception("The method or operation is not implemented.");
+	float z0y0  = w0y00*cvGetReal2D(source, 0 , 0 )+w0y01*cvGetReal2D(source, 0 , 1 )+w0y02*cvGetReal2D(source, 0 , 2 )+w0y03*cvGetReal2D(source, 0 , 3 )+w0y04*cvGetReal2D(source, 0 , 4 )+w0y05*cvGetReal2D(source, 0 , 5 )+w0y06*cvGetReal2D(source, 0 , 6 )+w0y07*cvGetReal2D(source, 0 , 7 );
+	float z0y1  = w0y10*cvGetReal2D(source, 1 , 0 )+w0y11*cvGetReal2D(source, 1 , 1 )+w0y12*cvGetReal2D(source, 1 , 2 )+w0y13*cvGetReal2D(source, 1 , 3 )+w0y14*cvGetReal2D(source, 1 , 4 )+w0y15*cvGetReal2D(source, 1 , 5 )+w0y16*cvGetReal2D(source, 1 , 6 );
+	float z0y2  = w0y20*cvGetReal2D(source, 2 , 0 )+w0y21*cvGetReal2D(source, 2 , 1 )+w0y22*cvGetReal2D(source, 2 , 2 )+w0y23*cvGetReal2D(source, 2 , 3 )+w0y24*cvGetReal2D(source, 2 , 4 )+w0y25*cvGetReal2D(source, 2 , 5 );
+	float z0y3  = w0y30*cvGetReal2D(source, 3 , 0 )+w0y31*cvGetReal2D(source, 3 , 1 )+w0y32*cvGetReal2D(source, 3 , 2 )+w0y33*cvGetReal2D(source, 3 , 3 )+w0y34*cvGetReal2D(source, 3 , 4 );
+	float z0y4  = w0y40*cvGetReal2D(source, 4 , 0 )+w0y41*cvGetReal2D(source, 4 , 1 )+w0y42*cvGetReal2D(source, 4 , 2 )+w0y43*cvGetReal2D(source, 4 , 3 );
+	float z0y5  = w0y50*cvGetReal2D(source, 5 , 0 )+w0y51*cvGetReal2D(source, 5 , 1 )+w0y52*cvGetReal2D(source, 5 , 2 );
+	float z0y6  = w0y60*cvGetReal2D(source, 6 , 0 )+w0y61*cvGetReal2D(source, 6 , 1 );
+	float z0y7  = w0y70*cvGetReal2D(source, 7 , 0 );
+
+	float Sz0y0  = 1/(1+exp(-z0y0));
+	float Sz0y1  = 1/(1+exp(-z0y1));
+	float Sz0y2  = 1/(1+exp(-z0y2));
+	float Sz0y3  = 1/(1+exp(-z0y3));
+	float Sz0y4  = 1/(1+exp(-z0y4));
+	float Sz0y5  = 1/(1+exp(-z0y5));
+	float Sz0y6  = 1/(1+exp(-z0y6));
+	float Sz0y7  = 1/(1+exp(-z0y7));
+
+	float y0hat  = pn0*Sz0y0+pn1*Sz0y1+pn2*Sz0y2+pn3*Sz0y3+pn4*Sz0y4+pn5*Sz0y5+pn6*Sz0y6+pn7*Sz0y7;
+	return y0hat;
+}
+
+void ProcessNN(IplImage* source, int  currentX, int currentY) 
+{
+
+
+float nny1 = NN1Y(source,    0.99999997828423858,    0.99999997828423858,    0.99999995656847718,    0.99999993485271588,    0.99999991313695480,    0.99999989142119338,    0.99999986970543176,    0.99999986970543176,    0.99999999999985290,    0.99999999999990164,    0.99999999999985290,    0.99999999999970534,    0.99999999999960720,    0.99999999999955824,    0.99999999999950940,    1.01194310406623744,    1.00597155196736487,   1.01194310406623744,    1.01791465642812629,    1.02388620918453865,    1.02985776246698402,    1.35785659062579156,    1.11928436668597020,    1.23856960593371724,    1.35785659062579156,    1.59643929140530538,    33.8710540203341212,    7.11233060828376562,    7.11233060828376562,    19.5495983323157496,    1.00327154289493148,    1.00178447784441782,    1.00089223878569422,    1.00131298158196502,    1.00098473559129442,    1.27421592173992316 ,    0.256791895722095820,    0.256791894793337860,    0.256537797097353914,    0.251702497893972754,    -0.126316683575109778,    0.256779241804798886,    0.256787239960715786,    0.256067858147848548);
+cout << nny1 << endl; // this is proof of idea fail=(
+
+/*
+	if (lsdOut->size == 0)
+	{	}
+	else
+	{
+		linesFoundOnPicture = linesFoundOnPicture +1;
+
+		currentY =currentY*roiSize;
+		currentX = currentX*roiSize;
+
+		CvPoint pt1 = {currentX + lsdOut->values[ 0 * lsdOut->dim + 0 ], currentY + lsdOut->values[ 0 * lsdOut->dim + 1]};
+		CvPoint pt2 = {currentX+ lsdOut->values[ 0 * lsdOut->dim + 2 ], currentY + lsdOut->values[ 0 * lsdOut->dim + 3 ] };
+		cvLine(originalUnderNNlsdColor, pt1, pt2, CV_RGB(240, 50, 50), 1, CV_AA,0);
+
+	}*/
+
 }
 void ProcessLSD(IplImage* source, int  currentX, int currentY)
 {
@@ -162,13 +209,10 @@ void UseLSD(IplImage* destination)
 
 void OpenDirectory(string p)
 {
-
 	if (boost::filesystem::is_directory(p))
 	{
-
 		for (boost::filesystem::directory_iterator itr(p); itr!=boost::filesystem::directory_iterator(); ++itr)
 		{
-
 			if (!boost::filesystem::is_directory(itr->path())){
 				cout << "I am currently working on: " <<  itr->path().filename()  << " : " <<itr->path()<< ' '; 
 				//file << itr->path() << " " << itr->path().filename() << ' ' << endl; // display filename only
@@ -177,7 +221,6 @@ void OpenDirectory(string p)
 				original = cvLoadImage( itr->path().string().c_str() );
 				 				
 					cout << endl<< "Please wait..." << endl;
-
 
 					composedLSDImageColor = cvCreateImage(cvGetSize(original), original->depth, original->nChannels);
 					originalUnderLSDColor = cvCreateImage(cvGetSize(original), original->depth, original->nChannels);
@@ -217,15 +260,7 @@ void OpenDirectory(string p)
 
 int main(int argc, char* argv[])
 {
-	//roundUp = 1;
-	for(int i = 1; i<argc; i=i+2){
-		//	if(string(argv[i]) == "-roiSize" ){roiSize = atoi(argv[i+1]);} 
-		//	if(string(argv[i]) == "-useWindows" ) {useWindows = atoi(argv[i+1]);} 
-		//	if(string(argv[i]) == "-doRound" ) {roundUp = atoi(argv[i+1]);} 
-		//	if(string(argv[i]) == "-normtype" ) {normalyzeMatrix = atoi(argv[i+1]);} 
-		//	if(string(argv[i]) == "-linesOnly" ) {linesOnly = atoi(argv[i+1]);} 
-		// example -server http://127.0.0.1:4773 -nickname vasia  // if you change w and h do not forget about stream bit rate!!!
-	}
+	for(int i = 1; i<argc; i=i+2){}
 
 	cout << "Hello dear user." << endl << "I am a program that can take folder with images and perform on them line segments detection. I will use LSD and NNLSD for you to compare results." << endl;
 
