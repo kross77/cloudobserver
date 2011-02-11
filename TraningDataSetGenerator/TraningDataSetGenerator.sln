@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TrainingDataSetGenerator", "TraningDataSetGenerator\TraningDataSetGenerator.vcproj", "{3642E59C-25AD-4D6C-BFB9-34965BC8A8D9}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NNLineSegmentsDetector", "NNLineSegmentsDetector\NNLineSegmentsDetector.vcproj", "{D986ABAB-13C9-4A0F-8B5E-C4EB26F3534C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LSD-lib", "LSD-lib\LSD-lib.vcproj", "{D2CA6B4A-E9DA-4094-8A29-F31661FA0033}"
+EndProject
+Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3642E59C-25AD-4D6C-BFB9-34965BC8A8D9}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3642E59C-25AD-4D6C-BFB9-34965BC8A8D9}.Debug|Win32.Build.0 = Debug|Win32
+		{3642E59C-25AD-4D6C-BFB9-34965BC8A8D9}.Release|Win32.ActiveCfg = Release|Win32
+		{3642E59C-25AD-4D6C-BFB9-34965BC8A8D9}.Release|Win32.Build.0 = Release|Win32
+		{D986ABAB-13C9-4A0F-8B5E-C4EB26F3534C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D986ABAB-13C9-4A0F-8B5E-C4EB26F3534C}.Debug|Win32.Build.0 = Debug|Win32
+		{D986ABAB-13C9-4A0F-8B5E-C4EB26F3534C}.Release|Win32.ActiveCfg = Release|Win32
+		{D986ABAB-13C9-4A0F-8B5E-C4EB26F3534C}.Release|Win32.Build.0 = Release|Win32
+		{D2CA6B4A-E9DA-4094-8A29-F31661FA0033}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D2CA6B4A-E9DA-4094-8A29-F31661FA0033}.Debug|Win32.Build.0 = Debug|Win32
+		{D2CA6B4A-E9DA-4094-8A29-F31661FA0033}.Release|Win32.ActiveCfg = Release|Win32
+		{D2CA6B4A-E9DA-4094-8A29-F31661FA0033}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
