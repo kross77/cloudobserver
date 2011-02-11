@@ -8,8 +8,8 @@
     <ProjectGuid>{09EB5A18-13B2-47DA-A3BC-0BE4BE2E8F4C}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CloudObserverWriter</RootNamespace>
-    <AssemblyName>cloudclient</AssemblyName>
+    <RootNamespace>CloudObserverVLCWriter</RootNamespace>
+    <AssemblyName>CloudObserverVLCWriter</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

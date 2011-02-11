@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace CloudObserverWriter
+namespace CloudObserverVLCWriter
 {
     public class Program
     {
