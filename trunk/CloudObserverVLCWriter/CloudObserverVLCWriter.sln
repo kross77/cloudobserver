@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserverWriter", "CloudObserverWriter.csproj", "{09EB5A18-13B2-47DA-A3BC-0BE4BE2E8F4C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserverVLCWriter", "CloudObserverVLCWriter.csproj", "{09EB5A18-13B2-47DA-A3BC-0BE4BE2E8F4C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
