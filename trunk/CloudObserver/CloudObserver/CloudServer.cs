@@ -4,13 +4,13 @@ using System.Net;
 using System.Net.Sockets;
 using System.ServiceProcess;
 using System.Threading;
-using CloudObserverLite.Properties;
+using CloudObserver.Properties;
 
-namespace CloudObserverLite
+namespace CloudObserver
 {
     public sealed class CloudServer : ServiceBase
     {
-        public const string SERVICE_NAME = "Cloud Observer Lite";
+        public const string SERVICE_NAME = "Cloud Observer";
 
         private TcpListener listener;
         private Thread thread;

@@ -1,4 +1,4 @@
-﻿namespace CloudObserverLite
+﻿namespace CloudObserver
 {
     public enum ClientType
     {

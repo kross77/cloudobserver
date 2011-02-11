@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserverLite", "CloudObserverLite.csproj", "{3FAB372F-A5BC-433E-A20D-71E92ABD1A3A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudObserver", "CloudObserver\CloudObserver.csproj", "{3FAB372F-A5BC-433E-A20D-71E92ABD1A3A}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "CloudObserverLiteInstaller", "CloudObserverLiteInstaller.vdproj", "{C0554216-C2E1-40D4-A4C4-F39425B36EB8}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "CloudObserverInstaller", "CloudObserverInstaller\CloudObserverInstaller.vdproj", "{AD4F1034-D255-4EB1-ABCD-F5F7191BA446}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +15,10 @@ Global
 		{3FAB372F-A5BC-433E-A20D-71E92ABD1A3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3FAB372F-A5BC-433E-A20D-71E92ABD1A3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3FAB372F-A5BC-433E-A20D-71E92ABD1A3A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C0554216-C2E1-40D4-A4C4-F39425B36EB8}.Debug|Any CPU.ActiveCfg = Debug
-		{C0554216-C2E1-40D4-A4C4-F39425B36EB8}.Debug|Any CPU.Build.0 = Debug
-		{C0554216-C2E1-40D4-A4C4-F39425B36EB8}.Release|Any CPU.ActiveCfg = Release
-		{C0554216-C2E1-40D4-A4C4-F39425B36EB8}.Release|Any CPU.Build.0 = Release
+		{AD4F1034-D255-4EB1-ABCD-F5F7191BA446}.Debug|Any CPU.ActiveCfg = Debug
+		{AD4F1034-D255-4EB1-ABCD-F5F7191BA446}.Debug|Any CPU.Build.0 = Debug
+		{AD4F1034-D255-4EB1-ABCD-F5F7191BA446}.Release|Any CPU.ActiveCfg = Release
+		{AD4F1034-D255-4EB1-ABCD-F5F7191BA446}.Release|Any CPU.Build.0 = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

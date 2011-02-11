@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.IO;
 
-namespace CloudObserverLite
+namespace CloudObserver
 {
     public struct HttpResponseStruct
     {
