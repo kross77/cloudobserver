@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace CloudObserverLite
+namespace CloudObserver
 {
     public class ResponseStatus
     {

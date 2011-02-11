@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Configuration.Install;
 using System.ServiceProcess;
 
-namespace CloudObserverLite
+namespace CloudObserver
 {
     [RunInstaller(true)]
     public class CloudServerInstaller : Installer

@@ -7,9 +7,9 @@ using System.Text;
 using System.Threading;
 using System.Web;
 using Microsoft.Win32;
-using CloudObserverLite.Properties;
+using CloudObserver.Properties;
 
-namespace CloudObserverLite
+namespace CloudObserver
 {
     public class CloudClient
     {
@@ -500,7 +500,7 @@ namespace CloudObserverLite
                 }
             }
 
-            string path = (string)Registry.LocalMachine.OpenSubKey("Software\\Cloud Observer Lite").GetValue("InstallLocation") +"htdocs" + httpRequest.url.Replace("/", "\\");
+            string path = (string)Registry.LocalMachine.OpenSubKey("Software\\Cloud Observer").GetValue("InstallLocation") +"htdocs" + httpRequest.url.Replace("/", "\\");
             if (Directory.Exists(path) && File.Exists(path + "index.html"))
                 path += "\\index.html";
 

@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace CloudObserverLite
+namespace CloudObserver
 {
     public class FLVReader
     {
