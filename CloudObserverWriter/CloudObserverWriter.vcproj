@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="HelloVideoStreaming"
+	Name="CloudObserverWriter"
 	ProjectGUID="{0293F071-7A00-413C-8C6E-5D5D44465B65}"
-	RootNamespace="HelloVideoStreaming"
+	RootNamespace="CloudObserverWriter"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -179,7 +179,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\HelloVideoStreaming.cpp"
+				RelativePath=".\CloudObserverWriter.cpp"
 				>
 			</File>
 			<File

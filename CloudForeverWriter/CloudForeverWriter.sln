@@ -6,8 +6,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		readMe.txt = readMe.txt
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HelloVideoStreaming", "HelloVideoStreaming\HelloVideoStreaming.vcproj", "{0293F071-7A00-413C-8C6E-5D5D44465B65}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HelloTestStreaming", "HelloTestStreaming\HelloTestStreaming.vcproj", "{176AB342-4FB2-45B8-88DD-A5019390F4CA}"
 EndProject
 Global
@@ -18,14 +16,6 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0293F071-7A00-413C-8C6E-5D5D44465B65}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{0293F071-7A00-413C-8C6E-5D5D44465B65}.Debug|Any CPU.Build.0 = Debug|Win32
-		{0293F071-7A00-413C-8C6E-5D5D44465B65}.Debug|Win32.ActiveCfg = Debug|Win32
-		{0293F071-7A00-413C-8C6E-5D5D44465B65}.Debug|Win32.Build.0 = Debug|Win32
-		{0293F071-7A00-413C-8C6E-5D5D44465B65}.Release|Any CPU.ActiveCfg = Release|Win32
-		{0293F071-7A00-413C-8C6E-5D5D44465B65}.Release|Any CPU.Build.0 = Release|Win32
-		{0293F071-7A00-413C-8C6E-5D5D44465B65}.Release|Win32.ActiveCfg = Release|Win32
-		{0293F071-7A00-413C-8C6E-5D5D44465B65}.Release|Win32.Build.0 = Release|Win32
 		{176AB342-4FB2-45B8-88DD-A5019390F4CA}.Debug|Any CPU.ActiveCfg = Debug|Win32
 		{176AB342-4FB2-45B8-88DD-A5019390F4CA}.Debug|Any CPU.Build.0 = Debug|Win32
 		{176AB342-4FB2-45B8-88DD-A5019390F4CA}.Debug|Win32.ActiveCfg = Debug|Win32
