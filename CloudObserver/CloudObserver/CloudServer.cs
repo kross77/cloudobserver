@@ -4,7 +4,6 @@ using System.Net;
 using System.Net.Sockets;
 using System.ServiceProcess;
 using System.Threading;
-using CloudObserver.Properties;
 
 namespace CloudObserver
 {
@@ -25,7 +24,7 @@ namespace CloudObserver
 
         private void Listen()
         {
-            this.listener = new TcpListener(IPAddress.Any, Settings.Default.ServerPort);
+            this.listener = new TcpListener(IPAddress.Any, Settings.ServerPort);
             this.listener.Start();
             this.EventLog.WriteEntry("Server started. Waiting for connections...");
 

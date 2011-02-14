@@ -1011,7 +1011,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Cloud Observer"
         "ProductCode" = "8:{E1979F38-3C5B-4357-B79B-A96C118D9985}"
-        "PackageCode" = "8:{9B71BD8A-0C87-4301-8902-0345570F7E1E}"
+        "PackageCode" = "8:{15F140EF-D04A-4908-B355-C2F2D7BCE49C}"
         "UpgradeCode" = "8:{1BC9ED6E-3DEB-4EA5-81BD-397272DC12E0}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
@@ -1072,6 +1072,22 @@
                                         }
                                         "Values"
                                         {
+                                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_0642841D2A644EC193699BF318ED1031"
+                                            {
+                                            "Name" = "8:ServerName"
+                                            "Condition" = "8:"
+                                            "Transitive" = "11:FALSE"
+                                            "ValueTypes" = "3:1"
+                                            "Value" = "8:Cloud Observer"
+                                            }
+                                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_16916C1A19854395B675BFFDE8B46CC0"
+                                            {
+                                            "Name" = "8:ServerPort"
+                                            "Condition" = "8:"
+                                            "Transitive" = "11:FALSE"
+                                            "ValueTypes" = "3:3"
+                                            "Value" = "3:4773"
+                                            }
                                             "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_4620A8E55CE74408AFD53C2DA8F4D8D3"
                                             {
                                             "Name" = "8:InstallLocation"
@@ -1079,6 +1095,14 @@
                                             "Transitive" = "11:FALSE"
                                             "ValueTypes" = "3:1"
                                             "Value" = "8:[TARGETDIR]"
+                                            }
+                                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_508E7DE2198F46D69CBAD15EF7F4A76D"
+                                            {
+                                            "Name" = "8:MaxStreams"
+                                            "Condition" = "8:"
+                                            "Transitive" = "11:FALSE"
+                                            "ValueTypes" = "3:3"
+                                            "Value" = "3:10"
                                             }
                                         }
                                     }
