@@ -500,9 +500,9 @@ namespace CloudObserver
                 }
             }
 
-            string path = (string)Registry.LocalMachine.OpenSubKey("Software\\Cloud Forever\\Cloud Observer").GetValue("InstallLocation") +"htdocs" + httpRequest.url.Replace("/", "\\");
+            string path = (string)Registry.LocalMachine.OpenSubKey("Software\\Cloud Forever\\Cloud Observer").GetValue("InstallLocation") +"htdocs" + httpRequest.url;
             if (Directory.Exists(path) && File.Exists(path + "index.html"))
-                path += "\\index.html";
+                path += "/index.html";
 
             // dynamic files
             switch (httpRequest.url)
