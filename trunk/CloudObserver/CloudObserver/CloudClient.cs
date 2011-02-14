@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading;
 using System.Web;
 using Microsoft.Win32;
-using CloudObserver.Properties;
 
 namespace CloudObserver
 {
@@ -228,7 +227,7 @@ namespace CloudObserver
                 this.httpResponse.status = (int)((parserState == ParserState.OK) ? ResponseState.OK : ResponseState.BAD_REQUEST);
 
                 this.httpResponse.headers = new Hashtable();
-                this.httpResponse.headers.Add("Server", Settings.Default.ServerName);
+                this.httpResponse.headers.Add("Server", Settings.ServerName);
                 this.httpResponse.headers.Add("Date", DateTime.Now.ToString("r"));
 
                 if (httpResponse.status == (int)ResponseState.OK)
@@ -438,7 +437,7 @@ namespace CloudObserver
                             bodyString += this.nickname;
                             bodyString += "\" is already in use!</BODY></HTML>\n";
                         }
-                        else if (server.streams.Count >= Settings.Default.MaxStreams)
+                        else if (server.streams.Count >= Settings.MaxStreams)
                         {
                             httpResponse.status = (int)ResponseState.FORBIDDEN;
                             bodyString = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n";
@@ -500,7 +499,7 @@ namespace CloudObserver
                 }
             }
 
-            string path = (string)Registry.LocalMachine.OpenSubKey("Software\\Cloud Forever\\Cloud Observer").GetValue("InstallLocation") +"htdocs" + httpRequest.url;
+            string path = Settings.InstallLocation +"htdocs" + httpRequest.url;
             if (Directory.Exists(path) && File.Exists(path + "index.html"))
                 path += "/index.html";
 
