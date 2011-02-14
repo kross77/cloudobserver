@@ -57,10 +57,45 @@ namespace CloudObserver
                 registryKey.SetValue("MaxStreams", (int)maxStreams, RegistryValueKind.DWord);
             }
 
-            installLocation = (string)registryKey.GetValue("InstallLocation");
-            serverName = (string)registryKey.GetValue("ServerName");
-            serverPort = (ushort)(int)registryKey.GetValue("ServerPort");
-            maxStreams = (uint)(int)registryKey.GetValue("MaxStreams");
+            object temp = null;
+
+            temp = registryKey.GetValue("InstallLocation");
+            if (temp == null)
+                registryKey.SetValue("InstallLocation", installLocation);
+            else
+                installLocation = (string)temp;
+
+            temp = registryKey.GetValue("ServerName");
+            if (temp == null)
+                registryKey.SetValue("ServerName", serverName);
+            else
+                serverName = (string)temp;
+
+            temp = registryKey.GetValue("ServerPort");
+            if (temp == null)
+                registryKey.SetValue("ServerPort", (int)serverPort, RegistryValueKind.DWord);
+            else
+                try
+                {
+                    serverPort = (ushort)(int)temp;
+                }
+                catch (Exception)
+                {
+                    registryKey.SetValue("ServerPort", (int)serverPort, RegistryValueKind.DWord);
+                }
+
+            temp = registryKey.GetValue("MaxStreams");
+            if (temp == null)
+                registryKey.SetValue("MaxStreams", (int)maxStreams, RegistryValueKind.DWord);
+            else
+                try
+                {
+                    maxStreams = (uint)(int)temp;
+                }
+                catch (Exception)
+                {
+                    registryKey.SetValue("MaxStreams", (int)maxStreams, RegistryValueKind.DWord);
+                }
         }
     }
 }
