@@ -918,7 +918,7 @@
             }
             "{3C67513D-01DD-4637-8A68-80971EB9504F}:_F93ACEECB0844DB4817526675EA2FCA1"
             {
-            "DefaultLocation" = "8:[ProgramFilesFolder]\\[ProductName]"
+            "DefaultLocation" = "8:[ProgramFilesFolder][Manufacturer]\\[ProductName]"
             "Name" = "8:#1925"
             "AlwaysCreate" = "11:FALSE"
             "Condition" = "8:"
@@ -1011,19 +1011,19 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Cloud Observer"
         "ProductCode" = "8:{E1979F38-3C5B-4357-B79B-A96C118D9985}"
-        "PackageCode" = "8:{BA5764D5-52E8-47F6-8CA9-FD82A09AC7F8}"
+        "PackageCode" = "8:{9B71BD8A-0C87-4301-8902-0345570F7E1E}"
         "UpgradeCode" = "8:{1BC9ED6E-3DEB-4EA5-81BD-397272DC12E0}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.0.0"
-        "Manufacturer" = "8:CloudTeam"
+        "ProductVersion" = "8:0.4.0"
+        "Manufacturer" = "8:Cloud Forever"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
         "Title" = "8:Cloud Observer"
         "Subject" = "8:"
-        "ARPCONTACT" = "8:CloudTeam"
+        "ARPCONTACT" = "8:Cloud Forever"
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:"
         "ARPURLINFOABOUT" = "8:"
@@ -1051,26 +1051,40 @@
                     "Transitive" = "11:FALSE"
                         "Keys"
                         {
-                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_7E9A273B00A746CB999582F117F1CAC8"
+                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_31EB95EDB0E542AB93D5AD34EF33A839"
                             {
-                            "Name" = "8:[ProductName]"
+                            "Name" = "8:[Manufacturer]"
                             "Condition" = "8:"
                             "AlwaysCreate" = "11:FALSE"
-                            "DeleteAtUninstall" = "11:TRUE"
+                            "DeleteAtUninstall" = "11:FALSE"
                             "Transitive" = "11:FALSE"
                                 "Keys"
                                 {
+                                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_C000AF9AC7A045B1A1AE746FA9953339"
+                                    {
+                                    "Name" = "8:[ProductName]"
+                                    "Condition" = "8:"
+                                    "AlwaysCreate" = "11:FALSE"
+                                    "DeleteAtUninstall" = "11:TRUE"
+                                    "Transitive" = "11:FALSE"
+                                        "Keys"
+                                        {
+                                        }
+                                        "Values"
+                                        {
+                                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_4620A8E55CE74408AFD53C2DA8F4D8D3"
+                                            {
+                                            "Name" = "8:InstallLocation"
+                                            "Condition" = "8:"
+                                            "Transitive" = "11:FALSE"
+                                            "ValueTypes" = "3:1"
+                                            "Value" = "8:[TARGETDIR]"
+                                            }
+                                        }
+                                    }
                                 }
                                 "Values"
                                 {
-                                    "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_4620A8E55CE74408AFD53C2DA8F4D8D3"
-                                    {
-                                    "Name" = "8:InstallLocation"
-                                    "Condition" = "8:"
-                                    "Transitive" = "11:FALSE"
-                                    "ValueTypes" = "3:1"
-                                    "Value" = "8:[TARGETDIR]"
-                                    }
                                 }
                             }
                         }
