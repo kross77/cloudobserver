@@ -529,13 +529,17 @@ namespace CloudObserver
             // static files
             if (File.Exists(path))
             {
-                RegistryKey registryKey = Registry.ClassesRoot.OpenSubKey(Path.GetExtension(path));
-                string registryValue = (string)registryKey.GetValue("Content Type");
+                try
+                {
+                    string registryValue = (string)Registry.ClassesRoot.OpenSubKey(Path.GetExtension(path)).GetValue("Content Type");
+                    if (registryValue != "")
+                        httpResponse.headers["Content-type"] = registryValue;
+                }
+                catch (Exception)
+                {
+                }
 
                 httpResponse.fileStream = File.OpenRead(path);
-                if (registryValue != "")
-                    httpResponse.headers["Content-type"] = registryValue;
-
                 httpResponse.headers["Content-Length"] = httpResponse.fileStream.Length;
             }
             else
