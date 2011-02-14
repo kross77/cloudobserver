@@ -53,8 +53,8 @@ namespace CloudObserver
                 registryKey = Registry.LocalMachine.CreateSubKey(RegistryPath);
                 registryKey.SetValue("InstallLocation", installLocation);
                 registryKey.SetValue("ServerName", serverName);
-                registryKey.SetValue("ServerPort", serverPort);
-                registryKey.SetValue("MaxStreams", maxStreams);
+                registryKey.SetValue("ServerPort", (int)serverPort, RegistryValueKind.DWord);
+                registryKey.SetValue("MaxStreams", (int)maxStreams, RegistryValueKind.DWord);
             }
 
             installLocation = (string)registryKey.GetValue("InstallLocation");
