@@ -1,0 +1,1 @@
+start premake4.exe  --file=build.lua --os=windows --platform=x32 vs2008
