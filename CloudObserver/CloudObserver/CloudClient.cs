@@ -327,14 +327,16 @@ namespace CloudObserver
                                 {
                                     // Update timestamp.
                                     byte[] newTimestampValue = BitConverter.GetBytes(timestamp - reader.timestampDelta);
-                                    tagHeader[4] = newTimestampValue[2];
-                                    tagHeader[5] = newTimestampValue[1];
-                                    tagHeader[6] = newTimestampValue[0];
+
+                                    byte[] modifiedTagHeader = (byte[])tagHeader.Clone();
+                                    modifiedTagHeader[4] = newTimestampValue[2];
+                                    modifiedTagHeader[5] = newTimestampValue[1];
+                                    modifiedTagHeader[6] = newTimestampValue[0];
 
                                     // Write tag.
                                     try
                                     {
-                                        reader.stream.Write(tagHeader, 0, tagHeader.Length);
+                                        reader.stream.Write(modifiedTagHeader, 0, modifiedTagHeader.Length);
                                         reader.stream.Write(tagData, 0, tagData.Length);
                                     }
                                     catch (IOException)
@@ -591,11 +593,17 @@ namespace CloudObserver
                         uint timestamp = ToUI24(data, 4);
                         // Update timestamp.
                         byte[] newTimestampValue = BitConverter.GetBytes(timestamp - bufferedTimestamp);
-                        data[4] = newTimestampValue[2];
-                        data[5] = newTimestampValue[1];
-                        data[6] = newTimestampValue[0];
+
+                        byte[] modifiedData = (byte[])data.Clone();
+                        modifiedData[4] = newTimestampValue[2];
+                        modifiedData[5] = newTimestampValue[1];
+                        modifiedData[6] = newTimestampValue[0];
+
+                        stream.Write(modifiedData, 0, modifiedData.Length);
                     }
-                    stream.Write(data, 0, data.Length);
+                    else
+                        stream.Write(data, 0, data.Length);
+                    
                     tagHeader = !tagHeader;
                 }
                 readers.Add(new FLVReader(stream, bufferedTimestamp));
