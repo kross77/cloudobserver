@@ -1,12 +1,9 @@
-// CamLister.cpp : Defines the entry point for the console application.
-
 #include "stdafx.h"
 #include <boost/regex.hpp>
 #include <boost/asio.hpp>
 #include <boost/lexical_cast.hpp>
-#include <windows.h>
+
 #include <iostream>
-#include <dshow.h>
 
 #pragma comment(lib, "strmiids")
 // FFmpeg
@@ -93,8 +90,6 @@ ALCcontext		*pContext;
 ALCdevice		*pCaptureDevice;
 const ALCchar	*szDefaultCaptureDevice;
 
-
-
 double desiredTimeForCaptureFame;
 double spendedTimeForCaptureFame;
 
@@ -117,11 +112,11 @@ struct limited_cmp {
 };
 
 int GetEvan(int number){
-while ( number % 4 != 0)
-{
-	 ++number;
-}
-return number;
+	while ( number % 4 != 0)
+	{
+		++number;
+	}
+	return number;
 }
 
 void replace_or_merge(std::string &a, const std::string &b, const std::string &c)
@@ -161,68 +156,43 @@ void initOpenCV()
 {
 selectCamera:
 	CamerasList  * CamList  = new CamerasList();
-    cameraInt = CamList->SelectFromList();
+	cameraInt = CamList->SelectFromList();
 	if (cameraInt == 999)
 	{
 		encoder.hasVideo = false;
 	}else{
 
-	/* initialize camera */
-	capture = cvCaptureFromCAM(cameraInt);
+		/* initialize camera */
+		capture = cvCaptureFromCAM(cameraInt);
 
-	cvSetCaptureProperty(capture, CV_CAP_PROP_FPS   , videoFrameRate );
+		cvSetCaptureProperty(capture, CV_CAP_PROP_FPS   , videoFrameRate );
+		cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH , (double)  videoWidth);
+		cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT  , (double) videoHeight);
 
-	
-	if(	cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH , (double)  videoWidth) == 0){
-		int myArr[] = {320, 640, 1280};
-		std::vector<int> WidthNumbers( myArr, myArr + sizeof(myArr) / sizeof(myArr[0]) );
-		int nearestWidth = *std::max_element(WidthNumbers.begin(), WidthNumbers.end(), limited_cmp(videoWidth));
-	if(nearestWidth == 320){
-	cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH , (double)  320);
-	cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT  , (double) 240);
 	}
-	if(nearestWidth == 640){
-		cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH , (double)  640);
-	
-		cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT  , (double) 480);
-	
-	}
-	if(nearestWidth == 1280){
-		cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH , (double)  1280);
-		cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT  , (double) 720);
-	}
-	}
-	//capture = cvCaptureFromCAM(cameraInt);
-
 	/* always check */
 	if (!capture)
 	{
 		fprintf(stderr, "Cannot initialize selected webcam!\n");
 		goto selectCamera;
-	//cin.get();
-
 	}
 
 	CVframe = cvQueryFrame(capture);
-    //cvSaveImage("test.jpg" ,CVframe);
-	 destination = cvCreateImage(cvSize(videoWidth, videoHeight), CVframe->depth, CVframe->nChannels);
-	  redchannel = cvCreateImage(cvGetSize(destination), 8, 1);
-	  greenchannel = cvCreateImage(cvGetSize(destination), 8, 1);
-	  bluechannel = cvCreateImage(cvGetSize(destination), 8, 1);
+	destination = cvCreateImage(cvSize(videoWidth, videoHeight), CVframe->depth, CVframe->nChannels);
+	redchannel = cvCreateImage(cvGetSize(destination), 8, 1);
+	greenchannel = cvCreateImage(cvGetSize(destination), 8, 1);
+	bluechannel = cvCreateImage(cvGetSize(destination), 8, 1);
 	encoder.hasVideo = true;
-	}
-
 }
+
 
 void initOpenAL(int fps)
 {
 	nSampleSize = 2.0f * audioSampleRate / fps;
-	//5000
 	Buffer = new ALchar[nSampleSize];
 	dev[0] = alcOpenDevice(NULL);
 	if (NULL == dev[0])
 	{
-		//noMic = true;
 		fprintf(stderr, "No microphone found, please restart application , or continue streaming with out sound\n");
 		Sleep(999999);
 		cin.get();
@@ -250,57 +220,42 @@ void initOpenAL(int fps)
 		}
 	}
 
-	// Get the name of the 'default' capture device
-  //   szDefaultCaptureDevice = alcGetString(NULL, ALC_CAPTURE_DEFAULT_DEVICE_SPECIFIER);
-	
-
-	 int SelectedIndex = 999;
-	 if(i <= 0)
-	 {
-		 cout <<"No devices found. \n " << endl;
-		 //cout <<"Please restart application."  << endl;
-		 //cin.get();
-		 //Sleep(999999);
-		 SelectedIndex = 999;
-	 }
-	 else if(i == 1){
-		  cout <<"Default device will be used" << std::endl;
-		 SelectedIndex = 0;
-		 encoder.hasAudio = true;
-	 }else{	
-	 while(SelectedIndex > i-1 || SelectedIndex < 0)
-	 {
-		 try{
-			 std::cout <<"please input index from 0 to " << i-1 << std::endl;		
-			 std::string s;
-			 std::getline( cin, s, '\n' );
-			 SelectedIndex =  boost::lexical_cast<int>(s);
-			 
+	int SelectedIndex = 999;
+	if(i <= 0)
+	{
+		cout <<"No devices found. \n " << endl;
+		SelectedIndex = 999;
+	}
+	else if(i == 1){
+		cout <<"Default device will be used" << std::endl;
+		SelectedIndex = 0;
+		encoder.hasAudio = true;
+	}else{	
+		while(SelectedIndex > i-1 || SelectedIndex < 0)
+		{
+			try{
+				std::cout <<"please input index from 0 to " << i-1 << std::endl;		
+				std::string s;
+				std::getline( cin, s, '\n' );
+				SelectedIndex =  boost::lexical_cast<int>(s);
 			}
-		 catch(std::exception& e){
-			 SelectedIndex = 999;
+			catch(std::exception& e){
+				SelectedIndex = 999;
 			}
-	 }
-	 }
+		}
+	}
 
+	if (SelectedIndex == 999)
+	{
+		encoder.hasAudio = false;
+	}else{
+		encoder.hasAudio = true;
+		alDistanceModel(AL_NONE); 
 
-
-	//printf("\nDefault Capture Device is '%s'\n\n", szDefaultCaptureDevice);
-
-
-	/* If you don't need 3D spatialization, this should help processing time */
-	 if (SelectedIndex == 999)
-	 {
-		 encoder.hasAudio = false;
-	 }else{
-		 encoder.hasAudio = true;
-	alDistanceModel(AL_NONE); 
-
-	dev[0] = alcCaptureOpenDevice(bufferList[SelectedIndex], audioSampleRate, AL_FORMAT_MONO16, nSampleSize/2);
-	alcCaptureStart(dev[0]);
-	//ToDo: Refactor nBlockAlign == number of channels * Bits per sample / 8 ; btw: why /8?
-	nBlockAlign = 1 * 16 / 8;
-	 }
+		dev[0] = alcCaptureOpenDevice(bufferList[SelectedIndex], audioSampleRate, AL_FORMAT_MONO16, nSampleSize/2);
+		alcCaptureStart(dev[0]);
+		nBlockAlign = 1 * 16 / 8;
+	}
 }
 
 void initFFmpeg(string container, int w, int h, int fps)
@@ -311,28 +266,24 @@ void initFFmpeg(string container, int w, int h, int fps)
 		Sleep(999999);
 		cin.get();
 	}
-
-	//cout << " 1 "<< endl;
 	encoder.SetConstants(fps, videoWidth, videoHeight, audioSampleRate, streamBitRate);
 
-	name:
+name:
 	int encoderName = encoder.ConnectUserToUrl(outputUserName) ;
 	if (encoderName == 0)
 	{
-		//printf("Cannot open stream for selected name\n");
 		getName();
 		int encoderServer = encoder.ConnectToServer(outputUrl) ;
-		  goto name;
+		goto name;
 	} 
 
 	if(encoder.InitUrl(container, outputUrl, outputUserName) == -10){
-	cout << "\nNo audio, and no video data found.\n Please close application.\nConnect some capturing device.\nRestart application\n";
-	cin.get();
-	Sleep(999999);
+		cout << "\nNo audio, and no video data found.\n Please close application.\nConnect some capturing device.\nRestart application\n";
+		cin.get();
+		Sleep(999999);
 
 	}
-	
-//	cout << " 2 "<< endl;
+
 	int bufferImgSize = avpicture_get_size(PIX_FMT_BGR24, w, h);
 
 	frame = avcodec_alloc_frame();
@@ -348,66 +299,53 @@ void initFFmpeg(string container, int w, int h, int fps)
 
 void init()
 {
-	
 	initOpenCV();
 	initOpenAL(videoFrameRate);
 	initFFmpeg(outputContainer, videoWidth, videoHeight, videoFrameRate);
-	
 }
 
 void CaptureFrame(int w, int h, char* buffer, int bytespan)
 {
-
 	/* get a frame */
 	CVframe = cvQueryFrame(capture);
-//cvSaveImage("test1.jpg" ,CVframe);
 	/* always check */
 	if (!CVframe)
 	{
 		printf("No CV frame captured!\n");
 		cin.get();
 	}
-
-	/* display current frame */
-	
 	//use cvResize to resize source to a destination image
 	cvResize(CVframe, destination);
-//cvSaveImage("test2.jpg" ,destination);
 	switch(useLSD){
-		case false:{} break;
-		case true:{
-			IplImage *destinationForLSD = cvCreateImage(cvSize(w, h),IPL_DEPTH_8U,1);
-			cvCvtColor(destination,destinationForLSD,CV_RGB2GRAY);
+case false:{} break;
+case true:{
+	IplImage *destinationForLSD = cvCreateImage(cvSize(w, h),IPL_DEPTH_8U,1);
+	cvCvtColor(destination,destinationForLSD,CV_RGB2GRAY);
 
-			image_double lsdImage;
-			ntuple_list lsdOut;
-			unsigned int x,y,i,j;
-			lsdImage = new_image_double(w,h);
+	image_double lsdImage;
+	ntuple_list lsdOut;
+	unsigned int x,y,i,j;
+	lsdImage = new_image_double(w,h);
 
+	for(x=0;x<w;x++)
+		for(y=0;y<h;y++)
+			lsdImage->data[ x + y * lsdImage->xsize ] = cvGetReal2D(destinationForLSD, y, x);/* image(x,y) */
 
-			for(x=0;x<w;x++)
-				for(y=0;y<h;y++)
-					lsdImage->data[ x + y * lsdImage->xsize ] = cvGetReal2D(destinationForLSD, y, x);/* image(x,y) */
+	/* call LSD */
+	lsdOut = lsd(lsdImage);
 
-
-
-			/* call LSD */
-			lsdOut = lsd(lsdImage);
-
-
-
-			for(i=0;i<lsdOut->size;i++)
-			{
-				CvPoint pt1 = { lsdOut->values[ i * lsdOut->dim + 0 ], lsdOut->values[ i * lsdOut->dim + 1]};
-				CvPoint pt2 = { lsdOut->values[ i * lsdOut->dim + 2 ], lsdOut->values[ i * lsdOut->dim + 3 ] };
-				cvLine(destination, pt1, pt2, CV_RGB(240, 255, 255), 1, CV_AA,0);
-			}
-			cvReleaseImage(&destinationForLSD);
-			free_image_double(lsdImage);
-			free_ntuple_list(lsdOut);
-				  } break;
+	for(i=0;i<lsdOut->size;i++)
+	{
+		CvPoint pt1 = { lsdOut->values[ i * lsdOut->dim + 0 ], lsdOut->values[ i * lsdOut->dim + 1]};
+		CvPoint pt2 = { lsdOut->values[ i * lsdOut->dim + 2 ], lsdOut->values[ i * lsdOut->dim + 3 ] };
+		cvLine(destination, pt1, pt2, CV_RGB(240, 255, 255), 1, CV_AA,0);
 	}
-	
+	cvReleaseImage(&destinationForLSD);
+	free_image_double(lsdImage);
+	free_ntuple_list(lsdOut);
+		  } break;
+	}
+
 	for(int i = 0; i < destination->imageSize; i=i+3)
 	{ 
 
@@ -417,27 +355,7 @@ void CaptureFrame(int w, int h, char* buffer, int bytespan)
 		buffer+=3;
 	}
 
-
-// 	cvSplit(destination, bluechannel, greenchannel, redchannel, NULL);
-// 	for(int y = 0; y < destination->height; y++)
-// 	{
-// 		char* line = buffer + y * bytespan;
-// 		for(int x = 0; x < destination->width; x++)
-// 		{
-// 			line[0] = cvGetReal2D(redchannel, y, x);
-// 			line[1] = cvGetReal2D(greenchannel, y, x);
-// 			line[2] = cvGetReal2D(bluechannel, y, x);
-// 			line += 3;
-// 		}
-// 	}
-
-// 	for (int i = 0; i < w*h*3; ++i) {
-// 		 buffer[i] = destination->imageData;
-// 	}
-	
 }
-
-
 
 char* CaptureSample()
 {
@@ -457,10 +375,7 @@ char* CaptureSample()
 
 void closeOpenCV()
 {
-	//cvDestroyWindow("HelloVideoEncoding");
 	cvReleaseCapture(&capture);
-//	cvReleaseImage(&destination);
-//	cvReleaseImage(&CVframe);
 }
 
 void closeOpenAL()
@@ -489,19 +404,21 @@ void close()
 }
 
 void ThreadCaptureFrame()
-{ if (encoder.hasVideo)
-{	while(1){
-	timerForCaptureFame.restart();
-	CaptureFrame( videoWidth, videoHeight, (char *)frame->data[0],frame->linesize[0]);
-	AVFrame* swap = frame;
-	frame = readyFrame;
-	readyFrame = swap;
-	spendedTimeForCaptureFame = timerForCaptureFame.elapsed();
-	if(spendedTimeForCaptureFame < desiredTimeForCaptureFame){
-		Sleep(desiredTimeForCaptureFame - spendedTimeForCaptureFame);
+{
+	if (encoder.hasVideo)
+	{	
+		while(1){
+			timerForCaptureFame.restart();
+			CaptureFrame( videoWidth, videoHeight, (char *)frame->data[0],frame->linesize[0]);
+			AVFrame* swap = frame;
+			frame = readyFrame;
+			readyFrame = swap;
+			spendedTimeForCaptureFame = timerForCaptureFame.elapsed();
+			if(spendedTimeForCaptureFame < desiredTimeForCaptureFame){
+				Sleep(desiredTimeForCaptureFame - spendedTimeForCaptureFame);
+			}
+		}
 	}
-}
-}
 
 }
 void ThreadSaveFrame()
@@ -509,26 +426,26 @@ void ThreadSaveFrame()
 	while(1)
 	{
 		timerForMain.restart();
-if (!encoder.hasVideo)
-{		if (!encoder.AddFrame( CaptureSample(), nSampleSize))
-printf("Cannot write frame!\n");
-}
+		if (!encoder.hasVideo)
+		{		if (!encoder.AddFrame( CaptureSample(), nSampleSize))
+		printf("Cannot write frame!\n");
+		}
 
-if (!encoder.hasAudio)
-{		if (!encoder.AddFrame(readyFrame))
-printf("Cannot write frame!\n");
-}
+		if (!encoder.hasAudio)
+		{		if (!encoder.AddFrame(readyFrame))
+		printf("Cannot write frame!\n");
+		}
 
-if (encoder.hasAudio && encoder.hasVideo)
-{	
-	if (!encoder.AddFrame(readyFrame, CaptureSample(), nSampleSize))
-printf("Cannot write frame!\n");
-}
-if (!encoder.hasAudio && !encoder.hasVideo)
-{
-	printf("No data to encode");
-break;
-}
+		if (encoder.hasAudio && encoder.hasVideo)
+		{	
+			if (!encoder.AddFrame(readyFrame, CaptureSample(), nSampleSize))
+				printf("Cannot write frame!\n");
+		}
+		if (!encoder.hasAudio && !encoder.hasVideo)
+		{
+			printf("No data to encode");
+			break;
+		}
 
 		spendedTimeForMain = timerForMain.elapsed();
 
@@ -540,30 +457,30 @@ int main(int argc, char* argv[])
 {
 	cameraInt = 0;
 	videoFrameRate = 15;
-	videoWidth = 1024; // default for WSVGA and XGA // use at least 640  to get full super HD Qualyty
-	videoHeight =  768; // default for XGA // use at least 480 to get full super HD Qualyty
+	videoWidth = 400; // default for WSVGA and XGA // use at least 640  to get full super HD Qualyty
+	videoHeight =  320; // default for XGA // use at least 480 to get full super HD Qualyty
 	microphoneInt = 1;
 	audioSampleRate = 44100;
 	outputContainer +="flv";
 	streamBitRate = 1.5 * videoWidth * 1024;  /*videoWidth * 150*/; // use at least 700000 to get full super HD Qualyty
 	for(int i = 1; i<argc; i=i+2){
-	//	cout << "i = " << i << "; argv[i] = " << argv[i] << endl;
-if(string(argv[i]) == "-camera") {cameraInt = atoi(argv[i+1]);} 
-if(string(argv[i]) == "-framerate" ){videoFrameRate = atoi(argv[i+1]);} 
-if(string(argv[i]) == "-width" ) {videoWidth = atoi(argv[i+1]);} 
-if(string(argv[i]) == "-height" ) {videoHeight = atoi(argv[i+1]);} 
-if(string(argv[i]) == "-microphone" ) {microphoneInt = atoi(argv[i+1]);} 
-if(string(argv[i]) == "-samplerate" ) {audioSampleRate = atoi(argv[i+1]);} 
-if(string(argv[i]) == "-server" ) {outputUrl = (argv[i+1]);} 
-if(string(argv[i]) == "-container" ) {outputContainer = (argv[i+1]);} 
-if(string(argv[i]) == "-nickname" ) {outputUserName = (argv[i+1]);} 
-if(string(argv[i]) == "-useLSD" ) {useLSD = atoi(argv[i+1]);} 
-if(string(argv[i]) == "-streamBitRate" ) {streamBitRate = atoi(argv[i+1]);} 
-	// example -server http://127.0.0.1:4773 -nickname vasia  // if you change w and h do not forget about stream bit rate!!!
-		}	
+		//	cout << "i = " << i << "; argv[i] = " << argv[i] << endl;
+		if(string(argv[i]) == "-camera") {cameraInt = atoi(argv[i+1]);} 
+		if(string(argv[i]) == "-framerate" ){videoFrameRate = atoi(argv[i+1]);} 
+		if(string(argv[i]) == "-width" ) {videoWidth = atoi(argv[i+1]);} 
+		if(string(argv[i]) == "-height" ) {videoHeight = atoi(argv[i+1]);} 
+		if(string(argv[i]) == "-microphone" ) {microphoneInt = atoi(argv[i+1]);} 
+		if(string(argv[i]) == "-samplerate" ) {audioSampleRate = atoi(argv[i+1]);} 
+		if(string(argv[i]) == "-server" ) {outputUrl = (argv[i+1]);} 
+		if(string(argv[i]) == "-container" ) {outputContainer = (argv[i+1]);} 
+		if(string(argv[i]) == "-nickname" ) {outputUserName = (argv[i+1]);} 
+		if(string(argv[i]) == "-useLSD" ) {useLSD = atoi(argv[i+1]);} 
+		if(string(argv[i]) == "-streamBitRate" ) {streamBitRate = atoi(argv[i+1]);} 
+		// example -server http://127.0.0.1:4773 -nickname vasia  // if you change w and h do not forget about stream bit rate!!!
+	}	
 
-videoHeight = GetEvan(videoHeight);
-videoWidth = GetEvan(videoWidth);
+	videoHeight = GetEvan(videoHeight);
+	videoWidth = GetEvan(videoWidth);
 	//Sleep(1000);
 	desiredTimeForCaptureFame = 1000.0f / videoFrameRate;
 	desiredTimeForMain = 1000.0f / videoFrameRate;
@@ -574,7 +491,7 @@ videoWidth = GetEvan(videoWidth);
 	}else{
 		replace_or_merge(outputUrl, "http://", "tcp://");
 	}
-	server:
+server:
 	int encoderServer = encoder.ConnectToServer(outputUrl) ;
 	if (encoderServer == -1)
 	{

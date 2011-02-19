@@ -1,14 +1,9 @@
-/*
-FFmpeg simple Encoder
-*/
-
 
 #ifndef __VIDEO_ENCODER_H__
 #define __VIDEO_ENCODER_H__
 #include "stdafx.h"
 //#include <boost/asio.hpp>
 #include "ffmpegInclude.h"
-#include "ConcurrentQueue.h"
 //#include <Windows.h>
 #include <string>
 #include <queue>
@@ -71,9 +66,6 @@ public:
 		int len;
 	};
 
-	ConcurrentQueue< AudioSample * > AudioSamples;
-	ConcurrentQueue< VideoSample * > VideoSamples;
-
 	bool sampleSendingFinished;
 	bool frameSendingFinished;
 
@@ -86,7 +78,7 @@ public:
 	std::string userName;
 	bool hasAudio;
 	bool hasVideo;
-		
+
 	VideoEncoder() 
 	{
 		//  url_context = NULL;
@@ -122,8 +114,8 @@ public:
 	// Add video and audio data
 
 	bool AddFrame(AVFrame* frame, const char* soundBuffer, int soundBufferSize);
-		bool AddFrame(AVFrame* frame);
-			bool AddFrame(const char* soundBuffer, int soundBufferSize);
+	bool AddFrame(AVFrame* frame);
+	bool AddFrame(const char* soundBuffer, int soundBufferSize);
 	// end of output
 	bool Finish();
 

@@ -2,19 +2,14 @@
     CONSOLE APPLICATION : HelloVideoStreaming Project Overview
 ========================================================================
 
-This file contains a summary of what you will find in each of the files that
-make up your HelloVideoStreaming application.
+Final Windows only vercion of CloudForeverWritter, which joined CO.
 
 
-HelloVideoStreaming.vcproj
-    This is the main project file for VC++ projects generated using an Application Wizard.
-    It contains information about the version of Visual C++ that generated the file, and
-    information about the platforms, configurations, and project features selected with the
-    Application Wizard.
+CloudObserverWriter.vcproj
+    C++ students project for life video broadcasting to TCP ( http emulating ) Cloud Observer server.
 
-HelloVideoStreaming.cpp
-    This is the main application source file.
-    Ment for testing and creating HelloWorld style code base for FFmpeg+Boost+OpenCV+OpenAL libs. Simple WebCam live video + live mic audio multyformat transmitter.
+CloudObserverWriter.cpp
+    Main Application - comtains A/V frames grabbing and all other logic, runs encoder which streams video out to the server.
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -23,11 +18,11 @@ Other standard files:
 StdAfx.h, StdAfx.cpp
     These files are used to build a precompiled header (PCH) file
     named HelloVideoStreaming.pch and a precompiled types file named StdAfx.obj.
+    Bad beginners habbit.
 
 /////////////////////////////////////////////////////////////////////////////
 Other notes:
 
-AppWizard uses "TODO:" comments to indicate parts of the source code you
-should add to or customize.
+Linear complex not readable, not portable programm.
 
 /////////////////////////////////////////////////////////////////////////////
