@@ -221,10 +221,6 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\ConcurrentQueue.h"
-				>
-			</File>
-			<File
 				RelativePath=".\ffmpeginclude.h"
 				>
 			</File>
@@ -234,10 +230,6 @@
 			</File>
 			<File
 				RelativePath=".\LSD.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Settings.h"
 				>
 			</File>
 			<File

@@ -11,8 +11,6 @@ FFmpeg simple Encoder
 #include "ffmpegInclude.h"
 #include <math.h>
 
-#include "Settings.h"
-// Boost#include <boost/asio.hpp>
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
@@ -46,7 +44,7 @@ int VideoEncoder::ReadFromServer()
 	size_t reply_length = boost::asio::read(s, boost::asio::buffer(reply, 13));
 	//std::cout << "Reply is: ";
 	std::cout.write(reply, reply_length);
-    std::cout << "\n";
+	std::cout << "\n";
 	string str (reply);
 	string key ("200");
 	size_t found;
@@ -68,12 +66,12 @@ int VideoEncoder::ConnectToServer(std::string& tcpUrl)
 	tcp::resolver::iterator iterator = resolver.resolve(query);
 
 	s.connect(*iterator);
-return 10;
+	return 10;
 }
-	catch (std::exception& e)
-	{
-		return -1;
-	}
+catch (std::exception& e)
+{
+	return -1;
+}
 }
 int VideoEncoder::ConnectUserToUrl( std::string& username)
 {
@@ -87,7 +85,7 @@ int VideoEncoder::ConnectUserToUrl( std::string& username)
 	}
 	catch (std::exception& e)
 	{
-return -1;
+		return -1;
 	}
 }
 int VideoEncoder::TryWriteToUrl(const unsigned char *buf, int size)
@@ -103,19 +101,19 @@ int VideoEncoder::TryWriteToUrl(const unsigned char *buf, int size)
 }
 void VideoEncoder::WriteToUrl(const unsigned char *buf, int size)
 {
-try
-{
-boost::asio::write(s, boost::asio::buffer(buf, size));
-}
-catch (std::exception& e)
-{
-	printf("Internal Error happened, please restart application");
-	cin.get();
-}
+	try
+	{
+		boost::asio::write(s, boost::asio::buffer(buf, size));
+	}
+	catch (std::exception& e)
+	{
+		printf("Internal Error happened, please restart application");
+		cin.get();
+	}
 }
 int VideoEncoder::InitUrl(std::string& container, std::string& tcpUrl, std::string& username)
 {
-	
+
 	if (!hasAudio && !hasVideo)
 	{
 		return -10;
@@ -165,10 +163,10 @@ int VideoEncoder::InitUrl(std::string& container, std::string& tcpUrl, std::stri
 				if (hasVideo)
 				{	
 					if (pVideoStream)
-				{
-					res = OpenVideo(pFormatContext, pVideoStream);
-				//	printf("OpenVideo \n");
-				}
+					{
+						res = OpenVideo(pFormatContext, pVideoStream);
+						//	printf("OpenVideo \n");
+					}
 				}
 
 				if (hasAudio)
@@ -179,24 +177,24 @@ int VideoEncoder::InitUrl(std::string& container, std::string& tcpUrl, std::stri
 
 				if (res && !(pOutFormat->flags & AVFMT_NOFILE)) 
 				{	
-				if(url_open( &url_context, tcpUrl.c_str(), URL_WRONLY)  < 0) 
+					if(url_open( &url_context, tcpUrl.c_str(), URL_WRONLY)  < 0) 
 					{ 
 						printf("Cannot open stream URL\n");
 						intConnection = -1; 
-						}
 					}
 				}
+			}
 
 
-			}    
-		}   
-	
+		}    
+	}   
+
 	//printf("1.7\n");
 	if (!res)
 	{
-	//	printf("1.8\n");
+		//	printf("1.8\n");
 		Free();
-	//	printf("Cannot init stream\n");
+		//	printf("Cannot init stream\n");
 
 	}
 	if (res)
@@ -377,8 +375,8 @@ void VideoEncoder::Free()
 
 		if (!(pFormatContext->flags & AVFMT_NOFILE) && pFormatContext->pb) 
 		{
-			 s.close();
-			 url_close(url_context);
+			s.close();
+			url_close(url_context);
 		}
 
 		// Free the stream.
@@ -549,7 +547,7 @@ AVStream * VideoEncoder::AddAudioStream(AVFormatContext *pContext, CodecID codec
 		printf("Cannot add new audio stream\n");
 		return NULL;
 	}
-//	printf("added new audio stream\n");
+	//	printf("added new audio stream\n");
 	// Codec.
 	pCodecCxt = pStream->codec;
 	pCodecCxt->codec_id = codec_id;
