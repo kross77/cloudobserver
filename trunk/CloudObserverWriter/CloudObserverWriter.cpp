@@ -7,9 +7,16 @@
 
 #pragma comment(lib, "strmiids")
 // FFmpeg
+#ifdef __WIN32__
 #include <avcodec.h>
 #include <avformat.h>
 #include <swscale.h>
+#else
+#include <libavcodec/avcodec.h>
+#include <libavformat/avformat.h>
+#include <libswscale/swscale.h>
+#endif
+
 #include <boost/thread.hpp>
 #include <boost/timer.hpp>
 
@@ -18,14 +25,24 @@
 #include "list.h"
 
 // OpenCV
+#ifdef __WIN32__
 #include <cv.h>
 #include <cxcore.h>
 #include <highgui.h>
+#else
+#include <opencv/cv.h>
+#include <opencv/cxcore.h>
+#include <opencv/highgui.h>
+#endif
 
 // OpenAL
+#ifdef __WIN32__
 #include <al.h>
 #include <alc.h>
-
+#else
+#include <AL/al.h>
+#include <AL/alc.h>
+#endif
 // Boost
 #include <boost/thread.hpp>
 #include <boost/timer.hpp>

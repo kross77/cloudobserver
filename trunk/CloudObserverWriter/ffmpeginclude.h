@@ -10,6 +10,12 @@
 #endif
 
 //#include "stdint.h"
+#ifdef __WIN32__
 #include <avcodec.h>
 #include <avformat.h>
 #include <swscale.h>
+#else
+#include <libavcodec/avcodec.h>
+#include <libavformat/avformat.h>
+#include <libswscale/swscale.h>
+#endif
