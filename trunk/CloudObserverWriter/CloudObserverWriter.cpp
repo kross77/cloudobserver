@@ -7,7 +7,7 @@
 
 #pragma comment(lib, "strmiids")
 // FFmpeg
-#ifdef __WIN32__
+#ifdef WIN32
 #include <avcodec.h>
 #include <avformat.h>
 #include <swscale.h>
@@ -25,7 +25,7 @@
 #include "list.h"
 
 // OpenCV
-#ifdef __WIN32__
+#ifdef WIN32
 #include <cv.h>
 #include <cxcore.h>
 #include <highgui.h>
@@ -36,7 +36,7 @@
 #endif
 
 // OpenAL
-#ifdef __WIN32__
+#ifdef WIN32
 #include <al.h>
 #include <alc.h>
 #else

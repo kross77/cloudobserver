@@ -1,5 +1,5 @@
 #pragma once
-#ifdef __WIN32__
+#ifdef WIN32
 #include <windows.h>
 #include <dshow.h>
 #else
