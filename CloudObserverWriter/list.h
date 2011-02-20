@@ -1,7 +1,12 @@
 #pragma once
-
+#ifdef __WIN32__
 #include <windows.h>
 #include <dshow.h>
+#else
+typedef int HRESULT;
+typedef int REFGUID;
+typedef int IEnumMoniker;
+#endif
 #include <iostream>
 class CamerasList
 {

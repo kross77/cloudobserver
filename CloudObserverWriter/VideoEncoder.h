@@ -3,7 +3,7 @@
 #define __VIDEO_ENCODER_H__
 #include "stdafx.h"
 //#include <boost/asio.hpp>
-#include "ffmpegInclude.h"
+#include "ffmpeginclude.h"
 //#include <Windows.h>
 #include <string>
 #include <queue>
