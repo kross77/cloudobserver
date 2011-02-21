@@ -1,4 +1,5 @@
 #summary BroadCast problem solution
+#labels Deprecated
 
 Биндинг, специально разработанный для широковещательных рассылок.
 
