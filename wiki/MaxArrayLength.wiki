@@ -1,3 +1,4 @@
+#labels Deprecated,Phase-Implementation
  = Introduction =
 In another page on wiki was described a problem with limited size of transferring data. In the article was written two possible decisions:
  # refuse using wcf and using iss + winservces
