@@ -1,3 +1,4 @@
+#labels Deprecated
  = TCP binding =
 
 Description could be find: http://blogs.msdn.com/drnick/archive/2006/06/05/617703.aspx.
