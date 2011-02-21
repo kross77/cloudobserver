@@ -1,3 +1,4 @@
+#labels Deprecated
 A bit later here will be written some dependences beetwen size of images, buffer size, tipe of binding and time.
 
 http://geekswithblogs.net/BizG/archive/2008/02/22/socket-errors-in-wcf-nettcpbinding.aspx
