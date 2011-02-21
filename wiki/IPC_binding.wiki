@@ -1,3 +1,4 @@
+#labels Deprecated
  = IPC binding =
 
 Offered by the NetNamedPipeBinding class, this uses named pipes as a transport for same-machine communication. It is the most secure binding, since it cannot accept calls from outside the machine. The IPC binding supports a variety of features, similar to the TCP binding. It is also the most performant binding, since IPC is a lighter protocol than TCP.
