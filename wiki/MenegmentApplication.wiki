@@ -1,5 +1,5 @@
 #summary About manegment tool and its future
-#labels Featured,Phase-Deploy,Phase-Implementation,Air,MXML,ActionScript,FlashBuilder,WSDL,VisualStudio
+#labels Deprecated,Phase-Deploy,Phase-Implementation,Air,MXML,ActionScript,FlashBuilder,WSDL,VisualStudio
 
 = Введение =
 
