@@ -1,0 +1,22 @@
+#summary How to set up library's environment's for Linux.
+#labels Phase-Implementation,Requirements,Support,Draft
+
+= Introduction =
+
+Here we describe what is needed to be capable of compiling writer client application on Linux. Details on how to compile an application is not topic of this page.
+
+
+= Details =
+
+First install throe your packet manager (or from developers site):
+  * [http://www.boost.org/ Boost] C++ library's 
+  * [http://opencv.willowgarage.com/wiki/ OpenCV]
+  * [http://connect.creativelabs.com/openal/default.aspx OpenAL]
+
+Secondly get latest svn of [http://www.ffmpeg.org/ FFmpeg] and open folder with its truck contents in terminal. type:
+  * ./configure --enable-pthreads --enable-shared  
+  * make 
+  * sudo make install
+This will take some time.
+
+Follow this instruction and you will install all required library's into your system.
