@@ -1,3 +1,4 @@
+#labels Phase-Implementation,Deprecated
  =Per-call services=
 
 4.2. Per-Call Services
@@ -513,5 +514,3 @@ However, the degree to which the client-side session ID matches that of the serv
 
 4.3.4. Session Termination
 Typically, the session will end once the client closes the proxy. However, in case the client neglects to close the proxy, or when the client terminates ungracefully or there is a communication problem, the session will also terminate once the inactivity timeout of the transport session is exceeded.
-
-
