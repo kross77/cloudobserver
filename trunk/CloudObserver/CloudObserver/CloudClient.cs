@@ -84,6 +84,14 @@ namespace CloudObserver
                         switch (parserState)
                         {
                             case ParserState.METHOD:
+                                if (this.httpRequest.method == "<policy-file-request/>" && File.Exists(Settings.InstallLocation + "htdocs/crossdomain.xml"))
+                                {
+                                    byte[] crossDomainXml = Encoding.ASCII.GetBytes(new StreamReader(File.OpenRead(Settings.InstallLocation + "htdocs/crossdomain.xml")).ReadToEnd());
+                                    networkStream.Write(crossDomainXml, 0, crossDomainXml.Length);
+                                    networkStream.Close();
+                                    Thread.CurrentThread.Abort();
+                                }
+
                                 if (buffer[index] != ' ')
                                     this.httpRequest.method += (char)buffer[index++];
                                 else
