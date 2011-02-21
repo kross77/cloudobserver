@@ -1,5 +1,5 @@
 #summary CloudObserver
-#labels AIR,Silverlight,IIS,WCF,CloudObserver
+#labels Featured,Phase-Design,CloudObserver
 ====== смотрите русскую версию на странице CloudObserver ======
 
 = CloudObserver =
