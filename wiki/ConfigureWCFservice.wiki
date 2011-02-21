@@ -1,3 +1,4 @@
+#labels Phase-Implementation,Deprecated
  =Некоторый troubleshooting=
 
  =Часть 1.=
