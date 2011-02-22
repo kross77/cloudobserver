@@ -8,9 +8,7 @@ FFmpeg simple Encoder
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <libavcodec/avcodec.h>
-#include <libavformat/avformat.h>
-#include <libswscale/swscale.h>
+
 #include <math.h>
 
 // Boost#include <boost/asio.hpp>
