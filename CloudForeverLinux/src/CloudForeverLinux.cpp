@@ -40,6 +40,7 @@ extern "C" {
 #include <boost/timer.hpp>
 
 #include "VideoEncoder.h"
+#include "LSD.h"
 //#include <iostream>
 
 using namespace std;
@@ -356,7 +357,35 @@ void CaptureFrame(int w, int h, char* buffer, int bytespan)
 
 	//use cvResize to resize source to a destination image
 	cvResize(CVframe, destination);
-//cvSaveImage("test2.jpg" ,destination);
+	switch(useLSD){
+case false:{} break;
+case true:{
+	IplImage *destinationForLSD = cvCreateImage(cvSize(w, h),IPL_DEPTH_8U,1);
+	cvCvtColor(destination,destinationForLSD,CV_RGB2GRAY);
+
+	image_double lsdImage;
+	ntuple_list lsdOut;
+	unsigned int x,y,i,j;
+	lsdImage = new_image_double(w,h);
+
+	for(x=0;x<w;x++)
+		for(y=0;y<h;y++)
+			lsdImage->data[ x + y * lsdImage->xsize ] = cvGetReal2D(destinationForLSD, y, x);/* image(x,y) */
+
+	/* call LSD */
+	lsdOut = lsd(lsdImage);
+
+	for(i=0;i<lsdOut->size;i++)
+	{
+		CvPoint pt1 = { lsdOut->values[ i * lsdOut->dim + 0 ], lsdOut->values[ i * lsdOut->dim + 1]};
+		CvPoint pt2 = { lsdOut->values[ i * lsdOut->dim + 2 ], lsdOut->values[ i * lsdOut->dim + 3 ] };
+		cvLine(destination, pt1, pt2, CV_RGB(240, 255, 255), 1, CV_AA,0);
+	}
+	cvReleaseImage(&destinationForLSD);
+	free_image_double(lsdImage);
+	free_ntuple_list(lsdOut);
+		  } break;
+	}
 
 
 	for(int i = 0; i < destination->imageSize; i=i+3)
