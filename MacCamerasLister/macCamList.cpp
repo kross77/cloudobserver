@@ -1,10 +1,10 @@
- // http://stackoverflow.com/questions/4290834/how-to-get-a-list-of-video-capture-devices-web-cameras-on-linux-ubuntu-c/4290867#4290867
+// http://stackoverflow.com/questions/4290834/how-to-get-a-list-of-video-capture-devices-web-cameras-on-linux-ubuntu-c/4290867#4290867
 // http://www.cs.fsu.edu/~baker/devices/lxr/http/source/xawtv-3.95/console/v4l-info.c#L111
 
 #include <iostream>
 #include <sstream>
 #include <string.h>
-#include <quicktime.h>
+#include <QuickTime/QuickTime.h>
 //#include <boost/lexical_cast.hpp>
 
 using namespace std;
@@ -16,48 +16,69 @@ int main()
 	int selectedIndex;
 
 	cout << endl << "Let us select video device." << endl << "Available capture devices are:" << endl;
+	
+	SGDeviceList deviceList;
+	
+	// Find and open a sequence grabber
+	ComponentDescription theDesc;
+	theDesc.componentType           = SeqGrabComponentType;
+	theDesc.componentSubType        = 0L;
+	theDesc.componentManufacturer   = 'appl';
+	theDesc.componentFlags          = 0L;
+	theDesc.componentFlagsMask      = 0L;   
+	Component sgCompID = FindNextComponent(NULL, &theDesc);
+	if (sgCompID != 0) {
+		ComponentInstance seqGrabber = OpenComponent(sgCompID);
+		if (seqGrabber)
+		{
+			ComponentResult result = SGInitialize(seqGrabber);
+			if (result == noErr)
+			{
+				// Get a video channel
+				SGChannel videoChannel;
+				result = SGNewChannel(seqGrabber, VideoMediaType, &videoChannel);
+				if (result == noErr)
+				{
+					/* build a device list */
+					SGGetChannelDeviceList(videoChannel, sgDeviceListDontCheckAvailability | sgDeviceListIncludeInputs, &deviceList);
+				} else {
+					cout << "Couldn't create video channel - please connect a video device and try again.";
+					return 999;
+				}
+			} else {
+				cout << "SG call failed.";
+				return 999;
+			}
+		} else {
+			cout << "FindNextComponent failed.";
+			return 999;
+		}
+	} else {
+		cout << "FindNextComponent failed.";
+		return 999;
+	}
 
-
-  // first get a video channel from the sequence grabber
-
-   ComponentDescription    theDesc;
-   Component               sgCompID;
-   ComponentResult         result;
-   theDesc.componentType           = SeqGrabComponentType;
-   theDesc.componentSubType        = 0L;
-   theDesc.componentManufacturer   = 'appl';
-   theDesc.componentFlags          = 0L;
-   theDesc.componentFlagsMask      = 0L;   
-   sgCompID = FindNextComponent (NULL, &theDesc);
-   seqGrabber = OpenComponent (sgCompID);
-   result = SGInitialize (seqGrabber);
-   result = SGNewChannel (seqGrabber, VideoMediaType, &videoChannel);
-   SGDeviceList  theDevices;
-   SGGetChannelDeviceList(videoChannel, sgDeviceListDontCheckAvailability | sgDeviceListIncludeInputs, &theDevices);
-
-    if (theDevices)
+    if (deviceList)
     {
-        int theDeviceIndex;
-        for (theDeviceIndex = 0; theDeviceIndex != (*theDevices)->count; ++theDeviceIndex)
+        for (int theDeviceIndex = 0; theDeviceIndex != (*deviceList)->count; ++theDeviceIndex)
         {
-            SGDeviceName theDeviceEntry = (*theDevices)->entry[theDeviceIndex];
+			SGDeviceName theDeviceEntry = (*deviceList)->entry[theDeviceIndex];
             cout << i << ".1. " <<  theDeviceEntry.name << endl; 
             // name of device is a pstring in theDeviceEntry.name
-
-        SGDeviceInputList theInputs = theDeviceEntry.inputs;
+			
+			SGDeviceInputList theInputs = theDeviceEntry.inputs;
             if (theInputs != NULL)
             {
-                int theInputIndex;
-                for ( theInputIndex = 0; theInputIndex != (*theInputs)->count; ++theInputIndex)
+                for (int theInputIndex = 0; theInputIndex != (*theInputs)->count; ++theInputIndex)
                 {
                     SGDeviceInputName theInput = (*theInputs)->entry[theInputIndex];
                     cout << i << ".2. " << theInput.name << endl;       
                     // name of input is a pstring in theInput.name
                 }
             }
-        }       
-    } // i++ we need to add...
-
+			i++;
+        }
+    }
 	
 	selectedIndex = 999;
 	if (i <= 0)
@@ -90,4 +111,3 @@ int main()
 	}
 	return selectedIndex;
 }
-
