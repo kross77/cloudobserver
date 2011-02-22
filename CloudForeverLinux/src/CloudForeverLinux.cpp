@@ -15,9 +15,12 @@
 #include <iostream>
 // FFmpeg
 
+extern "C" {
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
 #include <libswscale/swscale.h>
+}
+
 #include <boost/thread.hpp>
 #include <boost/timer.hpp>
 
