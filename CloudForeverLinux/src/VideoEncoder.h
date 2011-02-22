@@ -7,6 +7,9 @@
 #include <queue>
 #include <iostream>
 //#include "stdint.h"
+#ifndef __STDC_CONSTANT_MACROS
+  #define __STDC_CONSTANT_MACROS
+#endif
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
 #include <libswscale/swscale.h>
