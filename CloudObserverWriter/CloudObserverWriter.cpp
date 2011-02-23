@@ -116,6 +116,14 @@ double spendedTimeForMain;
 boost::timer timerForCaptureFame;
 boost::timer timerForMain;
 
+
+#ifndef WIN32
+void Sleep(int ms)
+{
+	boost::this_thread::sleep(boost::posix_time::milliseconds(ms));
+}
+#endif
+
 struct limited_cmp {
 	int limit;
 	limited_cmp(int a_limit) : limit(a_limit) {
