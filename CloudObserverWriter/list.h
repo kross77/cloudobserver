@@ -13,6 +13,9 @@ class CamerasList
 public:
 	CamerasList(void);
 	~CamerasList(void);
+#ifdef WIN32
 	HRESULT EnumerateDevices(REFGUID category, IEnumMoniker **ppEnum);
+#endif
 	int SelectFromList();
+
 };

@@ -1,28 +1,25 @@
 TARGET = cowriter
 
-#LIB_DIRS = /usr/local/lib 
+
 
 CXX = g++
-SRCS = CloudObserverWriter.cpp list.cpp LSD.cpp stdafx.cpp VideoEncoder.cpp
+SRCS = CloudObserverWriter.cpp VideoEncoder.cpp LSD.cpp linux/list.cpp
 
 OBJS      = $(SRCS:%.cpp=%.o)
 
-CXXFLAGS = -g -fPIC -pipe -O2 -MMD -MP
-CXXFLAGS += -lm -lcv -lhighgui -lcvaux
-
-
-
-LIBS = -lcv
+CXXFLAGS = -g -fPIC -pipe -O2 -MMD -MP -c
+LIBS = -lm -lcv -lhighgui 
+LIBS += -lboost_system -lboost_regex -lboost_serialization -lboost_thread
+LIBS += -lavcodec -lavdevice -lavformat -lavutil -lswscale -lcxcore -lopenal 
+LDFLAGS = -L/usr/lib -L/usr/local/lib 
 
 .PHONY: clean all
 
 all: $(OBJS)
-	$(CXX) -o $(TARGET) $(OBJS)
+	$(CXX)  $(LDFLAGS) -o $(TARGET) $(OBJS) $(LIBS)
 
 .cpp.o:
-	$(CC) $(CFLAGS) $< -o $@
+	$(CXX) $(CXXFLAGS) $< -o $@
 	
-	
-
 clean:
 	rm -f $(OBJS)
