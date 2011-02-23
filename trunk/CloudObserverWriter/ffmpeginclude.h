@@ -15,7 +15,9 @@
 #include <avformat.h>
 #include <swscale.h>
 #else
+extern "C" {
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
 #include <libswscale/swscale.h>
+}
 #endif
