@@ -130,7 +130,6 @@ void getName(){
 }
 void initOpenCV()
 {
-selectCamera:
 	CamerasListNamespace::CamerasList  * CamList  = new CamerasListNamespace::CamerasList();
     cameraInt = CamList->SelectFromList();
 
@@ -150,10 +149,10 @@ selectCamera:
 	/* always check */
 	if (!capture)
 	{
+		encoder.hasVideo = false;
 		fprintf(stderr, "Cannot initialize selected webcam!\n");
-		goto selectCamera;
-	//cin.get();
-
+		cout << endl;
+		return;
 	}
 
 	CVframe = cvQueryFrame(capture);
