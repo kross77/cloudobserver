@@ -1,4 +1,4 @@
-/*#include "list.h"
+#include "list.h"
 
 CamerasListNamespace::CamerasList::CamerasList(void)
 {
@@ -15,7 +15,8 @@ int CamerasListNamespace::CamerasList::SelectFromList()
 	
 	std::cout << std::endl << "Let us select video device." << std::endl << "Available capture devices are:" << std::endl;
 	
-	SGDeviceList deviceList;
+	SeqGrabComponent seqGrabber = NULL;
+	SGDeviceList deviceList = NULL;
 	
 	// Find and open a sequence grabber
 	ComponentDescription theDesc;
@@ -26,7 +27,7 @@ int CamerasListNamespace::CamerasList::SelectFromList()
 	theDesc.componentFlagsMask      = 0L;   
 	Component sgCompID = FindNextComponent(NULL, &theDesc);
 	if (sgCompID != 0) {
-		ComponentInstance seqGrabber = OpenComponent(sgCompID);
+		seqGrabber = OpenComponent(sgCompID);
 		if (seqGrabber)
 		{
 			ComponentResult result = SGInitialize(seqGrabber);
@@ -43,6 +44,7 @@ int CamerasListNamespace::CamerasList::SelectFromList()
 					std::cout << "Couldn't create video channel - please connect a video device and try again." << std::endl;
 					return 999;
 				}
+				SGDisposeChannel(seqGrabber, videoChannel);
 			} else {
 				std::cout << "SG call failed." << std::endl;
 				return 999;
@@ -78,6 +80,9 @@ int CamerasListNamespace::CamerasList::SelectFromList()
         }
     }
 	
+	SGDisposeDeviceList(seqGrabber, deviceList);
+	SGRelease(seqGrabber);
+	
 	selectedIndex = 999;
 	if (i <= 0)
 	{
@@ -108,4 +113,3 @@ int CamerasListNamespace::CamerasList::SelectFromList()
 	}
 	return selectedIndex;
 }
-*/
