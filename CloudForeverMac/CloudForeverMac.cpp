@@ -1,4 +1,4 @@
-#include "list.h"
+	#include "list.h"
 #include "VideoEncoder.h"
 
 // OpenAL
@@ -21,6 +21,7 @@ int videoHeight	;	// pixels
 int videoFrameRate;	// hertz
 
 int audioSampleRate	;	// hertz
+bool noAudio;
 
 string outputUrl ;
 string outputContainer	;
@@ -168,91 +169,96 @@ void initOpenCV()
 
 void initOpenAL(int fps)
 {
-	nSampleSize = 2.0f * audioSampleRate / fps;
-	//5000
-	Buffer = new ALchar[nSampleSize];
-	dev[0] = alcOpenDevice(NULL);
-	if (NULL == dev[0])
+	if (!noAudio)
 	{
-		//noMic = true;
-		fprintf(stderr, "No microphone found, please restart application , or continue streaming with out sound\n");
-		boost::this_thread::sleep(boost::posix_time::seconds(9999999));
-		cin.get();
-		return;
-	}
-
-	ctx = alcCreateContext(dev[0], NULL);
-	alcMakeContextCurrent(ctx);
-	int i = -1;
-	string bufferString[99];
-	const ALchar *pDeviceList = alcGetString(NULL, ALC_CAPTURE_DEVICE_SPECIFIER);
-	const ALCchar *bufferList[99];
-	if (pDeviceList)
-	{
-		printf("\nLet us select audio device\n");
-		printf("Available Capture Devices are:\n");
-		i = 0;
-		while (*pDeviceList)
+		nSampleSize = 2.0f * audioSampleRate / fps;
+		//5000
+		Buffer = new ALchar[nSampleSize];
+		dev[0] = alcOpenDevice(NULL);
+		if (NULL == dev[0])
 		{
-			bufferList[i] = pDeviceList;
-			bufferString[i] += pDeviceList;
-			cout << i <<") " << bufferString[i] << endl;
-			pDeviceList += strlen(pDeviceList) + 1;
-			i++;
+			//noMic = true;
+			fprintf(stderr, "No microphone found, please restart application , or continue streaming with out sound\n");
+			boost::this_thread::sleep(boost::posix_time::seconds(9999999));
+			cin.get();
+			return;
 		}
-	}
 
-	// Get the name of the 'default' capture device
-  //   szDefaultCaptureDevice = alcGetString(NULL, ALC_CAPTURE_DEFAULT_DEVICE_SPECIFIER);
-
-
-	 int SelectedIndex = 999;
-	 if(i <= 0)
-	 {
-		 cout <<"No devices found. \n " << endl;
-		 //cout <<"Please restart application."  << endl;
-		 //cin.get();
-		 //Sleep(999999);
-		 SelectedIndex = 999;
-	 }
-	 else if(i == 1){
-		  cout <<"Default device will be used" << std::endl;
-		 SelectedIndex = 0;
-		 encoder.hasAudio = true;
-	 }else{
-	 while(SelectedIndex > i-1 || SelectedIndex < 0)
-	 {
-		 try{
-			 std::cout <<"please input index from 0 to " << i-1 << std::endl;
-			 std::string s;
-			 std::getline( cin, s, '\n' );
-			 SelectedIndex =  boost::lexical_cast<int>(s);
-
+		ctx = alcCreateContext(dev[0], NULL);
+		alcMakeContextCurrent(ctx);
+		int i = -1;
+		string bufferString[99];
+		const ALchar *pDeviceList = alcGetString(NULL, ALC_CAPTURE_DEVICE_SPECIFIER);
+		const ALCchar *bufferList[99];
+		if (pDeviceList)
+		{
+			printf("\nLet us select audio device\n");
+			printf("Available Capture Devices are:\n");
+			i = 0;
+			while (*pDeviceList)
+			{
+				bufferList[i] = pDeviceList;
+				bufferString[i] += pDeviceList;
+				cout << i <<") " << bufferString[i] << endl;
+				pDeviceList += strlen(pDeviceList) + 1;
+				i++;
 			}
-		 catch(std::exception& e){
+		}
+
+		// Get the name of the 'default' capture device
+	  //   szDefaultCaptureDevice = alcGetString(NULL, ALC_CAPTURE_DEFAULT_DEVICE_SPECIFIER);
+
+
+		 int SelectedIndex = 999;
+		 if(i <= 0)
+		 {
+			 cout <<"No devices found. \n " << endl;
+			 //cout <<"Please restart application."  << endl;
+			 //cin.get();
+			 //Sleep(999999);
 			 SelectedIndex = 999;
-			}
-	 }
-	 }
+		 }
+		 else if(i == 1){
+			  cout <<"Default device will be used" << std::endl;
+			 SelectedIndex = 0;
+			 encoder.hasAudio = true;
+		 }else{
+		 while(SelectedIndex > i-1 || SelectedIndex < 0)
+		 {
+			 try{
+				 std::cout <<"please input index from 0 to " << i-1 << std::endl;
+				 std::string s;
+				 std::getline( cin, s, '\n' );
+				 SelectedIndex =  boost::lexical_cast<int>(s);
+
+				}
+			 catch(std::exception& e){
+				 SelectedIndex = 999;
+				}
+		 }
+		 }
 
 
 
-	//printf("\nDefault Capture Device is '%s'\n\n", szDefaultCaptureDevice);
+		//printf("\nDefault Capture Device is '%s'\n\n", szDefaultCaptureDevice);
 
 
-	/* If you don't need 3D spatialization, this should help processing time */
-	 if (SelectedIndex == 999)
-	 {
-		 encoder.hasAudio = false;
-	 }else{
-		 encoder.hasAudio = true;
+		/* If you don't need 3D spatialization, this should help processing time */
+		 if (SelectedIndex == 999)
+		 {
+			 encoder.hasAudio = false;
+		 }else{
+			 encoder.hasAudio = true;
 
-alDistanceModel(AL_NONE);
-	dev[0] = alcCaptureOpenDevice(bufferList[SelectedIndex], audioSampleRate, AL_FORMAT_MONO16, nSampleSize/2);
-	alcCaptureStart(dev[0]);
-	//ToDo: Refactor nBlockAlign == number of channels * Bits per sample / 8 ; btw: why /8?
-	nBlockAlign = 1 * 16 / 8;
-	 }
+	alDistanceModel(AL_NONE);
+		dev[0] = alcCaptureOpenDevice(bufferList[SelectedIndex], audioSampleRate, AL_FORMAT_MONO16, nSampleSize/2);
+		alcCaptureStart(dev[0]);
+		//ToDo: Refactor nBlockAlign == number of channels * Bits per sample / 8 ; btw: why /8?
+		nBlockAlign = 1 * 16 / 8;
+		 }
+	} else {
+		encoder.hasAudio = false;
+	}
 }
 
 void initFFmpeg(string container, int w, int h, int fps)
@@ -364,14 +370,11 @@ char* CaptureSample()
 	* number of frames, not bytes) */
 	alcGetIntegerv(dev[0], ALC_CAPTURE_SAMPLES, 1, &iSamplesAvailable);
 	// When we would have enough data to fill our BUFFERSIZE byte buffer, will grab the samples, so now we should wait
-	while(iSamplesAvailable < (nSampleSize / nBlockAlign))
+	while(iSamplesAvailable < (nSampleSize / nBlockAlign) - 1)
 		alcGetIntegerv(dev[0], ALC_CAPTURE_SAMPLES, 1, &iSamplesAvailable);
 	// Consume Samples
-	if (iSamplesAvailable >= (nSampleSize / nBlockAlign))
-	{
-		alcCaptureSamples(dev[0], Buffer, nSampleSize / nBlockAlign);
-		return  (char *)Buffer;
-	}
+	alcCaptureSamples(dev[0], Buffer, (nSampleSize / nBlockAlign) - 1);
+	return  (char *)Buffer;
 }
 
 void closeOpenCV()
@@ -465,6 +468,7 @@ int main(int argc, char* argv[])
 	audioSampleRate = 44100;
 	outputContainer +="flv";
 	streamBitRate = 1.5 * videoWidth * 1024;  /*videoWidth * 150*/; // use at least 700000 to get full super HD Qualyty
+	noAudio = false;
 	for(int i = 1; i<argc; i=i+2){
 	//	cout << "i = " << i << "; argv[i] = " << argv[i] << endl;
 if(string(argv[i]) == "-camera") {cameraInt = atoi(argv[i+1]);}
@@ -478,6 +482,7 @@ if(string(argv[i]) == "-container" ) {outputContainer = (argv[i+1]);}
 if(string(argv[i]) == "-nickname" ) {outputUserName = (argv[i+1]);}
 if(string(argv[i]) == "-useLSD" ) {useLSD = atoi(argv[i+1]);}
 if(string(argv[i]) == "-streamBitRate" ) {streamBitRate = atoi(argv[i+1]);}
+if(string(argv[i]) == "-noAudio" ) {noAudio = atoi(argv[i+1]);}
 	// example -server http://127.0.0.1:4773 -nickname vasia  // if you change w and h do not forget about stream bit rate!!!
 		}
 
