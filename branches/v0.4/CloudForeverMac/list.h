@@ -1,4 +1,4 @@
-/*#include <iostream>
+#include <iostream>
 #include <cstring>
 #include <boost/lexical_cast.hpp>
 #include <QuickTime/QuickTime.h>
@@ -15,4 +15,3 @@ namespace CamerasListNamespace
 		int SelectFromList();
 	};
 }
-*/

@@ -131,8 +131,8 @@ void getName(){
 void initOpenCV()
 {
 selectCamera:
-	//CamerasListNamespace::CamerasList  * CamList  = new CamerasListNamespace::CamerasList();
-    cameraInt = 0;//CamList->SelectFromList();
+	CamerasListNamespace::CamerasList  * CamList  = new CamerasListNamespace::CamerasList();
+    cameraInt = CamList->SelectFromList();
 
 	if (cameraInt == 999)
 	{
