@@ -1,14 +1,15 @@
 /*
 FFmpeg simple Encoder
 */
+
 #include "stdafx.h"
+
 #include "VideoEncoder.h"
 #include <boost/asio.hpp>
 #include <boost/regex.hpp>
-#include <Windows.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "ffmpegInclude.h"
+
 #include <math.h>
 
 #include <cstdlib>
@@ -558,7 +559,7 @@ AVStream * VideoEncoder::AddAudioStream(AVFormatContext *pContext, CodecID codec
 	pCodecCxt->channels    = 1;
 	pCodecCxt->sample_fmt  = SAMPLE_FMT_S16;
 
-	nSizeAudioEncodeBuffer = 4 * MAX_AUDIO_PACKET_SIZE; // хггю щрнн юсдхн й усъл лнфер керерэ
+	nSizeAudioEncodeBuffer = 4 * MAX_AUDIO_PACKET_SIZE; // О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫ О©╫ О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫
 	if (pAudioEncodeBuffer == NULL)
 	{      
 		pAudioEncodeBuffer = (uint8_t * )av_malloc(nSizeAudioEncodeBuffer);

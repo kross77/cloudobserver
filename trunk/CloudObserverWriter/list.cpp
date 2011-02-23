@@ -1,8 +1,21 @@
+#ifdef WIN32
 #include "StdAfx.h"
-#include "list.h"
-#include <windows.h>
 #include <dshow.h>
+#else
+#include <sys/ioctl.h>
+#include <linux/videodev2.h>
+#include <fcntl.h>
+
+#include <sstream>
+#include <unistd.h>
+#endif
+
+#include <iostream>
+#include <string.h>
+
 #include <boost/lexical_cast.hpp>
+
+#include "list.h"
 #pragma comment(lib, "strmiids")
 using namespace std;
 CamerasList::CamerasList(void)

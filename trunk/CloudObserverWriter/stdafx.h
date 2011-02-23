@@ -4,12 +4,19 @@
 //
 
 #pragma once
+#ifdef WIN32
 
 #include "targetver.h"
-
 #include <stdio.h>
-#ifdef WIN32
+
+#include <windows.h>
 #include <tchar.h>
+
+#else
+
+typedef unsigned char BYTE;
+typedef unsigned int DWORD; //TODO check it 32/64 bit
+
 #endif
 
 

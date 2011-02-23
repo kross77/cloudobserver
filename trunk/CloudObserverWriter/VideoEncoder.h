@@ -1,10 +1,9 @@
 
 #ifndef __VIDEO_ENCODER_H__
 #define __VIDEO_ENCODER_H__
-#include "stdafx.h"
-//#include <boost/asio.hpp>
+
+
 #include "ffmpeginclude.h"
-//#include <Windows.h>
 #include <string>
 #include <queue>
 #include <iostream>
@@ -14,7 +13,7 @@
 #include <boost/timer.hpp>
 
 using namespace std;
-//using boost::asio::ip::tcp;
+
 
 class VideoEncoder
 {

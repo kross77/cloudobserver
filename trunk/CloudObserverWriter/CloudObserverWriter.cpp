@@ -1,4 +1,6 @@
+#ifdef WIN32
 #include "stdafx.h"
+#endif
 #include <boost/regex.hpp>
 #include <boost/asio.hpp>
 #include <boost/lexical_cast.hpp>
@@ -12,9 +14,11 @@
 #include <avformat.h>
 #include <swscale.h>
 #else
+extern "C" {
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
 #include <libswscale/swscale.h>
+}
 #endif
 
 #include <boost/thread.hpp>
