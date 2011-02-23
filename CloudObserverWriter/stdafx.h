@@ -9,7 +9,7 @@
 #include "targetver.h"
 #include <stdio.h>
 
-#include <windows.h>
+//#include <windows.h>
 #include <tchar.h>
 
 #else
