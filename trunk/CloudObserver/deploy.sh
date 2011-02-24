@@ -1,8 +1,9 @@
 #!/bin/sh
 
 revision=`svnversion`
-version=0.4.0.$revision
-target=cloudobserver-$version
+version=0.4.0
+target_dir=cloudobserver-$version
+target=$target_dir.$revision
 
 executable=./CloudObserver/bin/Release/CloudObserver.exe
 if [ ! -f $executable ]; then
@@ -14,13 +15,13 @@ if [ -f $target.tar.gz ]; then
 	rm $target.tar.gz
 fi
 
-mkdir $target
-cp $executable $target
-cp ./CloudObserver/start.sh $target
-cp ./CloudObserver/stop.sh $target
-chmod a+x $target/start.sh $target/stop.sh
-cp -r ./CloudObserverInstaller/htdocs $target
-tar -czf $target.tar.gz --exclude-vcs $target
-rm -fr $target
+mkdir $target_dir
+cp $executable $target_dir
+cp ./CloudObserver/start.sh $target_dir
+cp ./CloudObserver/stop.sh $target_dir
+chmod a+x $target_dir/start.sh $target_dir/stop.sh
+cp -r ./CloudObserverInstaller/htdocs $target_dir
+tar -czf $target.tar.gz --exclude-vcs $target_dir
+rm -fr $target_dir
 
 exit 0
