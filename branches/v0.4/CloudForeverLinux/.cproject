@@ -46,9 +46,9 @@
 <listOptionValue builtIn="false" value="avcodec"/>
 <listOptionValue builtIn="false" value="avformat"/>
 <listOptionValue builtIn="false" value="avutil"/>
-<listOptionValue builtIn="false" value="boost_regex"/>
-<listOptionValue builtIn="false" value="boost_system"/>
-<listOptionValue builtIn="false" value="boost_thread"/>
+<listOptionValue builtIn="false" value="boost_regex-mt"/>
+<listOptionValue builtIn="false" value="boost_system-mt"/>
+<listOptionValue builtIn="false" value="boost_thread-mt"/>
 <listOptionValue builtIn="false" value="cv"/>
 <listOptionValue builtIn="false" value="cxcore"/>
 <listOptionValue builtIn="false" value="highgui"/>
@@ -623,7 +623,7 @@
 <tool id="cdt.managedbuild.tool.gnu.cpp.compiler.exe.release.1406667726" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.exe.release">
 <option id="gnu.cpp.compiler.exe.release.option.optimization.level.751686412" name="Optimization Level" superClass="gnu.cpp.compiler.exe.release.option.optimization.level" value="gnu.cpp.compiler.optimization.level.most" valueType="enumerated"/>
 <option id="gnu.cpp.compiler.exe.release.option.debugging.level.1455925626" name="Debug Level" superClass="gnu.cpp.compiler.exe.release.option.debugging.level" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
-<option id="gnu.cpp.compiler.option.include.paths.337928854" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+<option id="gnu.cpp.compiler.option.include.paths.337928854" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 <listOptionValue builtIn="false" value="/usr/include"/>
 <listOptionValue builtIn="false" value="/usr/local/include"/>
 </option>
@@ -640,13 +640,13 @@
 <listOptionValue builtIn="false" value="/usr/lib"/>
 <listOptionValue builtIn="false" value="/usr/local/lib"/>
 </option>
-<option id="gnu.cpp.link.option.libs.1587659008" superClass="gnu.cpp.link.option.libs" valueType="libs">
+<option id="gnu.cpp.link.option.libs.1587659008" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 <listOptionValue builtIn="false" value="avcodec"/>
 <listOptionValue builtIn="false" value="avformat"/>
 <listOptionValue builtIn="false" value="avutil"/>
-<listOptionValue builtIn="false" value="boost_regex"/>
-<listOptionValue builtIn="false" value="boost_system"/>
-<listOptionValue builtIn="false" value="boost_thread"/>
+<listOptionValue builtIn="false" value="boost_regex-mt"/>
+<listOptionValue builtIn="false" value="boost_system-mt"/>
+<listOptionValue builtIn="false" value="boost_thread-mt"/>
 <listOptionValue builtIn="false" value="cv"/>
 <listOptionValue builtIn="false" value="cxcore"/>
 <listOptionValue builtIn="false" value="highgui"/>
