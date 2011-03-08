@@ -1,23 +1,33 @@
-/*
-FFmpeg simple Encoder
-*/
 
+#ifndef __STDC_CONSTANT_MACROS
+  #define __STDC_CONSTANT_MACROS
+#endif
 
-#ifndef __VIDEO_ENCODER_H__
-#define __VIDEO_ENCODER_H__
-//#include <boost/asio.hpp>
-#include "ffmpegInclude.h"
-//#include <Windows.h>
-#include <string>
-#include <queue>
-#include <iostream>
+// FFmpeg
+extern "C" {
+#include <libavcodec/avcodec.h>
+#include <libavformat/avformat.h>
+#include <libswscale/swscale.h>
+}
 
 // Boost
+#include <boost/asio.hpp>
+#include <boost/lexical_cast.hpp>
+#include <boost/regex.hpp>
 #include <boost/thread.hpp>
 #include <boost/timer.hpp>
 
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <iostream>
+#include <cmath>
+#include <queue>
+
+#ifndef _VIDEO_ENCODER_H__
+#define _VIDEO_ENCODER_H__
+
 using namespace std;
-//using boost::asio::ip::tcp;
 
 class VideoEncoder
 {
@@ -156,4 +166,4 @@ private:
 
 };
 
-#endif // __VIDEO_ENCODER_H__
+#endif // _VIDEO_ENCODER_H__

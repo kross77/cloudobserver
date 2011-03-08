@@ -1,5 +1,10 @@
-
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <limits.h>
+#include <float.h>
+#ifndef _LSD_H__
+#define _LSD_H__
 
 	typedef struct ntuple_list_s
 	{
@@ -56,3 +61,5 @@
 	ntuple_list lsd_scale(image_double image, double scale);
 
 	ntuple_list lsd(image_double image);
+
+#endif // _LSD_H__
