@@ -1,24 +1,4 @@
-/*
-FFmpeg simple Encoder
-*/
-
 #include "VideoEncoder.h"
-#include <boost/asio.hpp>
-#include <boost/regex.hpp>
-#include <Windows.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include "ffmpegInclude.h"
-#include <math.h>
-
-// Boost#include <boost/asio.hpp>
-#include <cstdlib>
-#include <cstring>
-#include <iostream>
-
-#include <boost/thread.hpp>
-#include <boost/timer.hpp>
-#include <queue>
 
 using namespace std;
 using boost::asio::ip::tcp;
@@ -310,8 +290,7 @@ bool VideoEncoder::AddFrame(AVFrame* frame)
 		if (NeedConvert() && pImgConvertCtx) 
 		{
 			// Convert RGB to YUV.
-			sws_scale(pImgConvertCtx, frame->data, frame->linesize,
-				0, pVideoCodec->height, pCurrentPicture->data, pCurrentPicture->linesize);      
+			sws_scale(pImgConvertCtx, frame->data, frame->linesize,	0, pVideoCodec->height, pCurrentPicture->data, pCurrentPicture->linesize);
 		}
 
 		res = AddVideoFrame(pFormatContext, pCurrentPicture, pVideoStream->codec);
@@ -399,7 +378,7 @@ AVFrame * VideoEncoder::CreateFFmpegPicture(int pix_fmt, int nWidth, int nHeight
 		return NULL;
 	}
 
-	size = avpicture_get_size(pix_fmt, nWidth, nHeight);
+	size = avpicture_get_size((PixelFormat)pix_fmt, nWidth, nHeight);
 	picture_buf = (uint8_t *) av_malloc(size);
 
 	if (!picture_buf) 
@@ -409,8 +388,7 @@ AVFrame * VideoEncoder::CreateFFmpegPicture(int pix_fmt, int nWidth, int nHeight
 		return NULL;
 	}
 
-	avpicture_fill((AVPicture *)picture, picture_buf,
-		pix_fmt, nWidth, nHeight);
+	avpicture_fill((AVPicture *)picture, picture_buf, (PixelFormat)pix_fmt, nWidth, nHeight);
 
 	return picture;
 }
@@ -559,7 +537,7 @@ AVStream * VideoEncoder::AddAudioStream(AVFormatContext *pContext, CodecID codec
 	pCodecCxt->channels    = 1;
 	pCodecCxt->sample_fmt  = SAMPLE_FMT_S16;
 
-	nSizeAudioEncodeBuffer = 4 * MAX_AUDIO_PACKET_SIZE; // ÈÇÇÀ ÝÒÎÎ ÀÓÄÈÎ Ê ÕÓßÌ ÌÎÆÅÒ ËÅÒÅÒÜ
+	nSizeAudioEncodeBuffer = 4 * MAX_AUDIO_PACKET_SIZE; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	if (pAudioEncodeBuffer == NULL)
 	{      
 		pAudioEncodeBuffer = (uint8_t * )av_malloc(nSizeAudioEncodeBuffer);
@@ -713,12 +691,12 @@ bool VideoEncoder::AddAudioSample(AVFormatContext *pFormatContext, AVStream *pSt
 	memcpy(audioBuffer + nAudioBufferSizeCurrent, soundBuffer, soundBufferSize);
 	nAudioBufferSizeCurrent += soundBufferSize;
 
-	BYTE * pSoundBuffer = (BYTE *)audioBuffer;
+	char * pSoundBuffer = (char *)audioBuffer;
 	int nCurrentSize    = nAudioBufferSizeCurrent;
 
 	// Size of packet on bytes.
 	// FORMAT s16
-	DWORD packSizeInSize = 2 * audioInputSampleSize;
+	int  packSizeInSize = 2 * audioInputSampleSize;
 
 	while(nCurrentSize >= packSizeInSize)
 	{
