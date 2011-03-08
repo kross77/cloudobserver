@@ -1,6 +1,6 @@
-#include "utils/list.h"
-#include "videoEncoder/VideoEncoder.h"
-#include "libLSD/lsd.h"
+#include "list.h"
+#include "VideoEncoder.h"
+#include "lsd.h"
 
 // OpenAL
 #include <OpenAL/al.h>

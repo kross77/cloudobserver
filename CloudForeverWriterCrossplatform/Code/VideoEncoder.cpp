@@ -635,7 +635,9 @@ bool VideoEncoder::AddVideoFrame(AVFormatContext *pFormatContext, AVFrame * pOut
 		int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
 
 		WriteToUrl((unsigned char *)pb_buffer, len);
-		av_free_packet( &pkt);
+				av_free(pb_buffer) ;
+				av_freep(&pb_buffer);
+				av_free_packet( &pkt);
 		res = true;
 	} 
 	else 
@@ -669,7 +671,9 @@ bool VideoEncoder::AddVideoFrame(AVFormatContext *pFormatContext, AVFrame * pOut
 			int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
 
 			WriteToUrl((unsigned char *)pb_buffer, len);
-			av_free_packet( &pkt);
+				av_free(pb_buffer) ;
+				av_freep(&pb_buffer);
+				av_free_packet( &pkt);
 		}
 		else 
 		{
@@ -726,7 +730,10 @@ bool VideoEncoder::AddAudioSample(AVFormatContext *pFormatContext, AVStream *pSt
 		int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
 
 		WriteToUrl((unsigned char *)pb_buffer, len);
-		av_free_packet( &pkt);
+				av_free(pb_buffer) ;
+				av_freep(&pb_buffer);
+				av_free_packet( &pkt);	
+
 
 		nCurrentSize -= packSizeInSize;  
 		pSoundBuffer += packSizeInSize;  
