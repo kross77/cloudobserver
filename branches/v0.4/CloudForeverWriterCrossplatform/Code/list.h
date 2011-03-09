@@ -15,12 +15,12 @@
 #error "unknown platform"
 #endif
 
-#ifndef _LIST_H__
-#define _LIST_H__
+
 
 namespace CamerasListNamespace
 {
-	
+#ifndef _LIST_H__
+#define _LIST_H__
 	class CamerasList
 	{
 	public:
@@ -35,6 +35,6 @@ namespace CamerasListNamespace
 	#endif
 		
 	};
+#endif // _LIST_H__
 }
 
-#endif // _LIST_H__

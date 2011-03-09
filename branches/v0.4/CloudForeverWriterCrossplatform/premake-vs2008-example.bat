@@ -1,0 +1,1 @@
+start premake4.exe  --file=build.lua --os=windows --platform=x32 vs2008 --libsPath=C:\Users\Avesta\Documents\Visual Studio 2008\Projects\LibsAndHeaders\lib --includesPath=C:\Users\Avesta\Documents\Visual Studio 2008\Projects\LibsAndHeaders\include --OpenCVIncludesPath=C:\OpenCV2.1\include --OpenALIncludesPath=C:\Program Files (x86)\OpenAL 1.1 SDK\include

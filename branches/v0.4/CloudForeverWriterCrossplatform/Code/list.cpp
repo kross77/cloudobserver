@@ -1,7 +1,5 @@
 #include "list.h"
-	#ifdef WIN
-		#pragma comment(lib, "strmiids")
-	#endif
+
 CamerasListNamespace::CamerasList::CamerasList(void)
 {
 }
