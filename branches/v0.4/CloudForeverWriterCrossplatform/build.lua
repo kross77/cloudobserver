@@ -177,8 +177,6 @@ defines { "MAC" }
 "/opt/local/include",
 "/usr/include",
 "/usr/local/include",
-"/usr/lib",
-"/usr/local/lib"
  }	 
  
 end	 

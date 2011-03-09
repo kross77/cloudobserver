@@ -20,14 +20,11 @@
 
 namespace CamerasListNamespace
 {
-#ifndef _LIST_H__
-#define _LIST_H__
 	class CamerasList
 	{
 	public:
 		CamerasList(void);
-		~CamerasList(void);
-		
+		~CamerasList(void);	
 		int SelectFromList();
 		
 	#ifdef WIN
@@ -35,6 +32,5 @@ namespace CamerasListNamespace
 	#endif
 		
 	};
-#endif // _LIST_H__
 }
 
