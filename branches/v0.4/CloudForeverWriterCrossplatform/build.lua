@@ -104,7 +104,7 @@ end
 newoption {
    trigger     = "c99Includes",
    value       = "PATH",
-   description = "Choose a particular directory for C99 includes search if it is not defined on your system by defauft. WINDOWS-MSVC-SPECIFIC-REQUIRED-FOR-FFMPEG-OPTION! because on 2011.03.** msvc++ does not support C99 and FFmpeg release requires C99 there are errors compiling in VS enviroment. Choose a particular directory for C99 includes search. Problemm described here: http://ffmpeg.arrozcru.org/wiki/index.php?title=Inttypes.h . Currently required files could be found here http://code.google.com/p/msinttypes/downloads/list ."
+   description = "Choose a particular directory for C99 includes search if it is not defined on your system by defauft. WINDOWS-MSVC-SPECIFIC-REQUIRED-FOR-FFMPEG-OPTION! because on 2011.03.** msvc++ does not support C99 and FFmpeg release requires C99 there are errors compiling in VS environment. Choose a particular directory for C99 includes search. Problem described here: http://ffmpeg.arrozcru.org/wiki/index.php?title=Inttypes.h . Currently required files could be found here http://code.google.com/p/msinttypes/downloads/list ."
 }
 if not _OPTIONS["c99Includes"] then
    _OPTIONS["OpenCVIncludesPath"] = NULL
@@ -209,7 +209,7 @@ end
 "/usr/local/include",
 "/usr/lib",
 "/usr/local/lib",
-"C:\msys\local\include",
+"C:/msys/local/include",
  _OPTIONS["includesPath"],
   _OPTIONS["BoostIncludesPath"],
     _OPTIONS["FFmpegIncludesPath"],
