@@ -15,7 +15,7 @@ newoption {
    description = "Choose a particular directory for general libs search"
 }
 if not _OPTIONS["libsPath"] then
-   _OPTIONS["libsPath"] = NULL
+   _OPTIONS["libsPath"] = nil
 end
 
 newoption {
@@ -24,7 +24,7 @@ newoption {
    description = "Choose a particular directory for Boost libs search"
 }
 if not _OPTIONS["BoostLibsPath"] then
-   _OPTIONS["BoostLibsPath"] = NULL
+   _OPTIONS["BoostLibsPath"] = nil
 end
 
 newoption {
@@ -33,7 +33,7 @@ newoption {
    description = "Choose a particular directory for FFMpeg libs search"
 }
 if not _OPTIONS["FFmpegLibsPath"] then
-   _OPTIONS["FFmpegLibsPath"] = NULL
+   _OPTIONS["FFmpegLibsPath"] = nil
 end
 
 newoption {
@@ -42,7 +42,7 @@ newoption {
    description = "Choose a particular directory for OpenAL libs search"
 }
 if not _OPTIONS["OpenALLibsPath"] then
-   _OPTIONS["OpenALLibsPath"] = NULL
+   _OPTIONS["OpenALLibsPath"] = nil
 end
 
 newoption {
@@ -51,7 +51,7 @@ newoption {
    description = "Choose a particular directory for OpenCV libs search"
 }
 if not _OPTIONS["OpenCVlibsPath"] then
-   _OPTIONS["OpenCVlibsPath"] = NULL
+   _OPTIONS["OpenCVlibsPath"] = nil
 end
 
 -- Options for includes
@@ -62,7 +62,7 @@ newoption {
    description = "Choose a particular directory for general includes search"
 }
 if not _OPTIONS["includesPath"] then
-   _OPTIONS["includesPath"] = NULL
+   _OPTIONS["includesPath"] = nil
 end
 
 newoption {
@@ -71,7 +71,7 @@ newoption {
    description = "Choose a particular directory for Boost includes search"
 }
 if not _OPTIONS["BoostIncludesPath"] then
-   _OPTIONS["BoostIncludesPath"] = NULL
+   _OPTIONS["BoostIncludesPath"] = nil
 end
 
 newoption {
@@ -80,7 +80,7 @@ newoption {
    description = "Choose a particular directory for FFMpeg includes search"
 }
 if not _OPTIONS["FFmpegIncludesPath"] then
-   _OPTIONS["FFmpegIncludesPath"] = NULL
+   _OPTIONS["FFmpegIncludesPath"] = nil
 end
 
 newoption {
@@ -89,7 +89,7 @@ newoption {
    description = "Choose a particular directory for OpenAL includes search"
 }
 if not _OPTIONS["OpenALIncludesPath"] then
-   _OPTIONS["OpenALIncludesPath"] = NULL
+   _OPTIONS["OpenALIncludesPath"] = nil
 end
 
 newoption {
@@ -98,16 +98,16 @@ newoption {
    description = "Choose a particular directory for OpenCV includes search"
 }
 if not _OPTIONS["OpenCVIncludesPath"] then
-   _OPTIONS["OpenCVIncludesPath"] = NULL
+   _OPTIONS["OpenCVIncludesPath"] = nil
 end
 
 newoption {
-   trigger     = "c99Includes",
+   trigger     = "c99IncludesPath",
    value       = "PATH",
    description = "Choose a particular directory for C99 includes search if it is not defined on your system by defauft. WINDOWS-MSVC-SPECIFIC-REQUIRED-FOR-FFMPEG-OPTION! because on 2011.03.** msvc++ does not support C99 and FFmpeg release requires C99 there are errors compiling in VS environment. Choose a particular directory for C99 includes search. Problem described here: http://ffmpeg.arrozcru.org/wiki/index.php?title=Inttypes.h . Currently required files could be found here http://code.google.com/p/msinttypes/downloads/list ."
 }
 if not _OPTIONS["c99Includes"] then
-   _OPTIONS["OpenCVIncludesPath"] = NULL
+   _OPTIONS["OpenCVIncludesPath"] = nil
 end
  	
 -- Main Project Code
@@ -147,7 +147,7 @@ defines { "WIN" }
  "highgui210",
  "openal32"
   }
- 
+
 end
 
 if os.get() == "linux" then
@@ -163,7 +163,20 @@ defines { "LIN" }
  "cv",
  "cxcore",
  "highgui",
- "openal", }
+ "openal" }
+ 
+  libdirs {
+"/opt/local/lib",
+"/usr/lib",
+"/usr/local/lib"
+ }
+
+ includedirs {
+"/opt/local/include",
+"/usr/include",
+"/usr/local/include",
+ }	 
+ 
 end
 
 if os.get() == "macosx" then
@@ -181,19 +194,31 @@ defines { "MAC" }
  "QuickTime.framework",
  "boost_regex",
  "boost_system",
- "boost_thread",
+ "boost_thread"
  }
-end
-
  
- -- search libs in:
- 
- libdirs {
+  libdirs {
 "/opt/local/lib",
 "/System/Libarary/Frameworks",
 "/Library/Frameworks",
 "/usr/lib",
-"/usr/local/lib", 
+"/usr/local/lib"
+ }
+
+ includedirs {
+"/opt/local/include",
+"/usr/include",
+"/usr/local/include",
+"/usr/lib",
+"/usr/local/lib"
+ }	 
+ 
+end	 
+
+ 
+ --  user defined libs:
+ 
+ libdirs {
  _OPTIONS["libsPath"],
   _OPTIONS["BoostLibsPath"],
     _OPTIONS["FFmpegLibsPath"],
@@ -201,20 +226,16 @@ end
       _OPTIONS["OpenCVlibsPath"]
  }
 
--- include directorys
+-- user defined include directorys
 
  includedirs {
-"/opt/local/include",
-"/usr/include",
-"/usr/local/include",
-"/usr/lib",
-"/usr/local/lib",
-"C:/msys/local/include",
  _OPTIONS["includesPath"],
   _OPTIONS["BoostIncludesPath"],
     _OPTIONS["FFmpegIncludesPath"],
      _OPTIONS["OpenALIncludesPath"],
-      _OPTIONS["OpenCVIncludesPath"] }	 		 		
+      _OPTIONS["OpenCVIncludesPath"],
+       _OPTIONS["c99IncludesPath"]
+       }	 		 		
  	 
  -- add into project all possible code files and folders
  
