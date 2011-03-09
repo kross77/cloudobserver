@@ -182,7 +182,9 @@ while ((fd = open(videoDevice.str().c_str(), O_RDONLY)) != -1)
 
 
 #ifdef WIN
-HRESULT CamerasList::EnumerateDevices( REFGUID category, IEnumMoniker **ppEnum )
+#pragma comment(lib, "strmiids")
+
+HRESULT CamerasListNamespace::CamerasList::EnumerateDevices( REFGUID category, IEnumMoniker **ppEnum )
 {
 	// Create the System Device Enumerator.
 	ICreateDevEnum *pDevEnum;
