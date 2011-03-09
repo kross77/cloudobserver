@@ -3,10 +3,20 @@
 
 #include "VideoEncoder.h"
 #include "lsd.h"
-
+#include <boost/random.hpp>
 // OpenAL
+#ifdef WIN
+#include <al.h>
+#include <alc.h>
+#elif defined MAC
 #include <OpenAL/al.h>
 #include <OpenAL/alc.h>
+#elif defined LIN
+#include <AL/al.h>
+#include <AL/alc.h>
+#else
+#error "unknown platform"
+#endif
 
 // OpenCV
 #include <opencv/cv.h>

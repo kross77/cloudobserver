@@ -2,6 +2,7 @@
 #include <cstring>
 #include <boost/lexical_cast.hpp>
 #ifdef WIN
+#pragma comment(lib, "strmiids")
 #include <windows.h>
 #include <dshow.h>
 #elif defined LIN
@@ -30,8 +31,7 @@ namespace CamerasListNamespace
 		int SelectFromList();
 		
 	#ifdef WIN
-	private:
-		HRESULT EnumerateDevices(REFGUID category, IEnumMoniker **ppEnum);
+	private: HRESULT EnumerateDevices(REFGUID category, IEnumMoniker **ppEnum);
 	#endif
 		
 	};
