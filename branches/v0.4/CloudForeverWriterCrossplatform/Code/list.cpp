@@ -180,10 +180,10 @@ while ((fd = open(videoDevice.str().c_str(), O_RDONLY)) != -1)
 	return selectedIndex;
 }
 
+}
+
 
 #ifdef WIN
-#pragma comment(lib, "strmiids")
-
 HRESULT CamerasListNamespace::CamerasList::EnumerateDevices( REFGUID category, IEnumMoniker **ppEnum )
 {
 	// Create the System Device Enumerator.

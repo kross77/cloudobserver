@@ -20,6 +20,8 @@
 
 namespace CamerasListNamespace
 {
+#ifndef _L_H__
+#define _L_H__
 	class CamerasList
 	{
 	public:
@@ -32,5 +34,6 @@ namespace CamerasListNamespace
 	#endif
 		
 	};
+	#endif // _L_H__
 }
 
