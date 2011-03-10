@@ -98,10 +98,7 @@ solution "CloudForeverWriter"
       kind "ConsoleApp"
       language "C++"
       location ( "projects/" .. os.get() .. "-" .. action )
-      
- 
-
- 	
+	
 -- all libs we require, across all platforms we use  linux, macosx, windows. Support for bsd, solaris can be added.
 
 if os.get() == "windows" then
@@ -181,7 +178,6 @@ defines { "MAC" }
  }	 
  
 end	 
-
  
  --  user defined libs:
  
@@ -234,7 +230,7 @@ end
  -- add into project all possible code files and folders
  
     files { "**.c", "**.h", "**.cpp", "**.hpp" }
- 
+  excludes { "Code/CloudObserverVirtualWriter.cpp" }
  -- set configurations
       
       configuration "Debug"
