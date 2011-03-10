@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeLite_Project Name="CloudForeverWriter">
+  <VirtualDirectory Name="Code">
+    <File Name="../../Code/list.h"/>
+    <File Name="../../Code/LSD.h"/>
+    <File Name="../../Code/VideoEncoder.h"/>
+    <File Name="../../Code/CloudForeverWriter.cpp"/>
+    <File Name="../../Code/CloudObserverVirtualWriter.cpp"/>
+    <File Name="../../Code/list.cpp"/>
+    <File Name="../../Code/LSD.cpp"/>
+    <File Name="../../Code/VideoEncoder.cpp"/>
+  </VirtualDirectory>
+  <Settings Type="Executable">
+    <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger" Type="Executable">
+      <General OutputFile="bin/debug/CloudForeverWriter.exe" IntermediateDirectory="bin/obj/Debug" Command="./CloudForeverWriter.exe" CommandArguments="" WorkingDirectory="bin/debug" PauseExecWhenProcTerminates="yes"/>
+      <Compiler Required="yes" Options="-g">
+        <IncludePath Value="../../../../../../../Documents/Visual Studio 2008/Projects/LibsAndHeaders/include"/>
+        <IncludePath Value="C:/Program Files (x86)/OpenAL 1.1 SDK/include"/>
+        <IncludePath Value="C:/OpenCV2.1/include"/>
+        <IncludePath Value="../../../../../../../Downloads/msinttypes-r26"/>
+        <Preprocessor Value="WIN"/>
+        <Preprocessor Value="DEBUG"/>
+      </Compiler>
+      <Linker Required="yes" Options="">
+        <LibraryPath Value="../../../../../../../Documents/Visual Studio 2008/Projects/LibsAndHeaders/lib" />
+        <Library Value="avcodec" />
+        <Library Value="avformat" />
+        <Library Value="avutil" />
+        <Library Value="swscale" />
+        <Library Value="cv210" />
+        <Library Value="cxcore210" />
+        <Library Value="highgui210" />
+        <Library Value="openal32" />
+      </Linker>
+      <ResourceCompiler Required="no" Options=""/>
+      <CustomBuild Enabled="no">
+        <CleanCommand></CleanCommand>
+        <BuildCommand></BuildCommand>
+        <SingleFileCommand></SingleFileCommand>
+        <MakefileGenerationCommand></MakefileGenerationCommand>
+        <ThirdPartyToolName>None</ThirdPartyToolName>
+        <WorkingDirectory></WorkingDirectory>
+      </CustomBuild>
+      <AdditionalRules>
+        <CustomPostBuild></CustomPostBuild>
+        <CustomPreBuild></CustomPreBuild>
+      </AdditionalRules>
+    </Configuration>
+    <Configuration Name="Release" CompilerType="gnu g++" DebuggerType="GNU gdb debugger" Type="Executable">
+      <General OutputFile="bin/release/CloudForeverWriter.exe" IntermediateDirectory="bin/obj/Release" Command="./CloudForeverWriter.exe" CommandArguments="" WorkingDirectory="bin/release" PauseExecWhenProcTerminates="yes"/>
+      <Compiler Required="yes" Options="-O2">
+        <IncludePath Value="../../../../../../../Documents/Visual Studio 2008/Projects/LibsAndHeaders/include"/>
+        <IncludePath Value="C:/Program Files (x86)/OpenAL 1.1 SDK/include"/>
+        <IncludePath Value="C:/OpenCV2.1/include"/>
+        <IncludePath Value="../../../../../../../Downloads/msinttypes-r26"/>
+        <Preprocessor Value="WIN"/>
+        <Preprocessor Value="NDEBUG"/>
+      </Compiler>
+      <Linker Required="yes" Options="-s">
+        <LibraryPath Value="../../../../../../../Documents/Visual Studio 2008/Projects/LibsAndHeaders/lib" />
+        <Library Value="avcodec" />
+        <Library Value="avformat" />
+        <Library Value="avutil" />
+        <Library Value="swscale" />
+        <Library Value="cv210" />
+        <Library Value="cxcore210" />
+        <Library Value="highgui210" />
+        <Library Value="openal32" />
+      </Linker>
+      <ResourceCompiler Required="no" Options=""/>
+      <CustomBuild Enabled="no">
+        <CleanCommand></CleanCommand>
+        <BuildCommand></BuildCommand>
+        <SingleFileCommand></SingleFileCommand>
+        <MakefileGenerationCommand></MakefileGenerationCommand>
+        <ThirdPartyToolName>None</ThirdPartyToolName>
+        <WorkingDirectory></WorkingDirectory>
+      </CustomBuild>
+      <AdditionalRules>
+        <CustomPostBuild></CustomPostBuild>
+        <CustomPreBuild></CustomPreBuild>
+      </AdditionalRules>
+    </Configuration>
+    <Configuration Name="Debug|x32" CompilerType="gnu g++" DebuggerType="GNU gdb debugger" Type="Executable">
+      <General OutputFile="bin/debug/CloudForeverWriter.exe" IntermediateDirectory="bin/obj/x32/Debug" Command="./CloudForeverWriter.exe" CommandArguments="" WorkingDirectory="bin/debug" PauseExecWhenProcTerminates="yes"/>
+      <Compiler Required="yes" Options="-g;-m32">
+        <IncludePath Value="../../../../../../../Documents/Visual Studio 2008/Projects/LibsAndHeaders/include"/>
+        <IncludePath Value="C:/Program Files (x86)/OpenAL 1.1 SDK/include"/>
+        <IncludePath Value="C:/OpenCV2.1/include"/>
+        <IncludePath Value="../../../../../../../Downloads/msinttypes-r26"/>
+        <Preprocessor Value="WIN"/>
+        <Preprocessor Value="DEBUG"/>
+      </Compiler>
+      <Linker Required="yes" Options="-m32;-L/usr/lib32">
+        <LibraryPath Value="../../../../../../../Documents/Visual Studio 2008/Projects/LibsAndHeaders/lib" />
+        <Library Value="avcodec" />
+        <Library Value="avformat" />
+        <Library Value="avutil" />
+        <Library Value="swscale" />
+        <Library Value="cv210" />
+        <Library Value="cxcore210" />
+        <Library Value="highgui210" />
+        <Library Value="openal32" />
+      </Linker>
+      <ResourceCompiler Required="no" Options=""/>
+      <CustomBuild Enabled="no">
+        <CleanCommand></CleanCommand>
+        <BuildCommand></BuildCommand>
+        <SingleFileCommand></SingleFileCommand>
+        <MakefileGenerationCommand></MakefileGenerationCommand>
+        <ThirdPartyToolName>None</ThirdPartyToolName>
+        <WorkingDirectory></WorkingDirectory>
+      </CustomBuild>
+      <AdditionalRules>
+        <CustomPostBuild></CustomPostBuild>
+        <CustomPreBuild></CustomPreBuild>
+      </AdditionalRules>
+    </Configuration>
+    <Configuration Name="Release|x32" CompilerType="gnu g++" DebuggerType="GNU gdb debugger" Type="Executable">
+      <General OutputFile="bin/release/CloudForeverWriter.exe" IntermediateDirectory="bin/obj/x32/Release" Command="./CloudForeverWriter.exe" CommandArguments="" WorkingDirectory="bin/release" PauseExecWhenProcTerminates="yes"/>
+      <Compiler Required="yes" Options="-O2;-m32">
+        <IncludePath Value="../../../../../../../Documents/Visual Studio 2008/Projects/LibsAndHeaders/include"/>
+        <IncludePath Value="C:/Program Files (x86)/OpenAL 1.1 SDK/include"/>
+        <IncludePath Value="C:/OpenCV2.1/include"/>
+        <IncludePath Value="../../../../../../../Downloads/msinttypes-r26"/>
+        <Preprocessor Value="WIN"/>
+        <Preprocessor Value="NDEBUG"/>
+      </Compiler>
+      <Linker Required="yes" Options="-s;-m32;-L/usr/lib32">
+        <LibraryPath Value="../../../../../../../Documents/Visual Studio 2008/Projects/LibsAndHeaders/lib" />
+        <Library Value="avcodec" />
+        <Library Value="avformat" />
+        <Library Value="avutil" />
+        <Library Value="swscale" />
+        <Library Value="cv210" />
+        <Library Value="cxcore210" />
+        <Library Value="highgui210" />
+        <Library Value="openal32" />
+      </Linker>
+      <ResourceCompiler Required="no" Options=""/>
+      <CustomBuild Enabled="no">
+        <CleanCommand></CleanCommand>
+        <BuildCommand></BuildCommand>
+        <SingleFileCommand></SingleFileCommand>
+        <MakefileGenerationCommand></MakefileGenerationCommand>
+        <ThirdPartyToolName>None</ThirdPartyToolName>
+        <WorkingDirectory></WorkingDirectory>
+      </CustomBuild>
+      <AdditionalRules>
+        <CustomPostBuild></CustomPostBuild>
+        <CustomPreBuild></CustomPreBuild>
+      </AdditionalRules>
+    </Configuration>
+  </Settings>
+  <Dependencies name="Debug">
+  </Dependencies>
+  <Dependencies name="Release">
+  </Dependencies>
+  <Dependencies name="Debug|x32">
+  </Dependencies>
+  <Dependencies name="Release|x32">
+  </Dependencies>
+</CodeLite_Project>
