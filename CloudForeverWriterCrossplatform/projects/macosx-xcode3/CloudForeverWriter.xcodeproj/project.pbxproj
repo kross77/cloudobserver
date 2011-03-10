@@ -1,0 +1,423 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		6E580A776C6558E87CE73303 /* CloudForeverWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5FBE4312594E16A05C88576D /* CloudForeverWriter.cpp */; };
+		426202142F2005C341F300C7 /* CloudObserverVirtualWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E5717952D9C0BF36E9E70BF /* CloudObserverVirtualWriter.cpp */; };
+		4E4910B724F214DE41B27E22 /* LSD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F0E55217C9F73B375C569D3 /* LSD.cpp */; };
+		29E51DF25FAF7578450E7DAB /* VideoEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F63608B38C94920685907A1 /* VideoEncoder.cpp */; };
+		680B09024D953FA5478A7D49 /* list.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37FB77B1492D4C8E1DDE0EC2 /* list.cpp */; };
+		12E96D4B77902CB370E71B26 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E0853AC3C571945129B376D /* Carbon.framework */; };
+		6F1367C40C055172130C5F49 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12CA77E716E377A762216A92 /* OpenAL.framework */; };
+		350173DC72D80D6E587E4285 /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 336408CE5ECE37CA42CE2B06 /* QuickTime.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		5FBE4312594E16A05C88576D /* CloudForeverWriter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "CloudForeverWriter.cpp"; path = "CloudForeverWriter.cpp"; sourceTree = "<group>"; };
+		4E5717952D9C0BF36E9E70BF /* CloudObserverVirtualWriter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "CloudObserverVirtualWriter.cpp"; path = "CloudObserverVirtualWriter.cpp"; sourceTree = "<group>"; };
+		0F0E55217C9F73B375C569D3 /* LSD.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "LSD.cpp"; path = "LSD.cpp"; sourceTree = "<group>"; };
+		15FA652678FA292746995186 /* LSD.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "LSD.h"; path = "LSD.h"; sourceTree = "<group>"; };
+		7F63608B38C94920685907A1 /* VideoEncoder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "VideoEncoder.cpp"; path = "VideoEncoder.cpp"; sourceTree = "<group>"; };
+		0F2C545354CE6CBC7D461559 /* VideoEncoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "VideoEncoder.h"; path = "VideoEncoder.h"; sourceTree = "<group>"; };
+		37FB77B1492D4C8E1DDE0EC2 /* list.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "list.cpp"; path = "list.cpp"; sourceTree = "<group>"; };
+		7CB641A779980C2A793507FB /* list.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "list.h"; path = "list.h"; sourceTree = "<group>"; };
+		2E0853AC3C571945129B376D /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "Carbon.framework"; path = "/System/Library/Frameworks/Carbon.framework"; sourceTree = "<absolute>"; };
+		12CA77E716E377A762216A92 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "OpenAL.framework"; path = "/System/Library/Frameworks/OpenAL.framework"; sourceTree = "<absolute>"; };
+		336408CE5ECE37CA42CE2B06 /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "QuickTime.framework"; path = "/System/Library/Frameworks/QuickTime.framework"; sourceTree = "<absolute>"; };
+		7153574A75431E71018B447E /* CloudForeverWriter */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = "CloudForeverWriter"; path = "CloudForeverWriter"; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		590121376A1547AB7044349A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				12E96D4B77902CB370E71B26 /* Carbon.framework in Frameworks */,
+				6F1367C40C055172130C5F49 /* OpenAL.framework in Frameworks */,
+				350173DC72D80D6E587E4285 /* QuickTime.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		37776A4D39A64FBA0E156A76 /* CloudForeverWriter */ = {
+			isa = PBXGroup;
+			children = (
+				036C10EF7725107138321FB7 /* Code */,
+				4D670D9B2A884E5279B75FEE /* Frameworks */,
+				0FBE7F5C7F1156F0424C7F80 /* Products */,
+			);
+			name = "CloudForeverWriter";
+			sourceTree = "<group>";
+		};
+		036C10EF7725107138321FB7 /* Code */ = {
+			isa = PBXGroup;
+			children = (
+				5FBE4312594E16A05C88576D /* CloudForeverWriter.cpp */,
+				4E5717952D9C0BF36E9E70BF /* CloudObserverVirtualWriter.cpp */,
+				0F0E55217C9F73B375C569D3 /* LSD.cpp */,
+				15FA652678FA292746995186 /* LSD.h */,
+				7F63608B38C94920685907A1 /* VideoEncoder.cpp */,
+				0F2C545354CE6CBC7D461559 /* VideoEncoder.h */,
+				37FB77B1492D4C8E1DDE0EC2 /* list.cpp */,
+				7CB641A779980C2A793507FB /* list.h */,
+			);
+			name = "Code";
+			path = ../../Code;
+			sourceTree = "<group>";
+		};
+		4D670D9B2A884E5279B75FEE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2E0853AC3C571945129B376D /* Carbon.framework */,
+				12CA77E716E377A762216A92 /* OpenAL.framework */,
+				336408CE5ECE37CA42CE2B06 /* QuickTime.framework */,
+			);
+			name = "Frameworks";
+			sourceTree = "<group>";
+		};
+		0FBE7F5C7F1156F0424C7F80 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7153574A75431E71018B447E /* CloudForeverWriter */,
+			);
+			name = "Products";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5E4B32A1335D4F241C4B2411 /* CloudForeverWriter */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 017D68655FFE5B744CC16E79 /* Build configuration list for PBXNativeTarget "CloudForeverWriter" */;
+			buildPhases = (
+				06666D94789A6D8205CE6D10 /* Resources */,
+				2749674E5F1F044012964415 /* Sources */,
+				590121376A1547AB7044349A /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "CloudForeverWriter";
+			productInstallPath = "$(HOME)/bin";
+			productName = "CloudForeverWriter";
+			productReference = 7153574A75431E71018B447E /* CloudForeverWriter */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		08FB7793FE84155DC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 1DEB928908733DD80010E9CD /* Build configuration list for PBXProject "CloudForeverWriter" */;
+			compatibilityVersion = "Xcode 3.1";
+			hasScannedForEncodings = 1;
+			mainGroup = 37776A4D39A64FBA0E156A76 /* CloudForeverWriter */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5E4B32A1335D4F241C4B2411 /* CloudForeverWriter */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		06666D94789A6D8205CE6D10 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2749674E5F1F044012964415 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E580A776C6558E87CE73303 /* CloudForeverWriter.cpp in Sources */,
+				426202142F2005C341F300C7 /* CloudObserverVirtualWriter.cpp in Sources */,
+				4E4910B724F214DE41B27E22 /* LSD.cpp in Sources */,
+				29E51DF25FAF7578450E7DAB /* VideoEncoder.cpp in Sources */,
+				680B09024D953FA5478A7D49 /* list.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		0CFD27AA14C31DCE3A9C0194 /* Debug Native */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CONFIGURATION_BUILD_DIR = bin/debug;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/bin;
+				PRODUCT_NAME = "CloudForeverWriter";
+			};
+			name = "Debug Native";
+		};
+		63034F3F6FD62ADF7D4B2DA1 /* Debug Native 32-bit */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CONFIGURATION_BUILD_DIR = bin/debug;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/bin;
+				PRODUCT_NAME = "CloudForeverWriter";
+			};
+			name = "Debug Native 32-bit";
+		};
+		56557CE232E055A819F91637 /* Release Native */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				CONFIGURATION_BUILD_DIR = bin/release;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/bin;
+				PRODUCT_NAME = "CloudForeverWriter";
+			};
+			name = "Release Native";
+		};
+		04D473A57E9B3E2A6A1842B1 /* Release Native 32-bit */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				CONFIGURATION_BUILD_DIR = bin/release;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/bin;
+				PRODUCT_NAME = "CloudForeverWriter";
+			};
+			name = "Release Native 32-bit";
+		};
+		44F8209810441DCD72F67FDA /* Debug Native */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
+				CONFIGURATION_TEMP_DIR = "$(OBJROOT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"MAC",
+					"DEBUG",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"/opt/local/include",
+					"/usr/include",
+					"/usr/local/include",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"/opt/local/lib",
+					"/System/Libarary/Frameworks",
+					"/Library/Frameworks",
+					"/usr/lib",
+					"/usr/local/lib",
+				);
+				OBJROOT = "bin/obj/Debug";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = (
+					"-lavcodec",
+					"-lavformat",
+					"-lavutil",
+					"-lswscale",
+					"-lopencv_core",
+					"-lopencv_highgui",
+					"-lopencv_imgproc",
+					"-lboost_regex",
+					"-lboost_system",
+					"-lboost_thread",
+				);
+				PREBINDING = NO;
+				SYMROOT = "bin/debug";
+			};
+			name = "Debug Native";
+		};
+		4F3D164232996A90382559A6 /* Debug Native 32-bit */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "i386";
+				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
+				CONFIGURATION_TEMP_DIR = "$(OBJROOT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"MAC",
+					"DEBUG",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"/opt/local/include",
+					"/usr/include",
+					"/usr/local/include",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"/opt/local/lib",
+					"/System/Libarary/Frameworks",
+					"/Library/Frameworks",
+					"/usr/lib",
+					"/usr/local/lib",
+				);
+				OBJROOT = "bin/obj/x32/Debug";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = (
+					"-lavcodec",
+					"-lavformat",
+					"-lavutil",
+					"-lswscale",
+					"-lopencv_core",
+					"-lopencv_highgui",
+					"-lopencv_imgproc",
+					"-lboost_regex",
+					"-lboost_system",
+					"-lboost_thread",
+				);
+				PREBINDING = NO;
+				SYMROOT = "bin/debug";
+			};
+			name = "Debug Native 32-bit";
+		};
+		18597612167616D0069E6451 /* Release Native */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
+				CONFIGURATION_TEMP_DIR = "$(OBJROOT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"MAC",
+					"NDEBUG",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"/opt/local/include",
+					"/usr/include",
+					"/usr/local/include",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"/opt/local/lib",
+					"/System/Libarary/Frameworks",
+					"/Library/Frameworks",
+					"/usr/lib",
+					"/usr/local/lib",
+				);
+				OBJROOT = "bin/obj/Release";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = (
+					"-lavcodec",
+					"-lavformat",
+					"-lavutil",
+					"-lswscale",
+					"-lopencv_core",
+					"-lopencv_highgui",
+					"-lopencv_imgproc",
+					"-lboost_regex",
+					"-lboost_system",
+					"-lboost_thread",
+				);
+				PREBINDING = NO;
+				SYMROOT = "bin/release";
+			};
+			name = "Release Native";
+		};
+		0F2824A83A6A619131473759 /* Release Native 32-bit */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "i386";
+				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
+				CONFIGURATION_TEMP_DIR = "$(OBJROOT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"MAC",
+					"NDEBUG",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"/opt/local/include",
+					"/usr/include",
+					"/usr/local/include",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"/opt/local/lib",
+					"/System/Libarary/Frameworks",
+					"/Library/Frameworks",
+					"/usr/lib",
+					"/usr/local/lib",
+				);
+				OBJROOT = "bin/obj/x32/Release";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = (
+					"-lavcodec",
+					"-lavformat",
+					"-lavutil",
+					"-lswscale",
+					"-lopencv_core",
+					"-lopencv_highgui",
+					"-lopencv_imgproc",
+					"-lboost_regex",
+					"-lboost_system",
+					"-lboost_thread",
+				);
+				PREBINDING = NO;
+				SYMROOT = "bin/release";
+			};
+			name = "Release Native 32-bit";
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		017D68655FFE5B744CC16E79 /* Build configuration list for PBXNativeTarget "CloudForeverWriter" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0CFD27AA14C31DCE3A9C0194 /* Debug Native */,
+				63034F3F6FD62ADF7D4B2DA1 /* Debug Native 32-bit */,
+				56557CE232E055A819F91637 /* Release Native */,
+				04D473A57E9B3E2A6A1842B1 /* Release Native 32-bit */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = "Debug Native";
+		};
+		1DEB928908733DD80010E9CD /* Build configuration list for PBXProject "CloudForeverWriter" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				44F8209810441DCD72F67FDA /* Debug Native */,
+				4F3D164232996A90382559A6 /* Debug Native 32-bit */,
+				18597612167616D0069E6451 /* Release Native */,
+				0F2824A83A6A619131473759 /* Release Native 32-bit */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = "Debug Native";
+		};
+/* End XCConfigurationList section */
+
+	};
+	rootObject = 08FB7793FE84155DC02AAC07 /* Project object */;
+}

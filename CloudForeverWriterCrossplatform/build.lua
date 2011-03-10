@@ -4,7 +4,8 @@
 local action = _ACTION or ""
 
 if action == "clean" then
-  os.rmdir("build")
+  os.rmdir("projects/**")
+  os.rmdir("projects")
 end
 
 -- Options for libs search
@@ -12,7 +13,7 @@ end
 newoption {
    trigger     = "libsPath",
    value       = "PATH",
-   description = "Choose a particular directory for general libs search"
+   description = "Choose a particular directory for general libs search. ';' separators are allowed like --libsPath=C:/Code/Libs;C:/Code/MoreLibs"
 }
 
 newoption {
@@ -44,7 +45,7 @@ newoption {
 newoption {
    trigger     = "includesPath",
    value       = "PATH",
-   description = "Choose a particular directory for general includes search"
+   description = "Choose a particular directory for general includes search. ';' separators are allowed like --includesPath=C:/Code/Libs;C:/Code/MoreLibs "
 }
 
 newoption {
@@ -81,22 +82,22 @@ newoption {
 -- Main Project Code
 
 solution "CloudForeverWriter"
-	location ( "build/" .. action )
+	location ( "projects/".. os.get() .. "-" ..  action )
 	configurations { "Debug", "Release" }
-	objdir     ( "build/" .. action .. "/bin/obj" )
+	objdir     ( "projects/" .. os.get() .. "-" .. action .. "/bin/obj" )
  
    configuration { "Debug" }
-    targetdir ( "build/" .. action .. "/bin/debug" )
+    targetdir ( "projects/" .. os.get() .. "-" .. action .. "/bin/debug" )
  
   configuration { "Release" }
-    targetdir ( "build/" .. action ..  "/bin/release" )
+    targetdir ( "projects/" .. os.get() .. "-" .. action ..  "/bin/release" )
     
    -- A project defines one build target
    
    project "CloudForeverWriter"
       kind "ConsoleApp"
       language "C++"
-      location ( "build/" .. action )
+      location ( "projects/" .. os.get() .. "-" .. action )
       
  
 
@@ -185,7 +186,7 @@ end
  --  user defined libs:
  
 if  _OPTIONS["libsPath"] then
-   libdirs {  _OPTIONS["libsPath"] }
+   libdirs {  string.explode( _OPTIONS["libsPath"] , ";")  }
 end
 
 if _OPTIONS["BoostLibsPath"] then
@@ -207,7 +208,7 @@ end
 -- user defined include directorys
 
 if  _OPTIONS["includesPath"] then
-   includedirs {  _OPTIONS["includesPath"] }
+   includedirs {  string.explode( _OPTIONS["includesPath"] , ";") }
 end
 
 if _OPTIONS["BoostIncludesPath"] then

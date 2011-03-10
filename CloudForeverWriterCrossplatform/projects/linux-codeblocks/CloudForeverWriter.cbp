@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="CloudForeverWriter" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/debug/CloudForeverWriter" prefix_auto="0" extension_auto="0" />
+				<Option object_output="bin/obj/Debug" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-DLIN" />
+					<Add option="-DDEBUG" />
+					<Add directory="/opt/local/include" />
+					<Add directory="/usr/include" />
+					<Add directory="/usr/local/include" />
+				</Compiler>
+				<Linker>
+					<Add directory="/opt/local/lib" />
+					<Add directory="/usr/lib" />
+					<Add directory="/usr/local/lib" />
+					<Add library="avcodec" />
+					<Add library="avformat" />
+					<Add library="avutil" />
+					<Add library="swscale" />
+					<Add library="boost_regex-mt" />
+					<Add library="boost_system-mt" />
+					<Add library="boost_thread-mt" />
+					<Add library="cv" />
+					<Add library="cxcore" />
+					<Add library="highgui" />
+					<Add library="openal" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/release/CloudForeverWriter" prefix_auto="0" extension_auto="0" />
+				<Option object_output="bin/obj/Release" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-DLIN" />
+					<Add option="-DNDEBUG" />
+					<Add directory="/opt/local/include" />
+					<Add directory="/usr/include" />
+					<Add directory="/usr/local/include" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add directory="/opt/local/lib" />
+					<Add directory="/usr/lib" />
+					<Add directory="/usr/local/lib" />
+					<Add library="avcodec" />
+					<Add library="avformat" />
+					<Add library="avutil" />
+					<Add library="swscale" />
+					<Add library="boost_regex-mt" />
+					<Add library="boost_system-mt" />
+					<Add library="boost_thread-mt" />
+					<Add library="cv" />
+					<Add library="cxcore" />
+					<Add library="highgui" />
+					<Add library="openal" />
+				</Linker>
+			</Target>
+			<Target title="Debug|x32">
+				<Option output="bin/debug/CloudForeverWriter" prefix_auto="0" extension_auto="0" />
+				<Option object_output="bin/obj/x32/Debug" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-m32" />
+					<Add option="-DLIN" />
+					<Add option="-DDEBUG" />
+					<Add directory="/opt/local/include" />
+					<Add directory="/usr/include" />
+					<Add directory="/usr/local/include" />
+				</Compiler>
+				<Linker>
+					<Add option="-m32" />
+					<Add option="-L/usr/lib32" />
+					<Add directory="/opt/local/lib" />
+					<Add directory="/usr/lib" />
+					<Add directory="/usr/local/lib" />
+					<Add library="avcodec" />
+					<Add library="avformat" />
+					<Add library="avutil" />
+					<Add library="swscale" />
+					<Add library="boost_regex-mt" />
+					<Add library="boost_system-mt" />
+					<Add library="boost_thread-mt" />
+					<Add library="cv" />
+					<Add library="cxcore" />
+					<Add library="highgui" />
+					<Add library="openal" />
+				</Linker>
+			</Target>
+			<Target title="Release|x32">
+				<Option output="bin/release/CloudForeverWriter" prefix_auto="0" extension_auto="0" />
+				<Option object_output="bin/obj/x32/Release" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-m32" />
+					<Add option="-DLIN" />
+					<Add option="-DNDEBUG" />
+					<Add directory="/opt/local/include" />
+					<Add directory="/usr/include" />
+					<Add directory="/usr/local/include" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add option="-m32" />
+					<Add option="-L/usr/lib32" />
+					<Add directory="/opt/local/lib" />
+					<Add directory="/usr/lib" />
+					<Add directory="/usr/local/lib" />
+					<Add library="avcodec" />
+					<Add library="avformat" />
+					<Add library="avutil" />
+					<Add library="swscale" />
+					<Add library="boost_regex-mt" />
+					<Add library="boost_system-mt" />
+					<Add library="boost_thread-mt" />
+					<Add library="cv" />
+					<Add library="cxcore" />
+					<Add library="highgui" />
+					<Add library="openal" />
+				</Linker>
+			</Target>
+		</Build>
+		<Unit filename="../../Code/list.h">
+		</Unit>
+		<Unit filename="../../Code/LSD.h">
+		</Unit>
+		<Unit filename="../../Code/VideoEncoder.h">
+		</Unit>
+		<Unit filename="../../Code/CloudForeverWriter.cpp">
+		</Unit>
+		<Unit filename="../../Code/CloudObserverVirtualWriter.cpp">
+		</Unit>
+		<Unit filename="../../Code/list.cpp">
+		</Unit>
+		<Unit filename="../../Code/LSD.cpp">
+		</Unit>
+		<Unit filename="../../Code/VideoEncoder.cpp">
+		</Unit>
+		<Extensions />
+	</Project>
+</CodeBlocks_project_file>
+
