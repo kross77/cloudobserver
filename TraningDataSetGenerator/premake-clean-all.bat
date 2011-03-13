@@ -1,0 +1,1 @@
+start premake4.exe  --file=build.lua clean
