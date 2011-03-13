@@ -10,9 +10,10 @@
 #include <boost/filesystem.hpp>
 #include <boost/timer.hpp>
 
-#include <cv.h>
-#include <cxcore.h>
-#include <highgui.h>
+// OpenCV
+#include <opencv/cv.h>
+#include <opencv/cxcore.h>
+#include <opencv/highgui.h>
 
 #include "LSD.h"
 
