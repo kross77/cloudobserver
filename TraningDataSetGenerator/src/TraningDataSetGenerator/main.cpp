@@ -46,7 +46,7 @@ float gmax;
 float gmin;
 
 float min1;
-float max2;
+float max2; 
 float min3;
 float max4;
 float min5;
@@ -54,9 +54,6 @@ float max6;
 float min7;
 float max8;
 
-int round(double a) {
-	return int(a + 0.5);
-}
 float angle(double Ax,double  Ay,double  Bx,double  By)
 {
 	double ly = (By-Ay);
