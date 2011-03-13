@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\LSD-lib&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\LSD-lib&quot;;&quot;C:/OpenCV2.1/include&quot;;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -63,7 +63,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="cv210.lib cxcore210.lib highgui210.lib winmm.lib LSD-lib.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)\Debug&quot;"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)\Debug&quot;;&quot;C:/Users/Avesta/Documents/Visual Studio 2008/Projects/LibsAndHeaders/lib&quot;;"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
