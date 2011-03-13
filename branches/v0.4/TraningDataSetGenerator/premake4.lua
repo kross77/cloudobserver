@@ -90,9 +90,10 @@ end
 if os.get() == "linux" then
 defines { "LIN" }
     links {
- "boost_regex-mt",
- "boost_system-mt",
- "boost_thread-mt",
+ "boost_filesystem",
+ "boost_regex",
+ "boost_system",
+ "boost_thread",
  "cv",
  "cxcore",
  "highgui" }
@@ -119,9 +120,10 @@ defines { "MAC" }
  "opencv_highgui",
  "opencv_imgproc",
  "Carbon.framework",
- "boost_regex",
- "boost_system",
- "boost_thread"
+ "boost_filesystem-mt",
+ "boost_regex-mt",
+ "boost_system-mt",
+ "boost_thread-mt"
  }
  
   libdirs {

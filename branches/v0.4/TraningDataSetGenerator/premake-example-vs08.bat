@@ -1,1 +1,1 @@
-premake4.exe  --file=build.lua --os=windows  --libsPath="C:/Users/Avesta/Documents/Visual Studio 2008/Projects/LibsAndHeaders/lib" --includesPath="C:/Users/Avesta/Documents/Visual Studio 2008/Projects/LibsAndHeaders/include" --OpenCVIncludesPath="C:/OpenCV2.1/include" --platform=x32 vs2008
+premake4.exe --os=windows  --libsPath="C:/Users/Avesta/Documents/Visual Studio 2008/Projects/LibsAndHeaders/lib" --includesPath="C:/Users/Avesta/Documents/Visual Studio 2008/Projects/LibsAndHeaders/include" --OpenCVIncludesPath="C:/OpenCV2.1/include" --platform=x32 vs2008
