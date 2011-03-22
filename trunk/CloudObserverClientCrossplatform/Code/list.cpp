@@ -103,6 +103,7 @@ while ((fd = open(videoDevice.str().c_str(), O_RDONLY)) != -1)
 	videoDevice << "/dev/video" << i;
 }
 	#elif defined WIN
+				CoInitialize(NULL);
 		IEnumMoniker *pEnum;
 	printf("\nLet us select video device\n");
 	printf("Available Capture Devices are:\n");
