@@ -636,7 +636,7 @@ bool VideoEncoder::AddVideoFrame(AVFormatContext *pFormatContext, AVFrame * pOut
 
 		WriteToUrl((unsigned char *)pb_buffer, len);
 				av_free(pb_buffer) ;
-				av_freep(&pb_buffer);
+				//av_freep(&pb_buffer);
 				av_free_packet( &pkt);
 		res = true;
 	} 
@@ -672,7 +672,7 @@ bool VideoEncoder::AddVideoFrame(AVFormatContext *pFormatContext, AVFrame * pOut
 
 			WriteToUrl((unsigned char *)pb_buffer, len);
 				av_free(pb_buffer) ;
-				av_freep(&pb_buffer);
+				//av_freep(&pb_buffer);
 				av_free_packet( &pkt);
 		}
 		else 
@@ -731,7 +731,7 @@ bool VideoEncoder::AddAudioSample(AVFormatContext *pFormatContext, AVStream *pSt
 
 		WriteToUrl((unsigned char *)pb_buffer, len);
 				av_free(pb_buffer) ;
-				av_freep(&pb_buffer);
+		//av_freep(&pb_buffer);
 				av_free_packet( &pkt);	
 
 
