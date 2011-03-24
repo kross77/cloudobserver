@@ -13,7 +13,7 @@ end
 newoption {
    trigger     = "libsPath",
    value       = "PATH",
-   description = "Choose a particular directory for general libs search. ';' separators are allowed like --libsPath=C:/Code/Libs;C:/Code/MoreLibs"
+   description = "Choose a particular directory for general libs search. ';' separators are allowed like --libsPath=C:/src/Libs;C:/src/MoreLibs"
 }
 
 newoption {
@@ -45,7 +45,7 @@ newoption {
 newoption {
    trigger     = "includesPath",
    value       = "PATH",
-   description = "Choose a particular directory for general includes search. ';' separators are allowed like --includesPath=C:/Code/Libs;C:/Code/MoreLibs "
+   description = "Choose a particular directory for general includes search. ';' separators are allowed like --includesPath=C:/src/Libs;C:/src/MoreLibs "
 }
 
 newoption {
@@ -339,7 +339,7 @@ cloud.addIncludeDir( _OPTIONS["c99IncludesPath"] 	)
  -- add into project all possible code files and folders
  
     files { "**.c", "**.h", "**.cpp", "**.hpp" }
-  excludes { "Code/CloudObserverVirtualWriter.cpp" }
+  excludes { "src/CloudObserverVirtualWriter.cpp" }
  -- set configurations
       
       configuration "Debug"
