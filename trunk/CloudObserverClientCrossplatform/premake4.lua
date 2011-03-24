@@ -135,7 +135,6 @@ function cloud.copyFileIntoBuild(filePath, fileName)
  
 os.copyfile(filePath , "projects/" .. os.get() .. "-" .. action .. "/bin/debug/" .. fileName  )
 os.copyfile(filePath , "projects/" .. os.get() .. "-" .. action .. "/bin/release/" .. fileName )
-
 end
 
 cloud.win = { }
@@ -148,7 +147,6 @@ end
 if os.isdir( disc .. ":/Program Files/" .. relativePath ) then
 libdirs{disc .. ":/Program Files/" .. relativePath}
 end
-
 end
 
 function cloud.win.addIncludeDirFromProgrammFiles(relativePath)
@@ -192,7 +190,212 @@ else
 end
 end
 
--- Main Project Code
+cloud.project = {}
+
+function cloud.project.init()
+--
+cloud.addLibDir(  _OPTIONS["libsPath"] )
+cloud.addIncludeDir( _OPTIONS["includesPath"] )
+if os.get() == "windows" then
+defines { "WIN" }
+end
+
+if os.get() == "linux" then
+defines { "LIN" }
+  libdirs {
+"/opt/local/lib",
+"/usr/lib",
+"/usr/local/lib"
+ }
+
+ includedirs {
+"/opt/local/include",
+"/usr/include",
+"/usr/local/include"
+ }	 
+ 
+end
+
+if os.get() == "macosx" then
+defines { "MAC" }
+    links {
+ "Carbon.framework"
+ }
+
+ libdirs {
+"/opt/local/lib",
+"/System/Library/Frameworks",
+"/Library/Frameworks",
+"/usr/lib",
+"/usr/local/lib"
+ }
+
+ includedirs {
+"/opt/local/include",
+"/usr/include",
+"/usr/local/include"
+ }		 
+end 
+end
+
+function cloud.project.useCV()
+--
+cloud.addLibDir( _OPTIONS["OpenCVLibsPath"] )
+cloud.addIncludeDir(  _OPTIONS["OpenCVIncludesPath"] )
+if os.get() == "windows" then
+defines { "WIN" }
+    links {
+ "opencv_core220",
+ "opencv_highgui220",
+ "opencv_imgproc220"
+  }
+  
+  	cloud.win.addLibFromProgrammFiles("OpenCV-2.2.0")
+
+ 
+if  _OPTIONS["CopySharedLibraries"] then
+
+cloud.win.copyDLL("OpenCV-2.2.0", "opencv_core220.dll")
+cloud.win.copyDLL("OpenCV-2.2.0", "opencv_highgui220.dll")
+cloud.win.copyDLL("OpenCV-2.2.0", "opencv_imgproc220.dll")
+end
+end
+
+if os.get() == "linux" then
+defines { "LIN" }
+    links {
+ "opencv_core",
+ "opencv_highgui",
+ "opencv_imgproc"
+ }
+ 	 
+ 
+end
+
+if os.get() == "macosx" then
+defines { "MAC" }
+    links {
+ "opencv_core",
+ "opencv_highgui",
+ "opencv_imgproc",
+ "QuickTime.framework"
+ }	 
+end 
+end
+
+function cloud.project.useAL()
+--
+cloud.addIncludeDir(  _OPTIONS["OpenALIncludesPath"] )
+cloud.addLibDir(  _OPTIONS["OpenALLibsPath"] )
+if os.get() == "windows" then
+defines { "WIN" }
+    links {
+ "openal32"
+  }
+
+cloud.win.addLibFromProgrammFiles("OpenAL-1.13")
+
+ 
+if  _OPTIONS["CopySharedLibraries"] then
+
+cloud.win.copyDLL("OpenAL-1.13", "OpenAL32.dll")
+
+end
+
+end
+
+if os.get() == "linux" then
+defines { "LIN" }
+    links {
+ "openal"
+  }
+ 
+end
+
+if os.get() == "macosx" then
+defines { "MAC" }
+    links {
+ "OpenAL.framework"
+ }
+	 
+end 
+end
+
+function cloud.project.useBoost()
+--
+cloud.addIncludeDir( _OPTIONS["BoostIncludesPath"] )
+cloud.addLibDir( _OPTIONS["BoostLibsPath"])
+if os.get() == "windows" then
+defines { "WIN" } 
+  	cloud.win.addLibFromProgrammFiles("Boost-1.46.1")
+end
+
+if os.get() == "linux" then
+defines { "LIN" }
+    links {
+ "boost_regex",
+ "boost_system",
+ "boost_thread"
+  }
+ 
+end
+
+if os.get() == "macosx" then
+defines { "MAC" }
+    links {
+ "boost_regex-mt",
+ "boost_system-mt",
+ "boost_thread-mt"
+ }
+		 
+end 
+end
+
+function cloud.project.useFFmpeg()
+--
+cloud.addLibDir(  _OPTIONS["FFmpegLibsPath"] )
+cloud.addIncludeDir(  _OPTIONS["FFmpegIncludesPath"] )
+cloud.addIncludeDir( _OPTIONS["c99IncludesPath"] 	) 
+if os.get() == "windows" then
+defines { "WIN" }
+    links {
+ "avcodec-52",
+ "avformat-52",
+ "avutil-50",
+ "swscale-0"
+  }
+  
+cloud.win.addLibFromProgrammFiles2("FFmpeg-0.6.1", "bin")
+ 
+if  _OPTIONS["CopySharedLibraries"] then
+cloud.win.copyDLL("FFmpeg-0.6.1", "avcodec-52.dll")
+cloud.win.copyDLL("FFmpeg-0.6.1", "avformat-52.dll")
+cloud.win.copyDLL("FFmpeg-0.6.1", "avutil-50.dll")
+cloud.win.copyDLL("FFmpeg-0.6.1", "swscale-0.dll")
+end
+
+end
+
+if os.get() == "linux" then
+defines { "LIN" }
+    links {
+ "avcodec", 
+ "avformat",
+ "avutil",
+ "swscale"
+  }
+end
+
+if os.get() == "macosx" then
+defines { "MAC" }
+    links {
+ "avcodec", 
+ "avformat",
+ "avutil",
+ "swscale"
+ } 
+end 	
+end
 
 solution "CloudForeverWriter"
 	location ( "projects/".. os.get() .. "-" ..  action )
@@ -211,133 +414,11 @@ solution "CloudForeverWriter"
       kind "ConsoleApp"
       language "C++"
       location ( "projects/" .. os.get() .. "-" .. action )
-	
--- all libs we require, across all platforms we use  linux, macosx, windows. Support for bsd, solaris can be added.
-
-if os.get() == "windows" then
-defines { "WIN" }
-    links {
- "avcodec-52",
- "avformat-52",
- "avutil-50",
- "swscale-0",
- "opencv_core220",
- "opencv_highgui220",
- "opencv_imgproc220",
- "openal32"
-  }
-  
-  	cloud.win.addLibFromProgrammFiles("Boost-1.46.1")
-  		cloud.win.addLibFromProgrammFiles("OpenAL-1.13")
-  			cloud.win.addLibFromProgrammFiles("OpenCV-2.2.0")
-  				cloud.win.addLibFromProgrammFiles2("FFmpeg-0.6.1", "bin")
- 
-if  _OPTIONS["CopySharedLibraries"] then
-
-cloud.win.copyDLL("OpenCV-2.2.0", "opencv_core220.dll")
-cloud.win.copyDLL("OpenCV-2.2.0", "opencv_highgui220.dll")
-cloud.win.copyDLL("OpenCV-2.2.0", "opencv_imgproc220.dll")
-cloud.win.copyDLL("FFmpeg-0.6.1", "avcodec-52.dll")
-cloud.win.copyDLL("FFmpeg-0.6.1", "avformat-52.dll")
-cloud.win.copyDLL("FFmpeg-0.6.1", "avutil-50.dll")
-cloud.win.copyDLL("FFmpeg-0.6.1", "swscale-0.dll")
-cloud.win.copyDLL("OpenAL-1.13", "OpenAL32.dll")
-
-end
-
-end
-
-if os.get() == "linux" then
-defines { "LIN" }
-    links {
- "avcodec", 
- "avformat",
- "avutil",
- "swscale",
- "boost_regex",
- "boost_system",
- "boost_thread",
- "opencv_core",
- "opencv_highgui",
- "opencv_imgproc",
- "openal" }
- 
-  libdirs {
-"/opt/local/lib",
-"/usr/lib",
-"/usr/local/lib"
- }
-
- includedirs {
-"/opt/local/include",
-"/usr/include",
-"/usr/local/include",
- }	 
- 
-end
-
-if os.get() == "macosx" then
-defines { "MAC" }
-    links {
- "avcodec", 
- "avformat",
- "avutil",
- "swscale",
- "opencv_core",
- "opencv_highgui",
- "opencv_imgproc",
- "Carbon.framework",
- "OpenAL.framework",
- "QuickTime.framework",
- "boost_regex-mt",
- "boost_system-mt",
- "boost_thread-mt"
- }
-
- libdirs {
-"/opt/local/lib",
-"/System/Library/Frameworks",
-"/Library/Frameworks",
-"/usr/lib",
-"/usr/local/lib"
- }
-
- includedirs {
-"/opt/local/include",
-"/usr/include",
-"/usr/local/include"
- }		 
- 
-end	 
- 
- --  user defined libs:
- 
-cloud.addLibDir(  _OPTIONS["libsPath"] )
-
-cloud.addLibDir( _OPTIONS["BoostLibsPath"])
-
-cloud.addLibDir(  _OPTIONS["FFmpegLibsPath"] )
-
-cloud.addLibDir(  _OPTIONS["OpenALLibsPath"] )
-
-cloud.addLibDir( _OPTIONS["OpenCVLibsPath"] )
-
--- user defined include directorys
-
-cloud.addIncludeDir( _OPTIONS["includesPath"] )
-
-cloud.addIncludeDir( _OPTIONS["BoostIncludesPath"] )
-
-cloud.addIncludeDir(  _OPTIONS["FFmpegIncludesPath"] )
-
-cloud.addIncludeDir(  _OPTIONS["OpenALIncludesPath"] )
-
-cloud.addIncludeDir(  _OPTIONS["OpenCVIncludesPath"] )
-
-cloud.addIncludeDir( _OPTIONS["c99IncludesPath"] 	) 		
- 	 
- -- add into project all possible code files and folders
- 
+      cloud.project.init()
+      cloud.project.useFFmpeg()
+      cloud.project.useBoost()
+      cloud.project.useAL()
+      cloud.project.useCV()
     files { "**.c", "**.h", "**.cpp", "**.hpp" }
   excludes { "src/CloudObserverVirtualWriter.cpp" }
  -- set configurations
