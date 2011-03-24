@@ -6,8 +6,8 @@
 #include <boost/random.hpp>
 // OpenAL
 #ifdef WIN
-#include <al.h>
-#include <alc.h>
+#include <AL/al.h>
+#include <AL/alc.h>
 #elif defined MAC
 #include <OpenAL/al.h>
 #include <OpenAL/alc.h>

@@ -397,7 +397,7 @@ defines { "MAC" }
 end 	
 end
 
-solution "CloudForeverWriter"
+solution "CloudObserverClient"
 	location ( "projects/".. os.get() .. "-" ..  action )
 	configurations { "Debug", "Release" }
 	objdir     ( "projects/" .. os.get() .. "-" .. action .. "/bin/obj" )
@@ -410,7 +410,7 @@ solution "CloudForeverWriter"
     
    -- A project defines one build target
    
-   project "CloudForeverWriter"
+   project "CloudObserverWriterClient"
       kind "ConsoleApp"
       language "C++"
       location ( "projects/" .. os.get() .. "-" .. action )
@@ -419,9 +419,10 @@ solution "CloudForeverWriter"
       cloud.project.useBoost()
       cloud.project.useAL()
       cloud.project.useCV()
-    files { "**.c", "**.h", "**.cpp", "**.hpp" }
-  excludes { "src/CloudObserverVirtualWriter.cpp" }
- -- set configurations
+       links { "libLSD" }
+        links { "libEncoder" }
+         links { "libUtil" }
+    files { "src/CloudForeverWriter.cpp" }
       
       configuration "Debug"
          defines { "DEBUG" }
@@ -431,4 +432,79 @@ solution "CloudForeverWriter"
       configuration "Release"
          defines { "NDEBUG" }
          flags { "Optimize" }  
+ 
+    project "CloudObserverTestClient"
+      kind "ConsoleApp"
+      language "C++"
+      location ( "projects/" .. os.get() .. "-" .. action )
+      cloud.project.init()
+      cloud.project.useFFmpeg()
+      cloud.project.useBoost()
+      cloud.project.useAL()
+      cloud.project.useCV()
+        links { "libEncoder" }
+    files { "src/CloudObserverVirtualWriter.cpp" }
+      
+      configuration "Debug"
+         defines { "DEBUG" }
+         flags { "Symbols" }
+          
+ 
+      configuration "Release"
+         defines { "NDEBUG" }
+         flags { "Optimize" }          
+                  
+   project "libLSD"
+      language "C++"
+      location ( "projects/" .. os.get() .. "-" .. action )
+   	  files { "src/LSD.cpp", "src/LSD.h" }
+      kind "StaticLib"
+
+      cloud.project.init()
+      
+      configuration "Debug"
+         defines { "DEBUG" }
+         flags { "Symbols" }
+          
+ 
+      configuration "Release"
+         defines { "NDEBUG" }
+         flags { "Optimize" } 
+     
+       project "libEncoder"
+      language "C++"
+      location ( "projects/" .. os.get() .. "-" .. action )
+   	  files { "src/VideoEncoder.cpp", "src/VideoEncoder.h"}
+      kind "StaticLib"
+	cloud.project.init()
+      cloud.project.useFFmpeg()
+      cloud.project.useBoost()
+      
+      configuration "Debug"
+         defines { "DEBUG" }
+         flags { "Symbols" }
+          
+ 
+      configuration "Release"
+         defines { "NDEBUG" }
+         flags { "Optimize" }   
+         
+      project "libUtil"
+      language "C++"
+      location ( "projects/" .. os.get() .. "-" .. action )
+   	  files { "src/list.cpp", "src/list.h"}
+      kind "StaticLib"
+      
+            cloud.project.init()
+      cloud.project.useBoost()
+
+
+      configuration "Debug"
+         defines { "DEBUG" }
+         flags { "Symbols" }
+          
+ 
+      configuration "Release"
+         defines { "NDEBUG" }
+         flags { "Optimize" }   
          
