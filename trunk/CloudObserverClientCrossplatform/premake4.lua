@@ -223,15 +223,11 @@ defines { "MAC" }
  }
 
  libdirs {
-"/opt/local/lib",
-"/System/Library/Frameworks",
-"/Library/Frameworks",
 "/usr/lib",
 "/usr/local/lib"
  }
 
  includedirs {
-"/opt/local/include",
 "/usr/include",
 "/usr/local/include"
  }		 
@@ -315,7 +311,7 @@ end
 if os.get() == "macosx" then
 defines { "MAC" }
     links {
- "OpenAL.framework"
+ "openal"
  }
 	 
 end 
@@ -343,9 +339,9 @@ end
 if os.get() == "macosx" then
 defines { "MAC" }
     links {
- "boost_regex-mt",
- "boost_system-mt",
- "boost_thread-mt"
+ "boost_regex",
+ "boost_system",
+ "boost_thread"
  }
 		 
 end 
