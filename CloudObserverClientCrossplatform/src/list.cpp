@@ -146,6 +146,7 @@ while ((fd = open(videoDevice.str().c_str(), O_RDONLY)) != -1)
 			pMoniker->Release();
 
 		}
+	}
 	#else
 		#error "unknown platform"
 	#endif
@@ -179,8 +180,6 @@ while ((fd = open(videoDevice.str().c_str(), O_RDONLY)) != -1)
 		}
 	}
 	return selectedIndex;
-}
-
 }
 
 
