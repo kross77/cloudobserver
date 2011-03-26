@@ -1,7 +1,6 @@
-
+#include "list.h"
 #include "VideoEncoder.h"
 #include "lsd.h"
-#include "list.h"
 // OpenAL
 #ifdef WIN
 //#include <al.h>
