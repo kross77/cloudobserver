@@ -4,6 +4,8 @@
 #include "VideoEncoder.h"
 #include "lsd.h"
 #include <boost/random.hpp>
+#include "boost/date_time/gregorian/gregorian.hpp"
+#include <boost/date_time/posix_time/posix_time.hpp>
 // OpenAL
 #ifdef WIN
 #include <AL/al.h>
@@ -25,6 +27,9 @@
 
 using namespace std;
 using boost::asio::ip::tcp;
+using namespace boost::posix_time;
+using boost::posix_time::ptime;
+using boost::posix_time::time_duration;
 //cmndlVars
 int cameraInt;
 int microphoneInt;
@@ -171,7 +176,7 @@ void initFFmpeg(string container, int w, int h, int fps)
 	if(!encoder.hasAudio && !encoder.hasVideo){
 		cout << "\nNo audio, and no video data found.\n Please close application.\nConnect some capturing device.\nRestart application\n";
 		cin.get();
-		boost::this_thread::sleep(boost::posix_time::milliseconds(99999999999));
+		boost::this_thread::sleep(boost::posix_time::milliseconds(999999999));
 		cin.get();
 	}
 
@@ -191,7 +196,7 @@ void initFFmpeg(string container, int w, int h, int fps)
 	if(encoder.InitUrl(container, outputUrl, outputUserName) == -10){
 	cout << "\nNo audio, and no video data found.\n Please close application.\nConnect some capturing device.\nRestart application\n";
 	cin.get();
-	boost::this_thread::sleep(boost::posix_time::milliseconds(99999999999));
+	boost::this_thread::sleep(boost::posix_time::milliseconds(999999999));
 
 	}
 	
@@ -238,9 +243,10 @@ void CaptureFrame(int w, int h, char* buffer, int bytespan)
 	seed = seed + 2.2;
 	}else{
   cvResize(CVframe, CVframeWithText);
-		char timeStr [9];
-		_strtime( timeStr );
-		cvPutText(CVframeWithText, timeStr, cvPoint(0,(h/2+10)), &font , CV_RGB(1,1,1));
+		//char timeStr [9];
+		ptime now = second_clock::local_time();
+			
+		cvPutText(CVframeWithText,to_simple_string(now.time_of_day()).c_str(), cvPoint(0,(h/2+10)), &font , CV_RGB(1,1,1));
 		for(int i = 0; i < w*4*h; i=i+4)
 		{ 
 
@@ -410,7 +416,7 @@ outputUserName += boost::lexical_cast<string>(random_integer);;
 		cout << "\nInput 'exit' to quite" << endl;
 		cin >> quite;
 		//cout << endl;
-		Sleep(250);
+		     boost::this_thread::sleep(boost::posix_time::milliseconds(200));
 	}
 	workerThread2.interrupt();
 	workerThread.interrupt();
