@@ -1,7 +1,6 @@
 #include "VideoEncoder.h"
 
-using namespace std;
-using boost::asio::ip::tcp;
+
 
 boost::asio::io_service io_service;
 tcp::resolver resolver(io_service);

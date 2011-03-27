@@ -1,3 +1,5 @@
+#include <boost/asio.hpp>
+
 #include "list.h"
 #include "VideoEncoder.h"
 #include "LSD.h"

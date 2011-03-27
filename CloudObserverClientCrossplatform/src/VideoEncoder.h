@@ -28,6 +28,7 @@ extern "C" {
 #define _VIDEO_ENCODER_H__
 
 using namespace std;
+using boost::asio::ip::tcp;
 
 class VideoEncoder
 {
