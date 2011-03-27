@@ -2,7 +2,6 @@
 <s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
 			   xmlns:s="library://ns.adobe.com/flex/spark"
 			   creationComplete="application1_creationCompleteHandler(event)" xmlns:mx="library://ns.adobe.com/flex/mx" alignmentBaseline="roman">
-	<fx:Style source="COAccordation.css"/>
 	<s:states>
 		<s:State name="default"/>
 		<s:State name="One"/>
@@ -76,7 +75,7 @@
 			protected function application1_creationCompleteHandler(event:FlexEvent):void
 			{
 				st = new SoundTransform();
-				timer = new Timer(15000);
+				timer = new Timer(5000);
 				nc = new NetConnection();
 				nc.connect(null);
 				ns = new NetStream(nc);
@@ -235,6 +234,7 @@
 			
 			protected function button1_clickHandler(event:Event=null):void
 			{
+				sOne();
 				if( this.stage.displayState == StageDisplayState.NORMAL )
 				{
 					this.stage.displayState = StageDisplayState.FULL_SCREEN;
@@ -277,7 +277,8 @@
 			}
 			
 			protected function button2_clickHandler(event:MouseEvent):void
-			{
+			{	
+				sOne();
 				if(ns.soundTransform.volume !=0 )
 				{
 					st.volume=0;
@@ -298,11 +299,29 @@
 			
 		]]>
 	</fx:Script>
-	<mx:Canvas width="100%" height="100%"  id="LO" focusOut="sTwo()"  mouseOver="sOne()" mouseMove="sOne()"  mouseDown="sOne()"  >	
-		<mx:HBox   id="VUIC" width="100%" height="100%" verticalAlign="middle" horizontalAlign="center" backgroundColor="#000000">
+	<fx:Style>
+		/* CSS file */
+		@namespace s "library://ns.adobe.com/flex/spark";
+		@namespace mx "library://ns.adobe.com/flex/mx";
+		mx|ApplicationControlBar
+		{
+			horizontalAlign: center;
+			verticalAlign: middle;
+			fill-alphas: 0.9, 0.8;
+		}
+		global
+		{
+			content-background-color: #FFFFFF;
+			chrome-color: #DADADA;
+			selection-color: #A8C6EE;
+			symbol-color: #000000;
+		}
+	</fx:Style>
+	<mx:Canvas width="100%" height="100%"  id="LO" mouseMove="sOne()"  >	
+		<mx:HBox   id="VUIC" width="100%" height="100%" verticalAlign="middle" horizontalAlign="center" backgroundColor="#FFFFFF">
 			<mx:UIComponent  id="UIC" />
 		</mx:HBox>
-		<mx:ApplicationControlBar mouseOver="sOne()" mouseMove="sOne()" mouseDown="sOne()" id="ACB" width="100%" height="39" dock="false" top="0" top.One="0" top.Two="-50"  color.One="#CCCCCC" color.Two="#CCCCCC" horizontalAlign.One="center" horizontalAlign.Two="center" verticalAlign.One="middle" verticalAlign.Two="middle">
+		<mx:ApplicationControlBar mouseMove="sOne()" id="ACB" width="100%" height="39" dock="false" top="0"  top.Two="-50" horizontalAlign="center" verticalAlign="middle">
 			<s:Button label="Mute" click="button2_clickHandler(event)"/>
 			<s:Button label="Full Screen" click="button1_clickHandler(event)"/>
 		</mx:ApplicationControlBar>
