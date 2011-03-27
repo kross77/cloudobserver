@@ -2,7 +2,7 @@
 // CamLister.cpp : Defines the entry point for the console application.
 
 #include "VideoEncoder.h"
-#include "lsd.h"
+#include "LSD.h"
 #include <boost/random.hpp>
 #include "boost/date_time/gregorian/gregorian.hpp"
 #include <boost/date_time/posix_time/posix_time.hpp>
