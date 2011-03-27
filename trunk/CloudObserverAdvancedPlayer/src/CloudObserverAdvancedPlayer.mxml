@@ -250,18 +250,18 @@
 				if((currentState == 'Two')||(currentState == 'default'))
 				{
 					currentState='One';
-					
-					if(timer.running)
-					{
-						timer.reset();
-					}
-					else
-					{
-						timer.start();
-					}
-					timer.addEventListener(TimerEvent.TIMER, timer_timer);
+				}	
+				if(timer.running)
+				{
+					timer.reset();
+				}
+				else
+				{
 					timer.start();
 				}
+				timer.addEventListener(TimerEvent.TIMER, timer_timer);
+				timer.start();
+				
 			}
 			
 			private function timer_timer(evt:TimerEvent):void {
@@ -311,10 +311,62 @@
 		}
 		global
 		{
-			content-background-color: #FFFFFF;
-			chrome-color: #DADADA;
-			selection-color: #A8C6EE;
-			symbol-color: #000000;
+			fontFamily: 						"Arial";
+			rollOverColor:						#CCCCCC;
+			color:								#333333;
+			textRollOverColor:					#CCCCCC;
+			textSelectedColor:					#333333;
+			focus-color:						#4B6F9E;
+			selection-color: 					#D1E5F2;
+			font-size: 							11pt;
+		}
+		mx|Button
+		{
+			disabledSkin: 						Embed(source="assets/Button_disabledSkin.png",
+				scaleGridTop="5",
+				scaleGridLeft="5",
+				scaleGridRight="59",
+				scaleGridBottom="17");
+			downSkin: 							Embed(source="assets/Button_downSkin.png",
+				scaleGridTop="5",
+				scaleGridLeft="5",
+				scaleGridRight="59",
+				scaleGridBottom="17");
+			overSkin: 							Embed(source="assets/Button_overSkin.png",
+				scaleGridTop="5",
+				scaleGridLeft="5",
+				scaleGridRight="59",
+				scaleGridBottom="17");
+			upSkin: 							Embed(source="assets/Button_upSkin.png",
+				scaleGridTop="5",
+				scaleGridLeft="5",
+				scaleGridRight="59",
+				scaleGridBottom="17");
+			selectedDisabledSkin: 				Embed(source="assets/Button_selectedDisabledSkin.png",
+				scaleGridTop="5",
+				scaleGridLeft="5",
+				scaleGridRight="59",
+				scaleGridBottom="17");
+			selectedDownSkin: 					Embed(source="assets/Button_selectedDownSkin.png",
+				scaleGridTop="5",
+				scaleGridLeft="5",
+				scaleGridRight="59",
+				scaleGridBottom="17");
+			selectedOverSkin: 					Embed(source="assets/Button_selectedUpSkin.png",
+				scaleGridTop="5",
+				scaleGridLeft="5",
+				scaleGridRight="59",
+				scaleGridBottom="17");
+			selectedUpSkin: 					Embed(source="assets/Button_selectedUpSkin.png",
+				scaleGridTop="5",
+				scaleGridLeft="5",
+				scaleGridRight="59",
+				scaleGridBottom="17");
+			color: 								#D3E7F3;
+			textRollOverColor: 					#FFFFFF;
+			textSelectedColor: 					#FFFFFF;
+			focus-rounded-corners: "tl, tr, br, bl";
+			corner-radius: 4;			
 		}
 	</fx:Style>
 	<mx:Canvas width="100%" height="100%"  id="LO" mouseMove="sOne()"  >	
@@ -322,8 +374,8 @@
 			<mx:UIComponent  id="UIC" />
 		</mx:HBox>
 		<mx:ApplicationControlBar mouseMove="sOne()" id="ACB" width="100%" height="39" dock="false" top="0"  top.Two="-50" horizontalAlign="center" verticalAlign="middle">
-			<s:Button label="Mute" click="button2_clickHandler(event)"/>
-			<s:Button label="Full Screen" click="button1_clickHandler(event)"/>
+			<mx:Button label="Mute" click="button2_clickHandler(event)"/>
+			<mx:Button label="Full Screen" click="button1_clickHandler(event)"/>
 		</mx:ApplicationControlBar>
 	</mx:Canvas>
 </s:Application>
