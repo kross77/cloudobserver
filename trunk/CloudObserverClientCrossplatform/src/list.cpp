@@ -85,9 +85,9 @@ int CamerasListNamespace::CamerasList::SelectFromList()
 	SGRelease(seqGrabber);
 	#elif defined LIN
 	int fd;
-cout << endl << "Let us select video device." << endl << "Available capture devices are:" << endl;
+std::cout << std::endl << "Let us select video device." << std::endl << "Available capture devices are:" << std::endl;
 
-ostringstream videoDevice;
+std::ostringstream videoDevice;
 videoDevice << "/dev/video" << i;
 
 while ((fd = open(videoDevice.str().c_str(), O_RDONLY)) != -1)
@@ -95,7 +95,7 @@ while ((fd = open(videoDevice.str().c_str(), O_RDONLY)) != -1)
 	struct v4l2_capability capability;
 	memset(&capability, 0, sizeof(capability));
 	if (-1 == ioctl(fd, VIDIOC_QUERYCAP, &capability)) {}
-	cout << i << ". " << capability.card << endl;
+	std::cout << i << ". " << capability.card << std::endl;
 	close(fd);
 
 	i++;
