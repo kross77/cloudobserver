@@ -1,6 +1,6 @@
 
 #ifndef __STDC_CONSTANT_MACROS
-  #define __STDC_CONSTANT_MACROS
+#define __STDC_CONSTANT_MACROS
 #endif
 
 // FFmpeg
@@ -94,7 +94,7 @@ public:
 	std::string userName;
 	bool hasAudio;
 	bool hasVideo;
-		
+
 	VideoEncoder() 
 	{
 		//  url_context = NULL;
@@ -130,8 +130,8 @@ public:
 	// Add video and audio data
 
 	bool AddFrame(AVFrame* frame, const char* soundBuffer, int soundBufferSize);
-		bool AddFrame(AVFrame* frame);
-			bool AddFrame(const char* soundBuffer, int soundBufferSize);
+	bool AddFrame(AVFrame* frame);
+	bool AddFrame(const char* soundBuffer, int soundBufferSize);
 	// end of output
 	bool Finish();
 

@@ -28,12 +28,11 @@ namespace CamerasListNamespace
 		CamerasList(void);
 		~CamerasList(void);	
 		int SelectFromList();
-		
-	#ifdef WIN
-	private: HRESULT EnumerateDevices(REFGUID category, IEnumMoniker **ppEnum);
-	#endif
-		
-	};
-	#endif // _L_H__
-}
 
+#ifdef WIN
+	private: HRESULT EnumerateDevices(REFGUID category, IEnumMoniker **ppEnum);
+#endif
+
+	};
+#endif // _L_H__
+}

@@ -83,9 +83,9 @@ ALCcontext		*pContext;
 ALCdevice		*pCaptureDevice;
 const ALCchar	*szDefaultCaptureDevice;
 
- boost::mt19937 rng;
- 	 boost::uniform_int<> six(-128,127); 
-	 	 boost::variate_generator<boost::mt19937&, boost::uniform_int<> >die(rng, six); 
+boost::mt19937 rng;
+boost::uniform_int<> six(-128,127); 
+boost::variate_generator<boost::mt19937&, boost::uniform_int<> >die(rng, six); 
 
 double desiredTimeForCaptureFame;
 double spendedTimeForCaptureFame;
@@ -139,14 +139,14 @@ void initOpenCV()
 
 
 	encoder.hasVideo = true;
-	    cvInitFont( &font, CV_FONT_HERSHEY_DUPLEX  , 2, 1, 0.0, 3, CV_AA );
-		CvPoint UL = {0,0};
-		CvPoint LR = {videoWidth,videoHeight};
-		 CVframe = cvCreateImage(cvSize(videoWidth, videoHeight),8, 4 );
-		  CVframeWithText = cvCreateImage(cvSize(videoWidth, videoHeight),8, 4 );
-		 cvRectangle( CVframe, UL, LR, CV_RGB(0,254,53), CV_FILLED);
+	cvInitFont( &font, CV_FONT_HERSHEY_DUPLEX  , 2, 1, 0.0, 3, CV_AA );
+	CvPoint UL = {0,0};
+	CvPoint LR = {videoWidth,videoHeight};
+	CVframe = cvCreateImage(cvSize(videoWidth, videoHeight),8, 4 );
+	CVframeWithText = cvCreateImage(cvSize(videoWidth, videoHeight),8, 4 );
+	cvRectangle( CVframe, UL, LR, CV_RGB(0,254,53), CV_FILLED);
 
-		 cvPutText(CVframe, outputUserName.c_str(), cvPoint(0,videoHeight-10), &font , CV_RGB(1,1,1));
+	cvPutText(CVframe, outputUserName.c_str(), cvPoint(0,videoHeight-10), &font , CV_RGB(1,1,1));
 
 }
 
@@ -156,18 +156,18 @@ void initOpenAL(int fps)
 	nBlockAlign = 1 * 16 / 8;
 	//5000
 	Buffer = new ALchar[nSampleSize];
-	
-		
-		 if (randomSound)
-		 { 
-			 encoder.hasAudio = true;
-		 }
-		                 // produces randomness out of thin air
-		 // see pseudo-random number generators
-	     // distribution that maps to 1..6
-		 // see random number distributions
-	         
-	 
+
+
+	if (randomSound)
+	{ 
+		encoder.hasAudio = true;
+	}
+	// produces randomness out of thin air
+	// see pseudo-random number generators
+	// distribution that maps to 1..6
+	// see random number distributions
+
+
 }
 
 void initFFmpeg(string container, int w, int h, int fps)
@@ -183,24 +183,24 @@ void initFFmpeg(string container, int w, int h, int fps)
 	//cout << " 1 "<< endl;
 	encoder.SetConstants(fps, videoWidth, videoHeight, audioSampleRate, streamBitRate);
 
-	name:
+name:
 	int encoderName = encoder.ConnectUserToUrl(outputUserName) ;
 	if (encoderName == 0)
 	{
 		//printf("Cannot open stream for selected name\n");
 		getName();
 		int encoderServer = encoder.ConnectToServer(outputUrl) ;
-		  goto name;
+		goto name;
 	} 
 
 	if(encoder.InitUrl(container, outputUrl, outputUserName) == -10){
-	cout << "\nNo audio, and no video data found.\n Please close application.\nConnect some capturing device.\nRestart application\n";
-	cin.get();
-	boost::this_thread::sleep(boost::posix_time::milliseconds(999999999));
+		cout << "\nNo audio, and no video data found.\n Please close application.\nConnect some capturing device.\nRestart application\n";
+		cin.get();
+		boost::this_thread::sleep(boost::posix_time::milliseconds(999999999));
 
 	}
-	
-//	cout << " 2 "<< endl;
+
+	//	cout << " 2 "<< endl;
 	int bufferImgSize = avpicture_get_size(PIX_FMT_BGR24, w, h);
 
 	frame = avcodec_alloc_frame();
@@ -216,36 +216,36 @@ void initFFmpeg(string container, int w, int h, int fps)
 
 void init()
 {
-	
+
 	initOpenCV();
 	initOpenAL(videoFrameRate);
 	initFFmpeg(outputContainer, videoWidth, videoHeight, videoFrameRate);
-	
+
 }
 
 void CaptureFrame(int w, int h, char* buffer, int bytespan)
 {
 	if(rainbow){
-	int wxh = w * h;
-	static float seed = 1.0;
-	for (int i = 0; i < h; i ++)
-	{
-		char* line = buffer + i * bytespan;
-		for (int j = 0; j < w; j ++)
+		int wxh = w * h;
+		static float seed = 1.0;
+		for (int i = 0; i < h; i ++)
 		{
-			// RGB
-			line[0] = 255 * sin(((float)i / wxh * seed) * 3.14);
-			line[1] = 255 * cos(((float)j / wxh * seed) * 3.14);
-			line[2] = 255 * sin(((float)(i + j) / wxh * seed) * 3.14);
-			line += 3;
+			char* line = buffer + i * bytespan;
+			for (int j = 0; j < w; j ++)
+			{
+				// RGB
+				line[0] = 255 * sin(((float)i / wxh * seed) * 3.14);
+				line[1] = 255 * cos(((float)j / wxh * seed) * 3.14);
+				line[2] = 255 * sin(((float)(i + j) / wxh * seed) * 3.14);
+				line += 3;
+			}
 		}
-	}
-	seed = seed + 2.2;
+		seed = seed + 2.2;
 	}else{
-  cvResize(CVframe, CVframeWithText);
+		cvResize(CVframe, CVframeWithText);
 		//char timeStr [9];
 		ptime now = second_clock::local_time();
-			
+
 		cvPutText(CVframeWithText,to_simple_string(now.time_of_day()).c_str(), cvPoint(0,(h/2+10)), &font , CV_RGB(1,1,1));
 		for(int i = 0; i < w*4*h; i=i+4)
 		{ 
@@ -265,11 +265,11 @@ char* CaptureSample()
 {
 
 	if(randomSound){
-	for (int i = 0; i < nSampleSize / nBlockAlign; i ++)
-	{
-		// Sound :)
-		Buffer [i] = die();
-	}}
+		for (int i = 0; i < nSampleSize / nBlockAlign; i ++)
+		{
+			// Sound :)
+			Buffer [i] = die();
+		}}
 
 	return (char *)Buffer;
 }
@@ -308,12 +308,12 @@ void ThreadCaptureFrame()
 {	while(1){
 	timerForCaptureFame.restart();
 	CaptureFrame( videoWidth, videoHeight, (char *)frame->data[0],frame->linesize[0]);
-AVFrame* swap = frame;
+	AVFrame* swap = frame;
 	frame = readyFrame;
 	readyFrame = swap;
 	spendedTimeForCaptureFame = timerForCaptureFame.elapsed();
 	if(spendedTimeForCaptureFame < desiredTimeForCaptureFame){
-	boost::this_thread::sleep(boost::posix_time::milliseconds(desiredTimeForCaptureFame - spendedTimeForCaptureFame));
+		boost::this_thread::sleep(boost::posix_time::milliseconds(desiredTimeForCaptureFame - spendedTimeForCaptureFame));
 	}
 }
 }
@@ -324,26 +324,26 @@ void ThreadSaveFrame()
 	while(1)
 	{
 		timerForMain.restart();
-if (!encoder.hasVideo)
-{		if (!encoder.AddFrame( CaptureSample(), nSampleSize))
-printf("Cannot write frame!\n");
-}
+		if (!encoder.hasVideo)
+		{		if (!encoder.AddFrame( CaptureSample(), nSampleSize))
+		printf("Cannot write frame!\n");
+		}
 
-if (!encoder.hasAudio)
-{		if (!encoder.AddFrame(readyFrame))
-printf("Cannot write frame!\n");
-}
+		if (!encoder.hasAudio)
+		{		if (!encoder.AddFrame(readyFrame))
+		printf("Cannot write frame!\n");
+		}
 
-if (encoder.hasAudio && encoder.hasVideo)
-{	
-	if (!encoder.AddFrame(readyFrame, CaptureSample(), nSampleSize))
-printf("Cannot write frame!\n");
-}
-if (!encoder.hasAudio && !encoder.hasVideo)
-{
-	printf("No data to encode");
-break;
-}
+		if (encoder.hasAudio && encoder.hasVideo)
+		{	
+			if (!encoder.AddFrame(readyFrame, CaptureSample(), nSampleSize))
+				printf("Cannot write frame!\n");
+		}
+		if (!encoder.hasAudio && !encoder.hasVideo)
+		{
+			printf("No data to encode");
+			break;
+		}
 
 		spendedTimeForMain = timerForMain.elapsed();
 
@@ -364,19 +364,19 @@ int main(int argc, char* argv[])
 	streamBitRate = 1280000;
 	rainbow = false;
 	for(int i = 1; i<argc; i=i+2){
-	//	cout << "i = " << i << "; argv[i] = " << argv[i] << endl;
-if(string(argv[i]) == "-framerate" ){videoFrameRate = atoi(argv[i+1]);} 
-if(string(argv[i]) == "-width" ) {videoWidth = atoi(argv[i+1]);} 
-if(string(argv[i]) == "-height" ) {videoHeight = atoi(argv[i+1]);} 
-if(string(argv[i]) == "-samplerate" ) {audioSampleRate = atoi(argv[i+1]);} 
-if(string(argv[i]) == "-server" ) {outputUrl = (argv[i+1]);} 
-if(string(argv[i]) == "-container" ) {outputContainer = (argv[i+1]);} 
-if(string(argv[i]) == "-nickname" ) {outputUserName = (argv[i+1]);} 
-if(string(argv[i]) == "-streamBitRate" ) {streamBitRate = atoi(argv[i+1]);} 
-if(string(argv[i]) == "-rainbow" ) {rainbow = atoi(argv[i+1]);} 
-if(string(argv[i]) == "-randomSound" ) {randomSound = atoi(argv[i+1]);} 
-	// example -server http://127.0.0.1:4773 -nickname vasia 
-		}	
+		//	cout << "i = " << i << "; argv[i] = " << argv[i] << endl;
+		if(string(argv[i]) == "-framerate" ){videoFrameRate = atoi(argv[i+1]);} 
+		if(string(argv[i]) == "-width" ) {videoWidth = atoi(argv[i+1]);} 
+		if(string(argv[i]) == "-height" ) {videoHeight = atoi(argv[i+1]);} 
+		if(string(argv[i]) == "-samplerate" ) {audioSampleRate = atoi(argv[i+1]);} 
+		if(string(argv[i]) == "-server" ) {outputUrl = (argv[i+1]);} 
+		if(string(argv[i]) == "-container" ) {outputContainer = (argv[i+1]);} 
+		if(string(argv[i]) == "-nickname" ) {outputUserName = (argv[i+1]);} 
+		if(string(argv[i]) == "-streamBitRate" ) {streamBitRate = atoi(argv[i+1]);} 
+		if(string(argv[i]) == "-rainbow" ) {rainbow = atoi(argv[i+1]);} 
+		if(string(argv[i]) == "-randomSound" ) {randomSound = atoi(argv[i+1]);} 
+		// example -server http://127.0.0.1:4773 -nickname vasia 
+	}	
 	//Sleep(1000);
 	desiredTimeForCaptureFame = 1000.0f / videoFrameRate;
 	desiredTimeForMain = 1000.0f / videoFrameRate;
@@ -387,7 +387,7 @@ if(string(argv[i]) == "-randomSound" ) {randomSound = atoi(argv[i+1]);}
 	}else{
 		replace_or_merge(outputUrl, "http://", "tcp://");
 	}
-	server:
+server:
 	int encoderServer = encoder.ConnectToServer(outputUrl) ;
 	if (encoderServer == -1)
 	{
@@ -397,11 +397,11 @@ if(string(argv[i]) == "-randomSound" ) {randomSound = atoi(argv[i+1]);}
 	}
 	if(outputUserName == ""){
 
-outputUserName += "robot";
-srand((unsigned)time(0)); 
-int random_integer = rand(); 
-outputUserName += boost::lexical_cast<string>(random_integer);;
-//cout << outputUserName;
+		outputUserName += "robot";
+		srand((unsigned)time(0)); 
+		int random_integer = rand(); 
+		outputUserName += boost::lexical_cast<string>(random_integer);;
+		//cout << outputUserName;
 	}
 
 	init();
@@ -416,7 +416,7 @@ outputUserName += boost::lexical_cast<string>(random_integer);;
 		cout << "\nInput 'exit' to quite" << endl;
 		cin >> quite;
 		//cout << endl;
-		     boost::this_thread::sleep(boost::posix_time::milliseconds(200));
+		boost::this_thread::sleep(boost::posix_time::milliseconds(200));
 	}
 	workerThread2.interrupt();
 	workerThread.interrupt();
