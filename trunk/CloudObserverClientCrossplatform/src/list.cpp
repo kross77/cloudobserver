@@ -10,15 +10,15 @@ CamerasListNamespace::CamerasList::~CamerasList(void)
 
 int CamerasListNamespace::CamerasList::SelectFromList()
 {
-	
+
 	int i = 0;
 	int selectedIndex;
-	#ifdef MAC
+#ifdef MAC
 	std::cout << std::endl << "Let us select video device." << std::endl << "Available capture devices are:" << std::endl;
-	
+
 	SeqGrabComponent seqGrabber = NULL;
 	SGDeviceList deviceList = NULL;
-	
+
 	// Find and open a sequence grabber
 	ComponentDescription theDesc;
 	theDesc.componentType           = SeqGrabComponentType;
@@ -58,53 +58,53 @@ int CamerasListNamespace::CamerasList::SelectFromList()
 		std::cout << "FindNextComponent failed." << std::endl;
 		return 999;
 	}
-	
-    if (deviceList)
-    {
-        for (int theDeviceIndex = 0; theDeviceIndex != (*deviceList)->count; ++theDeviceIndex)
-        {
+
+	if (deviceList)
+	{
+		for (int theDeviceIndex = 0; theDeviceIndex != (*deviceList)->count; ++theDeviceIndex)
+		{
 			SGDeviceName theDeviceEntry = (*deviceList)->entry[theDeviceIndex];
-            std::cout << i << ".1. " <<  theDeviceEntry.name << std::endl; 
-            // name of device is a pstring in theDeviceEntry.name
-			
+			std::cout << i << ".1. " <<  theDeviceEntry.name << std::endl; 
+			// name of device is a pstring in theDeviceEntry.name
+
 			SGDeviceInputList theInputs = theDeviceEntry.inputs;
-            if (theInputs != NULL)
-            {
-                for (int theInputIndex = 0; theInputIndex != (*theInputs)->count; ++theInputIndex)
-                {
-                    SGDeviceInputName theInput = (*theInputs)->entry[theInputIndex];
-                    std::cout << i << ".2. " << theInput.name << std::endl;       
-                    // name of input is a pstring in theInput.name
-                }
-            }
+			if (theInputs != NULL)
+			{
+				for (int theInputIndex = 0; theInputIndex != (*theInputs)->count; ++theInputIndex)
+				{
+					SGDeviceInputName theInput = (*theInputs)->entry[theInputIndex];
+					std::cout << i << ".2. " << theInput.name << std::endl;       
+					// name of input is a pstring in theInput.name
+				}
+			}
 			i++;
-        }
-    }
-	
+		}
+	}
+
 	SGDisposeDeviceList(seqGrabber, deviceList);
 	SGRelease(seqGrabber);
-	#elif defined LIN
+#elif defined LIN
 	int fd;
-std::cout << std::endl << "Let us select video device." << std::endl << "Available capture devices are:" << std::endl;
+	std::cout << std::endl << "Let us select video device." << std::endl << "Available capture devices are:" << std::endl;
 
-std::ostringstream videoDevice;
-videoDevice << "/dev/video" << i;
-
-while ((fd = open(videoDevice.str().c_str(), O_RDONLY)) != -1)
-{
-	struct v4l2_capability capability;
-	memset(&capability, 0, sizeof(capability));
-	if (-1 == ioctl(fd, VIDIOC_QUERYCAP, &capability)) {}
-	std::cout << i << ". " << capability.card << std::endl;
-	close(fd);
-
-	i++;
-	videoDevice.str("");
+	std::ostringstream videoDevice;
 	videoDevice << "/dev/video" << i;
-}
-	#elif defined WIN
-				CoInitialize(NULL);
-		IEnumMoniker *pEnum;
+
+	while ((fd = open(videoDevice.str().c_str(), O_RDONLY)) != -1)
+	{
+		struct v4l2_capability capability;
+		memset(&capability, 0, sizeof(capability));
+		if (-1 == ioctl(fd, VIDIOC_QUERYCAP, &capability)) {}
+		std::cout << i << ". " << capability.card << std::endl;
+		close(fd);
+
+		i++;
+		videoDevice.str("");
+		videoDevice << "/dev/video" << i;
+	}
+#elif defined WIN
+	CoInitialize(NULL);
+	IEnumMoniker *pEnum;
 	printf("\nLet us select video device\n");
 	printf("Available Capture Devices are:\n");
 	HRESULT hr;
@@ -112,7 +112,7 @@ while ((fd = open(videoDevice.str().c_str(), O_RDONLY)) != -1)
 	if (SUCCEEDED(hr))
 	{
 		IMoniker *pMoniker = NULL;
-		
+
 		while (pEnum->Next(1, &pMoniker, NULL) == S_OK)
 		{
 			IPropertyBag *pPropBag;
@@ -147,10 +147,10 @@ while ((fd = open(videoDevice.str().c_str(), O_RDONLY)) != -1)
 
 		}
 	}
-	#else
-		#error "unknown platform"
-	#endif
-	
+#else
+#error "unknown platform"
+#endif
+
 	selectedIndex = 999;
 	if (i <= 0)
 	{
