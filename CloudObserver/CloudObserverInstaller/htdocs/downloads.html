@@ -32,7 +32,7 @@
         <style type="text/css">
 			body
 			{
-			  background-color:#FFF;
+			  background-color:#333;
 			  font:100.01% "Trebuchet MS",Verdana,Arial,sans-serif;
 			}
 						
@@ -41,11 +41,13 @@
 			  margin:0 10px;
 			}
 			
+			a#rol{ color: #000; text-shadow:0px 1px 1px #3AA;} 
+			
 			h1
 			{
 			  font-size:250%;
-			  color:#FFF;
-			  text-shadow:0 1px 1px #000;
+			  color:#222;
+			  text-shadow:0 1px 1px #999;
 			}
 			
 			h2
@@ -57,14 +59,14 @@
 			
 			div#nifty
 			{
-			  background:#9BD1FA;
+			  background:#FFF;
 			  margin:0 10%;
 			}
 			
 			b.rtop,b.rbottom
 			{
 			  display:block;
-			  background:#FFF;
+			  background:#333;
 			}
 			
 			b.rtop b,b.rbottom b
@@ -72,7 +74,7 @@
 			  display:block;
 			  height:1px;
 			  overflow:hidden;
-			  background:#9BD1FA;
+			  background:#FFF;
 			}
 			
 			b.r1
@@ -99,7 +101,7 @@
 			p
 			{
 			  color:#000;
-			  text-shadow:0 1px 1px #fff;
+			  text-shadow:0 1px 1px #999;
 			  padding-bottom:1em;
 			}
 			
@@ -135,40 +137,8 @@
         <div id="container">
         </div>
         <div id="info">
-            <p/>
-            <div id="nifty">
-                <b class="rtop">
-                    <b class="r1">
-                    </b>
-                    <b class="r2">
-                    </b>
-                    <b class="r3">
-                    </b>
-                    <b class="r4">
-                    </b>
-                </b>
-                <h1>
-                    <img src="logo.png" alt="Cloud Observer" border="0" usemap="#Map2" >
-                    <map name="Map2">
-                      <area shape="rect" coords="0,0,400,100" href="index.html" alt="Cloud Observer Main Page">
-                    </map>
-					</img>
-                </h1>
-                <p>
-                <a id="rol" style="color: #FFF;  text-shadow:#000;" href="./index.html">Return</a> 
-                 <a style="text-decoration: none; color: #000;" href="./index.html"> to main page </a>
-                </p>
-<b class="rbottom">
-                    <b class="r4">
-                    </b>
-                    <b class="r3">
-                    </b>
-                    <b class="r2">
-                    </b>
-                    <b class="r1">
-                    </b>
-                </b>
-            </div>
+            
+          
             <p/>
              <div id="nifty">
                 <b class="rtop">
@@ -228,7 +198,7 @@
 <hr>
 
 <p style="font-size: 8pt">
-&copy 2011 <a id="rol" style=" color: #FFF; text-shadow:#000;" href="http://code.google.com/p/cloudobserver/">Cloud Forever</a>. All rights reserved. </p>
+&copy 2011 <a id="rol" href="http://code.google.com/p/cloudobserver/">Cloud Forever</a>. All rights reserved. </p>
                 <b class="rbottom">
                     <b class="r4">
                     </b>
@@ -371,13 +341,13 @@
                 theta = 0,
                 html5support = 0;
 
-            if (((BrowserDetect.browser == "Chrome") && (BrowserDetect.version >= 8)) || ((BrowserDetect.browser == "Explorer") && (BrowserDetect.version >= 9)) || ((BrowserDetect.browser == "Firefox") && (BrowserDetect.version >= 4))) {
+       /*     if (((BrowserDetect.browser == "Chrome") && (BrowserDetect.version >= 8)) || ((BrowserDetect.browser == "Explorer") && (BrowserDetect.version >= 9)) || ((BrowserDetect.browser == "Firefox") && (BrowserDetect.version >= 4))) {
                 html5support = 1; //  document.write('<p>' + '3d three js, Html 5 Capable' + '</p>');
-                document.write('  <style type="text/css">  body { background-color: rgb(200,200,200); margin: 0px; overflow: hidden; font: 100.01% "Trebuchet MS",Verdana,Arial,sans-serif; } #info { position: absolute; top: 0px; width: 100%; color: #ffffff; padding: 5px; font-family:Monospace;font-size:13px; font-weight: bold; } a { color: #ffffff;} h1,h2,p{margin: 0 10px} h1{font-size: 250%;color: #FFF; text-shadow:0px 1px 1px #000;} a#rol{ color: #FFF; text-shadow:0px 1px 1px #000;} h2{font-size: 200%;color: #f0f0f0;padding-top: 0.3em}div#nifty{ margin: 0 10%;background: rgba(250, 250, 250, 0.1); -moz-border-radius:15px; border-radius: 15px;} b.rtop, b.rbottom{display:block;background:#FFF; } b.rtop b, b.rbottom b{display:block;height: 1px;overflow: hidden; background: #9BD1FA} b.r1{margin: 0 5px} b.r2{margin: 0 3px} b.r3{margin:0 2px} b.rtop b.r4, b.rbottom b.r4{margin: 0 1px;height: 2px} p, ul{color:#000;text-shadow: 0px 1px 1px rgba(255,255,255,0.6);padding-bottom:1em}input[type="button"], .eButton {width: 150px;padding: 5px 10px;word-wrap:break-word;height: auto;} hr{color: rgba(0, 0, 0, 0.0); height: 1px; background-color:rgba(0, 0, 0, 0);} b.rtop, b.rbottom{display:none;background: rgba(0,0,0,0)}html{ width:100%; height:100%; } body{ width:100%; height:100%; }  #container{ width:100%; height:100%;} </style>');
+                document.write('  <style type="text/css">  body { background-color: rgb(200,200,200); margin: 0px; overflow: hidden; font: 100.01% "Trebuchet MS",Verdana,Arial,sans-serif; } #info { position: absolute; top: 0px; width: 100%; color: #ffffff; padding: 5px; font-family:Monospace;font-size:13px; font-weight: bold; } a { color: #ffffff;} h1,h2,p{margin: 0 10px} h1{font-size: 250%;color: #FFF; text-shadow:0px 1px 1px #000;} h2{font-size: 200%;color: #f0f0f0;padding-top: 0.3em}div#nifty{ margin: 0 10%;background: rgba(250, 250, 250, 0.1); -moz-border-radius:15px; border-radius: 15px;} b.rtop, b.rbottom{display:block;background:#FFF; } b.rtop b, b.rbottom b{display:block;height: 1px;overflow: hidden; background: #9BD1FA} b.r1{margin: 0 5px} b.r2{margin: 0 3px} b.r3{margin:0 2px} b.rtop b.r4, b.rbottom b.r4{margin: 0 1px;height: 2px} p, ul{color:#000;text-shadow: 0px 1px 1px rgba(255,255,255,0.6);padding-bottom:1em}input[type="button"], .eButton {width: 150px;padding: 5px 10px;word-wrap:break-word;height: auto;} hr{color: rgba(0, 0, 0, 0.0); height: 1px; background-color:rgba(0, 0, 0, 0);} b.rtop, b.rbottom{display:none;background: rgba(0,0,0,0)}html{ width:100%; height:100%; } body{ width:100%; height:100%; }  #container{ width:100%; height:100%;} </style>');
                 init();
                 render();
             }
-
+*/
             function init() {
 
                 var container, mesh;
