@@ -31,7 +31,8 @@
 		</script>
         <style type="text/css">
 			body
-			{
+			{ min-width:600;
+			min-height:550;
 			  background-color:#333;
 			  font:100.01% "Trebuchet MS",Verdana,Arial,sans-serif;
 			}
@@ -57,7 +58,29 @@
 			  color:#f0f0f0;
 			  padding-top:.3em;
 			}
-			
+			div.BUTS{
+			height: 100;
+			 margin:0 10%;
+			align: center;
+			text-align:center;
+				   
+			}
+			div.BUT{
+				
+				  -moz-border-radius: 5px;
+  border-radius:5px;
+ 				 border: 1px double  rgba(0,0,0, 0.2);
+				width:150px 
+				display: block; 
+				width: 100;
+				height: 100;
+				margin:10px;
+		padding:10px;
+				float:left;
+				align: center;
+			text-align:center;
+				
+			}
 			div#nifty
 			{
 			  background:#FFF;
@@ -137,7 +160,7 @@
 
         </script>
  
-        <div id="container">
+        <div id="container">	
         </div>
         <div id="info">
             
@@ -190,56 +213,56 @@
 </h1>
            <p>     You can choose your platform and download will start immediately. </p>
                 <hr>
-                <div style="width:100%" align="">
-    <img   src="./platform-logos-big.png" alt="Icons of platforms we support: Windows Linux and MacOS X" border="0" align="middle" usemap="#Map">
-    <map name="Map">
-      <area shape="rect"  coords="0,0,87,100" href="#Linux" onClick="window.close()" alt="Click here to download Linux version of CloudClient">
-      <area shape="rect" coords="88,0,195,100" href="#Windows" onClick="window.close()" alt="Click here to download Windows version of CloudClient">
-      <area shape="rect" coords="196,0,300,100" href="#MacOsX" onClick="window.close()" alt="Click here to download MacOsX version of CloudClient">
-    </map>
+               <div style="min-width:600; min-height:200; display:inline-block">
+<p style="float:left;"/>
+<a id="rol"  href="#Linux">	<div align="center" class="BUT">
+	                  <p><img src="platform-logo-linux-pr.png" /></p>
+	                   
+	                    <span>
+                         Linux 
+                        </span>
+</div></a>
+	<p style="float:left;"/>
+<a id="rol"  href="#Windows">	<div align="center" class="BUT">
+	                  <p><img src="platform-logo-windows-pr.png" /></p>   
+	                    <span>
+                         Windows 
+                        </span>
+</div></a>
+	<p style="float:left;"/>
+<a id="rol"  href="#MacOSX">	<div align="center" class="BUT">
+	                  <p><img src="platform-logo-mac-pr.png" /></p>
+	                    <span>
+                         Mac OS X 
+                        </span>
+</div></a>
+	<p style="float:left;"/>
     </div>
 
-<div class="LTT">
-                   <h3>  <a id="bol"  href="#Linux">
-                    Linux </a>
-                 </h3>
-</div>
-  <div class="WTT">
-                  <h3>  <a id="bol" href="#Windows">
-                    Windows </a>  </h3>
-                
-</div>
-<div class="MTT">
-                    <h3> <a id="bol" href="#Mac">
-                    Mac OS X </a>
-                </h3>
-</div>
 <script>
-			$('.LTT,.WTT,.MTT').css({
-				position: 'absolute'
-			}).hide()
-			$('area').each(function(i) {
-				$('area').eq(i).bind('mouseover', function(e) {
-					$('.LTT,.WTT,.MTT').eq(i).css({
-						top: e.pageY+5,
-						left: e.pageX+5
-					}).show()
-				})
-					  $('area').eq(i).bind('mousemove', function(e) {
-					$('.LTT,.WTT,.MTT').eq(i).css({
-						top: e.pageY+5,
-						left: e.pageX+5
-					}).show()
-				})
-				$('area').eq(i).bind('mouseout', function() {
-					$('.LTT,.WTT,.MTT').hide()
-				})
-			})
+
+                        $('.BUT').each(function(i) {
+                                $('.BUT').eq(i).bind('mouseover', function(e) {
+                                        $('.BUT').eq(i).css({
+ background:'#99CCFF'
+                                        }).show()
+                                })
+                                          $('.BUT').eq(i).bind('mousemove', function(e) {
+                                        $('.BUT').eq(i).css({
+ background:'#99CCFF'
+                                        }).show()
+                                })
+                                $('.BUT').eq(i).bind('mouseout', function() {
+                                                                            $('.BUT').eq(i).css({
+ background:'#FFF'
+                                        }).show()
+                                })
+                        })
 </script>
 <hr>
 
 <p style="font-size: 8pt">
-&copy 2011 <a id="rol" href="http://code.google.com/p/cloudobserver/">Cloud Forever</a>. All rights reserved. </p>
+    Copyright &copy 2011 <a style=" color: #000;" id="rol" href="#cloudobserver" onClick="{	newwindow=window.open('http://code.google.com/p/cloudobserver/','CloudObserver','height=750,width=900');	if (window.focus) {newwindow.focus()}}">Cloud Forever</a>. All rights reserved. </p>
                 <b class="rbottom">
                     <b class="r4">
                     </b>
