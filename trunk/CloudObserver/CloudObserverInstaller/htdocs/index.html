@@ -145,6 +145,62 @@
             var maxHeight = 0;
             var firstRun = 0;
 
+
+ run = function(name, width, height) {
+
+                var winsJoin = "|" + exNames.join("|") + "|";
+                var closedWins = [];
+                for (var i = 0; i < wins.length; ++i) {
+                    if (wins[i].closed) {
+                        closedWins.push(exNames[i]);
+                    }
+                }
+                var closedJoin = "|" + closedWins.join("|") + "|";
+                if (winsJoin.indexOf('|' + name + '|') == -1 || closedJoin.indexOf('|' + name + '|') != -1) {
+                    if (height > maxHeight) {
+                        maxHeight = height + 55;
+                    }
+                    if (window.screenX + getOffset(document.getElementById('usersList')).left >= screen.width / 2) {
+                        if (window.screenX + 102 - w - width < 0) {
+                            w = 0;
+                            h = h + maxHeight;
+                            top = h + 1;
+                            maxHeight = 0;
+                            if (screen.height - h - height + getOffset(document.getElementById('usersList')).left - 155 < 0) {
+                                h = 0;
+                            }
+                        }
+                    }
+                    if (window.screenX + getOffset(document.getElementById('usersList')).left < screen.width / 2) {
+                        if (firstRun == 0) {
+                            w = window.screenX + getOffset(document.getElementById('usersList')).left + 150;
+                            firstRun = 1;
+                        }
+                        if (screen.width - w - width < 0) {
+                            w = window.screenX + +getOffset(document.getElementById('usersList')).left + 150;
+                            h = h + maxHeight;
+                            top = h + 1;
+                            maxHeight = 0;
+                            if (screen.height - h - height < 0) {
+                                h = 0;
+                            }
+                        }
+                    }
+                    left = w + 1;
+                    tops = h + 1;
+                    w = w + width + 7;
+                    var file = './' + name;
+                    var settings = 'width=' + width + ', height=' + height + ', left=' + left + ', top=' + tops + ', screenX=' + left + ', screenY=' + tops;
+                    wins.push(window.open(file, name, settings));
+                    exNames.push(name);
+                }
+                for (var i = 0; i < wins.length; ++i) {
+                    wins[i].focus();
+                }
+            }
+
+
+
             openWin = function(name, width, height) {
 
                 var winsJoin = "|" + exNames.join("|") + "|";
@@ -289,10 +345,10 @@
                   
                 }
 	</script>
- <p><a   style=" color: #FFF; text-shadow:0px 1px 1px #000;"  href="#" id="rol" onClick="window.open('downloads.html', 'downloads.html', 'width=' + '450' + ', height=' + '475' + ', left=' + '200' + ', top=' + '200' + ', screenX=' + '200' + ', screenY=' + '200');"  >Download</a>   our app and start broadcasting now!</p>
+ <p><a   style=" color: #FFF; text-shadow:0px 1px 1px #000;"  href="#" id="rol" onClick="run('downloads.html', 750, 500);"  >Download</a>   our app and start broadcasting now!</p>
 
 <p style="font-size: 8pt">
-    Copyright &copy 2011 <a style=" color: #FFF;" id="rol" href="http://code.google.com/p/cloudobserver/">Cloud Forever</a>. All rights reserved. </p>
+    Copyright &copy 2011 <a style=" color: #FFF;" id="rol" href="#cloudobserver" onClick="{	newwindow=window.open('http://code.google.com/p/cloudobserver/','CloudObserver','height=750,width=900');	if (window.focus) {newwindow.focus()}}">Cloud Forever</a>. All rights reserved. </p>
 
                 <b class="rbottom">
                     <b class="r4">
