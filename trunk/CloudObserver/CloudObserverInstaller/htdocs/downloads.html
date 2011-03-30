@@ -42,6 +42,7 @@
 			}
 			
 			a#rol{ color: #000; text-shadow:0px 1px 1px #3AA;} 
+			a#bol{ color: #FFF; text-shadow:1px 1px 1px #3AA;} 
 			
 			h1
 			{
@@ -67,6 +68,7 @@
 			{
 			  display:block;
 			  background:#333;
+			  
 			}
 			
 			b.rtop b,b.rbottom b
@@ -75,6 +77,7 @@
 			  height:1px;
 			  overflow:hidden;
 			  background:#FFF;
+			  
 			}
 			
 			b.r1
@@ -113,13 +116,11 @@
 			  padding:5px 10px;
 			}
         </style>
+        <script  type="text/javascript" src="js/jquery-1.5.1.min.js" >
+		</script>
     </head>
     <body onresize="resized()">
-             <script>
-            function $(id) {
-                return document.getElementById(id);
-            }
-
+             <script  type="text/javascript">
             function getOffset(el) {
                 var _x = 0;
                 var _y = 0;
@@ -133,7 +134,9 @@
                     left: _x
                 };
             }
+
         </script>
+ 
         <div id="container">
         </div>
         <div id="info">
@@ -195,6 +198,44 @@
       <area shape="rect" coords="196,0,300,100" href="#MacOsX" onClick="window.close()" alt="Click here to download MacOsX version of CloudClient">
     </map>
     </div>
+
+<div class="LTT">
+                   <h3>  <a id="bol"  href="#Linux">
+                    Linux </a>
+                 </h3>
+</div>
+  <div class="WTT">
+                  <h3>  <a id="bol" href="#Windows">
+                    Windows </a>  </h3>
+                
+</div>
+<div class="MTT">
+                    <h3> <a id="bol" href="#Mac">
+                    Mac OS X </a>
+                </h3>
+</div>
+<script>
+			$('.LTT,.WTT,.MTT').css({
+				position: 'absolute'
+			}).hide()
+			$('area').each(function(i) {
+				$('area').eq(i).bind('mouseover', function(e) {
+					$('.LTT,.WTT,.MTT').eq(i).css({
+						top: e.pageY+5,
+						left: e.pageX+5
+					}).show()
+				})
+					  $('area').eq(i).bind('mousemove', function(e) {
+					$('.LTT,.WTT,.MTT').eq(i).css({
+						top: e.pageY+5,
+						left: e.pageX+5
+					}).show()
+				})
+				$('area').eq(i).bind('mouseout', function() {
+					$('.LTT,.WTT,.MTT').hide()
+				})
+			})
+</script>
 <hr>
 
 <p style="font-size: 8pt">
@@ -211,311 +252,6 @@
                 </b>
             </div>
         </div>
-        <script type="text/javascript" src="./js/Three.js">
-        </script>
-        <script type="text/javascript" src="./js/Cube.js">
-        </script>
-        <script type="text/javascript">
-            var BrowserDetect = {
-                init: function() {
-                    this.browser = this.searchString(this.dataBrowser) || "An unknown browser";
-                    this.version = this.searchVersion(navigator.userAgent) || this.searchVersion(navigator.appVersion) || "an unknown version";
-                    this.OS = this.searchString(this.dataOS) || "an unknown OS";
-                },
-                searchString: function(data) {
-                    for (var i = 0; i < data.length; i++) {
-                        var dataString = data[i].string;
-                        var dataProp = data[i].prop;
-                        this.versionSearchString = data[i].versionSearch || data[i].identity;
-                        if (dataString) {
-                            if (dataString.indexOf(data[i].subString) != -1) return data[i].identity;
-                        } else if (dataProp) return data[i].identity;
-                    }
-                },
-                searchVersion: function(dataString) {
-                    var index = dataString.indexOf(this.versionSearchString);
-                    if (index == -1) return;
-                    return parseFloat(dataString.substring(index + this.versionSearchString.length + 1));
-                },
-                dataBrowser: [{
-                    string: navigator.userAgent,
-                    subString: "Chrome",
-                    identity: "Chrome"
-                },
-                {
-                    string: navigator.userAgent,
-                    subString: "OmniWeb",
-                    versionSearch: "OmniWeb/",
-                    identity: "OmniWeb"
-                },
-                {
-                    string: navigator.vendor,
-                    subString: "Apple",
-                    identity: "Safari",
-                    versionSearch: "Version"
-                },
-                {
-                    prop: window.opera,
-                    identity: "Opera"
-                },
-                {
-                    string: navigator.vendor,
-                    subString: "iCab",
-                    identity: "iCab"
-                },
-                {
-                    string: navigator.vendor,
-                    subString: "KDE",
-                    identity: "Konqueror"
-                },
-                {
-                    string: navigator.userAgent,
-                    subString: "Firefox",
-                    identity: "Firefox"
-                },
-                {
-                    string: navigator.vendor,
-                    subString: "Camino",
-                    identity: "Camino"
-                },
-                { // for newer Netscapes (6+)
-                    string: navigator.userAgent,
-                    subString: "Netscape",
-                    identity: "Netscape"
-                },
-                {
-                    string: navigator.userAgent,
-                    subString: "MSIE",
-                    identity: "Explorer",
-                    versionSearch: "MSIE"
-                },
-                {
-                    string: navigator.userAgent,
-                    subString: "Gecko",
-                    identity: "Mozilla",
-                    versionSearch: "rv"
-                },
-                { // for older Netscapes (4-)
-                    string: navigator.userAgent,
-                    subString: "Mozilla",
-                    identity: "Netscape",
-                    versionSearch: "Mozilla"
-                }],
-                dataOS: [{
-                    string: navigator.platform,
-                    subString: "Win",
-                    identity: "Windows"
-                },
-                {
-                    string: navigator.platform,
-                    subString: "Mac",
-                    identity: "Mac"
-                },
-                {
-                    string: navigator.userAgent,
-                    subString: "iPhone",
-                    identity: "iPhone/iPod"
-                },
-                {
-                    string: navigator.platform,
-                    subString: "Linux",
-                    identity: "Linux"
-                }]
-
-            };
-            BrowserDetect.init();
-
-            //document.write('<p>' + BrowserDetect.browser + '</p>');
-            //document.write('<p>' + BrowserDetect.version + '</p>');
-            var camera, scene, renderer;
-
-            var fov = 70,
-                texture_placeholder, isUserInteracting = false,
-                onMouseDownMouseX = 0,
-                onMouseDownMouseY = 0,
-                lon = 90,
-                onMouseDownLon = 0,
-                lat = 0,
-                onMouseDownLat = 0,
-                phi = 0,
-                theta = 0,
-                html5support = 0;
-
-       /*     if (((BrowserDetect.browser == "Chrome") && (BrowserDetect.version >= 8)) || ((BrowserDetect.browser == "Explorer") && (BrowserDetect.version >= 9)) || ((BrowserDetect.browser == "Firefox") && (BrowserDetect.version >= 4))) {
-                html5support = 1; //  document.write('<p>' + '3d three js, Html 5 Capable' + '</p>');
-                document.write('  <style type="text/css">  body { background-color: rgb(200,200,200); margin: 0px; overflow: hidden; font: 100.01% "Trebuchet MS",Verdana,Arial,sans-serif; } #info { position: absolute; top: 0px; width: 100%; color: #ffffff; padding: 5px; font-family:Monospace;font-size:13px; font-weight: bold; } a { color: #ffffff;} h1,h2,p{margin: 0 10px} h1{font-size: 250%;color: #FFF; text-shadow:0px 1px 1px #000;} h2{font-size: 200%;color: #f0f0f0;padding-top: 0.3em}div#nifty{ margin: 0 10%;background: rgba(250, 250, 250, 0.1); -moz-border-radius:15px; border-radius: 15px;} b.rtop, b.rbottom{display:block;background:#FFF; } b.rtop b, b.rbottom b{display:block;height: 1px;overflow: hidden; background: #9BD1FA} b.r1{margin: 0 5px} b.r2{margin: 0 3px} b.r3{margin:0 2px} b.rtop b.r4, b.rbottom b.r4{margin: 0 1px;height: 2px} p, ul{color:#000;text-shadow: 0px 1px 1px rgba(255,255,255,0.6);padding-bottom:1em}input[type="button"], .eButton {width: 150px;padding: 5px 10px;word-wrap:break-word;height: auto;} hr{color: rgba(0, 0, 0, 0.0); height: 1px; background-color:rgba(0, 0, 0, 0);} b.rtop, b.rbottom{display:none;background: rgba(0,0,0,0)}html{ width:100%; height:100%; } body{ width:100%; height:100%; }  #container{ width:100%; height:100%;} </style>');
-                init();
-                render();
-            }
-*/
-            function init() {
-
-                var container, mesh;
-
-                container = document.getElementById('container');
-
-                camera = new THREE.Camera(fov, window.innerWidth / window.innerHeight, 1, 1100);
-                camera
-
-                scene = new THREE.Scene();
-
-                texture_placeholder = document.createElement('canvas');
-                texture_placeholder.width = 128;
-                texture_placeholder.height = 128;
-
-                var context = texture_placeholder.getContext('2d');
-                context.fillStyle = 'rgb( 200, 200, 200 )';
-                context.fillRect(0, 0, texture_placeholder.width, texture_placeholder.height);
-
-                var materials = [
-
-                loadTexture('textures/cube/skybox/px.jpg'), // right
-                loadTexture('textures/cube/skybox/nx.jpg'), // left
-                loadTexture('textures/cube/skybox/py.jpg'), // top
-                loadTexture('textures/cube/skybox/ny.jpg'), // bottom
-                loadTexture('textures/cube/skybox/pz.jpg'), // back
-                loadTexture('textures/cube/skybox/nz.jpg') // front
-                ];
-
-                mesh = new THREE.Mesh(new Cube(300, 300, 300, 7, 7, materials, true), new THREE.MeshFaceMaterial());
-                mesh.overdraw = true;
-                scene.addObject(mesh);
-
-                renderer = new THREE.CanvasRenderer();
-                renderer.setSize(window.innerWidth, window.innerHeight);
-
-                container.appendChild(renderer.domElement);
-
-                document.addEventListener('mousedown', onDocumentMouseDown, false);
-                document.addEventListener('mousemove', onDocumentMouseMove, false);
-                document.addEventListener('mouseup', onDocumentMouseUp, false);
-                document.addEventListener('mousewheel', onDocumentMouseWheel, false);
-
-                document.addEventListener('touchstart', onDocumentTouchStart, false);
-                document.addEventListener('touchmove', onDocumentTouchMove, false);
-
-            }
-
-            function loadTexture(path) {
-
-                var material = new THREE.MeshBasicMaterial({
-                    map: new THREE.Texture(texture_placeholder)
-                });
-
-                var image = new Image();
-
-                image.onload = function() {
-
-                    this.loaded = true;
-                    material.map.image = this;
-                    render();
-
-                };
-
-                image.src = path;
-
-                return material;
-            }
-
-
-
-
-
-            function onDocumentMouseDown(event) {
-
-                event.preventDefault();
-
-                isUserInteracting = true;
-
-                onPointerDownPointerX = event.clientX;
-                onPointerDownPointerY = event.clientY;
-
-                onPointerDownLon = lon;
-                onPointerDownLat = lat;
-
-            }
-
-            function onDocumentMouseMove(event) {
-
-                if (isUserInteracting) {
-
-                    lon = (onPointerDownPointerX - event.clientX) * 0.1 + onPointerDownLon;
-                    lat = (event.clientY - onPointerDownPointerY) * 0.1 + onPointerDownLat;
-
-                    render();
-
-                }
-            }
-
-            function onDocumentMouseUp(event) {
-
-                isUserInteracting = false;
-                render();
-
-            }
-
-            function onDocumentMouseWheel(event) {
-
-                //    	fov -= event.wheelDeltaY * 0.05;
-                //   	camera.projectionMatrix = THREE.Matrix4.makePerspective( fov, window.innerWidth / window.innerHeight, 1, 1100 );
-                //	render();
-            }
-
-
-            function onDocumentTouchStart(event) {
-
-                if (event.touches.length == 1) {
-
-                    event.preventDefault();
-
-                    onPointerDownPointerX = event.touches[0].pageX;
-                    onPointerDownPointerY = event.touches[0].pageY;
-
-                    onPointerDownLon = lon;
-                    onPointerDownLat = lat;
-                }
-            }
-
-            function onDocumentTouchMove(event) {
-
-                if (event.touches.length == 1) {
-
-                    event.preventDefault();
-
-                    lon = (onPointerDownPointerX - event.touches[0].pageX) * 0.1 + onPointerDownLon;
-                    lat = (event.touches[0].pageY - onPointerDownPointerY) * 0.1 + onPointerDownLat;
-
-                    render();
-
-                }
-            }
-
-            function render() {
-
-                lat = Math.max(-85, Math.min(85, lat));
-                phi = (90 - lat) * Math.PI / 180;
-                theta = lon * Math.PI / 180;
-
-                camera.target.position.x = 500 * Math.sin(phi) * Math.cos(theta);
-                camera.target.position.y = 500 * Math.cos(phi);
-                camera.target.position.z = 500 * Math.sin(phi) * Math.sin(theta);
-
-                renderer.render(scene, camera);
-
-            }
-
-            function resized() {
-
-                if (html5support == 1) if (((document.body.clientWidth / document.body.clientHeight) < 6) && ((document.body.clientWidth / document.body.clientHeight) > (1 / 6))) {
-                    $('container').width = document.body.clientWidth;
-                    $('container').height = document.body.clientHeight;
-                    $('container').innerHTML = "";
-                    init();
-                    render();
-                }
-
-            }
-        </script>
     </body>
 
 </html>
