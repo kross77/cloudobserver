@@ -87,12 +87,6 @@ int64_t spendedTimeForMain;
 boost::timer timerForCaptureFame;
 boost::timer timerForMain;
 
-void get_name()
-{
-	cout << "Please your name (ex. georg )\n";
-	cin >> username;
-}
-
 void init_opencv()
 {
 	if (flag_disable_video)
@@ -262,7 +256,8 @@ name:
 	if (encoderName == 0)
 	{
 		//printf("Cannot open stream for selected name\n");
-		get_name();
+		std::cout << "Please, enter another username: ";
+		std::cin >> username;
 		int encoderServer = encoder.ConnectToServer(server_ip, server_port);
 		goto name;
 	}
@@ -577,15 +572,10 @@ int main(int argc, char* argv[])
 			std::cin >> server_ip;
 		} while (!encoder.ConnectToServer(server_ip, server_port));
 
-	if (username == "")
+	if (username.empty())
 	{
-		cout << "Please provide us with your user name" << endl;
-		get_name();
-
-		/*username += "robot";
-		srand((unsigned)time(0));
-		int random_integer = rand();
-		username += boost::lexical_cast<string>(random_integer);*/
+		std::cout << "Please, enter your username: ";
+		std::cin >> username;
 	}
 
 	init_opencv();
@@ -599,14 +589,13 @@ int main(int argc, char* argv[])
 	boost::this_thread::sleep(boost::posix_time::milliseconds(200));
 	boost::thread workerThread2(save_frame_loop);
 
-	string quite;
-	while (quite != "exit")
+	std::cout << "Type 'exit' and hit enter to stop broadcasting and close the application..." << std::endl;
+	std::string exit;
+	do
 	{
-		cout << "\nInput 'exit' to quite" << endl;
-		cin >> quite;
-		//cout << endl;
+		cin >> exit;
 		boost::this_thread::sleep(boost::posix_time::milliseconds(250));
-	}
+	} while (exit != "exit");
 
 	workerThread2.interrupt();
 	workerThread.interrupt();
