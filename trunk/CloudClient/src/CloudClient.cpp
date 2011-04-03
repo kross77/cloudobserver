@@ -2,6 +2,7 @@
 #include <boost/asio.hpp>
 #include <boost/date_time/gregorian/gregorian.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/lexical_cast.hpp>
 #include <boost/random.hpp>
 
 // OpenAL
@@ -527,26 +528,33 @@ int main(int argc, char* argv[])
 			string key = arg.substr(0, pos);
 			string value = arg.substr(pos + 1, arg.length() - pos - 1);
 
-			if (key == "--audio-capture-device")
-				audio_capture_device = atoi(value.c_str());
-			if (key == "--audio-sample-rate")
-				audio_sample_rate = atoi(value.c_str());
-			if (key == "--container")
-				container = value;
-			if (key == "--server-url")
-				server_url = value;
-			if (key == "--stream-bitrate")
-				stream_bitrate = atoi(value.c_str());
-			if (key == "--username")
-				username = value;
-			if (key == "--video-capture-device")
-				video_capture_device = atoi(value.c_str());
-			if (key == "--video-frame-rate")
-				video_frame_rate = atoi(value.c_str());
-			if (key == "--video-height")
-				video_height = atoi(value.c_str());
-			if (key == "--video-width")
-				video_width = atoi(value.c_str());
+			try
+			{
+				if (key == "--audio-capture-device")
+					audio_capture_device = boost::lexical_cast<int>(value);
+				if (key == "--audio-sample-rate")
+					audio_sample_rate = boost::lexical_cast<int>(value);
+				if (key == "--container")
+					container = value;
+				if (key == "--server-url")
+					server_url = value;
+				if (key == "--stream-bitrate")
+					stream_bitrate = boost::lexical_cast<int>(value);
+				if (key == "--username")
+					username = value;
+				if (key == "--video-capture-device")
+					video_capture_device = boost::lexical_cast<int>(value);
+				if (key == "--video-frame-rate")
+					video_frame_rate = boost::lexical_cast<int>(value);
+				if (key == "--video-height")
+					video_height = boost::lexical_cast<int>(value);
+				if (key == "--video-width")
+					video_width = boost::lexical_cast<int>(value);
+			}
+			catch (boost::bad_lexical_cast const&)
+			{
+				std::cout << "Error while parsing argument '" << arg << "': value is not valid. Argument skipped." << std::endl;
+			}
 		}
 		else
 		{
