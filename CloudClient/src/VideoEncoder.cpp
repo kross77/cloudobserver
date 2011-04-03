@@ -35,24 +35,24 @@ int VideoEncoder::ReadFromServer()
 	else{s.close(); return 0;}
 }
 
-int VideoEncoder::ConnectToServer(std::string& tcpUrl)
-{	try
+bool VideoEncoder::ConnectToServer(std::string addr, std::string port)
 {
-	std::string addr;
-	std::string port;
-	tcpExtract(tcpUrl, addr, port);
+	std::cout << "Trying to connect to server at " << addr << ":" << port << "...";
+	try
+	{
+		tcp::resolver::query query(tcp::v4(), addr.c_str(), port.c_str());
+		tcp::resolver::iterator iterator = resolver.resolve(query);
+		s.connect(*iterator);
+	}
+	catch (std::exception)
+	{
+		std::cout << " failed." << std::endl;
+		return false;
+	}
+	std::cout << " succeed." << std::endl;
+	return true;
+}
 
-	tcp::resolver::query query(tcp::v4(), addr.c_str(), port.c_str());
-	tcp::resolver::iterator iterator = resolver.resolve(query);
-
-	s.connect(*iterator);
-	return 10;
-}
-catch (std::exception& e)
-{
-	return -1;
-}
-}
 int VideoEncoder::ConnectUserToUrl( std::string& username)
 {
 	try

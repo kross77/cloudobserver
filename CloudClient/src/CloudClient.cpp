@@ -30,7 +30,8 @@ bool flag_disable_video;
 bool flag_generate_audio;
 bool flag_generate_video;
 bool flag_lsd;
-std::string server_url;
+std::string server_ip;
+std::string server_port;
 int stream_bitrate;
 std::string username;
 int video_capture_device;
@@ -85,29 +86,6 @@ int64_t spendedTimeForMain;
 
 boost::timer timerForCaptureFame;
 boost::timer timerForMain;
-
-int get_evan(int number)
-{
-	while (number % 4 != 0)
-		++number;
-	return number;
-}
-
-void replace_or_merge(std::string &a, const std::string &b, const std::string &c)
-{
-	const std::string::size_type pos_b_in_a = a.find(b);
-	if (pos_b_in_a == std::string::npos)
-		a.insert(0, c);
-	else
-		a.replace(pos_b_in_a, b.length(), c);
-}
-
-void get_server()
-{
-	cout << "Please input stream URL (ex. http://127.0.0.1:4773/ )\n";
-	cin >> server_url;
-	replace_or_merge(server_url, "http://", "tcp://");
-}
 
 void get_name()
 {
@@ -285,11 +263,11 @@ name:
 	{
 		//printf("Cannot open stream for selected name\n");
 		get_name();
-		int encoderServer = encoder.ConnectToServer(server_url) ;
+		int encoderServer = encoder.ConnectToServer(server_ip, server_port);
 		goto name;
 	}
 
-	if (encoder.InitUrl(container, server_url, username) == -10)
+	if (encoder.InitUrl(container, "tcp://" + server_ip + ":" + server_port + "/", username) == -10)
 	{
 		cout << "\nNo audio, and no video data found.\n Please close application.\nConnect some capturing device.\nRestart application\n";
 		cin.get();
@@ -501,8 +479,10 @@ void save_frame_loop()
 	}
 }
 
+// Application entry point.
 int main(int argc, char* argv[])
 {
+	// Initialize default settings.
 	audio_capture_device = -1;
 	audio_sample_rate = 44100;
 	container = "flv";
@@ -511,7 +491,8 @@ int main(int argc, char* argv[])
 	flag_generate_audio = false;
 	flag_generate_video = false;
 	flag_lsd = false;
-	server_url = "";
+	server_ip = "";
+	server_port = "4773";
 	stream_bitrate = 1048576;
 	username = "";
 	video_capture_device = -1;
@@ -519,6 +500,7 @@ int main(int argc, char* argv[])
 	video_height = 720;
 	video_width = 1280;
 
+	// Parse command line arguments.
 	for (int i = 1; i < argc; i++)
 	{
 		std::string arg = string(argv[i]);
@@ -536,8 +518,10 @@ int main(int argc, char* argv[])
 					audio_sample_rate = boost::lexical_cast<int>(value);
 				if (key == "--container")
 					container = value;
-				if (key == "--server-url")
-					server_url = value;
+				if (key == "--server-ip")
+					server_ip = value;
+				if (key == "--server-port")
+					server_port = value;
 				if (key == "--stream-bitrate")
 					stream_bitrate = boost::lexical_cast<int>(value);
 				if (key == "--username")
@@ -576,30 +560,22 @@ int main(int argc, char* argv[])
 		}
 	}
 
-	video_height = get_evan(video_height);
-	video_width = get_evan(video_width);
+	// Align video width and height so that each dimension divides by 4.
+	video_width -= video_width % 4;
+	video_height -= video_height % 4;
 
-	desiredTimeForCaptureFame = (int64_t)(1000.0f / video_frame_rate);
-	desiredTimeForMain = (int64_t)(1000.0f / video_frame_rate);
+	// Check the server if one is read from command line arguments.
+	if (!server_ip.empty())
+		if (!encoder.ConnectToServer(server_ip, server_port))
+			server_ip = "";
 
-	if(server_url == "")
-	{
-		cout << "Warning: No Cloud Observer server url found!" << endl;
-		get_server();
-	}
-	else
-	{
-		replace_or_merge(server_url, "http://", "tcp://");
-	}
-
-server:
-	int encoderServer = encoder.ConnectToServer(server_url);
-	if (encoderServer == -1)
-	{
-		//cout << "Cannot open stream URL\n";
-		get_server();
-		goto server;
-	}
+	// Repeat asking for server until succeed.
+	if (server_ip.empty())
+		do
+		{
+			std::cout << "Please, specify the server IP-address: ";
+			std::cin >> server_ip;
+		} while (!encoder.ConnectToServer(server_ip, server_port));
 
 	if (username == "")
 	{
@@ -615,6 +591,9 @@ server:
 	init_opencv();
 	init_openal(video_frame_rate);
 	init_ffmpeg(container, video_width, video_height, video_frame_rate);
+
+	desiredTimeForCaptureFame = (int64_t)(1000.0f / video_frame_rate);
+	desiredTimeForMain = (int64_t)(1000.0f / video_frame_rate);
 
 	boost::thread workerThread(capture_frame_loop);
 	boost::this_thread::sleep(boost::posix_time::milliseconds(200));
