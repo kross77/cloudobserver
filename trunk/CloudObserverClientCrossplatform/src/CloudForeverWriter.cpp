@@ -468,32 +468,37 @@ int main(int argc, char* argv[])
 	outputContainer +="flv";
 	streamBitRate = (int)(1.5 * videoWidth * 1024);
 	noAudio = false;
-	for (int i = 1; i < argc; i = i + 2)
+	int i = 1;
+	while (i < argc)
 	{
-		if (string(argv[i]) == "-camera")
-			cameraInt = atoi(argv[i + 1]);
-		if (string(argv[i]) == "-framerate")
-			videoFrameRate = atoi(argv[i + 1]);
-		if (string(argv[i]) == "-width")
-			videoWidth = atoi(argv[i + 1]);
-		if (string(argv[i]) == "-height")
-			videoHeight = atoi(argv[i + 1]);
-		if (string(argv[i]) == "-microphone")
-			microphoneInt = atoi(argv[i + 1]);
-		if (string(argv[i]) == "-samplerate")
-			audioSampleRate = atoi(argv[i + 1]);
-		if (string(argv[i]) == "-server")
-			outputUrl = argv[i + 1];
-		if (string(argv[i]) == "-container")
-			outputContainer = argv[i + 1];
-		if (string(argv[i]) == "-nickname")
-			outputUserName = argv[i + 1];
-		if (string(argv[i]) == "-useLSD")
-			useLSD = atoi(argv[i + 1]);
-		if (string(argv[i]) == "-streamBitRate")
-			streamBitRate = atoi(argv[i + 1]);
-		if (string(argv[i]) == "-noAudio")
-			noAudio = atoi(argv[i + 1]);
+		string key = string(argv[i++]);
+		if (key == "-useLSD")
+			useLSD = true;
+		if (key == "-noAudio")
+			noAudio = true;
+		if (i < argc)
+		{
+			if (key == "-camera")
+				cameraInt = atoi(argv[i++]);
+			if (key == "-framerate")
+				videoFrameRate = atoi(argv[i++]);
+			if (key == "-width")
+				videoWidth = atoi(argv[i++]);
+			if (key == "-height")
+				videoHeight = atoi(argv[i++]);
+			if (key == "-microphone")
+				microphoneInt = atoi(argv[i++]);
+			if (key == "-samplerate")
+				audioSampleRate = atoi(argv[i++]);
+			if (key == "-server")
+				outputUrl = argv[i++];
+			if (key == "-container")
+				outputContainer = argv[i++];
+			if (key == "-nickname")
+				outputUserName = argv[i++];
+			if (key == "-streamBitRate")
+				streamBitRate = atoi(argv[i++]);
+		}
 	}
 
 	videoHeight = GetEvan(videoHeight);
