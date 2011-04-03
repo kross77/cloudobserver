@@ -124,7 +124,7 @@ public:
 	void SetConstants( int UserFps , int UserWidth, int UserHeight, int UserAudioSampleRate, int videoBitRate);
 	// init output stream 	
 
-	int ConnectToServer(std::string& tcpUrl);
+	bool ConnectToServer(std::string addr, std::string port);
 	int ConnectUserToUrl(std::string& username);
 	int InitUrl(std::string& container, std::string& tcpUrl, std::string& username); // 1 all is ok, 0 not correct user name, -1 not correct URL
 	// Add video and audio data
