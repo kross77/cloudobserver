@@ -404,28 +404,7 @@ solution "CloudObserverClient"
 		
 		configuration "Release"
 			defines { "NDEBUG" }
-			flags { "Optimize" }  
-	
-	project "CloudObserverTestClient"
-		kind "ConsoleApp"
-		language "C++"
-		location ( "projects/" .. os.get() .. "-" .. action )
-		cloud.project.init()
-		cloud.project.useFFmpeg()
-		cloud.project.useBoost()
-		cloud.project.useAL()
-		cloud.project.useCV()
-		links { "libEncoder" }
-		files { "src/CloudObserverVirtualWriter.cpp" }
-		
-		configuration "Debug"
-			defines { "DEBUG" }
-			flags { "Symbols" }
-		
-		
-		configuration "Release"
-			defines { "NDEBUG" }
-			flags { "Optimize" }          
+			flags { "Optimize" }         
 	
 	project "libLSD"
 		language "C++"
