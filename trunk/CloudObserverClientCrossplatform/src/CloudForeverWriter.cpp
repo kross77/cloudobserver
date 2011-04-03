@@ -60,11 +60,11 @@ IplImage* redchannel;
 IplImage* greenchannel;
 IplImage* bluechannel;
 
-double desiredTimeForCaptureFame;
-double spendedTimeForCaptureFame;
+int64_t desiredTimeForCaptureFame;
+int64_t spendedTimeForCaptureFame;
 
-double desiredTimeForMain;
-double spendedTimeForMain;
+int64_t desiredTimeForMain;
+int64_t spendedTimeForMain;
 
 boost::timer timerForCaptureFame;
 boost::timer timerForMain;
@@ -164,7 +164,7 @@ void initOpenAL(int fps)
 {
 	if (!noAudio)
 	{
-		nSampleSize = 2.0f * audioSampleRate / fps;
+		nSampleSize = (int)(2.0f * audioSampleRate / fps);
 
 		Buffer = new ALchar[nSampleSize];
 		dev[0] = alcOpenDevice(NULL);
@@ -228,7 +228,7 @@ void initOpenAL(int fps)
 						std::getline(cin, s, '\n');
 						SelectedIndex = boost::lexical_cast<int>(s);
 					}
-					catch(std::exception& e)
+					catch(std::exception&)
 					{
 						SelectedIndex = 999;
 					}
@@ -320,20 +320,19 @@ void CaptureFrame(int w, int h, char* buffer, int bytespan)
 
 		image_double lsdImage;
 		ntuple_list lsdOut;
-		unsigned int x, y, i, j;
 		lsdImage = new_image_double(w, h);
 
-		for(x = 0; x < w; x++)
-			for(y = 0; y < h; y++)
+		for (int x = 0; x < w; x++)
+			for (int y = 0; y < h; y++)
 				lsdImage->data[x + y * lsdImage->xsize] = cvGetReal2D(destinationForLSD, y, x);
 
 		// call LSD
 		lsdOut = lsd(lsdImage);
 
-		for(i = 0; i < lsdOut->size; i++)
+		for (unsigned int i = 0; i < lsdOut->size; i++)
 		{
-			CvPoint pt1 = { lsdOut->values[i * lsdOut->dim + 0], lsdOut->values[i * lsdOut->dim + 1] };
-			CvPoint pt2 = { lsdOut->values[i * lsdOut->dim + 2], lsdOut->values[i * lsdOut->dim + 3] };
+			CvPoint pt1 = { (int)lsdOut->values[i * lsdOut->dim + 0], (int)lsdOut->values[i * lsdOut->dim + 1] };
+			CvPoint pt2 = { (int)lsdOut->values[i * lsdOut->dim + 2], (int)lsdOut->values[i * lsdOut->dim + 3] };
 			cvLine(destination, pt1, pt2, CV_RGB(240, 255, 255), 1, CV_AA, 0);
 		}
 		cvReleaseImage(&destinationForLSD);
@@ -341,7 +340,7 @@ void CaptureFrame(int w, int h, char* buffer, int bytespan)
 		free_ntuple_list(lsdOut);
 	}
 
-	for(int i = 0; i < destination->imageSize; i = i + 3)
+	for (int i = 0; i < destination->imageSize; i = i + 3)
 	{
 		buffer[2] = destination->imageData[i];
 		buffer[1] = destination->imageData[i + 1];
@@ -422,7 +421,7 @@ void ThreadCaptureFrame()
 			AVFrame* swap = frame;
 			frame = readyFrame;
 			readyFrame = swap;
-			spendedTimeForCaptureFame = timerForCaptureFame.elapsed();
+			spendedTimeForCaptureFame = (int64_t)timerForCaptureFame.elapsed();
 			if (spendedTimeForCaptureFame < desiredTimeForCaptureFame)
 				boost::this_thread::sleep(boost::posix_time::milliseconds(desiredTimeForCaptureFame - spendedTimeForCaptureFame));
 		}
@@ -452,7 +451,7 @@ void ThreadSaveFrame()
 			break;
 		}
 
-		spendedTimeForMain = timerForMain.elapsed();
+		spendedTimeForMain = (int64_t)timerForMain.elapsed();
 		if(spendedTimeForMain < desiredTimeForMain)
 			boost::this_thread::sleep(boost::posix_time::milliseconds(desiredTimeForMain - spendedTimeForMain));
 	}
@@ -467,7 +466,7 @@ int main(int argc, char* argv[])
 	microphoneInt = 1;
 	audioSampleRate = 44100;
 	outputContainer +="flv";
-	streamBitRate = 1.5 * videoWidth * 1024;
+	streamBitRate = (int)(1.5 * videoWidth * 1024);
 	noAudio = false;
 	for (int i = 1; i < argc; i = i + 2)
 	{
@@ -500,8 +499,8 @@ int main(int argc, char* argv[])
 	videoHeight = GetEvan(videoHeight);
 	videoWidth = GetEvan(videoWidth);
 
-	desiredTimeForCaptureFame = 1000.0f / videoFrameRate;
-	desiredTimeForMain = 1000.0f / videoFrameRate;
+	desiredTimeForCaptureFame = (int64_t)(1000.0f / videoFrameRate);
+	desiredTimeForMain = (int64_t)(1000.0f / videoFrameRate);
 
 	if(outputUrl == "")
 	{
