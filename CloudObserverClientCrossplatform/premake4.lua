@@ -392,10 +392,7 @@ solution "CloudObserverClient"
 		cloud.project.useBoost()
 		cloud.project.useAL()
 		cloud.project.useCV()
-		links { "libLSD" }
-		links { "libEncoder" }
-		links { "libUtil" }
-		files { "src/CloudForeverWriter.cpp" }
+		files { "src/CloudForeverWriter.cpp", "src/list.cpp", "src/list.h", "src/LSD.cpp", "src/LSD.h", "src/VideoEncoder.cpp", "src/VideoEncoder.h" }
 		
 		configuration "Debug"
 			defines { "DEBUG" }
@@ -404,54 +401,4 @@ solution "CloudObserverClient"
 		
 		configuration "Release"
 			defines { "NDEBUG" }
-			flags { "Optimize" }         
-	
-	project "libLSD"
-		language "C++"
-		location ( "projects/" .. os.get() .. "-" .. action )
-		files { "src/LSD.cpp", "src/LSD.h" }
-		kind "StaticLib"
-		cloud.project.init()
-		
-		configuration "Debug"
-			defines { "DEBUG" }
-			flags { "Symbols" }
-		
-		
-		configuration "Release"
-			defines { "NDEBUG" }
-			flags { "Optimize" } 
-	
-	project "libEncoder"
-		language "C++"
-		location ( "projects/" .. os.get() .. "-" .. action )
-		files { "src/VideoEncoder.cpp", "src/VideoEncoder.h"}
-		kind "StaticLib"
-		cloud.project.init()
-		cloud.project.useFFmpeg()
-		cloud.project.useBoost()
-		
-		configuration "Debug"
-			defines { "DEBUG" }
-			flags { "Symbols" }
-		
-		
-		configuration "Release"
-			defines { "NDEBUG" }
-			flags { "Optimize" }   
-	
-	project "libUtil"
-		language "C++"
-		location ( "projects/" .. os.get() .. "-" .. action )
-		files { "src/list.cpp", "src/list.h"}
-		kind "StaticLib"
-		cloud.project.init()
-		cloud.project.useBoost()
-		
-		configuration "Debug"
-			defines { "DEBUG" }
-			flags { "Symbols" }
-			
-		configuration "Release"
-			defines { "NDEBUG" }
-			flags { "Optimize" }   
+			flags { "Optimize" }
