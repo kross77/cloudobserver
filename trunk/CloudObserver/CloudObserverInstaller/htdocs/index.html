@@ -127,6 +127,8 @@
         </script>
         <script type="text/javascript" src="./js/Cube.js">
         </script>
+        <script type="text/javascript" src="./js/Hi-Res-Stats.js">
+        </script>
 		<script>
             var BrowserDetect = {
                 init: function()
@@ -293,6 +295,8 @@
         
                 document.addEventListener('touchstart', onDocumentTouchStart, false);
                 document.addEventListener('touchmove', onDocumentTouchMove, false);
+				
+ $('#info').scroll(Scroll);
         
             }
         
@@ -361,6 +365,15 @@
                 render();
         
             }
+			var zxcTO;
+			function  Scroll(){
+			 clearTimeout(zxcTO);
+			 zxcTO=setTimeout(function(){     
+			    isUserInteracting = false;
+                render();},100);
+			}
+
+
         
             function onDocumentMouseWheel(event)
             {
@@ -869,6 +882,15 @@
             {
                 resizedw();
             });
+			var stats = new Stats();
+
+// Align top-left
+//stats.domElement.style.position = 'absolute';
+//stats.domElement.style.left = '0px';
+//stats.domElement.style.top = '0px';
+//$('body').append(stats.domElement );
+//setInterval( function () { stats.update();}, 1000 / 60 );
+			
         }
     </script>
     <noscript>
