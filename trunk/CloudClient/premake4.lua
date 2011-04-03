@@ -370,7 +370,7 @@ function cloud.project.useFFmpeg()
 	end 	
 end
 
-solution "CloudObserverClient"
+solution "CloudClient"
 	location ( "projects/".. os.get() .. "-" ..  action )
 	configurations { "Debug", "Release" }
 	objdir     ( "projects/" .. os.get() .. "-" .. action .. "/bin/obj" )
@@ -383,7 +383,7 @@ solution "CloudObserverClient"
 	
 	-- A project defines one build target
 	
-	project "CloudObserverWriterClient"
+	project "CloudClient"
 		kind "ConsoleApp"
 		language "C++"
 		location ( "projects/" .. os.get() .. "-" .. action )
@@ -392,7 +392,7 @@ solution "CloudObserverClient"
 		cloud.project.useBoost()
 		cloud.project.useAL()
 		cloud.project.useCV()
-		files { "src/CloudForeverWriter.cpp", "src/list.cpp", "src/list.h", "src/LSD.cpp", "src/LSD.h", "src/VideoEncoder.cpp", "src/VideoEncoder.h" }
+		files { "src/CloudClient.cpp", "src/list.cpp", "src/list.h", "src/LSD.cpp", "src/LSD.h", "src/VideoEncoder.cpp", "src/VideoEncoder.h" }
 		
 		configuration "Debug"
 			defines { "DEBUG" }
