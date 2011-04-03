@@ -87,21 +87,7 @@ int64_t spendedTimeForMain;
 boost::timer timerForCaptureFame;
 boost::timer timerForMain;
 
-struct limited_cmp
-{
-	int limit;
-
-	limited_cmp(int a_limit) : limit(a_limit) {}
-
-	bool operator()(int left, int right) const
-	{
-		if (left <= limit && limit < right)
-			return false;
-		return (left < right);
-	}
-};
-
-int GetEvan(int number)
+int get_evan(int number)
 {
 	while (number % 4 != 0)
 		++number;
@@ -117,34 +103,20 @@ void replace_or_merge(std::string &a, const std::string &b, const std::string &c
 		a.replace(pos_b_in_a, b.length(), c);
 }
 
-void extract(std::string const& ip, std::string& address, std::string& service)
-{
-	boost::regex e("tcp://(.+):(\\d+)/");
-	boost::smatch what;
-	if (boost::regex_match(ip, what, e, boost::match_extra))
-	{
-		boost::smatch::iterator it = what.begin();
-		++it;
-		address = *it;
-		++it;
-		service = *it;
-	}
-}
-
-void getAdress()
+void get_server()
 {
 	cout << "Please input stream URL (ex. http://127.0.0.1:4773/ )\n";
 	cin >> outputUrl;
 	replace_or_merge(outputUrl, "http://", "tcp://");
 }
 
-void getName()
+void get_name()
 {
 	cout << "Please your name (ex. georg )\n";
 	cin >> outputUserName;
 }
 
-void initOpenCV()
+void init_opencv()
 {
 	if (!robot)
 	{
@@ -192,7 +164,7 @@ void initOpenCV()
 	}
 }
 
-void initOpenAL(int fps)
+void init_openal(int fps)
 {
 	if (noAudio)
 	{
@@ -296,7 +268,7 @@ void initOpenAL(int fps)
 	}
 }
 
-void initFFmpeg(string container, int w, int h, int fps)
+void init_ffmpeg(string container, int w, int h, int fps)
 {
 	if (!encoder.hasAudio && !encoder.hasVideo)
 	{
@@ -312,7 +284,7 @@ name:
 	if (encoderName == 0)
 	{
 		//printf("Cannot open stream for selected name\n");
-		getName();
+		get_name();
 		int encoderServer = encoder.ConnectToServer(outputUrl) ;
 		goto name;
 	}
@@ -337,14 +309,7 @@ name:
 	sample = new char[nSampleSize];
 }
 
-void init()
-{
-	initOpenCV();
-	initOpenAL(videoFrameRate);
-	initFFmpeg(outputContainer, videoWidth, videoHeight, videoFrameRate);
-}
-
-void CaptureFrame(int w, int h, char* buffer, int bytespan)
+void capture_frame(int w, int h, char* buffer, int bytespan)
 {
 	if (!robot)
 	{
@@ -444,7 +409,7 @@ void CaptureFrame(int w, int h, char* buffer, int bytespan)
 	}
 }
 
-char* CaptureSample()
+char* capture_sample()
 {
 	if (!robot)
 	{
@@ -465,7 +430,7 @@ char* CaptureSample()
 	return (char*)Buffer;
 }
 
-void closeOpenCV()
+void release_opencv()
 {
 	if (!robot)
 	{
@@ -475,11 +440,11 @@ void closeOpenCV()
 	}
 }
 
-void closeOpenAL()
+void release_openal()
 {
 }
 
-void closeFFmpeg()
+void release_ffmpeg()
 {
 	encoder.Finish();
 
@@ -493,21 +458,14 @@ void closeFFmpeg()
 	sample = NULL;
 }
 
-void close()
-{
-	closeOpenCV();
-	closeOpenAL();
-	closeFFmpeg();
-}
-
-void ThreadCaptureFrame()
+void capture_frame_loop()
 {
 	if (encoder.hasVideo)
 	{
 		while (true)
 		{
 			timerForCaptureFame.restart();
-			CaptureFrame(videoWidth, videoHeight, (char*)frame->data[0], frame->linesize[0]);
+			capture_frame(videoWidth, videoHeight, (char*)frame->data[0], frame->linesize[0]);
 			AVFrame* swap = frame;
 			frame = readyFrame;
 			readyFrame = swap;
@@ -518,13 +476,13 @@ void ThreadCaptureFrame()
 	}
 }
 
-void ThreadSaveFrame()
+void save_frame_loop()
 {
 	while (true)
 	{
 		timerForMain.restart();
 		if (!encoder.hasVideo)
-			if (!encoder.AddFrame(CaptureSample(), nSampleSize))
+			if (!encoder.AddFrame(capture_sample(), nSampleSize))
 				printf("Cannot write frame!\n");
 
 		if (!encoder.hasAudio)
@@ -532,7 +490,7 @@ void ThreadSaveFrame()
 				printf("Cannot write frame!\n");
 		
 		if (encoder.hasAudio && encoder.hasVideo)
-			if (!encoder.AddFrame(readyFrame, CaptureSample(), nSampleSize))
+			if (!encoder.AddFrame(readyFrame, capture_sample(), nSampleSize))
 				printf("Cannot write frame!\n");
 		
 		if (!encoder.hasAudio && !encoder.hasVideo)
@@ -601,8 +559,8 @@ int main(int argc, char* argv[])
 		}
 	}
 
-	videoHeight = GetEvan(videoHeight);
-	videoWidth = GetEvan(videoWidth);
+	videoHeight = get_evan(videoHeight);
+	videoWidth = get_evan(videoWidth);
 
 	desiredTimeForCaptureFame = (int64_t)(1000.0f / videoFrameRate);
 	desiredTimeForMain = (int64_t)(1000.0f / videoFrameRate);
@@ -610,7 +568,7 @@ int main(int argc, char* argv[])
 	if(outputUrl == "")
 	{
 		cout << "Warning: No Cloud Observer server url found!" << endl;
-		getAdress();
+		get_server();
 	}
 	else
 	{
@@ -622,7 +580,7 @@ server:
 	if (encoderServer == -1)
 	{
 		//cout << "Cannot open stream URL\n";
-		getAdress();
+		get_server();
 		goto server;
 	}
 
@@ -631,7 +589,7 @@ server:
 		if (!robot)
 		{
 			cout << "Please provide us with your user name" << endl;
-			getName();
+			get_name();
 		}
 		else
 		{
@@ -642,11 +600,13 @@ server:
 		}
 	}
 
-	init();
+	init_opencv();
+	init_openal(videoFrameRate);
+	init_ffmpeg(outputContainer, videoWidth, videoHeight, videoFrameRate);
 
-	boost::thread workerThread(ThreadCaptureFrame);
+	boost::thread workerThread(capture_frame_loop);
 	boost::this_thread::sleep(boost::posix_time::milliseconds(200));
-	boost::thread workerThread2(ThreadSaveFrame);
+	boost::thread workerThread2(save_frame_loop);
 
 	string quite;
 	while (quite != "exit")
@@ -660,6 +620,10 @@ server:
 	workerThread2.interrupt();
 	workerThread.interrupt();
 	boost::this_thread::sleep(boost::posix_time::milliseconds(250));
-	close();
+
+	release_opencv();
+	release_openal();
+	release_ffmpeg();
+
 	return 0;
 }
