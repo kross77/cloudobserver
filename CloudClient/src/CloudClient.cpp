@@ -518,47 +518,53 @@ int main(int argc, char* argv[])
 	video_height = 720;
 	video_width = 1280;
 
-	int i = 1;
-	while (i < argc)
+	for (int i = 1; i < argc; i++)
 	{
-		string key = string(argv[i++]);
-		if (key == "--disable-audio")
-			flag_disable_audio = true;
-		if (key == "--disable-video")
-			flag_disable_video = true;
-		if (key == "--generate-audio")
-			flag_generate_audio = true;
-		if (key == "--generate-video")
-			flag_generate_video = true;
-		if (key == "--lsd")
-			flag_lsd = true;
-		if (key == "--robot")
+		std::string arg = string(argv[i]);
+		int pos = arg.find("=");
+		if (std::string::npos != pos)
 		{
-			flag_generate_audio = true;
-			flag_generate_video = true;
-		}
-		if (i < argc)
-		{
+			string key = arg.substr(0, pos);
+			string value = arg.substr(pos + 1, arg.length() - pos - 1);
+
 			if (key == "--audio-capture-device")
-				audio_capture_device = atoi(argv[i++]);
+				audio_capture_device = atoi(value.c_str());
 			if (key == "--audio-sample-rate")
-				audio_sample_rate = atoi(argv[i++]);
+				audio_sample_rate = atoi(value.c_str());
 			if (key == "--container")
-				container = argv[i++];
+				container = value;
 			if (key == "--server-url")
-				server_url = argv[i++];
+				server_url = value;
 			if (key == "--stream-bitrate")
-				stream_bitrate = atoi(argv[i++]);
+				stream_bitrate = atoi(value.c_str());
 			if (key == "--username")
-				username = argv[i++];
+				username = value;
 			if (key == "--video-capture-device")
-				video_capture_device = atoi(argv[i++]);
+				video_capture_device = atoi(value.c_str());
 			if (key == "--video-frame-rate")
-				video_frame_rate = atoi(argv[i++]);
+				video_frame_rate = atoi(value.c_str());
 			if (key == "--video-height")
-				video_height = atoi(argv[i++]);
+				video_height = atoi(value.c_str());
 			if (key == "--video-width")
-				video_width = atoi(argv[i++]);
+				video_width = atoi(value.c_str());
+		}
+		else
+		{
+			if (arg == "--disable-audio")
+				flag_disable_audio = true;
+			if (arg == "--disable-video")
+				flag_disable_video = true;
+			if (arg == "--generate-audio")
+				flag_generate_audio = true;
+			if (arg == "--generate-video")
+				flag_generate_video = true;
+			if (arg == "--lsd")
+				flag_lsd = true;
+			if (arg == "--robot")
+			{
+				flag_generate_audio = true;
+				flag_generate_video = true;
+			}
 		}
 	}
 
