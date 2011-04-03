@@ -1,5 +1,8 @@
 // Boost
 #include <boost/asio.hpp>
+#include <boost/date_time/gregorian/gregorian.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/random.hpp>
 
 // OpenAL
 #include <AL/al.h>
@@ -14,6 +17,9 @@
 
 using namespace std;
 using boost::asio::ip::tcp;
+using namespace boost::posix_time;
+using boost::posix_time::ptime;
+using boost::posix_time::time_duration;
 
 //cmndlVars
 int cameraInt;
@@ -29,6 +35,14 @@ string outputContainer;
 string outputUserName;
 int streamBitRate;
 bool useLSD;
+bool rainbow;
+bool randomSound;
+bool robot;
+
+// Boost
+boost::mt19937 rng;
+boost::uniform_int<> six(-128, 127);
+boost::variate_generator<boost::mt19937&, boost::uniform_int<> >die(rng, six);
 
 // FFmpeg
 VideoEncoder encoder;
@@ -55,10 +69,14 @@ const ALCchar* szDefaultCaptureDevice;
 // OpenCV
 CvCapture* capture;
 IplImage* CVframe;
+IplImage* CVframeWithText;
 IplImage* destination;
 IplImage* redchannel;
 IplImage* greenchannel;
 IplImage* bluechannel;
+CvFont font;
+CvPoint UL;
+CvPoint LR;
 
 int64_t desiredTimeForCaptureFame;
 int64_t spendedTimeForCaptureFame;
@@ -128,130 +146,153 @@ void getName()
 
 void initOpenCV()
 {
-	CamerasListNamespace::CamerasList* CamList = new CamerasListNamespace::CamerasList();
-	cameraInt = CamList->SelectFromList();
-
-	if (cameraInt == 999)
+	if (!robot)
 	{
-		encoder.hasVideo = false;
+		CamerasListNamespace::CamerasList* CamList = new CamerasListNamespace::CamerasList();
+		cameraInt = CamList->SelectFromList();
+
+		if (cameraInt == 999)
+		{
+			encoder.hasVideo = false;
+		}
+		else
+		{
+			/* initialize camera */
+			capture = cvCaptureFromCAM(cameraInt);
+			cvSetCaptureProperty(capture, CV_CAP_PROP_FPS, videoFrameRate);
+			cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH, (double)videoWidth);
+			cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT, (double)videoHeight);
+		}
+
+		if (!capture)
+		{
+			encoder.hasVideo = false;
+			fprintf(stderr, "Cannot initialize selected webcam!\n");
+			cout << endl;
+			return;
+		}
+
+		CVframe = cvQueryFrame(capture);
+		destination = cvCreateImage(cvSize(videoWidth, videoHeight), CVframe->depth, CVframe->nChannels);
+		redchannel = cvCreateImage(cvGetSize(destination), 8, 1);
+		greenchannel = cvCreateImage(cvGetSize(destination), 8, 1);
+		bluechannel = cvCreateImage(cvGetSize(destination), 8, 1);
+		encoder.hasVideo = true;
 	}
 	else
 	{
-		/* initialize camera */
-		capture = cvCaptureFromCAM(cameraInt);
-		cvSetCaptureProperty(capture, CV_CAP_PROP_FPS, videoFrameRate);
-		cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH, (double)videoWidth);
-		cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT, (double)videoHeight);
+		encoder.hasVideo = true;
+		cvInitFont(&font, CV_FONT_HERSHEY_DUPLEX, 2, 1, 0.0, 3, CV_AA);
+		CvPoint UL = { 0, 0 };
+		CvPoint LR = { videoWidth, videoHeight };
+		CVframe = cvCreateImage(cvSize(videoWidth, videoHeight), 8, 4);
+		CVframeWithText = cvCreateImage(cvSize(videoWidth, videoHeight), 8, 4);
+		cvRectangle(CVframe, UL, LR, CV_RGB(0, 254, 53), CV_FILLED);
+		cvPutText(CVframe, outputUserName.c_str(), cvPoint(0, videoHeight - 10), &font, CV_RGB(1, 1, 1));
 	}
-
-	if (!capture)
-	{
-		encoder.hasVideo = false;
-		fprintf(stderr, "Cannot initialize selected webcam!\n");
-		cout << endl;
-		return;
-	}
-
-	CVframe = cvQueryFrame(capture);
-	destination = cvCreateImage(cvSize(videoWidth, videoHeight), CVframe->depth, CVframe->nChannels);
-	redchannel = cvCreateImage(cvGetSize(destination), 8, 1);
-	greenchannel = cvCreateImage(cvGetSize(destination), 8, 1);
-	bluechannel = cvCreateImage(cvGetSize(destination), 8, 1);
-	encoder.hasVideo = true;
 }
 
 void initOpenAL(int fps)
 {
-	if (!noAudio)
+	if (noAudio)
+	{
+		encoder.hasAudio = false;
+	}
+	else
 	{
 		nSampleSize = (int)(2.0f * audioSampleRate / fps);
-
+		nBlockAlign = 1 * 16 / 8;
 		Buffer = new ALchar[nSampleSize];
-		dev[0] = alcOpenDevice(NULL);
-		if (NULL == dev[0])
+		if (!robot)
 		{
-			fprintf(stderr, "No microphone found, please restart application , or continue streaming with out sound\n");
-			boost::this_thread::sleep(boost::posix_time::seconds(9999999));
-			cin.get();
-			return;
-		}
-
-		ctx = alcCreateContext(dev[0], NULL);
-		alcMakeContextCurrent(ctx);
-		int i = -1;
-		string bufferString[99];
-		const ALchar *pDeviceList = alcGetString(NULL, ALC_CAPTURE_DEVICE_SPECIFIER);
-		const ALCchar *bufferList[99];
-		if (pDeviceList)
-		{
-			printf("\nLet us select audio device\n");
-			printf("Available Capture Devices are:\n");
-			i = 0;
-			while (*pDeviceList)
+			dev[0] = alcOpenDevice(NULL);
+			if (NULL == dev[0])
 			{
-				bufferList[i] = pDeviceList;
-				bufferString[i] += pDeviceList;
-				cout << i <<") " << bufferString[i] << endl;
-				pDeviceList += strlen(pDeviceList) + 1;
-				i++;
+				fprintf(stderr, "No microphone found, please restart application , or continue streaming with out sound\n");
+				boost::this_thread::sleep(boost::posix_time::seconds(9999999));
+				cin.get();
+				return;
 			}
-		}
 
-		//Get the name of the 'default' capture device
-		//szDefaultCaptureDevice = alcGetString(NULL, ALC_CAPTURE_DEFAULT_DEVICE_SPECIFIER);
-		//printf("\nDefault Capture Device is '%s'\n\n", szDefaultCaptureDevice);
-
-		int SelectedIndex = 999;
-		if (i <= 0)
-		{
-			cout <<"No devices found. \n " << endl;
-			//cout <<"Please restart application." << endl;
-			//cin.get();
-			//Sleep(999999);
-			SelectedIndex = 999;
-		}
-		else
-			if (i == 1)
+			ctx = alcCreateContext(dev[0], NULL);
+			alcMakeContextCurrent(ctx);
+			int i = -1;
+			string bufferString[99];
+			const ALchar *pDeviceList = alcGetString(NULL, ALC_CAPTURE_DEVICE_SPECIFIER);
+			const ALCchar *bufferList[99];
+			if (pDeviceList)
 			{
-				cout <<"Default device will be used" << std::endl;
-				SelectedIndex = 0;
-				encoder.hasAudio = true;
-			}
-			else
-			{
-				while(SelectedIndex > i-1 || SelectedIndex < 0)
+				printf("\nLet us select audio device\n");
+				printf("Available Capture Devices are:\n");
+				i = 0;
+				while (*pDeviceList)
 				{
-					try
-					{
-						std::cout << "please input index from 0 to " << i - 1 << std::endl;
-						std::string s;
-						std::getline(cin, s, '\n');
-						SelectedIndex = boost::lexical_cast<int>(s);
-					}
-					catch(std::exception&)
-					{
-						SelectedIndex = 999;
-					}
+					bufferList[i] = pDeviceList;
+					bufferString[i] += pDeviceList;
+					cout << i <<") " << bufferString[i] << endl;
+					pDeviceList += strlen(pDeviceList) + 1;
+					i++;
 				}
 			}
 
-		if (SelectedIndex == 999)
-		{
-			encoder.hasAudio = false;
+			//Get the name of the 'default' capture device
+			//szDefaultCaptureDevice = alcGetString(NULL, ALC_CAPTURE_DEFAULT_DEVICE_SPECIFIER);
+			//printf("\nDefault Capture Device is '%s'\n\n", szDefaultCaptureDevice);
+
+			int SelectedIndex = 999;
+			if (i <= 0)
+			{
+				cout <<"No devices found. \n " << endl;
+				//cout <<"Please restart application." << endl;
+				//cin.get();
+				//Sleep(999999);
+				SelectedIndex = 999;
+			}
+			else
+				if (i == 1)
+				{
+					cout <<"Default device will be used" << std::endl;
+					SelectedIndex = 0;
+					encoder.hasAudio = true;
+				}
+				else
+				{
+					while(SelectedIndex > i-1 || SelectedIndex < 0)
+					{
+						try
+						{
+							std::cout << "please input index from 0 to " << i - 1 << std::endl;
+							std::string s;
+							std::getline(cin, s, '\n');
+							SelectedIndex = boost::lexical_cast<int>(s);
+						}
+						catch(std::exception&)
+						{
+							SelectedIndex = 999;
+						}
+					}
+				}
+
+			if (SelectedIndex == 999)
+			{
+				encoder.hasAudio = false;
+			}
+			else
+			{
+				encoder.hasAudio = true;
+				alDistanceModel(AL_NONE);
+				dev[0] = alcCaptureOpenDevice(bufferList[SelectedIndex], audioSampleRate, AL_FORMAT_MONO16, nSampleSize/2);
+				alcCaptureStart(dev[0]);
+			}
 		}
 		else
 		{
 			encoder.hasAudio = true;
-			alDistanceModel(AL_NONE);
-			dev[0] = alcCaptureOpenDevice(bufferList[SelectedIndex], audioSampleRate, AL_FORMAT_MONO16, nSampleSize/2);
-			alcCaptureStart(dev[0]);
-			//ToDo: Refactor nBlockAlign == number of channels * Bits per sample / 8 ; btw: why /8?
-			nBlockAlign = 1 * 16 / 8;
+			// produces randomness out of thin air
+			// see pseudo-random number generators
+			// distribution that maps to 1..6
+			// see random number distributions
 		}
-	}
-	else
-	{
-		encoder.hasAudio = false;
 	}
 }
 
@@ -305,84 +346,133 @@ void init()
 
 void CaptureFrame(int w, int h, char* buffer, int bytespan)
 {
-	CVframe = cvQueryFrame(capture);
-	if (!CVframe)
+	if (!robot)
 	{
-		printf("No CV frame captured!\n");
-		cin.get();
-	}
-
-	cvResize(CVframe, destination);
-	if (useLSD)
-	{
-		IplImage *destinationForLSD = cvCreateImage(cvSize(w, h), IPL_DEPTH_8U, 1);
-		cvCvtColor(destination, destinationForLSD, CV_RGB2GRAY);
-
-		image_double lsdImage;
-		ntuple_list lsdOut;
-		lsdImage = new_image_double(w, h);
-
-		for (int x = 0; x < w; x++)
-			for (int y = 0; y < h; y++)
-				lsdImage->data[x + y * lsdImage->xsize] = cvGetReal2D(destinationForLSD, y, x);
-
-		// call LSD
-		lsdOut = lsd(lsdImage);
-
-		for (unsigned int i = 0; i < lsdOut->size; i++)
+		CVframe = cvQueryFrame(capture);
+		if (!CVframe)
 		{
-			CvPoint pt1 = { (int)lsdOut->values[i * lsdOut->dim + 0], (int)lsdOut->values[i * lsdOut->dim + 1] };
-			CvPoint pt2 = { (int)lsdOut->values[i * lsdOut->dim + 2], (int)lsdOut->values[i * lsdOut->dim + 3] };
-			cvLine(destination, pt1, pt2, CV_RGB(240, 255, 255), 1, CV_AA, 0);
+			printf("No CV frame captured!\n");
+			cin.get();
 		}
-		cvReleaseImage(&destinationForLSD);
-		free_image_double(lsdImage);
-		free_ntuple_list(lsdOut);
-	}
 
-	for (int i = 0; i < destination->imageSize; i = i + 3)
+		cvResize(CVframe, destination);
+		if (useLSD)
+		{
+			IplImage *destinationForLSD = cvCreateImage(cvSize(w, h), IPL_DEPTH_8U, 1);
+			cvCvtColor(destination, destinationForLSD, CV_RGB2GRAY);
+
+			image_double lsdImage;
+			ntuple_list lsdOut;
+			lsdImage = new_image_double(w, h);
+
+			for (int x = 0; x < w; x++)
+				for (int y = 0; y < h; y++)
+					lsdImage->data[x + y * lsdImage->xsize] = cvGetReal2D(destinationForLSD, y, x);
+
+			// call LSD
+			lsdOut = lsd(lsdImage);
+
+			for (unsigned int i = 0; i < lsdOut->size; i++)
+			{
+				CvPoint pt1 = { (int)lsdOut->values[i * lsdOut->dim + 0], (int)lsdOut->values[i * lsdOut->dim + 1] };
+				CvPoint pt2 = { (int)lsdOut->values[i * lsdOut->dim + 2], (int)lsdOut->values[i * lsdOut->dim + 3] };
+				cvLine(destination, pt1, pt2, CV_RGB(240, 255, 255), 1, CV_AA, 0);
+			}
+			cvReleaseImage(&destinationForLSD);
+			free_image_double(lsdImage);
+			free_ntuple_list(lsdOut);
+		}
+
+		for (int i = 0; i < destination->imageSize; i = i + 3)
+		{
+			buffer[2] = destination->imageData[i];
+			buffer[1] = destination->imageData[i + 1];
+			buffer[0] = destination->imageData[i + 2];
+			buffer += 3;
+		}
+
+		//cvSplit(destination, bluechannel, greenchannel, redchannel, NULL);
+		//for(int y = 0; y < destination->height; y++)
+		//{
+		//	char* line = buffer + y * bytespan;
+		//	for(int x = 0; x < destination->width; x++)
+		//	{
+		// 		line[0] = cvGetReal2D(redchannel, y, x);
+		// 		line[1] = cvGetReal2D(greenchannel, y, x);
+		// 		line[2] = cvGetReal2D(bluechannel, y, x);
+		// 		line += 3;
+		//	}
+		//}
+
+		//for (int i = 0; i < w * h * 3; ++i) {
+		// 		buffer[i] = destination->imageData;
+		//}
+	}
+	else
 	{
-		buffer[2] = destination->imageData[i];
-		buffer[1] = destination->imageData[i + 1];
-		buffer[0] = destination->imageData[i + 2];
-		buffer += 3;
+		if (rainbow)
+		{
+			int wxh = w * h;
+			static float seed = 1.0;
+			for (int i = 0; i < h; i++)
+			{
+				char* line = buffer + i * bytespan;
+				for (int j = 0; j < w; j ++)
+				{
+					// RGB
+					line[0] = 255 * sin(((float)i / wxh * seed) * 3.14);
+					line[1] = 255 * cos(((float)j / wxh * seed) * 3.14);
+					line[2] = 255 * sin(((float)(i + j) / wxh * seed) * 3.14);
+					line += 3;
+				}
+			}
+			seed = seed + 2.2;
+		}
+		else
+		{
+			cvResize(CVframe, CVframeWithText);
+			ptime now = second_clock::local_time();
+			cvPutText(CVframeWithText, to_simple_string(now.time_of_day()).c_str(), cvPoint(0, (h / 2 + 10)), &font, CV_RGB(1, 1, 1));
+			for (int i = 0; i < w * 4 * h; i = i + 4)
+			{
+				buffer[0] = CVframeWithText->imageData[i];
+				buffer[1] = CVframeWithText->imageData[i + 1];
+				buffer[2] = CVframeWithText->imageData[i + 2];
+				buffer += 3;
+			}
+		}
 	}
-
-	//cvSplit(destination, bluechannel, greenchannel, redchannel, NULL);
-	//for(int y = 0; y < destination->height; y++)
-	//{
-	//	char* line = buffer + y * bytespan;
-	//	for(int x = 0; x < destination->width; x++)
-	//	{
-	// 		line[0] = cvGetReal2D(redchannel, y, x);
-	// 		line[1] = cvGetReal2D(greenchannel, y, x);
-	// 		line[2] = cvGetReal2D(bluechannel, y, x);
-	// 		line += 3;
-	//	}
-	//}
-
-	//for (int i = 0; i < w * h * 3; ++i) {
-	// 		buffer[i] = destination->imageData;
-	//}
 }
 
 char* CaptureSample()
 {
-	// Check how much audio data has been captured (note that 'val' is the number of frames, not bytes)
-	alcGetIntegerv(dev[0], ALC_CAPTURE_SAMPLES, 1, &iSamplesAvailable);
-	// When we would have enough data to fill our BUFFERSIZE byte buffer, will grab the samples, so now we should wait
-	while (iSamplesAvailable < (nSampleSize / nBlockAlign) - 1) // -1 was added to make code run on Mac OS X, potential bug
+	if (!robot)
+	{
+		// Check how much audio data has been captured (note that 'val' is the number of frames, not bytes)
 		alcGetIntegerv(dev[0], ALC_CAPTURE_SAMPLES, 1, &iSamplesAvailable);
-	// Consume Samples
-	alcCaptureSamples(dev[0], Buffer, (nSampleSize / nBlockAlign) - 1);
+		// When we would have enough data to fill our BUFFERSIZE byte buffer, will grab the samples, so now we should wait
+		while (iSamplesAvailable < (nSampleSize / nBlockAlign) - 1) // -1 was added to make code run on Mac OS X, potential bug
+			alcGetIntegerv(dev[0], ALC_CAPTURE_SAMPLES, 1, &iSamplesAvailable);
+		// Consume Samples
+		alcCaptureSamples(dev[0], Buffer, (nSampleSize / nBlockAlign) - 1);
+	}
+	else
+	{
+		if (randomSound)
+			for (int i = 0; i < nSampleSize / nBlockAlign; i++)
+				Buffer [i] = die();
+	}
 	return (char*)Buffer;
 }
 
 void closeOpenCV()
 {
-	cvReleaseCapture(&capture);
-	//cvReleaseImage(&destination);
-	//cvReleaseImage(&CVframe);
+	if (!robot)
+	{
+		cvReleaseCapture(&capture);
+		//cvReleaseImage(&destination);
+		//cvReleaseImage(&CVframe);
+	}
 }
 
 void closeOpenAL()
@@ -461,13 +551,17 @@ int main(int argc, char* argv[])
 {
 	cameraInt = 0;
 	videoFrameRate = 15;
-	videoWidth = 1024;
-	videoHeight =  768;
+	videoWidth = 1280;
+	videoHeight =  720;
 	microphoneInt = 1;
 	audioSampleRate = 44100;
 	outputContainer +="flv";
 	streamBitRate = (int)(1.5 * videoWidth * 1024);
 	noAudio = false;
+	rainbow = false;
+	randomSound = false;
+	robot = false;
+
 	int i = 1;
 	while (i < argc)
 	{
@@ -476,6 +570,12 @@ int main(int argc, char* argv[])
 			useLSD = true;
 		if (key == "-noAudio")
 			noAudio = true;
+		if (key == "-rainbow")
+			rainbow = true;
+		if (key == "-randomSound")
+			randomSound = true;
+		if (key == "-robot")
+			robot = true;
 		if (i < argc)
 		{
 			if (key == "-camera")
@@ -528,8 +628,18 @@ server:
 
 	if (outputUserName == "")
 	{
-		cout << "Please provide us with your user name" << endl;
-		getName();
+		if (!robot)
+		{
+			cout << "Please provide us with your user name" << endl;
+			getName();
+		}
+		else
+		{
+			outputUserName += "robot";
+			srand((unsigned)time(0));
+			int random_integer = rand();
+			outputUserName += boost::lexical_cast<string>(random_integer);
+		}
 	}
 
 	init();
