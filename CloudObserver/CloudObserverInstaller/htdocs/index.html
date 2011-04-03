@@ -55,11 +55,12 @@
 			-moz-border-radius:5px;
 			border-radius:5px;
 			border:1px double  rgba(0,0,0, 0.2);
-			width:150px 				display: block;
-			width:100;
-			height:100;
-			margin:10px;
+			display: inline-block;
+			width:87px;
+			height:85px;
+			position:relative;
 			padding:10px;
+			max-width:100;
 			float:left;
 			align:center;
 			text-align:center;
@@ -99,7 +100,9 @@
 			margin:0 1px;
 			}
 			div#info{
-			overflow:!important;
+			position:absolute;
+			width:100%;
+			overflow:auto;
 			}
 			p{
 			color:#000;
@@ -646,7 +649,7 @@
             setInterval(update, 5000);
         </script>
         
-        <div id="container" style="position:fixed">
+        <div id="container" style="position:absolute">
         </div>
         <div id="info">
             <p/>
@@ -695,8 +698,8 @@
                     Online users 
                 </h1>
                 <p>
-                      You can join tham - download our app for <a class="homeLink" href="#JsDetectsOsAndOpenesWindow" id="rol" > your platform.</a> <a class="allLink" href="#OptionsAppeared" id="rol" >Show all our downloads.</a>
-                </p>
+                      You can join them - download our application for <a class="homeLink" href="#JsDetectsOsAndOpenesWindow" id="rol" > your platform.</a> <a class="allLink" href="#OptionsAppeared" id="rol" >Show downloads section.</a>
+              </p>
                 <hr>
                 <ul id="usersList">
                  	_ONLINE_USERS_
@@ -742,8 +745,7 @@
 <p style="float:left;"/>
 <a id="rol2"  href="#Linux">	<div align="center" class="BUT">
 	                 <img src="platform-logo-linux-pr.png" height="50" width="52"/>
-	                    <p>
-	                    <span  style=" color: #FFF; text-shadow:0px 1px 1px #000;">
+	                    <p><span  style="width:100; color: #FFF; text-shadow:0px 1px 1px #000;">
                          Linux 
                         </span></p>
 </div></a>
@@ -758,7 +760,7 @@
 	<p style="float:left;"/>
 <a id="rol2"  href="#MacOSX">	<div align="center" class="BUT">
 	                  <img src="platform-logo-mac-pr.png" height="50" width="52"/>
-              <p style=" color: #FFF; text-shadow:0px 1px 1px #000;">Mac OS X</p>
+              <p style=" color: #FFF; width:100; text-shadow:0px 1px 1px #000;">Mac OS X</p>
 </div></a>
 	
     </div>
@@ -787,8 +789,7 @@
     <div id="footer2">
  
     
-<p style="font-size: 8pt">
-    Copyright &copy 2011 <a id="rol" href="#cloudobserver" onClick="{	newwindow=window.open('http://code.google.com/p/cloudobserver/','CloudObserver','height=750,width=900');	if (window.focus) {newwindow.focus()}}">Cloud Forever</a>. All rights reserved. </p><br/>
+<br/>
     </div>
 
                 <b class="rbottom">
@@ -802,11 +803,11 @@
                     </b>
                 </b>
             </div>
-      
+      <br/>
         
     </div>
 	<script type="text/javascript">
-        $('#footer1').html($('#footer2').html());
+        $('#footer1').html("<p style='font-size: 8pt'> Copyright &copy 2011 <a id='rol' href='#cloudobserver' onClick='{	newwindow=window.open('http://code.google.com/p/cloudobserver/','CloudObserver','height=750,width=900');	if (window.focus) {newwindow.focus()}}'>Cloud Forever</a>. All rights reserved. </p>");
     
         $('.downloads').hide()
         $('.downloads').css(
@@ -825,12 +826,12 @@
                 $('#footer2').fadeOut("slow", function()
                 {
                     $('#footer1').fadeOut("slow");
-                    $('#footer2').html($('#footer1').html());
+                    $('#footer2').html("<p style='font-size: 8pt'> Copyright &copy 2011 <a id='rol' href='#cloudobserver' onClick='{	newwindow=window.open('http://code.google.com/p/cloudobserver/','CloudObserver','height=750,width=900');	if (window.focus) {newwindow.focus()}}'>Cloud Forever</a>. All rights reserved. </p>");
                     $('#footer1').html('');
                     $(".downloads").fadeIn("slow");
                     $('#footer2').fadeIn("slow");
                 });
-                $('.allLink').html('Hide all downloads.');
+                $('.allLink').html('Hide downloads section.');
             }
         }, function()
         {
@@ -842,13 +843,14 @@
                     $('#footer2').fadeOut("fast", function()
                     {
                         $('#footer1').fadeOut("fast");
-                        $('#footer1').html($('#footer2').html());
+                        $('#footer1').html("<p style='font-size: 8pt'> Copyright &copy 2011 <a id='rol' href='#cloudobserver' onClick='{	newwindow=window.open('http://code.google.com/p/cloudobserver/','CloudObserver','height=750,width=900');	if (window.focus) {newwindow.focus()}}'>Cloud Forever</a>. All rights reserved. </p>");
                         $('#footer2').html('');
                         $('#footer1').fadeIn("slow");
                     });
                 });
     
-                $('.allLink').html('Show all downloads.');
+                $('.allLink').html('Show downloads section.');
+				
             }
         }
     
@@ -858,10 +860,10 @@
         if (((BrowserDetect.browser == "Chrome") && (BrowserDetect.version >= 8)) || ((BrowserDetect.browser == "Explorer") && (BrowserDetect.version >= 9)) || ((BrowserDetect.browser == "Opera") && (BrowserDetect.version >= 10)) || ((BrowserDetect.browser == "Firefox") && (BrowserDetect.version >= 4)))
         {
             html5support = 1; //  document.write('<p>' + '3d three js, Html 5 Capable' + '</p>');
-            document.write('  <style type="text/css">  body { background-color: rgb(200,200,200); margin: 0px; overflow: hidden; font: 100.01% "Trebuchet MS",Verdana,Arial,sans-serif; } #info { position: absolute; top: 0px; width: 100%; color: #ffffff; padding: 5px; font-family:Monospace;font-size:13px; font-weight: bold; } a { color: #ffffff;} h1,h2,p{margin: 0 10px} h1{font-size: 250%;color: #FFF; text-shadow:0px 1px 1px #000;} h2{font-size: 200%;color: #f0f0f0;padding-top: 0.3em}div#nifty{ margin: 0 10%;background: rgba(250, 250, 250, 0.1); -moz-border-radius:15px; border-radius: 15px;} b.rtop, b.rbottom{display:block;background:#FFF; } b.rtop b, b.rbottom b{display:block;height: 1px;overflow: hidden; background: #9BD1FA} b.r1{margin: 0 5px} b.r2{margin: 0 3px} b.r3{margin:0 2px} b.rtop b.r4, b.rbottom b.r4{margin: 0 1px;height: 2px} p, ul{color:#000;text-shadow: 0px 1px 1px rgba(255,255,255,0.6);padding-bottom:1em}input[type="button"], .eButton {width: 150px;padding: 5px 10px;word-wrap:break-word;height: auto;} b.rtop, b.rbottom{display:none;background: rgba(0,0,0,0)}html{ width:100%; height:100%; min-width:900; min-height:700;} body{ width:100%; height:100%; }  #container{ width:100%; height:100%;} </style>');
+         $(":header").append('<style type="text/css">  body { background-color: rgb(200,200,200); margin: 0px; overflow: hidden; font: 100.01% "Trebuchet MS",Verdana,Arial,sans-serif; } #info { position: absolute; top: 0px; width: 100%; color: #ffffff;  font-family:Monospace;font-size:13px; font-weight: bold; 			position:absolute;		height:100%;	overflow:auto; } a { color: #ffffff;} h1,h2,p{margin: 0 10px} h1{font-size: 250%;color: #FFF; text-shadow:0px 1px 1px #000;} h2{font-size: 200%;color: #f0f0f0;padding-top: 0.3em}div#nifty{ margin: 0 10%;background: rgba(250, 250, 250, 0.1); -moz-border-radius:15px; border-radius: 15px;} b.rtop, b.rbottom{display:block;background:#FFF; } b.rtop b, b.rbottom b{display:block;height: 1px;overflow: hidden; background: #9BD1FA} b.r1{margin: 0 5px} b.r2{margin: 0 3px} b.r3{margin:0 2px} b.rtop b.r4, b.rbottom b.r4{margin: 0 1px;height: 2px} p, ul{color:#000;text-shadow: 0px 1px 1px rgba(255,255,255,0.6);padding-bottom:1em}input[type="button"], .eButton {width: 150px;padding: 5px 10px;word-wrap:break-word;height: auto;} b.rtop, b.rbottom{display:none;background: rgba(0,0,0,0)}html{ width:100%; height:100%; min-width:900; min-height:700;} body{ width:100%; height:100%; }  #container{ width:100%; height:100%;} </style>');
             dinit();
-            lon = -360 * Math.random();
-            lat = -10 - 10 * Math.random();
+            lon = 360 * Math.random();
+            lat = 0;
             render();
             $(window).resize(function()
             {
@@ -869,6 +871,9 @@
             });
         }
     </script>
+    <noscript>
+    <h1><a href="https://www.google.com/adsense/support/bin/answer.py?answer=12654">Please turn on JavaScript</a></h1>
+    </noscript>
     </body>
 
 </html>
