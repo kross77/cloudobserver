@@ -1,1 +1,278 @@
-eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--)r[e(c)]=k[c]||e(c);k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('1o 1V=1i(){1i w(d,K,n){1o u,f,c;1x(f=0;f<P;f++)1x(u=0;u<1U;u++){c=(u+f*1d)*4;d[c]=d[c+4];d[c+1]=d[c+5];d[c+2]=d[c+6]}1x(f=0;f<P;f++){c=(1U+f*1d)*4;1f(f<K){d[c]=b[n].N.r;d[c+1]=b[n].N.g;d[c+2]=b[n].N.b}2e{d[c]=b[n].O.r;d[c+1]=b[n].O.g;d[c+2]=b[n].O.b}}}1o v=0,x=2,e,y=0,l=(1O 1N).1Q(),J=l,z=l,o=0,A=1c,B=0,m,g,a,p,C,q=0,D=1c,E=0,h,i,r,F,s=0,G=1c,H=0,j,k,t,I,b={U:{N:{r:16,g:16,b:1n},O:{r:0,g:1h,b:1h}},T:{N:{r:16,g:1n,b:16},O:{r:0,g:1h,b:0}},12:{N:{r:1n,g:16,b:26},O:{r:1h,g:0,b:1Y}}};e=W.X("14");e.8.1X="1W";e.8.V="2h";e.8.2g="0.9";e.8.23="22";e.20("1Z",1i(){v++;v==x&&(v=0);m.8.S="1e";h.8.S="1e";j.8.S="1e";28(v){1t 0:m.8.S="15";1S;1t 1:h.8.S="15";1S;1t 2:j.8.S="15"}},25);m=W.X("14");m.8.1w="13("+M.Z(b.U.N.r/2)+","+M.Z(b.U.N.g/2)+","+M.Z(b.U.N.b/2)+")";m.8.1A="1B R 11 R";e.10(m);g=W.X("14");g.8.1E="1F, 1G, 1H-1I";g.8.1J="1K";g.8.1L="1M";g.8.1v="13("+b.U.O.r+","+b.U.O.g+","+b.U.O.b+")";g.8.1u="R R 1s 11";g.17=\'<Q 8="18-19:1a">1P</Q>\';m.10(g);a=W.X("1l");a.V=1d;a.Y=P;a.8.S="15";a.8.1D="11";m.10(a);p=a.1C("2d");p.1r="13("+b.U.N.r+","+b.U.N.g+","+b.U.N.b+")";p.1q(0,0,a.V,a.Y);C=p.1p(0,0,a.V,a.Y);h=W.X("14");h.8.1w="13("+M.Z(b.T.N.r/2)+","+M.Z(b.T.N.g/2)+","+M.Z(b.T.N.b/2)+")";h.8.1A="1B R 11 R";h.8.S="1e";e.10(h);i=W.X("14");i.8.1E="1F, 1G, 1H-1I";i.8.1J="1K";i.8.1L="1M";i.8.1v="13("+b.T.O.r+","+b.T.O.g+","+b.T.O.b+")";i.8.1u="R R 1s 11";i.17=\'<Q 8="18-19:1a">1R</Q>\';h.10(i);a=W.X("1l");a.V=1d;a.Y=P;a.8.S="15";a.8.1D="11";h.10(a);r=a.1C("2d");r.1r="13("+b.T.N.r+","+b.T.N.g+","+b.T.N.b+")";r.1q(0,0,a.V,a.Y);F=r.1p(0,0,a.V,a.Y);21{1f(1g&&1g.1m&&1g.1m.24)x=3}27(L){}j=W.X("14");j.8.1w="13("+M.Z(b.12.N.r/2)+","+M.Z(b.12.N.g/2)+","+M.Z(b.12.N.b/2)+")";j.8.1A="1B R 11 R";j.8.S="1e";e.10(j);k=W.X("14");k.8.1E="1F, 1G, 1H-1I";k.8.1J="1K";k.8.1L="1M";k.8.1v="13("+b.12.O.r+","+b.12.O.g+","+b.12.O.b+")";k.8.1u="R R 1s 11";k.17=\'<Q 8="18-19:1a">1T</Q>\';j.10(k);a=W.X("1l");a.V=1d;a.Y=P;a.8.S="15";a.8.1D="11";j.10(a);t=a.1C("2d");t.1r="#29";t.1q(0,0,a.V,a.Y);I=t.1p(0,0,a.V,a.Y);2a{2b:e,2c:1i(){y++;l=(1O 1N).1Q();q=l-J;D=M.1b(D,q);E=M.1k(E,q);w(F.1y,M.1b(P,P-q/2f*P),"T");i.17=\'<Q 8="18-19:1a">\'+q+" 1R</Q> ("+D+"-"+E+")";r.1z(F,0,0);J=l;1f(l>z+1c){o=M.1j(y*1c/(l-z));A=M.1b(A,o);B=M.1k(B,o);w(C.1y,M.1b(P,P-o/2i*P),"U");g.17=\'<Q 8="18-19:1a">\'+o+" 1P</Q> ("+A+"-"+B+")";p.1z(C,0,0);1f(x==3){s=1g.1m.2j*9.2k-7;G=M.1b(G,s);H=M.1k(H,s);w(I.1y,M.1b(P,P-s/2),"12");k.17=\'<Q 8="18-19:1a">\'+M.1j(s)+" 1T</Q> ("+M.1j(G)+"-"+M.1j(H)+")";t.1z(I,0,0)}z=l;y=0}}}};',62,145,'||||||||style||||||||||||||||||||||||||||||||||||||||Math|bg|fg|30|span|0px|display|ms|fps|width|document|createElement|height|floor|appendChild|3px|mem|rgb|div|block||innerHTML|font|weight|bold|min|1E3|74|none|if|performance|255|function|round|max|canvas|memory|48|var|getImageData|fillRect|fillStyle|1px|case|margin|color|backgroundColor|for|data|putImageData|padding|2px|getContext|marginLeft|fontFamily|Helvetica|Arial|sans|serif|textAlign|left|fontSize|9px|Date|new|FPS|getTime|MS|break|MEM|73|Stats|pointer|cursor|128|click|addEventListener|try|10001|zIndex|totalJSHeapSize|false||catch|switch|301010|return|domElement|update||else|200|opacity|80px|100|usedJSHeapSize|54E'.split('|'),0,{}))
+/*
+ * stats.js r5
+ * http://github.com/mrdoob/stats.js
+ *
+ * Released under MIT license:
+ * http://www.opensource.org/licenses/mit-license.php
+ *
+ * How to use:
+ *
+ *  var stats = new Stats();
+ *  parentElement.appendChild( stats.domElement );
+ *
+ *  setInterval(function () {
+ *
+ *  	stats.update();
+ *
+ *  }, 1000/60);
+ *
+ */
+
+var Stats = function () {
+
+	var _mode = 0, _modesCount = 2, _container,
+	_frames = 0, _time = new Date().getTime(), _timeLastFrame = _time, _timeLastSecond = _time,
+	_fps = 0, _fpsMin = 1000, _fpsMax = 0, _fpsDiv, _fpsText, _fpsCanvas, _fpsContext, _fpsImageData,
+	_ms = 0, _msMin = 1000, _msMax = 0, _msDiv, _msText, _msCanvas, _msContext, _msImageData,
+	_mem = 0, _memMin = 1000, _memMax = 0, _memDiv, _memText, _memCanvas, _memContext, _memImageData,
+	_colors = {
+		fps: {
+			bg: { r: 16, g: 16, b: 48 },
+			fg: { r: 0, g: 255, b: 255 }
+		},
+		ms: {
+			bg: { r: 16, g: 48, b: 16 },
+			fg: { r: 0, g: 255, b: 0 }
+		},
+		mem: {
+			bg: { r: 48, g: 16, b: 26 },
+			fg: { r: 255, g: 0, b: 128 }
+		}
+	};
+
+	_container = document.createElement( 'div' );
+	_container.style.cursor = 'pointer';
+	_container.style.width = '80px';
+	_container.style.opacity = '0.9';
+	_container.style.zIndex = '10001';
+	_container.addEventListener( 'click', swapMode, false );
+
+	// fps
+
+	_fpsDiv = document.createElement( 'div' );
+	_fpsDiv.style.backgroundColor = 'rgb(' + Math.floor( _colors.fps.bg.r / 2 ) + ',' + Math.floor( _colors.fps.bg.g / 2 ) + ',' + Math.floor( _colors.fps.bg.b / 2 ) + ')';
+	_fpsDiv.style.padding = '2px 0px 3px 0px';
+	_container.appendChild( _fpsDiv );
+
+	_fpsText = document.createElement( 'div' );
+	_fpsText.style.fontFamily = 'Helvetica, Arial, sans-serif';
+	_fpsText.style.textAlign = 'left';
+	_fpsText.style.fontSize = '9px';
+	_fpsText.style.color = 'rgb(' + _colors.fps.fg.r + ',' + _colors.fps.fg.g + ',' + _colors.fps.fg.b + ')';
+	_fpsText.style.margin = '0px 0px 1px 3px';
+	_fpsText.innerHTML = '<span style="font-weight:bold">FPS</span>';
+	_fpsDiv.appendChild( _fpsText );
+
+	_fpsCanvas = document.createElement( 'canvas' );
+	_fpsCanvas.width = 74;
+	_fpsCanvas.height = 30;
+	_fpsCanvas.style.display = 'block';
+	_fpsCanvas.style.marginLeft = '3px';
+	_fpsDiv.appendChild( _fpsCanvas );
+
+	_fpsContext = _fpsCanvas.getContext( '2d' );
+	_fpsContext.fillStyle = 'rgb(' + _colors.fps.bg.r + ',' + _colors.fps.bg.g + ',' + _colors.fps.bg.b + ')';
+	_fpsContext.fillRect( 0, 0, _fpsCanvas.width, _fpsCanvas.height );
+
+	_fpsImageData = _fpsContext.getImageData( 0, 0, _fpsCanvas.width, _fpsCanvas.height );
+
+	// ms
+
+	_msDiv = document.createElement( 'div' );
+	_msDiv.style.backgroundColor = 'rgb(' + Math.floor( _colors.ms.bg.r / 2 ) + ',' + Math.floor( _colors.ms.bg.g / 2 ) + ',' + Math.floor( _colors.ms.bg.b / 2 ) + ')';
+	_msDiv.style.padding = '2px 0px 3px 0px';
+	_msDiv.style.display = 'none';
+	_container.appendChild( _msDiv );
+
+	_msText = document.createElement( 'div' );
+	_msText.style.fontFamily = 'Helvetica, Arial, sans-serif';
+	_msText.style.textAlign = 'left';
+	_msText.style.fontSize = '9px';
+	_msText.style.color = 'rgb(' + _colors.ms.fg.r + ',' + _colors.ms.fg.g + ',' + _colors.ms.fg.b + ')';
+	_msText.style.margin = '0px 0px 1px 3px';
+	_msText.innerHTML = '<span style="font-weight:bold">MS</span>';
+	_msDiv.appendChild( _msText );
+
+	_msCanvas = document.createElement( 'canvas' );
+	_msCanvas.width = 74;
+	_msCanvas.height = 30;
+	_msCanvas.style.display = 'block';
+	_msCanvas.style.marginLeft = '3px';
+	_msDiv.appendChild( _msCanvas );
+
+	_msContext = _msCanvas.getContext( '2d' );
+	_msContext.fillStyle = 'rgb(' + _colors.ms.bg.r + ',' + _colors.ms.bg.g + ',' + _colors.ms.bg.b + ')';
+	_msContext.fillRect( 0, 0, _msCanvas.width, _msCanvas.height );
+
+	_msImageData = _msContext.getImageData( 0, 0, _msCanvas.width, _msCanvas.height );
+
+	// mem
+
+	try { 
+
+		if ( performance && performance.memory && performance.memory.totalJSHeapSize ) {
+
+			_modesCount = 3;
+
+		}
+
+	} catch ( error ) { };
+
+	_memDiv = document.createElement( 'div' );
+	_memDiv.style.backgroundColor = 'rgb(' + Math.floor( _colors.mem.bg.r / 2 ) + ',' + Math.floor( _colors.mem.bg.g / 2 ) + ',' + Math.floor( _colors.mem.bg.b / 2 ) + ')';
+	_memDiv.style.padding = '2px 0px 3px 0px';
+	_memDiv.style.display = 'none';
+	_container.appendChild( _memDiv );
+
+	_memText = document.createElement( 'div' );
+	_memText.style.fontFamily = 'Helvetica, Arial, sans-serif';
+	_memText.style.textAlign = 'left';
+	_memText.style.fontSize = '9px';
+	_memText.style.color = 'rgb(' + _colors.mem.fg.r + ',' + _colors.mem.fg.g + ',' + _colors.mem.fg.b + ')';
+	_memText.style.margin = '0px 0px 1px 3px';
+	_memText.innerHTML = '<span style="font-weight:bold">MEM</span>';
+	_memDiv.appendChild( _memText );
+
+	_memCanvas = document.createElement( 'canvas' );
+	_memCanvas.width = 74;
+	_memCanvas.height = 30;
+	_memCanvas.style.display = 'block';
+	_memCanvas.style.marginLeft = '3px';
+	_memDiv.appendChild( _memCanvas );
+
+	_memContext = _memCanvas.getContext( '2d' );
+	_memContext.fillStyle = '#301010';
+	_memContext.fillRect( 0, 0, _memCanvas.width, _memCanvas.height );
+
+	_memImageData = _memContext.getImageData( 0, 0, _memCanvas.width, _memCanvas.height );
+
+	function updateGraph( data, value, color ) {
+
+		var x, y, index;
+
+		for ( y = 0; y < 30; y++ ) {
+
+			for ( x = 0; x < 73; x++ ) {
+
+				index = (x + y * 74) * 4;
+
+				data[ index ] = data[ index + 4 ];
+				data[ index + 1 ] = data[ index + 5 ];
+				data[ index + 2 ] = data[ index + 6 ];
+
+			}
+
+		}
+
+		for ( y = 0; y < 30; y++ ) {
+
+			index = (73 + y * 74) * 4;
+
+			if ( y < value ) {
+
+				data[ index ] = _colors[ color ].bg.r;
+				data[ index + 1 ] = _colors[ color ].bg.g;
+				data[ index + 2 ] = _colors[ color ].bg.b;
+
+			} else {
+
+				data[ index ] = _colors[ color ].fg.r;
+				data[ index + 1 ] = _colors[ color ].fg.g;
+				data[ index + 2 ] = _colors[ color ].fg.b;
+
+			}
+
+		}
+
+	}
+
+	function swapMode() {
+
+		_mode ++;
+		_mode == _modesCount ? _mode = 0 : _mode;
+
+		_fpsDiv.style.display = 'none';
+		_msDiv.style.display = 'none';
+		_memDiv.style.display = 'none';
+
+		switch( _mode ) {
+
+			case 0:
+
+				_fpsDiv.style.display = 'block';
+
+				break;
+
+			case 1:
+
+				_msDiv.style.display = 'block';
+
+				break;
+
+			case 2:
+
+				_memDiv.style.display = 'block';
+
+				break;
+		}
+
+	}
+
+	return {
+
+		domElement: _container,
+
+    getFPS: function () {
+        return _fps;
+    },
+		update: function () {
+
+			_frames ++;
+
+			_time = new Date().getTime();
+
+			_ms = _time - _timeLastFrame;
+			_msMin = Math.min( _msMin, _ms );
+			_msMax = Math.max( _msMax, _ms );
+
+			updateGraph( _msImageData.data, Math.min( 30, 30 - ( _ms / 200 ) * 30 ), 'ms' );
+
+			_msText.innerHTML = '<span style="font-weight:bold">' + _ms + ' MS</span> (' + _msMin + '-' + _msMax + ')';
+			_msContext.putImageData( _msImageData, 0, 0 );
+
+			_timeLastFrame = _time;
+
+			if ( _time > _timeLastSecond + 1000 ) {
+
+				_fps = Math.round( ( _frames * 1000) / ( _time - _timeLastSecond ) );
+				_fpsMin = Math.min( _fpsMin, _fps );
+				_fpsMax = Math.max( _fpsMax, _fps );
+
+				updateGraph( _fpsImageData.data, Math.min( 30, 30 - ( _fps / 100 ) * 30 ), 'fps' );
+
+				_fpsText.innerHTML = '<span style="font-weight:bold">' + _fps + ' FPS</span> (' + _fpsMin + '-' + _fpsMax + ')';
+				_fpsContext.putImageData( _fpsImageData, 0, 0 );
+
+				if ( _modesCount == 3 ) {
+
+					_mem = performance.memory.usedJSHeapSize * 0.000000954;
+					_memMin = Math.min( _memMin, _mem );
+					_memMax = Math.max( _memMax, _mem );
+
+					updateGraph( _memImageData.data, Math.min( 30, 30 - ( _mem / 2 ) ), 'mem' );
+
+					_memText.innerHTML = '<span style="font-weight:bold">' + Math.round( _mem ) + ' MEM</span> (' + Math.round( _memMin ) + '-' + Math.round( _memMax ) + ')';
+					_memContext.putImageData( _memImageData, 0, 0 );
+
+				}
+
+				_timeLastSecond = _time;
+				_frames = 0;
+
+			}
+
+		}
+
+	};
+
+};
