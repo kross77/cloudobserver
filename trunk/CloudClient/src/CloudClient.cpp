@@ -21,23 +21,21 @@ using namespace boost::posix_time;
 using boost::posix_time::ptime;
 using boost::posix_time::time_duration;
 
-//cmndlVars
-int cameraInt;
-int microphoneInt;
-int frameRate;
-int videoWidth;
-int videoHeight;
-int videoFrameRate;
-int audioSampleRate;
-bool noAudio;
-string outputUrl;
-string outputContainer;
-string outputUserName;
-int streamBitRate;
-bool useLSD;
-bool rainbow;
-bool randomSound;
-bool robot;
+int audio_capture_device;
+int audio_sample_rate;
+std::string container;
+bool flag_disable_audio;
+bool flag_disable_video;
+bool flag_generate_audio;
+bool flag_generate_video;
+bool flag_lsd;
+std::string server_url;
+int stream_bitrate;
+std::string username;
+int video_capture_device;
+int video_width;
+int video_height;
+int video_frame_rate;
 
 // Boost
 boost::mt19937 rng;
@@ -106,34 +104,48 @@ void replace_or_merge(std::string &a, const std::string &b, const std::string &c
 void get_server()
 {
 	cout << "Please input stream URL (ex. http://127.0.0.1:4773/ )\n";
-	cin >> outputUrl;
-	replace_or_merge(outputUrl, "http://", "tcp://");
+	cin >> server_url;
+	replace_or_merge(server_url, "http://", "tcp://");
 }
 
 void get_name()
 {
 	cout << "Please your name (ex. georg )\n";
-	cin >> outputUserName;
+	cin >> username;
 }
 
 void init_opencv()
 {
-	if (!robot)
+	if (flag_disable_video)
+	{
+		encoder.hasVideo = false;
+		return;
+	}
+
+	if (flag_generate_video)
+	{
+		encoder.hasVideo = true;
+		cvInitFont(&font, CV_FONT_HERSHEY_DUPLEX, 2, 1, 0.0, 3, CV_AA);
+		CvPoint UL = { 0, 0 };
+		CvPoint LR = { video_width, video_height };
+		CVframe = cvCreateImage(cvSize(video_width, video_height), 8, 4);
+		CVframeWithText = cvCreateImage(cvSize(video_width, video_height), 8, 4);
+		cvRectangle(CVframe, UL, LR, CV_RGB(0, 254, 53), CV_FILLED);
+		cvPutText(CVframe, username.c_str(), cvPoint(0, video_height - 10), &font, CV_RGB(1, 1, 1));
+	}
+	else
 	{
 		CamerasListNamespace::CamerasList* CamList = new CamerasListNamespace::CamerasList();
-		cameraInt = CamList->SelectFromList();
+		video_capture_device = CamList->SelectFromList();
 
-		if (cameraInt == 999)
-		{
+		if (video_capture_device == 999)
 			encoder.hasVideo = false;
-		}
 		else
 		{
-			/* initialize camera */
-			capture = cvCaptureFromCAM(cameraInt);
-			cvSetCaptureProperty(capture, CV_CAP_PROP_FPS, videoFrameRate);
-			cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH, (double)videoWidth);
-			cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT, (double)videoHeight);
+			capture = cvCaptureFromCAM(video_capture_device);
+			cvSetCaptureProperty(capture, CV_CAP_PROP_FPS, video_frame_rate);
+			cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH, (double)video_width);
+			cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT, (double)video_height);
 		}
 
 		if (!capture)
@@ -145,125 +157,112 @@ void init_opencv()
 		}
 
 		CVframe = cvQueryFrame(capture);
-		destination = cvCreateImage(cvSize(videoWidth, videoHeight), CVframe->depth, CVframe->nChannels);
+		destination = cvCreateImage(cvSize(video_width, video_height), CVframe->depth, CVframe->nChannels);
 		redchannel = cvCreateImage(cvGetSize(destination), 8, 1);
 		greenchannel = cvCreateImage(cvGetSize(destination), 8, 1);
 		bluechannel = cvCreateImage(cvGetSize(destination), 8, 1);
 		encoder.hasVideo = true;
 	}
-	else
-	{
-		encoder.hasVideo = true;
-		cvInitFont(&font, CV_FONT_HERSHEY_DUPLEX, 2, 1, 0.0, 3, CV_AA);
-		CvPoint UL = { 0, 0 };
-		CvPoint LR = { videoWidth, videoHeight };
-		CVframe = cvCreateImage(cvSize(videoWidth, videoHeight), 8, 4);
-		CVframeWithText = cvCreateImage(cvSize(videoWidth, videoHeight), 8, 4);
-		cvRectangle(CVframe, UL, LR, CV_RGB(0, 254, 53), CV_FILLED);
-		cvPutText(CVframe, outputUserName.c_str(), cvPoint(0, videoHeight - 10), &font, CV_RGB(1, 1, 1));
-	}
 }
 
 void init_openal(int fps)
 {
-	if (noAudio)
+	if (flag_disable_audio)
 	{
 		encoder.hasAudio = false;
+		return;
+	}
+
+	if (flag_generate_audio)
+	{
+		encoder.hasAudio = true;
+		nSampleSize = (int)(2.0f * audio_sample_rate / fps);
+		nBlockAlign = 1 * 16 / 8;
+		Buffer = new ALchar[nSampleSize];
 	}
 	else
 	{
-		nSampleSize = (int)(2.0f * audioSampleRate / fps);
+		nSampleSize = (int)(2.0f * audio_sample_rate / fps);
 		nBlockAlign = 1 * 16 / 8;
 		Buffer = new ALchar[nSampleSize];
-		if (!robot)
+		dev[0] = alcOpenDevice(NULL);
+		if (NULL == dev[0])
 		{
-			dev[0] = alcOpenDevice(NULL);
-			if (NULL == dev[0])
+			fprintf(stderr, "No microphone found, please restart application , or continue streaming with out sound\n");
+			boost::this_thread::sleep(boost::posix_time::seconds(9999999));
+			cin.get();
+			return;
+		}
+
+		ctx = alcCreateContext(dev[0], NULL);
+		alcMakeContextCurrent(ctx);
+		int i = -1;
+		string bufferString[99];
+		const ALchar *pDeviceList = alcGetString(NULL, ALC_CAPTURE_DEVICE_SPECIFIER);
+		const ALCchar *bufferList[99];
+		if (pDeviceList)
+		{
+			printf("\nLet us select audio device\n");
+			printf("Available Capture Devices are:\n");
+			i = 0;
+			while (*pDeviceList)
 			{
-				fprintf(stderr, "No microphone found, please restart application , or continue streaming with out sound\n");
-				boost::this_thread::sleep(boost::posix_time::seconds(9999999));
-				cin.get();
-				return;
+				bufferList[i] = pDeviceList;
+				bufferString[i] += pDeviceList;
+				cout << i <<") " << bufferString[i] << endl;
+				pDeviceList += strlen(pDeviceList) + 1;
+				i++;
 			}
+		}
 
-			ctx = alcCreateContext(dev[0], NULL);
-			alcMakeContextCurrent(ctx);
-			int i = -1;
-			string bufferString[99];
-			const ALchar *pDeviceList = alcGetString(NULL, ALC_CAPTURE_DEVICE_SPECIFIER);
-			const ALCchar *bufferList[99];
-			if (pDeviceList)
+		//Get the name of the 'default' capture device
+		//szDefaultCaptureDevice = alcGetString(NULL, ALC_CAPTURE_DEFAULT_DEVICE_SPECIFIER);
+		//printf("\nDefault Capture Device is '%s'\n\n", szDefaultCaptureDevice);
+
+		int SelectedIndex = 999;
+		if (i <= 0)
+		{
+			cout <<"No devices found. \n " << endl;
+			//cout <<"Please restart application." << endl;
+			//cin.get();
+			//Sleep(999999);
+			SelectedIndex = 999;
+		}
+		else
+			if (i == 1)
 			{
-				printf("\nLet us select audio device\n");
-				printf("Available Capture Devices are:\n");
-				i = 0;
-				while (*pDeviceList)
-				{
-					bufferList[i] = pDeviceList;
-					bufferString[i] += pDeviceList;
-					cout << i <<") " << bufferString[i] << endl;
-					pDeviceList += strlen(pDeviceList) + 1;
-					i++;
-				}
-			}
-
-			//Get the name of the 'default' capture device
-			//szDefaultCaptureDevice = alcGetString(NULL, ALC_CAPTURE_DEFAULT_DEVICE_SPECIFIER);
-			//printf("\nDefault Capture Device is '%s'\n\n", szDefaultCaptureDevice);
-
-			int SelectedIndex = 999;
-			if (i <= 0)
-			{
-				cout <<"No devices found. \n " << endl;
-				//cout <<"Please restart application." << endl;
-				//cin.get();
-				//Sleep(999999);
-				SelectedIndex = 999;
+				cout <<"Default device will be used" << std::endl;
+				SelectedIndex = 0;
+				encoder.hasAudio = true;
 			}
 			else
-				if (i == 1)
+			{
+				while(SelectedIndex > i-1 || SelectedIndex < 0)
 				{
-					cout <<"Default device will be used" << std::endl;
-					SelectedIndex = 0;
-					encoder.hasAudio = true;
-				}
-				else
-				{
-					while(SelectedIndex > i-1 || SelectedIndex < 0)
+					try
 					{
-						try
-						{
-							std::cout << "please input index from 0 to " << i - 1 << std::endl;
-							std::string s;
-							std::getline(cin, s, '\n');
-							SelectedIndex = boost::lexical_cast<int>(s);
-						}
-						catch(std::exception&)
-						{
-							SelectedIndex = 999;
-						}
+						std::cout << "please input index from 0 to " << i - 1 << std::endl;
+						std::string s;
+						std::getline(cin, s, '\n');
+						SelectedIndex = boost::lexical_cast<int>(s);
+					}
+					catch(std::exception&)
+					{
+						SelectedIndex = 999;
 					}
 				}
+			}
 
-			if (SelectedIndex == 999)
-			{
-				encoder.hasAudio = false;
-			}
-			else
-			{
-				encoder.hasAudio = true;
-				alDistanceModel(AL_NONE);
-				dev[0] = alcCaptureOpenDevice(bufferList[SelectedIndex], audioSampleRate, AL_FORMAT_MONO16, nSampleSize/2);
-				alcCaptureStart(dev[0]);
-			}
+		if (SelectedIndex == 999)
+		{
+			encoder.hasAudio = false;
 		}
 		else
 		{
 			encoder.hasAudio = true;
-			// produces randomness out of thin air
-			// see pseudo-random number generators
-			// distribution that maps to 1..6
-			// see random number distributions
+			alDistanceModel(AL_NONE);
+			dev[0] = alcCaptureOpenDevice(bufferList[SelectedIndex], audio_sample_rate, AL_FORMAT_MONO16, nSampleSize/2);
+			alcCaptureStart(dev[0]);
 		}
 	}
 }
@@ -277,19 +276,19 @@ void init_ffmpeg(string container, int w, int h, int fps)
 		boost::this_thread::sleep(boost::posix_time::seconds(9999999));
 		cin.get();
 	}
-	encoder.SetConstants(fps, videoWidth, videoHeight, audioSampleRate, streamBitRate);
+	encoder.SetConstants(fps, video_width, video_height, audio_sample_rate, stream_bitrate);
 
 name:
-	int encoderName = encoder.ConnectUserToUrl(outputUserName);
+	int encoderName = encoder.ConnectUserToUrl(username);
 	if (encoderName == 0)
 	{
 		//printf("Cannot open stream for selected name\n");
 		get_name();
-		int encoderServer = encoder.ConnectToServer(outputUrl) ;
+		int encoderServer = encoder.ConnectToServer(server_url) ;
 		goto name;
 	}
 
-	if (encoder.InitUrl(container, outputUrl, outputUserName) == -10)
+	if (encoder.InitUrl(container, server_url, username) == -10)
 	{
 		cout << "\nNo audio, and no video data found.\n Please close application.\nConnect some capturing device.\nRestart application\n";
 		cin.get();
@@ -311,7 +310,38 @@ name:
 
 void capture_frame(int w, int h, char* buffer, int bytespan)
 {
-	if (!robot)
+	if (flag_generate_video)
+	{
+		cvResize(CVframe, CVframeWithText);
+		ptime now = second_clock::local_time();
+		cvPutText(CVframeWithText, to_simple_string(now.time_of_day()).c_str(), cvPoint(0, (h / 2 + 10)), &font, CV_RGB(1, 1, 1));
+		for (int i = 0; i < w * 4 * h; i = i + 4)
+		{
+			buffer[0] = CVframeWithText->imageData[i];
+			buffer[1] = CVframeWithText->imageData[i + 1];
+			buffer[2] = CVframeWithText->imageData[i + 2];
+			buffer += 3;
+		}
+		//if (rainbow)
+		//{
+		//	int wxh = w * h;
+		//	static float seed = 1.0;
+		//	for (int i = 0; i < h; i++)
+		//	{
+		//		char* line = buffer + i * bytespan;
+		//		for (int j = 0; j < w; j ++)
+		//		{
+		//			// RGB
+		//			line[0] = 255 * sin(((float)i / wxh * seed) * 3.14);
+		//			line[1] = 255 * cos(((float)j / wxh * seed) * 3.14);
+		//			line[2] = 255 * sin(((float)(i + j) / wxh * seed) * 3.14);
+		//			line += 3;
+		//		}
+		//	}
+		//	seed = seed + 2.2;
+		//}
+	}
+	else
 	{
 		CVframe = cvQueryFrame(capture);
 		if (!CVframe)
@@ -321,7 +351,7 @@ void capture_frame(int w, int h, char* buffer, int bytespan)
 		}
 
 		cvResize(CVframe, destination);
-		if (useLSD)
+		if (flag_lsd)
 		{
 			IplImage *destinationForLSD = cvCreateImage(cvSize(w, h), IPL_DEPTH_8U, 1);
 			cvCvtColor(destination, destinationForLSD, CV_RGB2GRAY);
@@ -373,45 +403,16 @@ void capture_frame(int w, int h, char* buffer, int bytespan)
 		// 		buffer[i] = destination->imageData;
 		//}
 	}
-	else
-	{
-		if (rainbow)
-		{
-			int wxh = w * h;
-			static float seed = 1.0;
-			for (int i = 0; i < h; i++)
-			{
-				char* line = buffer + i * bytespan;
-				for (int j = 0; j < w; j ++)
-				{
-					// RGB
-					line[0] = 255 * sin(((float)i / wxh * seed) * 3.14);
-					line[1] = 255 * cos(((float)j / wxh * seed) * 3.14);
-					line[2] = 255 * sin(((float)(i + j) / wxh * seed) * 3.14);
-					line += 3;
-				}
-			}
-			seed = seed + 2.2;
-		}
-		else
-		{
-			cvResize(CVframe, CVframeWithText);
-			ptime now = second_clock::local_time();
-			cvPutText(CVframeWithText, to_simple_string(now.time_of_day()).c_str(), cvPoint(0, (h / 2 + 10)), &font, CV_RGB(1, 1, 1));
-			for (int i = 0; i < w * 4 * h; i = i + 4)
-			{
-				buffer[0] = CVframeWithText->imageData[i];
-				buffer[1] = CVframeWithText->imageData[i + 1];
-				buffer[2] = CVframeWithText->imageData[i + 2];
-				buffer += 3;
-			}
-		}
-	}
 }
 
 char* capture_sample()
 {
-	if (!robot)
+	if (flag_generate_audio)
+	{
+		for (int i = 0; i < nSampleSize / nBlockAlign; i++)
+			Buffer [i] = die();
+	}
+	else
 	{
 		// Check how much audio data has been captured (note that 'val' is the number of frames, not bytes)
 		alcGetIntegerv(dev[0], ALC_CAPTURE_SAMPLES, 1, &iSamplesAvailable);
@@ -421,18 +422,12 @@ char* capture_sample()
 		// Consume Samples
 		alcCaptureSamples(dev[0], Buffer, (nSampleSize / nBlockAlign) - 1);
 	}
-	else
-	{
-		if (randomSound)
-			for (int i = 0; i < nSampleSize / nBlockAlign; i++)
-				Buffer [i] = die();
-	}
 	return (char*)Buffer;
 }
 
 void release_opencv()
 {
-	if (!robot)
+	if (!flag_generate_video)
 	{
 		cvReleaseCapture(&capture);
 		//cvReleaseImage(&destination);
@@ -465,7 +460,7 @@ void capture_frame_loop()
 		while (true)
 		{
 			timerForCaptureFame.restart();
-			capture_frame(videoWidth, videoHeight, (char*)frame->data[0], frame->linesize[0]);
+			capture_frame(video_width, video_height, (char*)frame->data[0], frame->linesize[0]);
 			AVFrame* swap = frame;
 			frame = readyFrame;
 			readyFrame = swap;
@@ -507,76 +502,84 @@ void save_frame_loop()
 
 int main(int argc, char* argv[])
 {
-	cameraInt = 0;
-	videoFrameRate = 15;
-	videoWidth = 1280;
-	videoHeight =  720;
-	microphoneInt = 1;
-	audioSampleRate = 44100;
-	outputContainer +="flv";
-	streamBitRate = (int)(1.5 * videoWidth * 1024);
-	noAudio = false;
-	rainbow = false;
-	randomSound = false;
-	robot = false;
+	audio_capture_device = -1;
+	audio_sample_rate = 44100;
+	container = "flv";
+	flag_disable_audio = false;
+	flag_disable_video = false;
+	flag_generate_audio = false;
+	flag_generate_video = false;
+	flag_lsd = false;
+	server_url = "";
+	stream_bitrate = 1048576;
+	username = "";
+	video_capture_device = -1;
+	video_frame_rate = 15;
+	video_height = 720;
+	video_width = 1280;
 
 	int i = 1;
 	while (i < argc)
 	{
 		string key = string(argv[i++]);
-		if (key == "-useLSD")
-			useLSD = true;
-		if (key == "-noAudio")
-			noAudio = true;
-		if (key == "-rainbow")
-			rainbow = true;
-		if (key == "-randomSound")
-			randomSound = true;
-		if (key == "-robot")
-			robot = true;
+		if (key == "--disable-audio")
+			flag_disable_audio = true;
+		if (key == "--disable-video")
+			flag_disable_video = true;
+		if (key == "--generate-audio")
+			flag_generate_audio = true;
+		if (key == "--generate-video")
+			flag_generate_video = true;
+		if (key == "--lsd")
+			flag_lsd = true;
+		if (key == "--robot")
+		{
+			flag_generate_audio = true;
+			flag_generate_video = true;
+		}
 		if (i < argc)
 		{
-			if (key == "-camera")
-				cameraInt = atoi(argv[i++]);
-			if (key == "-framerate")
-				videoFrameRate = atoi(argv[i++]);
-			if (key == "-width")
-				videoWidth = atoi(argv[i++]);
-			if (key == "-height")
-				videoHeight = atoi(argv[i++]);
-			if (key == "-microphone")
-				microphoneInt = atoi(argv[i++]);
-			if (key == "-samplerate")
-				audioSampleRate = atoi(argv[i++]);
-			if (key == "-server")
-				outputUrl = argv[i++];
-			if (key == "-container")
-				outputContainer = argv[i++];
-			if (key == "-nickname")
-				outputUserName = argv[i++];
-			if (key == "-streamBitRate")
-				streamBitRate = atoi(argv[i++]);
+			if (key == "--audio-capture-device")
+				audio_capture_device = atoi(argv[i++]);
+			if (key == "--audio-sample-rate")
+				audio_sample_rate = atoi(argv[i++]);
+			if (key == "--container")
+				container = argv[i++];
+			if (key == "--server-url")
+				server_url = argv[i++];
+			if (key == "--stream-bitrate")
+				stream_bitrate = atoi(argv[i++]);
+			if (key == "--username")
+				username = argv[i++];
+			if (key == "--video-capture-device")
+				video_capture_device = atoi(argv[i++]);
+			if (key == "--video-frame-rate")
+				video_frame_rate = atoi(argv[i++]);
+			if (key == "--video-height")
+				video_height = atoi(argv[i++]);
+			if (key == "--video-width")
+				video_width = atoi(argv[i++]);
 		}
 	}
 
-	videoHeight = get_evan(videoHeight);
-	videoWidth = get_evan(videoWidth);
+	video_height = get_evan(video_height);
+	video_width = get_evan(video_width);
 
-	desiredTimeForCaptureFame = (int64_t)(1000.0f / videoFrameRate);
-	desiredTimeForMain = (int64_t)(1000.0f / videoFrameRate);
+	desiredTimeForCaptureFame = (int64_t)(1000.0f / video_frame_rate);
+	desiredTimeForMain = (int64_t)(1000.0f / video_frame_rate);
 
-	if(outputUrl == "")
+	if(server_url == "")
 	{
 		cout << "Warning: No Cloud Observer server url found!" << endl;
 		get_server();
 	}
 	else
 	{
-		replace_or_merge(outputUrl, "http://", "tcp://");
+		replace_or_merge(server_url, "http://", "tcp://");
 	}
 
 server:
-	int encoderServer = encoder.ConnectToServer(outputUrl);
+	int encoderServer = encoder.ConnectToServer(server_url);
 	if (encoderServer == -1)
 	{
 		//cout << "Cannot open stream URL\n";
@@ -584,25 +587,20 @@ server:
 		goto server;
 	}
 
-	if (outputUserName == "")
+	if (username == "")
 	{
-		if (!robot)
-		{
-			cout << "Please provide us with your user name" << endl;
-			get_name();
-		}
-		else
-		{
-			outputUserName += "robot";
-			srand((unsigned)time(0));
-			int random_integer = rand();
-			outputUserName += boost::lexical_cast<string>(random_integer);
-		}
+		cout << "Please provide us with your user name" << endl;
+		get_name();
+
+		/*username += "robot";
+		srand((unsigned)time(0));
+		int random_integer = rand();
+		username += boost::lexical_cast<string>(random_integer);*/
 	}
 
 	init_opencv();
-	init_openal(videoFrameRate);
-	init_ffmpeg(outputContainer, videoWidth, videoHeight, videoFrameRate);
+	init_openal(video_frame_rate);
+	init_ffmpeg(container, video_width, video_height, video_frame_rate);
 
 	boost::thread workerThread(capture_frame_loop);
 	boost::this_thread::sleep(boost::posix_time::milliseconds(200));
