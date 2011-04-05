@@ -47,6 +47,7 @@
 			private var netstream:NetStream;
 			private var client:HttpClient;
 			private var timer:Timer;
+			private var uri:String
 			
 			[Bindable]
 			public var verbs:ArrayCollection = new ArrayCollection([ { label:"GET" }, { label:"HEAD" }, { label:"DELETE" }, { label:"PUT" }, { label:"POST" } ]);
@@ -105,8 +106,8 @@
 				}
 				var url:String = ExternalInterface.call("window.location.host.toString");
 				if (nickName.length >= 1) {
-					nickName = "http://" + url +"/" + nickName  + "?action=read";
-					onRequest(nickName, "GET", "{''}", "");
+					uri = "http://" + url +"/" + nickName  + "?action=read";
+					onRequest(uri, "GET", "{''}", "");
 				}
 			}
 			
@@ -207,6 +208,7 @@
 			private function onComplete(e:Event) : void
 			{	
 				ns.appendBytesAction(NetStreamAppendBytesAction.RESET_BEGIN);
+				onRequest(uri, "GET", "{''}", "");
 				return;
 			}
 			
