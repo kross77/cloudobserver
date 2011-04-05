@@ -11,6 +11,7 @@ extern "C" {
 }
 
 // Boost
+#include <boost/algorithm/string.hpp>
 #include <boost/asio.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/regex.hpp>
@@ -26,6 +27,16 @@ extern "C" {
 
 #ifndef _VIDEO_ENCODER_H__
 #define _VIDEO_ENCODER_H__
+
+// The default network protocol.
+#define DEFAULT_PROTOCOL "HTTP"
+
+// The list of all supported network protocols.
+// Use ', ' (a comma followed by a space) as a delimiter.
+#define SUPPORTED_PROTOCOLS "HTTP"
+
+// The default port number.
+#define DEFAULT_PORT "4773"
 
 using namespace std;
 using boost::asio::ip::tcp;
@@ -122,7 +133,7 @@ public:
 	void SetConstants( int UserFps , int UserWidth, int UserHeight, int UserAudioSampleRate, int videoBitRate);
 	// init output stream 	
 
-	bool ConnectToServer(std::string addr, std::string port);
+	bool ConnectToServer(std::string url);
 	int ConnectUserToUrl(std::string& username);
 	int InitUrl(std::string& container, std::string& username); // 1 all is ok, 0 not correct user name, -1 not correct URL
 	// Add video and audio data

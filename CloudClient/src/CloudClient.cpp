@@ -30,8 +30,7 @@ bool flag_disable_video;
 bool flag_generate_audio;
 bool flag_generate_video;
 bool flag_lsd;
-std::string server_ip;
-std::string server_port;
+std::string server;
 int stream_bitrate;
 std::string username;
 int video_capture_device;
@@ -258,7 +257,7 @@ name:
 		//printf("Cannot open stream for selected name\n");
 		std::cout << "Please, enter another username: ";
 		std::cin >> username;
-		int encoderServer = encoder.ConnectToServer(server_ip, server_port);
+		int encoderServer = encoder.ConnectToServer(server);
 		goto name;
 	}
 
@@ -486,8 +485,7 @@ int main(int argc, char* argv[])
 	flag_generate_audio = false;
 	flag_generate_video = false;
 	flag_lsd = false;
-	server_ip = "";
-	server_port = "4773";
+	server = "";
 	stream_bitrate = 1048576;
 	username = "";
 	video_capture_device = -1;
@@ -513,10 +511,8 @@ int main(int argc, char* argv[])
 					audio_sample_rate = boost::lexical_cast<int>(value);
 				if (key == "--container")
 					container = value;
-				if (key == "--server-ip")
-					server_ip = value;
-				if (key == "--server-port")
-					server_port = value;
+				if (key == "--server")
+					server = value;
 				if (key == "--stream-bitrate")
 					stream_bitrate = boost::lexical_cast<int>(value);
 				if (key == "--username")
@@ -560,17 +556,17 @@ int main(int argc, char* argv[])
 	video_height -= video_height % 4;
 
 	// Check the server if one is read from command line arguments.
-	if (!server_ip.empty())
-		if (!encoder.ConnectToServer(server_ip, server_port))
-			server_ip = "";
+	if (!server.empty())
+		if (!encoder.ConnectToServer(server))
+			server = "";
 
 	// Repeat asking for server until succeed.
-	if (server_ip.empty())
+	if (server.empty())
 		do
 		{
-			std::cout << "Please, specify the server IP-address: ";
-			std::cin >> server_ip;
-		} while (!encoder.ConnectToServer(server_ip, server_port));
+			std::cout << "Please, specify the server URL: ";
+			std::cin >> server;
+		} while (!encoder.ConnectToServer(server));
 
 	if (username.empty())
 	{
