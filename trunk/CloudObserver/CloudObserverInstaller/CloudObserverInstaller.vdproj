@@ -63,7 +63,19 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_5A599E9AFBDA491097CE9B4992939B24"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_60669AF8AA1C4619A1C196DDB94167D4"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_613818F5D9BF4B8997FB7E0FAC72C21B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -81,6 +93,18 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_709916E1E1FF4424B675765974A39821"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_791729CF9390459591BC38FC5C519D5E"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_7CF90D17144D4EBEB1A9AE2E3DE50524"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -88,6 +112,12 @@
         "Entry"
         {
         "MsmKey" = "8:_B386995BCEF241559E7094996377DF6E"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D01F52B92DE04A5486E711E3B0FED39F"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -124,6 +154,12 @@
         "Entry"
         {
         "MsmKey" = "8:_E7C148780F024B93BE6BF5C31A334FF8"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F2D7F177708F4863BB95233D3DEFE93D"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -292,7 +328,7 @@
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
-                "FrameworkVersion" = "8:3.5.30729"
+                "FrameworkVersion" = "8:3.5.30729 "
                 "AllowLaterVersions" = "11:FALSE"
                 "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=76617"
                 }
@@ -460,12 +496,52 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5A599E9AFBDA491097CE9B4992939B24"
+            {
+            "SourcePath" = "8:htdocs\\js\\Hi-Res-Stats.js"
+            "TargetName" = "8:Hi-Res-Stats.js"
+            "Tag" = "8:"
+            "Folder" = "8:_57094BF226994B0DA0FCB7B13E4AA589"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_60669AF8AA1C4619A1C196DDB94167D4"
             {
             "SourcePath" = "8:htdocs\\history\\historyFrame.html"
             "TargetName" = "8:historyFrame.html"
             "Tag" = "8:"
             "Folder" = "8:_1A1C0CBB4BB042FDAC4AFF8302BB37A0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_613818F5D9BF4B8997FB7E0FAC72C21B"
+            {
+            "SourcePath" = "8:htdocs\\platform-logo-windows-pr.png"
+            "TargetName" = "8:platform-logo-windows-pr.png"
+            "Tag" = "8:"
+            "Folder" = "8:_54DE28E6B591498695EB982234E0C282"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -520,6 +596,46 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_709916E1E1FF4424B675765974A39821"
+            {
+            "SourcePath" = "8:htdocs\\platform-logo-mac-pr.png"
+            "TargetName" = "8:platform-logo-mac-pr.png"
+            "Tag" = "8:"
+            "Folder" = "8:_54DE28E6B591498695EB982234E0C282"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_791729CF9390459591BC38FC5C519D5E"
+            {
+            "SourcePath" = "8:htdocs\\platform-logo-linux-pr.png"
+            "TargetName" = "8:platform-logo-linux-pr.png"
+            "Tag" = "8:"
+            "Folder" = "8:_54DE28E6B591498695EB982234E0C282"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7CF90D17144D4EBEB1A9AE2E3DE50524"
             {
             "SourcePath" = "8:htdocs\\crossdomain.xml"
@@ -546,6 +662,26 @@
             "TargetName" = "8:px.jpg"
             "Tag" = "8:"
             "Folder" = "8:_A257FDBE3BB94985819C6C76EFB0EFE0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D01F52B92DE04A5486E711E3B0FED39F"
+            {
+            "SourcePath" = "8:htdocs\\js\\jquery-1.5.1.min.js"
+            "TargetName" = "8:jquery-1.5.1.min.js"
+            "Tag" = "8:"
+            "Folder" = "8:_57094BF226994B0DA0FCB7B13E4AA589"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -644,6 +780,26 @@
             {
             "SourcePath" = "8:htdocs\\playerProductInstall.swf"
             "TargetName" = "8:playerProductInstall.swf"
+            "Tag" = "8:"
+            "Folder" = "8:_54DE28E6B591498695EB982234E0C282"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F2D7F177708F4863BB95233D3DEFE93D"
+            {
+            "SourcePath" = "8:htdocs\\downloads.html"
+            "TargetName" = "8:downloads.html"
             "Tag" = "8:"
             "Folder" = "8:_54DE28E6B591498695EB982234E0C282"
             "Condition" = "8:"
@@ -803,7 +959,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Cloud Observer"
         "ProductCode" = "8:{E1979F38-3C5B-4357-B79B-A96C118D9985}"
-        "PackageCode" = "8:{418BEA98-D35A-474F-B1DE-9438936A3360}"
+        "PackageCode" = "8:{D74E1D46-F014-408E-9B6F-27BE6CAC006D}"
         "UpgradeCode" = "8:{1BC9ED6E-3DEB-4EA5-81BD-397272DC12E0}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
