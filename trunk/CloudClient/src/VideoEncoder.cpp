@@ -50,20 +50,23 @@ bool VideoEncoder::ConnectToServer(std::string url)
 	std::string host = url_parts[1];
 	std::string port = url_parts[2];
 
-	// Use default protocol if no protocol is specified.
+	// Use the default protocol if no protocol is specified.
 	if (protocol.empty())
 		protocol = DEFAULT_PROTOCOL;
 
-	// Use default port if no port is specified.
+	// Use the default port if no port is specified.
 	if (port.empty())
 		port = DEFAULT_PORT;
 
-	// Check the protocol.
-	boost::to_upper(protocol);
+	// Get the list of all supported protocols.
 	std::vector<std::string> protocols;
 	boost::split(protocols, SUPPORTED_PROTOCOLS, boost::is_any_of(", "));
+
+	// Check if the given protocol is supported.
+	boost::to_upper(protocol);
 	if (std::find(protocols.begin(), protocols.end(), protocol) == protocols.end())
 	{
+		// The protocol is not supported. Report a failure.
 		std::cout << protocol <<
 			" protocol is not valid. Use one of the following protocols: "
 			<< SUPPORTED_PROTOCOLS << "." << std::endl;
@@ -79,11 +82,12 @@ bool VideoEncoder::ConnectToServer(std::string url)
 	}
 	catch (std::exception)
 	{
+		// Failed to resolve the hostname. Report a failure.
 		std::cout << "Cannot resolve the hostname." << std::endl;
 		return false;
 	}
 	
-	// Connect to the server.
+	// Try to connect to the server using one of the endpoints.
 	for (iterator; iterator != boost::asio::ip::tcp::resolver::iterator(); ++iterator)
 	{
 		boost::asio::ip::tcp::endpoint endpoint = *iterator;
@@ -91,14 +95,19 @@ bool VideoEncoder::ConnectToServer(std::string url)
 		try
 		{
 			s.connect(endpoint);
+
+			// Connection succeded. Report a success.
 			std::cout << " OK." << std::endl;
 			return true;
 		}
 		catch (std::exception)
 		{
+			// Failed to connect to the endpoint. Try the next one if any.
 			std::cout << " failed." << std::endl;
 		}
 	}
+
+	// Unable to connect to all the endpoints. Report a failure.
 	return false;
 }
 
