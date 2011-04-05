@@ -85,7 +85,6 @@ public:
 	bool sampleSendingFinished;
 	bool frameSendingFinished;
 
-	URLContext * url_context;
 	int fps;
 	int width;	// pixels
 	int height	;	// pixels
@@ -97,7 +96,6 @@ public:
 
 	VideoEncoder() 
 	{
-		//  url_context = NULL;
 		pOutFormat = NULL;
 		pFormatContext = NULL;
 		pVideoStream = NULL;
@@ -126,7 +124,7 @@ public:
 
 	bool ConnectToServer(std::string addr, std::string port);
 	int ConnectUserToUrl(std::string& username);
-	int InitUrl(std::string& container, std::string& tcpUrl, std::string& username); // 1 all is ok, 0 not correct user name, -1 not correct URL
+	int InitUrl(std::string& container, std::string& username); // 1 all is ok, 0 not correct user name, -1 not correct URL
 	// Add video and audio data
 
 	bool AddFrame(AVFrame* frame, const char* soundBuffer, int soundBufferSize);

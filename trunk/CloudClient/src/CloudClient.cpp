@@ -262,7 +262,7 @@ name:
 		goto name;
 	}
 
-	if (encoder.InitUrl(container, "tcp://" + server_ip + ":" + server_port + "/", username) == -10)
+	if (encoder.InitUrl(container, username) == -10)
 	{
 		cout << "\nNo audio, and no video data found.\n Please close application.\nConnect some capturing device.\nRestart application\n";
 		cin.get();
