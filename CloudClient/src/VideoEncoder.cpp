@@ -96,7 +96,7 @@ bool VideoEncoder::ConnectToServer(std::string url)
 		{
 			s.connect(endpoint);
 
-			// Connection succeded. Report a success.
+			// Connection succeeded. Report a success.
 			std::cout << " OK." << std::endl;
 			return true;
 		}
