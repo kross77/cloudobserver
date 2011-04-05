@@ -46,7 +46,7 @@
         <script language="JavaScript" type="text/javascript">
             var loc = "nick=_NICKNAME_";
             var hasProductInstall = DetectFlashVer(6, 0, 65);
-            var hasRequestedVersion = DetectFlashVer(requiredMajorVersion, requiredMinorVersion, requiredRevision);
+            var hasRequestedVersion = DetectFlashVer(10, 1, 0);
             if (hasProductInstall && !hasRequestedVersion) {
                 var MMPlayerType = (isIE == true) ? "ActiveX" : "PlugIn";
                 var MMredirectURL = window.location;
@@ -63,7 +63,7 @@
         <noscript>
             <p>
                 <bold>
-                    Please enable Javascript
+                    <a title="Internet Explorer (6.0), Netscape Navigator (4.8), Mozilla Firefox (1.0), Mozilla Firefox (1.5), Apple Safari (1.0), e.t.c" href="https://www.google.com/adsense/support/bin/answer.py?answer=12654"> Please enable Javascript </a>
                 </bold>
             </p>
         </noscript>
