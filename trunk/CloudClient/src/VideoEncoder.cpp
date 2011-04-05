@@ -35,14 +35,60 @@ int VideoEncoder::ReadFromServer()
 	else{s.close(); return 0;}
 }
 
-bool VideoEncoder::ConnectToServer(std::string addr, std::string port)
+bool VideoEncoder::ConnectToServer(std::string url)
 {
-	std::cout << "Trying to connect to server at " << addr << ":" << port << "...";
+	// Parse the URL.
+	std::vector<std::string> url_parts;
+	boost::regex url_expression(
+		// protocol            host               port
+		"^(\?:([^:/\?#]+)://)\?(\\w+[^/\?#:]*)(\?::(\\d+))\?"
+		// path                file       parameters
+		"(/\?(\?:[^\?#/]*/)*)\?([^\?#]*)\?(\\\?(.*))\?"
+		);
+	boost::regex_split(std::back_inserter(url_parts), url, url_expression);
+	std::string protocol = url_parts[0];
+	std::string host = url_parts[1];
+	std::string port = url_parts[2];
+
+	// Use default protocol if no protocol is specified.
+	if (protocol.empty())
+		protocol = DEFAULT_PROTOCOL;
+
+	// Use default port if no port is specified.
+	if (port.empty())
+		port = DEFAULT_PORT;
+
+	// Check the protocol.
+	boost::to_upper(protocol);
+	std::vector<std::string> protocols;
+	boost::split(protocols, SUPPORTED_PROTOCOLS, boost::is_any_of(", "));
+	if (std::find(protocols.begin(), protocols.end(), protocol) == protocols.end())
+	{
+		std::cout << protocol <<
+			" protocol is not valid. Use one of the following protocols: "
+			<< SUPPORTED_PROTOCOLS << "." << std::endl;
+		return false;
+	}
+
+	// Resolve the host and the port into the server endpoint.
+	boost::asio::ip::tcp::resolver::query query(tcp::v4(), host, port);
+	boost::asio::ip::tcp::resolver::iterator iterator;
 	try
 	{
-		tcp::resolver::query query(tcp::v4(), addr.c_str(), port.c_str());
-		tcp::resolver::iterator iterator = resolver.resolve(query);
-		s.connect(*iterator);
+		iterator = resolver.resolve(query);
+	}
+	catch (std::exception)
+	{
+		std::cout << "Cannot resolve '" << host << ":" << port << "'." << std::endl;
+		return false;
+	}
+	boost::asio::ip::tcp::endpoint endpoint = *iterator;
+
+	// Connect to the server.
+	std::cout << "Trying to connect to the server at " << endpoint.address().to_string() << ":" << port << "...";
+	try
+	{
+		s.connect(endpoint);
 	}
 	catch (std::exception)
 	{
