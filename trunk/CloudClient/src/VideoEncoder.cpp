@@ -70,7 +70,7 @@ bool VideoEncoder::ConnectToServer(std::string url)
 		return false;
 	}
 
-	// Resolve the host and the port into the server endpoint.
+	// Resolve the hostname.
 	boost::asio::ip::tcp::resolver::query query(tcp::v4(), host, port);
 	boost::asio::ip::tcp::resolver::iterator iterator;
 	try
@@ -82,21 +82,24 @@ bool VideoEncoder::ConnectToServer(std::string url)
 		std::cout << "Cannot resolve the hostname." << std::endl;
 		return false;
 	}
-	boost::asio::ip::tcp::endpoint endpoint = *iterator;
-
+	
 	// Connect to the server.
-	std::cout << "Trying to connect to the server at " << endpoint.address().to_string() << ":" << port << "...";
-	try
+	for (iterator; iterator != boost::asio::ip::tcp::resolver::iterator(); ++iterator)
 	{
-		s.connect(endpoint);
+		boost::asio::ip::tcp::endpoint endpoint = *iterator;
+		std::cout << "Trying to connect to the server at " << endpoint.address().to_string() << ":" << port << "...";
+		try
+		{
+			s.connect(endpoint);
+			std::cout << " OK." << std::endl;
+			return true;
+		}
+		catch (std::exception)
+		{
+			std::cout << " failed." << std::endl;
+		}
 	}
-	catch (std::exception)
-	{
-		std::cout << " failed." << std::endl;
-		return false;
-	}
-	std::cout << " OK." << std::endl;
-	return true;
+	return false;
 }
 
 int VideoEncoder::ConnectUserToUrl( std::string& username)
