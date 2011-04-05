@@ -926,9 +926,18 @@ setInterval(function () { if(stats.getFPS() <= 4){
 	}
 	if(e.keyCode == 101 || e.keyCode == 1091 ){
 
-if( Math.random()<=0.5){vind = 2;}else{vind = -2;}
+if( Math.random()<=0.5){vind = vind *(0-1);}else{vind = vind *(0-1)*(0-1);}
 clearTimeout(doit);
-doit = setInterval(function () { if(stats.getFPS() <= 5){} else{  lon = lon + 0.02*(vind);  render();}}, 1000/3 );
+doit = setInterval(function () { if(stats.getFPS() <= 5){} else{  lon = lon + 0.02*(vind);  render();}}, 1000/ 10 );
+		}
+		if(e.keyCode == 115 || e.keyCode == 1099 ){
+clearTimeout(doit);
+		}
+				if(e.keyCode == 45  ){
+vind= vind-1;
+		}
+						if(e.keyCode == 43 ||  e.keyCode == 61  ){
+vind= vind+1;
 		}
 });	
 
