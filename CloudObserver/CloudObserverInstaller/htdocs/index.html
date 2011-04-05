@@ -262,8 +262,8 @@
                 scene = new THREE.Scene();
         
                 texture_placeholder = $('<canvas></canvas>');
-                texture_placeholder.width = 252;
-                texture_placeholder.height = 252;
+                texture_placeholder.width = 512;
+                texture_placeholder.height = 512;
         
                 var context = texture_placeholder[0].getContext('2d');
                 context.fillStyle = 'rgb( 200, 200, 200 )';
@@ -681,6 +681,8 @@
         
         <div id="containerHolder" style="position:absolute">
         </div>
+		<div id='statsCont' style="top:0; left:0; position:absolute;">
+        </div>
         <div id="info">
             <p/>
             <div id="nifty">
@@ -899,25 +901,36 @@ stats.domElement.style.position = 'absolute';
 stats.domElement.style.left = '0px';
 stats.domElement.style.top = '0px';
 //$('body').append(stats.domElement );
-setInterval( function () { stats.update();}, 1000 / 60 );
+setInterval( function () { stats.update();}, 1000 / 30 );
 var htstopped = false;
-setInterval(function () { if(stats.getFPS() <= 15){
+setInterval(function () { if(stats.getFPS() <= 4){
 	stopHtml5(); htstopped = true;
 	} else{ if(htstopped){startHtml5(); htstopped=false; }}}, 3000 );
 	
-$('*').keypress(function(e){
-    // '0' means 'Escape' key
-    // 'keyCode' or 'which' both are same       
-    if(e.keyCode == 112 ){
+        }	
+		var vind = -2;
+		var doit;
+			$('*').keypress(function(e){     
+    if(e.keyCode == 112 || e.keyCode == 1079 ){
         stopHtml5();
-		
     }
-        if(e.keyCode == 111){
+    if(e.keyCode == 111 || e.keyCode == 1097){
        startHtml5(); 
-	   
        }
-});
-        }
+	if(e.keyCode == 102 || e.keyCode == 1072 ){
+		$('#statsCont').append(stats.domElement );
+	}
+	if(e.keyCode == 103 || e.keyCode == 1087 ){
+	
+		$('#statsCont').html('');
+	}
+	if(e.keyCode == 101 || e.keyCode == 1091 ){
+
+if( Math.random()<=0.5){vind = 2;}else{vind = -2;}
+clearTimeout(doit);
+doit = setInterval(function () { if(stats.getFPS() <= 5){} else{  lon = lon + 0.02*(vind);  render();}}, 1000/3 );
+		}
+});	
 
     </script>
     <noscript>
