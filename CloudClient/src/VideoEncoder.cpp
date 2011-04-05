@@ -79,7 +79,7 @@ bool VideoEncoder::ConnectToServer(std::string url)
 	}
 	catch (std::exception)
 	{
-		std::cout << "Cannot resolve '" << host << ":" << port << "'." << std::endl;
+		std::cout << "Cannot resolve the hostname." << std::endl;
 		return false;
 	}
 	boost::asio::ip::tcp::endpoint endpoint = *iterator;
@@ -95,7 +95,7 @@ bool VideoEncoder::ConnectToServer(std::string url)
 		std::cout << " failed." << std::endl;
 		return false;
 	}
-	std::cout << " succeed." << std::endl;
+	std::cout << " OK." << std::endl;
 	return true;
 }
 
