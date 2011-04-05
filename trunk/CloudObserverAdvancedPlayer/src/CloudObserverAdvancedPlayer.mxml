@@ -81,6 +81,10 @@
 				nc.connect(null);
 				ns = new NetStream(nc);
 				ns.client = this;
+				ns.addEventListener(IOErrorEvent.IO_ERROR, recon);
+				ns.addEventListener(AsyncErrorEvent.ASYNC_ERROR, recon);
+				ns.addEventListener(Event.DEACTIVATE, recon);
+				
 				video = new Video;
 				video.attachNetStream(ns);
 				video.smoothing = true;
@@ -110,7 +114,9 @@
 					onRequest(uri, "GET", "{''}", "");
 				}
 			}
-			
+			public function recon(){
+				onRequest(uri, "GET", "{''}", "");
+			}
 			public function onRequest(urlToPlay:String, verb:String, HeaderText:String,BodyText:String):void {
 				
 				ns.appendBytesAction(NetStreamAppendBytesAction.RESET_BEGIN);
