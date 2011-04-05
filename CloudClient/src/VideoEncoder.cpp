@@ -91,7 +91,7 @@ void VideoEncoder::WriteToUrl(const unsigned char *buf, int size)
 		cin.get();
 	}
 }
-int VideoEncoder::InitUrl(std::string& container, std::string& tcpUrl, std::string& username)
+int VideoEncoder::InitUrl(std::string& container, std::string& username)
 {
 
 	if (!hasAudio && !hasVideo)
@@ -152,16 +152,6 @@ int VideoEncoder::InitUrl(std::string& container, std::string& tcpUrl, std::stri
 				if (hasAudio)
 				{	
 					res = OpenAudio(pFormatContext, pAudioStream);
-				}
-
-
-				if (res && !(pOutFormat->flags & AVFMT_NOFILE)) 
-				{	
-					if(url_open( &url_context, tcpUrl.c_str(), URL_WRONLY)  < 0) 
-					{ 
-						printf("Cannot open stream URL\n");
-						intConnection = -1; 
-					}
 				}
 			}
 
@@ -355,7 +345,6 @@ void VideoEncoder::Free()
 		if (!(pFormatContext->flags & AVFMT_NOFILE) && pFormatContext->pb) 
 		{
 			s.close();
-			url_close(url_context);
 		}
 
 		// Free the stream.
