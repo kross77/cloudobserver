@@ -79,7 +79,9 @@ var myArray  =  $("form input").map(function() {
   return $(this).val();
 });
 
+
 if(gArray.length != myArray.length){
+	$('#myframeset').html('');
 	gArray = myArray;
 var cols = [];
 
@@ -88,7 +90,7 @@ for(var i=0; i<myArray.length; i++) cols.push((100/myArray.length)+"%");
 $("#myframeset").attr("cols", cols.toString());
 
 for(var i=0; i<myArray.length; i++){
- $('<iframe />', {width:320, height:240, src:  './' + myArray[i] + '.flv?action=play' }).appendTo('body');
+ $('<iframe />', {width:320, height:240, src:  './' + myArray[i] + '.flv?action=play' }).appendTo('#myframeset');
 }
 
 }
