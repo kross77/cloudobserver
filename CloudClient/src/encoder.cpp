@@ -116,31 +116,17 @@ bool encoder::connect(std::string url)
 
 int encoder::set_username(std::string& username)
 {
-	try
-	{
-		std::string header = "STREAM /";
-		header += username;
-		header += "?action=write HTTP/1.1\r\n\r\n";
-		send_data((unsigned char *)header.c_str(),header.length() );
+	std::string http_header = "GET /" + username + "?action=write HTTP/1.1\r\n\r\n";
+	send_data(http_header.c_str(), http_header.length());
 
-		char reply[100];
-		size_t reply_length = boost::asio::read(s, boost::asio::buffer(reply, 13));
-		//std::cout << "Reply is: ";
-		std::cout.write(reply, reply_length);
-		std::cout << "\n";
-		std::string str (reply);
-		std::string key ("200");
-		size_t found;
+	http_response_parser parser;
+	http_response response = parser.parse(s);
 
-		found=str.rfind(key);
-		if (found!=std::string::npos)
-		{return 10;}
-		else{s.close(); return 0;}
-	}
-	catch (std::exception& e)
-	{
-		return -1;
-	}
+	if (response.status == 200)
+		return 10;
+
+	s.close();
+	return 0;
 }
 
 int encoder::start(std::string& container)
@@ -220,9 +206,9 @@ int encoder::start(std::string& container)
 	{
 		url_open_dyn_buf(&pFormatContext -> pb);
 		av_write_header(pFormatContext);
-		unsigned char *pb_buffer;
+		char* pb_buffer;
 		int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
-		send_data((unsigned char *)pb_buffer, len);
+		send_data(pb_buffer, len);
 	}
 	if(res == true){
 		return 1;
@@ -348,9 +334,9 @@ bool encoder::stop()
 	{
 		url_open_dyn_buf(&pFormatContext -> pb);
 		av_write_trailer(pFormatContext);
-		unsigned char *pb_buffer;
+		char* pb_buffer;
 		int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
-		send_data((unsigned char *)pb_buffer, len);
+		send_data(pb_buffer, len);
 		free();
 	}
 
@@ -605,10 +591,10 @@ bool encoder::add_audio_frame(AVFormatContext* pFormatContext, AVStream* pStream
 			res = false;
 			break;
 		}
-		unsigned char *pb_buffer;
+		char* pb_buffer;
 		int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
 
-		send_data((unsigned char *)pb_buffer, len);
+		send_data(pb_buffer, len);
 		av_free(pb_buffer) ;
 		//av_freep(&pb_buffer);
 		av_free_packet( &pkt);	
@@ -643,10 +629,10 @@ bool encoder::add_video_frame(AVFormatContext* pFormatContext, AVFrame* pOutputF
 
 		url_open_dyn_buf(&pFormatContext -> pb);
 		res = av_interleaved_write_frame(pFormatContext, &pkt);
-		unsigned char *pb_buffer;
+		char* pb_buffer;
 		int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
 
-		send_data((unsigned char *)pb_buffer, len);
+		send_data(pb_buffer, len);
 		av_free(pb_buffer) ;
 		//av_freep(&pb_buffer);
 		av_free_packet( &pkt);
@@ -679,10 +665,10 @@ bool encoder::add_video_frame(AVFormatContext* pFormatContext, AVFrame* pOutputF
 			// Write frame
 			url_open_dyn_buf(&pFormatContext -> pb);
 			res = (av_interleaved_write_frame(pFormatContext, &pkt) == 0);
-			unsigned char *pb_buffer;
+			char* pb_buffer;
 			int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
 
-			send_data((unsigned char *)pb_buffer, len);
+			send_data(pb_buffer, len);
 			av_free(pb_buffer) ;
 			//av_freep(&pb_buffer);
 			av_free_packet( &pkt);
@@ -770,11 +756,11 @@ bool encoder::need_convert()
 	return res;
 }
 
-void encoder::send_data(const unsigned char* buf, int size)
+void encoder::send_data(const char* data, int size)
 {
 	try
 	{
-		boost::asio::write(s, boost::asio::buffer(buf, size));
+		boost::asio::write(s, boost::asio::buffer(data, size));
 	}
 	catch (std::exception& e)
 	{
