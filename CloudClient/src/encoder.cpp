@@ -1,41 +1,44 @@
-#include "VideoEncoder.h"
-
-
+#include "encoder.h"
 
 boost::asio::io_service io_service;
-tcp::resolver resolver(io_service);
-tcp::socket s(io_service);
+boost::asio::ip::tcp::resolver resolver(io_service);
+boost::asio::ip::tcp::socket s(io_service);
 
-#define MAX_AUDIO_PACKET_SIZE (128 * 1024)
-
-
-void VideoEncoder::SetConstants( int UserFps , int UserWidth, int UserHeight, int UserAudioSampleRate, int videoBitRate)
+encoder::encoder() 
 {
-	vbr = videoBitRate;
-	fps = UserFps;
-	width = UserWidth;
-	height = UserHeight;
-	audioSampleRate = UserAudioSampleRate;
-	vbr = videoBitRate;
-}
-int VideoEncoder::ReadFromServer()
-{
-	char reply[100];
-	size_t reply_length = boost::asio::read(s, boost::asio::buffer(reply, 13));
-	//std::cout << "Reply is: ";
-	std::cout.write(reply, reply_length);
-	std::cout << "\n";
-	string str (reply);
-	string key ("200");
-	size_t found;
+	this->has_audio = false;
+	this->has_video = false;
 
-	found=str.rfind(key);
-	if (found!=string::npos)
-	{return 10;}
-	else{s.close(); return 0;}
+	this->pOutFormat = NULL;
+	this->pFormatContext = NULL;
+	this->pVideoStream = NULL;
+	this->pAudioStream = NULL;
+	this->pImgConvertCtx = NULL;
+	this->pVideoEncodeBuffer = NULL;
+	this->nSizeVideoEncodeBuffer = 0;
+	this->pAudioEncodeBuffer = NULL;
+	this->nSizeAudioEncodeBuffer = 0;
+	this->pCurrentPicture = NULL;
+	this->nAudioBufferSizeCurrent = 0;
+	this->nAudioBufferSize = 1024 * 1024 * 4;
+	this->audioBuffer = new char[nAudioBufferSize];
 }
 
-bool VideoEncoder::ConnectToServer(std::string url)
+encoder::~encoder()
+{
+	stop();
+}
+
+void encoder::init(int audio_samplerate, int video_bitrate, int video_framerate, int video_width, int video_height)
+{
+	this->audio_samplerate = audio_samplerate;
+	this->video_bitrate = video_bitrate;
+	this->video_framerate = video_framerate;
+	this->video_width = video_width;
+	this->video_height = video_height;
+}
+
+bool encoder::connect(std::string url)
 {
 	// Parse the URL.
 	std::vector<std::string> url_parts;
@@ -74,7 +77,7 @@ bool VideoEncoder::ConnectToServer(std::string url)
 	}
 
 	// Resolve the hostname.
-	boost::asio::ip::tcp::resolver::query query(tcp::v4(), host, port);
+	boost::asio::ip::tcp::resolver::query query(boost::asio::ip::tcp::v4(), host, port);
 	boost::asio::ip::tcp::resolver::iterator iterator;
 	try
 	{
@@ -111,54 +114,43 @@ bool VideoEncoder::ConnectToServer(std::string url)
 	return false;
 }
 
-int VideoEncoder::ConnectUserToUrl( std::string& username)
+int encoder::set_username(std::string& username)
 {
 	try
 	{
 		std::string header = "STREAM /";
 		header += username;
 		header += "?action=write HTTP/1.1\r\n\r\n";
-		WriteToUrl((unsigned char *)header.c_str(),header.length() );
-		return ReadFromServer();
-	}
-	catch (std::exception& e)
-	{
-		return -1;
-	}
-}
-int VideoEncoder::TryWriteToUrl(const unsigned char *buf, int size)
-{
-	try
-	{
-		boost::asio::write(s, boost::asio::buffer(buf, size));
-	}
-	catch (std::exception& e)
-	{
-		return -1;
-	}
-}
-void VideoEncoder::WriteToUrl(const unsigned char *buf, int size)
-{
-	try
-	{
-		boost::asio::write(s, boost::asio::buffer(buf, size));
-	}
-	catch (std::exception& e)
-	{
-		printf("Internal Error happened, please restart application");
-		cin.get();
-	}
-}
-int VideoEncoder::InitUrl(std::string& container, std::string& username)
-{
+		send_data((unsigned char *)header.c_str(),header.length() );
 
-	if (!hasAudio && !hasVideo)
+		char reply[100];
+		size_t reply_length = boost::asio::read(s, boost::asio::buffer(reply, 13));
+		//std::cout << "Reply is: ";
+		std::cout.write(reply, reply_length);
+		std::cout << "\n";
+		std::string str (reply);
+		std::string key ("200");
+		size_t found;
+
+		found=str.rfind(key);
+		if (found!=std::string::npos)
+		{return 10;}
+		else{s.close(); return 0;}
+	}
+	catch (std::exception& e)
+	{
+		return -1;
+	}
+}
+
+int encoder::start(std::string& container)
+{
+	if (!has_audio && !has_video)
 	{
 		return -10;
 	}
 	int intConnection;
 	bool res = false;
-	userName = username;
 
 
 	// Initialize libavcodec
@@ -180,13 +172,13 @@ int VideoEncoder::InitUrl(std::string& container, std::string& username)
 			//	sizeof(pFormatContext->filename))); 
 
 			// Add video and audio stream
-			if (hasVideo)
+			if (has_video)
 			{
-				pVideoStream   = AddVideoStream(pFormatContext, pOutFormat->video_codec);
+				pVideoStream   = add_video_stream(pFormatContext, pOutFormat->video_codec);
 			}
-			if (hasAudio)
+			if (has_audio)
 			{	
-				pAudioStream   = AddAudioStream(pFormatContext, pOutFormat->audio_codec);
+				pAudioStream   = add_audio_stream(pFormatContext, pOutFormat->audio_codec);
 			}
 
 
@@ -198,18 +190,17 @@ int VideoEncoder::InitUrl(std::string& container, std::string& username)
 
 				// Open Video and Audio stream
 				res = false;
-				if (hasVideo)
+				if (has_video)
 				{	
 					if (pVideoStream)
 					{
-						res = OpenVideo(pFormatContext, pVideoStream);
-						//	printf("OpenVideo \n");
+						res = open_video_stream(pFormatContext, pVideoStream);
 					}
 				}
 
-				if (hasAudio)
+				if (has_audio)
 				{	
-					res = OpenAudio(pFormatContext, pAudioStream);
+					res = open_audio_stream(pFormatContext, pAudioStream);
 				}
 			}
 
@@ -221,7 +212,7 @@ int VideoEncoder::InitUrl(std::string& container, std::string& username)
 	if (!res)
 	{
 		//	printf("1.8\n");
-		Free();
+		free();
 		//	printf("Cannot init stream\n");
 
 	}
@@ -231,7 +222,7 @@ int VideoEncoder::InitUrl(std::string& container, std::string& username)
 		av_write_header(pFormatContext);
 		unsigned char *pb_buffer;
 		int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
-		WriteToUrl((unsigned char *)pb_buffer, len);
+		send_data((unsigned char *)pb_buffer, len);
 	}
 	if(res == true){
 		return 1;
@@ -239,26 +230,25 @@ int VideoEncoder::InitUrl(std::string& container, std::string& username)
 	if(res == false){
 		return intConnection;
 	}
-
 }
 
-bool VideoEncoder::AddFrame(AVFrame* frame, const char* soundBuffer, int soundBufferSize)
+bool encoder::add_frame(AVFrame* frame, const char* sound_buffer, int sound_buffer_size)
 {
 	bool res = true;
 	int nOutputSize = 0;
 	AVCodecContext *pVideoCodec = NULL;
 
 	// Add sound
-	if (soundBuffer && soundBufferSize > 0)
+	if (sound_buffer && sound_buffer_size > 0)
 	{
-		res = AddAudioSample(pFormatContext, pAudioStream, soundBuffer, soundBufferSize);
+		res = add_audio_frame(pFormatContext, pAudioStream, sound_buffer, sound_buffer_size);
 	}
 
 	if (pVideoStream && frame && frame->data[0])
 	{
 		pVideoCodec = pVideoStream->codec;
 
-		if (NeedConvert()) 
+		if (need_convert()) 
 		{
 			// RGB to YUV420P.
 			if (!pImgConvertCtx) 
@@ -272,17 +262,17 @@ bool VideoEncoder::AddFrame(AVFrame* frame, const char* soundBuffer, int soundBu
 		}
 
 		// Allocate picture.
-		pCurrentPicture = CreateFFmpegPicture(pVideoCodec->pix_fmt, pVideoCodec->width, 
+		pCurrentPicture = create_avframe(pVideoCodec->pix_fmt, pVideoCodec->width, 
 			pVideoCodec->height);
 
-		if (NeedConvert() && pImgConvertCtx) 
+		if (need_convert() && pImgConvertCtx) 
 		{
 			// Convert RGB to YUV.
 			sws_scale(pImgConvertCtx, frame->data, frame->linesize,
 				0, pVideoCodec->height, pCurrentPicture->data, pCurrentPicture->linesize);      
 		}
 
-		res = AddVideoFrame(pFormatContext, pCurrentPicture, pVideoStream->codec);
+		res = add_video_frame(pFormatContext, pCurrentPicture, pVideoStream->codec);
 
 		// Free temp frame
 		av_free(pCurrentPicture->data[0]);
@@ -292,22 +282,7 @@ bool VideoEncoder::AddFrame(AVFrame* frame, const char* soundBuffer, int soundBu
 	return res;
 }
 
-bool VideoEncoder::AddFrame(const char* soundBuffer, int soundBufferSize)
-{
-	bool res = true;
-	int nOutputSize = 0;
-
-
-	// Add sound
-	if (soundBuffer && soundBufferSize > 0)
-	{
-		res = AddAudioSample(pFormatContext, pAudioStream, soundBuffer, soundBufferSize);
-	}
-
-	return res;
-}
-
-bool VideoEncoder::AddFrame(AVFrame* frame)
+bool encoder::add_frame(AVFrame* frame)
 {
 	bool res = true;
 	int nOutputSize = 0;
@@ -317,7 +292,7 @@ bool VideoEncoder::AddFrame(AVFrame* frame)
 	{
 		pVideoCodec = pVideoStream->codec;
 
-		if (NeedConvert()) 
+		if (need_convert()) 
 		{
 			// RGB to YUV420P.
 			if (!pImgConvertCtx) 
@@ -331,16 +306,16 @@ bool VideoEncoder::AddFrame(AVFrame* frame)
 		}
 
 		// Allocate picture.
-		pCurrentPicture = CreateFFmpegPicture(pVideoCodec->pix_fmt, pVideoCodec->width, 
+		pCurrentPicture = create_avframe(pVideoCodec->pix_fmt, pVideoCodec->width, 
 			pVideoCodec->height);
 
-		if (NeedConvert() && pImgConvertCtx) 
+		if (need_convert() && pImgConvertCtx) 
 		{
 			// Convert RGB to YUV.
 			sws_scale(pImgConvertCtx, frame->data, frame->linesize,	0, pVideoCodec->height, pCurrentPicture->data, pCurrentPicture->linesize);
 		}
 
-		res = AddVideoFrame(pFormatContext, pCurrentPicture, pVideoStream->codec);
+		res = add_video_frame(pFormatContext, pCurrentPicture, pVideoStream->codec);
 
 		// Free temp frame
 		av_free(pCurrentPicture->data[0]);
@@ -350,8 +325,22 @@ bool VideoEncoder::AddFrame(AVFrame* frame)
 	return res;
 }
 
+bool encoder::add_frame(const char* sound_buffer, int sound_buffer_size)
+{
+	bool res = true;
+	int nOutputSize = 0;
 
-bool VideoEncoder::Finish()
+
+	// Add sound
+	if (sound_buffer && sound_buffer_size > 0)
+	{
+		res = add_audio_frame(pFormatContext, pAudioStream, sound_buffer, sound_buffer_size);
+	}
+
+	return res;
+}
+
+bool encoder::stop()
 {
 	bool res = true;
 
@@ -361,8 +350,8 @@ bool VideoEncoder::Finish()
 		av_write_trailer(pFormatContext);
 		unsigned char *pb_buffer;
 		int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
-		WriteToUrl( (unsigned char *)pb_buffer, len);
-		Free();
+		send_data((unsigned char *)pb_buffer, len);
+		free();
 	}
 
 	if (audioBuffer)
@@ -374,141 +363,45 @@ bool VideoEncoder::Finish()
 	return res;
 }
 
-
-void VideoEncoder::Free()
+AVStream* encoder::add_audio_stream(AVFormatContext* pContext, CodecID codec_id)
 {
-	bool res = true;
+	AVCodecContext *pCodecCxt = NULL;
+	AVStream *pStream = NULL;
 
-	if (pFormatContext)
+	// Try create stream.
+	pStream = av_new_stream(pContext, 1);
+	if (!pStream) 
 	{
-		// close video stream
-		if (pVideoStream)
-		{
-			CloseVideo(pFormatContext, pVideoStream);
-		}
-
-		// close audio stream.
-		if (pAudioStream)
-		{
-			CloseAudio(pFormatContext, pAudioStream);
-		}
-
-		// Free the streams.
-		for(size_t i = 0; i < pFormatContext->nb_streams; i++) 
-		{
-			av_freep(&pFormatContext->streams[i]->codec);
-			av_freep(&pFormatContext->streams[i]);
-		}
-
-		if (!(pFormatContext->flags & AVFMT_NOFILE) && pFormatContext->pb) 
-		{
-			s.close();
-		}
-
-		// Free the stream.
-		av_free(pFormatContext);
-		pFormatContext = NULL;
-	}
-}
-
-AVFrame * VideoEncoder::CreateFFmpegPicture(int pix_fmt, int nWidth, int nHeight)
-{
-	AVFrame *picture     = NULL;
-	uint8_t *picture_buf = NULL;
-	int size;
-
-	picture = avcodec_alloc_frame();
-	if ( !picture)
-	{
-		printf("Cannot create frame\n");
+		printf("Cannot add new audio stream\n");
 		return NULL;
 	}
+	//	printf("added new audio stream\n");
+	// Codec.
+	pCodecCxt = pStream->codec;
+	pCodecCxt->codec_id = codec_id;
+	pCodecCxt->codec_type = CODEC_TYPE_AUDIO;
+	// Set format
+	pCodecCxt->bit_rate    = MAX_AUDIO_PACKET_SIZE - 1024*10;
+	pCodecCxt->sample_rate = audio_samplerate;
+	pCodecCxt->channels    = 1;
+	pCodecCxt->sample_fmt  = SAMPLE_FMT_S16;
 
-	size = avpicture_get_size((PixelFormat)pix_fmt, nWidth, nHeight);
-	picture_buf = (uint8_t *) av_malloc(size);
-
-	if (!picture_buf) 
-	{
-		av_free(picture);
-		printf("Cannot allocate buffer\n");
-		return NULL;
+	nSizeAudioEncodeBuffer = 4 * MAX_AUDIO_PACKET_SIZE;
+	if (pAudioEncodeBuffer == NULL)
+	{      
+		pAudioEncodeBuffer = (uint8_t * )av_malloc(nSizeAudioEncodeBuffer);
 	}
 
-	avpicture_fill((AVPicture *)picture, picture_buf, (PixelFormat)pix_fmt, nWidth, nHeight);
+	// Some formats want stream headers to be separate.
+	if(pContext->oformat->flags & AVFMT_GLOBALHEADER)
+	{
+		pCodecCxt->flags |= CODEC_FLAG_GLOBAL_HEADER;
+	}
 
-	return picture;
+	return pStream;
 }
 
-
-bool VideoEncoder::OpenVideo(AVFormatContext *oc, AVStream *pStream)
-{
-	AVCodec *pCodec;
-	AVCodecContext *pContext;
-
-	pContext = pStream->codec;
-
-	// Find the video encoder.
-	pCodec = avcodec_find_encoder(pContext->codec_id);
-	if (!pCodec) 
-	{
-		printf("Cannot found video codec\n");
-		return false;
-	}
-
-	// Open the codec.
-	if (avcodec_open(pContext, pCodec) < 0) 
-	{
-		printf("Cannot open video codec\n");
-		return false;
-	}
-
-	pVideoEncodeBuffer = NULL;      
-	if (!(pFormatContext->oformat->flags & AVFMT_RAWPICTURE)) 
-	{
-		/* allocate output buffer */
-		nSizeVideoEncodeBuffer = 10000000;
-		pVideoEncodeBuffer = (uint8_t *)av_malloc(nSizeVideoEncodeBuffer);
-	}
-
-	return true;
-}
-
-
-void VideoEncoder::CloseVideo(AVFormatContext *pContext, AVStream *pStream)
-{
-	avcodec_close(pStream->codec);
-	if (pCurrentPicture)
-	{
-		if (pCurrentPicture->data)
-		{
-			av_free(pCurrentPicture->data[0]);
-			pCurrentPicture->data[0] = NULL;
-		}
-		av_free(pCurrentPicture);
-		pCurrentPicture = NULL;
-	}
-
-	if (pVideoEncodeBuffer)
-	{
-		av_free(pVideoEncodeBuffer);
-		pVideoEncodeBuffer = NULL;
-	}
-	nSizeVideoEncodeBuffer = 0;
-}
-
-
-bool VideoEncoder::NeedConvert()
-{
-	bool res = false;
-	if (pVideoStream && pVideoStream->codec)
-	{
-		res = (pVideoStream->codec->pix_fmt != PIX_FMT_RGB24);
-	}
-	return res;
-}
-
-
-AVStream *VideoEncoder::AddVideoStream(AVFormatContext *pContext, CodecID codec_id)
+AVStream* encoder::add_video_stream(AVFormatContext* pContext, CodecID codec_id)
 {
 	AVCodecContext *pCodecCxt = NULL;
 	AVStream *st    = NULL;
@@ -525,15 +418,15 @@ AVStream *VideoEncoder::AddVideoStream(AVFormatContext *pContext, CodecID codec_
 	pCodecCxt->codec_type = CODEC_TYPE_VIDEO;
 	pCodecCxt->frame_number = 0;
 	// Put sample parameters.
-	pCodecCxt->bit_rate = vbr;
+	pCodecCxt->bit_rate = video_bitrate;
 	// Resolution must be a multiple of two.
-	pCodecCxt->width  = width;
-	pCodecCxt->height = height;
+	pCodecCxt->width  = video_width;
+	pCodecCxt->height = video_height;
 	/* time base: this is the fundamental unit of time (in seconds) in terms
 	of which frame timestamps are represented. for fixed-fps content,
 	timebase should be 1/framerate and timestamp increments should be
 	identically 1. */
-	pCodecCxt->time_base.den = fps;
+	pCodecCxt->time_base.den = video_framerate;
 	pCodecCxt->time_base.num = 1;
 	pCodecCxt->gop_size = 10; // emit one intra frame every twelve frames at most
 	pCodecCxt->pix_fmt = PIX_FMT_YUV420P;
@@ -559,47 +452,7 @@ AVStream *VideoEncoder::AddVideoStream(AVFormatContext *pContext, CodecID codec_
 	return st;
 }
 
-
-AVStream * VideoEncoder::AddAudioStream(AVFormatContext *pContext, CodecID codec_id)
-{
-	AVCodecContext *pCodecCxt = NULL;
-	AVStream *pStream = NULL;
-
-	// Try create stream.
-	pStream = av_new_stream(pContext, 1);
-	if (!pStream) 
-	{
-		printf("Cannot add new audio stream\n");
-		return NULL;
-	}
-	//	printf("added new audio stream\n");
-	// Codec.
-	pCodecCxt = pStream->codec;
-	pCodecCxt->codec_id = codec_id;
-	pCodecCxt->codec_type = CODEC_TYPE_AUDIO;
-	// Set format
-	pCodecCxt->bit_rate    = MAX_AUDIO_PACKET_SIZE - 1024*10;
-	pCodecCxt->sample_rate = audioSampleRate;
-	pCodecCxt->channels    = 1;
-	pCodecCxt->sample_fmt  = SAMPLE_FMT_S16;
-
-	nSizeAudioEncodeBuffer = 4 * MAX_AUDIO_PACKET_SIZE; // ���� ���� ����� � ���� ����� ������
-	if (pAudioEncodeBuffer == NULL)
-	{      
-		pAudioEncodeBuffer = (uint8_t * )av_malloc(nSizeAudioEncodeBuffer);
-	}
-
-	// Some formats want stream headers to be separate.
-	if(pContext->oformat->flags & AVFMT_GLOBALHEADER)
-	{
-		pCodecCxt->flags |= CODEC_FLAG_GLOBAL_HEADER;
-	}
-
-	return pStream;
-}
-
-
-bool VideoEncoder::OpenAudio(AVFormatContext *pContext, AVStream *pStream)
+bool encoder::open_audio_stream(AVFormatContext* pContext, AVStream* pStream)
 {
 	AVCodecContext *pCodecCxt = NULL;
 	AVCodec *pCodec = NULL;
@@ -646,8 +499,40 @@ bool VideoEncoder::OpenAudio(AVFormatContext *pContext, AVStream *pStream)
 	return true;
 }
 
+bool encoder::open_video_stream(AVFormatContext* oc, AVStream* pStream)
+{
+	AVCodec *pCodec;
+	AVCodecContext *pContext;
 
-void VideoEncoder::CloseAudio(AVFormatContext *pContext, AVStream *pStream)
+	pContext = pStream->codec;
+
+	// Find the video encoder.
+	pCodec = avcodec_find_encoder(pContext->codec_id);
+	if (!pCodec) 
+	{
+		printf("Cannot found video codec\n");
+		return false;
+	}
+
+	// Open the codec.
+	if (avcodec_open(pContext, pCodec) < 0) 
+	{
+		printf("Cannot open video codec\n");
+		return false;
+	}
+
+	pVideoEncodeBuffer = NULL;      
+	if (!(pFormatContext->oformat->flags & AVFMT_RAWPICTURE)) 
+	{
+		/* allocate output buffer */
+		nSizeVideoEncodeBuffer = 10000000;
+		pVideoEncodeBuffer = (uint8_t *)av_malloc(nSizeVideoEncodeBuffer);
+	}
+
+	return true;
+}
+
+void encoder::close_audio_stream(AVFormatContext* pContext, AVStream* pStream)
 {
 	avcodec_close(pStream->codec);
 	if (pAudioEncodeBuffer)
@@ -658,81 +543,29 @@ void VideoEncoder::CloseAudio(AVFormatContext *pContext, AVStream *pStream)
 	nSizeAudioEncodeBuffer = 0;
 }
 
-
-bool VideoEncoder::AddVideoFrame(AVFormatContext *pFormatContext, AVFrame * pOutputFrame, AVCodecContext *pVideoCodec)
+void encoder::close_video_stream(AVFormatContext* pContext, AVStream* pStream)
 {
-	bool res = false;
-
-	if (pFormatContext->oformat->flags & AVFMT_RAWPICTURE) 
+	avcodec_close(pStream->codec);
+	if (pCurrentPicture)
 	{
-		// Raw video case. The API will change slightly in the near
-		// futur for that.
-		AVPacket pkt;
-		av_init_packet(&pkt);
-
-		pkt.flags |= PKT_FLAG_KEY;
-		pkt.stream_index = pVideoStream->index;
-		pkt.data= (uint8_t *) pOutputFrame;
-		pkt.size= sizeof(AVPicture);
-
-		url_open_dyn_buf(&pFormatContext -> pb);
-		res = av_interleaved_write_frame(pFormatContext, &pkt);
-		unsigned char *pb_buffer;
-		int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
-
-		WriteToUrl((unsigned char *)pb_buffer, len);
-		av_free(pb_buffer) ;
-		//av_freep(&pb_buffer);
-		av_free_packet( &pkt);
-		res = true;
-	} 
-	else 
-	{
-		// Encode
-		int nOutputSize = avcodec_encode_video(pVideoCodec, pVideoEncodeBuffer, 
-			nSizeVideoEncodeBuffer, pOutputFrame);
-		if (nOutputSize > 0) 
+		if (pCurrentPicture->data)
 		{
-			AVPacket pkt;
-			av_init_packet(&pkt);
-
-			if (pVideoCodec->coded_frame->pts != AV_NOPTS_VALUE)
-			{
-				pkt.pts = av_rescale_q(pVideoCodec->coded_frame->pts, 
-					pVideoCodec->time_base, pVideoStream->time_base);
-			}
-
-			if(pVideoCodec->coded_frame->key_frame)
-			{
-				pkt.flags |= PKT_FLAG_KEY;
-			}
-			pkt.stream_index = pVideoStream->index;
-			pkt.data         = pVideoEncodeBuffer;
-			pkt.size         = nOutputSize;
-
-			// Write frame
-			url_open_dyn_buf(&pFormatContext -> pb);
-			res = (av_interleaved_write_frame(pFormatContext, &pkt) == 0);
-			unsigned char *pb_buffer;
-			int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
-
-			WriteToUrl((unsigned char *)pb_buffer, len);
-			av_free(pb_buffer) ;
-			//av_freep(&pb_buffer);
-			av_free_packet( &pkt);
+			av_free(pCurrentPicture->data[0]);
+			pCurrentPicture->data[0] = NULL;
 		}
-		else 
-		{
-			res = false;
-		}
+		av_free(pCurrentPicture);
+		pCurrentPicture = NULL;
 	}
 
-	return res;
+	if (pVideoEncodeBuffer)
+	{
+		av_free(pVideoEncodeBuffer);
+		pVideoEncodeBuffer = NULL;
+	}
+	nSizeVideoEncodeBuffer = 0;
 }
 
-
-bool VideoEncoder::AddAudioSample(AVFormatContext *pFormatContext, AVStream *pStream, 
-	const char* soundBuffer, int soundBufferSize)
+bool encoder::add_audio_frame(AVFormatContext* pFormatContext, AVStream* pStream, const char* soundBuffer, int soundBufferSize)
 {
 	AVCodecContext *pCodecCxt;    
 	bool res = true;  
@@ -775,7 +608,7 @@ bool VideoEncoder::AddAudioSample(AVFormatContext *pFormatContext, AVStream *pSt
 		unsigned char *pb_buffer;
 		int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
 
-		WriteToUrl((unsigned char *)pb_buffer, len);
+		send_data((unsigned char *)pb_buffer, len);
 		av_free(pb_buffer) ;
 		//av_freep(&pb_buffer);
 		av_free_packet( &pkt);	
@@ -792,16 +625,160 @@ bool VideoEncoder::AddAudioSample(AVFormatContext *pFormatContext, AVStream *pSt
 	return res;
 }
 
-void VideoEncoder::tcpExtract(std::string const& ip, std::string& address, std::string& service)
+bool encoder::add_video_frame(AVFormatContext* pFormatContext, AVFrame* pOutputFrame, AVCodecContext* pVideoCodec)
 {
-	boost::regex e("tcp://(.+):(\\d+)/");
-	boost::smatch what;
-	if(boost::regex_match(ip, what, e, boost::match_extra))
+	bool res = false;
+
+	if (pFormatContext->oformat->flags & AVFMT_RAWPICTURE) 
 	{
-		boost::smatch::iterator it = what.begin();
-		++it; // skip the first entry..
-		address = *it;
-		++it;
-		service = *it;
+		// Raw video case. The API will change slightly in the near
+		// futur for that.
+		AVPacket pkt;
+		av_init_packet(&pkt);
+
+		pkt.flags |= PKT_FLAG_KEY;
+		pkt.stream_index = pVideoStream->index;
+		pkt.data= (uint8_t *) pOutputFrame;
+		pkt.size= sizeof(AVPicture);
+
+		url_open_dyn_buf(&pFormatContext -> pb);
+		res = av_interleaved_write_frame(pFormatContext, &pkt);
+		unsigned char *pb_buffer;
+		int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
+
+		send_data((unsigned char *)pb_buffer, len);
+		av_free(pb_buffer) ;
+		//av_freep(&pb_buffer);
+		av_free_packet( &pkt);
+		res = true;
+	} 
+	else 
+	{
+		// Encode
+		int nOutputSize = avcodec_encode_video(pVideoCodec, pVideoEncodeBuffer, 
+			nSizeVideoEncodeBuffer, pOutputFrame);
+		if (nOutputSize > 0) 
+		{
+			AVPacket pkt;
+			av_init_packet(&pkt);
+
+			if (pVideoCodec->coded_frame->pts != AV_NOPTS_VALUE)
+			{
+				pkt.pts = av_rescale_q(pVideoCodec->coded_frame->pts, 
+					pVideoCodec->time_base, pVideoStream->time_base);
+			}
+
+			if(pVideoCodec->coded_frame->key_frame)
+			{
+				pkt.flags |= PKT_FLAG_KEY;
+			}
+			pkt.stream_index = pVideoStream->index;
+			pkt.data         = pVideoEncodeBuffer;
+			pkt.size         = nOutputSize;
+
+			// Write frame
+			url_open_dyn_buf(&pFormatContext -> pb);
+			res = (av_interleaved_write_frame(pFormatContext, &pkt) == 0);
+			unsigned char *pb_buffer;
+			int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
+
+			send_data((unsigned char *)pb_buffer, len);
+			av_free(pb_buffer) ;
+			//av_freep(&pb_buffer);
+			av_free_packet( &pkt);
+		}
+		else 
+		{
+			res = false;
+		}
+	}
+
+	return res;
+}
+
+AVFrame* encoder::create_avframe(int pix_fmt, int nWidth, int nHeight)
+{
+	AVFrame *picture     = NULL;
+	uint8_t *picture_buf = NULL;
+	int size;
+
+	picture = avcodec_alloc_frame();
+	if ( !picture)
+	{
+		printf("Cannot create frame\n");
+		return NULL;
+	}
+
+	size = avpicture_get_size((PixelFormat)pix_fmt, nWidth, nHeight);
+	picture_buf = (uint8_t *) av_malloc(size);
+
+	if (!picture_buf) 
+	{
+		av_free(picture);
+		printf("Cannot allocate buffer\n");
+		return NULL;
+	}
+
+	avpicture_fill((AVPicture *)picture, picture_buf, (PixelFormat)pix_fmt, nWidth, nHeight);
+
+	return picture;
+}
+
+void encoder::free()
+{
+	bool res = true;
+
+	if (pFormatContext)
+	{
+		// close video stream
+		if (pVideoStream)
+		{
+			close_video_stream(pFormatContext, pVideoStream);
+		}
+
+		// close audio stream.
+		if (pAudioStream)
+		{
+			close_audio_stream(pFormatContext, pAudioStream);
+		}
+
+		// Free the streams.
+		for(size_t i = 0; i < pFormatContext->nb_streams; i++) 
+		{
+			av_freep(&pFormatContext->streams[i]->codec);
+			av_freep(&pFormatContext->streams[i]);
+		}
+
+		if (!(pFormatContext->flags & AVFMT_NOFILE) && pFormatContext->pb) 
+		{
+			s.close();
+		}
+
+		// Free the stream.
+		av_free(pFormatContext);
+		pFormatContext = NULL;
+	}
+}
+
+bool encoder::need_convert()
+{
+	bool res = false;
+	if (pVideoStream && pVideoStream->codec)
+	{
+		res = (pVideoStream->codec->pix_fmt != PIX_FMT_RGB24);
+	}
+	return res;
+}
+
+void encoder::send_data(const unsigned char* buf, int size)
+{
+	try
+	{
+		boost::asio::write(s, boost::asio::buffer(buf, size));
+	}
+	catch (std::exception& e)
+	{
+		printf("Internal Error happened, please restart application");
+		std::cin.get();
 	}
 }
