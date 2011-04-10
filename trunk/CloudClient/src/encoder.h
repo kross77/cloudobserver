@@ -42,6 +42,8 @@ extern "C"
 #include <cstring>
 #include <queue>
 
+#include "http/http.h"
+
 class encoder
 {
 public:
@@ -119,7 +121,7 @@ private:
 	// Check whether to convert pixel format.
 	bool need_convert();
 	// Send data to the server.
-	void send_data(const unsigned char* buf, int size);
+	void send_data(const char* data, int size);
 };
 
 #endif // ENCODER_H
