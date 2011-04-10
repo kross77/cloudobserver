@@ -4,6 +4,8 @@
 #include <boost/asio.hpp>
 #include <boost/lexical_cast.hpp>
 
+#include <iostream>
+
 #include "http_response.h"
 #include "http_response_parser_state.h"
 
