@@ -11,13 +11,13 @@ end
 solution "CloudServer"
 	location ( "projects/".. os.get() .. "-" ..  action )
 	configurations { "Debug", "Release" }
-	objdir     ( "projects/" .. os.get() .. "-" .. action .. "/bin/obj" )
+	objdir     ( "projects/" .. os.get() .. "-" .. action .. "/obj" )
 	
 	configuration { "Debug" }
-		targetdir ( "projects/" .. os.get() .. "-" .. action .. "/bin/debug" )
+		targetdir ( "projects/" .. os.get() .. "-" .. action .. "/bin" )
 	
 	configuration { "Release" }
-		targetdir ( "projects/" .. os.get() .. "-" .. action ..  "/bin/release" )
+		targetdir ( "bin/" )
 		
 project "CloudServer"
   language  "C#"
