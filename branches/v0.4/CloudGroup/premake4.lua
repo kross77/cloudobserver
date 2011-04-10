@@ -19,7 +19,7 @@ newoption {
 newoption {
 	trigger     = "BoostLibsPath",
 	value       = "PATH",
-	description = "Choose a particular directory for Boost libs search"
+	description = "Choose a particular directory for Boost libs search (do not forget Boost-Extention)"
 }
 
 newoption {
