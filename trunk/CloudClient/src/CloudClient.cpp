@@ -14,7 +14,7 @@
 
 #include "list.h"
 #include "LSD.h"
-#include "VideoEncoder.h"
+#include "encoder.h"
 
 using namespace std;
 using boost::asio::ip::tcp;
@@ -44,7 +44,7 @@ boost::uniform_int<> six(-128, 127);
 boost::variate_generator<boost::mt19937&, boost::uniform_int<> >die(rng, six);
 
 // FFmpeg
-VideoEncoder encoder;
+encoder encoder;
 AVFrame* frame;
 AVFrame* readyFrame;
 int nSampleSize;
@@ -90,13 +90,13 @@ void init_opencv()
 {
 	if (flag_disable_video)
 	{
-		encoder.hasVideo = false;
+		encoder.has_video = false;
 		return;
 	}
 
 	if (flag_generate_video)
 	{
-		encoder.hasVideo = true;
+		encoder.has_video = true;
 		cvInitFont(&font, CV_FONT_HERSHEY_DUPLEX, 2, 1, 0.0, 3, CV_AA);
 		CvPoint UL = { 0, 0 };
 		CvPoint LR = { video_width, video_height };
@@ -111,7 +111,7 @@ void init_opencv()
 		video_capture_device = CamList->SelectFromList();
 
 		if (video_capture_device == 999)
-			encoder.hasVideo = false;
+			encoder.has_video = false;
 		else
 		{
 			capture = cvCaptureFromCAM(video_capture_device);
@@ -122,7 +122,7 @@ void init_opencv()
 
 		if (!capture)
 		{
-			encoder.hasVideo = false;
+			encoder.has_video = false;
 			fprintf(stderr, "Cannot initialize selected webcam!\n");
 			cout << endl;
 			return;
@@ -133,7 +133,7 @@ void init_opencv()
 		redchannel = cvCreateImage(cvGetSize(destination), 8, 1);
 		greenchannel = cvCreateImage(cvGetSize(destination), 8, 1);
 		bluechannel = cvCreateImage(cvGetSize(destination), 8, 1);
-		encoder.hasVideo = true;
+		encoder.has_video = true;
 	}
 }
 
@@ -141,13 +141,13 @@ void init_openal(int fps)
 {
 	if (flag_disable_audio)
 	{
-		encoder.hasAudio = false;
+		encoder.has_audio = false;
 		return;
 	}
 
 	if (flag_generate_audio)
 	{
-		encoder.hasAudio = true;
+		encoder.has_audio = true;
 		nSampleSize = (int)(2.0f * audio_sample_rate / fps);
 		nBlockAlign = 1 * 16 / 8;
 		Buffer = new ALchar[nSampleSize];
@@ -205,7 +205,7 @@ void init_openal(int fps)
 			{
 				cout <<"Default device will be used" << std::endl;
 				SelectedIndex = 0;
-				encoder.hasAudio = true;
+				encoder.has_audio = true;
 			}
 			else
 			{
@@ -227,11 +227,11 @@ void init_openal(int fps)
 
 		if (SelectedIndex == 999)
 		{
-			encoder.hasAudio = false;
+			encoder.has_audio = false;
 		}
 		else
 		{
-			encoder.hasAudio = true;
+			encoder.has_audio = true;
 			alDistanceModel(AL_NONE);
 			dev[0] = alcCaptureOpenDevice(bufferList[SelectedIndex], audio_sample_rate, AL_FORMAT_MONO16, nSampleSize/2);
 			alcCaptureStart(dev[0]);
@@ -241,27 +241,27 @@ void init_openal(int fps)
 
 void init_ffmpeg(string container, int w, int h, int fps)
 {
-	if (!encoder.hasAudio && !encoder.hasVideo)
+	if (!encoder.has_audio && !encoder.has_video)
 	{
 		cout << "\nNo audio, and no video data found.\n Please close application.\nConnect some capturing device.\nRestart application\n";
 		cin.get();
 		boost::this_thread::sleep(boost::posix_time::seconds(9999999));
 		cin.get();
 	}
-	encoder.SetConstants(fps, video_width, video_height, audio_sample_rate, stream_bitrate);
+	encoder.init(audio_sample_rate, stream_bitrate, fps, video_width, video_height);
 
 name:
-	int encoderName = encoder.ConnectUserToUrl(username);
+	int encoderName = encoder.set_username(username);
 	if (encoderName == 0)
 	{
 		//printf("Cannot open stream for selected name\n");
 		std::cout << "Please, enter another username: ";
 		std::cin >> username;
-		int encoderServer = encoder.ConnectToServer(server);
+		int encoderServer = encoder.connect(server);
 		goto name;
 	}
 
-	if (encoder.InitUrl(container, username) == -10)
+	if (encoder.start(container) == -10)
 	{
 		cout << "\nNo audio, and no video data found.\n Please close application.\nConnect some capturing device.\nRestart application\n";
 		cin.get();
@@ -414,7 +414,7 @@ void release_openal()
 
 void release_ffmpeg()
 {
-	encoder.Finish();
+	encoder.stop();
 
 	av_free(frame->data[0]);
 	av_free(frame);
@@ -428,7 +428,7 @@ void release_ffmpeg()
 
 void capture_frame_loop()
 {
-	if (encoder.hasVideo)
+	if (encoder.has_video)
 	{
 		while (true)
 		{
@@ -449,19 +449,19 @@ void save_frame_loop()
 	while (true)
 	{
 		timerForMain.restart();
-		if (!encoder.hasVideo)
-			if (!encoder.AddFrame(capture_sample(), nSampleSize))
+		if (!encoder.has_video)
+			if (!encoder.add_frame(capture_sample(), nSampleSize))
 				printf("Cannot write frame!\n");
 
-		if (!encoder.hasAudio)
-			if (!encoder.AddFrame(readyFrame))
+		if (!encoder.has_audio)
+			if (!encoder.add_frame(readyFrame))
 				printf("Cannot write frame!\n");
 		
-		if (encoder.hasAudio && encoder.hasVideo)
-			if (!encoder.AddFrame(readyFrame, capture_sample(), nSampleSize))
+		if (encoder.has_audio && encoder.has_video)
+			if (!encoder.add_frame(readyFrame, capture_sample(), nSampleSize))
 				printf("Cannot write frame!\n");
 		
-		if (!encoder.hasAudio && !encoder.hasVideo)
+		if (!encoder.has_audio && !encoder.has_video)
 		{
 			printf("No data to encode");
 			break;
@@ -557,7 +557,7 @@ int main(int argc, char* argv[])
 
 	// Check the server if one is read from command line arguments.
 	if (!server.empty())
-		if (!encoder.ConnectToServer(server))
+		if (!encoder.connect(server))
 			server = "";
 
 	// Repeat asking for server until succeed.
@@ -566,7 +566,7 @@ int main(int argc, char* argv[])
 		{
 			std::cout << "Please, specify the server URL: ";
 			std::cin >> server;
-		} while (!encoder.ConnectToServer(server));
+		} while (!encoder.connect(server));
 
 	if (username.empty())
 	{

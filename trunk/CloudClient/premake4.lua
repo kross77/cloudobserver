@@ -392,7 +392,7 @@ solution "CloudClient"
 		cloud.project.useBoost()
 		cloud.project.useAL()
 		cloud.project.useCV()
-		files { "src/CloudClient.cpp", "src/list.cpp", "src/list.h", "src/LSD.cpp", "src/LSD.h", "src/VideoEncoder.cpp", "src/VideoEncoder.h" }
+		files { "src/CloudClient.cpp", "src/list.cpp", "src/list.h", "src/LSD.cpp", "src/LSD.h", "src/encoder.cpp", "src/encoder.h" }
 		
 		configuration "Debug"
 			defines { "DEBUG" }
