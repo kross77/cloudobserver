@@ -1,16 +1,6 @@
 #ifndef ENCODER_H
 #define ENCODER_H
 
-// The default network protocol.
-#define DEFAULT_PROTOCOL "HTTP"
-
-// The list of all supported network protocols.
-// Use ', ' (a comma followed by a space) as a delimiter.
-#define SUPPORTED_PROTOCOLS "HTTP"
-
-// The default port number.
-#define DEFAULT_PORT "4773"
-
 // The maximum audio packet size.
 #define MAX_AUDIO_PACKET_SIZE (128 * 1024)
 
@@ -42,7 +32,7 @@ extern "C"
 #include <cstring>
 #include <queue>
 
-#include "http/http.h"
+#include "transmitter.h"
 
 class encoder
 {
@@ -50,8 +40,6 @@ public:
 	encoder();
 	~encoder();
 	void init(int audio_samplerate, int video_bitrate, int video_framerate, int video_width, int video_height);
-	bool connect(std::string url);
-	int set_username(std::string& username);
 	void start(std::string& container);
 	void add_frame(AVFrame* frame, const char* sound_buffer, int sound_buffer_size);
 	void add_frame(AVFrame* frame);
@@ -66,6 +54,7 @@ public:
 
 	bool has_audio;
 	bool has_video;
+	transmitter* transmitter;
 private:
 	// format context
 	AVFormatContext* pFormatContext;
@@ -118,8 +107,6 @@ private:
 	void free();
 	// Check whether to convert pixel format.
 	bool need_convert();
-	// Send data to the server.
-	void send_data(const char* data, int size);
 };
 
 #endif // ENCODER_H
