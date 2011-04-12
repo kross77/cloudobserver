@@ -392,7 +392,7 @@ solution "CloudClient"
 		cloud.project.useBoost()
 		cloud.project.useAL()
 		cloud.project.useCV()
-		files { "src/CloudClient.cpp", "src/list.cpp", "src/list.h", "src/LSD.cpp", "src/LSD.h", "src/encoder.cpp", "src/encoder.h", "src/http/http.h", "src/http/http_response.h", "src/http/http_response_parser.h", "src/http/http_response_parser.cpp", "src/http/http_response_parser_state.h" }
+		files { "src/CloudClient.cpp", "src/list.cpp", "src/list.h", "src/LSD.cpp", "src/LSD.h", "src/encoder.cpp", "src/encoder.h", "src/transmitter.cpp", "src/transmitter.h", "src/http/http.h", "src/http/http_response.h", "src/http/http_response_parser.h", "src/http/http_response_parser.cpp", "src/http/http_response_parser_state.h" }
 		
 		configuration "Debug"
 			defines { "DEBUG" }

@@ -250,16 +250,20 @@ void init_ffmpeg(string container, int w, int h, int fps)
 	}
 	encoder.init(audio_sample_rate, stream_bitrate, fps, video_width, video_height);
 
-name:
-	int encoderName = encoder.set_username(username);
-	if (encoderName == 0)
-	{
-		//printf("Cannot open stream for selected name\n");
-		std::cout << "Please, enter another username: ";
-		std::cin >> username;
-		int encoderServer = encoder.connect(server);
-		goto name;
-	}
+	bool succeed = false;
+	while (!succeed)
+		try
+		{
+			encoder.transmitter->set_username(username);
+			succeed = true;
+		}
+		catch (std::exception& e)
+		{
+			std::cout << e.what() << std::endl;
+			encoder.transmitter->connect(server);
+			std::cout << "Please, select another username: ";
+			std::cin >> username;
+		}
 
 	try
 	{
@@ -577,18 +581,36 @@ int main(int argc, char* argv[])
 	video_width -= video_width % 4;
 	video_height -= video_height % 4;
 
+	// Initialize the transmitter block.
+	encoder.transmitter = new transmitter();
+
 	// Check the server if one is read from command line arguments.
 	if (!server.empty())
-		if (!encoder.connect(server))
+		try
+		{
+			encoder.transmitter->connect(server);
+		}
+		catch (std::exception& e)
+		{
+			std::cout << e.what() << std::endl;
 			server = "";
+		}
 
 	// Repeat asking for server until succeed.
-	if (server.empty())
-		do
+	while (server.empty())
+	{
+		std::cout << "Please, specify the server URL: ";
+		std::cin >> server;
+		try
 		{
-			std::cout << "Please, specify the server URL: ";
-			std::cin >> server;
-		} while (!encoder.connect(server));
+			encoder.transmitter->connect(server);
+		}
+		catch (std::exception& e)
+		{
+			std::cout << e.what() << std::endl;
+			server = "";
+		}
+	}
 
 	if (username.empty())
 	{

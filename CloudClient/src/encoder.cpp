@@ -1,9 +1,5 @@
 #include "encoder.h"
 
-boost::asio::io_service io_service;
-boost::asio::ip::tcp::resolver resolver(io_service);
-boost::asio::ip::tcp::socket s(io_service);
-
 encoder::encoder() 
 {
 	this->has_audio = false;
@@ -26,6 +22,8 @@ encoder::encoder()
 encoder::~encoder()
 {
 	stop();
+
+	delete transmitter;
 }
 
 void encoder::init(int audio_samplerate, int video_bitrate, int video_framerate, int video_width, int video_height)
@@ -35,97 +33,6 @@ void encoder::init(int audio_samplerate, int video_bitrate, int video_framerate,
 	this->video_framerate = video_framerate;
 	this->video_width = video_width;
 	this->video_height = video_height;
-}
-
-bool encoder::connect(std::string url)
-{
-	// Parse the URL.
-	std::vector<std::string> url_parts;
-	boost::regex url_expression(
-		// protocol            host               port
-		"^(\?:([^:/\?#]+)://)\?(\\w+[^/\?#:]*)(\?::(\\d+))\?"
-		// path                file       parameters
-		"(/\?(\?:[^\?#/]*/)*)\?([^\?#]*)\?(\\\?(.*))\?"
-		);
-	boost::regex_split(std::back_inserter(url_parts), url, url_expression);
-	std::string protocol = url_parts[0];
-	std::string host = url_parts[1];
-	std::string port = url_parts[2];
-
-	// Use the default protocol if no protocol is specified.
-	if (protocol.empty())
-		protocol = DEFAULT_PROTOCOL;
-
-	// Use the default port if no port is specified.
-	if (port.empty())
-		port = DEFAULT_PORT;
-
-	// Get the list of all supported protocols.
-	std::vector<std::string> protocols;
-	boost::split(protocols, SUPPORTED_PROTOCOLS, boost::is_any_of(", "));
-
-	// Check if the given protocol is supported.
-	boost::to_upper(protocol);
-	if (std::find(protocols.begin(), protocols.end(), protocol) == protocols.end())
-	{
-		// The protocol is not supported. Report a failure.
-		std::cout << protocol <<
-			" protocol is not valid. Use one of the following protocols: "
-			<< SUPPORTED_PROTOCOLS << "." << std::endl;
-		return false;
-	}
-
-	// Resolve the hostname.
-	boost::asio::ip::tcp::resolver::query query(boost::asio::ip::tcp::v4(), host, port);
-	boost::asio::ip::tcp::resolver::iterator iterator;
-	try
-	{
-		iterator = resolver.resolve(query);
-	}
-	catch (std::exception)
-	{
-		// Failed to resolve the hostname. Report a failure.
-		std::cout << "Cannot resolve the hostname." << std::endl;
-		return false;
-	}
-	
-	// Try to connect to the server using one of the endpoints.
-	for (iterator; iterator != boost::asio::ip::tcp::resolver::iterator(); ++iterator)
-	{
-		boost::asio::ip::tcp::endpoint endpoint = *iterator;
-		std::cout << "Trying to connect to the server at " << endpoint.address().to_string() << ":" << port << "...";
-		try
-		{
-			s.connect(endpoint);
-
-			// Connection succeeded. Report a success.
-			std::cout << " OK." << std::endl;
-			return true;
-		}
-		catch (std::exception)
-		{
-			// Failed to connect to the endpoint. Try the next one if any.
-			std::cout << " failed." << std::endl;
-		}
-	}
-
-	// Unable to connect to all the endpoints. Report a failure.
-	return false;
-}
-
-int encoder::set_username(std::string& username)
-{
-	std::string http_header = "GET /" + username + "?action=write HTTP/1.1\r\n\r\n";
-	send_data(http_header.c_str(), http_header.length());
-
-	http_response_parser parser;
-	http_response response = parser.parse(s);
-
-	if (response.status == 200)
-		return 10;
-
-	s.close();
-	return 0;
 }
 
 void encoder::start(std::string& container)
@@ -178,7 +85,7 @@ void encoder::start(std::string& container)
 
 	char* pb_buffer;
 	int len = url_close_dyn_buf(pFormatContext->pb, (uint8_t**)(&pb_buffer));
-	send_data(pb_buffer, len);
+	transmitter->send(pb_buffer, len);
 	av_free(pb_buffer);
 }
 
@@ -247,7 +154,7 @@ void encoder::stop()
 			throw std::exception("av_write_trailer failed.");
 		char* pb_buffer;
 		int len = url_close_dyn_buf(pFormatContext->pb, (uint8_t**)(&pb_buffer));
-		send_data(pb_buffer, len);
+		transmitter->send(pb_buffer, len);
 		av_free(pb_buffer);
 		free();
 	}
@@ -504,7 +411,7 @@ bool encoder::add_audio_frame(AVFormatContext* pFormatContext, AVStream* pStream
 		char* pb_buffer;
 		int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
 
-		send_data(pb_buffer, len);
+		transmitter->send(pb_buffer, len);
 		av_free(pb_buffer) ;
 		//av_freep(&pb_buffer);
 		av_free_packet( &pkt);	
@@ -542,7 +449,7 @@ bool encoder::add_video_frame(AVFormatContext* pFormatContext, AVFrame* pOutputF
 		char* pb_buffer;
 		int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
 
-		send_data(pb_buffer, len);
+		transmitter->send(pb_buffer, len);
 		av_free(pb_buffer) ;
 		//av_freep(&pb_buffer);
 		av_free_packet( &pkt);
@@ -578,7 +485,7 @@ bool encoder::add_video_frame(AVFormatContext* pFormatContext, AVFrame* pOutputF
 			char* pb_buffer;
 			int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
 
-			send_data(pb_buffer, len);
+			transmitter->send(pb_buffer, len);
 			av_free(pb_buffer) ;
 			//av_freep(&pb_buffer);
 			av_free_packet( &pkt);
@@ -647,7 +554,7 @@ void encoder::free()
 
 		if (!(pFormatContext->flags & AVFMT_NOFILE) && pFormatContext->pb) 
 		{
-			s.close();
+			//s.close();
 		}
 
 		// Free the stream.
@@ -664,17 +571,4 @@ bool encoder::need_convert()
 		res = (pVideoStream->codec->pix_fmt != PIX_FMT_RGB24);
 	}
 	return res;
-}
-
-void encoder::send_data(const char* data, int size)
-{
-	try
-	{
-		boost::asio::write(s, boost::asio::buffer(data, size));
-	}
-	catch (std::exception& e)
-	{
-		printf("Internal Error happened, please restart application");
-		std::cin.get();
-	}
 }
