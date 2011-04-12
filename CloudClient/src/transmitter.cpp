@@ -9,13 +9,13 @@ transmitter::transmitter()
 
 transmitter::~transmitter()
 {
-	delete io_service;
+	delete resolver;
 
 	socket->shutdown(boost::asio::ip::tcp::socket::shutdown_both);
 	socket->close();
 	delete socket;
 
-	delete resolver;
+	delete io_service;
 }
 
 void transmitter::connect(std::string url)
