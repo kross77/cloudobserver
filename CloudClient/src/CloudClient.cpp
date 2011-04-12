@@ -261,9 +261,13 @@ name:
 		goto name;
 	}
 
-	if (encoder.start(container) == -10)
+	try
 	{
-		cout << "\nNo audio, and no video data found.\n Please close application.\nConnect some capturing device.\nRestart application\n";
+		encoder.start(container);
+	}
+	catch (std::exception& e)
+	{
+		std::cout << e.what() << std::endl;
 		cin.get();
 		boost::this_thread::sleep(boost::posix_time::seconds(9999999));
 	}
@@ -450,16 +454,34 @@ void save_frame_loop()
 	{
 		timerForMain.restart();
 		if (!encoder.has_video)
-			if (!encoder.add_frame(capture_sample(), nSampleSize))
+			try
+			{
+				encoder.add_frame(capture_sample(), nSampleSize);
+			}
+			catch (std::exception)
+			{
 				printf("Cannot write frame!\n");
+			}
 
 		if (!encoder.has_audio)
-			if (!encoder.add_frame(readyFrame))
+			try
+			{
+				encoder.add_frame(readyFrame);
+			}
+			catch (std::exception)
+			{
 				printf("Cannot write frame!\n");
+			}
 		
 		if (encoder.has_audio && encoder.has_video)
-			if (!encoder.add_frame(readyFrame, capture_sample(), nSampleSize))
+			try
+			{
+				encoder.add_frame(readyFrame, capture_sample(), nSampleSize);
+			}
+			catch (std::exception)
+			{
 				printf("Cannot write frame!\n");
+			}
 		
 		if (!encoder.has_audio && !encoder.has_video)
 		{

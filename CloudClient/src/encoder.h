@@ -52,11 +52,11 @@ public:
 	void init(int audio_samplerate, int video_bitrate, int video_framerate, int video_width, int video_height);
 	bool connect(std::string url);
 	int set_username(std::string& username);
-	int start(std::string& container);
-	bool add_frame(AVFrame* frame, const char* sound_buffer, int sound_buffer_size);
-	bool add_frame(AVFrame* frame);
-	bool add_frame(const char* sound_buffer, int sound_buffer_size);
-	bool stop();
+	void start(std::string& container);
+	void add_frame(AVFrame* frame, const char* sound_buffer, int sound_buffer_size);
+	void add_frame(AVFrame* frame);
+	void add_frame(const char* sound_buffer, int sound_buffer_size);
+	void stop();
 
 	int audio_samplerate;
 	int video_bitrate;
@@ -67,8 +67,6 @@ public:
 	bool has_audio;
 	bool has_video;
 private:
-	// output format
-	AVOutputFormat* pOutFormat;
 	// format context
 	AVFormatContext* pFormatContext;
 	// video stream context
