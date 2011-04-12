@@ -260,6 +260,7 @@ void init_ffmpeg(string container, int w, int h, int fps)
 		catch (std::exception& e)
 		{
 			std::cout << e.what() << std::endl;
+			encoder.transmitter->reset();
 			encoder.transmitter->connect(server);
 			std::cout << "Please, select another username: ";
 			std::cin >> username;
