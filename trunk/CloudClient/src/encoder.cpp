@@ -38,17 +38,17 @@ void encoder::init(int audio_samplerate, int video_bitrate, int video_framerate,
 void encoder::start(std::string& container)
 {
 	if (!has_audio && !has_video)
-		throw std::exception("No audio and no video.");
+		throw std::runtime_error("No audio and no video.");
 
 	av_register_all();
 
 	AVOutputFormat* pOutFormat = av_guess_format(container.c_str(), NULL, NULL);
 	if (pOutFormat == NULL)
-		throw std::exception("av_guess_format failed.");
+		throw std::runtime_error("av_guess_format failed.");
 
 	pFormatContext = avformat_alloc_context();
 	if (pFormatContext == NULL)
-		throw std::exception("avformat_alloc_context failed.");
+		throw std::runtime_error("avformat_alloc_context failed.");
 
 	pFormatContext->oformat = pOutFormat;
 
@@ -56,32 +56,32 @@ void encoder::start(std::string& container)
 	{
 		pAudioStream = add_audio_stream(pFormatContext, pOutFormat->audio_codec);
 		if (pAudioStream == NULL)
-			throw std::exception("add_audio_stream failed.");
+			throw std::runtime_error("add_audio_stream failed.");
 	}
 
 	if (has_video)
 	{
 		pVideoStream = add_video_stream(pFormatContext, pOutFormat->video_codec);
 		if (pVideoStream == NULL)
-			throw std::exception("add_video_stream failed.");
+			throw std::runtime_error("add_video_stream failed.");
 	}
 
 	if (av_set_parameters(pFormatContext, NULL) < 0)
-		throw std::exception("av_set_parameters failed.");
+		throw std::runtime_error("av_set_parameters failed.");
 
 	if (has_audio)
 		if (!open_audio_stream(pFormatContext, pAudioStream))
-			throw std::exception("open_audio_stream failed.");
+			throw std::runtime_error("open_audio_stream failed.");
 
 	if (has_video)
 		if (!open_video_stream(pFormatContext, pVideoStream))
-			throw std::exception("open_video_stream failed.");
+			throw std::runtime_error("open_video_stream failed.");
 
 	if (url_open_dyn_buf(&pFormatContext->pb) != 0)
-		throw std::exception("url_open_dyn_buf failed.");
+		throw std::runtime_error("url_open_dyn_buf failed.");
 
 	if (av_write_header(pFormatContext) != 0)
-		throw std::exception("av_write_header failed.");
+		throw std::runtime_error("av_write_header failed.");
 
 	char* pb_buffer;
 	int len = url_close_dyn_buf(pFormatContext->pb, (uint8_t**)(&pb_buffer));
@@ -128,7 +128,7 @@ void encoder::add_frame(AVFrame* frame)
 		}
 
 		if(!add_video_frame(pFormatContext, pCurrentPicture, pVideoStream->codec))
-			throw std::exception("add_video_frame failed.");
+			throw std::runtime_error("add_video_frame failed.");
 
 		// Free temp frame
 		av_free(pCurrentPicture->data[0]);
@@ -141,7 +141,7 @@ void encoder::add_frame(const char* sound_buffer, int sound_buffer_size)
 {
 	if (sound_buffer && sound_buffer_size > 0)
 		if (!add_audio_frame(pFormatContext, pAudioStream, sound_buffer, sound_buffer_size))
-			throw std::exception("add_audio_frame failed.");
+			throw std::runtime_error("add_audio_frame failed.");
 }
 
 void encoder::stop()
@@ -149,9 +149,9 @@ void encoder::stop()
 	if (pFormatContext)
 	{
 		if (url_open_dyn_buf(&pFormatContext->pb) != 0)
-			throw std::exception("url_open_dyn_buf failed.");
+			throw std::runtime_error("url_open_dyn_buf failed.");
 		if (av_write_trailer(pFormatContext) != 0)
-			throw std::exception("av_write_trailer failed.");
+			throw std::runtime_error("av_write_trailer failed.");
 		char* pb_buffer;
 		int len = url_close_dyn_buf(pFormatContext->pb, (uint8_t**)(&pb_buffer));
 		transmitter->send(pb_buffer, len);
