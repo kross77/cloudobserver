@@ -3,22 +3,18 @@
 transmitter::transmitter()
 {
 	io_service = new boost::asio::io_service();
-	socket = new boost::asio::ip::tcp::socket(*io_service);
 	resolver = new boost::asio::ip::tcp::resolver(*io_service);
 }
 
 transmitter::~transmitter()
 {
+	this->disconnect();
+
 	delete resolver;
-
-	socket->shutdown(boost::asio::ip::tcp::socket::shutdown_both);
-	socket->close();
-	delete socket;
-
 	delete io_service;
 }
 
-void transmitter::connect(std::string url)
+void transmitter::connect(std::string username, std::string url)
 {
 	// Parse the URL.
 	std::vector<std::string> url_parts;
@@ -48,68 +44,104 @@ void transmitter::connect(std::string url)
 	// Check if the given protocol is supported.
 	boost::to_upper(protocol);
 	if (std::find(protocols.begin(), protocols.end(), protocol) == protocols.end())
+	{
 		// The protocol is not supported. Report a failure.
-		throw std::exception((protocol + " protocol is not valid. Use one of the following protocols: " + SUPPORTED_PROTOCOLS + ".").c_str());
+		std::cout << protocol << " protocol is not valid. Use one of the following protocols: " << SUPPORTED_PROTOCOLS << "." << std::endl;
+		throw transmitter::server_connection_exception();
+	}
 
 	// Resolve the hostname.
 	boost::asio::ip::tcp::resolver::query query(boost::asio::ip::tcp::v4(), host, port);
 	boost::asio::ip::tcp::resolver::iterator iterator;
+	std::cout << "Resolving the hostname...";
 	try
 	{
 		iterator = resolver->resolve(query);
+		std::cout << " OK." << std::endl;
 	}
-	catch (std::exception)
+	catch (boost::system::system_error&)
 	{
 		// Failed to resolve the hostname. Report a failure.
-		throw std::exception("Cannot resolve the hostname.");
+		std::cout << " failed." << std::endl;
+		throw server_connection_exception();
 	}
+
+	// Count the number of endpoints.
+	int number_of_endpoints = 0;
+	boost::asio::ip::tcp::resolver::iterator counter = iterator;
+	for (counter; counter != boost::asio::ip::tcp::resolver::iterator(); ++counter)
+		number_of_endpoints++;
+	std::cout << "Endpoints found: " << number_of_endpoints << std::endl;
 	
+	// Create a socket for communication.
+	socket = new boost::asio::ip::tcp::socket(*io_service);
+
 	// Try to connect to the server using one of the endpoints.
+	bool connected = false;
 	for (iterator; iterator != boost::asio::ip::tcp::resolver::iterator(); ++iterator)
 	{
-		boost::asio::ip::tcp::endpoint endpoint = *iterator;
+		boost::asio::ip::tcp::endpoint endpoint = iterator->endpoint();
 		std::cout << "Trying to connect to the server at " << endpoint.address().to_string() << ":" << port << "...";
 		try
 		{
 			socket->connect(endpoint);
+			connected = true;
 
 			// Connection succeeded. Report a success.
 			std::cout << " OK." << std::endl;
-			return;
 		}
-		catch (std::exception)
+		catch (boost::system::system_error&)
 		{
 			// Failed to connect to the endpoint. Try the next one if any.
 			std::cout << " failed." << std::endl;
 		}
 	}
 
-	// Unable to connect to all the endpoints. Report a failure.
-	throw std::exception("Unable to connect to all the endpoints.");
+	// Check if the connection is successful.
+	if (!connected)
+	{
+		// Unable to connect to all the endpoints. Report a failure.
+		std::cout << "Unable to connect to all the endpoints." << std::endl;
+		this->disconnect();
+		throw server_connection_exception();
+	}
+
+	// Send an HTTP header.
+	std::string http_header = "GET /" + username + "?action=write HTTP/1.1\r\n\r\n";
+	this->send(http_header.c_str(), http_header.length());
+
+	// Parse the HTTP response.
+	http_response_parser parser;
+	http_response response = parser.parse(*socket);
+	std::cout << "Server responded: " << response.status << " " << response.description << "." << std::endl;
+
+	// Check for the response status.
+	if (response.status != 200)
+	{
+		this->disconnect();
+		throw invalid_username_exception();
+	}
 }
 
-void transmitter::reset()
+void transmitter::disconnect()
 {
-	socket->shutdown(boost::asio::ip::tcp::socket::shutdown_both);
-	socket->close();
-	delete socket;
-
-	socket = new boost::asio::ip::tcp::socket(*io_service);
+	if (socket)
+	{
+		try
+		{
+			socket->shutdown(boost::asio::ip::tcp::socket::shutdown_both);
+			socket->close();
+		}
+		catch (boost::system::system_error&) { }
+		delete socket;
+		socket = NULL;
+	}
 }
 
 void transmitter::send(const char* data, int size)
 {
+	if (!socket)
+		throw server_connection_exception();
+	
 	boost::asio::write(*socket, boost::asio::buffer(data, size));
-}
-
-void transmitter::set_username(std::string username)
-{
-	std::string http_header = "GET /" + username + "?action=write HTTP/1.1\r\n\r\n";
-	this->send(http_header.c_str(), http_header.length());
-
-	http_response_parser parser;
-	http_response response = parser.parse(*socket);
-
-	if (response.status != 200)
-		throw std::exception(("HTTP response: " + response.description).c_str());
 }
