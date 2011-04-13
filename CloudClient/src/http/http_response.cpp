@@ -23,96 +23,105 @@ void http_response::receive(boost::asio::ip::tcp::socket& socket)
 	std::string key = "";
 	std::string value = "";
 	
-	do
+	try
 	{
-		int bytes_read = socket.read_some(boost::asio::buffer(buffer, buffer_size));
-
-		char* position = buffer;
 		do
 		{
-			switch (parser_state)
+			int bytes_read = socket.read_some(boost::asio::buffer(buffer, buffer_size));
+
+			char* position = buffer;
+			do
 			{
-			case VERSION:
-				if (*position != ' ')
-					this->version += *position++;
-				else
+				switch (parser_state)
 				{
-					position++;
-					parser_state = STATUS;
-				}
-				break;
-			case STATUS:
-				if (*position != ' ')
-					status += *position++;
-				else
-				{
-					this->status = boost::lexical_cast<int>(status);
-					position++;
-					parser_state = DESCRIPTION;
-				}
-				break;
-			case DESCRIPTION:
-				if (*position == '\r')
-					position++;
-				else if (*position != '\n')
-					this->description += *position++;
-				else
-				{
-					position++;
-					key = "";
-					parser_state = HEADER_KEY;
-				}
-				break;
-			case HEADER_KEY:
-				if (*position == '\r')
-					position++;
-				else if (*position == '\n')
-				{
-					position++;
-					std::map<std::string, std::string>::iterator iterator = this->headers.find("Content-Length");
-					if (iterator != this->headers.end())
-					{
-						this->body_size = boost::lexical_cast<int>(iterator->second);
-						parser_state = BODY;
-					}
+				case VERSION:
+					if (*position != ' ')
+						this->version += *position++;
 					else
+					{
+						position++;
+						parser_state = STATUS;
+					}
+					break;
+				case STATUS:
+					if (*position != ' ')
+						status += *position++;
+					else
+					{
+						this->status = boost::lexical_cast<int>(status);
+						position++;
+						parser_state = DESCRIPTION;
+					}
+					break;
+				case DESCRIPTION:
+					if (*position == '\r')
+						position++;
+					else if (*position != '\n')
+						this->description += *position++;
+					else
+					{
+						position++;
+						key = "";
+						parser_state = HEADER_KEY;
+					}
+					break;
+				case HEADER_KEY:
+					if (*position == '\r')
+						position++;
+					else if (*position == '\n')
+					{
+						position++;
+						std::map<std::string, std::string>::iterator iterator = this->headers.find("Content-Length");
+						if (iterator != this->headers.end())
+						{
+							this->body_size = boost::lexical_cast<int>(iterator->second);
+							parser_state = BODY;
+						}
+						else
+							parser_state = OK;
+					}
+					else if (*position == ':')
+						position++;
+					else if (*position != ' ')
+						key += *position++;
+					else
+					{
+						position++;
+						value = "";
+						parser_state = HEADER_VALUE;
+					}
+					break;
+				case HEADER_VALUE:
+					if (*position == '\r')
+						position++;
+					else if (*position != '\n')
+						value += *position++;
+					else
+					{
+						position++;
+						this->headers.insert(std::pair<std::string, std::string>(key, value));
+						key = "";
+						parser_state = HEADER_KEY;
+					}
+					break;
+				case BODY:
+					this->body += *position++;
+					if (this->body.length() == this->body_size)
 						parser_state = OK;
+					break;
+				case OK:
+					position = buffer + bytes_read;
+					break;
 				}
-				else if (*position == ':')
-					position++;
-				else if (*position != ' ')
-					key += *position++;
-				else
-				{
-					position++;
-					value = "";
-					parser_state = HEADER_VALUE;
-				}
-				break;
-			case HEADER_VALUE:
-				if (*position == '\r')
-					position++;
-				else if (*position != '\n')
-					value += *position++;
-				else
-				{
-					position++;
-					this->headers.insert(std::pair<std::string, std::string>(key, value));
-					key = "";
-					parser_state = HEADER_KEY;
-				}
-				break;
-			case BODY:
-				this->body += *position++;
-				if (this->body.length() == this->body_size)
-					parser_state = OK;
-				break;
-			case OK:
-				position = buffer + bytes_read;
-				break;
-			}
-		} while (position < buffer + bytes_read);
-	} while (socket.available());
+			} while (position < buffer + bytes_read);
+		} while (socket.available());
+	}
+	catch (...)
+	{
+		delete buffer;
+		throw;
+	}
+	delete buffer;
 }
 
 void http_response::send(boost::asio::ip::tcp::socket& socket)
