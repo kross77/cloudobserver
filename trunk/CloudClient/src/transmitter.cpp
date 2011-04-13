@@ -106,9 +106,14 @@ void transmitter::connect(std::string username, std::string url)
 		throw server_connection_exception();
 	}
 
-	// Send an HTTP header.
-	std::string http_header = "GET /" + username + "?action=write HTTP/1.1\r\n\r\n";
-	this->send(http_header.c_str(), http_header.length());
+	// Send the HTTP request.
+	http_request request;
+	request.method = "GET";
+	request.url = '/' + username;
+	request.execute = true;
+	request.arguments.insert(std::pair<std::string, std::string>("action", "write"));
+	request.version = "HTTP/1.1";
+	request.send(*this->socket);
 
 	// Receive the HTTP response.
 	http_response response(*socket);
