@@ -2,6 +2,7 @@
 
 http_response::http_response()
 {
+	this->reset();
 }
 
 http_response::http_response(boost::asio::ip::tcp::socket& socket)
@@ -13,8 +14,31 @@ http_response::~http_response()
 {
 }
 
+void http_response::clear()
+{
+	this->version = "";
+	this->status = 0;
+	this->description = "";
+	this->headers.clear();
+	this->body_size = 0;
+	this->body = "";
+}
+
+void http_response::reset()
+{
+	this->version = "HTTP/1.1";
+	this->status = 200;
+	this->description = "OK";
+	this->headers.clear();
+	this->body_size = 0;
+	this->body = "";
+}
+
+
 void http_response::receive(boost::asio::ip::tcp::socket& socket)
 {
+	this->clear();
+
 	http_response_parser_state parser_state = VERSION;
 
 	int buffer_size = 1024;

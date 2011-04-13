@@ -2,6 +2,7 @@
 
 http_request::http_request()
 {
+	this->reset();
 }
 
 http_request::http_request(boost::asio::ip::tcp::socket& socket)
@@ -13,8 +14,32 @@ http_request::~http_request()
 {
 }
 
+void http_request::clear()
+{
+	this->method = "";
+	this->url = "";
+	this->version = "";
+	this->arguments.clear();
+	this->headers.clear();
+	this->body_size = 0;
+	this->body = "";
+}
+
+void http_request::reset()
+{
+	this->method = "GET";
+	this->url = "/";
+	this->version = "HTTP/1.1";
+	this->arguments.clear();
+	this->headers.clear();
+	this->body_size = 0;
+	this->body = "";
+}
+
 void http_request::receive(boost::asio::ip::tcp::socket& socket)
 {
+	this->clear();
+
 	http_request_parser_state parser_state = METHOD;
 
 	int buffer_size = 1024;

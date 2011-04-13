@@ -108,10 +108,8 @@ void transmitter::connect(std::string username, std::string url)
 
 	// Send the HTTP request.
 	http_request request;
-	request.method = "GET";
 	request.url = '/' + username;
 	request.arguments.insert(std::pair<std::string, std::string>("action", "write"));
-	request.version = "HTTP/1.1";
 	request.send(*this->socket);
 
 	// Receive the HTTP response.
