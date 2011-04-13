@@ -5,7 +5,6 @@
 #include <boost/asio.hpp>
 #include <boost/lexical_cast.hpp>
 
-#include <iostream>
 #include <string>
 #include <map>
 
