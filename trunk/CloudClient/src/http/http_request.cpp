@@ -47,7 +47,6 @@ void http_request::receive(boost::asio::ip::tcp::socket& socket)
 					{
 						position++;
 						key = "";
-						this->execute = true;
 						parser_state = URL_PARAM;
 					}
 					else if (*position != ' ')
@@ -163,7 +162,7 @@ void http_request::receive(boost::asio::ip::tcp::socket& socket)
 void http_request::send(boost::asio::ip::tcp::socket& socket)
 {
 	std::string request = this->method + ' ' + this->url;
-	if (this->execute)
+	if (arguments.begin() != arguments.end())
 	{
 		request += '?';
 		bool first = true;

@@ -23,7 +23,6 @@ public:
 	std::string url;
 	std::string version;
 	std::map<std::string, std::string> arguments;
-	bool execute;
 	std::map<std::string, std::string> headers;
 	int body_size;
 	std::string body;
