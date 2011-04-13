@@ -23,7 +23,7 @@ encoder::~encoder()
 {
 	stop();
 
-	delete transmitter;
+	delete transmitter_block;
 }
 
 void encoder::init(int audio_samplerate, int video_bitrate, int video_framerate, int video_width, int video_height)
@@ -85,7 +85,7 @@ void encoder::start(std::string& container)
 
 	char* pb_buffer;
 	int len = url_close_dyn_buf(pFormatContext->pb, (uint8_t**)(&pb_buffer));
-	transmitter->send(pb_buffer, len);
+	transmitter_block->send(pb_buffer, len);
 	av_free(pb_buffer);
 }
 
@@ -154,7 +154,7 @@ void encoder::stop()
 			throw std::runtime_error("av_write_trailer failed.");
 		char* pb_buffer;
 		int len = url_close_dyn_buf(pFormatContext->pb, (uint8_t**)(&pb_buffer));
-		transmitter->send(pb_buffer, len);
+		transmitter_block->send(pb_buffer, len);
 		av_free(pb_buffer);
 		free();
 	}
@@ -411,7 +411,7 @@ bool encoder::add_audio_frame(AVFormatContext* pFormatContext, AVStream* pStream
 		char* pb_buffer;
 		int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
 
-		transmitter->send(pb_buffer, len);
+		transmitter_block->send(pb_buffer, len);
 		av_free(pb_buffer) ;
 		//av_freep(&pb_buffer);
 		av_free_packet( &pkt);	
@@ -449,7 +449,7 @@ bool encoder::add_video_frame(AVFormatContext* pFormatContext, AVFrame* pOutputF
 		char* pb_buffer;
 		int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
 
-		transmitter->send(pb_buffer, len);
+		transmitter_block->send(pb_buffer, len);
 		av_free(pb_buffer) ;
 		//av_freep(&pb_buffer);
 		av_free_packet( &pkt);
@@ -485,7 +485,7 @@ bool encoder::add_video_frame(AVFormatContext* pFormatContext, AVFrame* pOutputF
 			char* pb_buffer;
 			int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
 
-			transmitter->send(pb_buffer, len);
+			transmitter_block->send(pb_buffer, len);
 			av_free(pb_buffer) ;
 			//av_freep(&pb_buffer);
 			av_free_packet( &pkt);

@@ -567,7 +567,7 @@ int main(int argc, char* argv[])
 	video_height -= video_height % 4;
 
 	// Initialize the transmitter block.
-	encoder.transmitter = new transmitter();
+	encoder.transmitter_block = new transmitter();
 
 	// Ask for the username if one wasn't read from command line arguments.
 	if (username.empty())
@@ -590,7 +590,7 @@ int main(int argc, char* argv[])
 		try
 		{
 			// Try to connect to the server.
-			encoder.transmitter->connect(username, server);
+			encoder.transmitter_block->connect(username, server);
 			// Connection succeeded.
 			succeed = true;
 		}

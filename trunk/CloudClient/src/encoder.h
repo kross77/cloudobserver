@@ -54,7 +54,7 @@ public:
 
 	bool has_audio;
 	bool has_video;
-	transmitter* transmitter;
+	transmitter* transmitter_block;
 private:
 	// format context
 	AVFormatContext* pFormatContext;
