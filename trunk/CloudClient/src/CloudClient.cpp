@@ -250,22 +250,6 @@ void init_ffmpeg(string container, int w, int h, int fps)
 	}
 	encoder.init(audio_sample_rate, stream_bitrate, fps, video_width, video_height);
 
-	bool succeed = false;
-	while (!succeed)
-		try
-		{
-			encoder.transmitter->set_username(username);
-			succeed = true;
-		}
-		catch (std::exception& e)
-		{
-			std::cout << e.what() << std::endl;
-			encoder.transmitter->reset();
-			encoder.transmitter->connect(server);
-			std::cout << "Please, select another username: ";
-			std::cin >> username;
-		}
-
 	try
 	{
 		encoder.start(container);
@@ -585,38 +569,43 @@ int main(int argc, char* argv[])
 	// Initialize the transmitter block.
 	encoder.transmitter = new transmitter();
 
-	// Check the server if one is read from command line arguments.
-	if (!server.empty())
-		try
-		{
-			encoder.transmitter->connect(server);
-		}
-		catch (std::exception& e)
-		{
-			std::cout << e.what() << std::endl;
-			server = "";
-		}
+	// Ask for the username if one wasn't read from command line arguments.
+	if (username.empty())
+	{
+		std::cout << "Please, select a username: ";
+		std::cin >> username;
+	}
 
-	// Repeat asking for server until succeed.
-	while (server.empty())
+	// Ask for the server URL if one wasn't read from command line arguments.
+	if (server.empty())
 	{
 		std::cout << "Please, specify the server URL: ";
 		std::cin >> server;
-		try
-		{
-			encoder.transmitter->connect(server);
-		}
-		catch (std::exception& e)
-		{
-			std::cout << e.what() << std::endl;
-			server = "";
-		}
 	}
 
-	if (username.empty())
+	// Repeat asking for the username and the server URL until connection is successfully established.
+	bool succeed = false;
+	while (!succeed)
 	{
-		std::cout << "Please, enter your username: ";
-		std::cin >> username;
+		try
+		{
+			// Try to connect to the server.
+			encoder.transmitter->connect(username, server);
+			// Connection succeeded.
+			succeed = true;
+		}
+		catch (transmitter::invalid_username_exception&)
+		{
+			// Server rejected the username. Ask for another username.
+			std::cout << "Please, select another username: ";
+			std::cin >> username;
+		}
+		catch (transmitter::server_connection_exception&)
+		{
+			// Failed to connect to the server. Ask for another server URL.
+			std::cout << "Please, specify another server URL: ";
+			std::cin >> server;
+		}
 	}
 
 	init_opencv();
