@@ -16,6 +16,8 @@ public:
 	http_request();
 	http_request(boost::asio::ip::tcp::socket& socket);
 	~http_request();
+	void clear();
+	void reset();
 	void receive(boost::asio::ip::tcp::socket& socket);
 	void send(boost::asio::ip::tcp::socket& socket);
 
