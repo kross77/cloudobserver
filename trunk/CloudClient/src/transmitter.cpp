@@ -110,9 +110,8 @@ void transmitter::connect(std::string username, std::string url)
 	std::string http_header = "GET /" + username + "?action=write HTTP/1.1\r\n\r\n";
 	this->send(http_header.c_str(), http_header.length());
 
-	// Parse the HTTP response.
-	http_response_parser parser;
-	http_response response = parser.parse(*socket);
+	// Receive the HTTP response.
+	http_response response(*socket);
 	std::cout << "Server responded: " << response.status << " " << response.description << "." << std::endl;
 
 	// Check for the response status.
