@@ -110,7 +110,6 @@ void transmitter::connect(std::string username, std::string url)
 	http_request request;
 	request.method = "GET";
 	request.url = '/' + username;
-	request.execute = true;
 	request.arguments.insert(std::pair<std::string, std::string>("action", "write"));
 	request.version = "HTTP/1.1";
 	request.send(*this->socket);
