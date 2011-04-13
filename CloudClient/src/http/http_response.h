@@ -5,8 +5,8 @@
 #include <boost/asio.hpp>
 #include <boost/lexical_cast.hpp>
 
-#include <string>
 #include <map>
+#include <string>
 
 class http_response
 {

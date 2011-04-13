@@ -126,10 +126,9 @@ void http_response::receive(boost::asio::ip::tcp::socket& socket)
 
 void http_response::send(boost::asio::ip::tcp::socket& socket)
 {
-	std::string headers_string = this->version + " " + boost::lexical_cast<std::string>(this->status) + " " + this->description + "\n";
+	std::string response = this->version + ' ' + boost::lexical_cast<std::string>(this->status) + ' ' + this->description + '\n';
 	for (std::map<std::string, std::string>::iterator header = this->headers.begin(); header != this->headers.end(); ++header)
-		headers_string += header->first + ": " + header->second + "\n";
-	headers_string += "\n";
-	headers_string += this->body;
-	socket.send(boost::asio::buffer(headers_string.c_str(), headers_string.length()));
+		response += header->first + ": " + header->second + '\n';
+	response += '\n' + this->body;
+	socket.send(boost::asio::buffer(response.c_str(), response.length()));
 }
