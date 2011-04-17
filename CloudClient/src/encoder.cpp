@@ -23,6 +23,7 @@ encoder::~encoder()
 {
 	stop();
 
+	delete multiplexer_block;
 	delete transmitter_block;
 }
 
@@ -33,12 +34,6 @@ void encoder::init(int audio_samplerate, int video_bitrate, int video_framerate,
 	this->video_framerate = video_framerate;
 	this->video_width = video_width;
 	this->video_height = video_height;
-
-	av_register_all();
-
-	pFormatContext = avformat_alloc_context();
-	if (pFormatContext == NULL)
-		throw std::runtime_error("avformat_alloc_context failed.");
 }
 
 void encoder::start(std::string& container)
@@ -46,9 +41,8 @@ void encoder::start(std::string& container)
 	if (!has_audio && !has_video)
 		throw std::runtime_error("No audio and no video.");
 
-	pFormatContext->oformat = av_guess_format(container.c_str(), NULL, NULL);
-	if (pFormatContext->oformat == NULL)
-		throw std::runtime_error("av_guess_format failed.");
+	multiplexer_block = new multiplexer(container);
+	pFormatContext = multiplexer_block->get_format_context();
 
 	if (has_audio)
 		open_audio_stream();
@@ -58,17 +52,8 @@ void encoder::start(std::string& container)
 	
 	if (av_set_parameters(pFormatContext, NULL) < 0)
 		throw std::runtime_error("av_set_parameters failed.");
-	
-	if (url_open_dyn_buf(&pFormatContext->pb) != 0)
-		throw std::runtime_error("url_open_dyn_buf failed.");
 
-	if (av_write_header(pFormatContext) != 0)
-		throw std::runtime_error("av_write_header failed.");
-
-	char* pb_buffer;
-	int len = url_close_dyn_buf(pFormatContext->pb, (uint8_t**)(&pb_buffer));
-	transmitter_block->send(pb_buffer, len);
-	av_free(pb_buffer);
+	multiplexer_block->connect(transmitter_block);
 }
 
 void encoder::add_frame(AVFrame* frame)
@@ -124,18 +109,8 @@ void encoder::add_frame(AVFrame* frame)
 			pkt.stream_index = pVideoStream->index;
 			pkt.data= (uint8_t *) pCurrentPicture;
 			pkt.size= sizeof(AVPicture);
-
-			url_open_dyn_buf(&pFormatContext -> pb);
-			if (av_interleaved_write_frame(pFormatContext, &pkt) != 0)
-				throw std::runtime_error("Failed to write frame.");
-
-			char* pb_buffer;
-			int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
-
-			transmitter_block->send(pb_buffer, len);
-			av_free(pb_buffer) ;
-			//av_freep(&pb_buffer);
-			av_free_packet( &pkt);
+			multiplexer_block->send(&pkt);
+			av_free_packet(&pkt);
 		} 
 		else 
 		{
@@ -160,18 +135,8 @@ void encoder::add_frame(AVFrame* frame)
 				pkt.stream_index = pVideoStream->index;
 				pkt.data         = pVideoEncodeBuffer;
 				pkt.size         = nOutputSize;
-
-				// Write frame
-				url_open_dyn_buf(&pFormatContext -> pb);
-				if (av_interleaved_write_frame(pFormatContext, &pkt) != 0)
-					throw std::runtime_error("Failed to write frame.");
-				char* pb_buffer;
-				int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
-
-				transmitter_block->send(pb_buffer, len);
-				av_free(pb_buffer) ;
-				//av_freep(&pb_buffer);
-				av_free_packet( &pkt);
+				multiplexer_block->send(&pkt);
+				av_free_packet(&pkt);
 			}
 		}
 
@@ -215,18 +180,8 @@ void encoder::add_frame(const char* sound_buffer, int sound_buffer_size)
 			pkt.flags |= PKT_FLAG_KEY;
 			pkt.stream_index = pAudioStream->index;
 			pkt.data = pAudioEncodeBuffer;
-
-			// Write the compressed frame in the media file.
-			url_open_dyn_buf(&pFormatContext -> pb);
-			if (av_interleaved_write_frame(pFormatContext, &pkt) != 0)
-				throw std::runtime_error("Failed to write frame.");
-			char* pb_buffer;
-			int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
-
-			transmitter_block->send(pb_buffer, len);
-			av_free(pb_buffer) ;
-			//av_freep(&pb_buffer);
-			av_free_packet( &pkt);	
+			multiplexer_block->send(&pkt);
+			av_free_packet(&pkt);
 
 
 			nCurrentSize -= packSizeInSize;  
@@ -243,14 +198,7 @@ void encoder::stop()
 {
 	if (pFormatContext)
 	{
-		if (url_open_dyn_buf(&pFormatContext->pb) != 0)
-			throw std::runtime_error("url_open_dyn_buf failed.");
-		if (av_write_trailer(pFormatContext) != 0)
-			throw std::runtime_error("av_write_trailer failed.");
-		char* pb_buffer;
-		int len = url_close_dyn_buf(pFormatContext->pb, (uint8_t**)(&pb_buffer));
-		transmitter_block->send(pb_buffer, len);
-		av_free(pb_buffer);
+		multiplexer_block->disconnect();
 
 		// close audio stream.
 		if (pAudioStream)
