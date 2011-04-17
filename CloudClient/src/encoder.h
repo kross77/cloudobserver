@@ -101,8 +101,6 @@ private:
 	// Add video frame.
 	bool add_video_frame(AVFrame* pOutputFrame, AVCodecContext* pVideoCodec);
 
-	// Allocate memory.
-	AVFrame* create_avframe(int pix_fmt, int nWidth, int nHeight);
 	// Free resources.
 	void free();
 	// Check whether to convert pixel format.
