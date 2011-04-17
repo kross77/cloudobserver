@@ -103,8 +103,6 @@ private:
 
 	// Free resources.
 	void free();
-	// Check whether to convert pixel format.
-	bool need_convert();
 };
 
 #endif // ENCODER_H
