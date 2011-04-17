@@ -108,9 +108,18 @@ void encoder::add_frame(AVFrame* frame)
 		}
 
 		// Allocate picture.
-		pCurrentPicture = create_avframe(pVideoCodec->pix_fmt, pVideoCodec->width, 
-			pVideoCodec->height);
+		pCurrentPicture = avcodec_alloc_frame();
+		if (!pCurrentPicture)
+			throw std::runtime_error("Cannot allocate frame.");
 
+		
+		int size = avpicture_get_size(pVideoCodec->pix_fmt, pVideoCodec->width, pVideoCodec->height);
+		uint8_t* frame_buffer = (uint8_t*)av_malloc(size);
+		if (!frame_buffer)
+			throw std::runtime_error("Cannot allocate frame buffer.");
+
+		avpicture_fill((AVPicture*)pCurrentPicture, frame_buffer, pVideoCodec->pix_fmt, pVideoCodec->width, pVideoCodec->height);
+		
 		if (need_convert() && pImgConvertCtx) 
 		{
 			// Convert RGB to YUV.
@@ -465,34 +474,6 @@ bool encoder::add_video_frame(AVFrame* pOutputFrame, AVCodecContext* pVideoCodec
 	}
 
 	return res;
-}
-
-AVFrame* encoder::create_avframe(int pix_fmt, int nWidth, int nHeight)
-{
-	AVFrame *picture     = NULL;
-	uint8_t *picture_buf = NULL;
-	int size;
-
-	picture = avcodec_alloc_frame();
-	if ( !picture)
-	{
-		printf("Cannot create frame\n");
-		return NULL;
-	}
-
-	size = avpicture_get_size((PixelFormat)pix_fmt, nWidth, nHeight);
-	picture_buf = (uint8_t *) av_malloc(size);
-
-	if (!picture_buf) 
-	{
-		av_free(picture);
-		printf("Cannot allocate buffer\n");
-		return NULL;
-	}
-
-	avpicture_fill((AVPicture *)picture, picture_buf, (PixelFormat)pix_fmt, nWidth, nHeight);
-
-	return picture;
 }
 
 void encoder::free()
