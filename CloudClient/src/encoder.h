@@ -92,9 +92,9 @@ private:
 	void open_video_stream();
 
 	// Close audio stream.
-	void close_audio_stream(AVStream* pStream);
+	void close_audio_stream();
 	// Close video stream.
-	void close_video_stream(AVStream* pStream);
+	void close_video_stream();
 
 	// Add audio frame.
 	bool add_audio_frame(AVStream* pStream, const char* soundBuffer, int soundBufferSize);

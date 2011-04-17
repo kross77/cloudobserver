@@ -303,9 +303,9 @@ void encoder::open_video_stream()
 	}
 }
 
-void encoder::close_audio_stream(AVStream* pStream)
+void encoder::close_audio_stream()
 {
-	avcodec_close(pStream->codec);
+	avcodec_close(pAudioStream->codec);
 	if (pAudioEncodeBuffer)
 	{
 		av_free(pAudioEncodeBuffer);
@@ -314,9 +314,9 @@ void encoder::close_audio_stream(AVStream* pStream)
 	nSizeAudioEncodeBuffer = 0;
 }
 
-void encoder::close_video_stream(AVStream* pStream)
+void encoder::close_video_stream()
 {
-	avcodec_close(pStream->codec);
+	avcodec_close(pVideoStream->codec);
 	if (pCurrentPicture)
 	{
 		if (pCurrentPicture->data)
@@ -501,17 +501,13 @@ void encoder::free()
 
 	if (pFormatContext)
 	{
-		// close video stream
-		if (pVideoStream)
-		{
-			close_video_stream(pVideoStream);
-		}
-
 		// close audio stream.
 		if (pAudioStream)
-		{
-			close_audio_stream(pAudioStream);
-		}
+			close_audio_stream();
+
+		// close video stream
+		if (pVideoStream)
+			close_video_stream();
 
 		// Free the streams.
 		for(size_t i = 0; i < pFormatContext->nb_streams; i++) 
