@@ -41,7 +41,6 @@ public:
 	~encoder();
 	void init(int audio_samplerate, int video_bitrate, int video_framerate, int video_width, int video_height);
 	void start(std::string& container);
-	void add_frame(AVFrame* frame, const char* sound_buffer, int sound_buffer_size);
 	void add_frame(AVFrame* frame);
 	void add_frame(const char* sound_buffer, int sound_buffer_size);
 	void stop();

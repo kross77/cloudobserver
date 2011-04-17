@@ -465,7 +465,8 @@ void save_frame_loop()
 		if (encoder.has_audio && encoder.has_video)
 			try
 			{
-				encoder.add_frame(readyFrame, capture_sample(), nSampleSize);
+				encoder.add_frame(capture_sample(), nSampleSize);
+				encoder.add_frame(readyFrame);
 			}
 			catch (std::exception)
 			{

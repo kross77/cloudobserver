@@ -79,12 +79,6 @@ void encoder::start(std::string& container)
 	av_free(pb_buffer);
 }
 
-void encoder::add_frame(AVFrame* frame, const char* sound_buffer, int sound_buffer_size)
-{
-	add_frame(sound_buffer, sound_buffer_size);
-	add_frame(frame);
-}
-
 void encoder::add_frame(AVFrame* frame)
 {
 	int nOutputSize = 0;
