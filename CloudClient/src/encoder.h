@@ -80,11 +80,6 @@ private:
 	int nAudioBufferSize;
 	char* audioBuffer;
 	
-	// Initialize audio stream.
-	void init_audio_stream();
-	// Initialize video stream.
-	void init_video_stream();
-
 	// Open audio stream.
 	void open_audio_stream();
 	// Open video stream.
