@@ -4,15 +4,11 @@ encoder::encoder()
 {
 	this->has_audio = false;
 	this->has_video = false;
-
-	this->pFormatContext = NULL;
-	this->pVideoStream = NULL;
-	this->pAudioStream = NULL;
 }
 
 encoder::~encoder()
 {
-	stop();
+	this->stop();
 
 	delete audio_encoder_block;
 	delete video_encoder_block;
@@ -35,7 +31,7 @@ void encoder::start(std::string& container)
 		throw std::runtime_error("No audio and no video.");
 
 	multiplexer_block = new multiplexer(container);
-	pFormatContext = multiplexer_block->get_format_context();
+	AVFormatContext* format_context = multiplexer_block->get_format_context();
 
 	if (has_audio)
 	{
@@ -49,7 +45,7 @@ void encoder::start(std::string& container)
 		video_encoder_block->connect(multiplexer_block);
 	}
 	
-	if (av_set_parameters(pFormatContext, NULL) < 0)
+	if (av_set_parameters(format_context, NULL) < 0)
 		throw std::runtime_error("av_set_parameters failed.");
 
 	multiplexer_block->connect(transmitter_block);
@@ -67,32 +63,11 @@ void encoder::add_frame(const char* sound_buffer, int sound_buffer_size)
 
 void encoder::stop()
 {
-	if (pFormatContext)
-	{
-		multiplexer_block->disconnect();
+	if (has_audio)
+		audio_encoder_block->disconnect();
 
-		// close audio stream.
-		if (has_audio)
-			audio_encoder_block->disconnect();
+	if (has_video)
+		video_encoder_block->disconnect();
 
-		// close video stream
-		if (has_video)
-			video_encoder_block->disconnect();
-
-		// Free the streams.
-		for(size_t i = 0; i < pFormatContext->nb_streams; i++) 
-		{
-			av_freep(&pFormatContext->streams[i]->codec);
-			av_freep(&pFormatContext->streams[i]);
-		}
-
-		if (!(pFormatContext->flags & AVFMT_NOFILE) && pFormatContext->pb) 
-		{
-			//s.close();
-		}
-
-		// Free the stream.
-		av_free(pFormatContext);
-		pFormatContext = NULL;
-	}
+	multiplexer_block->disconnect();
 }

@@ -57,13 +57,6 @@ public:
 	video_encoder* video_encoder_block;
 	multiplexer* multiplexer_block;
 	transmitter* transmitter_block;
-private:
-	// format context
-	AVFormatContext* pFormatContext;
-	// video stream context
-	AVStream* pVideoStream;
-	// audio stream context
-	AVStream* pAudioStream;
 };
 
 #endif // ENCODER_H
