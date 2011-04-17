@@ -94,7 +94,8 @@ void encoder::add_frame(AVFrame* frame)
 	{
 		pVideoCodec = pVideoStream->codec;
 
-		if (need_convert()) 
+		bool need_convert = (pVideoStream->codec->pix_fmt != PIX_FMT_RGB24);
+		if (need_convert) 
 		{
 			// RGB to YUV420P.
 			if (!pImgConvertCtx) 
@@ -120,7 +121,7 @@ void encoder::add_frame(AVFrame* frame)
 
 		avpicture_fill((AVPicture*)pCurrentPicture, frame_buffer, pVideoCodec->pix_fmt, pVideoCodec->width, pVideoCodec->height);
 		
-		if (need_convert() && pImgConvertCtx) 
+		if (need_convert && pImgConvertCtx) 
 		{
 			// Convert RGB to YUV.
 			sws_scale(pImgConvertCtx, frame->data, frame->linesize,	0, pVideoCodec->height, pCurrentPicture->data, pCurrentPicture->linesize);
@@ -506,14 +507,4 @@ void encoder::free()
 		av_free(pFormatContext);
 		pFormatContext = NULL;
 	}
-}
-
-bool encoder::need_convert()
-{
-	bool res = false;
-	if (pVideoStream && pVideoStream->codec)
-	{
-		res = (pVideoStream->codec->pix_fmt != PIX_FMT_RGB24);
-	}
-	return res;
 }
