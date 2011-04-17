@@ -81,10 +81,10 @@ private:
 	int nAudioBufferSize;
 	char* audioBuffer;
 	
-	// Add audio stream.
-	AVStream* add_audio_stream(CodecID codec_id);
-	// Add video stream.
-	AVStream* add_video_stream(CodecID codec_id);
+	// Initialize audio stream.
+	void init_audio_stream();
+	// Initialize video stream.
+	void init_video_stream();
 
 	// Open audio stream.
 	bool open_audio_stream(AVStream* pStream);
