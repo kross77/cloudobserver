@@ -54,14 +54,14 @@ void encoder::start(std::string& container)
 
 	if (has_audio)
 	{
-		pAudioStream = add_audio_stream(pFormatContext, pOutFormat->audio_codec);
+		pAudioStream = add_audio_stream(pOutFormat->audio_codec);
 		if (pAudioStream == NULL)
 			throw std::runtime_error("add_audio_stream failed.");
 	}
 
 	if (has_video)
 	{
-		pVideoStream = add_video_stream(pFormatContext, pOutFormat->video_codec);
+		pVideoStream = add_video_stream(pOutFormat->video_codec);
 		if (pVideoStream == NULL)
 			throw std::runtime_error("add_video_stream failed.");
 	}
@@ -70,11 +70,11 @@ void encoder::start(std::string& container)
 		throw std::runtime_error("av_set_parameters failed.");
 
 	if (has_audio)
-		if (!open_audio_stream(pFormatContext, pAudioStream))
+		if (!open_audio_stream(pAudioStream))
 			throw std::runtime_error("open_audio_stream failed.");
 
 	if (has_video)
-		if (!open_video_stream(pFormatContext, pVideoStream))
+		if (!open_video_stream(pVideoStream))
 			throw std::runtime_error("open_video_stream failed.");
 
 	if (url_open_dyn_buf(&pFormatContext->pb) != 0)
@@ -127,7 +127,7 @@ void encoder::add_frame(AVFrame* frame)
 			sws_scale(pImgConvertCtx, frame->data, frame->linesize,	0, pVideoCodec->height, pCurrentPicture->data, pCurrentPicture->linesize);
 		}
 
-		if(!add_video_frame(pFormatContext, pCurrentPicture, pVideoStream->codec))
+		if(!add_video_frame(pCurrentPicture, pVideoStream->codec))
 			throw std::runtime_error("add_video_frame failed.");
 
 		// Free temp frame
@@ -140,7 +140,7 @@ void encoder::add_frame(AVFrame* frame)
 void encoder::add_frame(const char* sound_buffer, int sound_buffer_size)
 {
 	if (sound_buffer && sound_buffer_size > 0)
-		if (!add_audio_frame(pFormatContext, pAudioStream, sound_buffer, sound_buffer_size))
+		if (!add_audio_frame(pAudioStream, sound_buffer, sound_buffer_size))
 			throw std::runtime_error("add_audio_frame failed.");
 }
 
@@ -166,13 +166,13 @@ void encoder::stop()
 	}
 }
 
-AVStream* encoder::add_audio_stream(AVFormatContext* pContext, CodecID codec_id)
+AVStream* encoder::add_audio_stream(CodecID codec_id)
 {
 	AVCodecContext *pCodecCxt = NULL;
 	AVStream *pStream = NULL;
 
 	// Try create stream.
-	pStream = av_new_stream(pContext, 1);
+	pStream = av_new_stream(pFormatContext, 1);
 	if (!pStream) 
 	{
 		printf("Cannot add new audio stream\n");
@@ -196,7 +196,7 @@ AVStream* encoder::add_audio_stream(AVFormatContext* pContext, CodecID codec_id)
 	}
 
 	// Some formats want stream headers to be separate.
-	if(pContext->oformat->flags & AVFMT_GLOBALHEADER)
+	if(pFormatContext->oformat->flags & AVFMT_GLOBALHEADER)
 	{
 		pCodecCxt->flags |= CODEC_FLAG_GLOBAL_HEADER;
 	}
@@ -204,12 +204,12 @@ AVStream* encoder::add_audio_stream(AVFormatContext* pContext, CodecID codec_id)
 	return pStream;
 }
 
-AVStream* encoder::add_video_stream(AVFormatContext* pContext, CodecID codec_id)
+AVStream* encoder::add_video_stream(CodecID codec_id)
 {
 	AVCodecContext *pCodecCxt = NULL;
 	AVStream *st    = NULL;
 
-	st = av_new_stream(pContext, 0);
+	st = av_new_stream(pFormatContext, 0);
 	if (!st) 
 	{
 		printf("Cannot add new vidoe stream\n");
@@ -247,7 +247,7 @@ AVStream* encoder::add_video_stream(AVFormatContext* pContext, CodecID codec_id)
 	}
 
 	// Some formats want stream headers to be separate.
-	if(pContext->oformat->flags & AVFMT_GLOBALHEADER)
+	if(pFormatContext->oformat->flags & AVFMT_GLOBALHEADER)
 	{
 		pCodecCxt->flags |= CODEC_FLAG_GLOBAL_HEADER;
 	}
@@ -255,7 +255,7 @@ AVStream* encoder::add_video_stream(AVFormatContext* pContext, CodecID codec_id)
 	return st;
 }
 
-bool encoder::open_audio_stream(AVFormatContext* pContext, AVStream* pStream)
+bool encoder::open_audio_stream(AVStream* pStream)
 {
 	AVCodecContext *pCodecCxt = NULL;
 	AVCodec *pCodec = NULL;
@@ -302,7 +302,7 @@ bool encoder::open_audio_stream(AVFormatContext* pContext, AVStream* pStream)
 	return true;
 }
 
-bool encoder::open_video_stream(AVFormatContext* oc, AVStream* pStream)
+bool encoder::open_video_stream(AVStream* pStream)
 {
 	AVCodec *pCodec;
 	AVCodecContext *pContext;
@@ -335,7 +335,7 @@ bool encoder::open_video_stream(AVFormatContext* oc, AVStream* pStream)
 	return true;
 }
 
-void encoder::close_audio_stream(AVFormatContext* pContext, AVStream* pStream)
+void encoder::close_audio_stream(AVStream* pStream)
 {
 	avcodec_close(pStream->codec);
 	if (pAudioEncodeBuffer)
@@ -346,7 +346,7 @@ void encoder::close_audio_stream(AVFormatContext* pContext, AVStream* pStream)
 	nSizeAudioEncodeBuffer = 0;
 }
 
-void encoder::close_video_stream(AVFormatContext* pContext, AVStream* pStream)
+void encoder::close_video_stream(AVStream* pStream)
 {
 	avcodec_close(pStream->codec);
 	if (pCurrentPicture)
@@ -368,7 +368,7 @@ void encoder::close_video_stream(AVFormatContext* pContext, AVStream* pStream)
 	nSizeVideoEncodeBuffer = 0;
 }
 
-bool encoder::add_audio_frame(AVFormatContext* pFormatContext, AVStream* pStream, const char* soundBuffer, int soundBufferSize)
+bool encoder::add_audio_frame(AVStream* pStream, const char* soundBuffer, int soundBufferSize)
 {
 	AVCodecContext *pCodecCxt;    
 	bool res = true;  
@@ -428,7 +428,7 @@ bool encoder::add_audio_frame(AVFormatContext* pFormatContext, AVStream* pStream
 	return res;
 }
 
-bool encoder::add_video_frame(AVFormatContext* pFormatContext, AVFrame* pOutputFrame, AVCodecContext* pVideoCodec)
+bool encoder::add_video_frame(AVFrame* pOutputFrame, AVCodecContext* pVideoCodec)
 {
 	bool res = false;
 
@@ -536,13 +536,13 @@ void encoder::free()
 		// close video stream
 		if (pVideoStream)
 		{
-			close_video_stream(pFormatContext, pVideoStream);
+			close_video_stream(pVideoStream);
 		}
 
 		// close audio stream.
 		if (pAudioStream)
 		{
-			close_audio_stream(pFormatContext, pAudioStream);
+			close_audio_stream(pAudioStream);
 		}
 
 		// Free the streams.
