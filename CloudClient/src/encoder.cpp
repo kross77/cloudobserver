@@ -128,8 +128,58 @@ void encoder::add_frame(AVFrame* frame)
 void encoder::add_frame(const char* sound_buffer, int sound_buffer_size)
 {
 	if (sound_buffer && sound_buffer_size > 0)
-		if (!add_audio_frame(pAudioStream, sound_buffer, sound_buffer_size))
-			throw std::runtime_error("add_audio_frame failed.");
+	{
+		AVCodecContext *pCodecCxt;
+
+		pCodecCxt       = pAudioStream->codec;
+		memcpy(audioBuffer + nAudioBufferSizeCurrent, sound_buffer, sound_buffer_size);
+		nAudioBufferSizeCurrent += sound_buffer_size;
+
+		char * pSoundBuffer = (char *)audioBuffer;
+		int nCurrentSize    = nAudioBufferSizeCurrent;
+
+		// Size of packet on bytes.
+		// FORMAT s16
+		int  packSizeInSize = 2 * audioInputSampleSize;
+
+		while(nCurrentSize >= packSizeInSize)
+		{
+			AVPacket pkt;
+			av_init_packet(&pkt);
+
+			pkt.size = avcodec_encode_audio(pCodecCxt, pAudioEncodeBuffer, 
+				nSizeAudioEncodeBuffer, (const short *)pSoundBuffer);
+
+			if (pCodecCxt->coded_frame && pCodecCxt->coded_frame->pts != AV_NOPTS_VALUE)
+			{
+				pkt.pts = av_rescale_q(pCodecCxt->coded_frame->pts, pCodecCxt->time_base, pAudioStream->time_base);
+			}
+
+			pkt.flags |= PKT_FLAG_KEY;
+			pkt.stream_index = pAudioStream->index;
+			pkt.data = pAudioEncodeBuffer;
+
+			// Write the compressed frame in the media file.
+			url_open_dyn_buf(&pFormatContext -> pb);
+			if (av_interleaved_write_frame(pFormatContext, &pkt) != 0)
+				throw std::runtime_error("Failed to write frame.");
+			char* pb_buffer;
+			int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
+
+			transmitter_block->send(pb_buffer, len);
+			av_free(pb_buffer) ;
+			//av_freep(&pb_buffer);
+			av_free_packet( &pkt);	
+
+
+			nCurrentSize -= packSizeInSize;  
+			pSoundBuffer += packSizeInSize;  
+		}
+
+		// save excess
+		memcpy(audioBuffer, audioBuffer + nAudioBufferSizeCurrent - nCurrentSize, nCurrentSize);
+		nAudioBufferSizeCurrent = nCurrentSize; 
+	}
 }
 
 void encoder::stop()
@@ -349,66 +399,6 @@ void encoder::close_video_stream()
 		pVideoEncodeBuffer = NULL;
 	}
 	nSizeVideoEncodeBuffer = 0;
-}
-
-bool encoder::add_audio_frame(AVStream* pStream, const char* soundBuffer, int soundBufferSize)
-{
-	AVCodecContext *pCodecCxt;    
-	bool res = true;  
-
-	pCodecCxt       = pStream->codec;
-	memcpy(audioBuffer + nAudioBufferSizeCurrent, soundBuffer, soundBufferSize);
-	nAudioBufferSizeCurrent += soundBufferSize;
-
-	char * pSoundBuffer = (char *)audioBuffer;
-	int nCurrentSize    = nAudioBufferSizeCurrent;
-
-	// Size of packet on bytes.
-	// FORMAT s16
-	int  packSizeInSize = 2 * audioInputSampleSize;
-
-	while(nCurrentSize >= packSizeInSize)
-	{
-		AVPacket pkt;
-		av_init_packet(&pkt);
-
-		pkt.size = avcodec_encode_audio(pCodecCxt, pAudioEncodeBuffer, 
-			nSizeAudioEncodeBuffer, (const short *)pSoundBuffer);
-
-		if (pCodecCxt->coded_frame && pCodecCxt->coded_frame->pts != AV_NOPTS_VALUE)
-		{
-			pkt.pts = av_rescale_q(pCodecCxt->coded_frame->pts, pCodecCxt->time_base, pStream->time_base);
-		}
-
-		pkt.flags |= PKT_FLAG_KEY;
-		pkt.stream_index = pStream->index;
-		pkt.data = pAudioEncodeBuffer;
-
-		// Write the compressed frame in the media file.
-		url_open_dyn_buf(&pFormatContext -> pb);
-		if (av_interleaved_write_frame(pFormatContext, &pkt) != 0) 
-		{
-			res = false;
-			break;
-		}
-		char* pb_buffer;
-		int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
-
-		transmitter_block->send(pb_buffer, len);
-		av_free(pb_buffer) ;
-		//av_freep(&pb_buffer);
-		av_free_packet( &pkt);	
-
-
-		nCurrentSize -= packSizeInSize;  
-		pSoundBuffer += packSizeInSize;  
-	}
-
-	// save excess
-	memcpy(audioBuffer, audioBuffer + nAudioBufferSizeCurrent - nCurrentSize, nCurrentSize);
-	nAudioBufferSizeCurrent = nCurrentSize; 
-
-	return res;
 }
 
 bool encoder::add_video_frame(AVFrame* pOutputFrame, AVCodecContext* pVideoCodec)
