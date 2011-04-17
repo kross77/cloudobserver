@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 #include "ExtendedCharPtr.h"
+#include <boost/extension/extension.hpp>
 
 #ifndef _GETproducer_h_
 #define _GETproducer_h_
@@ -59,13 +60,13 @@ private: // API
 
 public:
 
-	void Init(int generator)
+	void BOOST_EXTENSION_EXPORT_DECL Init(int generator)
 	{
 		initSimpleProducerLibAPI(0); 
 		this->generator = generator;
 	}
 
-	void updateData(ExtendedCharPtr localCharPtr)
+	void BOOST_EXTENSION_EXPORT_DECL updateData(ExtendedCharPtr localCharPtr)
 	{
 		switch ( generator ) {
 			case 1 : 
