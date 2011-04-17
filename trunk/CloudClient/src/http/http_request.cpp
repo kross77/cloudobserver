@@ -125,6 +125,7 @@ void http_request::receive(boost::asio::ip::tcp::socket& socket)
 						key = "";
 						parser_state = HEADER_KEY;
 					}
+					break;
 				case HEADER_KEY:
 					if (*position == '\r')
 						position++;
