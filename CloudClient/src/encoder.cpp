@@ -115,8 +115,67 @@ void encoder::add_frame(AVFrame* frame)
 			sws_scale(pImgConvertCtx, frame->data, frame->linesize,	0, pVideoCodec->height, pCurrentPicture->data, pCurrentPicture->linesize);
 		}
 
-		if(!add_video_frame(pCurrentPicture, pVideoStream->codec))
-			throw std::runtime_error("add_video_frame failed.");
+		if (pFormatContext->oformat->flags & AVFMT_RAWPICTURE) 
+		{
+			// Raw video case. The API will change slightly in the near
+			// futur for that.
+			AVPacket pkt;
+			av_init_packet(&pkt);
+
+			pkt.flags |= PKT_FLAG_KEY;
+			pkt.stream_index = pVideoStream->index;
+			pkt.data= (uint8_t *) pCurrentPicture;
+			pkt.size= sizeof(AVPicture);
+
+			url_open_dyn_buf(&pFormatContext -> pb);
+			if (av_interleaved_write_frame(pFormatContext, &pkt) != 0)
+				throw std::runtime_error("Failed to write frame.");
+
+			char* pb_buffer;
+			int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
+
+			transmitter_block->send(pb_buffer, len);
+			av_free(pb_buffer) ;
+			//av_freep(&pb_buffer);
+			av_free_packet( &pkt);
+		} 
+		else 
+		{
+			// Encode
+			int nOutputSize = avcodec_encode_video(pVideoCodec, pVideoEncodeBuffer, 
+				nSizeVideoEncodeBuffer, pCurrentPicture);
+			if (nOutputSize > 0) 
+			{
+				AVPacket pkt;
+				av_init_packet(&pkt);
+
+				if (pVideoCodec->coded_frame->pts != AV_NOPTS_VALUE)
+				{
+					pkt.pts = av_rescale_q(pVideoCodec->coded_frame->pts, 
+						pVideoCodec->time_base, pVideoStream->time_base);
+				}
+
+				if(pVideoCodec->coded_frame->key_frame)
+				{
+					pkt.flags |= PKT_FLAG_KEY;
+				}
+				pkt.stream_index = pVideoStream->index;
+				pkt.data         = pVideoEncodeBuffer;
+				pkt.size         = nOutputSize;
+
+				// Write frame
+				url_open_dyn_buf(&pFormatContext -> pb);
+				if (av_interleaved_write_frame(pFormatContext, &pkt) != 0)
+					throw std::runtime_error("Failed to write frame.");
+				char* pb_buffer;
+				int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
+
+				transmitter_block->send(pb_buffer, len);
+				av_free(pb_buffer) ;
+				//av_freep(&pb_buffer);
+				av_free_packet( &pkt);
+			}
+		}
 
 		// Free temp frame
 		av_free(pCurrentPicture->data[0]);
@@ -399,75 +458,4 @@ void encoder::close_video_stream()
 		pVideoEncodeBuffer = NULL;
 	}
 	nSizeVideoEncodeBuffer = 0;
-}
-
-bool encoder::add_video_frame(AVFrame* pOutputFrame, AVCodecContext* pVideoCodec)
-{
-	bool res = false;
-
-	if (pFormatContext->oformat->flags & AVFMT_RAWPICTURE) 
-	{
-		// Raw video case. The API will change slightly in the near
-		// futur for that.
-		AVPacket pkt;
-		av_init_packet(&pkt);
-
-		pkt.flags |= PKT_FLAG_KEY;
-		pkt.stream_index = pVideoStream->index;
-		pkt.data= (uint8_t *) pOutputFrame;
-		pkt.size= sizeof(AVPicture);
-
-		url_open_dyn_buf(&pFormatContext -> pb);
-		res = av_interleaved_write_frame(pFormatContext, &pkt);
-		char* pb_buffer;
-		int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
-
-		transmitter_block->send(pb_buffer, len);
-		av_free(pb_buffer) ;
-		//av_freep(&pb_buffer);
-		av_free_packet( &pkt);
-		res = true;
-	} 
-	else 
-	{
-		// Encode
-		int nOutputSize = avcodec_encode_video(pVideoCodec, pVideoEncodeBuffer, 
-			nSizeVideoEncodeBuffer, pOutputFrame);
-		if (nOutputSize > 0) 
-		{
-			AVPacket pkt;
-			av_init_packet(&pkt);
-
-			if (pVideoCodec->coded_frame->pts != AV_NOPTS_VALUE)
-			{
-				pkt.pts = av_rescale_q(pVideoCodec->coded_frame->pts, 
-					pVideoCodec->time_base, pVideoStream->time_base);
-			}
-
-			if(pVideoCodec->coded_frame->key_frame)
-			{
-				pkt.flags |= PKT_FLAG_KEY;
-			}
-			pkt.stream_index = pVideoStream->index;
-			pkt.data         = pVideoEncodeBuffer;
-			pkt.size         = nOutputSize;
-
-			// Write frame
-			url_open_dyn_buf(&pFormatContext -> pb);
-			res = (av_interleaved_write_frame(pFormatContext, &pkt) == 0);
-			char* pb_buffer;
-			int len = url_close_dyn_buf(pFormatContext -> pb, (unsigned char **)(&pb_buffer));
-
-			transmitter_block->send(pb_buffer, len);
-			av_free(pb_buffer) ;
-			//av_freep(&pb_buffer);
-			av_free_packet( &pkt);
-		}
-		else 
-		{
-			res = false;
-		}
-	}
-
-	return res;
 }

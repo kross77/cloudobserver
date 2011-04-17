@@ -89,9 +89,6 @@ private:
 	void close_audio_stream();
 	// Close video stream.
 	void close_video_stream();
-
-	// Add video frame.
-	bool add_video_frame(AVFrame* pOutputFrame, AVCodecContext* pVideoCodec);
 };
 
 #endif // ENCODER_H
