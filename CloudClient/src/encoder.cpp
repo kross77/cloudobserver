@@ -54,14 +54,14 @@ void encoder::start(std::string& container)
 
 	if (has_audio)
 	{
-		pAudioStream = add_audio_stream(pOutFormat->audio_codec);
+		init_audio_stream();
 		if (pAudioStream == NULL)
 			throw std::runtime_error("add_audio_stream failed.");
 	}
 
 	if (has_video)
 	{
-		pVideoStream = add_video_stream(pOutFormat->video_codec);
+		init_video_stream();
 		if (pVideoStream == NULL)
 			throw std::runtime_error("add_video_stream failed.");
 	}
@@ -166,22 +166,19 @@ void encoder::stop()
 	}
 }
 
-AVStream* encoder::add_audio_stream(CodecID codec_id)
+void encoder::init_audio_stream()
 {
 	AVCodecContext *pCodecCxt = NULL;
 	AVStream *pStream = NULL;
 
 	// Try create stream.
 	pStream = av_new_stream(pFormatContext, 1);
-	if (!pStream) 
-	{
-		printf("Cannot add new audio stream\n");
-		return NULL;
-	}
-	//	printf("added new audio stream\n");
+	if (!pStream)
+		throw std::runtime_error("Cannot initialize audio stream.");
+
 	// Codec.
 	pCodecCxt = pStream->codec;
-	pCodecCxt->codec_id = codec_id;
+	pCodecCxt->codec_id = pFormatContext->oformat->audio_codec;
 	pCodecCxt->codec_type = CODEC_TYPE_AUDIO;
 	// Set format
 	pCodecCxt->bit_rate    = MAX_AUDIO_PACKET_SIZE - 1024*10;
@@ -201,23 +198,20 @@ AVStream* encoder::add_audio_stream(CodecID codec_id)
 		pCodecCxt->flags |= CODEC_FLAG_GLOBAL_HEADER;
 	}
 
-	return pStream;
+	pAudioStream = pStream;
 }
 
-AVStream* encoder::add_video_stream(CodecID codec_id)
+void encoder::init_video_stream()
 {
 	AVCodecContext *pCodecCxt = NULL;
 	AVStream *st    = NULL;
 
 	st = av_new_stream(pFormatContext, 0);
-	if (!st) 
-	{
-		printf("Cannot add new vidoe stream\n");
-		return NULL;
-	}
+	if (!st)
+		throw std::runtime_error("Cannot initialize video stream.");
 
 	pCodecCxt = st->codec;
-	pCodecCxt->codec_id = (CodecID)codec_id;
+	pCodecCxt->codec_id = pFormatContext->oformat->video_codec;
 	pCodecCxt->codec_type = CODEC_TYPE_VIDEO;
 	pCodecCxt->frame_number = 0;
 	// Put sample parameters.
@@ -252,7 +246,7 @@ AVStream* encoder::add_video_stream(CodecID codec_id)
 		pCodecCxt->flags |= CODEC_FLAG_GLOBAL_HEADER;
 	}
 
-	return st;
+	pVideoStream = st;
 }
 
 bool encoder::open_audio_stream(AVStream* pStream)
