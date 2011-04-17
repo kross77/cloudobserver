@@ -55,6 +55,15 @@ void multiplexer::disconnect()
 		int length = url_close_dyn_buf(this->format_context->pb, (uint8_t**)(&buffer));
 		this->transmitter_block->send(buffer, length);
 		av_free(buffer);
+
+		for (size_t i = 0; i < this->format_context->nb_streams; i++)
+		{
+			av_free(this->format_context->streams[i]->codec);
+			av_free(this->format_context->streams[i]);
+		}
+
+		av_free(this->format_context);
+		this->format_context = NULL;
 	}
 }
 
