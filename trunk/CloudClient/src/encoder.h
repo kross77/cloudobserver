@@ -100,9 +100,6 @@ private:
 	bool add_audio_frame(AVStream* pStream, const char* soundBuffer, int soundBufferSize);
 	// Add video frame.
 	bool add_video_frame(AVFrame* pOutputFrame, AVCodecContext* pVideoCodec);
-
-	// Free resources.
-	void free();
 };
 
 #endif // ENCODER_H

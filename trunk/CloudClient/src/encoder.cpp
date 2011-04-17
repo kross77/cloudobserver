@@ -156,7 +156,30 @@ void encoder::stop()
 		int len = url_close_dyn_buf(pFormatContext->pb, (uint8_t**)(&pb_buffer));
 		transmitter_block->send(pb_buffer, len);
 		av_free(pb_buffer);
-		free();
+
+		// close audio stream.
+		if (pAudioStream)
+			close_audio_stream();
+
+		// close video stream
+		if (pVideoStream)
+			close_video_stream();
+
+		// Free the streams.
+		for(size_t i = 0; i < pFormatContext->nb_streams; i++) 
+		{
+			av_freep(&pFormatContext->streams[i]->codec);
+			av_freep(&pFormatContext->streams[i]);
+		}
+
+		if (!(pFormatContext->flags & AVFMT_NOFILE) && pFormatContext->pb) 
+		{
+			//s.close();
+		}
+
+		// Free the stream.
+		av_free(pFormatContext);
+		pFormatContext = NULL;
 	}
 
 	if (audioBuffer)
@@ -475,36 +498,4 @@ bool encoder::add_video_frame(AVFrame* pOutputFrame, AVCodecContext* pVideoCodec
 	}
 
 	return res;
-}
-
-void encoder::free()
-{
-	bool res = true;
-
-	if (pFormatContext)
-	{
-		// close audio stream.
-		if (pAudioStream)
-			close_audio_stream();
-
-		// close video stream
-		if (pVideoStream)
-			close_video_stream();
-
-		// Free the streams.
-		for(size_t i = 0; i < pFormatContext->nb_streams; i++) 
-		{
-			av_freep(&pFormatContext->streams[i]->codec);
-			av_freep(&pFormatContext->streams[i]);
-		}
-
-		if (!(pFormatContext->flags & AVFMT_NOFILE) && pFormatContext->pb) 
-		{
-			//s.close();
-		}
-
-		// Free the stream.
-		av_free(pFormatContext);
-		pFormatContext = NULL;
-	}
 }
