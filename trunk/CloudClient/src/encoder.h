@@ -87,9 +87,9 @@ private:
 	void init_video_stream();
 
 	// Open audio stream.
-	bool open_audio_stream(AVStream* pStream);
+	void open_audio_stream();
 	// Open video stream.
-	bool open_video_stream(AVStream* pStream);
+	void open_video_stream();
 
 	// Close audio stream.
 	void close_audio_stream(AVStream* pStream);
