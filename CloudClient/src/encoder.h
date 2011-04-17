@@ -30,6 +30,7 @@ extern "C"
 #include <queue>
 
 #include "audio_encoder.h"
+#include "video_encoder.h"
 #include "multiplexer.h"
 #include "transmitter.h"
 
@@ -53,6 +54,7 @@ public:
 	bool has_audio;
 	bool has_video;
 	audio_encoder* audio_encoder_block;
+	video_encoder* video_encoder_block;
 	multiplexer* multiplexer_block;
 	transmitter* transmitter_block;
 private:
@@ -62,19 +64,6 @@ private:
 	AVStream* pVideoStream;
 	// audio stream context
 	AVStream* pAudioStream;
-	// convert context
-	struct SwsContext* pImgConvertCtx;
-	// encoded video buffer
-	uint8_t* pVideoEncodeBuffer;
-	// encoded video buffer size
-	int nSizeVideoEncodeBuffer;
-	// current picture
-	AVFrame* pCurrentPicture;
-	
-	// Open video stream.
-	void open_video_stream();
-	// Close video stream.
-	void close_video_stream();
 };
 
 #endif // ENCODER_H
