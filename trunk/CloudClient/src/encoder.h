@@ -32,6 +32,7 @@ extern "C"
 #include <cstring>
 #include <queue>
 
+#include "multiplexer.h"
 #include "transmitter.h"
 
 class encoder
@@ -53,6 +54,7 @@ public:
 
 	bool has_audio;
 	bool has_video;
+	multiplexer* multiplexer_block;
 	transmitter* transmitter_block;
 private:
 	// format context
