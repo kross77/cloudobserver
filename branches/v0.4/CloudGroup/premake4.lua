@@ -391,8 +391,8 @@ solution "CloudClient"
 		-- cloud.project.useFFmpeg()
 		cloud.project.useBoost()
 		-- cloud.project.useAL()
-		cloud.project.useCV()
-		files { "src/Group.cpp" , "src/unit.h"}
+		-- cloud.project.useCV()
+		files { "src/Group.cpp" , "src/ExtendedCharPtr.h"}
 		
 		configuration "Debug"
 			defines { "DEBUG" }
@@ -411,8 +411,8 @@ solution "CloudClient"
 		-- cloud.project.useFFmpeg()
 		cloud.project.useBoost()
 		-- cloud.project.useAL()
-		cloud.project.useCV()
-		files { "src/unitFirst.cpp" , "src/unit.h" }
+		-- cloud.project.useCV()
+		files { "src/unitFirst.cpp" ,  "src/ExtendedCharPtr.h" }
 		
 		configuration "Debug"
 			defines { "DEBUG" }
@@ -431,8 +431,8 @@ solution "CloudClient"
 		-- cloud.project.useFFmpeg()
 		cloud.project.useBoost()
 		-- cloud.project.useAL()
-		cloud.project.useCV()
-		files { "src/unitLast.cpp" , "src/unit.h"}
+		-- cloud.project.useCV()
+		files { "src/unitLast.cpp" , "src/ExtendedCharPtr.h"}
 		
 		configuration "Debug"
 			defines { "DEBUG" }
