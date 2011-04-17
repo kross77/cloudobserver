@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstdlib>
+#include <boost/extension/extension.hpp>
 #include "ExtendedCharPtr.h"
 
 #ifndef _GETrenderer_h_
@@ -21,7 +22,7 @@ private: // API
 
 public:
 
-	void renderCastedData(ExtendedCharPtr data) 
+	void BOOST_EXTENSION_EXPORT_DECL renderCastedData(ExtendedCharPtr data) 
 	{ 
 		renderChar(data);
 	}
