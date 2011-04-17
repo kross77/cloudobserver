@@ -567,9 +567,6 @@ int main(int argc, char* argv[])
 	video_width -= video_width % 4;
 	video_height -= video_height % 4;
 
-	// Initialize the transmitter block.
-	encoder.transmitter_block = new transmitter();
-
 	// Ask for the username if one wasn't read from command line arguments.
 	if (username.empty())
 	{
@@ -583,6 +580,9 @@ int main(int argc, char* argv[])
 		std::cout << "Please, specify the server URL: ";
 		std::cin >> server;
 	}
+
+	// Initialize the transmitter block.
+	encoder.transmitter_block = new transmitter();
 
 	// Repeat asking for the username and the server URL until connection is successfully established.
 	bool succeed = false;
