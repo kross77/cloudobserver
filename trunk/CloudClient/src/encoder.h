@@ -90,8 +90,6 @@ private:
 	// Close video stream.
 	void close_video_stream();
 
-	// Add audio frame.
-	bool add_audio_frame(AVStream* pStream, const char* soundBuffer, int soundBufferSize);
 	// Add video frame.
 	bool add_video_frame(AVFrame* pOutputFrame, AVCodecContext* pVideoCodec);
 };
