@@ -33,6 +33,12 @@ void encoder::init(int audio_samplerate, int video_bitrate, int video_framerate,
 	this->video_framerate = video_framerate;
 	this->video_width = video_width;
 	this->video_height = video_height;
+
+	av_register_all();
+
+	pFormatContext = avformat_alloc_context();
+	if (pFormatContext == NULL)
+		throw std::runtime_error("avformat_alloc_context failed.");
 }
 
 void encoder::start(std::string& container)
@@ -40,17 +46,9 @@ void encoder::start(std::string& container)
 	if (!has_audio && !has_video)
 		throw std::runtime_error("No audio and no video.");
 
-	av_register_all();
-
-	AVOutputFormat* pOutFormat = av_guess_format(container.c_str(), NULL, NULL);
-	if (pOutFormat == NULL)
+	pFormatContext->oformat = av_guess_format(container.c_str(), NULL, NULL);
+	if (pFormatContext->oformat == NULL)
 		throw std::runtime_error("av_guess_format failed.");
-
-	pFormatContext = avformat_alloc_context();
-	if (pFormatContext == NULL)
-		throw std::runtime_error("avformat_alloc_context failed.");
-
-	pFormatContext->oformat = pOutFormat;
 
 	if (has_audio)
 		open_audio_stream();
