@@ -11,18 +11,14 @@ encoder::encoder()
 	this->pImgConvertCtx = NULL;
 	this->pVideoEncodeBuffer = NULL;
 	this->nSizeVideoEncodeBuffer = 0;
-	this->pAudioEncodeBuffer = NULL;
-	this->nSizeAudioEncodeBuffer = 0;
 	this->pCurrentPicture = NULL;
-	this->nAudioBufferSizeCurrent = 0;
-	this->nAudioBufferSize = 1024 * 1024 * 4;
-	this->audioBuffer = new char[nAudioBufferSize];
 }
 
 encoder::~encoder()
 {
 	stop();
 
+	delete audio_encoder_block;
 	delete multiplexer_block;
 	delete transmitter_block;
 }
@@ -45,7 +41,10 @@ void encoder::start(std::string& container)
 	pFormatContext = multiplexer_block->get_format_context();
 
 	if (has_audio)
-		open_audio_stream();
+	{
+		audio_encoder_block = new audio_encoder(this->audio_samplerate);
+		audio_encoder_block->connect(multiplexer_block);
+	}
 	
 	if (has_video)
 		open_video_stream();
@@ -149,49 +148,7 @@ void encoder::add_frame(AVFrame* frame)
 
 void encoder::add_frame(const char* sound_buffer, int sound_buffer_size)
 {
-	if (sound_buffer && sound_buffer_size > 0)
-	{
-		AVCodecContext *pCodecCxt;
-
-		pCodecCxt       = pAudioStream->codec;
-		memcpy(audioBuffer + nAudioBufferSizeCurrent, sound_buffer, sound_buffer_size);
-		nAudioBufferSizeCurrent += sound_buffer_size;
-
-		char * pSoundBuffer = (char *)audioBuffer;
-		int nCurrentSize    = nAudioBufferSizeCurrent;
-
-		// Size of packet on bytes.
-		// FORMAT s16
-		int  packSizeInSize = 2 * audioInputSampleSize;
-
-		while(nCurrentSize >= packSizeInSize)
-		{
-			AVPacket pkt;
-			av_init_packet(&pkt);
-
-			pkt.size = avcodec_encode_audio(pCodecCxt, pAudioEncodeBuffer, 
-				nSizeAudioEncodeBuffer, (const short *)pSoundBuffer);
-
-			if (pCodecCxt->coded_frame && pCodecCxt->coded_frame->pts != AV_NOPTS_VALUE)
-			{
-				pkt.pts = av_rescale_q(pCodecCxt->coded_frame->pts, pCodecCxt->time_base, pAudioStream->time_base);
-			}
-
-			pkt.flags |= PKT_FLAG_KEY;
-			pkt.stream_index = pAudioStream->index;
-			pkt.data = pAudioEncodeBuffer;
-			multiplexer_block->send(&pkt);
-			av_free_packet(&pkt);
-
-
-			nCurrentSize -= packSizeInSize;  
-			pSoundBuffer += packSizeInSize;  
-		}
-
-		// save excess
-		memcpy(audioBuffer, audioBuffer + nAudioBufferSizeCurrent - nCurrentSize, nCurrentSize);
-		nAudioBufferSizeCurrent = nCurrentSize; 
-	}
+	audio_encoder_block->send(sound_buffer, sound_buffer_size);
 }
 
 void encoder::stop()
@@ -201,8 +158,8 @@ void encoder::stop()
 		multiplexer_block->disconnect();
 
 		// close audio stream.
-		if (pAudioStream)
-			close_audio_stream();
+		if (has_audio)
+			audio_encoder_block->disconnect();
 
 		// close video stream
 		if (pVideoStream)
@@ -223,82 +180,6 @@ void encoder::stop()
 		// Free the stream.
 		av_free(pFormatContext);
 		pFormatContext = NULL;
-	}
-
-	if (audioBuffer)
-	{
-		delete[] audioBuffer;
-		audioBuffer = NULL;
-	}
-}
-
-void encoder::open_audio_stream()
-{
-	AVCodecContext *pCodecCxt = NULL;
-	AVStream *pStream = NULL;
-
-	// Try create stream.
-	pStream = av_new_stream(pFormatContext, 1);
-	if (!pStream)
-		throw std::runtime_error("Cannot initialize audio stream.");
-
-	// Codec.
-	pCodecCxt = pStream->codec;
-	pCodecCxt->codec_id = pFormatContext->oformat->audio_codec;
-	pCodecCxt->codec_type = CODEC_TYPE_AUDIO;
-	// Set format
-	pCodecCxt->bit_rate    = MAX_AUDIO_PACKET_SIZE - 1024*10;
-	pCodecCxt->sample_rate = audio_samplerate;
-	pCodecCxt->channels    = 1;
-	pCodecCxt->sample_fmt  = SAMPLE_FMT_S16;
-
-	nSizeAudioEncodeBuffer = 4 * MAX_AUDIO_PACKET_SIZE;
-	if (pAudioEncodeBuffer == NULL)
-	{      
-		pAudioEncodeBuffer = (uint8_t * )av_malloc(nSizeAudioEncodeBuffer);
-	}
-
-	// Some formats want stream headers to be separate.
-	if(pFormatContext->oformat->flags & AVFMT_GLOBALHEADER)
-	{
-		pCodecCxt->flags |= CODEC_FLAG_GLOBAL_HEADER;
-	}
-
-	pAudioStream = pStream;
-
-
-	AVCodec *pCodec = NULL;
-
-	// Find the audio encoder.
-	pCodec = avcodec_find_encoder(pCodecCxt->codec_id);
-	if (!pCodec)
-		throw std::runtime_error("Cannot find audio encoder.");
-
-	// Open it.
-	if (avcodec_open(pCodecCxt, pCodec) < 0)
-		throw std::runtime_error("Cannot open audio encoder.");
-
-	if (pCodecCxt->frame_size <= 1) 
-	{
-		// Ugly hack for PCM codecs (will be removed ASAP with new PCM
-		// support to compute the input frame size in samples. 
-		audioInputSampleSize = nSizeAudioEncodeBuffer / pCodecCxt->channels;
-		switch (pAudioStream->codec->codec_id) 
-		{
-		case CODEC_ID_PCM_S16LE:
-		case CODEC_ID_PCM_S16BE:
-		case CODEC_ID_PCM_U16LE:
-		case CODEC_ID_PCM_U16BE:
-			audioInputSampleSize >>= 1;
-			break;
-		default:
-			break;
-		}
-		pCodecCxt->frame_size = audioInputSampleSize;
-	} 
-	else 
-	{
-		audioInputSampleSize = pCodecCxt->frame_size;
 	}
 }
 
@@ -371,17 +252,6 @@ void encoder::open_video_stream()
 		nSizeVideoEncodeBuffer = 10000000;
 		pVideoEncodeBuffer = (uint8_t *)av_malloc(nSizeVideoEncodeBuffer);
 	}
-}
-
-void encoder::close_audio_stream()
-{
-	avcodec_close(pAudioStream->codec);
-	if (pAudioEncodeBuffer)
-	{
-		av_free(pAudioEncodeBuffer);
-		pAudioEncodeBuffer = NULL;
-	}
-	nSizeAudioEncodeBuffer = 0;
 }
 
 void encoder::close_video_stream()

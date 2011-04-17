@@ -1,9 +1,6 @@
 #ifndef ENCODER_H
 #define ENCODER_H
 
-// The maximum audio packet size.
-#define MAX_AUDIO_PACKET_SIZE (128 * 1024)
-
 // Allow C99 macros.
 #ifndef __STDC_CONSTANT_MACROS
 #define __STDC_CONSTANT_MACROS
@@ -32,6 +29,7 @@ extern "C"
 #include <cstring>
 #include <queue>
 
+#include "audio_encoder.h"
 #include "multiplexer.h"
 #include "transmitter.h"
 
@@ -54,6 +52,7 @@ public:
 
 	bool has_audio;
 	bool has_video;
+	audio_encoder* audio_encoder_block;
 	multiplexer* multiplexer_block;
 	transmitter* transmitter_block;
 private:
@@ -69,26 +68,11 @@ private:
 	uint8_t* pVideoEncodeBuffer;
 	// encoded video buffer size
 	int nSizeVideoEncodeBuffer;
-	// encoded audio buffer
-	uint8_t* pAudioEncodeBuffer;
-	// encoded audio buffer size
-	int nSizeAudioEncodeBuffer;
-	// count of sample
-	int audioInputSampleSize;
 	// current picture
 	AVFrame* pCurrentPicture;
-	// audio buffer
-	int nAudioBufferSizeCurrent;
-	int nAudioBufferSize;
-	char* audioBuffer;
 	
-	// Open audio stream.
-	void open_audio_stream();
 	// Open video stream.
 	void open_video_stream();
-
-	// Close audio stream.
-	void close_audio_stream();
 	// Close video stream.
 	void close_video_stream();
 };
