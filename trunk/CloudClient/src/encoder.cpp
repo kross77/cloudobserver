@@ -53,17 +53,11 @@ void encoder::start(std::string& container)
 	pFormatContext->oformat = pOutFormat;
 
 	if (has_audio)
-	{
-		init_audio_stream();
 		open_audio_stream();
-	}
-
+	
 	if (has_video)
-	{
-		init_video_stream();
 		open_video_stream();
-	}
-
+	
 	if (av_set_parameters(pFormatContext, NULL) < 0)
 		throw std::runtime_error("av_set_parameters failed.");
 	
@@ -183,7 +177,7 @@ void encoder::stop()
 	}
 }
 
-void encoder::init_audio_stream()
+void encoder::open_audio_stream()
 {
 	AVCodecContext *pCodecCxt = NULL;
 	AVStream *pStream = NULL;
@@ -216,9 +210,44 @@ void encoder::init_audio_stream()
 	}
 
 	pAudioStream = pStream;
+
+
+	AVCodec *pCodec = NULL;
+
+	// Find the audio encoder.
+	pCodec = avcodec_find_encoder(pCodecCxt->codec_id);
+	if (!pCodec)
+		throw std::runtime_error("Cannot find audio encoder.");
+
+	// Open it.
+	if (avcodec_open(pCodecCxt, pCodec) < 0)
+		throw std::runtime_error("Cannot open audio encoder.");
+
+	if (pCodecCxt->frame_size <= 1) 
+	{
+		// Ugly hack for PCM codecs (will be removed ASAP with new PCM
+		// support to compute the input frame size in samples. 
+		audioInputSampleSize = nSizeAudioEncodeBuffer / pCodecCxt->channels;
+		switch (pAudioStream->codec->codec_id) 
+		{
+		case CODEC_ID_PCM_S16LE:
+		case CODEC_ID_PCM_S16BE:
+		case CODEC_ID_PCM_U16LE:
+		case CODEC_ID_PCM_U16BE:
+			audioInputSampleSize >>= 1;
+			break;
+		default:
+			break;
+		}
+		pCodecCxt->frame_size = audioInputSampleSize;
+	} 
+	else 
+	{
+		audioInputSampleSize = pCodecCxt->frame_size;
+	}
 }
 
-void encoder::init_video_stream()
+void encoder::open_video_stream()
 {
 	AVCodecContext *pCodecCxt = NULL;
 	AVStream *st    = NULL;
@@ -264,49 +293,8 @@ void encoder::init_video_stream()
 	}
 
 	pVideoStream = st;
-}
 
-void encoder::open_audio_stream()
-{
-	AVCodecContext *pCodecCxt = NULL;
-	AVCodec *pCodec = NULL;
-	pCodecCxt = pAudioStream->codec;
 
-	// Find the audio encoder.
-	pCodec = avcodec_find_encoder(pCodecCxt->codec_id);
-	if (!pCodec)
-		throw std::runtime_error("Cannot find audio encoder.");
-
-	// Open it.
-	if (avcodec_open(pCodecCxt, pCodec) < 0)
-		throw std::runtime_error("Cannot open audio encoder.");
-
-	if (pCodecCxt->frame_size <= 1) 
-	{
-		// Ugly hack for PCM codecs (will be removed ASAP with new PCM
-		// support to compute the input frame size in samples. 
-		audioInputSampleSize = nSizeAudioEncodeBuffer / pCodecCxt->channels;
-		switch (pAudioStream->codec->codec_id) 
-		{
-		case CODEC_ID_PCM_S16LE:
-		case CODEC_ID_PCM_S16BE:
-		case CODEC_ID_PCM_U16LE:
-		case CODEC_ID_PCM_U16BE:
-			audioInputSampleSize >>= 1;
-			break;
-		default:
-			break;
-		}
-		pCodecCxt->frame_size = audioInputSampleSize;
-	} 
-	else 
-	{
-		audioInputSampleSize = pCodecCxt->frame_size;
-	}
-}
-
-void encoder::open_video_stream()
-{
 	AVCodec *pCodec;
 	AVCodecContext *pContext;
 
