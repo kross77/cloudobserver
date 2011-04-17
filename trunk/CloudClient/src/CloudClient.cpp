@@ -4,6 +4,8 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/random.hpp>
+#include <boost/thread.hpp>
+#include <boost/timer.hpp>
 
 // OpenAL
 #include <AL/al.h>
@@ -12,9 +14,13 @@
 // OpenCV
 #include <opencv2/opencv.hpp>
 
+#include "audio_encoder.h"
+#include "video_encoder.h"
+#include "multiplexer.h"
+#include "transmitter.h"
+
 #include "list.h"
 #include "LSD.h"
-#include "encoder.h"
 
 using namespace std;
 using boost::asio::ip::tcp;
@@ -38,13 +44,20 @@ int video_width;
 int video_height;
 int video_frame_rate;
 
+bool has_audio;
+bool has_video;
+
+audio_encoder* audio_encoder_block;
+video_encoder* video_encoder_block;
+multiplexer* multiplexer_block;
+transmitter* transmitter_block;
+
 // Boost
 boost::mt19937 rng;
 boost::uniform_int<> six(-128, 127);
 boost::variate_generator<boost::mt19937&, boost::uniform_int<> >die(rng, six);
 
 // FFmpeg
-encoder encoder;
 AVFrame* frame;
 AVFrame* readyFrame;
 int nSampleSize;
@@ -90,13 +103,13 @@ void init_opencv()
 {
 	if (flag_disable_video)
 	{
-		encoder.has_video = false;
+		has_video = false;
 		return;
 	}
 
 	if (flag_generate_video)
 	{
-		encoder.has_video = true;
+		has_video = true;
 		cvInitFont(&font, CV_FONT_HERSHEY_DUPLEX, 2, 1, 0.0, 3, CV_AA);
 		CvPoint UL = { 0, 0 };
 		CvPoint LR = { video_width, video_height };
@@ -111,7 +124,7 @@ void init_opencv()
 		video_capture_device = CamList->SelectFromList();
 
 		if (video_capture_device == 999)
-			encoder.has_video = false;
+			has_video = false;
 		else
 		{
 			capture = cvCaptureFromCAM(video_capture_device);
@@ -122,7 +135,7 @@ void init_opencv()
 
 		if (!capture)
 		{
-			encoder.has_video = false;
+			has_video = false;
 			fprintf(stderr, "Cannot initialize selected webcam!\n");
 			cout << endl;
 			return;
@@ -133,7 +146,7 @@ void init_opencv()
 		redchannel = cvCreateImage(cvGetSize(destination), 8, 1);
 		greenchannel = cvCreateImage(cvGetSize(destination), 8, 1);
 		bluechannel = cvCreateImage(cvGetSize(destination), 8, 1);
-		encoder.has_video = true;
+		has_video = true;
 	}
 }
 
@@ -141,13 +154,13 @@ void init_openal(int fps)
 {
 	if (flag_disable_audio)
 	{
-		encoder.has_audio = false;
+		has_audio = false;
 		return;
 	}
 
 	if (flag_generate_audio)
 	{
-		encoder.has_audio = true;
+		has_audio = true;
 		nSampleSize = (int)(2.0f * audio_sample_rate / fps);
 		nBlockAlign = 1 * 16 / 8;
 		Buffer = new ALchar[nSampleSize];
@@ -205,7 +218,7 @@ void init_openal(int fps)
 			{
 				cout <<"Default device will be used" << std::endl;
 				SelectedIndex = 0;
-				encoder.has_audio = true;
+				has_audio = true;
 			}
 			else
 			{
@@ -227,11 +240,11 @@ void init_openal(int fps)
 
 		if (SelectedIndex == 999)
 		{
-			encoder.has_audio = false;
+			has_audio = false;
 		}
 		else
 		{
-			encoder.has_audio = true;
+			has_audio = true;
 			alDistanceModel(AL_NONE);
 			dev[0] = alcCaptureOpenDevice(bufferList[SelectedIndex], audio_sample_rate, AL_FORMAT_MONO16, nSampleSize/2);
 			alcCaptureStart(dev[0]);
@@ -241,26 +254,6 @@ void init_openal(int fps)
 
 void init_ffmpeg(string container, int w, int h, int fps)
 {
-	if (!encoder.has_audio && !encoder.has_video)
-	{
-		cout << "\nNo audio, and no video data found.\n Please close application.\nConnect some capturing device.\nRestart application\n";
-		cin.get();
-		boost::this_thread::sleep(boost::posix_time::seconds(9999999));
-		cin.get();
-	}
-	encoder.init(audio_sample_rate, stream_bitrate, fps, video_width, video_height);
-
-	try
-	{
-		encoder.start(container);
-	}
-	catch (std::exception& e)
-	{
-		std::cout << e.what() << std::endl;
-		cin.get();
-		boost::this_thread::sleep(boost::posix_time::seconds(9999999));
-	}
-
 	int bufferImgSize = avpicture_get_size(PIX_FMT_BGR24, w, h);
 
 	frame = avcodec_alloc_frame();
@@ -407,8 +400,6 @@ void release_openal()
 
 void release_ffmpeg()
 {
-	encoder.stop();
-
 	av_free(frame->data[0]);
 	av_free(frame);
 
@@ -421,7 +412,7 @@ void release_ffmpeg()
 
 void capture_frame_loop()
 {
-	if (encoder.has_video)
+	if (has_video)
 	{
 		while (true)
 		{
@@ -442,38 +433,38 @@ void save_frame_loop()
 	while (true)
 	{
 		timerForMain.restart();
-		if (!encoder.has_video)
+		if (!has_video)
 			try
 			{
-				encoder.add_frame(capture_sample(), nSampleSize);
+				audio_encoder_block->send(capture_sample(), nSampleSize);
 			}
 			catch (std::exception)
 			{
 				printf("Cannot write frame!\n");
 			}
 
-		if (!encoder.has_audio)
+		if (!has_audio)
 			try
 			{
-				encoder.add_frame(readyFrame);
+				video_encoder_block->send(readyFrame);
 			}
 			catch (std::exception)
 			{
 				printf("Cannot write frame!\n");
 			}
 		
-		if (encoder.has_audio && encoder.has_video)
+		if (has_audio && has_video)
 			try
 			{
-				encoder.add_frame(capture_sample(), nSampleSize);
-				encoder.add_frame(readyFrame);
+				audio_encoder_block->send(capture_sample(), nSampleSize);
+				video_encoder_block->send(readyFrame);
 			}
 			catch (std::exception)
 			{
 				printf("Cannot write frame!\n");
 			}
 		
-		if (!encoder.has_audio && !encoder.has_video)
+		if (!has_audio && !has_video)
 		{
 			printf("No data to encode");
 			break;
@@ -582,7 +573,7 @@ int main(int argc, char* argv[])
 	}
 
 	// Initialize the transmitter block.
-	encoder.transmitter_block = new transmitter();
+	transmitter_block = new transmitter();
 
 	// Repeat asking for the username and the server URL until connection is successfully established.
 	bool succeed = false;
@@ -591,7 +582,7 @@ int main(int argc, char* argv[])
 		try
 		{
 			// Try to connect to the server.
-			encoder.transmitter_block->connect(username, server);
+			transmitter_block->connect(username, server);
 			// Connection succeeded.
 			succeed = true;
 		}
@@ -612,6 +603,32 @@ int main(int argc, char* argv[])
 	init_opencv();
 	init_openal(video_frame_rate);
 	init_ffmpeg(container, video_width, video_height, video_frame_rate);
+
+	if (!has_audio && !has_video)
+	{
+		std::cout << "No input devices selected. Closing application..." << std::endl;
+		return 0;
+	}
+
+	multiplexer_block = new multiplexer(container);
+	AVFormatContext* format_context = multiplexer_block->get_format_context();
+
+	if (has_audio)
+	{
+		audio_encoder_block = new audio_encoder(audio_sample_rate);
+		audio_encoder_block->connect(multiplexer_block);
+	}
+	
+	if (has_video)
+	{
+		video_encoder_block = new video_encoder(stream_bitrate, video_frame_rate, video_width, video_height);
+		video_encoder_block->connect(multiplexer_block);
+	}
+	
+	if (av_set_parameters(format_context, NULL) < 0)
+		throw std::runtime_error("av_set_parameters failed.");
+
+	multiplexer_block->connect(transmitter_block);
 
 	desiredTimeForCaptureFame = (int64_t)(1000.0f / video_frame_rate);
 	desiredTimeForMain = (int64_t)(1000.0f / video_frame_rate);
@@ -635,6 +652,24 @@ int main(int argc, char* argv[])
 	release_opencv();
 	release_openal();
 	release_ffmpeg();
+
+	if (has_audio)
+	{
+		audio_encoder_block->disconnect();
+		delete audio_encoder_block;
+	}
+
+	if (has_video)
+	{
+		video_encoder_block->disconnect();
+		delete video_encoder_block;
+	}
+
+	multiplexer_block->disconnect();
+	delete multiplexer_block;
+
+	transmitter_block->disconnect();
+	delete transmitter_block;
 
 	return 0;
 }
