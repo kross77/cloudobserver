@@ -82,24 +82,24 @@ private:
 	char* audioBuffer;
 	
 	// Add audio stream.
-	AVStream* add_audio_stream(AVFormatContext* pContext, CodecID codec_id);
+	AVStream* add_audio_stream(CodecID codec_id);
 	// Add video stream.
-	AVStream* add_video_stream(AVFormatContext* pContext, CodecID codec_id);
+	AVStream* add_video_stream(CodecID codec_id);
 
 	// Open audio stream.
-	bool open_audio_stream(AVFormatContext* pContext, AVStream* pStream);
+	bool open_audio_stream(AVStream* pStream);
 	// Open video stream.
-	bool open_video_stream(AVFormatContext* oc, AVStream* pStream);
+	bool open_video_stream(AVStream* pStream);
 
 	// Close audio stream.
-	void close_audio_stream(AVFormatContext* pContext, AVStream* pStream);
+	void close_audio_stream(AVStream* pStream);
 	// Close video stream.
-	void close_video_stream(AVFormatContext* pContext, AVStream* pStream);
+	void close_video_stream(AVStream* pStream);
 
 	// Add audio frame.
-	bool add_audio_frame(AVFormatContext* pFormatContext, AVStream* pStream, const char* soundBuffer, int soundBufferSize);
+	bool add_audio_frame(AVStream* pStream, const char* soundBuffer, int soundBufferSize);
 	// Add video frame.
-	bool add_video_frame(AVFormatContext* pFormatContext, AVFrame* pOutputFrame, AVCodecContext* pVideoCodec);
+	bool add_video_frame(AVFrame* pOutputFrame, AVCodecContext* pVideoCodec);
 
 	// Allocate memory.
 	AVFrame* create_avframe(int pix_fmt, int nWidth, int nHeight);
