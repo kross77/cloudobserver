@@ -422,3 +422,44 @@ solution "CloudClient"
 		configuration "Release"
 			defines { "NDEBUG" }
 			flags { "Optimize" }
+			
+			
+			project "Hello_world"
+		kind "ConsoleApp"
+		language "C++"
+		location ( "projects/" .. os.get() .. "-" .. action )
+		cloud.project.init()
+		-- cloud.project.useFFmpeg()
+		cloud.project.useBoost()
+		-- cloud.project.useAL()
+		-- cloud.project.useCV()
+		files {  "src/hello_world.cpp"}
+		
+		configuration "Debug"
+			defines { "DEBUG" }
+			flags { "Symbols" }
+		
+		
+		configuration "Release"
+			defines { "NDEBUG" }
+			flags { "Optimize" }
+			
+		project "Hello_world_lib"
+		kind "SharedLib"
+		language "C++"
+		location ( "projects/" .. os.get() .. "-" .. action )
+		cloud.project.init()
+		-- cloud.project.useFFmpeg()
+		cloud.project.useBoost()
+		-- cloud.project.useAL()
+		-- cloud.project.useCV()
+		files { "src/hello_world_lib.cpp"  }
+		
+		configuration "Debug"
+			defines { "DEBUG" }
+			flags { "Symbols" }
+		
+		
+		configuration "Release"
+			defines { "NDEBUG" }
+			flags { "Optimize" }
