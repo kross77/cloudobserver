@@ -55,28 +55,18 @@ void encoder::start(std::string& container)
 	if (has_audio)
 	{
 		init_audio_stream();
-		if (pAudioStream == NULL)
-			throw std::runtime_error("add_audio_stream failed.");
+		open_audio_stream();
 	}
 
 	if (has_video)
 	{
 		init_video_stream();
-		if (pVideoStream == NULL)
-			throw std::runtime_error("add_video_stream failed.");
+		open_video_stream();
 	}
 
 	if (av_set_parameters(pFormatContext, NULL) < 0)
 		throw std::runtime_error("av_set_parameters failed.");
-
-	if (has_audio)
-		if (!open_audio_stream(pAudioStream))
-			throw std::runtime_error("open_audio_stream failed.");
-
-	if (has_video)
-		if (!open_video_stream(pVideoStream))
-			throw std::runtime_error("open_video_stream failed.");
-
+	
 	if (url_open_dyn_buf(&pFormatContext->pb) != 0)
 		throw std::runtime_error("url_open_dyn_buf failed.");
 
@@ -249,33 +239,27 @@ void encoder::init_video_stream()
 	pVideoStream = st;
 }
 
-bool encoder::open_audio_stream(AVStream* pStream)
+void encoder::open_audio_stream()
 {
 	AVCodecContext *pCodecCxt = NULL;
 	AVCodec *pCodec = NULL;
-	pCodecCxt = pStream->codec;
+	pCodecCxt = pAudioStream->codec;
 
 	// Find the audio encoder.
 	pCodec = avcodec_find_encoder(pCodecCxt->codec_id);
-	if (!pCodec) 
-	{
-		printf("Cannot open audio codec\n");
-		return false;
-	}
+	if (!pCodec)
+		throw std::runtime_error("Cannot find audio encoder.");
 
 	// Open it.
-	if (avcodec_open(pCodecCxt, pCodec) < 0) 
-	{
-		printf("Cannot open audio codec\n");
-		return false;
-	}
+	if (avcodec_open(pCodecCxt, pCodec) < 0)
+		throw std::runtime_error("Cannot open audio encoder.");
 
 	if (pCodecCxt->frame_size <= 1) 
 	{
 		// Ugly hack for PCM codecs (will be removed ASAP with new PCM
 		// support to compute the input frame size in samples. 
 		audioInputSampleSize = nSizeAudioEncodeBuffer / pCodecCxt->channels;
-		switch (pStream->codec->codec_id) 
+		switch (pAudioStream->codec->codec_id) 
 		{
 		case CODEC_ID_PCM_S16LE:
 		case CODEC_ID_PCM_S16BE:
@@ -292,31 +276,23 @@ bool encoder::open_audio_stream(AVStream* pStream)
 	{
 		audioInputSampleSize = pCodecCxt->frame_size;
 	}
-
-	return true;
 }
 
-bool encoder::open_video_stream(AVStream* pStream)
+void encoder::open_video_stream()
 {
 	AVCodec *pCodec;
 	AVCodecContext *pContext;
 
-	pContext = pStream->codec;
+	pContext = pVideoStream->codec;
 
 	// Find the video encoder.
 	pCodec = avcodec_find_encoder(pContext->codec_id);
-	if (!pCodec) 
-	{
-		printf("Cannot found video codec\n");
-		return false;
-	}
+	if (!pCodec)
+		throw std::runtime_error("Cannot find video encoder.");
 
 	// Open the codec.
-	if (avcodec_open(pContext, pCodec) < 0) 
-	{
-		printf("Cannot open video codec\n");
-		return false;
-	}
+	if (avcodec_open(pContext, pCodec) < 0)
+		throw std::runtime_error("Cannot open video encoder.");
 
 	pVideoEncodeBuffer = NULL;      
 	if (!(pFormatContext->oformat->flags & AVFMT_RAWPICTURE)) 
@@ -325,8 +301,6 @@ bool encoder::open_video_stream(AVStream* pStream)
 		nSizeVideoEncodeBuffer = 10000000;
 		pVideoEncodeBuffer = (uint8_t *)av_malloc(nSizeVideoEncodeBuffer);
 	}
-
-	return true;
 }
 
 void encoder::close_audio_stream(AVStream* pStream)
