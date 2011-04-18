@@ -370,7 +370,7 @@ function cloud.project.useFFmpeg()
 	end 	
 end
 
-solution "CloudClient"
+solution "CloudGroup"
 	location ( "projects/".. os.get() .. "-" ..  action )
 	configurations { "Debug", "Release" }
 	objdir     ( "projects/" .. os.get() .. "-" .. action .. "/bin/obj" )
@@ -392,7 +392,7 @@ solution "CloudClient"
 		cloud.project.useBoost()
 		-- cloud.project.useAL()
 		-- cloud.project.useCV()
-		files { "src/Group.cpp" , "src/ExtendedCharPtr.h"}
+		files { "src/Group.cpp" , "src/ExtendedCharPtr.h", "src/PublicProducerPrototype.h", "src/PublicRendererPrototype.h" }
 		
 		configuration "Debug"
 			defines { "DEBUG" }
@@ -403,7 +403,7 @@ solution "CloudClient"
 			defines { "NDEBUG" }
 			flags { "Optimize" }
 			
-		project "FirstUnit"
+		project "simpleProducer"
 		kind "SharedLib"
 		language "C++"
 		location ( "projects/" .. os.get() .. "-" .. action )
@@ -412,7 +412,7 @@ solution "CloudClient"
 		cloud.project.useBoost()
 		-- cloud.project.useAL()
 		-- cloud.project.useCV()
-		files { "src/unitFirst.cpp" ,  "src/ExtendedCharPtr.h" }
+		files { "src/simpleProducer.cpp" ,"src/PublicProducerPrototype.h",  "src/ExtendedCharPtr.h" }
 		
 		configuration "Debug"
 			defines { "DEBUG" }
@@ -423,7 +423,7 @@ solution "CloudClient"
 			defines { "NDEBUG" }
 			flags { "Optimize" }
 			
-		project "LastUnit"
+		project "simpleRenderer"
 		kind "SharedLib"
 		language "C++"
 		location ( "projects/" .. os.get() .. "-" .. action )
@@ -432,7 +432,7 @@ solution "CloudClient"
 		cloud.project.useBoost()
 		-- cloud.project.useAL()
 		-- cloud.project.useCV()
-		files { "src/unitLast.cpp" , "src/ExtendedCharPtr.h"}
+		files { "src/simpleRenderer.cpp" ,"src/PublicRendererPrototype.h" , "src/ExtendedCharPtr.h"}
 		
 		configuration "Debug"
 			defines { "DEBUG" }
