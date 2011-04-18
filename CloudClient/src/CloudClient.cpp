@@ -14,10 +14,10 @@
 // OpenCV
 #include <opencv2/opencv.hpp>
 
-#include "audio_encoder.h"
-#include "video_encoder.h"
-#include "multiplexer.h"
-#include "transmitter.h"
+#include "filters/audio_encoder.h"
+#include "filters/video_encoder.h"
+#include "filters/multiplexer.h"
+#include "filters/transmitter.h"
 
 #include "list.h"
 #include "LSD.h"
