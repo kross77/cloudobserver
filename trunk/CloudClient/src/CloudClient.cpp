@@ -20,7 +20,7 @@
 #include "filters/transmitter.h"
 
 #include "list.h"
-#include "LSD.h"
+#include "3rdparty/LSD/LSD.h"
 
 using namespace std;
 using boost::asio::ip::tcp;
