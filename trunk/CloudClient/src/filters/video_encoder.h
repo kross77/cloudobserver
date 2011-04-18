@@ -4,6 +4,11 @@
 // The encode buffer size.
 #define ENCODE_BUFFER_SIZE (1024 * 1024 * 10)
 
+// Allow C99 macros.
+#ifndef __STDC_CONSTANT_MACROS
+#define __STDC_CONSTANT_MACROS
+#endif
+
 // FFmpeg
 extern "C"
 {

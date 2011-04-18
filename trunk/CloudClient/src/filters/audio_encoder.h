@@ -10,6 +10,11 @@
 // The encode buffer size.
 #define ENCODE_BUFFER_SIZE (4 * MAX_AUDIO_PACKET_SIZE)
 
+// Allow C99 macros.
+#ifndef __STDC_CONSTANT_MACROS
+#define __STDC_CONSTANT_MACROS
+#endif
+
 // FFmpeg
 extern "C"
 {

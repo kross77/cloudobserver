@@ -1,6 +1,11 @@
 #ifndef MULTIPLEXER_H
 #define MULTIPLEXER_H
 
+// Allow C99 macros.
+#ifndef __STDC_CONSTANT_MACROS
+#define __STDC_CONSTANT_MACROS
+#endif
+
 // FFmpeg
 extern "C"
 {
