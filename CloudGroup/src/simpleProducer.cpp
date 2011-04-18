@@ -1,13 +1,19 @@
 #include <iostream>
-#include <cstdlib>
-#include "ExtendedCharPtr.h"
-#include <boost/extension/extension.hpp>
+#include <map>
 
-#ifndef _GETproducer_h_
-#define _GETproducer_h_
+#include <boost/extension/extension.hpp>
+#include <boost/extension/factory.hpp>
+#include <boost/extension/type_map.hpp>
+
+#include "ExtendedCharPtr.h"
+#include "PublicProducerPrototype.h"
+
+#ifndef _simpleProducer_h_
+#define _simpleProducer_h_
+
 using namespace std ;
 
-class simpleProducer 
+class simpleProducer : public PublicProducerPrototype
 {
 private: // API
 
@@ -56,19 +62,18 @@ private: // API
 		s[len] = 0;
 	}
 
-	int generator;
+
 
 public:
 
-	void BOOST_EXTENSION_EXPORT_DECL Init(int generator)
+	simpleProducer(int generator) : PublicProducerPrototype(generator)
 	{
 		initSimpleProducerLibAPI(0); 
-		this->generator = generator;
 	}
 
-	void BOOST_EXTENSION_EXPORT_DECL updateData(ExtendedCharPtr localCharPtr)
+virtual	ExtendedCharPtr updateData(ExtendedCharPtr localCharPtr)
 	{
-		switch ( generator ) {
+		switch ( _generator ) {
 			case 1 : 
 				{genCharFilledWithNumbers(localCharPtr.data, localCharPtr.length); }
 				break;
@@ -81,7 +86,14 @@ public:
 			default : 
 				{ genRandomFilledChar(localCharPtr.data, localCharPtr.length); }
 		}
+		return localCharPtr;
 	}
 };
 
-#endif //_GETproducer_h_
+BOOST_EXTENSION_TYPE_MAP_FUNCTION {
+	using namespace boost::extensions;
+	std::map<std::string, factory<PublicProducerPrototype, int> >&
+		Producer_factories(types.get());
+	Producer_factories["simpleProducer factory"].set<simpleProducer>();
+}
+#endif //_simpleProducer_h_

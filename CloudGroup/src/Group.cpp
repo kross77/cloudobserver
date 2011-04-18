@@ -19,6 +19,8 @@
 #include <boost/scoped_ptr.hpp>
 
 #include "ExtendedCharPtr.h"
+#include "PublicProducerPrototype.h"
+#include "PublicRendererPrototype.h"
 
 using namespace boost::extensions;
 using namespace std;
@@ -33,7 +35,7 @@ string extention = ".dylib"; // as wall .bundle can be used.
 #error "unknown platform";
 #endif
 
-void try_open_lib(shared_library lib, string path)
+void try_open_lib(shared_library & lib, string & path)
 {
 	if (!lib.open()) {
 		cout << "Library failed to open: " << path << endl;
@@ -43,20 +45,65 @@ void try_open_lib(shared_library lib, string path)
 		cout << "Library " << path << " opened." << endl;
 	}
 }
-
+void renderChar(ExtendedCharPtr data) { 
+	cout << "Received char: ";
+	for (int i = 0; i < data.length; i++)
+		//cout << *data.data++;
+		cout << data.data[i];
+	cout << endl;
+}
 int main()
 {
-	string LastUnit_path = "LastUnit";
-	string FirstUnit_path = "FirstUnit";
+	
+	string simple_producer_path = "simpleProducer";
+	string simple_renderer_path = "simpleRenderer";
 
-	LastUnit_path = LastUnit_path + extention; 
-	FirstUnit_path = FirstUnit_path + extention; 
+	simple_producer_path = simple_producer_path + extention; 
+	simple_renderer_path = simple_renderer_path + extention; 
 
-	shared_library LastUnit(LastUnit_path);
-	shared_library FirstUnit(FirstUnit_path);
+	shared_library simple_producer(simple_producer_path);
+	shared_library simple_renderer(simple_renderer_path);
 
-	try_open_lib(LastUnit, LastUnit_path );
-	try_open_lib(FirstUnit, FirstUnit_path);
+	try_open_lib(simple_producer, simple_producer_path );
+	try_open_lib(simple_renderer, simple_renderer_path);
+
+	// Use the shared_library::call to automatically call an
+	// Extension-specific function in the shared library,
+	// which takes a type_map.
+	type_map producer_types;
+	if (!simple_producer.call(producer_types)) {
+		cerr << "Function not found!" << endl;
+		cin.get();
+		return 1;
+	}
+
+	// Retrieve a map of all animal factories taking an int and indexed
+	// by a string from the type_map.
+	map<string, factory<PublicProducerPrototype, int> >& producer_factories(producer_types.get());
+	if (producer_factories.empty()) {
+		cerr << "Producers not found!" << endl;
+		cin.get();
+		return 1;
+	}
+
+	// Create each animal.
+	ExtendedCharPtr CharPtr;
+	CharPtr.data = new char[10];
+	CharPtr.length = 10; 
+	
+	int generator = 1;
+
+	for (map<string, factory<PublicProducerPrototype, int> >::iterator it
+		= producer_factories.begin();
+		it != producer_factories.end(); ++it) {
+			++generator;
+			cout << "Creating Producers using factory: " << it->first << endl;
+			boost::scoped_ptr<PublicProducerPrototype> current_producer(it->second.create(generator));
+			cout << "Created data producer: " << 
+				" Lets try it on data generation: " << endl;
+			renderChar(current_producer->updateData(CharPtr));
+	}
 
 	cin.get();
+
 }
