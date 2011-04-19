@@ -150,9 +150,9 @@ void http_response::receive(boost::asio::ip::tcp::socket& socket)
 
 void http_response::send(boost::asio::ip::tcp::socket& socket)
 {
-	std::string response = this->version + ' ' + boost::lexical_cast<std::string>(this->status) + ' ' + this->description + '\n';
+	std::string response = this->version + ' ' + boost::lexical_cast<std::string>(this->status) + ' ' + this->description + "\r\n";
 	for (std::map<std::string, std::string>::iterator header = this->headers.begin(); header != this->headers.end(); ++header)
-		response += header->first + ": " + header->second + '\n';
-	response += '\n' + this->body;
+		response += header->first + ": " + header->second + "\r\n";
+	response += "\r\n" + this->body;
 	socket.send(boost::asio::buffer(response.c_str(), response.length()));
 }

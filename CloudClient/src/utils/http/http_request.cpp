@@ -206,9 +206,9 @@ void http_request::send(boost::asio::ip::tcp::socket& socket)
 			}
 		}
 	}
-	request += ' ' + this->version + '\n';
+	request += ' ' + this->version + "\r\n";
 	for (std::map<std::string, std::string>::iterator header = this->headers.begin(); header != this->headers.end(); ++header)
-		request += header->first + ": " + header->second + '\n';
-	request += '\n' + this->body;
+		request += header->first + ": " + header->second + "\r\n";
+	request += "\r\n" + this->body;
 	socket.send(boost::asio::buffer(request.c_str(), request.length()));
 }
