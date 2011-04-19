@@ -14,7 +14,7 @@ protected:
 public:
 
 	PublicProducerPrototype(int generator) : _generator(generator) {}
-	virtual ~PublicProducerPrototype(void) {}
+	~PublicProducerPrototype(void) {}
 
 	virtual ExtendedCharPtr updateData(ExtendedCharPtr localCharPtr){ return localCharPtr;}
 	

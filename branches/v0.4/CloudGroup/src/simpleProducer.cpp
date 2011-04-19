@@ -32,7 +32,7 @@ private: // API
 			s[i] = alphanum[rand() % (sizeof(alphanum) - 1)];
 		}
 
-		s[len] = 0;
+		//s[len] = 0;
 	}
 
 	void genCharFilledWithCapitals(char *s, int len) {
@@ -41,7 +41,7 @@ private: // API
 		for (int i = 0; i < len; ++i) {
 			s[i] = alphanum[rand() % (sizeof(alphanum) - 1)];
 		}
-		s[len] = 0;
+		//s[len] = 0;
 	}
 
 	void genCharFilledWithNumbers(char *s, int len) {
@@ -50,7 +50,7 @@ private: // API
 		for (int i = 0; i < len; ++i) {
 			s[i] = alphanum[rand() % (sizeof(alphanum) - 1)];
 		}
-		s[len] = 0;
+		//s[len] = 0;
 	}
 
 	void genCharFilledWithLoverCase(char *s, int len) {
@@ -59,7 +59,7 @@ private: // API
 		for (int i = 0; i < len; ++i) {
 			s[i] = alphanum[rand() % (sizeof(alphanum) - 1)];
 		}
-		s[len] = 0;
+		//s[len] = 0;
 	}
 
 

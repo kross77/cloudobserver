@@ -45,27 +45,29 @@ void try_open_lib(shared_library & lib, string & path)
 		cout << "Library " << path << " opened." << endl;
 	}
 }
-void renderChar(ExtendedCharPtr data) { 
+void renderChar(ExtendedCharPtr & data) { 
 	cout << "Received char: ";
 	for (int i = 0; i < data.length; i++)
 		//cout << *data.data++;
 		cout << data.data[i];
 	cout << endl;
 }
+
 int main()
 {
-	
+
+
 	string simple_producer_path = "simpleProducer";
-	string simple_renderer_path = "simpleRenderer";
+	//string simple_renderer_path = "simpleRenderer";
 
 	simple_producer_path = simple_producer_path + extention; 
-	simple_renderer_path = simple_renderer_path + extention; 
+	//simple_renderer_path = simple_renderer_path + extention; 
 
 	shared_library simple_producer(simple_producer_path);
-	shared_library simple_renderer(simple_renderer_path);
+	//shared_library simple_renderer(simple_renderer_path);
 
 	try_open_lib(simple_producer, simple_producer_path );
-	try_open_lib(simple_renderer, simple_renderer_path);
+	//try_open_lib(simple_renderer, simple_renderer_path);
 
 	// Use the shared_library::call to automatically call an
 	// Extension-specific function in the shared library,
@@ -86,7 +88,7 @@ int main()
 		return 1;
 	}
 
-	// Create each animal.
+
 	ExtendedCharPtr CharPtr;
 	CharPtr.data = new char[10];
 	CharPtr.length = 10; 
