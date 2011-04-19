@@ -392,7 +392,7 @@ solution "CloudGroup"
 		cloud.project.useBoost()
 		-- cloud.project.useAL()
 		-- cloud.project.useCV()
-		files { "src/Group.cpp" , "src/ExtendedCharPtr.h", "src/PublicProducerPrototype.h", "src/PublicRendererPrototype.h" }
+		files { "src/Group.cpp" , "src/simpleProducer.cpp", "src/ExtendedCharPtr.h", "src/PublicProducerPrototype.h", "src/PublicRendererPrototype.h" }
 		
 		configuration "Debug"
 			defines { "DEBUG" }

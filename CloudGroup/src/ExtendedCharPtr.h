@@ -41,7 +41,8 @@ public:
 	}
 	~ExtendedCharPtr()
 	{
-		delete[] data; // use the array form of delete
+		delete[] data;
+		// use the array form of delete
 		// no need to test for nullity, it's handled
 	}
 	size_t length; // can't really be negative, right ?
