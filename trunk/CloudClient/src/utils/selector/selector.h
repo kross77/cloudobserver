@@ -17,9 +17,11 @@ public:
 	void add_option(std::string description, void* identifier);
 	void* get_selection();
 	void select();
+	void set_autoselection(bool autoselection);
 
 	class internal_exception: public std::exception { };
 private:
+	bool autoselection;
 	std::string greeting;
 	std::map<std::string, void*> options;
 	void* selection;
