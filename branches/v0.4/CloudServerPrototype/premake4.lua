@@ -395,9 +395,9 @@ solution "CloudServerPrototype"
 		cloud.project.useBoost()
 	--	cloud.project.useAL()
 	--	cloud.project.useCV()
-		links { "cf-utils" }
+		links { "cf-http" }
 		links { "sqlite" }
-		includedirs { "3rdparty/cf-utils", "3rdparty/sqlite" }
+		includedirs { "3rdparty/cf-http", "3rdparty/sqlite" }
 		files { "src/**.h", "src/**.cpp" }
 
 		configuration "Debug"
@@ -408,11 +408,11 @@ solution "CloudServerPrototype"
 			defines { "NDEBUG" }
 			flags { "Optimize" }
 			
-	project "cf-utils"
+	project "cf-http"
 		kind "StaticLib"
 		language "C++"
 		location ( "projects/" .. os.get() .. "-" .. action )
-		files { "3rdparty/cf-utils/**.h", "3rdparty/cf-utils/**.cpp" }
+		files { "3rdparty/cf-http/**.h", "3rdparty/cf-http/**.cpp" }
 		cloud.project.init()
 	--	cloud.project.useFFmpeg()
 		cloud.project.useBoost()
