@@ -94,6 +94,6 @@ BOOST_EXTENSION_TYPE_MAP_FUNCTION {
 	using namespace boost::extensions;
 	std::map<std::string, factory<PublicProducerPrototype, int> >&
 		Producer_factories(types.get());
-	Producer_factories["simpleProducer factory"].set<simpleProducer>();
+	Producer_factories["simpleProducer"].set<simpleProducer>();
 }
 #endif //_simpleProducer_h_
