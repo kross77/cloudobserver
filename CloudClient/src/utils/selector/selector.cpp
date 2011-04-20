@@ -2,6 +2,7 @@
 
 selector::selector(std::string greeting)
 {
+	this->autoselection = true;
 	this->greeting = greeting;
 	this->selection = NULL;
 	this->selected = false;
@@ -47,22 +48,35 @@ void selector::select()
 	for (std::map<std::string, void*>::iterator iterator = options.begin(); iterator != options.end(); ++iterator)
 		std::cout << "  " << ++counter << ". " << iterator->first << std::endl;
 
-	// Repeat asking for selection until an acceptable value is received.
+	// Prepare for selection.
 	int selected_index = 0;
-	do
+
+	// Check if there is any choice.
+	if (autoselection && (counter == 1))
 	{
-		std::cout << "Your choice: ";
-		std::string line;
-		std::getline(std::cin, line);
-		try
+		// Select the option if there is no choice and auto selection is enabled.
+		std::cout << "Automatically choosing the only available option." << std::endl;
+		selected_index = 1;
+	}
+	else
+	{
+		// Repeat asking for selection until an acceptable value is received.
+		int selected_index = 0;
+		do
 		{
-			selected_index = boost::lexical_cast<int>(line);
-		}
-		catch (boost::bad_lexical_cast&)
-		{
-			std::cout << "Invalid input. Try again." << std::endl;
-		}
-	} while ((selected_index <= 0) || (selected_index > counter));
+			std::cout << "Your choice: ";
+			std::string line;
+			std::getline(std::cin, line);
+			try
+			{
+				selected_index = boost::lexical_cast<int>(line);
+			}
+			catch (boost::bad_lexical_cast&)
+			{
+				std::cout << "Invalid input. Try again." << std::endl;
+			}
+		} while ((selected_index <= 0) || (selected_index > counter));
+	}
 
 	// Find an identifier of the selected option.
 	std::map<std::string, void*>::iterator iterator = options.begin();
@@ -72,4 +86,9 @@ void selector::select()
 	// Remember the selected identifier.
 	this->selection = iterator->second;
 	this->selected = true;
+}
+
+void selector::set_autoselection(bool autoselection)
+{
+	this->autoselection = autoselection;
 }
