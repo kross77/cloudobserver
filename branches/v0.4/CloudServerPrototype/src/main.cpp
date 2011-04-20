@@ -3,6 +3,9 @@
 #include <fstream>
 #include <stdio.h>
 #include <time.h>
+#include <vector> 
+
+#include <boost/process.hpp> 
 // Boost
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
@@ -17,13 +20,20 @@
 #include <boost/date_time/posix_time/posix_time_io.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
+
+
 //CF
 #include <http.h>
 
-
-#ifdef _WIN32
+#ifdef WIN
 #include "Windows.h"
 #define _USE_32_BIT_TIME_T
+#elif defined LIN
+#include <unistd.h>
+#elif defined MAC
+#include <unistd.h> // probably...
+#else
+#error "unknown platform";
 #endif
 
 using namespace boost::asio::ip;
@@ -35,6 +45,23 @@ using namespace std;
 
 int port_number;
 path file_service_default_path;
+
+bool file_service_file_can_exec(path p)
+{
+#ifdef WIN
+	if((p.extension().string() == ".exe")||(p.extension().string() == ".bat"))
+	{
+		return true;
+	}
+#elif defined LIN
+	if( !access(p, X_OK)){ return true;}
+#elif defined MAC
+	if( !access(p, X_OK)){ return true;} // probably...
+#else
+#error "unknown platform";
+#endif
+	return false;
+}
 
 string file_service_get_dif_path(path base_path, path new_path)
 {
@@ -67,6 +94,24 @@ void file_service(http_request request, boost::shared_ptr<tcp::socket> socket)
 					ptime t = from_time_t(last_write_time(p));
 					body << p.filename() << "<br/> size is : " << file_size(p) <<" bytes. <br/> file was modified last time @ " << t << ".<br/><a href='/" << file_service_get_dif_path(file_service_default_path, p) << "' > click here to download. </a>";
 				}
+				else if(file_service_file_can_exec(p))
+				{
+					if(request.arguments["execute"] == "true")
+					{
+						if(request.arguments["args"] == "true")
+						{
+							// if args vector existsts fill it up like
+							//   std::vector<std::string> args; 
+							//   args.push_back("--version"); 
+						}
+						//execute (http://www.highscore.de/boost/process/process/tutorials.html)
+						//std::string exec = "bjam"; 
+						//bp::context ctx; 
+						//ctx.stdout_behavior = bp::silence_stream(); 
+						//bp::child c = bp::launch(exec, args, ctx); 
+					}
+					body << p.filename() << "<br/> Can execute!" ;
+				}
 				else
 				{
 					ptime t = from_time_t(last_write_time(p));
@@ -81,7 +126,7 @@ void file_service(http_request request, boost::shared_ptr<tcp::socket> socket)
 					Created.imbue(std::locale(std::cout.getloc(), new time_facet(facet)));
 					Current.imbue(std::locale(std::cout.getloc(), new time_facet(facet)));
 					Expires.imbue(std::locale(std::cout.getloc(), new time_facet(facet)));
-		
+
 					Created << t ;
 					Current << cur;	
 					Expires << expire;
