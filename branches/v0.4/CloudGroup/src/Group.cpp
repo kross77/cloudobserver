@@ -35,6 +35,29 @@ string extention = ".dylib"; // as wall .bundle can be used.
 #error "unknown platform";
 #endif
 
+template <class BaseClass, class ConstructorType>
+map<string, factory<BaseClass, ConstructorType> > get_factories (shared_library & lib) {
+	type_map lib_types;
+	if (!lib.call(lib_types)) {
+		cerr << "Types map not found!" << endl;
+		cin.get();
+	}
+
+	map<string, factory<BaseClass, ConstructorType> > lib_factories(lib_types.get());
+	if (lib_factories.empty()) {
+		cerr << "Producers not found!" << endl;
+		cin.get();
+	}
+	return lib_factories;
+}
+
+template <class BaseClass, class ConstructorType>
+boost::shared_ptr<BaseClass> get_class (shared_library & lib, std::string class_name, ConstructorType value ) {
+	map<string, factory<BaseClass, ConstructorType> > lib_factories = get_factories<BaseClass, ConstructorType>(lib);
+	 boost::shared_ptr<BaseClass> lib_class(lib_factories[class_name].create(value));
+	 return lib_class;
+}
+
 void try_open_lib(shared_library & lib, string & path)
 {
 	if (!lib.open()) {
@@ -45,10 +68,11 @@ void try_open_lib(shared_library & lib, string & path)
 		cout << "Library " << path << " opened." << endl;
 	}
 }
+
+
 void renderChar(ExtendedCharPtr & data) { 
 	cout << "Received char: ";
 	for (int i = 0; i < data.length; i++)
-		//cout << *data.data++;
 		cout << data.data[i];
 	cout << endl;
 }
@@ -69,42 +93,45 @@ int main()
 	try_open_lib(simple_producer, simple_producer_path );
 	//try_open_lib(simple_renderer, simple_renderer_path);
 
-	// Use the shared_library::call to automatically call an
-	// Extension-specific function in the shared library,
-	// which takes a type_map.
-	type_map producer_types;
-	if (!simple_producer.call(producer_types)) {
-		cerr << "Function not found!" << endl;
-		cin.get();
-		return 1;
-	}
 
-	// Retrieve a map of all animal factories taking an int and indexed
-	// by a string from the type_map.
-	map<string, factory<PublicProducerPrototype, int> >& producer_factories(producer_types.get());
-	if (producer_factories.empty()) {
-		cerr << "Producers not found!" << endl;
-		cin.get();
-		return 1;
-	}
-
+	//map<string, factory<PublicRendererPrototype, void> > renderer_factories = get_factories<PublicRendererPrototype, void>(simple_renderer);
 
 	ExtendedCharPtr CharPtr;
 	CharPtr.data = new char[10];
 	CharPtr.length = 10; 
-	
-	int generator = 1;
+	cout << "CharPtr created successfully \n";
+	int generator_number = 1;
 
-	for (map<string, factory<PublicProducerPrototype, int> >::iterator it
-		= producer_factories.begin();
-		it != producer_factories.end(); ++it) {
-			++generator;
-			cout << "Creating Producers using factory: " << it->first << endl;
-			boost::scoped_ptr<PublicProducerPrototype> current_producer(it->second.create(generator));
-			cout << "Created data producer: " << 
-				" Lets try it on data generation: " << endl;
-			renderChar(current_producer->updateData(CharPtr));
-	}
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//one way to create classes from dll - create all possible classes using factories, tested, works
+
+	//map<string, factory<PublicProducerPrototype, int> > producer_factories = get_factories<PublicProducerPrototype, int>(simple_producer);
+	//for (map<string, factory<PublicProducerPrototype, int> >::iterator it
+	//	= producer_factories.begin();
+	//	it != producer_factories.end(); ++it) {
+	//		++generator_number;
+	//		cout << "Creating Producers using factory: " << it->first << endl;
+	//		boost::scoped_ptr<PublicProducerPrototype> current_producer(it->second.create(generator_number));
+	//		cout << "Created data producer, " << 
+	//			" Lets try it on data generation: " << endl;
+	//		renderChar(current_producer->updateData(CharPtr));
+	//}
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	//another way to create one class from dll by name having factories, tested, works
+
+	//map<string, factory<PublicProducerPrototype, int> > producer_factories = get_factories<PublicProducerPrototype, int>(simple_producer);
+	//boost::scoped_ptr<PublicProducerPrototype> producer(producer_factories["simpleProducer"].create(generator_number));
+	//renderChar(producer->updateData(CharPtr));
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	//last way is to create a class having only int name (declared in realization)
+	//its prototype interface class and that class constructor argument type and value we want to use
+
+	boost::shared_ptr<PublicProducerPrototype> producer ( get_class<PublicProducerPrototype, int>(simple_producer, "simpleProducer", generator_number));
+	renderChar(producer->updateData(CharPtr));
 
 	cin.get();
 
