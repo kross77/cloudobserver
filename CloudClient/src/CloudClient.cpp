@@ -19,6 +19,8 @@
 #include "filters/multiplexer.h"
 #include "filters/transmitter.h"
 
+#include "utils/selector/selector.h"
+
 #include "list.h"
 #include "3rdparty/LSD/LSD.h"
 
@@ -181,74 +183,34 @@ void init_openal(int fps)
 
 		ctx = alcCreateContext(dev[0], NULL);
 		alcMakeContextCurrent(ctx);
-		int i = -1;
-		string bufferString[99];
 		const ALchar *pDeviceList = alcGetString(NULL, ALC_CAPTURE_DEVICE_SPECIFIER);
-		const ALCchar *bufferList[99];
-		if (pDeviceList)
+		if (pDeviceList == NULL)
 		{
-			printf("\nLet us select audio device\n");
-			printf("Available Capture Devices are:\n");
-			i = 0;
-			while (*pDeviceList)
-			{
-				bufferList[i] = pDeviceList;
-				bufferString[i] += pDeviceList;
-				cout << i <<") " << bufferString[i] << endl;
-				pDeviceList += strlen(pDeviceList) + 1;
-				i++;
-			}
-		}
-
-		//Get the name of the 'default' capture device
-		//szDefaultCaptureDevice = alcGetString(NULL, ALC_CAPTURE_DEFAULT_DEVICE_SPECIFIER);
-		//printf("\nDefault Capture Device is '%s'\n\n", szDefaultCaptureDevice);
-
-		int SelectedIndex = 999;
-		if (i <= 0)
-		{
-			cout <<"No devices found. \n " << endl;
-			//cout <<"Please restart application." << endl;
-			//cin.get();
-			//Sleep(999999);
-			SelectedIndex = 999;
-		}
-		else
-			if (i == 1)
-			{
-				cout <<"Default device will be used" << std::endl;
-				SelectedIndex = 0;
-				has_audio = true;
-			}
-			else
-			{
-				while(SelectedIndex > i-1 || SelectedIndex < 0)
-				{
-					try
-					{
-						std::cout << "please input index from 0 to " << i - 1 << std::endl;
-						std::string s;
-						std::getline(cin, s, '\n');
-						SelectedIndex = boost::lexical_cast<int>(s);
-					}
-					catch(std::exception&)
-					{
-						SelectedIndex = 999;
-					}
-				}
-			}
-
-		if (SelectedIndex == 999)
-		{
+			std::cout << "Failed to get the list of audio capture devices." << std::endl;
 			has_audio = false;
+			return;
 		}
-		else
+
+		if (*pDeviceList == NULL)
 		{
-			has_audio = true;
-			alDistanceModel(AL_NONE);
-			dev[0] = alcCaptureOpenDevice(bufferList[SelectedIndex], audio_sample_rate, AL_FORMAT_MONO16, nSampleSize/2);
-			alcCaptureStart(dev[0]);
+			std::cout << "No audio capture devices found." << std::endl;
+			has_audio = false;
+			return;
 		}
+
+		selector audio_selector("Please, select the audio capture device:");
+		while (*pDeviceList)
+		{
+			audio_selector.add_option(std::string(pDeviceList), (void*)pDeviceList);
+			pDeviceList += strlen(pDeviceList) + 1;
+		}
+
+		audio_selector.select();
+
+		has_audio = true;
+		alDistanceModel(AL_NONE);
+		dev[0] = alcCaptureOpenDevice((ALCchar*)audio_selector.get_selection(), audio_sample_rate, AL_FORMAT_MONO16, nSampleSize/2);
+		alcCaptureStart(dev[0]);
 	}
 }
 
