@@ -3,22 +3,14 @@
 #include <iostream>
 #include <map>
 
-// Boost
-#include <boost/asio.hpp>
-#include <boost/date_time/gregorian/gregorian.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
-#include <boost/lexical_cast.hpp>
-#include <boost/random.hpp>
-#include <boost/circular_buffer.hpp>
-#include <boost/function.hpp>
-#include <boost/scoped_ptr.hpp>
+//#include <boost/circular_buffer.hpp> // there are plans on using circular_buffer as transport layer inside process between dlls
+
+#include <boost/shared_ptr.hpp> // aka std::shared_ptr
 
 #include <boost/extension/factory.hpp>
 #include <boost/extension/extension.hpp>
 #include <boost/extension/shared_library.hpp>
 #include <boost/extension/type_map.hpp>
-#include <boost/function.hpp>
-#include <boost/scoped_ptr.hpp>
 
 #include "ExtendedCharPtr.h"
 #include "PublicProducerPrototype.h"
@@ -94,14 +86,6 @@ void try_open_lib(shared_library & lib, string & path)
 	{
 		cout << "Library " << path << " opened." << endl;
 	}
-}
-
-
-void renderChar(ExtendedCharPtr & data) { 
-	cout << "Received char: ";
-	for (int i = 0; i < data.length; i++)
-		cout << data.data[i];
-	cout << endl;
 }
 
 int main()
