@@ -194,7 +194,7 @@ function cloud.project.init()
 	--
 	cloud.addLibDir(  _OPTIONS["libsPath"] )
 	cloud.addIncludeDir( _OPTIONS["includesPath"] )
-		includedirs {"libs/header-only"}
+		 includedirs {"3rdparty/header-only"}
 		defines{ "BOOST_ASIO_DISABLE_IOCP" }
 	if os.get() == "windows" then
 		defines { "WIN" }
@@ -402,11 +402,11 @@ solution "CloudServerPrototype"
 
 		configuration "Debug"
 			defines { "DEBUG" }
-			flags { "Symbols" }
+			flags { "Symbols" , "Unicode"}
 		
 		configuration "Release"
 			defines { "NDEBUG" }
-			flags { "Optimize" }
+			flags { "OptimizeSpeed" , "Unicode"}
 			
 	project "cf-http"
 		kind "StaticLib"
@@ -423,11 +423,11 @@ solution "CloudServerPrototype"
 		
 		configuration "Debug"
 			defines { "DEBUG" }
-			flags { "Symbols" }
+			flags { "Symbols", "Unicode" }
 		
 		configuration "Release"
 			defines { "NDEBUG" }
-			flags { "Optimize" }
+			flags { "OptimizeSpeed", "Unicode" }
 			
 	project "sqlite"
 		kind "StaticLib"
@@ -438,8 +438,8 @@ solution "CloudServerPrototype"
 		
 		configuration "Debug"
 			defines { "DEBUG" }
-			flags { "Symbols" }
+			flags { "Symbols", "Unicode" }
 		
 		configuration "Release"
 			defines { "NDEBUG" }
-			flags { "Optimize" }
+			flags { "OptimizeSpeed", "Unicode" }

@@ -5,7 +5,7 @@ Preparation instructions:
   - Download or build latest official distributions of library's and headers for next libs (if distributions are not presented you should compile library's manually on your own or call for help )
     - Boost C++ library's ( http://www.boost.org/ )  (we tested with version 1.4.6)
     - Boost.Extension ( http://boost-extension.redshoelace.com/docs/boost/extension/index.html, we use latest revision 50116 http://svn.boost.org/svn/boost/sandbox/boost/extension/, we adress it as part of boost 'boost/extension/**' )
-    - Boost.Process ( http://www.highscore.de/boost/process/ )
+    - Boost.Process ( we use our costume modification of it that can be found in our SVN but we base it on  http://svn.boost.org/svn/boost/sandbox/SOC/2010/process/ r71393  )
     - SQLite (http://www.sqlite.org/cintro.html)
     -----------------------------------------------------------------------------------
     -----------------------------------------------------------------------------------
