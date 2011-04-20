@@ -1,0 +1,55 @@
+#summary We show how we do it and how you can do it.
+#labels Featured,Phase-Implementation,Phase-Requirements,Phase-Deploy,Boost
+
+= Introduction =
+
+We use [http://www.boost.org/ Boost] a lot in our C++ code. Mostly because it is easy to use, production level tested opensource library. Boost is one of 4 cross platform libs we use to achieve applications scale over *Windows*, *Mac OS X* and *Linux* distributions. Boost is mainly header only library but there are some parts of Boost that require compilation.  Here we show how we compile that parts of Boost. To compile our C++ projects from source you will need build Boost libraries.
+
+
+= Details =
+
+Libraries that are *official parts of Boost* (current release `1.46.1` ) that require compilation are:
+
+    * date_time                
+    * filesystem              
+    * graph                   
+    * graph_parallel           
+    * iostreams                
+    * math                     
+    * mpi                      
+    * program_options          
+    * python                   
+    * random                   
+    * regex                    
+    * serialization            
+    * signals                  
+    * system                  
+    * test                     
+    * thread                   
+    * wave                     
+
+<wiki:comment>
+There some *unofficial parts of Boost* we use which also require compilation:
+</wiki:comment>
+
+= Official  Boost libraries compilation =
+
+== With out administration privileges == 
+
+ # [http://www.boost.org/users/download/ Download] latest Boost release (currently [http://sourceforge.net/projects/boost/files/boost/1.46.1/ 1.46.1]).
+ # Unpack, extract downloaded content into some folder.
+ # Open that folder in terminal (for example you ca open 'cmd' or 'terminal' an use command like `cd absolute/path/to/directory/with/extracted/Boost` than use command to show folder contents `ls` on Unix like OS (Mac, Linux) and `dir` on Windows - in output you should be capable to find `boost-build.jam` )
+ # Create two folders (using command like `mkdir` _foldername_ ) `build-dir` and `install-dir`
+ # run command `./booststrap` (`booststrap.sh` or `booststrap.bat` on windows)
+ # now we can compile Boost and install it with `./bjam -j4 link=static  threading=single,multi --builddir=./build-dir install  --without-mpi --prefix=./install-dir`
+   * Such call will compile static libraries of Boost into `build-dir`. (you probably will not be capable to use Boost out from there - there will be no includes headers and a really big directories hierarchy )
+   * Than *bjam* will create for us "installation" of Boost into `install-dir` - there will appear folder with all boost libs (static version) and includes folder with all of boost headers.
+   * We set -j4 flag to compile on 4 cores. use -j`N` where `N` is number of desired cores to be used during compilation process.
+   * We set `--without-mpi` flag because we currently do not use it. (on installing boost with mpi please refer to [http://www.boost.org/doc/libs/1_46_1/doc/html/mpi/getting_started.html#mpi.config this official Boost.MPI page])
+
+
+<wiki:comment>
+./bjam -j4 link=static  threading=multi toolset=msvc-9.0 --builddir=./build-dir --without-mpi  install --prefix=./install-dir
+
+bjam -j4 link=static  threading=single,multi --build-dir=./build-dir --without-mpi  install --prefix=./install-dir
+</wiki:comment>
