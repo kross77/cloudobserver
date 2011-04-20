@@ -39,7 +39,7 @@ BOOST_EXTENSION_TYPE_MAP_FUNCTION {
 	using namespace boost::extensions;
 	std::map<std::string, factory<PublicRendererPrototype, void> >&
 		Renderer_factories(types.get());
-	Renderer_factories["simpleRenderer factory"].set<simpleRenderer>();
+	Renderer_factories["simpleRenderer"].set<simpleRenderer>();
 }
 
 #endif //_simpleRenderer_h_
