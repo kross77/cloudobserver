@@ -1,14 +1,3 @@
-/*
- * Boost.Extension / hello world example main
- *
- * (C) Copyright Jeremy Pack 2008
- * Distributed under the Boost Software License, Version 1.0. (See             
- * accompanying file LICENSE_1_0.txt or copy at
- * http://www.boost.org/LICENSE_1_0.txt)
- *
- * See http://www.boost.org/ for latest version.
- */
-
 #include <iostream>
 
 #include <boost/extension/shared_library.hpp>
@@ -34,7 +23,7 @@ int main() {
   // This is for convenience in writing cross-platform code, but
   // is not required. All shared libraries are set to start with
   // "lib" and end with "extension".
-  string library_path = "Hello_world_lib";
+  string library_path = "lib-hello-world";
   library_path += extention;
 
   // Create shared_library object with the relative or absolute

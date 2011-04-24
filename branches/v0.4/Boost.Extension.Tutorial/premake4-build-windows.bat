@@ -1,2 +1,2 @@
 premake4 clean
-cmd /k premake4 --os=windows --c99IncludesPath="C:/Users/Avesta/Downloads/msinttypes-r26"  --BoostIncludesPath="C:/Users/Avesta/Desktop/CO/Boost-Extention/" --CopySharedLibraries=true --platform=x32 vs2008 
+cmd /k premake4 --os=windows --BoostIncludesPath="C:/Users/Avesta/Downloads/EXTENSION-SVN-SOURCE/" --CopySharedLibraries=true --platform=x32 vs2008 

@@ -22,24 +22,6 @@ newoption {
 	description = "Choose a particular directory for Boost libs search (do not forget Boost-Extention)"
 }
 
-newoption {
-	trigger     = "FFmpegLibsPath",
-	value       = "PATH",
-	description = "Choose a particular directory for FFMpeg libs search"
-}
-
-newoption {
-	trigger     = "OpenALLibsPath",
-	value       = "PATH",
-	description = "Choose a particular directory for OpenAL libs search"
-}
-
-newoption {
-	trigger     = "OpenCVLibsPath",
-	value       = "PATH",
-	description = "Choose a particular directory for OpenCV libs search"
-}
-
 -- Options for includes
 
 newoption {
@@ -52,31 +34,6 @@ newoption {
 	trigger     = "BoostIncludesPath",
 	value       = "PATH",
 	description = "Choose a particular directory for Boost includes search"
-}
-
-newoption {
-	trigger     = "FFmpegIncludesPath",
-	value       = "PATH",
-	description = "Choose a particular directory for FFMpeg includes search"
-}
-
-newoption {
-	trigger     = "OpenALIncludesPath",
-	value       = "PATH",
-	description = "Choose a particular directory for OpenAL includes search"
-}
-
-
-newoption {
-	trigger     = "OpenCVIncludesPath",
-	value       = "PATH",
-	description = "Choose a particular directory for OpenCV includes search"
-}
-
-newoption {
-	trigger     = "c99IncludesPath",
-	value       = "PATH",
-	description = "Choose a particular directory for C99 includes search if it is not defined on your system by defauft. WINDOWS-MSVC-SPECIFIC-REQUIRED-FOR-FFMPEG-OPTION! because on 2011.03.** msvc++ does not support C99 and FFmpeg release requires C99 there are errors compiling in VS environment. Choose a particular directory for C99 includes search. Problem described here: http://ffmpeg.arrozcru.org/wiki/index.php?title=Inttypes.h . Currently required files could be found here http://code.google.com/p/msinttypes/downloads/list ."
 }
 
 -- Options for Shared Libs
@@ -229,77 +186,6 @@ function cloud.project.init()
 		}
 	end 
 end
-
-function cloud.project.useCV()
-	--
-	cloud.addLibDir( _OPTIONS["OpenCVLibsPath"] )
-	cloud.addIncludeDir(  _OPTIONS["OpenCVIncludesPath"] )
-	if os.get() == "windows" then
-		defines { "WIN" }
-		links {
-		"opencv_core220",
-		"opencv_highgui220",
-		"opencv_imgproc220"
-		}
-		
-		cloud.win.addLibFromProgrammFiles("OpenCV-2.2.0")
-		
-		if  _OPTIONS["CopySharedLibraries"] then
-			cloud.win.copyDLL("OpenCV-2.2.0", "opencv_core220.dll")
-			cloud.win.copyDLL("OpenCV-2.2.0", "opencv_highgui220.dll")
-			cloud.win.copyDLL("OpenCV-2.2.0", "opencv_imgproc220.dll")
-		end
-	end
-	
-	if os.get() == "linux" then
-		defines { "LIN" }
-		links {
-		"opencv_core",
-		"opencv_highgui",
-		"opencv_imgproc"
-		}	
-	end
-	
-	if os.get() == "macosx" then
-		defines { "MAC" }
-		links {
-		"opencv_core",
-		"opencv_highgui",
-		"opencv_imgproc",
-		"QuickTime.framework"
-		}	 
-	end 
-end
-
-function cloud.project.useAL()
-	--
-	cloud.addIncludeDir(  _OPTIONS["OpenALIncludesPath"] )
-	cloud.addLibDir(  _OPTIONS["OpenALLibsPath"] )
-	if os.get() == "windows" then
-		defines { "WIN" }
-		links {
-		"openal32"
-		}
-		cloud.win.addLibFromProgrammFiles("OpenAL-1.13")
-		if  _OPTIONS["CopySharedLibraries"] then
-			cloud.win.copyDLL("OpenAL-1.13", "OpenAL32.dll")
-		end
-	end
-	
-	if os.get() == "linux" then
-		defines { "LIN" }
-		links {
-		"openal"
-		}
-	end
-	
-	if os.get() == "macosx" then
-		defines { "MAC" }
-		links {
-		"openal"
-		}
-	end 
-end
 	
 function cloud.project.useBoost()
 	--
@@ -327,50 +213,7 @@ function cloud.project.useBoost()
 	end 
 end
 
-function cloud.project.useFFmpeg()
-	--
-	cloud.addLibDir(  _OPTIONS["FFmpegLibsPath"] )
-	cloud.addIncludeDir(  _OPTIONS["FFmpegIncludesPath"] )
-	cloud.addIncludeDir( _OPTIONS["c99IncludesPath"] 	) 
-	if os.get() == "windows" then
-		defines { "WIN" }
-		links {
-		"avcodec-52",
-		"avformat-52",
-		"avutil-50",
-		"swscale-0"
-		}
-		cloud.win.addLibFromProgrammFiles2("FFmpeg-0.6.1", "bin")
-		if  _OPTIONS["CopySharedLibraries"] then
-			cloud.win.copyDLL("FFmpeg-0.6.1", "avcodec-52.dll")
-			cloud.win.copyDLL("FFmpeg-0.6.1", "avformat-52.dll")
-			cloud.win.copyDLL("FFmpeg-0.6.1", "avutil-50.dll")
-			cloud.win.copyDLL("FFmpeg-0.6.1", "swscale-0.dll")
-		end
-	end
-	
-	if os.get() == "linux" then
-		defines { "LIN" }
-		links {
-		"avcodec", 
-		"avformat",
-		"avutil",
-		"swscale"
-		}
-	end
-	
-	if os.get() == "macosx" then
-		defines { "MAC" }
-		links {
-		"avcodec", 
-		"avformat",
-		"avutil",
-		"swscale"
-		}
-	end 	
-end
-
-solution "CloudClient"
+solution "Boost.Extension.Tutorials"
 	location ( "projects/".. os.get() .. "-" ..  action )
 	configurations { "Debug", "Release" }
 	objdir     ( "projects/" .. os.get() .. "-" .. action .. "/bin/obj" )
@@ -382,17 +225,153 @@ solution "CloudClient"
 		targetdir ( "projects/" .. os.get() .. "-" .. action ..  "/bin/release" )
 	
 	-- A project defines one build target
+
+	project "Mltiple-Inheritance"
+		kind "ConsoleApp"
+		language "C++"
+		location ( "projects/" .. os.get() .. "-" .. action )
+		cloud.project.init()
+		cloud.project.useBoost()
+		files {  "src/multiple-inheritance_main.cpp" ,"src/headers-interfaces/computer.hpp" ,"src/headers-interfaces/vehicle.hpp"}
+		
+		configuration "Debug"
+			defines { "DEBUG" }
+			flags { "Symbols" }
+		
+		
+		configuration "Release"
+			defines { "NDEBUG" }
+			flags { "Optimize" }
+			
+		project "lib-multiple-inheritance-Vehicle"
+		kind "SharedLib"
+		language "C++"
+		location ( "projects/" .. os.get() .. "-" .. action )
+		cloud.project.init()
+		cloud.project.useBoost()
+		files { "src/lib-multiple-inheritance/vehicle.cpp" ,"src/headers-interfaces/vehicle.hpp" }
+		
+		configuration "Debug"
+			defines { "DEBUG" }
+			flags { "Symbols" }
+		
+		
+		configuration "Release"
+			defines { "NDEBUG" }
+			flags { "Optimize" }
+			
+		project "lib-multiple-inheritance-Car"
+		kind "SharedLib"
+		language "C++"
+		location ( "projects/" .. os.get() .. "-" .. action )
+		cloud.project.init()
+		cloud.project.useBoost()
+		files {"src/lib-multiple-inheritance/car.**" ,"src/headers-interfaces/vehicle.hpp" }
+		links { "lib-multiple-inheritance-Vehicle" }
+		configuration "Debug"
+			defines { "DEBUG" }
+			flags { "Symbols" }
+		
+		
+		configuration "Release"
+			defines { "NDEBUG" }
+			flags { "Optimize" }
+
+		project "lib-multiple-inheritance-Computer"
+		kind "SharedLib"
+		language "C++"
+		location ( "projects/" .. os.get() .. "-" .. action )
+		cloud.project.init()
+		cloud.project.useBoost()
+		files { "src/lib-multiple-inheritance/computer.cpp" ,"src/headers-interfaces/computer.hpp" }
+		
+		configuration "Debug"
+			defines { "DEBUG" }
+			flags { "Symbols" }
+		
+		
+		configuration "Release"
+			defines { "NDEBUG" }
+			flags { "Optimize" }
+
+		project "lib-multiple-inheritance-Boat"
+		kind "SharedLib"
+		language "C++"
+		location ( "projects/" .. os.get() .. "-" .. action )
+		cloud.project.init()
+		cloud.project.useBoost()
+		files { "src/lib-multiple-inheritance/boat.**" ,"src/headers-interfaces/vehicle.hpp" }
+		links { "lib-multiple-inheritance-Vehicle" }
+		configuration "Debug"
+			defines { "DEBUG" }
+			flags { "Symbols" }
+		
+		
+		configuration "Release"
+			defines { "NDEBUG" }
+			flags { "Optimize" }
+
+		project "lib-multiple-inheritance-Plane"
+		kind "SharedLib"
+		language "C++"
+		location ( "projects/" .. os.get() .. "-" .. action )
+		cloud.project.init()
+		cloud.project.useBoost()
+		files { "src/lib-multiple-inheritance/plane.**"  ,"src/headers-interfaces/vehicle.hpp" }
+		links { "lib-multiple-inheritance-Vehicle" }
+		configuration "Debug"
+			defines { "DEBUG" }
+			flags { "Symbols" }
+		
+		
+		configuration "Release"
+			defines { "NDEBUG" }
+			flags { "Optimize" }
+
+		project "lib-multiple-inheritance-Flying-Car"
+		kind "SharedLib"
+		language "C++"
+		location ( "projects/" .. os.get() .. "-" .. action )
+		cloud.project.init()
+		cloud.project.useBoost()
+		files { "src/lib-multiple-inheritance/flying_car.**" ,"src/lib-multiple-inheritance/plane.hpp"}
+		links { "lib-multiple-inheritance-Vehicle" }
+		links { "lib-multiple-inheritance-Plane" }
+		links { "lib-multiple-inheritance-Car" }
+		configuration "Debug"
+			defines { "DEBUG" }
+			flags { "Symbols" }
+		
+		
+		configuration "Release"
+			defines { "NDEBUG" }
+			flags { "Optimize" }
+
+		project "lib-multiple-inheritance-Car-Of-The-Future"
+		kind "SharedLib"
+		language "C++"
+		location ( "projects/" .. os.get() .. "-" .. action )
+		cloud.project.init()
+		cloud.project.useBoost()
+		files { "src/lib-multiple-inheritance/car_of_the_future.**" ,"src/lib-multiple-inheritance/boat.hpp"  ,"src/lib-multiple-inheritance/flying_car.hpp" ,"src/headers-interfaces/computer.hpp"  }
+		links { "lib-multiple-inheritance-Vehicle" }
+		links { "lib-multiple-inheritance-Flying-Car", "lib-multiple-inheritance-Boat", "lib-multiple-inheritance-Computer" }
+		configuration "Debug"
+			defines { "DEBUG" }
+			flags { "Symbols" }
+		
+		
+		configuration "Release"
+			defines { "NDEBUG" }
+			flags { "Optimize" }
 	
-	project "Factories"
+	project "Simple-Inheritance"
 		kind "ConsoleApp"
 		language "C++"
 		location ( "projects/" .. os.get() .. "-" .. action )
 		cloud.project.init()
-		-- cloud.project.useFFmpeg()
 		cloud.project.useBoost()
-		-- cloud.project.useAL()
-		-- cloud.project.useCV()
-		files {  "src/factories_main.cpp" ,"src/animal.h"}
+		files {  "src/simple-inheritance_main.cpp" ,"src/headers-interfaces/animal.h"}
 		
 		configuration "Debug"
 			defines { "DEBUG" }
@@ -403,16 +382,13 @@ solution "CloudClient"
 			defines { "NDEBUG" }
 			flags { "Optimize" }
 			
-		project "Factories_lib"
+		project "lib-simple-inheritance"
 		kind "SharedLib"
 		language "C++"
 		location ( "projects/" .. os.get() .. "-" .. action )
 		cloud.project.init()
-		-- cloud.project.useFFmpeg()
 		cloud.project.useBoost()
-		-- cloud.project.useAL()
-		-- cloud.project.useCV()
-		files { "src/factories_lib.cpp" ,"src/animal.h" }
+		files { "src/lib-simple-inheritance/animals.cpp" ,"src/headers-interfaces/animal.h" }
 		
 		configuration "Debug"
 			defines { "DEBUG" }
@@ -424,16 +400,13 @@ solution "CloudClient"
 			flags { "Optimize" }
 			
 			
-			project "Hello_world"
+			project "Hello-World"
 		kind "ConsoleApp"
 		language "C++"
 		location ( "projects/" .. os.get() .. "-" .. action )
 		cloud.project.init()
-		-- cloud.project.useFFmpeg()
 		cloud.project.useBoost()
-		-- cloud.project.useAL()
-		-- cloud.project.useCV()
-		files {  "src/hello_world.cpp"}
+		files {  "src/hello-world_main.cpp"}
 		
 		configuration "Debug"
 			defines { "DEBUG" }
@@ -444,16 +417,13 @@ solution "CloudClient"
 			defines { "NDEBUG" }
 			flags { "Optimize" }
 			
-		project "Hello_world_lib"
+		project "lib-hello-world"
 		kind "SharedLib"
 		language "C++"
 		location ( "projects/" .. os.get() .. "-" .. action )
 		cloud.project.init()
-		-- cloud.project.useFFmpeg()
 		cloud.project.useBoost()
-		-- cloud.project.useAL()
-		-- cloud.project.useCV()
-		files { "src/hello_world_lib.cpp"  }
+		files { "src/lib-hello-world/c-style-functions.cpp"  }
 		
 		configuration "Debug"
 			defines { "DEBUG" }
