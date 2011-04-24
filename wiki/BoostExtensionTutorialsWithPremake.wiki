@@ -9,7 +9,7 @@ We [http://code.google.com/p/cloudobserver/source/browse/#svn%2Fbranches%2Fv0.4%
  * GNU Make, including Cygwin and MinGW
  * Apple Xcode
  * Code::Blocks
- * CodeLite
+ * !CodeLite
 
 To achieve such expansion we had to modify some of the source files a bit and use [http://industriousone.com/what-premake premake build configuration generator] for projects/solutions creation.
 
