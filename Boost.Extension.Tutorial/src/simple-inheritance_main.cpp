@@ -1,14 +1,3 @@
-/*
- * Boost.Extension / hello world example main
- *
- * (C) Copyright Jeremy Pack 2008
- * Distributed under the Boost Software License, Version 1.0. (See             
- * accompanying file LICENSE_1_0.txt or copy at
- * http://www.boost.org/LICENSE_1_0.txt)
- *
- * See http://www.boost.org/ for latest version.
- */
-
 #include <iostream>
 #include <map>
 
@@ -18,7 +7,7 @@
 #include <boost/function.hpp>
 #include <boost/scoped_ptr.hpp>
 
-#include "animal.h"
+#include "headers-interfaces/animal.h"
 using namespace std;
 
 #ifdef WIN
@@ -39,7 +28,7 @@ int main() {
   // This is for convenience in writing cross-platform code, but
   // is not required. All shared libraries are set to start with
   // "lib" and end with "extension".
-  string library_path = "Factories_lib";
+  string library_path = "lib-simple-inheritance";
 library_path +=extention;
 
   // Create shared_library object with the relative or absolute

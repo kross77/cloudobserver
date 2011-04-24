@@ -16,7 +16,7 @@
 #include <boost/extension/factory.hpp>
 #include <boost/extension/type_map.hpp>
 
-#include "animal.h"
+#include "../headers-interfaces/animal.h"
 
 class puma : public animal {
  public:
