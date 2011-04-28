@@ -13,15 +13,12 @@
 #define BOOST_EXTENSION_CAR_OF_THE_FUTURE_HPP
 //  See the FAQ for info about why the following is necessary
 //  here, but usually isn't.
-#define BOOST_EXTENSION_FLYING_CAR_DECL BOOST_EXTENSION_IMPORT_DECL
-#define BOOST_EXTENSION_BOAT_DECL BOOST_EXTENSION_IMPORT_DECL
-#define BOOST_EXTENSION_COMPUTER_DECL BOOST_EXTENSION_IMPORT_DECL
 #include "flying_car.hpp"
 #include "boat.hpp"
 #include "../headers-interfaces/computer.hpp"
 #include <iostream>
 #include <typeinfo>
-class BOOST_EXTENSION_CAR_OF_THE_FUTURE_DECL 
+class BOOST_EXTENSION_EXPORT_DECL
   car_of_the_future : public flying_car, public boat, public computer
 {
 public:

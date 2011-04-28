@@ -14,11 +14,10 @@
 #define BOOST_EXTENSION_PLANE_HPP
 //  See the FAQ for info about why the following is necessary
 //  here, but usually isn't.
-#define BOOST_EXTENSION_VEHICLE_DECL BOOST_EXTENSION_IMPORT_DECL
 #include "../headers-interfaces/vehicle.hpp"
 #include <iostream>
 #include <typeinfo>
-class  BOOST_EXTENSION_PLANE_DECL plane : virtual public vehicle
+class  BOOST_EXTENSION_EXPORT_DECL plane : virtual public vehicle
 {
 public:
   plane(void){std::cout << "\nCreated a Plane";}

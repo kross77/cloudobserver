@@ -16,7 +16,7 @@
 #include <typeinfo>
 #include <string>
 
-class BOOST_EXTENSION_VEHICLE_DECL vehicle
+class BOOST_EXTENSION_EXPORT_DECL vehicle
 {
 public:
   vehicle(void){std::cout << "\nCreated a Vehicle";}

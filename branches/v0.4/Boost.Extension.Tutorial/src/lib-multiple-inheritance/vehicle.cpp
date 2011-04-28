@@ -19,8 +19,6 @@ these types of macros are not necessary for classes
 - see the FAQ.
   */
 #include <boost/extension/extension.hpp>
-#define BOOST_EXTENSION_VEHICLE_DECL BOOST_EXTENSION_EXPORT_DECL
-
 #include "../headers-interfaces/vehicle.hpp"
 #include <boost/extension/type_map.hpp>
 #include <boost/extension/factory.hpp>

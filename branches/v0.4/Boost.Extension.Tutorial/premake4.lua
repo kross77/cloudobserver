@@ -19,7 +19,7 @@ newoption {
 newoption {
 	trigger     = "BoostLibsPath",
 	value       = "PATH",
-	description = "Choose a particular directory for Boost libs search (do not forget Boost-Extention)"
+	description = "Choose a particular directory for Boost libs search (do not forget Boost-Extension and Boost-Reflection which are required by samples we try to re-create following instructions given here http://boost-extension.redshoelace.com/docs/boost/extension/index.html in this solution, also remember that we adress them as part of boost: 'boost/reflection/**', 'boost/extension/**')"
 }
 
 -- Options for includes
@@ -166,7 +166,8 @@ function cloud.project.init()
 		"/opt/local/include",
 		"/usr/include",
 		"/usr/local/include"
-		}	 
+		}
+		links{"dl"} 
 	end
 	
 	if os.get() == "macosx" then
@@ -184,6 +185,7 @@ function cloud.project.init()
 		"/usr/include",
 		"/usr/local/include"
 		}
+		links{"dl"}
 	end 
 end
 	
@@ -224,7 +226,43 @@ solution "Boost.Extension.Tutorials"
 	configuration { "Release" }
 		targetdir ( "projects/" .. os.get() .. "-" .. action ..  "/bin/release" )
 	
-	-- A project defines one build target
+--Interoperability---------------------------------------------------------------------	
+
+	project "Interoperability"
+		kind "ConsoleApp"
+		language "C++"
+		location ( "projects/" .. os.get() .. "-" .. action )
+		cloud.project.init()
+		cloud.project.useBoost()
+		files {  "src/interoperability_main.cpp" }
+		
+		configuration "Debug"
+			defines { "DEBUG" }
+			flags { "Symbols" }
+		
+		
+		configuration "Release"
+			defines { "NDEBUG" }
+			flags { "Optimize" }
+			
+		project "lib-interoperability"
+		kind "SharedLib"
+		language "C++"
+		location ( "projects/" .. os.get() .. "-" .. action )
+		cloud.project.init()
+		cloud.project.useBoost()
+		files { "src/lib-interoperability/**"}
+		
+		configuration "Debug"
+			defines { "DEBUG" }
+			flags { "Symbols" }
+		
+		
+		configuration "Release"
+			defines { "NDEBUG" }
+			flags { "Optimize" }
+
+--Mltiple-Inheritance---------------------------------------------------------------------	
 
 	project "Mltiple-Inheritance"
 		kind "ConsoleApp"
@@ -233,6 +271,10 @@ solution "Boost.Extension.Tutorials"
 		cloud.project.init()
 		cloud.project.useBoost()
 		files {  "src/multiple-inheritance_main.cpp" ,"src/headers-interfaces/computer.hpp" ,"src/headers-interfaces/vehicle.hpp"}
+		
+		-- next 2 lines actually should not be needed
+		links { "lib-multiple-inheritance-Vehicle" }
+		links { "lib-multiple-inheritance-Computer" }
 		
 		configuration "Debug"
 			defines { "DEBUG" }
@@ -355,6 +397,8 @@ solution "Boost.Extension.Tutorials"
 		cloud.project.useBoost()
 		files { "src/lib-multiple-inheritance/car_of_the_future.**" ,"src/lib-multiple-inheritance/boat.hpp"  ,"src/lib-multiple-inheritance/flying_car.hpp" ,"src/headers-interfaces/computer.hpp"  }
 		links { "lib-multiple-inheritance-Vehicle" }
+		links { "lib-multiple-inheritance-Plane" }
+		links { "lib-multiple-inheritance-Car" }
 		links { "lib-multiple-inheritance-Flying-Car", "lib-multiple-inheritance-Boat", "lib-multiple-inheritance-Computer" }
 		configuration "Debug"
 			defines { "DEBUG" }
@@ -364,7 +408,9 @@ solution "Boost.Extension.Tutorials"
 		configuration "Release"
 			defines { "NDEBUG" }
 			flags { "Optimize" }
-	
+
+--Simple-Inheritance---------------------------------------------------------------------
+
 	project "Simple-Inheritance"
 		kind "ConsoleApp"
 		language "C++"
@@ -399,7 +445,8 @@ solution "Boost.Extension.Tutorials"
 			defines { "NDEBUG" }
 			flags { "Optimize" }
 			
-			
+--Hello-World---------------------------------------------------------------------
+		
 			project "Hello-World"
 		kind "ConsoleApp"
 		language "C++"
@@ -433,3 +480,5 @@ solution "Boost.Extension.Tutorials"
 		configuration "Release"
 			defines { "NDEBUG" }
 			flags { "Optimize" }
+			
+-----------------------------------------------------------------------

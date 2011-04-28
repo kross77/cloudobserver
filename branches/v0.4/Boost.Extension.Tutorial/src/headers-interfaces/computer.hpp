@@ -15,7 +15,7 @@
 #include <iostream>
 #include <string>
 #include <typeinfo>
-class BOOST_EXTENSION_COMPUTER_DECL computer
+class BOOST_EXTENSION_EXPORT_DECL computer
 {
 public:
   computer(void){std::cout << "\nCreated a Computer";}

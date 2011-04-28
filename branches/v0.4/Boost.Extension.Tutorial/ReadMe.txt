@@ -5,7 +5,8 @@ Preparation instructions:
   - Download or build latest official distributions of library's and headers for next libs (if distributions are not presented you should compile library's manually on your own or call for help )
     - Boost C++ library's ( http://www.boost.org/ )  (we tested with version 1.4.16)
     - Boost-Extension ( http://boost-extension.redshoelace.com/docs/boost/extension/index.html, we use latest revision 71463 http://svn.boost.org/svn/boost/sandbox/boost/extension/, we adress it as part of boost 'boost/extension/**' )
-  - Be sure to have C99 compiler ( or for MSVC++ download headers fro here http://code.google.com/p/msinttypes/downloads/list )  (we tested with version "r26")
+    - Boost-Reflection ( we use it because of this tutorial http://boost-extension.redshoelace.com/docs/boost/extension/boost_extension/extension_reflection.html, we use latest revision 71517 http://svn.boost.org/svn/boost/sandbox/boost/reflection/, we adress it as part of boost 'boost/reflection/**' )
+
 
 
 On Windows you should remember where to you downloaded library's and headers 
