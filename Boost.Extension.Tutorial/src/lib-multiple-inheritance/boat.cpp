@@ -20,7 +20,6 @@ these types of macros are not necessary for classes
 - see the FAQ.
   */
 #include <boost/extension/extension.hpp>
-#define BOOST_EXTENSION_BOAT_DECL BOOST_EXTENSION_EXPORT_DECL
 #include "boat.hpp"
 #include <boost/extension/type_map.hpp>
 #include <boost/extension/factory.hpp>

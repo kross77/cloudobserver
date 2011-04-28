@@ -21,9 +21,6 @@ these types of macros are not necessary for classes
   */
 
 #include <boost/extension/extension.hpp>
-#define BOOST_EXTENSION_CAR_DECL BOOST_EXTENSION_EXPORT_DECL
-
-
 #include "car.hpp"
 #include <boost/extension/type_map.hpp>
 #include <boost/extension/factory.hpp>

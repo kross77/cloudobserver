@@ -20,16 +20,14 @@ these types of macros are not necessary for classes
 - see the FAQ.
   */
 #include <boost/extension/extension.hpp>
-#define BOOST_EXTENSION_CAR_OF_THE_FUTURE_DECL BOOST_EXTENSION_EXPORT_DECL
-
 #include "car_of_the_future.hpp"
 #include <boost/extension/type_map.hpp>
 #include <boost/extension/factory.hpp>
 #include <string>
 
 std::string car_of_the_future::list_capabilities() {
-  return boat::list_capabilities() + flying_car::list_capabilities() +
-         computer::list_capabilities() + "\nCosts an arm and a leg";
+  return boat::list_capabilities() + flying_car::list_capabilities() + 
+         computer::list_capabilities() +  "\nCosts an arm and a leg";
 }
 
 using boost::extensions::factory;
