@@ -8,17 +8,9 @@
 #include <boost/scoped_ptr.hpp>
 
 #include "headers-interfaces/animal.h"
-using namespace std;
 
-#ifdef WIN
-string extention = ".dll";
-#elif defined LIN
-string extention = ".so";
-#elif defined MAC
-string extention = ".dylib"; // as wall .bundle can be used.
-#else
-#error "unknown platform";
-#endif
+#include "utilities.h"
+using namespace std;
 
 int main() {
   using namespace boost::extensions;
@@ -28,8 +20,8 @@ int main() {
   // This is for convenience in writing cross-platform code, but
   // is not required. All shared libraries are set to start with
   // "lib" and end with "extension".
-  string library_path = "lib-simple-inheritance";
-library_path +=extention;
+  string library_path = add_prefix_and_suffix("lib-simple-inheritance");
+
 
   // Create shared_library object with the relative or absolute
   // path to the shared library.

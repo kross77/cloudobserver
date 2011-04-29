@@ -234,7 +234,7 @@ solution "Boost.Extension.Tutorials"
 		location ( "projects/" .. os.get() .. "-" .. action )
 		cloud.project.init()
 		cloud.project.useBoost()
-		files {  "src/interoperability_main.cpp" }
+		files {  "src/interoperability_main.cpp" , "src/utils.h"}
 		
 		configuration "Debug"
 			defines { "DEBUG" }
@@ -270,7 +270,7 @@ solution "Boost.Extension.Tutorials"
 		location ( "projects/" .. os.get() .. "-" .. action )
 		cloud.project.init()
 		cloud.project.useBoost()
-		files {  "src/multiple-inheritance_main.cpp" ,"src/headers-interfaces/computer.hpp" ,"src/headers-interfaces/vehicle.hpp"}
+		files {  "src/multiple-inheritance_main.cpp" ,"src/headers-interfaces/computer.hpp" ,"src/headers-interfaces/vehicle.hpp", "src/utils.h"}
 		
 		-- next 2 lines actually should not be needed
 		links { "lib-multiple-inheritance-Vehicle" }
@@ -417,7 +417,7 @@ solution "Boost.Extension.Tutorials"
 		location ( "projects/" .. os.get() .. "-" .. action )
 		cloud.project.init()
 		cloud.project.useBoost()
-		files {  "src/simple-inheritance_main.cpp" ,"src/headers-interfaces/animal.h"}
+		files {  "src/simple-inheritance_main.cpp" ,"src/headers-interfaces/animal.h" , "src/utils.h"}
 		
 		configuration "Debug"
 			defines { "DEBUG" }
@@ -453,7 +453,7 @@ solution "Boost.Extension.Tutorials"
 		location ( "projects/" .. os.get() .. "-" .. action )
 		cloud.project.init()
 		cloud.project.useBoost()
-		files {  "src/hello-world_main.cpp"}
+		files {  "src/hello-world_main.cpp" , "src/utils.h"}
 		
 		configuration "Debug"
 			defines { "DEBUG" }

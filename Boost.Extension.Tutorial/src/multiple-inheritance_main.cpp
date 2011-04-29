@@ -15,18 +15,9 @@
 #include "headers-interfaces/computer.hpp"
 #include <boost/scoped_ptr.hpp>
 
+#include "utilities.h"
+
 using namespace std;
-
-#ifdef WIN
-string extention = ".dll";
-#elif defined LIN
-string extention = ".so";
-#elif defined MAC
-string extention = ".dylib"; // as wall .bundle can be used.
-#else
-#error "unknown platform";
-#endif
-
 
 int main() {
   using namespace boost::extensions;
@@ -34,26 +25,19 @@ int main() {
   //  constructors.
   type_map types;
 
-  string library_path_to_Vehicle = "lib-multiple-inheritance-Vehicle";
-  library_path_to_Vehicle +=extention;
+  string library_path_to_Vehicle = add_prefix_and_suffix("lib-multiple-inheritance-Vehicle");
 
-  string library_path_to_Car = "lib-multiple-inheritance-Car";
-  library_path_to_Car +=extention;
+  string library_path_to_Car = add_prefix_and_suffix("lib-multiple-inheritance-Car");
 
-  string library_path_to_Boat = "lib-multiple-inheritance-Boat";
-  library_path_to_Boat +=extention;
+  string library_path_to_Boat = add_prefix_and_suffix("lib-multiple-inheritance-Boat");
 
-  string library_path_to_Plane = "lib-multiple-inheritance-Plane";
-  library_path_to_Plane +=extention;
+  string library_path_to_Plane = add_prefix_and_suffix("lib-multiple-inheritance-Plane");
 
-  string library_path_to_Flying_Car = "lib-multiple-inheritance-Flying-Car";
-  library_path_to_Flying_Car +=extention;
+  string library_path_to_Flying_Car = add_prefix_and_suffix("lib-multiple-inheritance-Flying-Car");
 
-  string library_path_to_Computer = "lib-multiple-inheritance-Computer";
-  library_path_to_Computer +=extention;
+  string library_path_to_Computer = add_prefix_and_suffix("lib-multiple-inheritance-Computer");
 
-  string library_path_to_Car_Of_The_Future = "lib-multiple-inheritance-Car-Of-The-Future";
-  library_path_to_Car_Of_The_Future +=extention;
+  string library_path_to_Car_Of_The_Future = add_prefix_and_suffix("lib-multiple-inheritance-Car-Of-The-Future");
 
   //  Load the constructors and information into the factory_map.
   load_single_library(types, library_path_to_Vehicle);
