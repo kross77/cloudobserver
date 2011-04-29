@@ -5,14 +5,12 @@
 
 Here we will describe what are tips and tricks we found that should be performed for correct Boost-Extension tutorials execution on Linux.
 
-
 = Details =
 
 == General ==
 
  # In terminal standing inside directory with app and libs call `export LD_LIBRARY_PATH=./` to make it possible for application to find your libs.
- # By default compiler adds `lib` prefix to all your libraries. So you can get names like `liblib-hello-world.so`. Our apps by default search for libraries with out prefix so please remove it in order to achieve something like `lib-hello-world.so`.
- # By default created executables are not runnable so please call `chmod u+x Your-APP-NAME` on each of them to make them executable.
+ # By default created executables may not runnable. Please call `chmod u+x Your-APP-NAME` on each of them to make them executable.
 
 == Specials for each tutorial ==
  
@@ -21,8 +19,6 @@ Works correctly.
 === Simple-Inheritance ===
 Currently does not find any class members.
 === Mltiple-Enheritance ===
-Currently requires you to have copies of each lib your app creates - one with prefix, one with out.
+Works correctly.
 === Interoperability ===
 Currently outputs `Segmentation fault`.
-
-
