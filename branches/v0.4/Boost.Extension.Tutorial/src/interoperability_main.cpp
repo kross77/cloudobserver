@@ -20,17 +20,10 @@
 #include <boost/reflection/reflection.hpp>
 #include <boost/function.hpp>
 
+#include "utilities.h"
+
 using namespace std;
 
-#ifdef WIN
-string extention = ".dll";
-#elif defined LIN
-string extention = ".so";
-#elif defined MAC
-string extention = ".dylib"; // as wall .bundle can be used.
-#else
-#error "unknown platform";
-#endif
 
 int main(void)
 {
@@ -42,8 +35,7 @@ int main(void)
   // will be populated inside the shared library.
   map<string, reflection> reflection_map;
 
-  string library_path = "lib-interoperability";
-  library_path +=extention;
+  string library_path = add_prefix_and_suffix( "lib-interoperability" );
 
   // Load the shared library using Boost.Extension
   boost::extensions::shared_library lib(library_path);

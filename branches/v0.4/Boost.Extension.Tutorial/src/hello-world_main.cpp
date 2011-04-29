@@ -3,17 +3,9 @@
 #include <boost/extension/shared_library.hpp>
 #include <boost/function.hpp>
 
-using namespace std;
+#include "utilities.h"
 
-#ifdef WIN
-string extention = ".dll";
-#elif defined LIN
-string extention = ".so";
-#elif defined MAC
-string extention = ".dylib"; // as wall .bundle can be used.
-#else
-#error "unknown platform";
-#endif
+using namespace std;
 
 int main() {
   using namespace boost::extensions;
@@ -23,8 +15,7 @@ int main() {
   // This is for convenience in writing cross-platform code, but
   // is not required. All shared libraries are set to start with
   // "lib" and end with "extension".
-  string library_path = "lib-hello-world";
-  library_path += extention;
+  string library_path = add_prefix_and_suffix("lib-hello-world");
 
   // Create shared_library object with the relative or absolute
   // path to the shared library.
