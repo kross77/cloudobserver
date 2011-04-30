@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="lib-multiple-inheritance-Flying-Car"
-	ProjectGUID="{E9FCB8C3-B73D-B042-9D17-4043DD09565D}"
+	ProjectGUID="{EF0008EC-3F03-2C45-BA96-C81BC2EBA3F2}"
 	RootNamespace="lib-multiple-inheritance-Flying-Car"
 	Keyword="Win32Proj"
 	>

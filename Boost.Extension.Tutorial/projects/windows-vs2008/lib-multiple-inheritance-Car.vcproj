@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="lib-multiple-inheritance-Car"
-	ProjectGUID="{394805E3-F062-2445-B27F-FD17E310DCE1}"
+	ProjectGUID="{B1D90F43-1C5B-4046-B936-95A557CB5B3D}"
 	RootNamespace="lib-multiple-inheritance-Car"
 	Keyword="Win32Proj"
 	>

@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="lib-multiple-inheritance-Car-Of-The-Future"
-	ProjectGUID="{9625C5BA-3A87-2A4A-ADC8-C23007814DF1}"
+	ProjectGUID="{1D64E39B-3D86-1A4F-9BF8-65A630ECD21A}"
 	RootNamespace="lib-multiple-inheritance-Car-Of-The-Future"
 	Keyword="Win32Proj"
 	>

@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="Mltiple-Inheritance"
-	ProjectGUID="{52B18248-94B0-4144-B540-0F76A3F5B81A}"
+	ProjectGUID="{6EAEE309-AB9B-8949-A2B1-7069DC5E342D}"
 	RootNamespace="Mltiple-Inheritance"
 	Keyword="Win32Proj"
 	>

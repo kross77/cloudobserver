@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="Interoperability"
-	ProjectGUID="{64B0E808-DAE2-8148-916D-2A5A641035C0}"
+	ProjectGUID="{BDD5C5B6-435E-B644-9662-444F874C5F04}"
 	RootNamespace="Interoperability"
 	Keyword="Win32Proj"
 	>
