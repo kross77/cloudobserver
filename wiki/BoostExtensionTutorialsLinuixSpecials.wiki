@@ -17,7 +17,7 @@ Here we will describe what are tips and tricks we found that should be performed
 === Hello-World app ===
 Works correctly.
 === Simple-Inheritance ===
-Currently does not find any class members.
+Works correctly.
 === Mltiple-Enheritance ===
 Works correctly.
 === Interoperability ===
