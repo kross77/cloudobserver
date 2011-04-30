@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="lib-multiple-inheritance-Computer"
-	ProjectGUID="{9F9D57BB-42B2-AC4B-AE06-E400D7FEF6C1}"
+	ProjectGUID="{1C8A0DAC-2B33-5B4B-ACCF-E5720259302C}"
 	RootNamespace="lib-multiple-inheritance-Computer"
 	Keyword="Win32Proj"
 	>

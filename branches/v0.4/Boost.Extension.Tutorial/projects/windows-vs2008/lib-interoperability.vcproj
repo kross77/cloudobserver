@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="lib-interoperability"
-	ProjectGUID="{9C4286E6-7458-BE47-BEFC-B9A7EA317852}"
+	ProjectGUID="{0717AA00-91A5-3C45-A8D9-8F7083A3F97F}"
 	RootNamespace="lib-interoperability"
 	Keyword="Win32Proj"
 	>

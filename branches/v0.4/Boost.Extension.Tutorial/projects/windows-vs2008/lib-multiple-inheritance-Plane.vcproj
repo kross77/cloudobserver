@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="lib-multiple-inheritance-Plane"
-	ProjectGUID="{06D9A359-273E-904D-A45A-99B969612763}"
+	ProjectGUID="{E8DFDD8D-C369-6D46-AA19-55649C42B3D8}"
 	RootNamespace="lib-multiple-inheritance-Plane"
 	Keyword="Win32Proj"
 	>

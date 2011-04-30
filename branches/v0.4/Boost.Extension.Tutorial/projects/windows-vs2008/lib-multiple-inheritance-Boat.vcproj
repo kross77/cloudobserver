@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="lib-multiple-inheritance-Boat"
-	ProjectGUID="{9C5A6926-2FB5-C34B-8F94-63C83E2194BA}"
+	ProjectGUID="{03E9E4E1-CFA5-A241-869C-C5676BF70161}"
 	RootNamespace="lib-multiple-inheritance-Boat"
 	Keyword="Win32Proj"
 	>

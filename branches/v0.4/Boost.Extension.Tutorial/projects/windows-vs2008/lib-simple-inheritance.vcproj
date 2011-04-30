@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="lib-simple-inheritance"
-	ProjectGUID="{F197C1F5-DD24-4049-B94B-0A5E94E91F03}"
+	ProjectGUID="{B7ECC71F-E9CD-A743-9BD2-36075A4B9300}"
 	RootNamespace="lib-simple-inheritance"
 	Keyword="Win32Proj"
 	>
