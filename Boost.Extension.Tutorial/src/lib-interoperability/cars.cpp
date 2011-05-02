@@ -46,7 +46,7 @@ public:
 
 extern "C" 
 void BOOST_EXTENSION_EXPORT_DECL
-extension_export_car(std::map<std::string, reflection> reflection_map) {
+extension_export_car(std::map<std::string, reflection> &reflection_map) {
   reflection_map["suv"].reflect<suv>()
     .constructor<const char*>()
     .function(&suv::get_type, "get_type")
