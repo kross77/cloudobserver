@@ -21,4 +21,4 @@ Works correctly.
 === Mltiple-Enheritance ===
 Works correctly.
 === Interoperability ===
-Currently outputs `Segmentation fault`.
+Works correctly.
