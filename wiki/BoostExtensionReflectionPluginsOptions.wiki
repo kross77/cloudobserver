@@ -1,5 +1,5 @@
+#summary Here we describe key options and requirements for plugin creation with Boost Extension and Reflection
 #labels Phase-Implementation,Phase-Design
-#Here we describe key options and requirements for plugin creation with Boost Extension and Reflection
 
 = Introduction =
 
@@ -36,6 +36,4 @@ On basics of creation such plugins please [http://boost-extension.redshoelace.co
    * includes to `<boost/extension/extension.hpp>` and `<boost/reflection/reflection.hpp>` in implementation file are required 
    * no special directives in class declarations
    * you have freedom in naming a function you want to use for creating library description reflection map.
-
-
 
