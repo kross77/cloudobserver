@@ -396,7 +396,6 @@ solution "CloudServerPrototype"
 	--	cloud.project.useAL()
 	--	cloud.project.useCV()
 		links { "cf-http" }
-		links { "sqlite" }
 		includedirs { "3rdparty/cf-http", "3rdparty/sqlite" }
 		files { "src/**.h", "src/**.cpp" }
 
@@ -429,17 +428,3 @@ solution "CloudServerPrototype"
 			defines { "NDEBUG" }
 			flags { "OptimizeSpeed", "Unicode" }
 			
-	project "sqlite"
-		kind "StaticLib"
-		language "C++"
-		location ( "projects/" .. os.get() .. "-" .. action )
-		cloud.project.init()
-		files { "3rdparty/sqlite/**.h", "3rdparty/sqlite/**.c" }
-		
-		configuration "Debug"
-			defines { "DEBUG" }
-			flags { "Symbols", "Unicode" }
-		
-		configuration "Release"
-			defines { "NDEBUG" }
-			flags { "OptimizeSpeed", "Unicode" }
