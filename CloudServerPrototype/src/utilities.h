@@ -7,6 +7,48 @@
 using namespace boost::asio::ip;
 using namespace std;
 
+// 32-bit time space set up
+#ifdef WIN
+#include "Windows.h"
+#define _USE_32_BIT_TIME_T
+#elif defined LIN
+#include <unistd.h>
+#elif defined MAC
+#include <unistd.h> // probably...
+#else
+#error "unknown platform";
+#endif
+
+// Shared library suffixes
+#ifdef WIN
+string extention = ".dll";
+#elif defined LIN
+string extention = ".so";
+#elif defined MAC
+string extention = ".dylib"; // as wall .bundle can be used.
+#else
+#error "unknown platform";
+#endif
+
+// Shared library prefixes
+#ifdef WIN
+string prefix = "";
+#elif defined LIN
+string prefix = "lib";
+#elif defined MAC
+string prefix = "lib"; // as wall .bundle can be used.
+#else
+#error "unknown platform";
+#endif
+
+string add_prefix_and_suffix(string name)
+{
+	string library_name = prefix;
+	library_name +=	name;
+	library_name +=	extention;
+	return library_name;
+}
+
 void print_user_info(boost::asio::ip::tcp::socket& socket)
 {
 	tcp::endpoint remote_endpoint = socket.remote_endpoint();
