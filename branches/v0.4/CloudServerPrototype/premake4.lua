@@ -194,8 +194,6 @@ function cloud.project.init()
 	--
 	cloud.addLibDir(  _OPTIONS["libsPath"] )
 	cloud.addIncludeDir( _OPTIONS["includesPath"] )
-		 includedirs {"3rdparty/header-only"}
-		defines{ "BOOST_ASIO_DISABLE_IOCP" }
 	if os.get() == "windows" then
 		defines { "WIN" }
 	end
@@ -308,6 +306,8 @@ function cloud.project.useBoost()
 	--
 	cloud.addIncludeDir( _OPTIONS["BoostIncludesPath"] )
 	cloud.addLibDir( _OPTIONS["BoostLibsPath"])
+		includedirs {"3rdparty/header-only"}
+		defines{ "BOOST_ASIO_DISABLE_IOCP" }
 	if os.get() == "windows" then
 		defines { "WIN" } 
 		cloud.win.addLibFromProgrammFiles("Boost-1.46.1")
@@ -385,19 +385,27 @@ solution "CloudServerPrototype"
 		targetdir ( "projects/" .. os.get() .. "-" .. action ..  "/bin/release" )
 	
 	-- A project defines one build target
-	
-	project "CloudServerPrototype"
+
+
+----------------------------------------------------------------------------------------------
+-- server ------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------			
+		
+	project "Server"
 		kind "ConsoleApp"
 		language "C++"
 		location ( "projects/" .. os.get() .. "-" .. action )
+		
 		cloud.project.init()
-	--	cloud.project.useFFmpeg()
 		cloud.project.useBoost()
-	--	cloud.project.useAL()
-	--	cloud.project.useCV()
+		
 		links { "cf-http" }
-		includedirs { "3rdparty/cf-http", "3rdparty/sqlite" }
-		files { "src/**.h", "src/**.cpp" }
+		includedirs { "3rdparty/cf-http"}
+		
+		files { "src/**.h", "src/**.hpp", "src/**.cpp" }
+		files { "service-interface/**" }
+
+		excludes { "src/default-services/**" }
 
 		configuration "Debug"
 			defines { "DEBUG" }
@@ -407,19 +415,45 @@ solution "CloudServerPrototype"
 			defines { "NDEBUG" }
 			flags { "OptimizeSpeed" , "Unicode"}
 			
+
+----------------------------------------------------------------------------------------------
+-- services ----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------			
+			
+			
+	project "services.file"
+		kind "SharedLib"
+		language "C++"
+		location ( "projects/" .. os.get() .. "-" .. action )
+		
+		cloud.project.init()
+		cloud.project.useBoost()
+
+		links { "cf-http" }
+		includedirs { "3rdparty/cf-http", "3rdparty/sqlite" }
+		
+		files { "src/default-services/file/**"}
+		files { "service-interface/**" }
+
+		configuration "Debug"
+			defines { "DEBUG" }
+			flags { "Symbols" , "Unicode"}
+		
+		configuration "Release"
+			defines { "NDEBUG" }
+			flags { "OptimizeSpeed" , "Unicode"}
+			
+
+
+------------------------------------------------------------------------------------------------
+
 	project "cf-http"
 		kind "StaticLib"
 		language "C++"
 		location ( "projects/" .. os.get() .. "-" .. action )
 		files { "3rdparty/cf-http/**.h", "3rdparty/cf-http/**.cpp" }
 		cloud.project.init()
-	--	cloud.project.useFFmpeg()
-		cloud.project.useBoost()
-	--	cloud.project.useAL()
-	--	cloud.project.useCV()
-		
-		
-		
+		cloud.project.useBoost()	
 		configuration "Debug"
 			defines { "DEBUG" }
 			flags { "Symbols", "Unicode" }
@@ -427,4 +461,3 @@ solution "CloudServerPrototype"
 		configuration "Release"
 			defines { "NDEBUG" }
 			flags { "OptimizeSpeed", "Unicode" }
-			

@@ -1,4 +1,4 @@
-#include "util.h"
+#include "utilities.h"
 #include <sstream>
 #include <fstream>
 #include <stdio.h>
@@ -6,10 +6,7 @@
 #include <vector> 
 
 #include <boost/process.hpp> 
-// Boost
 #include <boost/algorithm/string.hpp>
-#include <boost/filesystem.hpp>
-
 #include <boost/lexical_cast.hpp>
 #include <boost/regex.hpp>
 #include <boost/thread.hpp>
@@ -21,20 +18,10 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 
-
 //CF
 #include <http.h>
 
-#ifdef WIN
-#include "Windows.h"
-#define _USE_32_BIT_TIME_T
-#elif defined LIN
-#include <unistd.h>
-#elif defined MAC
-#include <unistd.h> // probably...
-#else
-#error "unknown platform";
-#endif
+#include "../service-interface/service.hpp"
 
 using namespace boost::asio::ip;
 using namespace boost::filesystem;
