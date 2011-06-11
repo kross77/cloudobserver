@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute">
+  <mx:Script  source="EchoTest.as"/>
+  
+  <mx:TextInput id="ui" x="5" y="5"/>
+  <mx:Button id="submit" label="Submit data to library" click="Echo()" x="5" y="30"/>
+
+</mx:Application>
