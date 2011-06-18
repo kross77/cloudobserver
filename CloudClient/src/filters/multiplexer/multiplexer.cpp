@@ -74,6 +74,8 @@ AVFormatContext* multiplexer::get_format_context()
 
 void multiplexer::send(AVPacket* packet)
 {
+	boost::mutex::scoped_lock lock(this->send_mutex);
+
 	url_open_dyn_buf(&this->format_context->pb);
 	if (av_interleaved_write_frame(this->format_context, packet) != 0)
 	{

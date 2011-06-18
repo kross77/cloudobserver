@@ -6,6 +6,9 @@
 #define __STDC_CONSTANT_MACROS
 #endif
 
+// Boost
+#include <boost/thread.hpp>
+
 // FFmpeg
 extern "C"
 {
@@ -28,6 +31,9 @@ public:
 	class internal_exception: public std::exception { };
 private:
 	AVFormatContext* format_context;
+
+	mutable boost::mutex send_mutex;
+
 	transmitter* transmitter_block;
 };
 
