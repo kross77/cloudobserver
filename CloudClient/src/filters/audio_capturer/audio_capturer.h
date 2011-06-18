@@ -12,7 +12,6 @@
 #include "../audio_encoder/audio_encoder.h"
 
 #include <iostream>
-#include <windows.h>
 
 class audio_capturer
 {
