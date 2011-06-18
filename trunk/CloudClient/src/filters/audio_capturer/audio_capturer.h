@@ -10,8 +10,6 @@
 
 #include "../audio_player/audio_player.h"
 
-#include "../../utils/selector/selector.h"
-
 #include <iostream>
 #include <windows.h>
 
