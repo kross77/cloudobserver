@@ -13,7 +13,7 @@ extern "C"
 #include <libavformat/avformat.h>
 }
 
-#include "transmitter.h"
+#include "../transmitter/transmitter.h"
 
 class multiplexer
 {
