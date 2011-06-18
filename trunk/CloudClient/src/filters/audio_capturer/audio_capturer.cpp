@@ -20,6 +20,9 @@ audio_capturer::audio_capturer(ALCuint audio_sample_rate, ALCenum audio_format, 
 		break;
 	}
 	this->buffer = new ALchar[this->sample_rate * this->format_multiplier];
+
+	this->audio_player_block = NULL;
+	this->audio_encoder_block = NULL;
 }
 
 audio_capturer::~audio_capturer()
@@ -80,10 +83,10 @@ void audio_capturer::capture_loop()
 		{
 			alcCaptureSamples(this->capture_device, this->buffer, this->capture_size);
 
-			if (audio_player_block != NULL)
+			if (this->audio_player_block != NULL)
 				this->audio_player_block->send(this->buffer, this->capture_size * this->format_multiplier);
 
-			if (audio_encoder_block != NULL)
+			if (this->audio_encoder_block != NULL)
 				this->audio_encoder_block->send(this->buffer, this->capture_size * this->format_multiplier);
 		}
 		boost::this_thread::sleep(boost::posix_time::milliseconds(1000 * this->capture_size / this->sample_rate));
