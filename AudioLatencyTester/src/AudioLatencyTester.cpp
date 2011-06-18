@@ -1,9 +1,9 @@
 // Boost
 #include <boost/lexical_cast.hpp>
 
-#include "filters/audio_selector.h"
-#include "filters/audio_capturer.h"
-#include "filters/audio_player.h"
+#include "filters/audio_selector/audio_selector.h"
+#include "filters/audio_capturer/audio_capturer.h"
+#include "filters/audio_player/audio_player.h"
 
 #include <iostream>
 #include <string>
