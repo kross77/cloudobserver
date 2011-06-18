@@ -12,6 +12,7 @@
 
 #include "filters/audio_selector/audio_selector.h"
 #include "filters/audio_capturer/audio_capturer.h"
+#include "filters/audio_player/audio_player.h"
 #include "filters/audio_encoder/audio_encoder.h"
 #include "filters/video_encoder/video_encoder.h"
 #include "filters/multiplexer/multiplexer.h"
@@ -33,6 +34,7 @@ int audio_sample_rate;
 std::string container;
 bool flag_disable_audio;
 bool flag_disable_video;
+bool flag_echo;
 bool flag_generate_audio;
 bool flag_generate_video;
 bool flag_lsd;
@@ -48,6 +50,7 @@ bool has_video;
 
 audio_selector* audio_selector_block;
 audio_capturer* audio_capturer_block;
+audio_player* audio_player_block;
 audio_encoder* audio_encoder_block;
 video_encoder* video_encoder_block;
 multiplexer* multiplexer_block;
@@ -318,6 +321,7 @@ int main(int argc, char* argv[])
 	container = "flv";
 	flag_disable_audio = false;
 	flag_disable_video = false;
+	flag_echo = false;
 	flag_generate_audio = false;
 	flag_generate_video = false;
 	flag_lsd = false;
@@ -373,6 +377,8 @@ int main(int argc, char* argv[])
 				flag_disable_audio = true;
 			if (arg == "--disable-video")
 				flag_disable_video = true;
+			if (arg == "--echo")
+				flag_echo = true;
 			if (arg == "--generate-audio")
 				flag_generate_audio = true;
 			if (arg == "--generate-video")
@@ -449,6 +455,12 @@ int main(int argc, char* argv[])
 
 		audio_selector_block = new audio_selector();
 		audio_selector_block->connect(audio_capturer_block);
+
+		if (flag_echo)
+		{
+			audio_player_block = new audio_player(audio_sample_rate, AL_FORMAT_MONO16);
+			audio_capturer_block->connect(audio_player_block);
+		}
 	}
 	
 	if (has_video)
@@ -497,6 +509,9 @@ int main(int argc, char* argv[])
 
 		audio_selector_block->disconnect();
 		delete audio_selector_block;
+
+		if (flag_echo)
+			delete audio_player_block;
 	}
 
 	if (has_video)
