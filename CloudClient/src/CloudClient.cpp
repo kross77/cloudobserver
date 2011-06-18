@@ -7,13 +7,11 @@
 #include <boost/thread.hpp>
 #include <boost/timer.hpp>
 
-// OpenAL
-#include <AL/al.h>
-#include <AL/alc.h>
-
 // OpenCV
 #include <opencv2/opencv.hpp>
 
+#include "filters/audio_selector/audio_selector.h"
+#include "filters/audio_capturer/audio_capturer.h"
 #include "filters/audio_encoder/audio_encoder.h"
 #include "filters/video_encoder/video_encoder.h"
 #include "filters/multiplexer/multiplexer.h"
@@ -46,9 +44,10 @@ int video_width;
 int video_height;
 int video_frame_rate;
 
-bool has_audio;
 bool has_video;
 
+audio_selector* audio_selector_block;
+audio_capturer* audio_capturer_block;
 audio_encoder* audio_encoder_block;
 video_encoder* video_encoder_block;
 multiplexer* multiplexer_block;
@@ -65,20 +64,6 @@ AVFrame* readyFrame;
 int nSampleSize;
 char* sample;
 URLContext* StreamToUrl;
-
-// OpenAL
-ALCdevice* dev[2];
-ALCcontext* ctx;
-ALuint source, buffers[3];
-ALchar* Buffer;
-ALuint buf;
-ALint val;
-ALint iSamplesAvailable;
-int nBlockAlign;
-ALCdevice* pDevice;
-ALCcontext* pContext;
-ALCdevice* pCaptureDevice;
-const ALCchar* szDefaultCaptureDevice;
 
 // OpenCV
 CvCapture* capture;
@@ -149,68 +134,6 @@ void init_opencv()
 		greenchannel = cvCreateImage(cvGetSize(destination), 8, 1);
 		bluechannel = cvCreateImage(cvGetSize(destination), 8, 1);
 		has_video = true;
-	}
-}
-
-void init_openal(int fps)
-{
-	if (flag_disable_audio)
-	{
-		has_audio = false;
-		return;
-	}
-
-	if (flag_generate_audio)
-	{
-		has_audio = true;
-		nSampleSize = (int)(2.0f * audio_sample_rate / fps);
-		nBlockAlign = 1 * 16 / 8;
-		Buffer = new ALchar[nSampleSize];
-	}
-	else
-	{
-		nSampleSize = (int)(2.0f * audio_sample_rate / fps);
-		nBlockAlign = 1 * 16 / 8;
-		Buffer = new ALchar[nSampleSize];
-		dev[0] = alcOpenDevice(NULL);
-		if (NULL == dev[0])
-		{
-			fprintf(stderr, "No microphone found, please restart application , or continue streaming with out sound\n");
-			boost::this_thread::sleep(boost::posix_time::seconds(9999999));
-			cin.get();
-			return;
-		}
-
-		ctx = alcCreateContext(dev[0], NULL);
-		alcMakeContextCurrent(ctx);
-		const ALchar *pDeviceList = alcGetString(NULL, ALC_CAPTURE_DEVICE_SPECIFIER);
-		if (pDeviceList == NULL)
-		{
-			std::cout << "Failed to get the list of audio capture devices." << std::endl;
-			has_audio = false;
-			return;
-		}
-
-		if (*pDeviceList == NULL)
-		{
-			std::cout << "No audio capture devices found." << std::endl;
-			has_audio = false;
-			return;
-		}
-
-		selector audio_selector("Please, select the audio capture device:");
-		while (*pDeviceList)
-		{
-			audio_selector.add_option(std::string(pDeviceList), (void*)pDeviceList);
-			pDeviceList += strlen(pDeviceList) + 1;
-		}
-
-		audio_selector.select();
-
-		has_audio = true;
-		alDistanceModel(AL_NONE);
-		dev[0] = alcCaptureOpenDevice((ALCchar*)audio_selector.get_selection(), audio_sample_rate, AL_FORMAT_MONO16, nSampleSize/2);
-		alcCaptureStart(dev[0]);
 	}
 }
 
@@ -326,26 +249,6 @@ void capture_frame(int w, int h, char* buffer, int bytespan)
 	}
 }
 
-char* capture_sample()
-{
-	if (flag_generate_audio)
-	{
-		for (int i = 0; i < nSampleSize / nBlockAlign; i++)
-			Buffer [i] = die();
-	}
-	else
-	{
-		// Check how much audio data has been captured (note that 'val' is the number of frames, not bytes)
-		alcGetIntegerv(dev[0], ALC_CAPTURE_SAMPLES, 1, &iSamplesAvailable);
-		// When we would have enough data to fill our BUFFERSIZE byte buffer, will grab the samples, so now we should wait
-		while (iSamplesAvailable < (nSampleSize / nBlockAlign) - 1) // -1 was added to make code run on Mac OS X, potential bug
-			alcGetIntegerv(dev[0], ALC_CAPTURE_SAMPLES, 1, &iSamplesAvailable);
-		// Consume Samples
-		alcCaptureSamples(dev[0], Buffer, (nSampleSize / nBlockAlign) - 1);
-	}
-	return (char*)Buffer;
-}
-
 void release_opencv()
 {
 	if (!flag_generate_video)
@@ -354,10 +257,6 @@ void release_opencv()
 		//cvReleaseImage(&destination);
 		//cvReleaseImage(&CVframe);
 	}
-}
-
-void release_openal()
-{
 }
 
 void release_ffmpeg()
@@ -395,41 +294,13 @@ void save_frame_loop()
 	while (true)
 	{
 		timerForMain.restart();
-		if (!has_video)
-			try
-			{
-				audio_encoder_block->send(capture_sample(), nSampleSize);
-			}
-			catch (std::exception)
-			{
-				printf("Cannot write frame!\n");
-			}
-
-		if (!has_audio)
-			try
-			{
-				video_encoder_block->send(readyFrame);
-			}
-			catch (std::exception)
-			{
-				printf("Cannot write frame!\n");
-			}
-		
-		if (has_audio && has_video)
-			try
-			{
-				audio_encoder_block->send(capture_sample(), nSampleSize);
-				video_encoder_block->send(readyFrame);
-			}
-			catch (std::exception)
-			{
-				printf("Cannot write frame!\n");
-			}
-		
-		if (!has_audio && !has_video)
+		try
 		{
-			printf("No data to encode");
-			break;
+			video_encoder_block->send(readyFrame);
+		}
+		catch (std::exception)
+		{
+			printf("Cannot write frame!\n");
 		}
 
 		spendedTimeForMain = (int64_t)timerForMain.elapsed();
@@ -563,22 +434,21 @@ int main(int argc, char* argv[])
 	}
 
 	init_opencv();
-	init_openal(video_frame_rate);
 	init_ffmpeg(container, video_width, video_height, video_frame_rate);
-
-	if (!has_audio && !has_video)
-	{
-		std::cout << "No input devices selected. Closing application..." << std::endl;
-		return 0;
-	}
 
 	multiplexer_block = new multiplexer(container);
 	AVFormatContext* format_context = multiplexer_block->get_format_context();
 
-	if (has_audio)
+	if (!flag_disable_audio)
 	{
 		audio_encoder_block = new audio_encoder(audio_sample_rate);
 		audio_encoder_block->connect(multiplexer_block);
+
+		audio_capturer_block = new audio_capturer(audio_sample_rate, AL_FORMAT_MONO16, video_frame_rate);
+		audio_capturer_block->connect(audio_encoder_block);
+
+		audio_selector_block = new audio_selector();
+		audio_selector_block->connect(audio_capturer_block);
 	}
 	
 	if (has_video)
@@ -591,6 +461,9 @@ int main(int argc, char* argv[])
 		throw std::runtime_error("av_set_parameters failed.");
 
 	multiplexer_block->connect(transmitter_block);
+
+	if (!flag_disable_audio)
+		audio_selector_block->select();
 
 	desiredTimeForCaptureFame = (int64_t)(1000.0f / video_frame_rate);
 	desiredTimeForMain = (int64_t)(1000.0f / video_frame_rate);
@@ -612,13 +485,18 @@ int main(int argc, char* argv[])
 	boost::this_thread::sleep(boost::posix_time::milliseconds(250));
 
 	release_opencv();
-	release_openal();
 	release_ffmpeg();
 
-	if (has_audio)
+	if (!flag_disable_audio)
 	{
 		audio_encoder_block->disconnect();
 		delete audio_encoder_block;
+
+		audio_capturer_block->disconnect();
+		delete audio_capturer_block;
+
+		audio_selector_block->disconnect();
+		delete audio_selector_block;
 	}
 
 	if (has_video)
