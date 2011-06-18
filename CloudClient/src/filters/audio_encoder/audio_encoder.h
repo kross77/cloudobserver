@@ -22,7 +22,7 @@ extern "C"
 #include <libavformat/avformat.h>
 }
 
-#include "multiplexer.h"
+#include "../multiplexer/multiplexer.h"
 
 class audio_encoder
 {

@@ -17,7 +17,7 @@ extern "C"
 #include <libswscale/swscale.h>
 }
 
-#include "multiplexer.h"
+#include "../multiplexer/multiplexer.h"
 
 class video_encoder
 {
