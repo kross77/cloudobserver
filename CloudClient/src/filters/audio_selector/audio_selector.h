@@ -4,9 +4,9 @@
 // OpenAL
 #include <AL/alc.h>
 
-#include "audio_capturer.h"
+#include "../audio_capturer/audio_capturer.h"
 
-#include "../utils/selector/selector.h"
+#include "../../utils/selector/selector.h"
 
 class audio_selector
 {
