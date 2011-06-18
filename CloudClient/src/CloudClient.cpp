@@ -444,7 +444,7 @@ int main(int argc, char* argv[])
 		audio_encoder_block = new audio_encoder(audio_sample_rate);
 		audio_encoder_block->connect(multiplexer_block);
 
-		audio_capturer_block = new audio_capturer(audio_sample_rate, AL_FORMAT_MONO16, video_frame_rate);
+		audio_capturer_block = new audio_capturer(audio_sample_rate, AL_FORMAT_MONO16, audio_sample_rate / video_frame_rate);
 		audio_capturer_block->connect(audio_encoder_block);
 
 		audio_selector_block = new audio_selector();
