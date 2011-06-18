@@ -31,8 +31,15 @@ void audio_capturer::connect(audio_player* audio_player_block)
 	this->audio_player_block = audio_player_block;
 }
 
+void audio_capturer::connect(audio_encoder* audio_encoder_block)
+{
+	this->audio_encoder_block = audio_encoder_block;
+}
+
 void audio_capturer::disconnect()
 {
+	this->audio_player_block = NULL;
+	this->audio_encoder_block = NULL;
 }
 
 void audio_capturer::start(ALCchar* audio_capture_device)
@@ -72,7 +79,12 @@ void audio_capturer::capture_loop()
 		if (captured_samples >= this->capture_size)
 		{
 			alcCaptureSamples(this->capture_device, this->buffer, this->capture_size);
-			this->audio_player_block->send(this->buffer, this->capture_size * this->format_multiplier);
+
+			if (audio_player_block != NULL)
+				this->audio_player_block->send(this->buffer, this->capture_size * this->format_multiplier);
+
+			if (audio_encoder_block != NULL)
+				this->audio_encoder_block->send(this->buffer, this->capture_size * this->format_multiplier);
 		}
 		boost::this_thread::sleep(boost::posix_time::milliseconds(1000 * this->capture_size / this->sample_rate));
 	}
