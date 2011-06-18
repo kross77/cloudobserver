@@ -8,9 +8,9 @@
 #include <AL/al.h>
 #include <AL/alc.h>
 
-#include "audio_player.h"
+#include "../audio_player/audio_player.h"
 
-#include "../utils/selector/selector.h"
+#include "../../utils/selector/selector.h"
 
 #include <iostream>
 #include <windows.h>
