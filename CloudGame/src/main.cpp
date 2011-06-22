@@ -25,10 +25,10 @@
 #include <adobe/iomanip_asl_cel.hpp>
 #include <adobe/name.hpp>
 
-#include "filters/audio_encoder.h"
-#include "filters/video_encoder.h"
-#include "filters/multiplexer.h"
-#include "filters/transmitter.h"
+#include "filters/audio_encoder/audio_encoder.h"
+#include "filters/video_encoder/video_encoder.h"
+#include "filters/multiplexer/multiplexer.h"
+#include "filters/transmitter/transmitter.h"
 
 
 using namespace std;
