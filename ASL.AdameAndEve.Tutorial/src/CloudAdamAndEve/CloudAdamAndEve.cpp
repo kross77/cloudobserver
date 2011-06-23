@@ -29,18 +29,6 @@ namespace boost {
 /******************************************* namespace adobe ******************************************************/
 namespace adobe {
 
-void setup_main_window( application_t* app )
-{
-    adobe::get_main_display().set_root(::CreateWindowExW(NULL,
-                                         NULL,
-                                         NULL,
-                                         NULL,
-                                         NULL, NULL, NULL, NULL, NULL,
-                                         NULL,
-                                         NULL,
-                                         NULL));
-}
-
 bool os_initialize( application_t* app )
 {
 
@@ -53,8 +41,6 @@ bool os_initialize( application_t* app )
     // Tell the application...
     //
     app->set_resource_directory( directory.branch_path() );
-
-    setup_main_window( app );
 
     return true;
 }
