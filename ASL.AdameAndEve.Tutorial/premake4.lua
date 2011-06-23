@@ -367,7 +367,10 @@ solution "AdobeSourceLibrariesTutorial"
 		language "C++"
 		location ( "projects/" .. os.get() .. "-" .. action )
 		files {"src/adam_tutorial.cpp" }
-	
+		cloud.project.init()
+		cloud.project.useBoost()
+		cloud.project.useASL()
+		cloud.project.AdobeSourceLibrariesTutorial.copyAassets()
 		configuration "Debug"
 			defines { "DEBUG" }
 			flags { "Symbols" }
@@ -377,7 +380,3 @@ solution "AdobeSourceLibrariesTutorial"
 			defines { "NDEBUG" }
 			flags { "Optimize" }		
 			
-		cloud.project.init()
-		cloud.project.useBoost()
-		cloud.project.useASL()
-		cloud.project.AdobeSourceLibrariesTutorial.copyAassets()
