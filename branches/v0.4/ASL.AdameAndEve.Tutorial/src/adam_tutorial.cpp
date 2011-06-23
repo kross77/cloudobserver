@@ -280,6 +280,7 @@ int main(int argc, char* argv[])
     {
         std::cerr << "Unknown Exception\n";
     }
-
+	
+	std::cin.get();
     std::cout << "Bye!" << std::endl;
 }
