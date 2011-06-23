@@ -97,10 +97,10 @@ function os.copydir(src_dir, dst_dir, filter, single_dst_dir)
 	end
  
 	if counter == #matches then
-		print( counter .. " files copied.")
+		printf( counter .. " files copied.")
 		return true
 	else
-		print( "Error: " .. counter .. "/" .. #matches .. " files copied.")
+		printf( "Error: " .. counter .. "/" .. #matches .. " files copied.")
 		return nil
 	end
 end
@@ -379,4 +379,24 @@ solution "AdobeSourceLibrariesTutorial"
 		configuration "Release"
 			defines { "NDEBUG" }
 			flags { "Optimize" }		
-			
+		
+	printf("AdamTutorial project created." )
+		
+	project "AdamSmoke"
+		kind "ConsoleApp"
+		language "C++"
+		location ( "projects/" .. os.get() .. "-" .. action )
+		files {"src/adam_smoke.cpp" }
+		cloud.project.init()
+		cloud.project.useBoost()
+		cloud.project.useASL()
+		cloud.project.AdobeSourceLibrariesTutorial.copyAassets()
+		configuration "Debug"
+			defines { "DEBUG" }
+			flags { "Symbols" }
+		
+		configuration "Release"
+			defines { "NDEBUG" }
+			flags { "Optimize" }		
+		
+		printf("AdamSmoke project created." )
