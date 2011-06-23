@@ -263,7 +263,6 @@ function cloud.project.useASL()
 	if os.get() == "windows" then
 		defines { "WIN" }
 		links {
-		"libadobe_widgets",
 		"libasl_dev"
 		}
 		cloud.win.addLibFromProgrammFiles("ASL-1.0.43")
