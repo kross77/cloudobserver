@@ -264,7 +264,7 @@ function cloud.project.useASL()
 		defines { "WIN" }
 		links {
 		"libadobe_widgets",
-		"libasl"
+		"libasl_dev"
 		}
 		cloud.win.addLibFromProgrammFiles("ASL-1.0.43")
 		
@@ -273,14 +273,14 @@ function cloud.project.useASL()
 	if os.get() == "linux" then
 		defines { "LIN" }
 		links {
-		"libasl"
+		"libasl_dev"
 		}
 	end
 	
 	if os.get() == "macosx" then
 		defines { "MAC" }
 		links {
-		"libasl"
+		"libasl_dev"
 		}
 	end 
 	printf("using ASL." )
