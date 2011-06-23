@@ -3,12 +3,13 @@
     Distributed under the MIT License (see accompanying file LICENSE_1_0_0.txt
     or a copy at http://stlab.adobe.com/licenses.html)
 */
-// OJ 2011
+
 /*************************************************************************************************/
-//#define NO_STDIO_REDIRECT
+
 #define _SCL_SECURE_NO_DEPRECATE
 #define _CRT_SECURE_NO_DEPRECATE
 #define ADOBE_STD_SERIALIZATION
+#define BOOST_FILESYSTEM_VERSION 2
 
 #include <adobe/config.hpp>
 
@@ -18,8 +19,7 @@
 #include <boost/version.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/fstream.hpp>
-#include <boost/algorithm/string.hpp>
-#include <boost/lexical_cast.hpp>
+
 #include <adobe/adam_evaluate.hpp>
 #include <adobe/adam_parser.hpp>
 #include <adobe/adam.hpp>
@@ -32,14 +32,13 @@
 #include <adobe/name.hpp>
 #include <adobe/virtual_machine.hpp>
 
-using namespace std;
 /****************************************************************************************************/
 
 namespace bfs = boost::filesystem;
 
 /****************************************************************************************************/
 
-typedef map<adobe::name_t, adobe::any_regular_t> cell_set_t;
+typedef std::map<adobe::name_t, adobe::any_regular_t> cell_set_t;
 
 /****************************************************************************************************/
 
@@ -47,9 +46,9 @@ void simple_display(cell_set_t::value_type& cell_m, const adobe::any_regular_t& 
 {
     cell_m.second = new_value;
 
-    cout << "U \'" << cell_m.first.c_str() << "\' ==> "
+    std::cout << "U \'" << cell_m.first.c_str() << "\' ==> "
               << adobe::begin_asl_cel << cell_m.second << adobe::end_asl_cel
-              << endl;
+              << std::endl;
 }
   
 
@@ -57,18 +56,17 @@ void simple_display(cell_set_t::value_type& cell_m, const adobe::any_regular_t& 
 
 void stream_cell_state(const cell_set_t::value_type& cell)
 {
-    cout << "   '" << cell.first.c_str() << "': "
+    std::cout << "   '" << cell.first.c_str() << "': "
               << adobe::begin_asl_cel << cell.second << adobe::end_asl_cel
-              << endl;
+              << std::endl;
 }
 
 /****************************************************************************************************/
 
 adobe::dictionary_t parse_input_dictionary(const bfs::path& input_path)
 {
-	string path_str = boost::lexical_cast<string>(input_path);
-		
-    ifstream            input_stream(path_str.c_str());
+    std::string              path_str(input_path.native_file_string());
+    std::ifstream            input_stream(path_str.c_str());
     adobe::array_t           token_stream;
     adobe::virtual_machine_t vm;
 
@@ -82,11 +80,11 @@ adobe::dictionary_t parse_input_dictionary(const bfs::path& input_path)
 
     vm.pop_back();
 
-    cout << "--" << endl
+    std::cout << "--" << std::endl
               << "Initializing sheet with the following input dictionary: "
               << adobe::begin_asl_cel << result << adobe::end_asl_cel
-              << endl
-              << "--" << endl;
+              << std::endl
+              << "--" << std::endl;
 
     return result;
 }
@@ -102,9 +100,8 @@ struct sheet_tracker
         //  attach the VM to the sheet.
         sheet_m.machine_m.set_variable_lookup(boost::bind(&adobe::sheet_t::get, &sheet_m, _1));
     
-        string     sheet_path_str = boost::lexical_cast<string>(sheet_path);
-
-		ifstream   sheet_stream(sheet_path_str.c_str());
+        std::string     sheet_path_str(sheet_path.native_file_string());
+        std::ifstream   sheet_stream(sheet_path_str.c_str());
 
         callbacks_m.add_cell_proc_m = 
             boost::bind(&sheet_tracker::add_cell_trap, boost::ref(*this), 
@@ -114,7 +111,7 @@ struct sheet_tracker
                         callbacks_m.add_interface_proc_m, _1, _2, _3, _4, _5, _6);
 
         if (!sheet_stream.is_open())
-            cerr << "Could not open \"" << sheet_path_str << "\"!\n";
+            std::cerr << "Could not open \"" << sheet_path_str << "\"!\n";
 
         // set up adam sheet
         adobe::parse(sheet_stream,
@@ -149,7 +146,7 @@ private:
 
     adobe::sheet_t                          sheet_m;
     adobe::adam_callback_suite_t            callbacks_m;
-    map<adobe::name_t, adobe::any_regular_t> cell_set_m;
+    std::map<adobe::name_t, adobe::any_regular_t> cell_set_m;
 };
 
 /****************************************************************************************************/
@@ -181,9 +178,9 @@ void sheet_tracker::add_cell_trap(  adobe::adam_callback_suite_t::add_cell_proc_
                                     const adobe::line_position_t&                   position,
                                     const adobe::array_t&                           expr_or_init)
 {
-    original(type, cell_name, position, expr_or_init, string(), string());
+    original(type, cell_name, position, expr_or_init, std::string(), std::string());
 
-    cout << "A \'" << cell_name.c_str() << "\' (" << cell_type_to_name(type) << ")" << endl;
+    std::cout << "A \'" << cell_name.c_str() << "\' (" << cell_type_to_name(type) << ")" << std::endl;
 
     if (cell_type_to_name(type) == adobe::static_name_t("output"))
         cell_set_m[cell_name] = adobe::any_regular_t();
@@ -200,9 +197,9 @@ void sheet_tracker::add_interface_trap( adobe::adam_callback_suite_t::add_interf
                                         const adobe::array_t&                               expression)
 {
     original(cell_name, linked, position1, initializer, position2, expression,
-             string(), string());
+             std::string(), std::string());
 
-    cout << "A \'" << cell_name.c_str() << "\' (interface)" <<  endl;
+    std::cout << "A \'" << cell_name.c_str() << "\' (interface)" <<  std::endl;
 
     cell_set_m[cell_name] = adobe::any_regular_t();
 }
@@ -211,8 +208,8 @@ void sheet_tracker::add_interface_trap( adobe::adam_callback_suite_t::add_interf
 
 void sheet_tracker::loop()
 {
-    string              cell_name_buffer;
-    vector<char>        new_value_buffer;
+    std::string              cell_name_buffer;
+    std::vector<char>        new_value_buffer;
 
     cell_name_buffer.reserve(1024);
     new_value_buffer.reserve(1024);
@@ -226,20 +223,20 @@ void sheet_tracker::loop()
 
     while (true)
     {
-        cout << "--" << endl;
+        std::cout << "--" << std::endl;
 
         sheet_m.update();
 
-        cout << "sheet:" << endl;
+        std::cout << "sheet:" << std::endl;
         adobe::for_each(cell_set_m, stream_cell_state);
-        cout << "Enter in the name of a cell for which you would like to change the value: ";
-        cin.getline(&cell_name_buffer[0], 1024);
+        std::cout << "Enter in the name of a cell for which you would like to change the value: ";
+        std::cin.getline(&cell_name_buffer[0], 1024);
 
         if (cell_name_buffer[0] == 0)
             break;
 
-        cout << "Enter in the new value for cell \'" << &cell_name_buffer[0] << "\': ";
-        cin.getline(&new_value_buffer[0], 1024);
+        std::cout << "Enter in the new value for cell \'" << &cell_name_buffer[0] << "\': ";
+        std::cin.getline(&new_value_buffer[0], 1024);
 
         if (new_value_buffer[0] == 0)
             break;
@@ -248,7 +245,7 @@ void sheet_tracker::loop()
 
         adobe::name_t cell(&cell_name_buffer[0]);
 
-        cout << "Setting cell " << cell << " to " << adobe::begin_asl_cel << new_value << adobe::end_asl_cel << endl;
+        std::cout << "Setting cell " << cell << " to " << adobe::begin_asl_cel << new_value << adobe::end_asl_cel << std::endl;
 
         sheet_m.set(cell, new_value);
     }
@@ -260,29 +257,29 @@ int main(int argc, char* argv[])
 {
     try
     {
-        cout << "Adobe Adam Tutorial" << endl;
-        cout << "Compiler: " << BOOST_COMPILER << endl;
-        cout << "     ASL: v" << ADOBE_VERSION_MAJOR << "." << ADOBE_VERSION_MINOR << "." 
-                  << ADOBE_VERSION_SUBMINOR << endl;
-        cout << "   Boost: v" << BOOST_VERSION / 100000 << "." << BOOST_VERSION / 100 % 1000 
-                  << "." << BOOST_VERSION % 100 << endl;
-        cout << "--" << endl;
+        std::cout << "Adobe Adam Tutorial" << std::endl;
+        std::cout << "Compiler: " << BOOST_COMPILER << std::endl;
+        std::cout << "     ASL: v" << ADOBE_VERSION_MAJOR << "." << ADOBE_VERSION_MINOR << "." 
+                  << ADOBE_VERSION_SUBMINOR << std::endl;
+        std::cout << "   Boost: v" << BOOST_VERSION / 100000 << "." << BOOST_VERSION / 100 % 1000 
+                  << "." << BOOST_VERSION % 100 << std::endl;
+        std::cout << "--" << std::endl;
 
-        string sheet_pathname(argc > 1 ? (argv[1]) : ("assets/adam_tutorial_default.adm"));
+        std::string sheet_pathname(argc > 1 ? (argv[1]) : ("assets/adam_tutorial_default.adm"));
         bfs::path   sheet_filepath(sheet_pathname.c_str(), bfs::native);
-        string input_pathname(argc > 2 ? (argv[2]) : ("assets/adam_tutorial_input.cel"));
+        std::string input_pathname(argc > 2 ? (argv[2]) : ("assets/adam_tutorial_input.cel"));
         bfs::path   input_filepath(input_pathname.c_str(), bfs::native);
 
         sheet_tracker(sheet_filepath, input_filepath).loop();
     }
-    catch (const exception& error)
+    catch (const std::exception& error)
     {
-        cerr << "Exception: " << error.what() << "\n";
+        std::cerr << "Exception: " << error.what() << "\n";
     }
     catch (...)
     {
-        cerr << "Unknown Exception\n";
+        std::cerr << "Unknown Exception\n";
     }
 
-    cout << "Bye!" << endl;
+    std::cout << "Bye!" << std::endl;
 }
