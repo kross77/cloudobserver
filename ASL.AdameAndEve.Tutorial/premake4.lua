@@ -262,11 +262,16 @@ function cloud.project.useASL()
 	cloud.addLibDir(  _OPTIONS["ASLLibsPath"] )
 	if os.get() == "windows" then
 		defines { "WIN" }
-		links {
-		"libasl_dev"
-		}
-		cloud.win.addLibFromProgrammFiles("ASL-1.0.43")
-		
+		cloud.win.addLibFromProgrammFiles("ASL-1.0.43")		
+		configuration "Debug"
+			links {
+			"libasl_dev_debug"
+			}
+	
+		configuration "Release"
+			links {
+			"libasl_dev_release"
+			}
 	end
 	
 	if os.get() == "linux" then
