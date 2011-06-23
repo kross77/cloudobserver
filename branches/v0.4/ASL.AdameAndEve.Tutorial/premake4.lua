@@ -12,6 +12,12 @@ newoption {
 }
 
 newoption {
+	trigger     = "TBBLibsPath",
+	value       = "PATH",
+	description = "Choose a particular directory for SDL libs search"
+}
+
+newoption {
 	trigger     = "ASLLibsPath",
 	value       = "PATH",
 	description = "Choose a particular directory for SDL libs search"
@@ -30,6 +36,12 @@ newoption {
 	trigger     = "includesPath",
 	value       = "PATH",
 	description = "Choose a particular directory for general includes search. ';' separators are allowed like --includesPath=C:/src/Libs;C:/src/MoreLibs "
+}
+
+newoption {
+	trigger     = "TBBIncludesPath",
+	value       = "PATH",
+	description = "Choose a particular directory for SDL includes search"
 }
 
 newoption {
@@ -255,22 +267,44 @@ end
 
 
 
+function cloud.project.useTBB()
+	--
+	cloud.addIncludeDir(  _OPTIONS["TBBIncludesPath"] )
+	cloud.addLibDir(  _OPTIONS["TBBLibsPath"] )
+	if os.get() == "windows" then
+		defines { "WIN" }
+		cloud.win.addLibFromProgrammFiles("TBB-3.0")		
+	end
+	if os.get() == "linux" then
+		defines { "LIN" }
+	end
+	if os.get() == "macosx" then
+		defines { "MAC" }
+	end 
+	printf("using TBB." )
+end
 
 function cloud.project.useASL()
 	--
+	defines { "_SCL_SECURE_NO_DEPRECATE", "_CRT_SECURE_NO_DEPRECATE", "BOOST_FILESYSTEM_VERSION=2", "ADOBE_SERIALIZATION", "ADOBE_STD_SERIALIZATION" }
 	cloud.addIncludeDir(  _OPTIONS["ASLIncludesPath"] )
 	cloud.addLibDir(  _OPTIONS["ASLLibsPath"] )
+	cloud.project.useTBB()
 	if os.get() == "windows" then
 		defines { "WIN" }
 		cloud.win.addLibFromProgrammFiles("ASL-1.0.43")		
+			links {
+			"comctl32"
+			}
 		configuration "Debug"
 			links {
-			"libasl_dev_debug"
+			"libasl_dev_debug",
+			"libadobe_widgets_debug"
 			}
-	
 		configuration "Release"
 			links {
-			"libasl_dev_release"
+			"libasl_dev_release",
+			"libadobe_widgets_release"
 			}
 	end
 	
@@ -278,12 +312,13 @@ function cloud.project.useASL()
 		defines { "LIN" }
 		configuration "Debug"
 			links {
-			"libasl_dev_debug"
+			"libasl_dev_debug",
+			"libadobe_widgets_debug"
 			}
-	
 		configuration "Release"
 			links {
-			"libasl_dev_release"
+			"libasl_dev_release",
+			"libadobe_widgets_release"
 			}
 	end
 	
@@ -291,12 +326,13 @@ function cloud.project.useASL()
 		defines { "MAC" }
 		configuration "Debug"
 			links {
-			"libasl_dev_debug"
+			"libasl_dev_debug",
+			"libadobe_widgets_debug"
 			}
-	
 		configuration "Release"
 			links {
-			"libasl_dev_release"
+			"libasl_dev_release",
+			"libadobe_widgets_release"
 			}
 	end 
 	printf("using ASL." )
@@ -361,6 +397,27 @@ solution "AdobeSourceLibrariesTutorial"
 		targetdir ( "projects/" .. os.get() .. "-" .. action ..  "/bin/release" )
 	
 	-- A project defines one build target
+	project "CloudAdamAndEve"
+		kind "ConsoleApp"
+		language "C++"
+		location ( "projects/" .. os.get() .. "-" .. action )
+		files {"src/CloudAdamAndEve/**" }
+		cloud.project.init()
+		cloud.project.useBoost()
+		cloud.project.useASL()
+		cloud.project.AdobeSourceLibrariesTutorial.copyAassets()
+		configuration "Debug"
+			defines { "DEBUG" }
+			flags { "Symbols" }
+		
+		
+		configuration "Release"
+			defines { "NDEBUG" }
+			flags { "Optimize" }		
+		
+	printf("CloudAdamAndEve tutorial project created." )	
+	
+	
 	
 	project "AdamTutorial"
 		kind "ConsoleApp"
