@@ -400,3 +400,22 @@ solution "AdobeSourceLibrariesTutorial"
 			flags { "Optimize" }		
 		
 		printf("AdamSmoke project created." )
+
+	project "EveSmoke"
+		kind "ConsoleApp"
+		language "C++"
+		location ( "projects/" .. os.get() .. "-" .. action )
+		files {"src/eve_smoke.cpp" }
+		cloud.project.init()
+		cloud.project.useBoost()
+		cloud.project.useASL()
+		cloud.project.AdobeSourceLibrariesTutorial.copyAassets()
+		configuration "Debug"
+			defines { "DEBUG" }
+			flags { "Symbols" }
+		
+		configuration "Release"
+			defines { "NDEBUG" }
+			flags { "Optimize" }		
+		
+		printf("EveSmoke project created." )
