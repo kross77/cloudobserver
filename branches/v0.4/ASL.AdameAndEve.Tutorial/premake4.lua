@@ -276,16 +276,28 @@ function cloud.project.useASL()
 	
 	if os.get() == "linux" then
 		defines { "LIN" }
-		links {
-		"libasl_dev"
-		}
+		configuration "Debug"
+			links {
+			"libasl_dev_debug"
+			}
+	
+		configuration "Release"
+			links {
+			"libasl_dev_release"
+			}
 	end
 	
 	if os.get() == "macosx" then
 		defines { "MAC" }
-		links {
-		"libasl_dev"
-		}
+		configuration "Debug"
+			links {
+			"libasl_dev_debug"
+			}
+	
+		configuration "Release"
+			links {
+			"libasl_dev_release"
+			}
 	end 
 	printf("using ASL." )
 end
@@ -354,14 +366,8 @@ solution "AdobeSourceLibrariesTutorial"
 		kind "ConsoleApp"
 		language "C++"
 		location ( "projects/" .. os.get() .. "-" .. action )
-		cloud.project.init()
-		cloud.project.useBoost()
-		cloud.project.useASL()
-		
-		cloud.project.AdobeSourceLibrariesTutorial.copyAassets()
-		
 		files {"src/adam_tutorial.cpp" }
-		
+	
 		configuration "Debug"
 			defines { "DEBUG" }
 			flags { "Symbols" }
@@ -369,4 +375,9 @@ solution "AdobeSourceLibrariesTutorial"
 		
 		configuration "Release"
 			defines { "NDEBUG" }
-			flags { "Optimize" }
+			flags { "Optimize" }		
+			
+		cloud.project.init()
+		cloud.project.useBoost()
+		cloud.project.useASL()
+		cloud.project.AdobeSourceLibrariesTutorial.copyAassets()
