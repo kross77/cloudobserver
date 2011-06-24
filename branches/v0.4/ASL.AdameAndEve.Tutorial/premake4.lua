@@ -90,7 +90,6 @@ function os.copydir(src_dir, dst_dir, filter, single_dst_dir)
 	if not os.isdir(src_dir) then error(src_dir .. " is not an existing directory!") end
 	filter = filter or "**"
 	src_dir = src_dir .. "/"
-	print('copy "' .. src_dir .. filter .. '" to "' .. dst_dir .. '".')
 	dst_dir = dst_dir .. "/"
 	local dir = path.rebase(".",path.getabsolute("."), src_dir) -- root dir, relative from src_dir
  
@@ -109,7 +108,6 @@ function os.copydir(src_dir, dst_dir, filter, single_dst_dir)
 	end
  
 	if counter == #matches then
-		printf( counter .. " files copied.")
 		return true
 	else
 		printf( "Error: " .. counter .. "/" .. #matches .. " files copied.")
@@ -192,7 +190,7 @@ function cloud.win.copyDLL( folderName ,fileName)
 		end
 	end
 	if pa then
-		printf("file: ".. fileName.. " copied into builds dirs" )
+
 	end
 end
 
@@ -210,7 +208,7 @@ function cloud.win.copyDLL2( folderName ,fileName)
 		end
 	end
 	if pa then
-		printf("file: ".. fileName.. " copied into builds dirs" )
+
 	end
 end
 
@@ -220,7 +218,7 @@ function cloud.project.clean()
 if os.isdir( "projects" ) then
 	os.rmdir("projects/**")
 	os.rmdir("projects")
-	print("removed old files.")
+
 end
 end
 function cloud.project.init()
@@ -281,7 +279,6 @@ function cloud.project.useTBB()
 	if os.get() == "macosx" then
 		defines { "MAC" }
 	end 
-	printf("using TBB." )
 end
 
 function cloud.project.useASL()
@@ -335,7 +332,7 @@ function cloud.project.useASL()
 			"libadobe_widgets_release"
 			}
 	end 
-	printf("using ASL." )
+
 end
 
 
@@ -364,7 +361,7 @@ function cloud.project.useBoost()
 		"boost_thread"
 		}	
 	end 
-	printf("using Boost (regex, system, thread)." )
+
 end
 
 cloud.project.AdobeSourceLibrariesTutorial = {}
@@ -401,11 +398,10 @@ solution "AdobeSourceLibrariesTutorial"
 		kind "ConsoleApp"
 		language "C++"
 		location ( "projects/" .. os.get() .. "-" .. action )
-		files {"src/CloudAdamAndEve/**" }
+		files {"src/**" }
 		cloud.project.init()
 		cloud.project.useBoost()
 		cloud.project.useASL()
-		cloud.project.AdobeSourceLibrariesTutorial.copyAassets()
 		configuration "Debug"
 			defines { "DEBUG" }
 			flags { "Symbols" }
@@ -414,65 +410,5 @@ solution "AdobeSourceLibrariesTutorial"
 		configuration "Release"
 			defines { "NDEBUG" }
 			flags { "Optimize" }		
-		
-	printf("CloudAdamAndEve tutorial project created." )	
-	
-	
-	
-	project "AdamTutorial"
-		kind "ConsoleApp"
-		language "C++"
-		location ( "projects/" .. os.get() .. "-" .. action )
-		files {"src/adam_tutorial.cpp" }
-		cloud.project.init()
-		cloud.project.useBoost()
-		cloud.project.useASL()
-		cloud.project.AdobeSourceLibrariesTutorial.copyAassets()
-		configuration "Debug"
-			defines { "DEBUG" }
-			flags { "Symbols" }
-		
-		
-		configuration "Release"
-			defines { "NDEBUG" }
-			flags { "Optimize" }		
-		
-	printf("AdamTutorial project created." )
-		
-	project "AdamSmoke"
-		kind "ConsoleApp"
-		language "C++"
-		location ( "projects/" .. os.get() .. "-" .. action )
-		files {"src/adam_smoke.cpp" }
-		cloud.project.init()
-		cloud.project.useBoost()
-		cloud.project.useASL()
-		cloud.project.AdobeSourceLibrariesTutorial.copyAassets()
-		configuration "Debug"
-			defines { "DEBUG" }
-			flags { "Symbols" }
-		
-		configuration "Release"
-			defines { "NDEBUG" }
-			flags { "Optimize" }		
-		
-		printf("AdamSmoke project created." )
 
-	project "EveSmoke"
-		kind "ConsoleApp"
-		language "C++"
-		location ( "projects/" .. os.get() .. "-" .. action )
-		files {"src/eve_smoke.cpp" }
-		cloud.project.init()
-		cloud.project.useBoost()
-		cloud.project.useASL()
-		cloud.project.AdobeSourceLibrariesTutorial.copyAassets()
-		configuration "Debug"
-			defines { "DEBUG" }
-			flags { "Symbols" }
-		
-		configuration "Release"
-			defines { "NDEBUG" }
-			flags { "Optimize" }		
-		
-		printf("EveSmoke project created." )
+	
