@@ -409,6 +409,6 @@ solution "AdobeSourceLibrariesTutorial"
 		
 		configuration "Release"
 			defines { "NDEBUG" }
-			flags { "Optimize" }		
-
-	
+			flags { "Optimize" }
+		configuration { "linux", "gmake" }
+		 buildoptions { "`pkg-config --cflags --libs gtk+-2.0`"}
