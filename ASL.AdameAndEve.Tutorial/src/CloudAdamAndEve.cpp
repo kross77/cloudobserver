@@ -15,6 +15,7 @@
 #include <cassert>
 #include <string>
 #include <sstream>
+#include <iostream>
 
 #include <boost/filesystem/path.hpp>
 #include <boost/array.hpp>
