@@ -2,20 +2,20 @@
 #labels Featured,CloudObserver,Phase-Support,Phase-Implementation,ASL,Tutorials
 
 = Introduction =
-We, at CloudForewer, team plan to use ASL for creation of some minimalistic graphical user interfaces which are some times required in our projects. We work across Mac OS X, Windows and lots of Linux flavours. We have takan a small look at Qt gui and wxWidgets and found out they are way too much for our current needs. We desired something more minimalistic and more boost oriented. We found such lib - Adobe Source Libraries (ASL). ASL is not only UI library but we plan to concentrait on its GUI features.
+We, at CloudForewer, team plan to use ASL for creation of some minimalistic graphical user interfaces which are sometimes required in our projects. We work across Mac OS X, Windows and lots of Linux flavors. We have taken a small look at Qt GUI and wxWidgets and found out they are way too much for our current needs. We desired something more minimalistic and more boost oriented. We found such lib - Adobe Source Libraries (ASL). ASL is not only UI library but we plan to concentrate on its GUI features.
 
 == What are main ASL concepts ==
- * We found [http://www.youtube.com/v/4moyKUHApq4&hl=en&fs=1 grate video] where core ASL developer gives a speach on concepts of this library;
- * Also concepts are decribed on [http://stlab.adobe.com/ ASL site].
+ * We found [http://www.youtube.com/v/4moyKUHApq4&hl=en&fs=1 grate video] where core ASL developer gives a speech on concepts of this library;
+ * Also concepts are described on [http://stlab.adobe.com/ ASL site].
 
 == How to compile ASL ==
-We faced some problems in Adobe Source Libraries compilation so we asked for detailed instructions, which were provided to us [http://stackoverflow.com/questions/6397501/how-to-compile-asl-boost-based-adobe-c-gui-library-on-windows-7 here at stackoverflow]. Instructions are for Windows OS but concept of working with [http://www.boost.org/boost-build2/ bjam] are same on every platform. It compiles into static libasl and static libadobe_widgets.
+We faced some problems in Adobe Source Libraries compilation so we asked for detailed instructions, which were provided to us [http://stackoverflow.com/questions/6397501/how-to-compile-asl-boost-based-adobe-c-gui-library-on-windows-7 here at stackoverflow]. Instructions are for Windows OS but concept of working with [http://www.boost.org/boost-build2/ bjam] are same on every platform. It compiles into static `libasl` and static `libadobe_widgets`.
 
 == What is Adobe Source Libraries tutorials and demos base? ==  
  * You can find interesting precompiled adobe demos for Windows in  asl_begin_win archives [http://sourceforge.net/projects/adobe-source/files/adobe-source/  here];
- * There is `test` forlder is archives with adobe source libraries it containes some samples.
+ * There is `test` folder is archives with adobe source libraries it contains some samples.
 
-== What materials we plan to produce for ASL comunity ==
+== What materials we plan to produce for ASL community ==
 
 We plan to port and join some of [http://sourceforge.net/projects/adobe-source/files/adobe-source/ official ASL tutorials] so that C++ projects/solutions for next environments could be created:
 
@@ -25,10 +25,11 @@ We plan to port and join some of [http://sourceforge.net/projects/adobe-source/f
  * Code::Blocks;
  * !CodeLite;
 
-So no bjam would be required to get projects/solutions for your favourite enviroments. To achieve such expansion we plan to modify some of the source files a bit and use [http://industriousone.com/what-premake premake build configuration generator] for projects/solutions creation.
+So no BJAM would be required to get projects/solutions for your favorite environments. To achieve such expansion we plan to modify some of the source files a bit and use [http://industriousone.com/what-premake Premake build configuration generator] for projects/solutions creation.
 
 = Details =
-Now all you'll need to do to see some of Adobe-Source-Libraries-Tutorials as projects/solutions compilable from your favorite IDE is call something like `premake4 --os=YOUR-OS  --platform=x32 IDE-NAME ` (ofcourse you would have built ASL libs and Boost inside your Programm files folder)
+== Project compilation ==
+Now all you'll need to do to see some of Adobe-Source-Libraries-Tutorials as projects/solutions compilable from your favorite IDE is call something like `premake4 --os=YOUR-OS  --platform=x32 IDE-NAME ` (of course you would have built ASL and Boost libraries inside your Program files folder)
 
 Where YOUR-OS could be:
 
@@ -47,9 +48,25 @@ Where IDE-NAME could be:
  * vs2008
  * vs2010
  * xcode3
+ 
+== What is Adam ==
+Adam is Lua/JSON like language meant for creation of interaction/data-binding rules for ASL
 
-= For More Detailes =
+== What is Eve ==
+Eve is layout description language. It has Lua/JSON alike structures 
+
+== What tutorials we plan to create ==
+
+=== Alert ===
+Simple cross platform “Alert” application based on ASL alert source. It will show Adam and Eve based window with ok button
+=== Adam and Eve ===
+Cross platform application whose behavior could be modified via both GUI (Described in EVE file) and console input (all controlled by Adam file)
+
+== Tips ==
+It is not the best idea to hardcore Adam and Eve values into your classes because they can be changed dynamically. But in case of need there Is an [http://jsfiddle.net/t9sgA/10/show/ small web 2.0 application]  for turning normally formatted text into  `static char*` formatted text.
+
+= For More Details =
 Please read `ReadMe.txt` file inside folder with project.
 
-== On windows ==
+== On Windows ==
 If you do not have Boost (current 1.46.1) and ASL libraries installed into Program Files/Boost-1.46.1/ please read `ReadMe.txt` file.
