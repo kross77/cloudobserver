@@ -309,13 +309,13 @@ function cloud.project.useASL()
 		defines { "LIN" }
 		configuration "Debug"
 			links {
-			"libasl_dev_debug",
-			"libadobe_widgets_debug"
+			"asl_dev_debug",
+			"adobe_widgets_debug"
 			}
 		configuration "Release"
 			links {
-			"libasl_dev_release",
-			"libadobe_widgets_release"
+			"asl_dev_release",
+			"adobe_widgets_release"
 			}
 	end
 	
@@ -323,13 +323,13 @@ function cloud.project.useASL()
 		defines { "MAC" }
 		configuration "Debug"
 			links {
-			"libasl_dev_debug",
-			"libadobe_widgets_debug"
+			"asl_dev_debug",
+			"adobe_widgets_debug"
 			}
 		configuration "Release"
 			links {
-			"libasl_dev_release",
-			"libadobe_widgets_release"
+			"asl_dev_release",
+			"adobe_widgets_release"
 			}
 	end 
 
