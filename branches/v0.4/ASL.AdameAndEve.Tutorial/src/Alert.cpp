@@ -9,13 +9,6 @@
 
 #include <adobe/any_regular.hpp>
 #include <adobe/name.hpp>
-#include <adobe/name.hpp>
-
-#include <utility>
-#include <cassert>
-#include <string>
-#include <sstream>
-#include <iostream>
 
 #include <boost/filesystem/path.hpp>
 #include <boost/array.hpp>
@@ -148,7 +141,7 @@ void alert(const char*                    message_text,
 
 int  main(  )
 {
-	alert(  "There was an error.","Alert","OK",0,0,0,boost::filesystem::path(),0,1);
+	alert(  "There were no errors at all=) .","Alert","OK",0,0,0,boost::filesystem::path(),0,1);
 	std::cin.get();
     return 0;
 } 
