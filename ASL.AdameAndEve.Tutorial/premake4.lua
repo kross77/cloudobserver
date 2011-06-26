@@ -394,11 +394,11 @@ solution "AdobeSourceLibrariesTutorial"
 		targetdir ( "projects/" .. os.get() .. "-" .. action ..  "/bin/release" )
 	
 	-- A project defines one build target
-	project "AdamAndEve"
+	project "LiveFeedback"
 		kind "ConsoleApp"
 		language "C++"
 		location ( "projects/" .. os.get() .. "-" .. action )
-		files {"src/AdamAndEve.cpp" }
+		files {"src/LiveFeedback.cpp" }
 		cloud.project.init()
 		cloud.project.useBoost()
 		cloud.project.useASL()
@@ -406,6 +406,24 @@ solution "AdobeSourceLibrariesTutorial"
 			defines { "DEBUG" }
 			flags { "Symbols" }
 		
+		configuration "Release"
+			defines { "NDEBUG" }
+			flags { "Optimize" }
+			
+		configuration { "linux", "gmake" }
+		 buildoptions { "`pkg-config --cflags --libs gtk+-2.0`"}
+		 --
+	project "ReturnValue"
+		kind "ConsoleApp"
+		language "C++"
+		location ( "projects/" .. os.get() .. "-" .. action )
+		files {"src/ReturnValue.cpp" }
+		cloud.project.init()
+		cloud.project.useBoost()
+		cloud.project.useASL()
+		configuration "Debug"
+			defines { "DEBUG" }
+			flags { "Symbols" }
 		
 		configuration "Release"
 			defines { "NDEBUG" }
@@ -413,8 +431,8 @@ solution "AdobeSourceLibrariesTutorial"
 			
 		configuration { "linux", "gmake" }
 		 buildoptions { "`pkg-config --cflags --libs gtk+-2.0`"}
-		 
-		 	project "Alert"
+		 --
+	project "Alert"
 		kind "ConsoleApp"
 		language "C++"
 		location ( "projects/" .. os.get() .. "-" .. action )
@@ -424,8 +442,26 @@ solution "AdobeSourceLibrariesTutorial"
 		cloud.project.useASL()
 		configuration "Debug"
 			defines { "DEBUG" }
-			flags { "Symbols" }
+			flags { "Symbols" }	
 		
+		configuration "Release"
+			defines { "NDEBUG" }
+			flags { "Optimize" }
+			
+		configuration { "linux", "gmake" }
+		 buildoptions { "`pkg-config --cflags --libs gtk+-2.0`"}
+		 
+		 	project "AlertBase"
+		kind "ConsoleApp"
+		language "C++"
+		location ( "projects/" .. os.get() .. "-" .. action )
+		files {"src/AlertBase.cpp" }
+		cloud.project.init()
+		cloud.project.useBoost()
+		cloud.project.useASL()
+		configuration "Debug"
+			defines { "DEBUG" }
+			flags { "Symbols" }	
 		
 		configuration "Release"
 			defines { "NDEBUG" }
