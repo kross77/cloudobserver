@@ -394,11 +394,11 @@ solution "AdobeSourceLibrariesTutorial"
 		targetdir ( "projects/" .. os.get() .. "-" .. action ..  "/bin/release" )
 	
 	-- A project defines one build target
-	project "CloudAdamAndEve"
+	project "AdamAndEve"
 		kind "ConsoleApp"
 		language "C++"
 		location ( "projects/" .. os.get() .. "-" .. action )
-		files {"src/**" }
+		files {"src/AdamAndEve.cpp" }
 		cloud.project.init()
 		cloud.project.useBoost()
 		cloud.project.useASL()
@@ -410,5 +410,26 @@ solution "AdobeSourceLibrariesTutorial"
 		configuration "Release"
 			defines { "NDEBUG" }
 			flags { "Optimize" }
+			
+		configuration { "linux", "gmake" }
+		 buildoptions { "`pkg-config --cflags --libs gtk+-2.0`"}
+		 
+		 	project "Alert"
+		kind "ConsoleApp"
+		language "C++"
+		location ( "projects/" .. os.get() .. "-" .. action )
+		files {"src/Alert.cpp" }
+		cloud.project.init()
+		cloud.project.useBoost()
+		cloud.project.useASL()
+		configuration "Debug"
+			defines { "DEBUG" }
+			flags { "Symbols" }
+		
+		
+		configuration "Release"
+			defines { "NDEBUG" }
+			flags { "Optimize" }
+			
 		configuration { "linux", "gmake" }
 		 buildoptions { "`pkg-config --cflags --libs gtk+-2.0`"}
