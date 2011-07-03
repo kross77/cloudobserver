@@ -40,6 +40,12 @@ newoption {
 	description = "Choose a particular directory for OpenCV libs search"
 }
 
+newoption {
+	trigger     = "TclLibsPath",
+	value       = "PATH",
+	description = "Choose a particular directory for Tcl libs search"
+}
+
 -- Options for includes
 
 newoption {
@@ -71,6 +77,12 @@ newoption {
 	trigger     = "OpenCVIncludesPath",
 	value       = "PATH",
 	description = "Choose a particular directory for OpenCV includes search"
+}
+
+newoption {
+	trigger     = "TclIncludesPath",
+	value       = "PATH",
+	description = "Choose a particular directory for Tcl includes search"
 }
 
 newoption {
@@ -370,6 +382,36 @@ function cloud.project.useFFmpeg()
 	end 	
 end
 
+function cloud.project.useTcl()
+	--
+	cloud.addLibDir( _OPTIONS["TclLibsPath"] )
+	cloud.addIncludeDir(  _OPTIONS["TclIncludesPath"] )
+	if os.get() == "windows" then
+		defines { "WIN" }
+		links {
+		"tcl85",
+		"tk85"
+		}
+		cloud.win.addLibFromProgrammFiles("Tcl")
+	end
+	
+	if os.get() == "linux" then
+		defines { "LIN" }
+		links {
+		"tcl85",
+		"tk85"
+		}	
+	end
+	
+	if os.get() == "macosx" then
+		defines { "MAC" }
+		links {
+		"tcl85",
+		"tk85"
+		}	 
+	end
+end
+
 solution "AudioLatencyTester"
 	location ( "projects/".. os.get() .. "-" ..  action )
 	configurations { "Debug", "Release" }
@@ -392,6 +434,7 @@ solution "AudioLatencyTester"
 		cloud.project.useBoost()
 		cloud.project.useAL()
 		cloud.project.useCV()
+		cloud.project.useTcl()
 		files { "src/**.h", "src/**.cpp" }
 		
 		configuration "Debug"
