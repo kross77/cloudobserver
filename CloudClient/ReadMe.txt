@@ -7,7 +7,10 @@ Preparation instructions:
     - Boost C++ library's ( http://www.boost.org/ )  (we tested with version 0.6.1)
     - OpenCV ( http://opencv.willowgarage.com/wiki/ ) (we tested with version 2.1)
     - OpenAL ( http://connect.creativelabs.com/openal/default.aspx ) (we tested with version 1.1)
+	- Tcl with Tk ( http://www.tcl.tk/ ) (we tested with version 8.5.10)
   - Be sure to have C99 compiler ( or for MSVC++ download headers fro here http://code.google.com/p/msinttypes/downloads/list )  (we tested with version "r26")
+
+It is recommended to use the free ActiveTcl distribution from ActiveState ( http://www.activestate.com/activetcl ) instead of building Tcl and Tk on your own, version 8.5.9.2 works fine. On Windows you should install it into your "Program Files" or "Program Files (x86)" folder to make the premake script automatically find it there.
 
 On Windows you should remember where to you downloaded library's and headers 
 (or if you want to target only 32 bit platform and use visual studio 2008 get our Librarys-Windows-x32-vs08 archive and install it into your system as described in its own read me text file. in case of successful installation build file will not require anething from you but path to C99 compiler includes required for ffmpeg and provided here http://code.google.com/p/msinttypes/downloads/list ).
