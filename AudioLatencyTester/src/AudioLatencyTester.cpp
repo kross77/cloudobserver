@@ -1,11 +1,15 @@
 // Boost
 #include <boost/lexical_cast.hpp>
 
+#include "3rdparty/cpptcl/cpptcl.h"
+#include "3rdparty/cpptk/cpptk.h"
+
 #include "filters/audio_selector/audio_selector.h"
 #include "filters/audio_capturer/audio_capturer.h"
 #include "filters/audio_player/audio_player.h"
 
 #include <iostream>
+#include <fstream>
 #include <string>
 
 #define SAMPLE_RATE 44100
@@ -35,8 +39,19 @@ void print_help()
 	std::cout << "Type 'cs-default' to set capture size to its default value." << std::endl;
 	std::cout << "Type 'el-default' to set expected latency to its default value." << std::endl;
 	std::cout << "Type 'help' to see these help messages again." << std::endl;
+	std::cout << "Type 'gui' to enter the graphical mode." << std::endl;
 	std::cout << "Type 'exit' to close the application." << std::endl;
 	std::cout << std::endl;
+}
+
+int get_sample_rate()
+{
+	return SAMPLE_RATE;
+}
+
+void set_capture_size(int capture_size)
+{
+	audio_capturer_block.set_capture_size(capture_size);
 }
 
 int main(int argc, char* argv[])
@@ -128,6 +143,27 @@ int main(int argc, char* argv[])
 		{
 			std::cout << std::endl;
 			print_help();
+			continue;
+		}
+
+		if (input == "gui")
+		{
+			std::cout << "Entering graphical mode... ";
+			Tcl::interpreter interpreter(Tk::getInterpreter());
+
+			interpreter.def("set_capture_size", set_capture_size);
+			interpreter.def("get_sample_rate", get_sample_rate);
+
+			std::ifstream script;
+			script.open("gui.tcl");
+			interpreter.eval(script);
+			script.close();
+
+			std::cout << "OK." << std::endl;
+			std::cout << "Close the window to resume to the text mode." << std::endl;
+
+			Tk::runEventLoop();
+			std::cout << "Leaving graphical mode... OK." << std::endl;
 			continue;
 		}
 

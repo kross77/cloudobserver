@@ -121,6 +121,37 @@ end
 
 cloud = { }
 
+function os.copydir(src_dir, dst_dir, filter, single_dst_dir)
+	if not os.isdir(src_dir) then error(src_dir .. " is not an existing directory!") end
+	filter = filter or "**"
+	src_dir = src_dir .. "/"
+	print('copy "' .. src_dir .. filter .. '" to "' .. dst_dir .. '".')
+	dst_dir = dst_dir .. "/"
+	local dir = path.rebase(".",path.getabsolute("."), src_dir) -- root dir, relative from src_dir
+ 
+	os.chdir( src_dir ) -- change current directory to src_dir
+		local matches = os.matchfiles(filter)
+	os.chdir( dir ) -- change current directory back to root
+ 
+	local counter = 0
+	for k, v in ipairs(matches) do
+		local target = iif(single_dst_dir, path.getname(v), v)
+		--make sure, that directory exists or os.copyfile() fails
+		os.mkdir( path.getdirectory(dst_dir .. target))
+		if os.copyfile( src_dir .. v, dst_dir .. target) then
+			counter = counter + 1
+		end
+	end
+ 
+	if counter == #matches then
+		print( counter .. " files copied.")
+		return true
+	else
+		print( "Error: " .. counter .. "/" .. #matches .. " files copied.")
+		return nil
+	end
+end
+
 function cloud.addLibDir(path)
 	--
 	if  path then
@@ -412,6 +443,19 @@ function cloud.project.useTcl()
 	end
 end
 
+function cloud.project.copyAssets()
+	cwd = os.getcwd()
+	if not os.isdir("projects/" .. os.get() .. "-" .. action .. "/bin/debug/assets" ) then
+		os.mkdir("projects/" .. os.get() .. "-" .. action .. "/bin/debug/assets")
+	end
+	if not os.isdir("projects/" .. os.get() .. "-" .. action .."/bin/release/assets" ) then
+		os.mkdir("projects/" .. os.get() .. "-" .. action .. "/bin/release/assets")
+	end
+	os.copydir("assets",  "projects/" .. os.get() .. "-" .. action .. "/bin/debug/assets")
+	os.copydir("assets",  "projects/" .. os.get() .. "-" .. action .. "/bin/release/assets")
+	os.copydir("assets",  "projects/" .. os.get() .. "-" .. action .. "/assets")
+end
+
 solution "AudioLatencyTester"
 	location ( "projects/".. os.get() .. "-" ..  action )
 	configurations { "Debug", "Release" }
@@ -435,6 +479,9 @@ solution "AudioLatencyTester"
 		cloud.project.useAL()
 		cloud.project.useCV()
 		cloud.project.useTcl()
+		
+		cloud.project.copyAssets()
+		
 		files { "src/**.h", "src/**.cpp" }
 		
 		configuration "Debug"
