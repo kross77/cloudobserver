@@ -10,10 +10,10 @@
 
 #define SAMPLE_RATE 44100
 #define FORMAT AL_FORMAT_MONO16
-#define CAPTURE_SIZE 1470
+#define DEFAULT_CAPTURE_SIZE 1470
 
 audio_selector audio_selector_block;
-audio_capturer audio_capturer_block(SAMPLE_RATE, FORMAT, CAPTURE_SIZE);
+audio_capturer audio_capturer_block(SAMPLE_RATE, FORMAT, DEFAULT_CAPTURE_SIZE);
 audio_player audio_player_block(SAMPLE_RATE, FORMAT);
 
 int main(int argc, char* argv[])
@@ -28,37 +28,55 @@ int main(int argc, char* argv[])
 	audio_selector_block.select();
 	std::cout << std::endl;
 
-	std::cout << "Minimum capture size is 1." << std::endl;
-	std::cout << "Maximum capture size is " << SAMPLE_RATE << "." << std::endl;
+	std::cout << "Minimum capture size is 1 sample." << std::endl;
+	std::cout << "Maximum capture size is " << SAMPLE_RATE << " samples." << std::endl;
 	std::cout << std::endl;
 
-	std::cout << "Default capture size is " << CAPTURE_SIZE << "." << std::endl;
-	std::cout << "Expected latency is " << (1000 * CAPTURE_SIZE / SAMPLE_RATE) << " ms." << std::endl;
+	std::cout << "Default capture size is " << DEFAULT_CAPTURE_SIZE << " samples." << std::endl;
+	std::cout << "Default expected latency is " << (1000 * DEFAULT_CAPTURE_SIZE / SAMPLE_RATE) << " ms." << std::endl;
 	std::cout << std::endl;
 
+	std::cout << "Type 'csNUM' to set capture size to NUM." << std::endl;
 	std::cout << "Type 'exit' to close the application." << std::endl;
 	std::cout << std::endl;
 
 	std::string input;
 	do
 	{
-		std::cout << "Set capture size: ";
+		std::cout << "$ ";
 		std::cin >> input;
-		try
+
+		if (input.substr(0, 2) == "cs")
 		{
-			int capture_size = boost::lexical_cast<int>(input);
-			if ((capture_size >= 1) && (capture_size <= SAMPLE_RATE))
+			input = input.substr(2, input.length() - 2);
+			try
 			{
-				audio_capturer_block.set_capture_size(capture_size);
-				std::cout << "Expected latency is " << (1000 * capture_size / SAMPLE_RATE) << " ms." << std::endl;
+				int capture_size = boost::lexical_cast<int>(input);
+				if ((capture_size >= 1) && (capture_size <= SAMPLE_RATE))
+				{
+					audio_capturer_block.set_capture_size(capture_size);
+					std::cout << "Capture size is set to " << capture_size << (capture_size > 1 ? " samples." : " sample.") << std::endl;
+					std::cout << "Expected latency is " << (1000 * capture_size / SAMPLE_RATE) << " ms." << std::endl;
+				}
+				else
+					std::cout << "Invalid input. " << capture_size << " is out of range [1.." << SAMPLE_RATE << "]." << std::endl;
 			}
-			else
-				std::cout << "Invalid input." << std::endl;
-		}
-		catch (boost::bad_lexical_cast)
-		{
-			std::cout << "Invalid input." << std::endl;
+			catch (boost::bad_lexical_cast)
+			{
+				std::cout << "Invalid input. ";
+				if (input.empty())
+					std::cout << "No argument provided." << std::endl;
+				else
+					std::cout << "'" << input << "' is not an integer." << std::endl;
+			}
+			continue;
 		}
 
+		if (input == "exit")
+			continue;
+
+		std::cout << "Unknown command '" << input << "'." << std::endl;
 	} while (input != "exit");
+
+	return 0;
 }
