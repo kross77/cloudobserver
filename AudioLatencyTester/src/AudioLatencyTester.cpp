@@ -37,6 +37,7 @@ int main(int argc, char* argv[])
 	std::cout << std::endl;
 
 	std::cout << "Type 'csNUM' to set capture size to NUM." << std::endl;
+	std::cout << "Type 'elNUM' to set expected latency to NUM." << std::endl;
 	std::cout << "Type 'exit' to close the application." << std::endl;
 	std::cout << std::endl;
 
@@ -60,6 +61,33 @@ int main(int argc, char* argv[])
 				}
 				else
 					std::cout << "Invalid input. " << capture_size << " is out of range [1.." << SAMPLE_RATE << "]." << std::endl;
+			}
+			catch (boost::bad_lexical_cast)
+			{
+				std::cout << "Invalid input. ";
+				if (input.empty())
+					std::cout << "No argument provided." << std::endl;
+				else
+					std::cout << "'" << input << "' is not an integer." << std::endl;
+			}
+			continue;
+		}
+
+		if (input.substr(0, 2) == "el")
+		{
+			input = input.substr(2, input.length() - 2);
+			try
+			{
+				int expected_latency = boost::lexical_cast<int>(input);
+				if ((expected_latency >= 1) && (expected_latency <= 1000))
+				{
+					int capture_size = expected_latency * SAMPLE_RATE / 1000;
+					audio_capturer_block.set_capture_size(capture_size);
+					std::cout << "Expected latency is set to " << expected_latency << " ms." << std::endl;
+					std::cout << "Capture size is " << capture_size << (capture_size > 1 ? " samples." : " sample.") << std::endl;
+				}
+				else
+					std::cout << "Invalid input. " << expected_latency << " is out of range [1..1000]." << std::endl;
 			}
 			catch (boost::bad_lexical_cast)
 			{
