@@ -32,6 +32,8 @@ void print_help()
 
 	std::cout << "Type 'csNUM' to set capture size to NUM." << std::endl;
 	std::cout << "Type 'elNUM' to set expected latency to NUM." << std::endl;
+	std::cout << "Type 'cs-default' to set capture size to its default value." << std::endl;
+	std::cout << "Type 'el-default' to set expected latency to its default value." << std::endl;
 	std::cout << "Type 'help' to see these help messages again." << std::endl;
 	std::cout << "Type 'exit' to close the application." << std::endl;
 	std::cout << std::endl;
@@ -52,6 +54,22 @@ int main(int argc, char* argv[])
 	{
 		std::cout << "$ ";
 		std::cin >> input;
+
+		if (input == "cs-default")
+		{
+			audio_capturer_block.set_capture_size(DEFAULT_CAPTURE_SIZE);
+			std::cout << "Capture size is set to " << DEFAULT_CAPTURE_SIZE << " samples." << std::endl;
+			std::cout << "Expected latency is " << (1000 * DEFAULT_CAPTURE_SIZE / SAMPLE_RATE) << " ms." << std::endl;
+			continue;
+		}
+
+		if (input == "el-default")
+		{
+			audio_capturer_block.set_capture_size(DEFAULT_CAPTURE_SIZE);
+			std::cout << "Expected latency is set to " << (1000 * DEFAULT_CAPTURE_SIZE / SAMPLE_RATE) << " ms." << std::endl;
+			std::cout << "Capture size is " << DEFAULT_CAPTURE_SIZE << " samples." << std::endl;
+			continue;
+		}
 
 		if (input.substr(0, 2) == "cs")
 		{
