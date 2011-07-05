@@ -16,16 +16,10 @@ audio_selector audio_selector_block;
 audio_capturer audio_capturer_block(SAMPLE_RATE, FORMAT, DEFAULT_CAPTURE_SIZE);
 audio_player audio_player_block(SAMPLE_RATE, FORMAT);
 
-int main(int argc, char* argv[])
+void print_help()
 {
-	std::cout << "Audio Latency Tester" << std::endl;
+	std::cout << "Audio Latency Tester 1.0" << std::endl;
 	std::cout << "Copyright (c) 2011 Cloud Forever. All rights reserved." << std::endl;
-	std::cout << std::endl;
-
-	audio_selector_block.connect(&audio_capturer_block);
-	audio_capturer_block.connect(&audio_player_block);
-
-	audio_selector_block.select();
 	std::cout << std::endl;
 
 	std::cout << "Minimum capture size is 1 sample." << std::endl;
@@ -38,7 +32,19 @@ int main(int argc, char* argv[])
 
 	std::cout << "Type 'csNUM' to set capture size to NUM." << std::endl;
 	std::cout << "Type 'elNUM' to set expected latency to NUM." << std::endl;
+	std::cout << "Type 'help' to see these help messages again." << std::endl;
 	std::cout << "Type 'exit' to close the application." << std::endl;
+	std::cout << std::endl;
+}
+
+int main(int argc, char* argv[])
+{
+	print_help();
+
+	audio_selector_block.connect(&audio_capturer_block);
+	audio_capturer_block.connect(&audio_player_block);
+
+	audio_selector_block.select();
 	std::cout << std::endl;
 
 	std::string input;
@@ -97,6 +103,13 @@ int main(int argc, char* argv[])
 				else
 					std::cout << "'" << input << "' is not an integer." << std::endl;
 			}
+			continue;
+		}
+
+		if (input == "help")
+		{
+			std::cout << std::endl;
+			print_help();
 			continue;
 		}
 
