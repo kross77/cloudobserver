@@ -8,8 +8,6 @@
 //
 
 #include "cpptkbase.h"
-#include <tcl.h>
-#include <tk.h>
 #include <map>
 #include <ostream>
 #include <iostream>
@@ -721,4 +719,9 @@ void Tk::runEventLoop()
 void Tk::setDumpStream(ostream &os)
 {
 	dumpstream = &os;
+}
+
+Tcl_Interp *Tk::getInterpreter()
+{
+	return getInterp();
 }
