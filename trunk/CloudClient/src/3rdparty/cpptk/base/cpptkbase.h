@@ -16,6 +16,8 @@
 #   endif
 # endif
 
+#include <tcl.h>
+#include <tk.h>
 #include <stdexcept>
 #include <string>
 #include <utility>
@@ -962,6 +964,9 @@ void runEventLoop();
 
 // for setting command output stream
 void setDumpStream(std::ostream &os);
+
+// get internal interpreter
+Tcl_Interp *getInterpreter();
 
 } // namespace Tk
 
