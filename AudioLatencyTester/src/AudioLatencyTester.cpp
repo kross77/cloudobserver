@@ -155,7 +155,7 @@ int main(int argc, char* argv[])
 			interpreter.def("get_sample_rate", get_sample_rate);
 
 			std::ifstream script;
-			script.open("gui.tcl");
+			script.open("assets/gui.tcl");
 			interpreter.eval(script);
 			script.close();
 
