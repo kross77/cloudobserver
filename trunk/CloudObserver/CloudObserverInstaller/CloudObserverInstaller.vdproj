@@ -21,6 +21,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_1556DD6BA14D423B91F58590E1A8D4E9"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_2B3DCDA8407C46BF99B96E231ECF2CA1"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -33,6 +39,18 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_2E94FAC1451C47638CD3B9B2BBB90211"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_2EC3B8FA1E2F4504AF5D48C419F61257"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_33D292D10F184DE7A6C42D61BCEC094F"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -40,6 +58,12 @@
         "Entry"
         {
         "MsmKey" = "8:_3B5DB7D4109F4376B2934F4C3D795FD5"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_4404118C040948ACB5C0B4C76FCEBB2E"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -87,13 +111,13 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_6568272879C0460CA6491613DCEDB963"
+        "MsmKey" = "8:_709916E1E1FF4424B675765974A39821"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_709916E1E1FF4424B675765974A39821"
+        "MsmKey" = "8:_73AE96B837FB46989D1AB3FE6A294325"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -328,7 +352,7 @@
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
-                "FrameworkVersion" = "8:3.5.30729 "
+                "FrameworkVersion" = "8:3.5.30729  "
                 "AllowLaterVersions" = "11:FALSE"
                 "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=76617"
                 }
@@ -342,6 +366,26 @@
             "TargetName" = "8:player.html"
             "Tag" = "8:"
             "Folder" = "8:_54DE28E6B591498695EB982234E0C282"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1556DD6BA14D423B91F58590E1A8D4E9"
+            {
+            "SourcePath" = "8:htdocs\\js\\clouds.js"
+            "TargetName" = "8:clouds.js"
+            "Tag" = "8:"
+            "Folder" = "8:_57094BF226994B0DA0FCB7B13E4AA589"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -396,6 +440,46 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2E94FAC1451C47638CD3B9B2BBB90211"
+            {
+            "SourcePath" = "8:htdocs\\js\\browser-detect.js"
+            "TargetName" = "8:browser-detect.js"
+            "Tag" = "8:"
+            "Folder" = "8:_57094BF226994B0DA0FCB7B13E4AA589"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2EC3B8FA1E2F4504AF5D48C419F61257"
+            {
+            "SourcePath" = "8:htdocs\\js\\AC_OETags.js"
+            "TargetName" = "8:AC_OETags.js"
+            "Tag" = "8:"
+            "Folder" = "8:_57094BF226994B0DA0FCB7B13E4AA589"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_33D292D10F184DE7A6C42D61BCEC094F"
             {
             "SourcePath" = "8:htdocs\\textures\\cube\\skybox\\py.jpg"
@@ -420,6 +504,26 @@
             {
             "SourcePath" = "8:htdocs\\player.swf"
             "TargetName" = "8:player.swf"
+            "Tag" = "8:"
+            "Folder" = "8:_54DE28E6B591498695EB982234E0C282"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4404118C040948ACB5C0B4C76FCEBB2E"
+            {
+            "SourcePath" = "8:htdocs\\grid.html"
+            "TargetName" = "8:grid.html"
             "Tag" = "8:"
             "Folder" = "8:_54DE28E6B591498695EB982234E0C282"
             "Condition" = "8:"
@@ -576,10 +680,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6568272879C0460CA6491613DCEDB963"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_709916E1E1FF4424B675765974A39821"
             {
-            "SourcePath" = "8:htdocs\\AC_OETags.js"
-            "TargetName" = "8:AC_OETags.js"
+            "SourcePath" = "8:htdocs\\platform-logo-mac-pr.png"
+            "TargetName" = "8:platform-logo-mac-pr.png"
             "Tag" = "8:"
             "Folder" = "8:_54DE28E6B591498695EB982234E0C282"
             "Condition" = "8:"
@@ -596,12 +700,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_709916E1E1FF4424B675765974A39821"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_73AE96B837FB46989D1AB3FE6A294325"
             {
-            "SourcePath" = "8:htdocs\\platform-logo-mac-pr.png"
-            "TargetName" = "8:platform-logo-mac-pr.png"
+            "SourcePath" = "8:htdocs\\js\\script.js"
+            "TargetName" = "8:script.js"
             "Tag" = "8:"
-            "Folder" = "8:_54DE28E6B591498695EB982234E0C282"
+            "Folder" = "8:_57094BF226994B0DA0FCB7B13E4AA589"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -959,7 +1063,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Cloud Observer"
         "ProductCode" = "8:{E1979F38-3C5B-4357-B79B-A96C118D9985}"
-        "PackageCode" = "8:{D74E1D46-F014-408E-9B6F-27BE6CAC006D}"
+        "PackageCode" = "8:{8A69BC0B-86BC-4D13-95A6-E6F4EB61657A}"
         "UpgradeCode" = "8:{1BC9ED6E-3DEB-4EA5-81BD-397272DC12E0}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
