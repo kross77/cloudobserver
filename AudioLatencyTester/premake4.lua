@@ -429,16 +429,16 @@ function cloud.project.useTcl()
 	if os.get() == "linux" then
 		defines { "LIN" }
 		links {
-		"tcl85",
-		"tk85"
+		"tcl8.5",
+		"tk8.5"
 		}	
 	end
 	
 	if os.get() == "macosx" then
 		defines { "MAC" }
 		links {
-		"tcl85",
-		"tk85"
+		"tcl8.5",
+		"tk8.5"
 		}	 
 	end
 end
