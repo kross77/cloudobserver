@@ -173,5 +173,7 @@ int main(int argc, char* argv[])
 		std::cout << "Unknown command '" << input << "'." << std::endl;
 	} while (input != "exit");
 
+	audio_capturer_block.stop();
+
 	return 0;
 }
