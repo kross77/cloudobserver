@@ -8,7 +8,7 @@ namespace CloudObserver
         public int status;
         public string version;
         public Hashtable headers;
-        public int BodySize;
+        public long bodySize;
         public byte[] bodyData;
         public FileStream fileStream;
     }

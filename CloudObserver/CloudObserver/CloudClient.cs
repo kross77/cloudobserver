@@ -241,6 +241,16 @@ namespace CloudObserver
                 if (httpResponse.status == (int)ResponseState.OK)
                     this.OnResponse(ref this.httpRequest, ref this.httpResponse);
 
+                if (clientType != ClientType.ReaderClient)
+                {
+                    this.httpResponse.bodySize = 0;
+                    if (this.httpResponse.bodyData != null)
+                        this.httpResponse.bodySize += this.httpResponse.bodyData.Length;
+                    if (this.httpResponse.fileStream != null)
+                        this.httpResponse.bodySize += this.httpResponse.fileStream.Length;
+                    this.httpResponse.headers.Add("Content-Length", this.httpResponse.bodySize);
+                }
+
                 string headersString = this.httpResponse.version + " " + ResponseStatus.GetInstance()[this.httpResponse.status] + "\n";
                 foreach (DictionaryEntry header in this.httpResponse.headers)
                     headersString += header.Key + ": " + header.Value + "\n";
@@ -549,7 +559,6 @@ namespace CloudObserver
                 }
 
                 httpResponse.fileStream = File.OpenRead(path);
-                httpResponse.headers["Content-Length"] = httpResponse.fileStream.Length;
             }
             else
             {
