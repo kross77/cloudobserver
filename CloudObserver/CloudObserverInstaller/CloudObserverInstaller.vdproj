@@ -352,7 +352,7 @@
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
-                "FrameworkVersion" = "8:3.5.30729  "
+                "FrameworkVersion" = "8:.NETFramework,Version=v3.5"
                 "AllowLaterVersions" = "11:FALSE"
                 "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=76617"
                 }
@@ -1063,7 +1063,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Cloud Observer"
         "ProductCode" = "8:{E1979F38-3C5B-4357-B79B-A96C118D9985}"
-        "PackageCode" = "8:{8A69BC0B-86BC-4D13-95A6-E6F4EB61657A}"
+        "PackageCode" = "8:{3F7741ED-9378-42D2-9A54-DA09D2727207}"
         "UpgradeCode" = "8:{1BC9ED6E-3DEB-4EA5-81BD-397272DC12E0}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
