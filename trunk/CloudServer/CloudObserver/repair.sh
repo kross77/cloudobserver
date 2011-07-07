@@ -12,4 +12,4 @@ then
 	rm $lock_file
 fi
 
-mono-service2 CloudObserver.exe
+rm -fr "/etc/mono/registry/LocalMachine/software/cloud forever/cloud observer"

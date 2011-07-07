@@ -25,7 +25,8 @@ mkdir $target_dir
 cp $executable $target_dir
 cp ./CloudObserver/start.sh $target_dir
 cp ./CloudObserver/stop.sh $target_dir
-chmod a+x $target_dir/start.sh $target_dir/stop.sh
+cp ./CloudObserver/repair.sh $target_dir
+chmod a+x $target_dir/start.sh $target_dir/stop.sh $target_dir/repair.sh
 cp -r ./CloudObserverInstaller/htdocs $target_dir
 mkdir $target_dir/dumps
 tar -czf $target.tar.gz --exclude-vcs $target_dir
