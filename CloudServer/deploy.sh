@@ -6,8 +6,14 @@ target_dir=cloudobserver-$version
 target=$target_dir.$revision
 
 executable=./CloudObserver/bin/Release/CloudObserver.exe
+
+# build the release configuration
 if [ ! -f $executable ]; then
-	echo "No executable found. You should first build the Cloud Observer project in release configuration with Mono."
+	xbuild /property:Configuration=Release
+fi
+
+if [ ! -f $executable ]; then
+	echo "Cannot find the release executable. It seems like you either don't have Mono installed or the build process have failed. You may try to build the release configuration of the project by yourself using the MonoDevelop IDE and then restart this script."
 	exit 1
 fi
 
