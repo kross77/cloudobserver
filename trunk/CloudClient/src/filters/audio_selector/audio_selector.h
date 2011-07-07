@@ -8,6 +8,8 @@
 
 #include "../../utils/selector/selector.h"
 
+#include <vector>
+
 class audio_selector
 {
 public:

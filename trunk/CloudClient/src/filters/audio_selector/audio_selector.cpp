@@ -34,13 +34,13 @@ void audio_selector::select()
 		throw internal_exception();
 	}
 
-	selector audio_selector("Please, select the audio capture device:");
+	std::vector<std::string> options;
 	while (*devices)
 	{
-		audio_selector.add_option(std::string(devices), (void*)devices);
+		options.push_back(std::string(devices));
 		devices += strlen(devices) + 1;
 	}
-	audio_selector.select();
 
-	this->audio_capturer_block->start((ALCchar*)audio_selector.get_selection());
+	int selected_index = selector::simple_select(options, "Please, select the audio capture device:");
+	this->audio_capturer_block->start((ALCchar*)options[selected_index - 1].c_str());
 }
