@@ -1,11 +1,10 @@
 #include "selector.h"
 
-selector::selector(std::string greeting)
+selector::selector(std::string greeting, bool autoselection)
 {
-	this->autoselection = true;
-	this->greeting = greeting;
-	this->selection = NULL;
-	this->selected = false;
+	this->reset();
+	this->set_greeting(greeting);
+	this->set_autoselection(autoselection);
 }
 
 selector::~selector()
@@ -21,7 +20,7 @@ void selector::add_option(std::string description, void* identifier)
 void* selector::get_selection()
 {
 	// Check whether the selection have been performed.
-	if (!selected)
+	if (!this->selected)
 	{
 		std::cout << "Selector: the selection haven't been performed yet." << std::endl;
 		throw internal_exception();
@@ -29,6 +28,14 @@ void* selector::get_selection()
 
 	// Return the selected identifier.
 	return this->selection;
+}
+
+void selector::reset()
+{
+	this->autoselection = true;
+	this->greeting = "";
+	this->selected = false;
+	this->selection = NULL;
 }
 
 void selector::select()
@@ -40,19 +47,20 @@ void selector::select()
 		throw internal_exception();
 	}
 
-	// Print the greeting message.
-	std::cout << this->greeting << std::endl;
+	// Print the greeting message if it is present.
+	if (!this->greeting.empty())
+		std::cout << this->greeting << std::endl;
 
 	// Print the options to select from.
 	int counter = 0;
-	for (std::map<std::string, void*>::iterator iterator = options.begin(); iterator != options.end(); ++iterator)
+	for (std::map<std::string, void*>::iterator iterator = this->options.begin(); iterator != this->options.end(); ++iterator)
 		std::cout << "  " << ++counter << ". " << iterator->first << std::endl;
 
 	// Prepare for selection.
 	int selected_index = 0;
 
 	// Check if there is any choice.
-	if (autoselection && (counter == 1))
+	if (this->autoselection && (counter == 1))
 	{
 		// Select the option if there is no choice and auto selection is enabled.
 		std::cout << "Automatically choosing the only available option." << std::endl;
@@ -61,7 +69,6 @@ void selector::select()
 	else
 	{
 		// Repeat asking for selection until an acceptable value is received.
-		int selected_index = 0;
 		do
 		{
 			std::cout << "Your choice: ";
@@ -79,7 +86,7 @@ void selector::select()
 	}
 
 	// Find an identifier of the selected option.
-	std::map<std::string, void*>::iterator iterator = options.begin();
+	std::map<std::string, void*>::iterator iterator = this->options.begin();
 	for (int i = 1; i < selected_index; i++)
 		iterator++;
 
@@ -91,4 +98,9 @@ void selector::select()
 void selector::set_autoselection(bool autoselection)
 {
 	this->autoselection = autoselection;
+}
+
+void selector::set_greeting(std::string greeting)
+{
+	this->greeting = greeting;
 }
