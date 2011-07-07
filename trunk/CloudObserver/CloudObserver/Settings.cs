@@ -12,6 +12,9 @@ namespace CloudObserver
         private static string serverName = "Cloud Observer";
         private static ushort serverPort = 4773;
         private static uint maxStreams = 10;
+        private static string dumpsLocation = installLocation + "dumps/";
+        private static bool dumpWriters = false;
+        private static bool dumpReaders = false;
 
         public static string InstallLocation
         {
@@ -45,6 +48,30 @@ namespace CloudObserver
             }
         }
 
+        public static string DumpsLocation
+        {
+            get
+            {
+                return dumpsLocation;
+            }
+        }
+
+        public static bool DumpWriters
+        {
+            get
+            {
+                return dumpWriters;
+            }
+        }
+
+        public static bool DumpReaders
+        {
+            get
+            {
+                return dumpReaders;
+            }
+        }
+
         static Settings()
         {
             RegistryKey registryKey = Registry.LocalMachine.OpenSubKey(RegistryPath);
@@ -55,6 +82,9 @@ namespace CloudObserver
                 registryKey.SetValue("ServerName", serverName);
                 registryKey.SetValue("ServerPort", (int)serverPort, RegistryValueKind.DWord);
                 registryKey.SetValue("MaxStreams", (int)maxStreams, RegistryValueKind.DWord);
+                registryKey.SetValue("DumpsLocation", dumpsLocation);
+                registryKey.SetValue("DumpWriters", dumpWriters ? 1 : 0, RegistryValueKind.DWord);
+                registryKey.SetValue("DumpReaders", dumpReaders ? 1 : 0, RegistryValueKind.DWord);
             }
 
             object temp = null;
@@ -95,6 +125,38 @@ namespace CloudObserver
                 catch (Exception)
                 {
                     registryKey.SetValue("MaxStreams", (int)maxStreams, RegistryValueKind.DWord);
+                }
+
+            temp = registryKey.GetValue("DumpsLocation");
+            if (temp == null)
+                registryKey.SetValue("DumpsLocation", dumpsLocation);
+            else
+                dumpsLocation = (string)temp;
+
+            temp = registryKey.GetValue("DumpWriters");
+            if (temp == null)
+                registryKey.SetValue("DumpWriters", dumpWriters ? 1 : 0, RegistryValueKind.DWord);
+            else
+                try
+                {
+                    dumpWriters = ((int)temp != 0);
+                }
+                catch (Exception)
+                {
+                    registryKey.SetValue("DumpWriters", dumpWriters ? 1 : 0, RegistryValueKind.DWord);
+                }
+
+            temp = registryKey.GetValue("DumpReaders");
+            if (temp == null)
+                registryKey.SetValue("DumpReaders", dumpReaders ? 1 : 0, RegistryValueKind.DWord);
+            else
+                try
+                {
+                    dumpReaders = ((int)temp != 0);
+                }
+                catch (Exception)
+                {
+                    registryKey.SetValue("DumpReaders", dumpReaders ? 1 : 0, RegistryValueKind.DWord);
                 }
         }
     }

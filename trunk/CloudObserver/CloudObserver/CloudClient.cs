@@ -18,6 +18,8 @@ namespace CloudObserver
         private HttpRequestStruct httpRequest;
         private HttpResponseStruct httpResponse;
 
+        private FileStream writerDumpStream;
+
         private ClientType clientType = ClientType.GeneralClient;
 
         private string nickname;
@@ -275,12 +277,27 @@ namespace CloudObserver
                 if (httpResponse.status == (int)ResponseState.OK)
                 {
                     if (clientType == ClientType.ReaderClient)
-                        ((CloudClient)server.streams[nickname]).ConnectReader(networkStream);
+                    {
+                        FileStream dumpStream = null;
+                        if (Settings.DumpReaders)
+                        {
+                            try
+                            {
+                                dumpStream = File.Create(Settings.DumpsLocation + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-") + nickname + "-reader.flv");
+                            }
+                            catch (Exception)
+                            {
+                            }
+                        }
+                        ((CloudClient)server.streams[nickname]).ConnectReader(networkStream, dumpStream);
+                    }
 
                     if (clientType == ClientType.WriterClient)
                     {
                         // FLV header
                         header = ReadBytes(networkStream, HEADER_LENGTH);
+                        if (writerDumpStream != null)
+                            writerDumpStream.Write(header, 0, header.Length);
                         // Signature
                         if ((SIGNATURE1 != header[0]) || (SIGNATURE2 != header[1]) || (SIGNATURE3 != header[2]))
                             throw new InvalidDataException("Not a valid FLV file!.");
@@ -305,6 +322,8 @@ namespace CloudObserver
                         {
                             // FLV tag header
                             byte[] tagHeader = ReadBytes(networkStream, TAG_HEADER_LENGTH);
+                            if (writerDumpStream != null)
+                                writerDumpStream.Write(tagHeader, 0, tagHeader.Length);
                             // TagType
                             if ((tagHeader[0] != TAGTYPE_AUDIO) && (tagHeader[0] != TAGTYPE_VIDEO) && (tagHeader[0] != TAGTYPE_DATA))
                                 throw new InvalidDataException("Not a valid FLV file!.");
@@ -320,6 +339,8 @@ namespace CloudObserver
                                 throw new InvalidDataException("Not a valid FLV file!.");
                             // Data
                             byte[] tagData = ReadBytes(networkStream, (int)dataSize + 4);
+                            if (writerDumpStream != null)
+                                writerDumpStream.Write(tagData, 0, tagData.Length);
 
                             lock (locker)
                             {
@@ -356,6 +377,11 @@ namespace CloudObserver
                                     {
                                         reader.stream.Write(modifiedTagHeader, 0, modifiedTagHeader.Length);
                                         reader.stream.Write(tagData, 0, tagData.Length);
+                                        if (reader.dumpStream != null)
+                                        {
+                                            reader.dumpStream.Write(modifiedTagHeader, 0, modifiedTagHeader.Length);
+                                            reader.dumpStream.Write(tagData, 0, tagData.Length);
+                                        }
                                     }
                                     catch (IOException)
                                     {
@@ -364,7 +390,11 @@ namespace CloudObserver
                                 }
 
                                 foreach (FLVReader disconnectedReader in disconnectedReaders)
+                                {
+                                    if (disconnectedReader.dumpStream != null)
+                                        disconnectedReader.dumpStream.Close();
                                     readers.Remove(disconnectedReader);
+                                }
                                 disconnectedReaders.Clear();
                             }
                         }
@@ -385,8 +415,15 @@ namespace CloudObserver
                 }
                 if (clientType == ClientType.WriterClient)
                 {
+                    if (writerDumpStream != null)
+                        writerDumpStream.Close();
+
                     foreach (FLVReader reader in readers)
+                    {
                         reader.stream.Close();
+                        if (reader.dumpStream != null)
+                            reader.dumpStream.Close();
+                    }
                     server.streams.Remove(nickname);
                 }
                 Thread.CurrentThread.Abort();
@@ -477,6 +514,16 @@ namespace CloudObserver
                             bodyString += this.nickname;
                             bodyString += "\".</BODY></HTML>\n";
                             this.clientType = ClientType.WriterClient;
+                            if (Settings.DumpWriters)
+                            {
+                                try
+                                {
+                                    this.writerDumpStream = File.Create(Settings.DumpsLocation + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-") + nickname + "-writer.flv");
+                                }
+                                catch (Exception)
+                                {
+                                }
+                            }
                         }
                         httpResponse.bodyData = Encoding.ASCII.GetBytes(bodyString);
                         return;
@@ -593,13 +640,19 @@ namespace CloudObserver
             //}
         }
 
-        public void ConnectReader(Stream stream)
+        public void ConnectReader(Stream stream, FileStream dumpStream)
         {
             lock (locker)
             {
                 stream.Write(header, 0, header.Length);
+                if (dumpStream != null)
+                    dumpStream.Write(header, 0, header.Length);
                 foreach (byte[] data in scriptData)
+                {
                     stream.Write(data, 0, data.Length);
+                    if (dumpStream != null)
+                        dumpStream.Write(data, 0, data.Length);
+                }
 
                 bool tagHeader = true;
                 foreach (byte[] data in tagsBuffer)
@@ -617,13 +670,19 @@ namespace CloudObserver
                         modifiedData[6] = newTimestampValue[0];
 
                         stream.Write(modifiedData, 0, modifiedData.Length);
+                        if (dumpStream != null)
+                            dumpStream.Write(modifiedData, 0, modifiedData.Length);
                     }
                     else
+                    {
                         stream.Write(data, 0, data.Length);
+                        if (dumpStream != null)
+                            dumpStream.Write(data, 0, data.Length);
+                    }
                     
                     tagHeader = !tagHeader;
                 }
-                readers.Add(new FLVReader(stream, bufferedTimestamp));
+                readers.Add(new FLVReader(stream, dumpStream, bufferedTimestamp));
             }
         }
 
