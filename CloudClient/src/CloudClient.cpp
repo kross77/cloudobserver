@@ -10,7 +10,6 @@
 // OpenCV
 #include <opencv2/opencv.hpp>
 
-#include "filters/audio_selector/audio_selector.h"
 #include "filters/audio_capturer/audio_capturer.h"
 #include "filters/audio_player/audio_player.h"
 #include "filters/audio_encoder/audio_encoder.h"
@@ -48,7 +47,6 @@ int video_frame_rate;
 
 bool has_video;
 
-audio_selector* audio_selector_block;
 audio_capturer* audio_capturer_block;
 audio_player* audio_player_block;
 audio_encoder* audio_encoder_block;
@@ -453,9 +451,6 @@ int main(int argc, char* argv[])
 		audio_capturer_block = new audio_capturer(audio_sample_rate, AL_FORMAT_MONO16, audio_sample_rate / video_frame_rate);
 		audio_capturer_block->connect(audio_encoder_block);
 
-		audio_selector_block = new audio_selector();
-		audio_selector_block->connect(audio_capturer_block);
-
 		if (flag_echo)
 		{
 			audio_player_block = new audio_player(audio_sample_rate, AL_FORMAT_MONO16);
@@ -475,7 +470,7 @@ int main(int argc, char* argv[])
 	multiplexer_block->connect(transmitter_block);
 
 	if (!flag_disable_audio)
-		audio_selector_block->select();
+		audio_capturer_block->start();
 
 	desiredTimeForCaptureFame = (int64_t)(1000.0f / video_frame_rate);
 	desiredTimeForMain = (int64_t)(1000.0f / video_frame_rate);
@@ -506,9 +501,6 @@ int main(int argc, char* argv[])
 
 		audio_capturer_block->disconnect();
 		delete audio_capturer_block;
-
-		audio_selector_block->disconnect();
-		delete audio_selector_block;
 
 		if (flag_echo)
 			delete audio_player_block;
