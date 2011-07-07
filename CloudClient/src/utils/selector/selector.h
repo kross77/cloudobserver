@@ -12,20 +12,22 @@
 class selector
 {
 public:
-	selector(std::string greeting);
+	selector(std::string greeting = "", bool autoselection = true);
 	~selector();
 	void add_option(std::string description, void* identifier);
 	void* get_selection();
+	void reset();
 	void select();
 	void set_autoselection(bool autoselection);
+	void set_greeting(std::string greeting);
 
 	class internal_exception: public std::exception { };
 private:
 	bool autoselection;
 	std::string greeting;
 	std::map<std::string, void*> options;
-	void* selection;
 	bool selected;
+	void* selection;
 };
 
 #endif // SELECTOR_H
