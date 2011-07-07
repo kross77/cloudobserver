@@ -8,6 +8,7 @@
 #include <iostream>
 #include <map>
 #include <string>
+#include <vector>
 
 class selector
 {
@@ -20,6 +21,8 @@ public:
 	void select();
 	void set_autoselection(bool autoselection);
 	void set_greeting(std::string greeting);
+
+	static int simple_select(std::vector<std::string> options, std::string greeting = "", bool autoselection = true);
 
 	class internal_exception: public std::exception { };
 private:

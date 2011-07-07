@@ -104,3 +104,54 @@ void selector::set_greeting(std::string greeting)
 {
 	this->greeting = greeting;
 }
+
+int selector::simple_select(std::vector<std::string> options, std::string greeting, bool autoselection)
+{
+	// Check whether there are options to select from.
+	if (options.begin() == options.end())
+	{
+		std::cout << "Selector: no options to select from." << std::endl;
+		throw internal_exception();
+	}
+
+	// Print the greeting message if it is present.
+	if (!greeting.empty())
+		std::cout << greeting << std::endl;
+
+	// Print the options to select from.
+	int counter = 0;
+	for (std::vector<std::string>::iterator iterator = options.begin(); iterator != options.end(); ++iterator)
+		std::cout << "  " << ++counter << ". " << *iterator << std::endl;
+
+	// Prepare for selection.
+	int selected_index = 0;
+
+	// Check if there is any choice.
+	if (autoselection && (counter == 1))
+	{
+		// Select the option if there is no choice and auto selection is enabled.
+		std::cout << "Automatically choosing the only available option." << std::endl;
+		selected_index = 1;
+	}
+	else
+	{
+		// Repeat asking for selection until an acceptable value is received.
+		do
+		{
+			std::cout << "Your choice: ";
+			std::string line;
+			std::getline(std::cin, line);
+			try
+			{
+				selected_index = boost::lexical_cast<int>(line);
+			}
+			catch (boost::bad_lexical_cast&)
+			{
+				std::cout << "Invalid input. Try again." << std::endl;
+			}
+		} while ((selected_index <= 0) || (selected_index > counter));
+	}
+
+	// Return the selected index.
+	return selected_index;
+}
