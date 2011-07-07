@@ -409,6 +409,10 @@ int main(int argc, char* argv[])
 		std::cin >> server;
 	}
 
+	// Ask for the audio capture device if it is needed and wasn't read from the command line arguments.
+	if (!flag_disable_audio && !flag_generate_audio && (audio_capture_device == -1))
+		audio_capture_device = selector::simple_select(audio_capturer::get_capture_devices(), "Please, select the audio capture device:");
+
 	// Initialize the transmitter block.
 	transmitter_block = new transmitter();
 
@@ -449,6 +453,7 @@ int main(int argc, char* argv[])
 		audio_encoder_block->connect(multiplexer_block);
 
 		audio_capturer_block = new audio_capturer(audio_sample_rate, AL_FORMAT_MONO16, audio_sample_rate / video_frame_rate);
+		audio_capturer_block->set_capture_device(audio_capture_device);
 		audio_capturer_block->connect(audio_encoder_block);
 
 		if (flag_echo)
