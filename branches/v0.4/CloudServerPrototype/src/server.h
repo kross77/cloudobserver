@@ -38,6 +38,8 @@ private:
 	int _config;
 	printer *print;
 	extension_utils *util;
+	//TODO: get rid of ptr to only one service, replace with some sort of set of services.
+	boost::shared_ptr<service> file_service_ptr;
 };
 
 #endif //SERVER_H

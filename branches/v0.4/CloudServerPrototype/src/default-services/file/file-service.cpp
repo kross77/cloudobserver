@@ -31,12 +31,14 @@
 #include <boost/extension/factory.hpp>
 #include <boost/extension/type_map.hpp>
 
+#ifndef _FILE_SERVICE
+#define _FILE_SERVICE
 // class accessible thru Boost Extension for programs with access to service class\interface
 class file_service : public service
 {
 public:
 	file_service(boost::filesystem::path default_path) : service(default_path){std::cout << "\nCreated a File-Service";}
-	virtual ~file_service(void){std::cout << "\nDestroyed a File-Service";}
+	~file_service(void){std::cout << "\nDestroyed a File-Service";}
 
 	//We provide files download, short files info options.
 	//TODO: remove info to another service  
@@ -148,6 +150,7 @@ private:
 BOOST_EXTENSION_TYPE_MAP_FUNCTION {
 	using namespace boost::extensions;
 	std::map<std::string, factory<service, boost::filesystem::path> >&
-		service_factories(types.get());
-	service_factories["File System factory"].set<file_service>();
+		Producer_factories(types.get());
+	Producer_factories["file_service"].set<file_service>();
 }
+#endif //_FILE_SERVICE

@@ -4,8 +4,8 @@ template <class BaseClass, class ConstructorType>
 std::map<std::string, boost::extensions::factory<BaseClass, ConstructorType> > extension_utils::get_factories (boost::extensions::shared_library &lib) {
 	boost::extensions::type_map lib_types;
 	if (!lib.call(lib_types)) {
-		cerr << "Types map not found!" << endl;
-		cin.get();
+		std::cerr << "Types map not found!" << std::endl;
+		std::cin.get();
 	}
 
 	std::map<std::string, boost::extensions::factory<BaseClass, ConstructorType> > lib_factories(lib_types.get());

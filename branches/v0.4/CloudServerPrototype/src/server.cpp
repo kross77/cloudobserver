@@ -11,6 +11,14 @@ server::server(int config)
 	//TODO create shared libs loader function which would do stuff like:
 	//boost::shared_ptr<service> service_instance ( util->get_class<service>(shared_library_instance, "service_string_name"));
 	//Do not forget shared_ptr is not scoped_ptr
+
+	std::string file_lib_path = "services_file";
+	file_lib_path = util->add_prefix_and_suffix(file_lib_path);
+	boost::extensions::shared_library file_service(file_lib_path);
+	util->try_open_lib(file_service, file_lib_path );
+	file_service_ptr = util->get_class<service>(file_service, "file_service", boost::filesystem::current_path());
+
+
 }
 server::~server()
 {
@@ -50,6 +58,7 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 		print->print_map_contents(request.arguments, "arguments");
 		//response.body = "<head></head><body><h1>It Rocks!</h1></body>";
 		//TODO: Make server library independent via ptree config and options filtering. 
+		file_service_ptr->service_call(request, socket);
 		//file_service(request, socket); 
 		socket->close();
 		std::cout << "connection resolved." << std::endl;

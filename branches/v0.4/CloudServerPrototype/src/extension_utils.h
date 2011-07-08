@@ -30,7 +30,6 @@
 //boost::shared_ptr<Your_Base_Class> producer ( get_class<Your_Base_Class, Constructor_Argument_T>(Your_Shared_Library_Instance, "BOOST_EXTENSION_TYPE_MAP_FUNCTION_STRING_NAME_DEFINED_IN_LIB", Some_Constructor_Argument_Value));
 //
 
-
 #ifndef UTILITIES_H
 #define UTILITIES_H 
 //STD
@@ -65,11 +64,11 @@ public:
 	template <class BaseClass, class ConstructorType>
 	std::map<std::string, boost::extensions::factory<BaseClass, ConstructorType> > get_factories (boost::extensions::shared_library & lib);
 
-	template <class BaseClass, class ConstructorType>
-	boost::shared_ptr<BaseClass> get_class (boost::extensions::shared_library & lib, std::string class_name, ConstructorType value );
-
 	template <class BaseClass>
 	std::map<std::string, boost::extensions::factory<BaseClass> > get_factories (boost::extensions::shared_library & lib);
+
+	template <class BaseClass, class ConstructorType>
+	boost::shared_ptr<BaseClass> get_class (boost::extensions::shared_library & lib, std::string class_name, ConstructorType value );
 
 	template <class BaseClass>
 	boost::shared_ptr<BaseClass> get_class (boost::extensions::shared_library & lib, std::string class_name );
@@ -77,9 +76,13 @@ public:
 	void try_open_lib(boost::extensions::shared_library & lib, std::string & path);
 
 	std::string add_prefix_and_suffix(std::string name);
+
 private:
 	std::string current_prefix;
 	std::string current_extention;
 };
+
+//include inline functions
+#include "extension_utils_inl.h"
 
 #endif // UTILITIES_H
