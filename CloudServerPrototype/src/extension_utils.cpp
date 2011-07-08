@@ -33,4 +33,3 @@ std::string extension_utils::add_prefix_and_suffix(std::string name)
 	return library_name;
 }
 
-
