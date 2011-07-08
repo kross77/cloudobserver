@@ -294,21 +294,24 @@ void capture_frame_loop()
 
 void save_frame_loop()
 {
-	while (true)
+	if (has_video)
 	{
-		timerForMain.restart();
-		try
+		while (true)
 		{
-			video_encoder_block->send(readyFrame);
-		}
-		catch (std::exception)
-		{
-			printf("Cannot write frame!\n");
-		}
+			timerForMain.restart();
+			try
+			{
+				video_encoder_block->send(readyFrame);
+			}
+			catch (std::exception)
+			{
+				printf("Cannot write frame!\n");
+			}
 
-		spendedTimeForMain = (int64_t)timerForMain.elapsed();
-		if(spendedTimeForMain < desiredTimeForMain)
-			boost::this_thread::sleep(boost::posix_time::milliseconds(desiredTimeForMain - spendedTimeForMain));
+			spendedTimeForMain = (int64_t)timerForMain.elapsed();
+			if(spendedTimeForMain < desiredTimeForMain)
+				boost::this_thread::sleep(boost::posix_time::milliseconds(desiredTimeForMain - spendedTimeForMain));
+		}
 	}
 }
 
