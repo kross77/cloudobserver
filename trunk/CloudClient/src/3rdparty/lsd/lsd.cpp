@@ -1,4 +1,4 @@
-#include "LSD.h"
+#include "lsd.h"
 
 /** ln(10) */
 #ifndef M_LN10
