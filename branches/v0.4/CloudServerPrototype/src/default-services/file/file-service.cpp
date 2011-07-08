@@ -1,5 +1,4 @@
-#ifndef FILE_SERVICE_HPP
-#define FILE_SERVICE_HPP
+
 
 #include "../../../service-interface/service.hpp"
 
@@ -26,15 +25,19 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 
+///////////////////////////////
+#include <map>
+#include <boost/extension/extension.hpp>
+#include <boost/extension/factory.hpp>
+#include <boost/extension/type_map.hpp>
+
 //TODO: Remove using namespace
 using namespace boost::asio::ip;
 using namespace boost::filesystem;
 using namespace boost::posix_time;
-using namespace boost::local_time;
-using namespace boost::gregorian;
 using namespace std;
 // class accessible thru Boost Extension for programs with access to service class\interface
-class BOOST_EXTENSION_EXPORT_DECL file_service : virtual public service
+class file_service : public service
 {
 public:
 	file_service(path default_path) : service(default_path){std::cout << "\nCreated a File-Service";}
@@ -147,4 +150,9 @@ private:
 	}
 };
 
-#endif
+BOOST_EXTENSION_TYPE_MAP_FUNCTION {
+	using namespace boost::extensions;
+	std::map<std::string, factory<service, boost::filesystem::path> >&
+		service_factories(types.get());
+	service_factories["File System factory"].set<file_service>();
+}
