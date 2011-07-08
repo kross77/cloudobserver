@@ -4,9 +4,9 @@
 #include <iostream>
 #include <string>
 
-//Boost-Extension
-#include <typeinfo>
-#include <boost/extension/extension.hpp>
+////Boost-Extension
+//#include <typeinfo>
+//#include <boost/extension/extension.hpp>
 
 //Boost-FileSystem
 #include <boost/filesystem.hpp>
