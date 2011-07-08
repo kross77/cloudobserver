@@ -93,20 +93,6 @@
 					uri = "http://" + url +"/" + nickName  + "?action=read";
 					onRequest(uri, "{''}", "");
 				} 
-				FlexGlobals.topLevelApplication.addEventListener(KeyboardEvent.KEY_DOWN, handleKeyDown);
-			}
-			
-			protected function handleKeyDown (e:KeyboardEvent):void {
-				if((e.keyCode == 68) && (e.ctrlKey == true))
-				{
-					tf.width = 300;
-					tf.visible = true;
-				}	
-				else if((e.keyCode == 68) && (e.shiftKey == true))
-				{
-					tf.visible = false;
-					tf.width = 0;
-				}	
 			}
 			
 			protected function recon( e:Event){
@@ -334,7 +320,6 @@
 		<mx:ApplicationControlBar mouseMove="sOne()" id="ACB" width="100%" height="39" dock="false" top="0"  top.Two="-50" horizontalAlign="center" verticalAlign="middle">
 			<mx:Button label="Mute" click="button2_clickHandler(event)"/>
 			<mx:Button label="Full Screen" click="button1_clickHandler(event)"/>
-			<mx:TextInput id="tf" text="http://127.0.0.1:4773/beAch.flv?action=read" enter="onRequest(tf.text, '{}', '');" visible="false"  width="0"/>
 		</mx:ApplicationControlBar>
 	</mx:Canvas>
 </s:Application>
