@@ -16,6 +16,7 @@ video_capturer::video_capturer(int video_width, int video_height, int video_fram
 	this->capture_device = NULL;
 	this->capture_thread = NULL;
 
+	this->line_segment_detector_block = NULL;
 	this->video_encoder_block = NULL;
 
 	this->set_capture_device(0);
@@ -29,6 +30,11 @@ video_capturer::~video_capturer()
 	av_free(this->frame);
 }
 
+void video_capturer::connect(line_segment_detector* line_segment_detector_block)
+{
+	this->line_segment_detector_block = line_segment_detector_block;
+}
+
 void video_capturer::connect(video_encoder* video_encoder_block)
 {
 	this->video_encoder_block = video_encoder_block;
@@ -36,6 +42,7 @@ void video_capturer::connect(video_encoder* video_encoder_block)
 
 void video_capturer::disconnect()
 {
+	this->line_segment_detector_block = NULL;
 	this->video_encoder_block = NULL;
 }
 
@@ -79,6 +86,9 @@ void video_capturer::capture_loop()
 		this->captured_frame = cvQueryFrame(this->capture_device);
 		cvResize(this->captured_frame, this->resized_frame);
 
+		if (this->line_segment_detector_block != NULL)
+			this->line_segment_detector_block->send(this->resized_frame);
+
 		char* buffer = (char*)this->frame->data[0];
 		for (int i = 0; i < this->resized_frame->imageSize; i += 3)
 		{
@@ -88,7 +98,8 @@ void video_capturer::capture_loop()
 			buffer += 3;
 		}
 
-		this->video_encoder_block->send(this->frame);
+		if (this->video_encoder_block != NULL)
+			this->video_encoder_block->send(this->frame);
 
 		boost::this_thread::sleep(boost::posix_time::milliseconds(1000 / this->frame_rate));
 	}

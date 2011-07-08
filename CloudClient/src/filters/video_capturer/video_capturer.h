@@ -19,6 +19,7 @@ extern "C"
 // OpenCV
 #include <opencv2/opencv.hpp>
 
+#include "../line_segment_detector/line_segment_detector.h"
 #include "../video_encoder/video_encoder.h"
 
 #include <exception>
@@ -31,6 +32,7 @@ class video_capturer
 public:
 	video_capturer(int video_width, int video_height, int video_frame_rate);
 	~video_capturer();
+	void connect(line_segment_detector* line_segment_detector_block);
 	void connect(video_encoder* video_encoder_block);
 	void disconnect();
 	void start();
@@ -53,6 +55,7 @@ private:
 	CvCapture* capture_device;
 	boost::thread* capture_thread;
 
+	line_segment_detector* line_segment_detector_block;
 	video_encoder* video_encoder_block;
 };
 

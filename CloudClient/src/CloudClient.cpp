@@ -18,6 +18,7 @@
 #include "filters/video_generator/video_generator.h"
 #include "filters/video_generator_rainbow/video_generator_rainbow.h"
 #include "filters/video_encoder/video_encoder.h"
+#include "filters/line_segment_detector/line_segment_detector.h"
 #include "filters/multiplexer/multiplexer.h"
 #include "filters/transmitter/transmitter.h"
 
@@ -57,6 +58,7 @@ audio_encoder* audio_encoder_block;
 video_capturer* video_capturer_block;
 video_generator* video_generator_block;
 video_generator_rainbow* video_generator_rainbow_block;
+line_segment_detector* line_segment_detector_block;
 video_encoder* video_encoder_block;
 multiplexer* multiplexer_block;
 transmitter* transmitter_block;
@@ -65,103 +67,6 @@ transmitter* transmitter_block;
 boost::mt19937 rng;
 boost::uniform_int<> six(-128, 127);
 boost::variate_generator<boost::mt19937&, boost::uniform_int<> >die(rng, six);
-
-//void capture_frame(int w, int h, char* buffer, int bytespan)
-//{
-//	if (flag_generate_video)
-//	{
-//		cvResize(CVframe, CVframeWithText);
-//		ptime now = second_clock::local_time();
-//		cvPutText(CVframeWithText, to_simple_string(now.time_of_day()).c_str(), cvPoint(0, (h / 2 + 10)), &font, CV_RGB(1, 1, 1));
-//		for (int i = 0; i < w * 4 * h; i = i + 4)
-//		{
-//			buffer[0] = CVframeWithText->imageData[i];
-//			buffer[1] = CVframeWithText->imageData[i + 1];
-//			buffer[2] = CVframeWithText->imageData[i + 2];
-//			buffer += 3;
-//		}
-//		//if (rainbow)
-//		//{
-//		//	int wxh = w * h;
-//		//	static float seed = 1.0;
-//		//	for (int i = 0; i < h; i++)
-//		//	{
-//		//		char* line = buffer + i * bytespan;
-//		//		for (int j = 0; j < w; j ++)
-//		//		{
-//		//			// RGB
-//		//			line[0] = 255 * sin(((float)i / wxh * seed) * 3.14);
-//		//			line[1] = 255 * cos(((float)j / wxh * seed) * 3.14);
-//		//			line[2] = 255 * sin(((float)(i + j) / wxh * seed) * 3.14);
-//		//			line += 3;
-//		//		}
-//		//	}
-//		//	seed = seed + 2.2;
-//		//}
-//	}
-//	else
-//	{
-//		CVframe = cvQueryFrame(capture);
-//		if (!CVframe)
-//		{
-//			printf("No CV frame captured!\n");
-//			cin.get();
-//		}
-//
-//		cvResize(CVframe, destination);
-//		if (flag_lsd)
-//		{
-//			IplImage *destinationForLSD = cvCreateImage(cvSize(w, h), IPL_DEPTH_8U, 1);
-//			cvCvtColor(destination, destinationForLSD, CV_RGB2GRAY);
-//
-//			image_double lsdImage;
-//			ntuple_list lsdOut;
-//			lsdImage = new_image_double(w, h);
-//
-//			for (int x = 0; x < w; x++)
-//				for (int y = 0; y < h; y++)
-//					lsdImage->data[x + y * lsdImage->xsize] = cvGetReal2D(destinationForLSD, y, x);
-//
-//			// call LSD
-//			lsdOut = lsd(lsdImage);
-//
-//			for (unsigned int i = 0; i < lsdOut->size; i++)
-//			{
-//				CvPoint pt1 = { (int)lsdOut->values[i * lsdOut->dim + 0], (int)lsdOut->values[i * lsdOut->dim + 1] };
-//				CvPoint pt2 = { (int)lsdOut->values[i * lsdOut->dim + 2], (int)lsdOut->values[i * lsdOut->dim + 3] };
-//				cvLine(destination, pt1, pt2, CV_RGB(240, 255, 255), 1, CV_AA, 0);
-//			}
-//			cvReleaseImage(&destinationForLSD);
-//			free_image_double(lsdImage);
-//			free_ntuple_list(lsdOut);
-//		}
-//
-//		for (int i = 0; i < destination->imageSize; i = i + 3)
-//		{
-//			buffer[2] = destination->imageData[i];
-//			buffer[1] = destination->imageData[i + 1];
-//			buffer[0] = destination->imageData[i + 2];
-//			buffer += 3;
-//		}
-//
-//		//cvSplit(destination, bluechannel, greenchannel, redchannel, NULL);
-//		//for(int y = 0; y < destination->height; y++)
-//		//{
-//		//	char* line = buffer + y * bytespan;
-//		//	for(int x = 0; x < destination->width; x++)
-//		//	{
-//		// 		line[0] = cvGetReal2D(redchannel, y, x);
-//		// 		line[1] = cvGetReal2D(greenchannel, y, x);
-//		// 		line[2] = cvGetReal2D(bluechannel, y, x);
-//		// 		line += 3;
-//		//	}
-//		//}
-//
-//		//for (int i = 0; i < w * h * 3; ++i) {
-//		// 		buffer[i] = destination->imageData;
-//		//}
-//	}
-//}
 
 // Application entry point.
 int main(int argc, char* argv[])
@@ -348,7 +253,15 @@ int main(int argc, char* argv[])
 		else
 		{
 			video_capturer_block = new video_capturer(video_width, video_height, video_frame_rate);
-			video_capturer_block->connect(video_encoder_block);
+			if (flag_lsd)
+			{
+				line_segment_detector_block = new line_segment_detector(video_width, video_height);
+				line_segment_detector_block->connect(video_encoder_block);
+
+				video_capturer_block->connect(line_segment_detector_block);
+			}
+			else
+				video_capturer_block->connect(video_encoder_block);
 		}
 	}
 	
@@ -410,6 +323,12 @@ int main(int argc, char* argv[])
 	{
 		video_encoder_block->disconnect();
 		delete video_encoder_block;
+
+		if (flag_lsd)
+		{
+			line_segment_detector_block->disconnect();
+			delete line_segment_detector_block;
+		}
 
 		if (flag_generate_video)
 		{
