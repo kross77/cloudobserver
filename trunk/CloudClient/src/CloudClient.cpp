@@ -11,6 +11,7 @@
 #include <opencv2/opencv.hpp>
 
 #include "filters/audio_capturer/audio_capturer.h"
+#include "filters/audio_generator/audio_generator.h"
 #include "filters/audio_player/audio_player.h"
 #include "filters/audio_encoder/audio_encoder.h"
 #include "filters/video_encoder/video_encoder.h"
@@ -48,6 +49,7 @@ int video_frame_rate;
 bool has_video;
 
 audio_capturer* audio_capturer_block;
+audio_generator* audio_generator_block;
 audio_player* audio_player_block;
 audio_encoder* audio_encoder_block;
 video_encoder* video_encoder_block;
@@ -452,14 +454,25 @@ int main(int argc, char* argv[])
 		audio_encoder_block = new audio_encoder(audio_sample_rate);
 		audio_encoder_block->connect(multiplexer_block);
 
-		audio_capturer_block = new audio_capturer(audio_sample_rate, AL_FORMAT_MONO16, audio_sample_rate / video_frame_rate);
-		audio_capturer_block->set_capture_device(audio_capture_device);
-		audio_capturer_block->connect(audio_encoder_block);
+		if (flag_generate_audio)
+		{
+			audio_generator_block = new audio_generator(audio_sample_rate, AL_FORMAT_MONO16, audio_sample_rate / video_frame_rate);
+			audio_generator_block->connect(audio_encoder_block);
+		}
+		else
+		{
+			audio_capturer_block = new audio_capturer(audio_sample_rate, AL_FORMAT_MONO16, audio_sample_rate / video_frame_rate);
+			audio_capturer_block->set_capture_device(audio_capture_device);
+			audio_capturer_block->connect(audio_encoder_block);
+		}
 
 		if (flag_echo)
 		{
 			audio_player_block = new audio_player(audio_sample_rate, AL_FORMAT_MONO16);
-			audio_capturer_block->connect(audio_player_block);
+			if (flag_generate_audio)
+				audio_generator_block->connect(audio_player_block);
+			else
+				audio_capturer_block->connect(audio_player_block);
 		}
 	}
 	
@@ -475,7 +488,12 @@ int main(int argc, char* argv[])
 	multiplexer_block->connect(transmitter_block);
 
 	if (!flag_disable_audio)
-		audio_capturer_block->start();
+	{
+		if (flag_generate_audio)
+			audio_generator_block->start();
+		else
+			audio_capturer_block->start();
+	}
 
 	desiredTimeForCaptureFame = (int64_t)(1000.0f / video_frame_rate);
 	desiredTimeForMain = (int64_t)(1000.0f / video_frame_rate);
@@ -504,8 +522,16 @@ int main(int argc, char* argv[])
 		audio_encoder_block->disconnect();
 		delete audio_encoder_block;
 
-		audio_capturer_block->disconnect();
-		delete audio_capturer_block;
+		if (flag_generate_audio)
+		{
+			audio_generator_block->disconnect();
+			delete audio_generator_block;
+		}
+		else
+		{
+			audio_capturer_block->disconnect();
+			delete audio_capturer_block;
+		}
 
 		if (flag_echo)
 			delete audio_player_block;
