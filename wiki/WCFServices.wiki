@@ -1,3 +1,4 @@
+#labels Deprecated
 = WCF Services =
 
 WCF(Windows Communication Foundation) - реализация SOAP протокола от Microsoft (http://ru.wikipedia.org/wiki/SOAP). В нашем случае с его помощью мы будем реализовывать удаленный вызов методов (сервисов) и обращеные к данным через них, которые выполняются на сервере. 
