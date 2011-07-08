@@ -398,7 +398,7 @@ solution "CloudServerPrototype"
 -- server ------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------			
 		
-	project "ExtedableServer"
+	project "ExtendableServer"
 		kind "ConsoleApp"
 		language "C++"
 		location ( "projects/" .. os.get() .. "-" .. action )
