@@ -194,6 +194,9 @@ function cloud.project.init()
 	--
 	cloud.addLibDir(  _OPTIONS["libsPath"] )
 	cloud.addIncludeDir( _OPTIONS["includesPath"] )
+	libdirs {
+		"./"
+		}
 	if os.get() == "windows" then
 		defines { "WIN" }
 	end
@@ -317,7 +320,9 @@ function cloud.project.useBoost()
 		links {
 		"boost_regex",
 		"boost_system",
-		"boost_thread"
+		"boost_thread",
+		"boost_filesystem",
+		"dl"
 		}
 	end
 	if os.get() == "macosx" then
@@ -325,7 +330,9 @@ function cloud.project.useBoost()
 		links {
 		"boost_regex",
 		"boost_system",
-		"boost_thread"
+		"boost_thread",
+		"boost_filesystem",
+		"dl"
 		}	
 	end 
 end
@@ -414,8 +421,24 @@ solution "CloudServerPrototype"
 		configuration "Release"
 			defines { "NDEBUG" }
 			flags { "OptimizeSpeed" , "Unicode"}
-			
 
+------------------------------------------------------------------------------------------------
+
+	project "cf-http"
+		kind "StaticLib"
+		language "C++"
+		location ( "projects/" .. os.get() .. "-" .. action )
+		files { "3rdparty/cf-http/**.h", "3rdparty/cf-http/**.cpp" }
+		cloud.project.init()
+		cloud.project.useBoost()	
+		configuration "Debug"
+			defines { "DEBUG" }
+			flags { "Symbols", "Unicode" }
+		
+		configuration "Release"
+			defines { "NDEBUG" }
+			flags { "OptimizeSpeed", "Unicode" }
+			
 ----------------------------------------------------------------------------------------------
 -- services ----------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------			
@@ -443,22 +466,3 @@ solution "CloudServerPrototype"
 		configuration "Release"
 			defines { "NDEBUG" }
 			flags { "OptimizeSpeed" , "Unicode"}
-			
-
-
-------------------------------------------------------------------------------------------------
-
-	project "cf-http"
-		kind "StaticLib"
-		language "C++"
-		location ( "projects/" .. os.get() .. "-" .. action )
-		files { "3rdparty/cf-http/**.h", "3rdparty/cf-http/**.cpp" }
-		cloud.project.init()
-		cloud.project.useBoost()	
-		configuration "Debug"
-			defines { "DEBUG" }
-			flags { "Symbols", "Unicode" }
-		
-		configuration "Release"
-			defines { "NDEBUG" }
-			flags { "OptimizeSpeed", "Unicode" }

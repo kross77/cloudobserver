@@ -75,7 +75,7 @@ public:
 
 	void try_open_lib(boost::extensions::shared_library & lib, std::string & path);
 
-	std::string add_prefix_and_suffix(std::string name);
+	std::string add_prefix_and_suffix(std::string &name);
 
 private:
 	std::string current_prefix;

@@ -8,7 +8,7 @@ std::map<std::string, boost::extensions::factory<BaseClass, ConstructorType> > e
 		std::cin.get();
 	}
 
-	std::map<std::string, boost::extensions::factory<BaseClass, ConstructorType> > lib_factories(lib_types.get());
+	std::map<std::string, boost::extensions::factory<BaseClass, ConstructorType> > &lib_factories(lib_types.get());
 	if (lib_factories.empty()) {
 		std::cerr << "Producers not found!" << std::endl;
 		std::cin.get();
@@ -31,7 +31,7 @@ std::map<std::string, boost::extensions::factory<BaseClass> > extension_utils::g
 		std::cin.get();
 	}
 
-	std::map<std::string, boost::extensions::factory<BaseClass> > lib_factories(lib_types.get());
+	std::map<std::string, boost::extensions::factory<BaseClass> > &lib_factories(lib_types.get());
 	if (lib_factories.empty()) {
 		std::cerr << "Producers not found!" << std::endl;
 		std::cin.get();
