@@ -6,8 +6,9 @@
 There are two ways for plug in creation:
 
  * *Extension* - application can find out what classes in plugin inherit some of the classes app had during its compilation. 
+<wiki:comment>
  * *Reflection* - it is when app is provided with name of class to load, its function name to call and its function types.
-
+</wiki:comment>
 
 = Details =
 
@@ -18,10 +19,12 @@ What shall be provided to an app to correctly load plugin created with Extension
  # *Extension*:
   * Array of shared libraries names, ones that can provide class inheritance tree from base - class (like an interface) application had during compilation to the latest class that we want to load
   *  class to load name
- # *Reflection*:
+ <wiki:comment>
+# *Reflection*:
   *  Shared library name
   *  Class name 
   *  Function name
+</wiki:comment>
 
 == Creating a plugin ==
 On basics of creation such plugins please [http://boost-extension.redshoelace.com/docs/boost/extension/boost_extension/tutorials.html review Boost Extension] and [http://boost-extension.redshoelace.com/docs/boost/extension/boost_extension/extension_reflection.html Boost Reflection C++ tutorials].
@@ -32,8 +35,10 @@ On basics of creation such plugins please [http://boost-extension.redshoelace.co
     # various Boost.Extension includes in header and implementation file
     # BOOST_EXTENSION_EXPORT_DECL in its declaration
    * after class declaration in implementation file you shall use standart BOOST_EXTENSION_TYPE_MAP_FUNCTION 
-  # *Reflection*:
+<wiki:comment> 
+ # *Reflection*:
    * includes to `<boost/extension/extension.hpp>` and `<boost/reflection/reflection.hpp>` in implementation file are required 
    * no special directives in class declarations
    * you have freedom in naming a function you want to use for creating library description reflection map.
-
+</wiki:comment>
+<g:plusone size="medium"></g:plusone>
