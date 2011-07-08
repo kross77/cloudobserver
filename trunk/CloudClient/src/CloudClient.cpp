@@ -15,6 +15,7 @@
 #include "filters/audio_player/audio_player.h"
 #include "filters/audio_encoder/audio_encoder.h"
 #include "filters/video_capturer/video_capturer.h"
+#include "filters/video_generator/video_generator.h"
 #include "filters/video_encoder/video_encoder.h"
 #include "filters/multiplexer/multiplexer.h"
 #include "filters/transmitter/transmitter.h"
@@ -52,6 +53,7 @@ audio_generator* audio_generator_block;
 audio_player* audio_player_block;
 audio_encoder* audio_encoder_block;
 video_capturer* video_capturer_block;
+video_generator* video_generator_block;
 video_encoder* video_encoder_block;
 multiplexer* multiplexer_block;
 transmitter* transmitter_block;
@@ -60,69 +62,6 @@ transmitter* transmitter_block;
 boost::mt19937 rng;
 boost::uniform_int<> six(-128, 127);
 boost::variate_generator<boost::mt19937&, boost::uniform_int<> >die(rng, six);
-
-//// OpenCV
-//CvCapture* capture;
-//IplImage* CVframe;
-//IplImage* CVframeWithText;
-//IplImage* destination;
-//IplImage* redchannel;
-//IplImage* greenchannel;
-//IplImage* bluechannel;
-//CvFont font;
-//CvPoint UL;
-//CvPoint LR;
-
-//void init_opencv()
-//{
-//	if (flag_disable_video)
-//	{
-//		has_video = false;
-//		return;
-//	}
-//
-//	if (flag_generate_video)
-//	{
-//		has_video = true;
-//		cvInitFont(&font, CV_FONT_HERSHEY_DUPLEX, 2, 1, 0.0, 3, CV_AA);
-//		CvPoint UL = { 0, 0 };
-//		CvPoint LR = { video_width, video_height };
-//		CVframe = cvCreateImage(cvSize(video_width, video_height), 8, 4);
-//		CVframeWithText = cvCreateImage(cvSize(video_width, video_height), 8, 4);
-//		cvRectangle(CVframe, UL, LR, CV_RGB(0, 254, 53), CV_FILLED);
-//		cvPutText(CVframe, username.c_str(), cvPoint(0, video_height - 10), &font, CV_RGB(1, 1, 1));
-//	}
-//	else
-//	{
-//		CamerasListNamespace::CamerasList* CamList = new CamerasListNamespace::CamerasList();
-//		video_capture_device = CamList->SelectFromList();
-//
-//		if (video_capture_device == 999)
-//			has_video = false;
-//		else
-//		{
-//			capture = cvCaptureFromCAM(video_capture_device);
-//			cvSetCaptureProperty(capture, CV_CAP_PROP_FPS, video_frame_rate);
-//			cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH, (double)video_width);
-//			cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT, (double)video_height);
-//		}
-//
-//		if (!capture)
-//		{
-//			has_video = false;
-//			fprintf(stderr, "Cannot initialize selected webcam!\n");
-//			cout << endl;
-//			return;
-//		}
-//
-//		CVframe = cvQueryFrame(capture);
-//		destination = cvCreateImage(cvSize(video_width, video_height), CVframe->depth, CVframe->nChannels);
-//		redchannel = cvCreateImage(cvGetSize(destination), 8, 1);
-//		greenchannel = cvCreateImage(cvGetSize(destination), 8, 1);
-//		bluechannel = cvCreateImage(cvGetSize(destination), 8, 1);
-//		has_video = true;
-//	}
-//}
 
 //void capture_frame(int w, int h, char* buffer, int bytespan)
 //{
@@ -387,8 +326,16 @@ int main(int argc, char* argv[])
 		video_encoder_block = new video_encoder(stream_bitrate, video_frame_rate, video_width, video_height);
 		video_encoder_block->connect(multiplexer_block);
 
-		video_capturer_block = new video_capturer(video_width, video_height, video_frame_rate);
-		video_capturer_block->connect(video_encoder_block);
+		if (flag_generate_video)
+		{
+			video_generator_block = new video_generator(video_width, video_height, video_frame_rate, username);
+			video_generator_block->connect(video_encoder_block);
+		}
+		else
+		{
+			video_capturer_block = new video_capturer(video_width, video_height, video_frame_rate);
+			video_capturer_block->connect(video_encoder_block);
+		}
 	}
 	
 	if (av_set_parameters(format_context, NULL) < 0)
@@ -405,7 +352,12 @@ int main(int argc, char* argv[])
 	}
 
 	if (!flag_disable_video)
-		video_capturer_block->start();
+	{
+		if (flag_generate_video)
+			video_generator_block->start();
+		else
+			video_capturer_block->start();
+	}
 
 	std::cout << "Type 'exit' and hit enter to stop broadcasting and close the application..." << std::endl;
 	std::string exit;
@@ -440,8 +392,16 @@ int main(int argc, char* argv[])
 		video_encoder_block->disconnect();
 		delete video_encoder_block;
 
-		video_capturer_block->disconnect();
-		delete video_capturer_block;
+		if (flag_generate_video)
+		{
+			video_generator_block->disconnect();
+			delete video_generator_block;
+		}
+		else
+		{
+			video_capturer_block->disconnect();
+			delete video_capturer_block;
+		}
 	}
 
 	multiplexer_block->disconnect();
