@@ -1,5 +1,5 @@
 #summary things you should know to work with Boost.Extension.Tutorials on Linux os
-#labels Phase-Implementation,Phase-QA,Phase-Support,Boost,Tutorials
+#labels Phase-Implementation,Phase-QA,Phase-Support,Boost,Tutorials,Deprecated
 
 = Introduction =
 
