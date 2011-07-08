@@ -31,26 +31,21 @@
 #include <boost/extension/factory.hpp>
 #include <boost/extension/type_map.hpp>
 
-//TODO: Remove using namespace
-using namespace boost::asio::ip;
-using namespace boost::filesystem;
-using namespace boost::posix_time;
-using namespace std;
 // class accessible thru Boost Extension for programs with access to service class\interface
 class file_service : public service
 {
 public:
-	file_service(path default_path) : service(default_path){std::cout << "\nCreated a File-Service";}
+	file_service(boost::filesystem::path default_path) : service(default_path){std::cout << "\nCreated a File-Service";}
 	virtual ~file_service(void){std::cout << "\nDestroyed a File-Service";}
 
 	//We provide files download, short files info options.
 	//TODO: remove info to another service  
-	virtual bool service_call (http_request request, boost::shared_ptr<tcp::socket> socket)
+	virtual bool service_call (http_request request, boost::shared_ptr<boost::asio::ip::tcp::socket> socket)
 	{
-		stringstream body;
-		path p = (service_default_path/request.url);
+		std::stringstream body;
+		boost::filesystem::path p = (service_default_path/request.url);
 		http_response response;
-		response.headers.insert(pair<string, string>("Connection", "close"));
+		response.headers.insert(std::pair<std::string, std::string>("Connection", "close"));
 		if (exists(p))
 		{
 			if (is_regular_file(p))
@@ -60,30 +55,30 @@ public:
 				{
 					if(request.arguments["info"] == "true")
 					{
-						ptime t = from_time_t(last_write_time(p));
+						boost::posix_time::ptime t = boost::posix_time::from_time_t(last_write_time(p));
 						body << p.filename() << "<br/> size is : " << file_size(p) <<" bytes. <br/> file was modified last time @ " << t << ".<br/><a href='/" << file_service_get_dif_path(service_default_path, p) << "' > click here to download. </a>";
 					}
 					else
 					{
-						ptime t = from_time_t(last_write_time(p));
-						ptime cur = second_clock::local_time();
-						time_duration  ex = hours(32) + minutes(10);
-						ptime expire = cur + ex;
-						string lt = boost::lexical_cast<string>(ex.total_seconds());
+						boost::posix_time::ptime t = boost::posix_time::from_time_t(last_write_time(p));
+						boost::posix_time::ptime cur = boost::posix_time::second_clock::local_time();
+						boost::posix_time::time_duration  ex = boost::posix_time::hours(32) + boost::posix_time::minutes(10);
+						boost::posix_time::ptime expire = cur + ex;
+						std::string lt = boost::lexical_cast<std::string>(ex.total_seconds());
 
-						ostringstream Created , Current, Expires;
+						std::ostringstream Created , Current, Expires;
 						static char const* const facet = "%a, %d %b %Y %H:%M:%S GMT";
 
-						Created.imbue(std::locale(std::cout.getloc(), new time_facet(facet)));
-						Current.imbue(std::locale(std::cout.getloc(), new time_facet(facet)));
-						Expires.imbue(std::locale(std::cout.getloc(), new time_facet(facet)));
+						Created.imbue(std::locale(std::cout.getloc(), new boost::posix_time::time_facet(facet)));
+						Current.imbue(std::locale(std::cout.getloc(), new boost::posix_time::time_facet(facet)));
+						Expires.imbue(std::locale(std::cout.getloc(), new boost::posix_time::time_facet(facet)));
 
 						Created << t ;
 						Current << cur;	
 						Expires << expire;
 
-						response.headers.insert(pair<string, string>("Date", Current.str()));
-						response.headers.insert(pair<string, string>("Server", "CF: RAC"));	
+						response.headers.insert(std::pair<std::string, std::string>("Date", Current.str()));
+						response.headers.insert(std::pair<std::string, std::string>("Server", "CF: RAC"));	
 
 						if (  Created.str() == request.headers["If-Modified-Since"])
 						{
@@ -94,12 +89,12 @@ public:
 						{
 							int length = file_size(p);
 
-							response.headers.insert(pair<string, string>("Last-Modified", Created.str()));
-							response.headers.insert(pair<string, string>("Content-Length", boost::lexical_cast<string>(length)));
-							response.headers.insert(pair<string, string>("Cache-Control", "max-age="+lt));
-							response.headers.insert(pair<string, string>("Expires", Expires.str()));
+							response.headers.insert(std::pair<std::string, std::string>("Last-Modified", Created.str()));
+							response.headers.insert(std::pair<std::string, std::string>("Content-Length", boost::lexical_cast<std::string>(length)));
+							response.headers.insert(std::pair<std::string, std::string>("Cache-Control", "max-age="+lt));
+							response.headers.insert(std::pair<std::string, std::string>("Expires", Expires.str()));
 
-							body << std::ifstream( p.string().c_str(), ios::binary).rdbuf();
+							body << std::ifstream( p.string().c_str(), std::ios::binary).rdbuf();
 							response.body = body.str();
 						}
 
@@ -136,15 +131,15 @@ public:
 	}
 
 private:
-	string file_service_get_dif_path(path base_path, path new_path)
+	std::string file_service_get_dif_path(boost::filesystem::path base_path, boost::filesystem::path new_path)
 	{
-		path sdiffpath;
-		path stmppath = new_path;
+		boost::filesystem::path sdiffpath;
+		boost::filesystem::path stmppath = new_path;
 		while(stmppath != base_path) {
-			sdiffpath = path(stmppath.stem().string() + stmppath.extension().string())/ sdiffpath;
+			sdiffpath = boost::filesystem::path(stmppath.stem().string() + stmppath.extension().string())/ sdiffpath;
 			stmppath = stmppath.parent_path();
 		}
-		string diff_path = boost::lexical_cast<string>(sdiffpath);
+		std::string diff_path = boost::lexical_cast<std::string>(sdiffpath);
 		diff_path = diff_path.substr(1, (diff_path.length()-2));
 		return diff_path;
 	}
