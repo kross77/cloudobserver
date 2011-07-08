@@ -25,15 +25,12 @@ public:
 	//We link service to filesystem directory where it should operate (read from / write to)
 	service(boost::filesystem::path default_path) : service_default_path(default_path) {std::cout << "\nCreated a Service";}
 
-	virtual ~service(void){std::cout << "\nDestroyed a Service";}
+	~service(void){std::cout << "\nDestroyed a Service";}
 
 	//We pass user request to service for future inspection
 	virtual bool service_call(http_request request, boost::shared_ptr<boost::asio::ip::tcp::socket> socket){return 1;} // bool for service execution status
 
-	//Here we provide default service model with some frequently used methods
-
-
-	
+	//Here we provide default service model with some frequently used methods	
 	boost::filesystem::path get_default_path(void) {
 		return service_default_path;
 	}
