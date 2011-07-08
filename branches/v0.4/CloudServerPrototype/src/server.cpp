@@ -8,6 +8,9 @@ server::server(int config)
 	util = new extension_utils();
 	this->acceptor_thread = new boost::thread(&server::acceptor_loop, this);
 	std::cout << "server created on port: " << _config << std::endl;
+	//TODO create shared libs loader function which would do stuff like:
+	//boost::shared_ptr<service> service_instance ( util->get_class<service>(shared_library_instance, "service_string_name"));
+	//Do not forget shared_ptr is not scoped_ptr
 }
 server::~server()
 {
@@ -47,33 +50,6 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 		print->print_map_contents(request.arguments, "arguments");
 		//response.body = "<head></head><body><h1>It Rocks!</h1></body>";
 		//TODO: Make server library independent via ptree config and options filtering. 
-		//TODO: move services creation to some other place constructor for example.
-		boost::extensions::type_map types;
-		std::string library_path_to_FS= util->add_prefix_and_suffix("services.file");
-		boost::extensions::shared_library lib(library_path_to_FS); 
-		if (!lib.open()) {
-			std::cerr << "Library failed to open: " << library_path_to_FS << std::endl;
-		} 
-		if (!lib.call(types)) {
-			std::cerr << "Library has no services!" << std::endl;
-		}
-		std::map<std::string, boost::extensions::factory<service, boost::filesystem::path> >& factories(types.get());
-		if (factories.empty()) {
-			std::cerr << "Desired service was not found!" << std::endl;
-		}
-		// Create each service.
-		boost::filesystem::path file_service_default_path = boost::filesystem::current_path();
-		for (std::map<std::string, boost::extensions::factory<service, boost::filesystem::path> >::iterator it
-			= factories.begin();
-			it != factories.end(); ++it) {
-				
-				std::cout << "Creating a service factory: " << it->first << std::endl;
-				boost::scoped_ptr<service> current_service(it->second.create(file_service_default_path));
-				std::cout << "Service returned: " << current_service->service_call( request, socket)  << std::endl;
-		}
-
-
-
 		//file_service(request, socket); 
 		socket->close();
 		std::cout << "connection resolved." << std::endl;
