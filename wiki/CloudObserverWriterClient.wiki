@@ -1,4 +1,5 @@
 #summary Cloud Observer Writer Client
+#labels Deprecated
 
 = Cloud Observer Writer Client =
 
