@@ -16,6 +16,7 @@
 #include "filters/audio_encoder/audio_encoder.h"
 #include "filters/video_capturer/video_capturer.h"
 #include "filters/video_generator/video_generator.h"
+#include "filters/video_generator_rainbow/video_generator_rainbow.h"
 #include "filters/video_encoder/video_encoder.h"
 #include "filters/multiplexer/multiplexer.h"
 #include "filters/transmitter/transmitter.h"
@@ -39,6 +40,7 @@ bool flag_disable_video;
 bool flag_echo;
 bool flag_generate_audio;
 bool flag_generate_video;
+bool flag_rainbow;
 bool flag_lsd;
 std::string server;
 int stream_bitrate;
@@ -54,6 +56,7 @@ audio_player* audio_player_block;
 audio_encoder* audio_encoder_block;
 video_capturer* video_capturer_block;
 video_generator* video_generator_block;
+video_generator_rainbow* video_generator_rainbow_block;
 video_encoder* video_encoder_block;
 multiplexer* multiplexer_block;
 transmitter* transmitter_block;
@@ -172,6 +175,7 @@ int main(int argc, char* argv[])
 	flag_echo = false;
 	flag_generate_audio = false;
 	flag_generate_video = false;
+	flag_rainbow = false;
 	flag_lsd = false;
 	server = "";
 	stream_bitrate = 1048576;
@@ -231,6 +235,8 @@ int main(int argc, char* argv[])
 				flag_generate_audio = true;
 			if (arg == "--generate-video")
 				flag_generate_video = true;
+			if (arg == "--rainbow")
+				flag_rainbow = true;
 			if (arg == "--lsd")
 				flag_lsd = true;
 			if (arg == "--robot")
@@ -328,8 +334,16 @@ int main(int argc, char* argv[])
 
 		if (flag_generate_video)
 		{
-			video_generator_block = new video_generator(video_width, video_height, video_frame_rate, username);
-			video_generator_block->connect(video_encoder_block);
+			if (flag_rainbow)
+			{
+				video_generator_rainbow_block = new video_generator_rainbow(video_width, video_height, video_frame_rate);
+				video_generator_rainbow_block->connect(video_encoder_block);
+			}
+			else
+			{
+				video_generator_block = new video_generator(video_width, video_height, video_frame_rate, username);
+				video_generator_block->connect(video_encoder_block);
+			}
 		}
 		else
 		{
@@ -354,7 +368,12 @@ int main(int argc, char* argv[])
 	if (!flag_disable_video)
 	{
 		if (flag_generate_video)
-			video_generator_block->start();
+		{
+			if (flag_rainbow)
+				video_generator_rainbow_block->start();
+			else
+				video_generator_block->start();
+		}
 		else
 			video_capturer_block->start();
 	}
@@ -394,8 +413,16 @@ int main(int argc, char* argv[])
 
 		if (flag_generate_video)
 		{
-			video_generator_block->disconnect();
-			delete video_generator_block;
+			if (flag_rainbow)
+			{
+				video_generator_rainbow_block->disconnect();
+				delete video_generator_rainbow_block;
+			}
+			else
+			{
+				video_generator_block->disconnect();
+				delete video_generator_block;
+			}
 		}
 		else
 		{
