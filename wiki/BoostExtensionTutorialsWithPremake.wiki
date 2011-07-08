@@ -1,5 +1,5 @@
 #summary What is in Boost.Extension.Tutorials brunch folder?
-#labels Phase-Support,Phase-Implementation,Boost-Extension,Tutorials
+#labels Phase-Support,Phase-Implementation,Boost-Extension,Tutorials,Deprecated
 
 = Introduction =
 
