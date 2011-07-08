@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<actionScriptProperties mainApplicationPath="CloudObserverAdvancedPlayer.mxml" projectUUID="30950e6f-5e96-4969-a6f4-b74839c77bfa" version="6">
-  <compiler additionalCompilerArguments="-locale en_US -optimize" autoRSLOrdering="false" copyDependentFiles="true" fteInMXComponents="false" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="true" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="bin-debug" sourceFolderPath="src" strict="true" targetPlayerVersion="10.1.0" useApolloConfig="false" useDebugRSLSwfs="true" verifyDigests="true" warn="false">
+<actionScriptProperties mainApplicationPath="player.mxml" projectUUID="30950e6f-5e96-4969-a6f4-b74839c77bfa" version="6">
+  <compiler additionalCompilerArguments="-locale en_US -optimize" autoRSLOrdering="false" copyDependentFiles="true" fteInMXComponents="false" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="true" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="bin-debug" sourceFolderPath="src" strict="true" targetPlayerVersion="10.2.0" useApolloConfig="false" useDebugRSLSwfs="true" verifyDigests="true" warn="false">
     <compilerSourcePath/>
     <libraryPath defaultLinkType="1">
       <libraryPathEntry kind="4" path="">
@@ -12,9 +12,8 @@
     </libraryPath>
     <sourceAttachmentPath/>
   </compiler>
-  <theme themeIsDefault="false" themeIsSDK="true" themeLocation="${SDK_THEMES_DIR}/frameworks/themes/Wireframe"/>
   <applications>
-    <application path="CloudObserverAdvancedPlayer.mxml"/>
+    <application path="player.mxml"/>
     <application path="CloudObserverAdvancedPlayerWithDevelopersUtils.mxml"/>
   </applications>
   <modules/>

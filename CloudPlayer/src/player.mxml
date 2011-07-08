@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
 			   xmlns:s="library://ns.adobe.com/flex/spark"
-			   creationComplete="application1_creationCompleteHandler(event)" xmlns:mx="library://ns.adobe.com/flex/mx" alignmentBaseline="roman">
+			   creationComplete="creationCompleteHandler(event)" xmlns:mx="library://ns.adobe.com/flex/mx" alignmentBaseline="roman">
 	<s:states>
 		<s:State name="default"/>
 		<s:State name="One"/>
@@ -27,7 +27,6 @@
 			import flash.events.*;
 			import flash.system.*;
 			
-			import mx.collections.ArrayCollection;
 			import mx.containers.*;
 			import mx.controls.*;
 			import mx.core.FlexGlobals;
@@ -47,33 +46,11 @@
 			private var netstream:NetStream;
 			private var client:HttpClient;
 			private var timer:Timer;
-			private var uri:String
+			private var uri:String;
+			private var videoAddr:String = new String();
+			private var nickName:String = new String();
 			
-			[Bindable]
-			public var verbs:ArrayCollection = new ArrayCollection([ { label:"GET" }, { label:"HEAD" }, { label:"DELETE" }, { label:"PUT" }, { label:"POST" } ]);
-			
-			[Bindable]
-			public var requestSent:String = "";
-			
-			[Bindable]
-			public var status:String = "";
-			
-			[Bindable]
-			public var responseStatus:String;
-			
-			[Bindable]
-			public var responseHeader:String;
-			
-			[Bindable]
-			public var responseBody:String;    
-			
-			[Bindable]
-			public var videoAddr:String = new String();
-			
-			[Bindable]
-			public var nickName:String = new String();
-			
-			protected function application1_creationCompleteHandler(event:FlexEvent):void
+			protected function creationCompleteHandler(event:FlexEvent):void
 			{
 				st = new SoundTransform();
 				timer = new Timer(5000);
@@ -90,11 +67,14 @@
 				video.smoothing = true;
 				video.width = UIC.width;
 				video.height = UIC.height;
+				
 				UIC.addChild(video);
 				UIC.addEventListener(ResizeEvent.RESIZE, UIC_resizeHandler);
+				
 				ns.play(null);
 				ns.appendBytesAction(NetStreamAppendBytesAction.RESET_BEGIN);
-				this.addEventListener(ResizeEvent.RESIZE, application1_resizeHandler);
+				
+				this.addEventListener(ResizeEvent.RESIZE, resizeHandler);
 				
 				for (var s:String in FlexGlobals.topLevelApplication.parameters)
 				{
@@ -111,61 +91,54 @@
 				var url:String = ExternalInterface.call("window.location.host.toString");
 				if (nickName.length >= 1) {
 					uri = "http://" + url +"/" + nickName  + "?action=read";
-					onRequest(uri, "GET", "{''}", "");
-				}
+					onRequest(uri, "{''}", "");
+				} 
+				FlexGlobals.topLevelApplication.addEventListener(KeyboardEvent.KEY_DOWN, handleKeyDown);
 			}
-			public function recon(){
-				onRequest(uri, "GET", "{''}", "");
+			
+			protected function handleKeyDown (e:KeyboardEvent):void {
+				if((e.keyCode == 68) && (e.ctrlKey == true))
+				{
+					tf.width = 300;
+					tf.visible = true;
+				}	
+				else if((e.keyCode == 68) && (e.shiftKey == true))
+				{
+					tf.visible = false;
+					tf.width = 0;
+				}	
 			}
-			public function onRequest(urlToPlay:String, verb:String, HeaderText:String,BodyText:String):void {
-				
-				ns.appendBytesAction(NetStreamAppendBytesAction.RESET_BEGIN);
-				
-				requestSent = "";
-				responseBody = "";
-				responseStatus = "";
-				responseHeader = "";    
-				
+			
+			protected function recon( e:Event){
+				onRequest(uri, "{''}", "");
+			}
+			
+			protected function onRequest(urlToPlay:String, HeaderText:String,BodyText:String):void {
+				ns.appendBytesAction(NetStreamAppendBytesAction.RESET_BEGIN);	
 				var listeners:Object = { 
-					onConnect: function(e:HttpRequestEvent):void {
-					},
-					onRequest: function(e:HttpRequestEvent):void {
-					},
-					onStatus: function(e:HttpStatusEvent):void {
-					},
-					onData: function(e:HttpDataEvent):void {           
+					onConnect: function(e:HttpRequestEvent):void {},
+					onRequest: function(e:HttpRequestEvent):void {},
+					onStatus: function(e:HttpStatusEvent):void {},
+					onData: function(e:HttpDataEvent):void
+					{           
 						ns.appendBytes(e.bytes);
 						videoResize();
 					},        
-					onClose: function():void {
-					},
-					onComplete: function(e:HttpResponseEvent):void {          
-					},
-					onError: function(event:ErrorEvent):void {
-					}
+					onClose: function():void {},
+					onComplete: function(e:HttpResponseEvent):void {},
+					onError: function(event:ErrorEvent):void {}
 				};
 				
-				status = "Connecting";
-				
 				var client:HttpClient = new HttpClient();
-				client.timeout = 2000;
 				client.listener = new HttpListener(listeners);
 				
 				var request:HttpRequest = null;  
-				if (verb == "GET") request = new Get();        
-				else if (verb == "HEAD") request = new Head();
-				else if (verb == "DELETE") request = new Delete();
-				else if (verb == "PUT") request = new Put();
-				else if (verb == "POST") request = new Post();
-				else throw new ArgumentError("Invalid verb: " + verb);
-				
+				request = new Get();        
 				addCustomHeaders(request, HeaderText);
-				if (verb == "PUT" || verb == "POST") addBody(request, BodyText);
-				
 				client.request(new URI(urlToPlay), request);
 			}
 			
-			public function addCustomHeaders(request:HttpRequest, HeaderText:String):void {
+			protected function addCustomHeaders(request:HttpRequest, HeaderText:String):void {
 				var headerToAdd:Array = [];
 				var headerLines:Array = HeaderText.split(/\r+/);
 				for each(var headerLine:String in headerLines) {
@@ -178,48 +151,25 @@
 				}      
 			}
 			
-			public function addBody(request:HttpRequest, BodyText:String):void {
-				var data:ByteArray = new ByteArray();
-				data.writeUTFBytes(BodyText);
-				data.position = 0;  
-				request.body = data;
-			}
-			
-			public function onMetaData(p:Object) : void
+			protected function onMetaData(p:Object) : void
 			{
 				videoResize();
 				return;
 			}
 			
-			public function onImageData(p:Object) : void
-			{			
-				return;
-			}
-			
-			public function onTextData(p:Object) : void
-			{			
-				return;
-			}
-			
-			public function onXMPData(p:Object) : void
-			{			
-				return;
-			}
-			
-			public function onCuePoint(p:Object) : void
-			{			
-				return;
-			}
-			
-			private function onComplete(e:Event) : void
+			protected function onImageData(p:Object) : void{}
+			protected function onTextData(p:Object) : void{}
+			protected function onXMPData(p:Object) : void{}
+			protected function onCuePoint(p:Object) : void{}
+			protected function onComplete(e:Event) : void
 			{	
 				ns.appendBytesAction(NetStreamAppendBytesAction.RESET_BEGIN);
-				onRequest(uri, "GET", "{''}", "");
+				onRequest(uri, "{''}", "");
 				return;
 			}
 			
-			protected function UIC_resizeHandler(event:ResizeEvent):void
-			{}
+			protected function UIC_resizeHandler(event:ResizeEvent):void{}
+			
 			protected function videoResize():void
 			{
 				var VW:Number = this.width - 16; 
@@ -299,7 +249,7 @@
 				}
 			}
 			
-			protected function application1_resizeHandler(event:ResizeEvent):void
+			protected function resizeHandler(event:ResizeEvent):void
 			{
 				videoResize();
 				video.smoothing = true;
@@ -384,6 +334,7 @@
 		<mx:ApplicationControlBar mouseMove="sOne()" id="ACB" width="100%" height="39" dock="false" top="0"  top.Two="-50" horizontalAlign="center" verticalAlign="middle">
 			<mx:Button label="Mute" click="button2_clickHandler(event)"/>
 			<mx:Button label="Full Screen" click="button1_clickHandler(event)"/>
+			<mx:TextInput id="tf" text="http://127.0.0.1:4773/beAch.flv?action=read" enter="onRequest(tf.text, '{}', '');" visible="false"  width="0"/>
 		</mx:ApplicationControlBar>
 	</mx:Canvas>
 </s:Application>
