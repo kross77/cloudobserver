@@ -28,7 +28,7 @@ void server::acceptor_loop(){
 	boost::asio::io_service io_service;
 	int m_nPort = _config;
 	boost::asio::ip::tcp::acceptor acceptor(io_service, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), m_nPort));
-	std::cout << "Waiting for connection..." << std::endl;
+	std::cout << "Waiting for connection..." << std::endl << std::endl;
 	while(true)
 	{
 		try
