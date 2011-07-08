@@ -34,6 +34,7 @@ namespace CloudObserver
         private List<byte[]> scriptData;
         private List<byte[]> tagsBuffer;
         private uint bufferedTimestamp;
+        private bool keyFrames;
 
         private object locker = new Object();
 
@@ -58,6 +59,7 @@ namespace CloudObserver
             this.scriptData = new List<byte[]>();
             this.tagsBuffer = new List<byte[]>();
             this.bufferedTimestamp = 0;
+            this.keyFrames = false;
         }
 
         public void Process()
@@ -346,6 +348,7 @@ namespace CloudObserver
                             {
                                 if ((tagHeader[0] == TAGTYPE_VIDEO) && (1 == (tagData[0] & 0xF0) >> 4))
                                 {
+                                    keyFrames = true;
                                     tagsBuffer.Clear();
                                     bufferedTimestamp = timestamp;
                                 }
@@ -359,8 +362,13 @@ namespace CloudObserver
                                     scriptData.Add(tagData);
                                 }
 
-                                tagsBuffer.Add(tagHeader);
-                                tagsBuffer.Add(tagData);
+                                if (keyFrames)
+                                {
+                                    tagsBuffer.Add(tagHeader);
+                                    tagsBuffer.Add(tagData);
+                                }
+                                else
+                                    bufferedTimestamp = timestamp;
 
                                 foreach (FLVReader reader in readers)
                                 {
