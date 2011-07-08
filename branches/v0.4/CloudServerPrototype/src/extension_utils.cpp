@@ -25,7 +25,7 @@ extension_utils::extension_utils()
 }
 
 
-std::string extension_utils::add_prefix_and_suffix(std::string name)
+std::string extension_utils::add_prefix_and_suffix(std::string &name)
 {
 	std::string library_name = current_prefix;
 	library_name +=	name;
