@@ -1,11 +1,11 @@
+#ifndef UTILITIES_H
+#define UTILITIES_H 
+
 #include <iostream>
 #include <string>
 #include <map>
 
 #include <boost/asio.hpp>
-
-using namespace boost::asio::ip;
-using namespace std;
 
 // 32-bit time space set up
 #ifdef WIN
@@ -21,70 +21,37 @@ using namespace std;
 
 // Shared library suffixes
 #ifdef WIN
-string extention = ".dll";
+std::string current_extention = ".dll";
 #elif defined LIN
-string extention = ".so";
+std::string current_extention = ".so";
 #elif defined MAC
-string extention = ".dylib"; // as wall .bundle can be used.
+std::string current_extention = ".dylib"; // as wall .bundle can be used.
 #else
 #error "unknown platform";
 #endif
 
 // Shared library prefixes
 #ifdef WIN
-string prefix = "";
+std::string current_prefix = "";
 #elif defined LIN
-string prefix = "lib";
+std::string current_prefix = "lib";
 #elif defined MAC
-string prefix = "lib"; // as wall .bundle can be used.
+std::string current_prefix = "lib"; // as wall .bundle can be used.
 #else
 #error "unknown platform";
 #endif
 
-string add_prefix_and_suffix(string name)
+inline std::string add_prefix_and_suffix(std::string name)
 {
-	string library_name = prefix;
+	std::string library_name = current_prefix;
 	library_name +=	name;
-	library_name +=	extention;
+	library_name +=	current_extention;
 	return library_name;
 }
 
-void print_user_info(boost::asio::ip::tcp::socket& socket)
-{
-	tcp::endpoint remote_endpoint = socket.remote_endpoint();
-	address addr = remote_endpoint.address();
-	string addr_string = addr.to_string();
-	unsigned short port = remote_endpoint.port();
 
-	cout << "User address: " << addr_string << endl;
-	cout << "User port: " << port << endl;
-}
 
-void print_map_contents(map <string, string> data)
-{
-	map<string, string>::const_iterator end = data.end();
-	if(data.end() != data.begin())
-	{
-		cout << "Received request contained:\n";
-		for (map<string, string>::const_iterator it = data.begin(); it != end; ++it)
-		{
-			cout << it->first << " : " << it->second << '\n';
-		}
-	}
-}
 
-void print_map_contents(map <string, string> data, string name)
-{
-	map<string, string>::const_iterator end = data.end();
-	if(data.end() != data.begin())
-	{
-		cout << "Received request contained next "<< name << ":\n";
-		for (map<string, string>::const_iterator it = data.begin(); it != end; ++it)
-		{
-			cout << it->first << " : " << it->second << '\n';
-		}
-	}
-}
 
 /*
 FILE* f = fopen(request.url.c_str(), "rb");
@@ -98,3 +65,4 @@ delete buf;
 fclose(f);
 */
 
+#endif // UTILITIES_H
