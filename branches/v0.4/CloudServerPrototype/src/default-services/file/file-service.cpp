@@ -3,7 +3,7 @@
 
 #include "../../../service-interface/service.hpp"
 
-
+//STD
 #include <iostream>
 #include <typeinfo>
 #include <sstream>
@@ -12,11 +12,9 @@
 #include <time.h>
 #include <vector> 
 
-#include <boost/process.hpp> 
 // Boost
+#include <boost/process.hpp> 
 #include <boost/algorithm/string.hpp>
-
-
 #include <boost/lexical_cast.hpp>
 #include <boost/regex.hpp>
 #include <boost/thread.hpp>
@@ -28,22 +26,26 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 
+//TODO: Remove using namespace
 using namespace boost::asio::ip;
 using namespace boost::filesystem;
 using namespace boost::posix_time;
 using namespace boost::local_time;
 using namespace boost::gregorian;
 using namespace std;
-
+// class accessible thru Boost Extension for programs with access to service class\interface
 class BOOST_EXTENSION_EXPORT_DECL file_service : virtual public service
 {
 public:
 	file_service(path default_path) : service(default_path){std::cout << "\nCreated a File-Service";}
 	virtual ~file_service(void){std::cout << "\nDestroyed a File-Service";}
+
+	//We provide files download, short files info options.
+	//TODO: remove info to another service  
 	virtual bool service_call (http_request request, boost::shared_ptr<tcp::socket> socket)
 	{
 		stringstream body;
-		path p = (file_service_default_path/request.url);
+		path p = (service_default_path/request.url);
 		http_response response;
 		response.headers.insert(pair<string, string>("Connection", "close"));
 		if (exists(p))
@@ -56,25 +58,7 @@ public:
 					if(request.arguments["info"] == "true")
 					{
 						ptime t = from_time_t(last_write_time(p));
-						body << p.filename() << "<br/> size is : " << file_size(p) <<" bytes. <br/> file was modified last time @ " << t << ".<br/><a href='/" << file_service_get_dif_path(file_service_default_path, p) << "' > click here to download. </a>";
-					}
-					else if(file_service_file_can_exec(p))
-					{
-						if(request.arguments["execute"] == "true")
-						{
-							if(request.arguments["args"] == "true")
-							{
-								// if args vector existsts fill it up like
-								//   std::vector<std::string> args; 
-								//   args.push_back("--version"); 
-							}
-							//execute (http://www.highscore.de/boost/process/process/tutorials.html)
-							//std::string exec = "bjam"; 
-							//bp::context ctx; 
-							//ctx.stdout_behavior = bp::silence_stream(); 
-							//bp::child c = bp::launch(exec, args, ctx); 
-						}
-						body << p.filename() << "<br/> Can execute!" ;
+						body << p.filename() << "<br/> size is : " << file_size(p) <<" bytes. <br/> file was modified last time @ " << t << ".<br/><a href='/" << file_service_get_dif_path(service_default_path, p) << "' > click here to download. </a>";
 					}
 					else
 					{
@@ -129,7 +113,7 @@ public:
 				for (boost::filesystem::directory_iterator itr(p); itr!=boost::filesystem::directory_iterator(); ++itr)
 				{
 
-					body << "<br/><a href='/" << file_service_get_dif_path(file_service_default_path, itr->path())	<< "' >"<< itr->path().filename() << "</a>";
+					body << "<br/><a href='/" << file_service_get_dif_path(service_default_path, itr->path())	<< "' >"<< itr->path().filename() << "</a>";
 				}
 			}
 			else
@@ -149,24 +133,6 @@ public:
 	}
 
 private:
-
-	bool file_service_file_can_exec(path p)
-	{
-		#ifdef WIN
-			if((p.extension().string() == ".exe")||(p.extension().string() == ".bat"))
-			{
-				return true;
-			}
-		#elif defined LIN
-			if( !access(p, X_OK)){ return true;}
-		#elif defined MAC
-			if( !access(p, X_OK)){ return true;} // probably...
-		#else
-			#error "unknown platform";
-		#endif
-		return false;
-	}
-
 	string file_service_get_dif_path(path base_path, path new_path)
 	{
 		path sdiffpath;
@@ -179,8 +145,6 @@ private:
 		diff_path = diff_path.substr(1, (diff_path.length()-2));
 		return diff_path;
 	}
-
-
 };
 
 #endif
