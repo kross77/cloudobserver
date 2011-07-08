@@ -24,7 +24,7 @@
 #include "utils/selector/selector.h"
 
 #include "list.h"
-#include "3rdparty/LSD/LSD.h"
+#include "3rdparty/lsd/lsd.h"
 
 using namespace std;
 using boost::asio::ip::tcp;
