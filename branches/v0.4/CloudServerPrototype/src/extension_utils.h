@@ -61,64 +61,21 @@ class extension_utils
 public:
 	extension_utils();
 	virtual ~extension_utils(){}
-	void load_library(boost::extensions::type_map *types, std::string library_name);
 	
 	template <class BaseClass, class ConstructorType>
-	std::map<std::string, boost::extensions::factory<BaseClass, ConstructorType> > get_factories (boost::extensions::shared_library & lib) {
-		boost::extensions::type_map lib_types;
-		if (!lib.call(lib_types)) {
-			cerr << "Types map not found!" << endl;
-			cin.get();
-		}
-
-		std::map<std::string, boost::extensions::factory<BaseClass, ConstructorType> > lib_factories(lib_types.get());
-		if (lib_factories.empty()) {
-			std::cerr << "Producers not found!" << std::endl;
-			std::cin.get();
-		}
-		return lib_factories;
-	}
+	std::map<std::string, boost::extensions::factory<BaseClass, ConstructorType> > get_factories (boost::extensions::shared_library & lib);
 
 	template <class BaseClass, class ConstructorType>
-	boost::shared_ptr<BaseClass> get_class (boost::extensions::shared_library & lib, std::string class_name, ConstructorType value ) {
-		std::map<std::string, boost::extensions::factory<BaseClass, ConstructorType> > lib_factories = get_factories<BaseClass, ConstructorType>(lib);
-		boost::shared_ptr<BaseClass> lib_class(lib_factories[class_name].create(value));
-		return lib_class;
-	}
+	boost::shared_ptr<BaseClass> get_class (boost::extensions::shared_library & lib, std::string class_name, ConstructorType value );
 
 	template <class BaseClass>
-	std::map<std::string, boost::extensions::factory<BaseClass> > get_factories (boost::extensions::shared_library & lib) {
-		boost::extensions::type_map lib_types;
-		if (!lib.call(lib_types)) {
-			std::cerr << "Types map not found!" << std::endl;
-			std::cin.get();
-		}
-
-		std::map<std::string, boost::extensions::factory<BaseClass> > lib_factories(lib_types.get());
-		if (lib_factories.empty()) {
-			std::cerr << "Producers not found!" << std::endl;
-			std::cin.get();
-		}
-		return lib_factories;
-	}
+	std::map<std::string, boost::extensions::factory<BaseClass> > get_factories (boost::extensions::shared_library & lib);
 
 	template <class BaseClass>
-	boost::shared_ptr<BaseClass> get_class (boost::extensions::shared_library & lib, std::string class_name ) {
-		std::map<std::string, boost::extensions::factory<BaseClass> > lib_factories = get_factories<BaseClass>(lib);
-		boost::shared_ptr<BaseClass> lib_class(lib_factories[class_name].create());
-		return lib_class;
-	}
+	boost::shared_ptr<BaseClass> get_class (boost::extensions::shared_library & lib, std::string class_name );
 
-	void try_open_lib(boost::extensions::shared_library & lib, std::string & path)
-	{
-		if (!lib.open()) {
-			std::cout << "Library failed to open: " << path << std::endl;
-		}
-		else
-		{
-			std::cout << "Library " << path << " opened." << std::endl;
-		}
-	}
+	void try_open_lib(boost::extensions::shared_library & lib, std::string & path);
+
 	std::string add_prefix_and_suffix(std::string name);
 private:
 	std::string current_prefix;

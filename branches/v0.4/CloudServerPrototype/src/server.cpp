@@ -60,7 +60,7 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 	}
 }
 
-void server::user_info(boost::asio::ip::tcp::socket& socket)
+void server::user_info(boost::asio::ip::tcp::socket &socket)
 {
 	boost::asio::ip::tcp::endpoint remote_endpoint = socket.remote_endpoint();
 	boost::asio::ip::address addr = remote_endpoint.address();

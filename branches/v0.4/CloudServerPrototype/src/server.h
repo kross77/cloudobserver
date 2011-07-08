@@ -24,7 +24,6 @@
 //General Service header Class\Interface
 #include "../service-interface/service.hpp"
 
-
 class server
 {
 public:
@@ -32,14 +31,13 @@ public:
 	server(int config);
 	virtual ~server();
 	void acceptor_loop();
-	void user_info(boost::asio::ip::tcp::socket& socket);
+	void user_info(boost::asio::ip::tcp::socket &socket);
 private:
 	void request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socket> socket);
 	boost::thread *acceptor_thread;
 	int _config;
 	printer *print;
 	extension_utils *util;
-
 };
 
 #endif //SERVER_H
