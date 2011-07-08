@@ -1,5 +1,5 @@
 #summary What is ASL and ASL.AdameAndEve.Tutorial brunch folder?
-#labels Featured,CloudObserver,Phase-Support,Phase-Implementation,ASL,Tutorials
+#labels Deprecated,CloudObserver,Phase-Support,Phase-Implementation,ASL,Tutorials
 
 = Introduction =
 We, at CloudForewer, team plan to use ASL for creation of some minimalistic graphical user interfaces which are sometimes required in our projects. We work across Mac OS X, Windows and lots of Linux flavors. We have taken a small look at Qt GUI and wxWidgets and found out they are way too much for our current needs. We desired something more minimalistic and more boost oriented. We found such lib - Adobe Source Libraries (ASL). ASL is not only UI library but we plan to concentrate on its GUI features.
