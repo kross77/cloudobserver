@@ -1,94 +1,42 @@
 // Boost
-#include <boost/asio.hpp>
-#include <boost/date_time/gregorian/gregorian.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/lexical_cast.hpp>
-#include <boost/random.hpp>
-#include <boost/thread.hpp>
-#include <boost/timer.hpp>
-
-// OpenCV
-#include <opencv2/opencv.hpp>
 
 #include "filters/audio_capturer/audio_capturer.h"
+#include "filters/audio_encoder/audio_encoder.h"
 #include "filters/audio_generator/audio_generator.h"
 #include "filters/audio_player/audio_player.h"
-#include "filters/audio_encoder/audio_encoder.h"
-#include "filters/video_capturer/video_capturer.h"
-#include "filters/video_generator/video_generator.h"
-#include "filters/video_generator_rainbow/video_generator_rainbow.h"
-#include "filters/video_encoder/video_encoder.h"
 #include "filters/line_segment_detector/line_segment_detector.h"
 #include "filters/multiplexer/multiplexer.h"
 #include "filters/transmitter/transmitter.h"
+#include "filters/video_capturer/video_capturer.h"
+#include "filters/video_encoder/video_encoder.h"
+#include "filters/video_generator/video_generator.h"
+#include "filters/video_generator_rainbow/video_generator_rainbow.h"
 
 #include "utils/selector/selector.h"
-
-#include "list.h"
-#include "3rdparty/lsd/lsd.h"
-
-using namespace std;
-using boost::asio::ip::tcp;
-using namespace boost::posix_time;
-using boost::posix_time::ptime;
-using boost::posix_time::time_duration;
-
-int audio_capture_device;
-int audio_sample_rate;
-std::string container;
-bool flag_disable_audio;
-bool flag_disable_video;
-bool flag_echo;
-bool flag_generate_audio;
-bool flag_generate_video;
-bool flag_rainbow;
-bool flag_lsd;
-std::string server;
-int stream_bitrate;
-std::string username;
-int video_capture_device;
-int video_width;
-int video_height;
-int video_frame_rate;
-
-audio_capturer* audio_capturer_block;
-audio_generator* audio_generator_block;
-audio_player* audio_player_block;
-audio_encoder* audio_encoder_block;
-video_capturer* video_capturer_block;
-video_generator* video_generator_block;
-video_generator_rainbow* video_generator_rainbow_block;
-line_segment_detector* line_segment_detector_block;
-video_encoder* video_encoder_block;
-multiplexer* multiplexer_block;
-transmitter* transmitter_block;
-
-// Boost
-boost::mt19937 rng;
-boost::uniform_int<> six(-128, 127);
-boost::variate_generator<boost::mt19937&, boost::uniform_int<> >die(rng, six);
 
 // Application entry point.
 int main(int argc, char* argv[])
 {
 	// Initialize default settings.
-	audio_capture_device = -1;
-	audio_sample_rate = 44100;
-	container = "flv";
-	flag_disable_audio = false;
-	flag_disable_video = false;
-	flag_echo = false;
-	flag_generate_audio = false;
-	flag_generate_video = false;
-	flag_rainbow = false;
-	flag_lsd = false;
-	server = "";
-	stream_bitrate = 1048576;
-	username = "";
-	video_capture_device = -1;
-	video_frame_rate = 15;
-	video_height = 720;
-	video_width = 1280;
+	int audio_capture_device = -1;
+	int audio_sample_rate = 44100;
+	std::string container = "flv";
+	bool flag_disable_audio = false;
+	bool flag_disable_video = false;
+	bool flag_echo = false;
+	bool flag_generate_audio = false;
+	bool flag_generate_video = false;
+	bool flag_rainbow = false;
+	bool flag_lsd = false;
+	std::string server = "";
+	int stream_bitrate = 1048576;
+	std::string username = "";
+	int video_capture_device = -1;
+	int video_frame_rate = 15;
+	int video_height = 720;
+	int video_width = 1280;
 
 	// Parse command line arguments.
 	for (int i = 1; i < argc; i++)
@@ -174,6 +122,18 @@ int main(int argc, char* argv[])
 	if (!flag_disable_audio && !flag_generate_audio && (audio_capture_device == -1))
 		audio_capture_device = selector::simple_select(audio_capturer::get_capture_devices(), "Please, select the audio capture device:");
 
+	audio_capturer* audio_capturer_block = NULL;
+	audio_encoder* audio_encoder_block = NULL;
+	audio_generator* audio_generator_block = NULL;
+	audio_player* audio_player_block = NULL;
+	line_segment_detector* line_segment_detector_block = NULL;
+	multiplexer* multiplexer_block = NULL;
+	transmitter* transmitter_block = NULL;
+	video_capturer* video_capturer_block = NULL;
+	video_encoder* video_encoder_block = NULL;
+	video_generator* video_generator_block = NULL;
+	video_generator_rainbow* video_generator_rainbow_block = NULL;
+
 	// Initialize the transmitter block.
 	transmitter_block = new transmitter();
 
@@ -203,7 +163,6 @@ int main(int argc, char* argv[])
 	}
 
 	multiplexer_block = new multiplexer(container);
-	AVFormatContext* format_context = multiplexer_block->get_format_context();
 
 	if (!flag_disable_audio)
 	{
@@ -264,9 +223,6 @@ int main(int argc, char* argv[])
 				video_capturer_block->connect(video_encoder_block);
 		}
 	}
-	
-	if (av_set_parameters(format_context, NULL) < 0)
-		throw std::runtime_error("av_set_parameters failed.");
 
 	multiplexer_block->connect(transmitter_block);
 
@@ -295,7 +251,7 @@ int main(int argc, char* argv[])
 	std::string exit;
 	do
 	{
-		cin >> exit;
+		std::cin >> exit;
 		boost::this_thread::sleep(boost::posix_time::milliseconds(250));
 	} while (exit != "exit");
 
