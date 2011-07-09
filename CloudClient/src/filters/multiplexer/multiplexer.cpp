@@ -1,5 +1,7 @@
 #include "multiplexer.h"
 
+using namespace ffmpeg;
+
 multiplexer::multiplexer(std::string container)
 {
 	av_register_all();

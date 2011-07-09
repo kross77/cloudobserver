@@ -1,21 +1,8 @@
 #ifndef LINE_SEGMENT_DETECTOR_H
 #define LINE_SEGMENT_DETECTOR_H
 
-// Allow C99 macros.
-#ifndef __STDC_CONSTANT_MACROS
-#define __STDC_CONSTANT_MACROS
-#endif
-
 // Boost
 #include <boost/asio.hpp>
-
-// FFmpeg
-extern "C"
-{
-#include <libavcodec/avcodec.h>
-#include <libavformat/avformat.h>
-#include <libswscale/swscale.h>
-}
 
 // OpenCV
 #include <opencv2/opencv.hpp>
@@ -23,6 +10,7 @@ extern "C"
 #include "../video_encoder/video_encoder.h"
 
 #include "../../3rdparty/lsd/lsd.h"
+#include "../../3rdparty/ffmpeg/ffmpeg.h"
 
 #include <exception>
 #include <iostream>
@@ -41,7 +29,7 @@ private:
 	int width;
 	int height;
 
-	AVFrame* output_frame;
+	ffmpeg::AVFrame* output_frame;
 
 	video_encoder* video_encoder_block;
 };

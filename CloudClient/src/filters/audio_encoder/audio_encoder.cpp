@@ -1,5 +1,7 @@
 #include "audio_encoder.h"
 
+using namespace ffmpeg;
+
 audio_encoder::audio_encoder(int samplerate)
 {
 	this->samplerate = samplerate;

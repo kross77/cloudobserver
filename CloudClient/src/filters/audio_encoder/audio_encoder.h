@@ -10,19 +10,9 @@
 // The encode buffer size.
 #define ENCODE_BUFFER_SIZE (4 * MAX_AUDIO_PACKET_SIZE)
 
-// Allow C99 macros.
-#ifndef __STDC_CONSTANT_MACROS
-#define __STDC_CONSTANT_MACROS
-#endif
-
-// FFmpeg
-extern "C"
-{
-#include <libavcodec/avcodec.h>
-#include <libavformat/avformat.h>
-}
-
 #include "../multiplexer/multiplexer.h"
+
+#include "../../3rdparty/ffmpeg/ffmpeg.h"
 
 class audio_encoder
 {
@@ -37,7 +27,7 @@ public:
 private:
 	int samplerate;
 
-	AVStream* stream;
+	ffmpeg::AVStream* stream;
 
 	char* buffer;
 	int buffer_position;

@@ -1,26 +1,17 @@
 #ifndef VIDEO_CAPTURER_H
 #define VIDEO_CAPTURER_H
 
-// Allow C99 macros.
-#ifndef __STDC_CONSTANT_MACROS
-#define __STDC_CONSTANT_MACROS
-#endif
-
 // Boost
 #include <boost/asio.hpp>
 #include <boost/thread.hpp>
-
-// FFmpeg
-extern "C"
-{
-#include <libavcodec/avcodec.h>
-}
 
 // OpenCV
 #include <opencv2/opencv.hpp>
 
 #include "../line_segment_detector/line_segment_detector.h"
 #include "../video_encoder/video_encoder.h"
+
+#include "../../3rdparty/ffmpeg/ffmpeg.h"
 
 #include <exception>
 #include <iostream>
@@ -50,7 +41,7 @@ private:
 	IplImage* captured_frame;
 	IplImage* resized_frame;
 
-	AVFrame* frame;
+	ffmpeg::AVFrame* frame;
 
 	CvCapture* capture_device;
 	boost::thread* capture_thread;

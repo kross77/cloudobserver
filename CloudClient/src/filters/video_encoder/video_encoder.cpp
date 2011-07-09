@@ -1,5 +1,7 @@
 #include "video_encoder.h"
 
+using namespace ffmpeg;
+
 video_encoder::video_encoder(int bitrate, int framerate, int width, int height)
 {
 	this->bitrate = bitrate;

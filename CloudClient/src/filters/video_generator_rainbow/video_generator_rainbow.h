@@ -3,23 +3,14 @@
 
 #define _USE_MATH_DEFINES
 
-// Allow C99 macros.
-#ifndef __STDC_CONSTANT_MACROS
-#define __STDC_CONSTANT_MACROS
-#endif
-
 // Boost
 #include <boost/asio.hpp>
 #include <boost/date_time.hpp>
 #include <boost/thread.hpp>
 
-// FFmpeg
-extern "C"
-{
-#include <libavcodec/avcodec.h>
-}
-
 #include "../video_encoder/video_encoder.h"
+
+#include "../../3rdparty/ffmpeg/ffmpeg.h"
 
 #include <cmath>
 #include <exception>
@@ -43,7 +34,7 @@ private:
 	int height;
 	int frame_rate;
 
-	AVFrame* frame;
+	ffmpeg::AVFrame* frame;
 
 	boost::thread* generation_thread;
 
