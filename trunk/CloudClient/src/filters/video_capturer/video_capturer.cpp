@@ -66,6 +66,11 @@ void video_capturer::set_capture_device(int capture_device_index)
 		this->capture_device = NULL;
 	}
 
+	// OpenCV doesn't provide the 'default' capture source, so we treat the zero (default) index just as the first capture device.
+	// Any other index should be decremented as OpenCV counts the sources from 0.
+	if (capture_device_index > 0)
+		capture_device_index--;
+
 	this->capture_device = cvCreateCameraCapture(capture_device_index);
 	if (this->capture_device == NULL)
 	{
@@ -79,6 +84,161 @@ void video_capturer::set_capture_device(int capture_device_index)
 
 	this->captured_frame = cvQueryFrame(this->capture_device);
 	this->resized_frame = cvCreateImage(cvSize(this->width, this->height), this->captured_frame->depth, this->captured_frame->nChannels);
+}
+
+std::vector<std::string> video_capturer::get_capture_devices()
+{
+	std::vector<std::string> capture_devices;
+
+#ifdef WIN
+	HRESULT hr;
+
+	// Initialize the COM library.
+	hr = CoInitialize(NULL);
+	if (FAILED(hr))
+	{
+		std::cout << "Video capturer: failed to initialize the COM library." << std::endl;
+		throw internal_exception();
+	}
+
+	// Create the System Device Enumerator.
+	ICreateDevEnum* device_enumerator;
+	hr = CoCreateInstance(CLSID_SystemDeviceEnum, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&device_enumerator));
+	if (FAILED(hr))
+	{
+		std::cout << "Video capturer: failed to create the System Device Enumerator." << std::endl;
+		throw internal_exception();
+	}
+
+	// Create an enumerator for the Video Input Device category.
+	IEnumMoniker* enumerator;
+	hr = device_enumerator->CreateClassEnumerator(CLSID_VideoInputDeviceCategory, &enumerator, 0);
+	if (FAILED(hr))
+	{
+		std::cout << "Video capturer: failed to create an enumerator for the Video Input Device category." << std::endl;
+		throw internal_exception();
+	}
+	
+	// Release the System Device Enumerator.
+	device_enumerator->Release();
+
+	IMoniker* moniker = NULL;
+	while (enumerator->Next(1, &moniker, NULL) == S_OK)
+	{
+		IPropertyBag* property_bag;
+		hr = moniker->BindToStorage(0, 0, IID_PPV_ARGS(&property_bag));
+		if (FAILED(hr))
+		{
+			moniker->Release();
+			continue;
+		}
+
+		VARIANT var;
+		VariantInit(&var);
+
+		hr = property_bag->Read(L"Description", &var, 0);
+		if (FAILED(hr))
+			hr = property_bag->Read(L"FriendlyName", &var, 0);
+		if (SUCCEEDED(hr))
+		{
+			capture_devices.push_back(std::string(bstr_t(var.bstrVal)));
+			VariantClear(&var);
+		}
+
+		property_bag->Release();
+		moniker->Release();
+	}
+#endif
+
+#ifdef LIN
+	int file_descriptor;
+	int device_number = 0;
+	std::ostringstream device;
+	device << "/dev/video" << device_number;
+	while ((file_descriptor = open(device.str().c_str(), O_RDONLY)) != -1)
+	{
+		struct v4l2_capability capability;
+		memset(&capability, 0, sizeof(capability));
+		ioctl(file_descriptor, VIDIOC_QUERYCAP, &capability);
+		capture_devices.push_back(std::string((char*)capability.card));
+		close(file_descriptor);
+
+		device_number++;
+		device.str("");
+		device << "/dev/video" << device_number;
+	}
+#endif
+
+#ifdef MAC
+	ComponentResult result;
+
+	// Find the sequence grabber.
+	ComponentDescription sequence_grabber_description;
+	sequence_grabber_description.componentType = SeqGrabComponentType;
+	sequence_grabber_description.componentSubType = 0L;
+	sequence_grabber_description.componentManufacturer = 'appl';
+	sequence_grabber_description.componentFlags = 0L;
+	sequence_grabber_description.componentFlagsMask = 0L;
+	Component sequence_grabber_component = FindNextComponent(NULL, &sequence_grabber_description);
+	if (!sequence_grabber_component)
+	{
+		std::cout << "Video capturer: failed to find the sequence grabber." << std::endl;
+		throw internal_exception();
+	}
+
+	// Open the sequence grabber.
+	SeqGrabComponent sequence_grabber = OpenComponent(sequence_grabber_component);
+	if (!sequence_grabber)
+	{
+		std::cout << "Video capturer: failed to open the sequence grabber." << std::endl;
+		throw internal_exception();
+	}
+
+	// Initialize the sequence grabber.
+	result = SGInitialize(sequence_grabber);
+	if (result != noErr)
+	{
+		std::cout << "Video capturer: failed to initialize the sequence grabber." << std::endl;
+		throw internal_exception();
+	}
+
+	// Get a video channel.
+	SGChannel video_channel;
+	result = SGNewChannel(sequence_grabber, VideoMediaType, &video_channel);
+	if (result != noErr)
+	{
+		std::cout << "Video capturer: failed to get a video channel." << std::endl;
+		throw internal_exception();
+	}
+
+	// Get a device list.
+	SGDeviceList device_list;
+	SGGetChannelDeviceList(video_channel, sgDeviceListDontCheckAvailability | sgDeviceListIncludeInputs, &device_list);
+	if (!device_list)
+	{
+		std::cout << "Video capturer: failed to get a device list." << std::endl;
+		throw internal_exception();
+	}
+
+	// Dispose the video channel.
+	SGDisposeChannel(sequence_grabber, video_channel);
+
+	for (int device_index = 0; device_index < (*device_list)->count; ++device_index)
+	{
+		SGDeviceName device = (*device_list)->entry[device_index];
+		if (device.inputs != NULL)
+			for (int input_index = 0; input_index < (*device.inputs)->count; ++input_index)
+			{
+				SGDeviceInputName input = (*device.inputs)->entry[input_index];
+				capture_devices.push_back(std::string((char*)input.name));
+			}
+	}
+
+	SGDisposeDeviceList(sequence_grabber, device_list);
+	SGRelease(sequence_grabber);
+#endif
+
+	return capture_devices;
 }
 
 void video_capturer::capture_loop()
