@@ -122,6 +122,10 @@ int main(int argc, char* argv[])
 	if (!flag_disable_audio && !flag_generate_audio && (audio_capture_device == -1))
 		audio_capture_device = selector::simple_select(audio_capturer::get_capture_devices(), "Please, select the audio capture device:");
 
+	// Ask for the video capture device if it is needed and wasn't read from the command line arguments.
+	if (!flag_disable_video && !flag_generate_video && (video_capture_device == -1))
+		video_capture_device = selector::simple_select(video_capturer::get_capture_devices(), "Please, select the video capture device:");
+
 	audio_capturer* audio_capturer_block = NULL;
 	audio_encoder* audio_encoder_block = NULL;
 	audio_generator* audio_generator_block = NULL;
@@ -212,6 +216,7 @@ int main(int argc, char* argv[])
 		else
 		{
 			video_capturer_block = new video_capturer(video_width, video_height, video_frame_rate);
+			video_capturer_block->set_capture_device(video_capture_device);
 			if (flag_lsd)
 			{
 				line_segment_detector_block = new line_segment_detector(video_width, video_height);
