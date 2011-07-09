@@ -39,6 +39,26 @@ std::map<std::string, boost::extensions::factory<BaseClass> > extension_utils::g
 	return lib_factories;
 }
 
+template <class BaseClass, class ConstructorType>
+boost::shared_ptr<BaseClass> extension_utils::give_me_class(std::string library_name, std::string class_name_inside_lib, ConstructorType constructor_argument)
+{
+	library_name = add_prefix_and_suffix(library_name);
+	boost::extensions::shared_library library(library_name);
+	try_open_lib(library, library_name);
+	boost::shared_ptr<BaseClass> class_ptr = get_class<BaseClass>(library, class_name_inside_lib, constructor_argument);
+	return class_ptr;
+}
+
+template <class BaseClass>
+boost::shared_ptr<BaseClass> extension_utils::give_me_class(std::string library_name, std::string class_name_inside_lib)
+{
+	library_name = add_prefix_and_suffix(library_name);
+	boost::extensions::shared_library library(library_name);
+	try_open_lib(library, library_name);
+	boost::shared_ptr<BaseClass> class_ptr = get_class<BaseClass>(library, class_name_inside_lib);
+	return class_ptr;
+}
+
 template <class BaseClass>
 boost::shared_ptr<BaseClass> extension_utils::get_class (boost::extensions::shared_library &lib, std::string class_name ) {
 	std::map<std::string, boost::extensions::factory<BaseClass> > lib_factories = get_factories<BaseClass>(lib);
