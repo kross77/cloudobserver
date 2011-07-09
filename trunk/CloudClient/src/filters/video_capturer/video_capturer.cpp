@@ -1,5 +1,7 @@
 #include "video_capturer.h"
 
+using namespace ffmpeg;
+
 video_capturer::video_capturer(int video_width, int video_height, int video_frame_rate)
 {
 	this->width = video_width;

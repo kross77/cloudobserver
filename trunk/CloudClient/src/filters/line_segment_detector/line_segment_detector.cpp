@@ -1,5 +1,7 @@
 #include "line_segment_detector.h"
 
+using namespace ffmpeg;
+
 line_segment_detector::line_segment_detector(int video_width, int video_height)
 {
 	this->width = video_width;

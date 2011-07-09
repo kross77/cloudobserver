@@ -1,5 +1,7 @@
 #include "video_generator_rainbow.h"
 
+using namespace ffmpeg;
+
 video_generator_rainbow::video_generator_rainbow(int video_width, int video_height, int video_frame_rate)
 {
 	this->width = video_width;

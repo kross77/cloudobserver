@@ -1,22 +1,12 @@
 #ifndef MULTIPLEXER_H
 #define MULTIPLEXER_H
 
-// Allow C99 macros.
-#ifndef __STDC_CONSTANT_MACROS
-#define __STDC_CONSTANT_MACROS
-#endif
-
 // Boost
 #include <boost/thread.hpp>
 
-// FFmpeg
-extern "C"
-{
-#include <libavcodec/avcodec.h>
-#include <libavformat/avformat.h>
-}
-
 #include "../transmitter/transmitter.h"
+
+#include "../../3rdparty/ffmpeg/ffmpeg.h"
 
 class multiplexer
 {
@@ -25,12 +15,12 @@ public:
 	~multiplexer();
 	void connect(transmitter* transmitter_block);
 	void disconnect();
-	AVFormatContext* get_format_context();
-	void send(AVPacket* packet);
+	ffmpeg::AVFormatContext* get_format_context();
+	void send(ffmpeg::AVPacket* packet);
 	
 	class internal_exception: public std::exception { };
 private:
-	AVFormatContext* format_context;
+	ffmpeg::AVFormatContext* format_context;
 
 	mutable boost::mutex send_mutex;
 

@@ -1,5 +1,7 @@
 #include "video_generator.h"
 
+using namespace ffmpeg;
+
 video_generator::video_generator(int video_width, int video_height, int video_frame_rate, std::string username)
 {
 	this->width = video_width;
