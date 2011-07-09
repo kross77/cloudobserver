@@ -37,8 +37,8 @@
 class file_service : public service
 {
 public:
-	file_service(boost::filesystem::path default_path) : service(default_path){std::cout << "\nCreated a File-Service";}
-	~file_service(void){std::cout << "\nDestroyed a File-Service";}
+	file_service(boost::filesystem::path default_path) : service(default_path){std::cout << "\nCreated a File-Service" << std::endl;}
+	~file_service(void){std::cout << "\nDestroyed a File-Service"<< std::endl;}
 
 	//We provide files download, short files info options.
 	//TODO: remove info to another service  

@@ -39,7 +39,7 @@ void extension_utils::try_open_lib( boost::extensions::shared_library &lib, std:
 		std::cout << "Library failed to open: " << path << std::endl;
 	}
 	else
-	{
+	{	
 		std::cout << "Library " << path << " opened." << std::endl;
 	}
 }

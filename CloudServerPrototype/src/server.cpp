@@ -1,5 +1,4 @@
 #include "server.h"
-// We should provide each server client with a thread for dealing with his request
 
 server::server(int config) 
 {
@@ -8,18 +7,27 @@ server::server(int config)
 	util = new extension_utils();
 	this->acceptor_thread = new boost::thread(&server::acceptor_loop, this);
 	std::cout << "server created on port: " << _config << std::endl;
+	server_root_path = boost::filesystem::current_path();
 	//TODO create shared libs loader function which would do stuff like:
 	//boost::shared_ptr<service> service_instance ( util->get_class<service>(shared_library_instance, "service_string_name"));
 	//Do not forget shared_ptr is not scoped_ptr
 
-	std::string file_lib_path = "services_file";
-	file_lib_path = util->add_prefix_and_suffix(file_lib_path);
-	boost::extensions::shared_library file_service(file_lib_path);
-	util->try_open_lib(file_service, file_lib_path );
-	file_service_ptr = util->get_class<service>(file_service, "file_service", boost::filesystem::current_path());
+	//std::string file_lib_path = "services_file";
+	//file_lib_path = util->add_prefix_and_suffix(file_lib_path);
+	//boost::extensions::shared_library file_service(file_lib_path);
+	//util->try_open_lib(file_service, file_lib_path );
+	//file_service_ptr = util->get_class<service>(file_service, "file_service", boost::filesystem::current_path());
+
+	file_service_ptr = create_service("services_file", "file_service");
 
 
 }
+
+boost::shared_ptr<service> server::create_service(std::string library_name, std::string class_name_inside_lib)
+{
+	return util->give_me_class<service, boost::filesystem::path>(library_name, class_name_inside_lib, server_root_path);
+}
+
 server::~server()
 {
 }
