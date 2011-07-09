@@ -18,6 +18,24 @@
 #include <string>
 #include <vector>
 
+#ifdef WIN
+#pragma comment(lib, "strmiids")
+#include <comdef.h>
+#include <dshow.h>
+#include <windows.h>
+#endif
+
+#ifdef LIN
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/ioctl.h>
+#include <linux/videodev2.h>
+#endif
+
+#ifdef MAC
+#include <QuickTime/QuickTime.h>
+#endif
+
 class video_capturer
 {
 public:
@@ -29,6 +47,8 @@ public:
 	void start();
 	void stop();
 	void set_capture_device(int capture_device_index);
+
+	static std::vector<std::string> get_capture_devices();
 
 	class internal_exception: public std::exception { };
 private:
