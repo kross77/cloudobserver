@@ -27,12 +27,11 @@ void print_info()
 
 void print_help()
 {
-	std::cout << "Type 'help' to see interactive shell help messages again." << std::endl;
-	std::cout << "Type 'program_options_help' to see program start up arguments/" << std::endl;
-	std::cout << "Type 'config' to enter path for configuration file for us to read." << std::endl;
-	std::cout << "Type 'start' to start this server." << std::endl; 
-	std::cout << "Type 'exit' to stop this server and leave this the application." << std::endl;
-	std::cout << std::endl;
+	std::cout	<< "Type 'help'                  to see interactive shell help messages again." << std::endl
+				<< "Type 'program_options_help'  to see program start up arguments." << std::endl
+				<< "Type 'config'                to enter path for configuration file." << std::endl
+				<< "Type 'start'                 to start this server." << std::endl
+				<< "Type 'exit'                  to stop this server and leave this the application." << std::endl;
 }
 
 bool config(std::string config_file_path)
@@ -123,7 +122,7 @@ void start(boost::property_tree::ptree server_config)
 	return ;
 }
 
-void parse_programm_options(int argc, char* argv[])
+void parse_program_options(int argc, char* argv[])
 {
 	desc.add_options()
 		("help", "to produce help message")
@@ -155,7 +154,7 @@ int main(int argc, char* argv[])
 { 
 	print_info();
 
-	parse_programm_options(argc, argv);
+	parse_program_options(argc, argv);
 
 	std::string input;
 	do
@@ -194,7 +193,7 @@ int main(int argc, char* argv[])
 					continue;
 
 				if(config(file_path))
-					file_path = "exit"; 
+					break; 
 
 			} while (file_path != "exit");
 			continue;
@@ -204,5 +203,6 @@ int main(int argc, char* argv[])
 
 		std::cout << "Unknown command '" << input << "'." << std::endl;
 	} while (input != "exit");
+
 	return EXIT_SUCCESS;
 }
