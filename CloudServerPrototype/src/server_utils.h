@@ -42,6 +42,7 @@
 #include <boost/asio.hpp>
 #include <boost/shared_ptr.hpp> // aka std::shared_ptr
 #include <boost/unordered_map.hpp> // aka std::unordered_map
+#include <boost/foreach.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 #include <boost/property_tree/json_parser.hpp>
@@ -77,11 +78,12 @@ public:
 		std::map<std::string, std::string> headers;
 		std::map<std::string, std::string> arguments;
 	};
-	
-	boost::shared_ptr<service> create_service(std::string library_name, std::string class_name_inside_lib); // Creates class that is inherited from service class\interface. 
 
-	std::map<boost::shared_ptr<service>, rules> parse_config(boost::property_tree::ptree config); // TODO: write this
-	void save_config( std::map<boost::shared_ptr<service>, rules> services_map); // TODO: write this
+	// Creates class that is inherited from service class\interface. 
+	boost::shared_ptr<service> create_service(std::string library_name, std::string class_name_inside_lib); 
+
+	std::map<boost::shared_ptr<service>, server_utils::rules> parse_config(boost::property_tree::ptree config); 
+	void save_config( std::map<boost::shared_ptr<service>, rules> services_map); 
 
 	data parse_request(http_request request); // TODO: write this
 

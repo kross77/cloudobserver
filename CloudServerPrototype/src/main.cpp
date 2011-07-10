@@ -8,34 +8,154 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 #include <boost/property_tree/json_parser.hpp>
+#include <boost/program_options.hpp>
 
+boost::program_options::options_description desc("Allowed options");
+server *s;
+server_utils su;
+boost::property_tree::ptree server_config;
+bool server_started = false, server_config_was_set = false;
+std::string default_configuration_file_name = "config.xml";
 
-
-void print_help()
+void print_info()
 {
 	std::cout << "Expendable Server 1.0" << std::endl;
 	std::cout << "Copyright (c) 2011 Cloud Forever. All rights reserved." << std::endl;
 	std::cout << std::endl;
+	std::cout << "Type 'help' to see help messages." << std::endl;
+}
 
+void print_help()
+{
+	std::cout << "Type 'help' to see interactive shell help messages again." << std::endl;
+	std::cout << "Type 'program_options_help' to see program start up arguments/" << std::endl;
 	std::cout << "Type 'config' to enter path for configuration file for us to read." << std::endl;
 	std::cout << "Type 'start' to start this server." << std::endl; 
-	std::cout << "Type 'help' to see these help messages again." << std::endl;
 	std::cout << "Type 'exit' to stop this server and leave this the application." << std::endl;
 	std::cout << std::endl;
-	//TODO: implement start stop pause.
-	//	std::cout << "Type 'start' to start this server." << std::endl; // After server stop, or pause.
-	//	std::cout << "Type 'stop' to stop this server." << std::endl;  // What means pause server? Socket closed, services map saved, all services freed from duty.
-	//	std::cout << "Type 'pause' to pause this server." << std::endl; // What means pause server? Socket shall be open, no requests processed
 }
-int main(int argc, char* argv[])
-{ 
-	print_help();
 
-	server *s;
-	bool server_started = false;
+bool config(std::string config_file_path)
+{
+	std::cout << "Config file path: " << config_file_path << std::endl;
+	std::ifstream script;
+	try
+	{
+		script.open(config_file_path.c_str());
+		if(!script.is_open())
+		{
+			if(config_file_path == default_configuration_file_name)
+			{
+				std::cout << "Error: could not open default configuration file: '" << config_file_path << "'." << std::endl;
+				return false;
+			}
+			std::cout << "Error: could not open configuration file: '" << config_file_path << "'." << std::endl;
+			return false;
+		}
+	}
+	catch(std::exception &e)
+	{
+		std::cout << "Error: could not open configuration file: '" << config_file_path << "'." << std::endl;
+		return false;
+	}
+
+	try
+	{
+		std::string ext = config_file_path.substr(config_file_path.find_last_of(".") + 1);
+		if((ext == "x") || (ext == "xml") || (ext  == "ccml"))
+		{
+			boost::property_tree::read_xml(script, server_config);
+		}
+		else if((ext == "j") || (ext == "js") || (ext == "json"))
+		{
+			boost::property_tree::read_json(script, server_config);
+		}
+		else
+		{
+			std::cout << "Error: configuration file must have extension `.x`, `.xml`, `.ccml` for xml formated input files or `.j`, `.js`, `.json` for JSON formated files  " << std::endl;
+			return false;
+		}
+	}
+	catch(std::exception &e)
+	{
+		std::cout << "Error: configuration file should be valid JSON or XML file." << std::endl;
+		return false;
+	}
+
+	//TODO: link to server class
+	try{
+		su.parse_config(server_config);
+	}
+	catch (std::exception &e)
+	{
+		std::cout << "Error: Could not read server configuration." << std::endl;
+		return false;
+	}
+
+	std::cout << "Configuration from '" << config_file_path << "' is currently active." << std::endl;
+	return true;
+}
+
+void start(boost::property_tree::ptree server_config)
+{
+	//TODO: replace with default config file loader. With if(!server_config_was_set)...
 	int port_number = 12345;
 
-	boost::property_tree::ptree server_config;
+	if(!server_started)
+	{
+		try
+		{
+			s = new server(port_number);
+		}
+		catch(std::exception &e)
+		{
+			std::cout << "Server initialization failed miserably" << std::endl;
+			return;
+		}
+		server_started = true;
+		std::cout << "Server started with default options" << std::endl;
+	}
+	else
+	{
+		std::cout << "Server is already running. You can configure it while it runs." << std::endl;
+		return ;
+	}
+	return ;
+}
+
+void parse_programm_options(int argc, char* argv[])
+{
+	desc.add_options()
+		("help", "to produce help message")
+		("config", boost::program_options::value<std::string>()->composing()->notifier(&config)->default_value(default_configuration_file_name), "to enter path for configuration file for us to read");
+	("start", "to start this server")
+		;
+	boost::program_options::variables_map vm;
+
+	try
+	{
+		boost::program_options::store(boost::program_options::parse_command_line(argc, argv, desc), vm);
+		boost::program_options::notify(vm);    
+	}
+	catch(std::exception &e)
+	{
+		std::cout << "You have used unknown argument while starting program, please see our help: " << std::endl;
+		std::cout << desc << std::endl;
+	}
+	if (vm.count("help")) {
+		std::cout << desc << std::endl;
+	}
+
+	if (vm.count("start")) {
+		start(server_config);
+	} 
+}
+
+int main(int argc, char* argv[])
+{ 
+	print_info();
+
+	parse_programm_options(argc, argv);
 
 	std::string input;
 	do
@@ -43,101 +163,40 @@ int main(int argc, char* argv[])
 		std::cout << "$ ";
 		std::cin >> input;
 
-		if (input == "help")
+		if ((input == "help") || (input == "--help"))
 		{
 			std::cout << std::endl;
 			print_help();
 			continue;
 		}
-
-		if (input == "start")
+		if ((input == "program_options_help") || (input == "--program_options_help"))
 		{
-			if(!server_started)
-			{
-				try
-				{
-					s = new server(port_number);
-				}
-				catch(std::exception &e)
-				{
-					std::cout << "Server initialization failed miserably" << std::endl;
-					continue;
-				}
-				server_started = true;
-				std::cout << "Server started with default options" << std::endl;
-			}
-			else
-			{
-				std::cout << "Server is already running. You can configure it while it runs." << std::endl;
-			}
+			std::cout << std::endl;
+			std::cout << desc << std::endl;
 			continue;
 		}
 
-		if (input == "config")
+		if ((input == "start") || (input == "--start"))
 		{
-			std::string file_type;
-			std::cout << "Please enter config file type - 'xml' or 'json': " << std::endl;
+			start(server_config);
+			continue;
+		}
+
+		if ((input == "config") || (input == "--config"))
+		{
+			std::string file_path;
+			std::cout << "Please enter config file path (to XML or JSON file): " << std::endl;
 			do{
-				std::cout << "type: ";
-				std::cin >> file_type;
-				if (input == "exit")
+				std::cout << "Path: ";
+				std::cin >> file_path;
+
+				if (file_path == "exit")
 					continue;
 
-				if (file_type == "xml")
-				{
-					std::cout << "Please input config file path." << std::endl;
-					std::string file_path;
-					do 
-					{
-						std::cout << "Path: ";
-						std::cin >> file_path;
-						if (input == "exit")
-							continue;
+				if(config(file_path))
+					file_path = "exit"; 
 
-						try
-						{
-							std::ifstream script;
-							script.open(file_path.c_str());
-							boost::property_tree::read_xml(script, server_config);
-							std::cout << "Configuration from '" << file_path << "' is currently active." << std::endl;
-							break;
-						}
-						catch(std::exception &e)
-						{
-							std::cout << "Bad path or file: '" << file_path << "'." << std::endl;
-						}
-					} while (file_path != "exit");
-					break;
-				}
-				if (file_type == "json")
-				{
-					std::cout << "Please input config file path." << std::endl;
-					std::string file_path;
-					do 
-					{
-						std::cout << "path: ";
-						std::cin >> file_path;
-						if (input == "exit")
-							continue;
-
-						try
-						{
-							std::ifstream script;
-							script.open(file_path.c_str());
-							boost::property_tree::read_json(script, server_config);
-							std::cout << "Configuration from '" << file_path << "' is currently active." << std::endl;
-							break;
-						}
-						catch(std::exception &e)
-						{
-							std::cout << "Bad path or file: '" << file_path << "'." << std::endl;
-							continue;
-						}
-					} while (file_path != "exit");
-					break;
-				}
-				std::cout << "Unknown type '" << file_type << "'." << std::endl;
-			} while (file_type != "exit");
+			} while (file_path != "exit");
 			continue;
 		}
 		if (input == "exit")
