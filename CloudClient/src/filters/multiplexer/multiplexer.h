@@ -1,6 +1,9 @@
 #ifndef MULTIPLEXER_H
 #define MULTIPLEXER_H
 
+// STD
+#include <stdint.h>
+
 // Boost
 #include <boost/thread.hpp>
 
