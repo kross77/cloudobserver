@@ -575,20 +575,16 @@ namespace CloudObserver
             if (Directory.Exists(path) && File.Exists(path + "index.html"))
                 path += "/index.html";
 
-            // dynamic files
-            switch (httpRequest.url)
+            if (httpRequest.url == "/users.json")
             {
-                case "/users.json":
-                    string users = "[";
-                    foreach (string nickname in server.streams.Keys)
-                        users += "\n\t{\n\t\t\"nickname\": \"" + nickname + "\",\n\t\t\"width\": " + ((CloudClient)server.streams[nickname]).width + ",\n\t\t\"height\": " + ((CloudClient)server.streams[nickname]).height + "\n\t},";
-                    if (server.streams.Keys.Count > 0)
-                        users = users.Substring(0, users.Length - 1);
-                    users += "\n]";
-                    httpResponse.bodyData = Encoding.ASCII.GetBytes(users);
-                    return;
-                default:
-                    break;
+                string users = "[";
+                foreach (string nickname in server.streams.Keys)
+                    users += "\n\t{\n\t\t\"nickname\": \"" + nickname + "\",\n\t\t\"width\": " + ((CloudClient)server.streams[nickname]).width + ",\n\t\t\"height\": " + ((CloudClient)server.streams[nickname]).height + "\n\t},";
+                if (server.streams.Keys.Count > 0)
+                    users = users.Substring(0, users.Length - 1);
+                users += "\n]";
+                httpResponse.bodyData = Encoding.ASCII.GetBytes(users);
+                return;
             }
             
             // static files
