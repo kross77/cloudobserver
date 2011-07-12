@@ -195,7 +195,7 @@
                     left = w + 1;
                     tops = h + 1;
                     w = w + width + 7;
-                    var file = './' + name + '.flv?action=play';
+            		var file = './' + name + '.flv?action=play'; //TODO replace with something like var file = "./player.html#" + name;
                     var settings = 'width=' + width + ', height=' + height + ', left=' + left + ', top=' + tops + ', screenX=' + left + ', screenY=' + tops;
                     wins.push(window.open(file, name, settings));
                     exNames.push(name);
@@ -208,37 +208,17 @@
         
             function update()
             {
-                var xmlhttp;
-                try
-                {
-                    xmlhttp = new XMLHttpRequest();
-                }
-                catch (e)
-                {
-                    var success = false;
-                    var objects = ["MSXML2.XMLHTTP.5.0", "MSXML2.XMLHTTP.4.0", "MSXML2.XMLHTTP.3.0", "MSXML2.XMLHTTP", "Microsoft.XMLHTTP"];
-                    for (var i = 0; i < objects.length && !success; i++)
-                    {
-                        try
-                        {
-                            xmlhttp = new ActiveXObject(objects[i]);
-                            success = true;
-                        }
-                        catch (e)
-                        {};
-                    }
-                    if (!success) throw new Error("AJAX is unavailabe");
-                }
-                xmlhttp.onreadystatechange = function()
-                {
-                    if (xmlhttp.readyState == 4)
-                    {
-                        if (document.getElementById('usersList').innerHTML != xmlhttp.responseText) document.getElementById('usersList').innerHTML = xmlhttp.responseText;
-                    };
-                }
-                xmlhttp.open("get", "buttons.html", true);
-                xmlhttp.send(null);
-            }
+            	$.get("users.json", function(json)
+            	{
+					var obj = $.parseJSON( json );
+					var user_list_html = "";
+					for (var i = 0, len = obj.length; i < len; i++ )
+					{
+   						user_list_html += "<li><FORM><INPUT class='eButton' type='button' value='"+ obj[i].nickname +"' onClick=\"openWin('" + obj[i].nickname +"'," + obj[i].width + ',' +  obj[i].height +");\"'></FORM></li>" ;
+					}
+					$('#usersList').html(user_list_html);
+				});
+			}
 			
 			function stopHtml5()
 			{
