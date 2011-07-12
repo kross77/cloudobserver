@@ -49,10 +49,14 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 		util->print->print_map_contents(request.headers, "headers");
 		util->print->print_map_contents(request.arguments, "arguments");
 		//response.body = "<head></head><body><h1>It Rocks!</h1></body>";
-		//TODO: Make server library independent via ptree config and options filtering. 
+		//TODO: Make server library independent via ptree config and options filtering.
+
 		file_service_ptr->service_call(request, socket);
-		//file_service(request, socket); 
-		socket->close();
+		if (file_service_ptr->get_if_auto_close_socket())
+		{
+			socket->close();
+		} 
+
 		std::cout << "connection resolved." << std::endl;
 	}
 	catch(std::exception &e)
