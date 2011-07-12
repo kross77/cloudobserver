@@ -7,7 +7,10 @@
         </title>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 		<script type="text/javascript">
-
+		//Current Broadcasing clients URL's.
+        current_windows_client_url = "http://code.google.com/p/cloudobserver/downloads/detail?name=cloudobserverwriter-0.4.0.927-windows-x86-with-libraries.zip";
+        current_linux_client_url = "http://code.google.com/p/cloudobserver/downloads/detail?name=cloudobserverwriter-0.4.0.927-linux-x86_64-with-libraries.tar.gz";
+        current_mac_client_url = "http://code.google.com/p/cloudobserver/downloads/detail?name=cloudobserverwriter-0.4.0.927-macosx-i386-with-libraries.tar.gz";
         </script>
         <style type="text/css">
 			body{
@@ -48,7 +51,7 @@
 			color:#FFF;
 			text-shadow:0px 1px 1px #000;
 			}
-			a#rol2{
+			a.rol2{
 			text-shadow:0px 1px 1px #000;
 			}
 			div#nifty{
@@ -175,9 +178,10 @@
                 <h1>
                     Online users 
                 </h1>
-                <p>
-                      You can join them - download our application for <a class="homeLink" href="#JsDetectsOsAndOpenesWindow" id="rol" > your platform.</a> <a class="allLink" href="#OptionsAppeared" id="rol" >Show downloads section.</a>
-              </p>
+                
+                   <p>  <dfn id="supportedPlatform"> You can join them - download our application for <a class="homeLink" href="#platform" id="rol" > your platform.</a></dfn><dfn> </dfn><a class="allLink" href="#OptionsAppeared" id="rol" >Show downloads section.</a>
+                   </p>
+              
                 <hr>
                 <ul id="usersList">
                  	_ONLINE_USERS_
@@ -221,14 +225,14 @@
                 <hr>
                <div style="min-width:600; min-height:100; display:inline-block">
 <p style="float:left;"/>
-<a id="rol2"  href="#Linux">	<div align="center" class="BUT">
+<a class="rol2 linux_link"  href="#Linux">	<div align="center" class="BUT" onclick="location.href=current_linux_client_url">
 	                 <img src="platform-logo-linux-pr.png" height="50" width="52"/>
 	                    <p><span  style="width:100; color: #FFF; text-shadow:0px 1px 1px #000;">
                          Linux 
                         </span></p>
 </div></a>
 	<p style="float:left;"/>
-<a id="rol2"  href="#Windows">	<div align="center" class="BUT">
+<a class="rol2 windows_link"  href="#Windows">	<div align="center" class="BUT" onclick="location.href=current_windows_client_url">
 	                 <img src="platform-logo-windows-pr.png" height="50" width="56" /> 
 	                   <p style=" color: #FFF; text-shadow:0px 1px 1px #000;">
 
@@ -236,7 +240,7 @@
           </p>  
 </div></a>
 	<p style="float:left;"/>
-<a id="rol2"  href="#MacOSX">	<div align="center" class="BUT">
+<a class="rol2 mac_link"  href="#MacOSX">	<div align="center" class="BUT"  onclick="location.href=current_mac_client_url">
 	                  <img src="platform-logo-mac-pr.png" height="50" width="52"/>
               <p style=" color: #FFF; width:100; text-shadow:0px 1px 1px #000;">Mac OS X</p>
 </div></a>
@@ -335,7 +339,33 @@
         );
     
         BrowserDetect.init();
-        if (((BrowserDetect.browser == "Chrome") && (BrowserDetect.version >= 8)) || ((BrowserDetect.browser == "Explorer") && (BrowserDetect.version >= 9)) || ((BrowserDetect.browser == "Opera") && (BrowserDetect.version >= 10)) || ((BrowserDetect.browser == "Firefox") && (BrowserDetect.version >= 4)))
+        
+        var user_os = BrowserDetect.OS;
+        if(user_os == "Windows")
+        {
+        	 $('.homeLink').attr("href", current_windows_client_url);
+        }
+        else if(BrowserDetect.OS == "Linux")
+        {
+        	$('.homeLink').attr("href", current_linux_client_url);
+        }
+        else if(BrowserDetect.OS == "Mac")
+        {
+        	$('.homeLink').attr("href", current_mac_client_url);
+        }
+        else
+        {
+        	$('#supportedPlatform').html("");
+        }
+        
+        $('.linux_link').attr("href", current_linux_client_url);
+		$('.windows_link').attr("href", current_windows_client_url);
+		$('.mac_link').attr("href", current_mac_client_url);
+        
+        
+        var user_browser = BrowserDetect.browser;
+        var user_browser_version = BrowserDetect.version;
+        if (((user_browser == "Chrome") && (user_browser_version >= 8)) || ((user_browser == "Explorer") && (user_browser_version >= 9)) || ((user_browser == "Opera") && (user_browser_version >= 10)) || ((user_browser == "Firefox") && (user_browser_version >= 4)))
         {
 			lon = 360 * Math.random();
 			lat = 0;
