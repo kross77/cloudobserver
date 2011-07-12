@@ -195,7 +195,7 @@
                     left = w + 1;
                     tops = h + 1;
                     w = w + width + 7;
-            		var file = './' + name + '.flv?action=play'; //TODO replace with something like var file = "./player.html#" + name;
+            		var file = "./player.html#" + name;
                     var settings = 'width=' + width + ', height=' + height + ', left=' + left + ', top=' + tops + ', screenX=' + left + ', screenY=' + tops;
                     wins.push(window.open(file, name, settings));
                     exNames.push(name);

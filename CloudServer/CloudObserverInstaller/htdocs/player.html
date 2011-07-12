@@ -44,23 +44,7 @@
     </head>
     <body>
         <script language="JavaScript" type="text/javascript">
-        
-        	function getFileName() {
-				//this gets the full url
-				var url = document.location.href;
-				//this removes the anchor at the end, if there is one
-				url = url.substring(0, (url.indexOf("#") == -1) ? url.length : url.indexOf("#"));
-				//this removes the query after the file name, if there is one
-				url = url.substring(0, (url.indexOf("?") == -1) ? url.length : url.indexOf("?"));
-				//this removes everything before the last slash in the path
-				url = url.substring(url.lastIndexOf("/") + 1, url.length);
-				//this removes the file extension after the name of file
-				url = url.substring(0, (url.lastIndexOf(".") == -1) ? url.length : url.lastIndexOf("."));
-				//return
-				return url;
-			}
-			
-			//this function can be used to pake player play video from ragular file server
+
 			function getNameFromHash() {
 				//this gets the full url
 				var url = document.location.hash;
@@ -69,10 +53,9 @@
 				//return
 				return url;
 			}
-            var loc = "nick=" + getFileName();
             
             //use with fileserver (call url's like http://127.0.0.1:4773/player.html#Ole), tested.
-            //var loc = "nick=" + getNameFromHash();
+            var loc = "nick=" + getNameFromHash();
             
             var hasProductInstall = DetectFlashVer(6, 0, 65);
             var hasRequestedVersion = DetectFlashVer(10, 1, 0);
