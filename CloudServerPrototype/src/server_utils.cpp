@@ -7,9 +7,9 @@ server_utils::server_utils()
 	this->description.server_root_path = boost::filesystem::current_path();
 }
 
-boost::shared_ptr<service> server_utils::create_service(std::string library_name, std::string class_name_inside_lib)
+boost::shared_ptr<service> server_utils::create_service(std::string library_name, std::string class_name_inside_lib, boost::property_tree::ptree config)
 {
-	return util->give_me_class<service, boost::filesystem::path>(library_name, class_name_inside_lib, this->description.server_root_path);
+	return util->give_me_class<service, boost::property_tree::ptree>(library_name, class_name_inside_lib, config);
 }
 
 std::map<boost::shared_ptr<service>, server_utils::service_description> server_utils::parse_config_services( boost::property_tree::ptree config )
