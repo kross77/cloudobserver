@@ -18,64 +18,53 @@ std::map<boost::shared_ptr<service>, server_utils::service_description> server_u
 		config.get_child("config.services", server_utils::empty_class<boost::property_tree::ptree>()))
 	{
 		boost::property_tree::ptree individual_service_tree = (boost::property_tree::ptree) v.second ;
-		BOOST_FOREACH(boost::property_tree::ptree::value_type &vs,
-			individual_service_tree)
+
+		std::string service_name = individual_service_tree.get<std::string>("name", "unnamed service");
+		std::cout << std::endl << "Service name: " << service_name << std::endl;
+
+		try{
+			std::string service_library_name = individual_service_tree.get<std::string>("library_name"); // Will throw error if not defined
+			std::cout << "Library name: " << service_library_name << std::endl;
+
+
+			std::string service_class_name = individual_service_tree.get<std::string>("class_name"); // Will throw error if not defined
+			std::cout << "Class name: " << service_class_name << std::endl;
+		}
+		catch(std::exception &e)
 		{
-			std::string first_data = vs.first.data();
+			std::cout << std::endl << "Parsing library or class name error in service: " << service_name << std::endl;
+			continue;
+		}
 
-			if(first_data == "name")
-			{
-				std::string second_data = vs.second.data();
-				std::cout << std::endl << "Service name: " << second_data << std::endl;
-			}
+		std::string service_root_file_system_directory = individual_service_tree.get<std::string>("root_file_system_directory", description.server_root_path.string());
+		std::cout << "Root directory path: " << service_root_file_system_directory << std::endl;
 
-			if(first_data == "library_name")
-			{
-				std::string second_data = vs.second.data();
-				std::cout << "Library name: " << second_data << std::endl;
-			}
+		boost::property_tree::ptree service_properties_tree = individual_service_tree.get_child("properties", server_utils::empty_class<boost::property_tree::ptree>());
 
-			if(first_data == "class_name")
-			{
-				std::string second_data = vs.second.data();
-				std::cout << "Class name: " << second_data << std::endl;
-			}
+		std::string root_service_web_path = service_properties_tree.get<std::string>("root_service_web_path", "");
+		if(!root_service_web_path.empty())
+		std::cout << "Service web root directory path: " << root_service_web_path << std::endl;
+	
 
-			if(first_data == "root_file_system_directory")
-			{
-				std::string second_data = vs.second.data();
-				std::cout << "Root directory path: " << second_data << std::endl;
-			}
+		BOOST_FOREACH(boost::property_tree::ptree::value_type &vp,
+			service_properties_tree.get_child("arguments", server_utils::empty_class<boost::property_tree::ptree>()))
+		{
+			std::cout << "Required argument: " << vp.first.data() << " : " << vp.second.data() <<  std::endl;
+		}
 
-			if(first_data == "properties")
-			{
-				boost::property_tree::ptree service_properties_tree = (boost::property_tree::ptree) vs.second ;		
-				BOOST_FOREACH(boost::property_tree::ptree::value_type &vp,
-					service_properties_tree.get_child("arguments", server_utils::empty_class<boost::property_tree::ptree>()))
-				{
-					std::cout << "Required argument: " << vp.first.data() << " : " << vp.second.data() <<  std::endl;
-				}
+		BOOST_FOREACH(boost::property_tree::ptree::value_type &vp,
+			service_properties_tree.get_child("headers", server_utils::empty_class<boost::property_tree::ptree>()))
+		{
+			std::cout << "Required header: " << vp.first.data() << " : " << vp.second.data() <<  std::endl;
+		}
 
-				BOOST_FOREACH(boost::property_tree::ptree::value_type &vp,
-					service_properties_tree.get_child("headers", server_utils::empty_class<boost::property_tree::ptree>()))
-				{
-					std::cout << "Required header: " << vp.first.data() << " : " << vp.second.data() <<  std::endl;
-				}
-
-				BOOST_FOREACH(boost::property_tree::ptree::value_type &vp,
-					service_properties_tree.get_child("url_extensions", server_utils::empty_class<boost::property_tree::ptree>()))
-				{
-					std::cout << "Supported url extension: " << vp.second.data() <<  std::endl;
-				}
-
-				if(first_data == "root_service_web_path")
-				{
-					std::string second_data = vs.second.data();
-					std::cout << "Service web root directory path: " << second_data << std::endl;
-				}
-			}
+		BOOST_FOREACH(boost::property_tree::ptree::value_type &vp,
+			service_properties_tree.get_child("url_extensions", server_utils::empty_class<boost::property_tree::ptree>()))
+		{
+			std::cout << "Supported url extension: " << vp.second.data() <<  std::endl;
 		}
 	}
+
 	std::map<boost::shared_ptr<service>, server_utils::service_description> m;
 	return m;
 }
