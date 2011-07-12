@@ -200,6 +200,13 @@ int main(int argc, char* argv[])
 		}
 		if (input == "exit")
 			continue;
+		
+		std::string ext = input.substr(input.find_last_of(".") + 1);
+		if((ext == "x") || (ext == "xml") || (ext  == "ccml") || (ext == "j") || (ext == "js") || (ext == "json"))
+		{
+			config(input);
+			continue;
+		}
 
 		std::cout << "Unknown command '" << input << "'." << std::endl;
 	} while (input != "exit");
