@@ -593,9 +593,6 @@ namespace CloudObserver
                     users += "\n]";
                     httpResponse.bodyData = Encoding.ASCII.GetBytes(users);
                     return;
-                case "/player.html":
-                    httpResponse.bodyData = Encoding.ASCII.GetBytes(new StreamReader(File.OpenRead(path)).ReadToEnd().Replace("_NICKNAME_", this.nickname));
-                    return;
                 default:
                     break;
             }
