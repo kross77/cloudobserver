@@ -37,7 +37,11 @@
 class file_service : public service
 {
 public:
-	file_service(boost::filesystem::path default_path) : service(default_path){std::cout << "\nCreated a File-Service" << std::endl;}
+	file_service(boost::property_tree::ptree config) : service(config)
+	{ 
+		service_default_path = config.get<std::string>("root_file_system_directory", boost::filesystem::current_path().string());
+		std::cout << "\nCreated a File-Service" << std::endl;
+	}
 	~file_service(void){std::cout << "\nDestroyed a File-Service"<< std::endl;}
 
 	//We provide files download, short files info options.
@@ -133,6 +137,8 @@ public:
 	}
 
 private:
+	boost::filesystem::path service_default_path;
+
 	std::string file_service_get_dif_path(boost::filesystem::path base_path, boost::filesystem::path new_path)
 	{
 		boost::filesystem::path sdiffpath;
@@ -149,7 +155,7 @@ private:
 
 BOOST_EXTENSION_TYPE_MAP_FUNCTION {
 	using namespace boost::extensions;
-	std::map<std::string, factory<service, boost::filesystem::path> >&
+	std::map<std::string, factory<service, boost::property_tree::ptree> >&
 		Producer_factories(types.get());
 	Producer_factories["file_service"].set<file_service>();
 }

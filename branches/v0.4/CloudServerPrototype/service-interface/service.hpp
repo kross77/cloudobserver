@@ -11,6 +11,9 @@
 //Boost-FileSystem
 #include <boost/filesystem.hpp>
 
+//Boost-PropertyTree
+#include <boost/property_tree/ptree.hpp>
+
 //Boost-ASIO
 #include <boost/asio.hpp>
 
@@ -23,7 +26,12 @@ class service
 public:
 
 	//We link service to filesystem directory where it should operate (read from / write to)
-	service(boost::filesystem::path default_path) : service_default_path(default_path) {std::cout << "\nCreated a Service";}
+	service(boost::property_tree::ptree config)
+	{
+		set_config(config);
+		auto_close_socket = true;
+		std::cout << "\nCreated a Service";
+	}
 
 	~service(void){std::cout << "\nDestroyed a Service";}
 
@@ -31,17 +39,27 @@ public:
 	virtual bool service_call(http_request request, boost::shared_ptr<boost::asio::ip::tcp::socket> socket){return 1;} // bool for service execution status
 
 	//Here we provide default service model with some frequently used methods	
-	boost::filesystem::path get_default_path(void) {
-		return service_default_path;
+	boost::property_tree::ptree get_config(void) {
+		return configuration;
 	}
 	
-	void set_default_path(boost::filesystem::path default_path) {
-		service_default_path = default_path;
+	void set_config(boost::property_tree::ptree _configuration) {
+		configuration = _configuration;
+	}
+
+	void update_config(boost::property_tree::ptree new_configuration)
+	{
+		configuration = new_configuration;
+	}
+	
+	bool get_if_auto_close_socket(void)
+	{
+		return auto_close_socket;
 	}
 
 protected:
-	boost::filesystem::path service_default_path;
-
+	boost::property_tree::ptree configuration;
+	bool auto_close_socket;
 };
 
 #endif

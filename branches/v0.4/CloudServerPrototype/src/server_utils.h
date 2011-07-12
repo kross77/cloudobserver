@@ -60,7 +60,9 @@
 class server_utils
 {
 public:
+
 	server_utils();
+
 	virtual ~server_utils(){}
 
 	//Each service provides us with rules
@@ -99,8 +101,9 @@ public:
 		std::string root_service_web_path;
 	};
 
-	// Creates class that is inherited from service class\interface. 
-	boost::shared_ptr<service> create_service(std::string library_name, std::string class_name_inside_lib); 
+	// Creates class that is inherited from service class\interface, we plan to send to each service server_description with out service_map but with this wary service ptree description
+	// Main point is for the service to get as much as possible information about its host server, its own configuration.
+	boost::shared_ptr<service> create_service(std::string library_name, std::string class_name_inside_lib, boost::property_tree::ptree config); 
 
 	server_utils::server_description parse_config(boost::property_tree::ptree config); 
 	void save_config( server_utils::server_description server_configuration_description); 
@@ -114,6 +117,7 @@ public:
 	printer *print;
 
 	server_description description;
+
 private:
 
 	std::map<boost::shared_ptr<service>, server_utils::service_description> parse_config_services( boost::property_tree::ptree config );

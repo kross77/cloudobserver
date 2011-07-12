@@ -6,7 +6,10 @@ server::server(int config)
 	util = new server_utils();
 	this->acceptor_thread = new boost::thread(&server::acceptor_loop, this);
 	std::cout << "server created on port: " << _config << std::endl;
-	file_service_ptr = util->create_service("services_file", "file_service");
+
+	boost::property_tree::ptree service_config;
+	service_config.put<std::string>("root_file_system_directory", util->description.server_root_path.string());
+	file_service_ptr = util->create_service("services_file", "file_service", service_config);
 }
 
 server::~server()
