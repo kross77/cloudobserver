@@ -557,9 +557,6 @@ namespace CloudObserver
                         }
                         httpResponse.bodyData = Encoding.ASCII.GetBytes(bodyString);
                         return;
-                    case "play":
-                        httpRequest.url = "/player.html";
-                        break;
                     default:
                         httpResponse.status = (int)ResponseState.BAD_REQUEST;
                         bodyString = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n";
