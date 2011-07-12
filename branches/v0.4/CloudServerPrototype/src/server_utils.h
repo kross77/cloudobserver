@@ -57,9 +57,6 @@
 //Maps printer
 #include "printer.h"
 
-
-
-
 class server_utils
 {
 public:
@@ -73,27 +70,40 @@ public:
 		std::string name;
 		std::string library_name;
 		std::string class_name;
-		std::string root_directory;
+		std::string root_file_system_directory;
 
 		//A service might have
 		boost::unordered_multimap<std::string, std::string> set_of_header_rules;
 		boost::unordered_multimap<std::string, std::string> set_of_arguments_rules;
 		std::set<std::string> url_extensions;
-
+		std::string root_service_web_path;	
 	};
 	
+	struct server_description
+	{
+		int port;
+
+		// Server path (by default app path) //TODO: make it configurable via config ptree
+		boost::filesystem::path server_root_path;
+
+		//We keep all services and their rules inside of a map
+		std::map<boost::shared_ptr<service>, server_utils::service_description> service_map;
+	};
+
 	//Each request provides us with data
 	struct request_data
 	{
 		std::map<std::string, std::string> headers;
 		std::map<std::string, std::string> arguments;
+		std::set<std::string> url_extension;
+		std::string root_service_web_path;
 	};
 
 	// Creates class that is inherited from service class\interface. 
 	boost::shared_ptr<service> create_service(std::string library_name, std::string class_name_inside_lib); 
 
-	std::map<boost::shared_ptr<service>, server_utils::service_description> parse_config(boost::property_tree::ptree config); 
-	void save_config( std::map<boost::shared_ptr<service>, server_utils::service_description> services_map); 
+	server_utils::server_description parse_config(boost::property_tree::ptree config); 
+	void save_config( server_utils::server_description server_configuration_description); 
 
 	server_utils::request_data parse_request(http_request request); // TODO: write this
 
@@ -103,13 +113,10 @@ public:
 	// For maps contents printing
 	printer *print;
 
+	server_description description;
 private:
 
-	//We keep all services and their rules inside of a map
-	std::map<boost::shared_ptr<service>, server_utils::service_description> service_map;
-	
-	// Server path (by default app path) //TODO: make it configurable via config ptree
-	boost::filesystem::path server_root_path;
+	std::map<boost::shared_ptr<service>, server_utils::service_description> parse_config_services( boost::property_tree::ptree config );
 
 	// For services creation from shared libraries
 	extension_utils *util; 
@@ -122,6 +129,5 @@ private:
 	}
 
 };
-
 
 #endif // SERVER_UTILITIES_H
