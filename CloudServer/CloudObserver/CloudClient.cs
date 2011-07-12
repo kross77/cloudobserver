@@ -593,6 +593,15 @@ namespace CloudObserver
                         buttons += "<li><FORM><INPUT class=\"eButton\" type=\"button\" value=\"" + nickname + "\" onClick=\"openWin('" + nickname + "'" + "," + ((CloudClient)server.streams[nickname]).width + "," + ((CloudClient)server.streams[nickname]).height + ")\"></FORM></li>\n";
                     httpResponse.bodyData = Encoding.ASCII.GetBytes(buttons);
                     return;
+                case "/users.json":
+                    string users = "[";
+                    foreach (string nickname in server.streams.Keys)
+                        users += "\n\t{\n\t\t\"nickname\": \"" + nickname + "\",\n\t\t\"width\": " + ((CloudClient)server.streams[nickname]).width + ",\n\t\t\"height\": " + ((CloudClient)server.streams[nickname]).height + "\n\t},";
+                    if (server.streams.Keys.Count > 0)
+                        users = users.Substring(0, users.Length - 1);
+                    users += "\n]";
+                    httpResponse.bodyData = Encoding.ASCII.GetBytes(users);
+                    return;
                 case "/player.html":
                     httpResponse.bodyData = Encoding.ASCII.GetBytes(new StreamReader(File.OpenRead(path)).ReadToEnd().Replace("_NICKNAME_", this.nickname));
                     return;
