@@ -37,6 +37,7 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <set>
 
 //Boost
 #include <boost/asio.hpp>
@@ -66,14 +67,23 @@ public:
 	virtual ~server_utils(){}
 
 	//Each service provides us with rules
-	struct rules
+	struct service_description
 	{
+		//A service must have
+		std::string name;
+		std::string library_name;
+		std::string class_name;
+		std::string root_directory;
+
+		//A service might have
 		boost::unordered_multimap<std::string, std::string> set_of_header_rules;
 		boost::unordered_multimap<std::string, std::string> set_of_arguments_rules;
+		std::set<std::string> url_extensions;
+
 	};
 	
 	//Each request provides us with data
-	struct data
+	struct request_data
 	{
 		std::map<std::string, std::string> headers;
 		std::map<std::string, std::string> arguments;
@@ -82,27 +92,34 @@ public:
 	// Creates class that is inherited from service class\interface. 
 	boost::shared_ptr<service> create_service(std::string library_name, std::string class_name_inside_lib); 
 
-	std::map<boost::shared_ptr<service>, server_utils::rules> parse_config(boost::property_tree::ptree config); 
-	void save_config( std::map<boost::shared_ptr<service>, rules> services_map); 
+	std::map<boost::shared_ptr<service>, server_utils::service_description> parse_config(boost::property_tree::ptree config); 
+	void save_config( std::map<boost::shared_ptr<service>, server_utils::service_description> services_map); 
 
-	data parse_request(http_request request); // TODO: write this
+	server_utils::request_data parse_request(http_request request); // TODO: write this
 
-	int relevance(const rules & r, const data & d); // TODO: write this
-	boost::shared_ptr<service> find_service(const data & d); //TODO:  write this
+	int relevance(const server_utils::service_description & r, const server_utils::request_data & d); // TODO: write this
+	boost::shared_ptr<service> find_service(const server_utils::request_data & d); //TODO:  write this
 
 	// For maps contents printing
 	printer *print;
 
 private:
 
-	//We keap all services and thare rules inside of a map
-	std::map<boost::shared_ptr<service>, rules> service_map;
+	//We keep all services and their rules inside of a map
+	std::map<boost::shared_ptr<service>, server_utils::service_description> service_map;
 	
 	// Server path (by default app path) //TODO: make it configurable via config ptree
 	boost::filesystem::path server_root_path;
 
 	// For services creation from shared libraries
 	extension_utils *util; 
+
+	template<class T>
+	inline T &empty_class()
+	{
+		static T pt;
+		return pt;
+	}
 
 };
 
