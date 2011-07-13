@@ -40,7 +40,25 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 {
 	try
 	{
-		http_request request(*socket);
+		http_request request;
+		try
+		{
+			request.receive(*socket);
+		}
+		catch (http_request::policy_file_request_exception)
+		{
+			std::cout << "Sending the 'crossdomain.xml' file." << std::endl;
+			std::string policy_file =
+				"<?xml version=\"1.0\"?>\n"
+				"<!DOCTYPE cross-domain-policy SYSTEM \"http://www.macromedia.com/xml/dtds/cross-domain-policy.dtd\">\n"
+				"<cross-domain-policy>\n"
+				"  <allow-access-from domain=\"*\" to-ports=\"*\" />\n"
+				"</cross-domain-policy>\n";
+			socket->send(boost::asio::buffer(policy_file));
+			socket->close();
+			return;
+		}
+
 		std::cout << "request url: " << request.url << "\n";
 		util->print->print_map_contents(request.headers, "headers");
 		util->print->print_map_contents(request.arguments, "arguments");
