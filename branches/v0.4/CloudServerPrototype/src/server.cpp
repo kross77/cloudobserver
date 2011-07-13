@@ -80,8 +80,3 @@ boost::property_tree::ptree server::get_configuration()
 {
 	return util->save_config(util->description);
 }
-
-void server::update_configuration( boost::property_tree::ptree config )
-{
-	util->parse_config(config);  // TODO: implement util->description update.
-}
