@@ -52,14 +52,21 @@ public:
 		configuration = new_configuration;
 	}
 	
-	bool get_if_auto_close_socket(void)
+	bool get_auto_close_socket(void)
 	{
 		return auto_close_socket;
 	}
 
 protected:
+	void set_auto_close_socket(bool _auto_close_socket)
+	{
+		auto_close_socket = _auto_close_socket;
+	}
+
+protected:
 	boost::property_tree::ptree configuration;
 	bool auto_close_socket;
+
 };
 
 #endif
