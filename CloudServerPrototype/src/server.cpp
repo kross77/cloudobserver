@@ -6,10 +6,6 @@ server::server(boost::property_tree::ptree config)
 	util->description = util->parse_config(config);
 	this->acceptor_thread = new boost::thread(&server::acceptor_loop, this);
 	std::cout << "server created on port: " << util->description.port << std::endl;
-
-	boost::property_tree::ptree service_config;
-	service_config.put<std::string>("root_file_system_directory", util->description.server_root_path.string());
-	file_service_ptr = util->create_service("services_file", "file_service", service_config);
 }
 
 server::~server()
@@ -48,14 +44,19 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 		std::cout << "request url: " << request.url << "\n";
 		util->print->print_map_contents(request.headers, "headers");
 		util->print->print_map_contents(request.arguments, "arguments");
-		//response.body = "<head></head><body><h1>It Rocks!</h1></body>";
-		//TODO: Make server library independent via ptree config and options filtering.
-
-		file_service_ptr->service_call(request, socket);
-		if (file_service_ptr->get_auto_close_socket())
+		try
 		{
-			socket->close();
-		} 
+			boost::shared_ptr<service> requested_service = server::find_service(request);
+			requested_service->service_call(request, socket);
+			if (requested_service->get_auto_close_socket())
+			{
+				socket->close();
+			}
+		}
+		catch(std::exception &e)
+		{
+			std::cout << "Could not find service for request." << std::endl;
+		}
 
 		std::cout << "connection resolved." << std::endl;
 	}
@@ -79,4 +80,9 @@ void server::user_info(boost::asio::ip::tcp::socket &socket)
 boost::property_tree::ptree server::get_configuration()
 {
 	return util->save_config(util->description);
+}
+
+boost::shared_ptr<service> server::find_service( http_request request )
+{
+	return util->find_service(util->parse_request(request));
 }

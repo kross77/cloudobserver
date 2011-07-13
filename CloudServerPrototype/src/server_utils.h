@@ -112,12 +112,12 @@ public:
 	server_utils::request_data parse_request(http_request request); 
 
 	int relevance(const server_utils::service_description & r, const server_utils::request_data & d);
-	boost::shared_ptr<service> find_service(const server_utils::request_data & d); //TODO:  write this
 
 	void add_to_services_list(boost::property_tree::ptree config);
 	boost::shared_ptr<service> server_utils::get_service_by_name(std::string name);
 	std::multiset<std::string> server_utils::get_services_class_names();
 	std::multiset<std::string> server_utils::get_services_libraries_names();
+	boost::shared_ptr<service> find_service(server_utils::request_data &d);
 	// For maps contents printing
 	printer *print;
 
