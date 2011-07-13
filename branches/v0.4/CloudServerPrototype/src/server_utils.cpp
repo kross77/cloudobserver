@@ -14,20 +14,27 @@ boost::shared_ptr<service> server_utils::create_service(std::string library_name
 
 std::map<boost::shared_ptr<service>, server_utils::service_description> server_utils::parse_config_services( boost::property_tree::ptree config )
 {
+	std::map<boost::shared_ptr<service>, server_utils::service_description> services_map;
+
 	BOOST_FOREACH(boost::property_tree::ptree::value_type &v,
 		config.get_child("config.services", server_utils::empty_class<boost::property_tree::ptree>()))
 	{
+		server_utils::service_description one_description;
+		std::string service_library_name;
+		std::string service_class_name;
 		boost::property_tree::ptree individual_service_tree = (boost::property_tree::ptree) v.second ;
 
 		std::string service_name = individual_service_tree.get<std::string>("name", "unnamed service");
+		one_description.name = service_name;
 		std::cout << std::endl << "Service name: " << service_name << std::endl;
 
 		try{
-			std::string service_library_name = individual_service_tree.get<std::string>("library_name"); // Will throw error if not defined
+			service_library_name = individual_service_tree.get<std::string>("library_name"); // Will throw error if not defined
+			one_description.library_name = service_library_name;
 			std::cout << "Library name: " << service_library_name << std::endl;
 
-
-			std::string service_class_name = individual_service_tree.get<std::string>("class_name"); // Will throw error if not defined
+			service_class_name = individual_service_tree.get<std::string>("class_name"); // Will throw error if not defined
+			one_description.class_name = service_class_name;
 			std::cout << "Class name: " << service_class_name << std::endl;
 		}
 		catch(std::exception &e)
@@ -39,33 +46,43 @@ std::map<boost::shared_ptr<service>, server_utils::service_description> server_u
 		boost::property_tree::ptree service_properties_tree = individual_service_tree.get_child("properties", server_utils::empty_class<boost::property_tree::ptree>());
 
 		std::string root_service_web_path = service_properties_tree.get<std::string>("root_service_web_path", "");
-		if(!root_service_web_path.empty())
+		if(!root_service_web_path.empty()){
+		one_description.root_service_web_path = root_service_web_path;
 		std::cout << "Service web root directory path: " << root_service_web_path << std::endl;
-	
-
-		BOOST_FOREACH(boost::property_tree::ptree::value_type &vp,
-			service_properties_tree.get_child("arguments", server_utils::empty_class<boost::property_tree::ptree>()))
-		{
-			std::cout << "Required argument: " << vp.first.data() << " : " << vp.second.data() <<  std::endl;
 		}
 
-		BOOST_FOREACH(boost::property_tree::ptree::value_type &vp,
+		BOOST_FOREACH(boost::property_tree::ptree::value_type &va,
+			service_properties_tree.get_child("arguments", server_utils::empty_class<boost::property_tree::ptree>()))
+		{
+			one_description.set_of_arguments_rules.insert(std::pair<std::string, std::string>( va.first.data(), va.second.data() ) );
+			std::cout << "Required argument: " << va.first.data() << " : " << va.second.data() <<  std::endl;
+		}
+
+		BOOST_FOREACH(boost::property_tree::ptree::value_type &vh,
 			service_properties_tree.get_child("headers", server_utils::empty_class<boost::property_tree::ptree>()))
 		{
-			std::cout << "Required header: " << vp.first.data() << " : " << vp.second.data() <<  std::endl;
+			one_description.set_of_header_rules.insert(std::pair<std::string, std::string>(vh.first.data(), vh.second.data()));
+			std::cout << "Required header: " << vh.first.data() << " : " << vh.second.data() <<  std::endl;
 		}
 
 		BOOST_FOREACH(boost::property_tree::ptree::value_type &vp,
 			service_properties_tree.get_child("url_extensions", server_utils::empty_class<boost::property_tree::ptree>()))
 		{
+			one_description.url_extensions.insert(vp.second.data());
 			std::cout << "Supported url extension: " << vp.second.data() <<  std::endl;
 		}
 
 		boost::property_tree::ptree service_custome_properties_tree = service_properties_tree.get_child("settings", server_utils::empty_class<boost::property_tree::ptree>());
+		try{
+		boost::shared_ptr<service> one_service = util->give_me_class<service, boost::property_tree::ptree>(service_library_name, service_class_name, service_custome_properties_tree);
+		services_map.insert(std::pair<boost::shared_ptr<service>, server_utils::service_description>(one_service, one_description));
+		}
+		catch(std::exception &e)
+		{
+			std::cout << "Error while creating service: " << service_name << std::endl;
+		}
 	}
-
-	std::map<boost::shared_ptr<service>, server_utils::service_description> m;
-	return m;
+	return services_map;
 }
 
 server_utils::server_description server_utils::parse_config( boost::property_tree::ptree config )
