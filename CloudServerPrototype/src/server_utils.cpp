@@ -297,7 +297,7 @@ int server_utils::relevance(const server_utils::service_description &r, const se
 	}
 	if (r.url_extensions.find(d.url_extension) != r.url_extensions.end())
 	{
-		rel += 50;
+		rel += 100;
 	}
 	std::multiset<std::string> libraries_names;
 	typedef std::map<std::string, std::string> map_s_t;
@@ -307,11 +307,11 @@ int server_utils::relevance(const server_utils::service_description &r, const se
 	{
 		BOOST_FOREACH(multimap_s_t::value_type rule_it, r.set_of_arguments_rules)
 		{
-			if( rule_it.first.data() == data_it.first.data())
+			if( rule_it.first == data_it.first)
 			{
 				if(data_it.second.find(rule_it.second) !=std::string::npos)
 				{
-					rel += 1;
+					rel += 100;
 				}
 			}
 		}
@@ -321,11 +321,11 @@ int server_utils::relevance(const server_utils::service_description &r, const se
 	{
 		BOOST_FOREACH(multimap_s_t::value_type rule_it, r.set_of_header_rules)
 		{
-			if( rule_it.first.data() == data_it.first.data())
+			if( rule_it.first == data_it.first)
 			{
 				if(data_it.second.find(rule_it.second) !=std::string::npos)
 				{
-					rel += 1;
+					rel += 100;
 				}
 			}
 		}
@@ -340,20 +340,22 @@ boost::shared_ptr<service> server_utils::find_service(server_utils::request_data
 	boost::shared_ptr<service> result;
 	int pre_max = -2;
 	int max = -1;
+	std::string name = "";
 	BOOST_FOREACH(map_t::value_type data_it, this->description.service_map)
 	{
 		int current = server_utils::relevance(data_it.second, d);
-		if (current > max)
+		if (current >= max)
 		{
 			pre_max = max;
 			max = current;
 			result = data_it.first;
+			name = data_it.second.name;
 		}
 	}
 	if (pre_max == max)
 	{
 		throw std::exception("Could not find suitable service.");
 	}
-	
+	std::cout << "Found service: " << name << std::endl;
 	return result;
 }
