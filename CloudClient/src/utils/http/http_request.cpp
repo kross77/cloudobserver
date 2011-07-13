@@ -59,6 +59,8 @@ void http_request::receive(boost::asio::ip::tcp::socket& socket)
 				switch (parser_state)
 				{
 				case METHOD:
+					if (this->method == "<policy-file-request/>")
+						throw policy_file_request_exception();
 					if (*position != ' ')
 						this->method += *position++;
 					else
