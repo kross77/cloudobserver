@@ -19,9 +19,9 @@
 class server
 {
 public:
-	// TODO: turn int config into ptree based real config file
-	server(int config);
-
+	server(boost::property_tree::ptree config);
+	boost::property_tree::ptree get_configuration();
+	void update_configuration(boost::property_tree::ptree config); // TODO: write this.
 	virtual ~server();
 	void acceptor_loop();
 	void user_info(boost::asio::ip::tcp::socket &socket);
@@ -32,9 +32,6 @@ private:
 
 	// Main server thread
 	boost::thread *acceptor_thread; 
-
-	//TODO: replace with ptree
-	int _config; 
 
 	//TODO: get rid of ptr to only one service, replace with some sort of set of services.
 	boost::shared_ptr<service> file_service_ptr;
