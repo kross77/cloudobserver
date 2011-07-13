@@ -107,12 +107,9 @@ server_utils::server_description server_utils::parse_config( boost::property_tre
 
 boost::property_tree::ptree server_utils::save_config( server_utils::server_description server_configuration_description )
 {
-
 	boost::property_tree::ptree root, arr;
-
 	root.put<int>("config.port", server_configuration_description.port);
 	root.put<std::string>("config.server_root_path", server_configuration_description.server_root_path.string());
-
 	typedef std::map<boost::shared_ptr<service>, server_utils::service_description> map_t;
 	BOOST_FOREACH( map_t::value_type &i, server_configuration_description.service_map)
 	{
@@ -154,8 +151,5 @@ boost::property_tree::ptree server_utils::save_config( server_utils::server_desc
 		arr.push_back(std::make_pair("service", serv));
 	}
 	root.put_child("config.services", arr);
-	boost::property_tree::xml_writer_settings<char> w(' ', 4);
-	write_xml("services.xml", root, std::locale(), w);
-	write_json("services.json", root);
 	return root;
 }

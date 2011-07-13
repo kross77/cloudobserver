@@ -1,11 +1,11 @@
 #include "server.h"
 
-server::server(int config) 
+server::server(boost::property_tree::ptree config) 
 {
-	_config = config;
 	util = new server_utils();
+	util->description = util->parse_config(config);
 	this->acceptor_thread = new boost::thread(&server::acceptor_loop, this);
-	std::cout << "server created on port: " << _config << std::endl;
+	std::cout << "server created on port: " << util->description.port << std::endl;
 
 	boost::property_tree::ptree service_config;
 	service_config.put<std::string>("root_file_system_directory", util->description.server_root_path.string());
@@ -18,7 +18,7 @@ server::~server()
 
 void server::acceptor_loop(){
 	boost::asio::io_service io_service;
-	int m_nPort = _config;
+	int m_nPort = util->description.port;
 	boost::asio::ip::tcp::acceptor acceptor(io_service, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), m_nPort));
 	std::cout << "Waiting for connection..." << std::endl << std::endl;
 	while(true)
@@ -74,4 +74,14 @@ void server::user_info(boost::asio::ip::tcp::socket &socket)
 
 	std::cout << "User address: " << addr_string << std::endl;
 	std::cout << "User port: " << port << std::endl;
+}
+
+boost::property_tree::ptree server::get_configuration()
+{
+	return util->save_config(util->description);
+}
+
+void server::update_configuration( boost::property_tree::ptree config )
+{
+	util->parse_config(config);  // TODO: implement util->description update.
 }
