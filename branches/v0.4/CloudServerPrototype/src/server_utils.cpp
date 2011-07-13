@@ -72,9 +72,11 @@ std::map<boost::shared_ptr<service>, server_utils::service_description> server_u
 			std::cout << "Supported url extension: " << vp.second.data() <<  std::endl;
 		}
 
-		boost::property_tree::ptree service_custome_properties_tree = service_properties_tree.get_child("settings", server_utils::empty_class<boost::property_tree::ptree>());
+		one_description.service_custome_properties_tree = service_properties_tree.get_child("settings", server_utils::empty_class<boost::property_tree::ptree>());
+
+
 		try{
-		boost::shared_ptr<service> one_service = util->give_me_class<service, boost::property_tree::ptree>(service_library_name, service_class_name, service_custome_properties_tree);
+		boost::shared_ptr<service> one_service = util->give_me_class<service, boost::property_tree::ptree>(service_library_name, service_class_name, one_description.service_custome_properties_tree);
 		services_map.insert(std::pair<boost::shared_ptr<service>, server_utils::service_description>(one_service, one_description));
 		}
 		catch(std::exception &e)
@@ -101,4 +103,59 @@ server_utils::server_description server_utils::parse_config( boost::property_tre
 	std::cout << std::endl;
 
 	return server_descr;
+}
+
+boost::property_tree::ptree server_utils::save_config( server_utils::server_description server_configuration_description )
+{
+
+	boost::property_tree::ptree root, arr;
+
+	root.put<int>("config.port", server_configuration_description.port);
+	root.put<std::string>("config.server_root_path", server_configuration_description.server_root_path.string());
+
+	typedef std::map<boost::shared_ptr<service>, server_utils::service_description> map_t;
+	BOOST_FOREACH( map_t::value_type &i, server_configuration_description.service_map)
+	{
+		server_utils::service_description sm = i.second;
+		boost::property_tree::ptree serv;
+
+		serv.put<std::string>("name", sm.name);
+		serv.put<std::string>("class_name", sm.class_name);
+		serv.put<std::string>("library_name", sm.library_name);
+		serv.put<std::string>("root_file_system_directory", sm.root_file_system_directory);
+		serv.put<std::string>("root_service_web_path", sm.root_service_web_path);
+
+		boost::property_tree::ptree serv_prop, head, arg;
+		typedef boost::unordered_multimap<std::string, std::string> mulmap_t;
+		bool headers_exist = false, args_exist = false;
+		BOOST_FOREACH(  mulmap_t::value_type &iih, sm.set_of_arguments_rules)
+		{
+			args_exist = true;
+			arg.put<std::string>(iih.first.data(), iih.second.data());
+		}
+		BOOST_FOREACH(  mulmap_t::value_type &iia, sm.set_of_header_rules)
+		{
+			headers_exist = true;
+			head.put<std::string>(iia.first.data(), iia.second.data());
+		}
+		if (args_exist)
+		{
+			serv_prop.push_back( std::make_pair("arguments", arg));
+		}
+		if (headers_exist)
+		{
+			serv_prop.push_back( std::make_pair("headers", head));
+		}
+		if((headers_exist) || (args_exist))
+		{
+			serv.push_back(std::make_pair("properties", serv_prop));
+		}
+		serv.push_back(std::make_pair("properties", sm.service_custome_properties_tree));
+		arr.push_back(std::make_pair("service", serv));
+	}
+	root.put_child("config.services", arr);
+	boost::property_tree::xml_writer_settings<char> w(' ', 4);
+	write_xml("services.xml", root, std::locale(), w);
+	write_json("services.json", root);
+	return root;
 }

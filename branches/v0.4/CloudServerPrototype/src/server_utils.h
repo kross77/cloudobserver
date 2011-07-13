@@ -73,6 +73,7 @@ public:
 		std::string library_name;
 		std::string class_name;
 		std::string root_file_system_directory;
+		boost::property_tree::ptree service_custome_properties_tree;
 
 		//A service might have
 		boost::unordered_multimap<std::string, std::string> set_of_header_rules;
@@ -106,7 +107,7 @@ public:
 	boost::shared_ptr<service> create_service(std::string library_name, std::string class_name_inside_lib, boost::property_tree::ptree config); 
 
 	server_utils::server_description parse_config(boost::property_tree::ptree config); 
-	void save_config( server_utils::server_description server_configuration_description); 
+	boost::property_tree::ptree save_config( server_utils::server_description server_configuration_description); 
 
 	server_utils::request_data parse_request(http_request request); // TODO: write this
 

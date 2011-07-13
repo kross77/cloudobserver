@@ -5,13 +5,13 @@ std::map<std::string, boost::extensions::factory<BaseClass, ConstructorType> > e
 	boost::extensions::type_map lib_types;
 	if (!lib.call(lib_types)) {
 		std::cerr << "Types map not found!" << std::endl;
-		std::cin.get();
+		throw std::exception("Types map not found!");
 	}
 
 	std::map<std::string, boost::extensions::factory<BaseClass, ConstructorType> > &lib_factories(lib_types.get());
 	if (lib_factories.empty()) {
 		std::cerr << "Producers not found!" << std::endl;
-		std::cin.get();
+		throw std::exception("Producers not found!");
 	}
 	return lib_factories;
 }
@@ -28,13 +28,13 @@ std::map<std::string, boost::extensions::factory<BaseClass> > extension_utils::g
 	boost::extensions::type_map lib_types;
 	if (!lib.call(lib_types)) {
 		std::cerr << "Types map not found!" << std::endl;
-		std::cin.get();
+		throw std::exception("Types map not found!");
 	}
 
 	std::map<std::string, boost::extensions::factory<BaseClass> > &lib_factories(lib_types.get());
 	if (lib_factories.empty()) {
 		std::cerr << "Producers not found!" << std::endl;
-		std::cin.get();
+		throw std::exception("Producers not found!");
 	}
 	return lib_factories;
 }

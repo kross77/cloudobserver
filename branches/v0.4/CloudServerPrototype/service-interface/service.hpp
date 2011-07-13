@@ -33,7 +33,7 @@ public:
 		std::cout << "\nCreated a Service";
 	}
 
-	~service(void){std::cout << "\nDestroyed a Service";}
+	~service(void){std::cout << "\nDestroyed a Service" << std::endl;}
 
 	//We pass user request to service for future inspection
 	virtual bool service_call(http_request request, boost::shared_ptr<boost::asio::ip::tcp::socket> socket){return 1;} // bool for service execution status
