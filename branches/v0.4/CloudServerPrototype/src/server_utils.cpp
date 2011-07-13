@@ -36,9 +36,6 @@ std::map<boost::shared_ptr<service>, server_utils::service_description> server_u
 			continue;
 		}
 
-		std::string service_root_file_system_directory = individual_service_tree.get<std::string>("root_file_system_directory", description.server_root_path.string());
-		std::cout << "Root directory path: " << service_root_file_system_directory << std::endl;
-
 		boost::property_tree::ptree service_properties_tree = individual_service_tree.get_child("properties", server_utils::empty_class<boost::property_tree::ptree>());
 
 		std::string root_service_web_path = service_properties_tree.get<std::string>("root_service_web_path", "");
@@ -63,6 +60,8 @@ std::map<boost::shared_ptr<service>, server_utils::service_description> server_u
 		{
 			std::cout << "Supported url extension: " << vp.second.data() <<  std::endl;
 		}
+
+		boost::property_tree::ptree service_custome_properties_tree = service_properties_tree.get_child("settings", server_utils::empty_class<boost::property_tree::ptree>());
 	}
 
 	std::map<boost::shared_ptr<service>, server_utils::service_description> m;
