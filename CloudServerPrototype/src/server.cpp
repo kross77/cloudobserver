@@ -52,7 +52,7 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 		//TODO: Make server library independent via ptree config and options filtering.
 
 		file_service_ptr->service_call(request, socket);
-		if (file_service_ptr->get_if_auto_close_socket())
+		if (file_service_ptr->get_auto_close_socket())
 		{
 			socket->close();
 		} 
