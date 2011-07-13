@@ -88,10 +88,11 @@ bool config(std::string config_file_path)
 		if(!server_started)
 		{
 		s = new server(server_config);
+		server_started = true;
 		}
 		else
 		{
-			s->update_configuration(server_config);
+			s->util->add_to_services_list(server_config);
 			std::cout << "Configuration updated." << std::endl;
 		}
 	}

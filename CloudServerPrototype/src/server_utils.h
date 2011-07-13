@@ -98,8 +98,8 @@ public:
 	{
 		std::map<std::string, std::string> headers;
 		std::map<std::string, std::string> arguments;
-		std::set<std::string> url_extension;
-		std::string root_service_web_path;
+		std::string url_extension;
+		std::string url;
 	};
 
 	// Creates class that is inherited from service class\interface, we plan to send to each service server_description with out service_map but with this wary service ptree description
@@ -109,11 +109,15 @@ public:
 	server_utils::server_description parse_config(boost::property_tree::ptree config); 
 	boost::property_tree::ptree save_config( server_utils::server_description server_configuration_description); 
 
-	server_utils::request_data parse_request(http_request request); // TODO: write this
+	server_utils::request_data parse_request(http_request request); 
 
-	int relevance(const server_utils::service_description & r, const server_utils::request_data & d); // TODO: write this
+	int relevance(const server_utils::service_description & r, const server_utils::request_data & d);
 	boost::shared_ptr<service> find_service(const server_utils::request_data & d); //TODO:  write this
 
+	void add_to_services_list(boost::property_tree::ptree config);
+	boost::shared_ptr<service> server_utils::get_service_by_name(std::string name);
+	std::multiset<std::string> server_utils::get_services_class_names();
+	std::multiset<std::string> server_utils::get_services_libraries_names();
 	// For maps contents printing
 	printer *print;
 

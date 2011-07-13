@@ -21,14 +21,12 @@ class server
 public:
 	server(boost::property_tree::ptree config);
 	boost::property_tree::ptree get_configuration();
-	void update_configuration(boost::property_tree::ptree config); // TODO: write this.
 	virtual ~server();
 	void acceptor_loop();
 	void user_info(boost::asio::ip::tcp::socket &socket);
+	server_utils *util;
 private:
 	void request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socket> socket); //Each request received by server will be sent to a new thread and processed by request_response_loop
-
-	server_utils *util;
 
 	// Main server thread
 	boost::thread *acceptor_thread; 
