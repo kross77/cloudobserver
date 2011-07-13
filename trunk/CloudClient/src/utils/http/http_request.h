@@ -6,6 +6,7 @@
 #include <boost/asio.hpp>
 #include <boost/lexical_cast.hpp>
 
+#include <exception>
 #include <map>
 #include <string>
 #include <vector>
@@ -28,6 +29,8 @@ public:
 	std::map<std::string, std::string> headers;
 	int body_size;
 	std::string body;
+
+	class policy_file_request_exception: public std::exception { };
 private:
 	enum http_request_parser_state { METHOD, URL, URL_PARAM, URL_VALUE, VERSION, HEADER_KEY, HEADER_VALUE, BODY, OK };
 };
