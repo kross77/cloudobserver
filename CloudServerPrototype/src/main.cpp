@@ -82,8 +82,9 @@ bool config(std::string config_file_path)
 	}
 
 	//TODO: link to server class
-	try{
-		su.parse_config(server_config);
+	try
+	{
+		su.save_config(su.parse_config(server_config));
 	}
 	catch (std::exception &e)
 	{
