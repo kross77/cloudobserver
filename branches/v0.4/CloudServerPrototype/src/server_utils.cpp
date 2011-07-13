@@ -333,3 +333,27 @@ int server_utils::relevance(const server_utils::service_description &r, const se
 
 	return rel;
 }
+
+boost::shared_ptr<service> server_utils::find_service(server_utils::request_data & d)
+{
+	typedef std::map<boost::shared_ptr<service>, server_utils::service_description> map_t;
+	boost::shared_ptr<service> result;
+	int pre_max = -2;
+	int max = -1;
+	BOOST_FOREACH(map_t::value_type data_it, this->description.service_map)
+	{
+		int current = server_utils::relevance(data_it.second, d);
+		if (current > max)
+		{
+			pre_max = max;
+			max = current;
+			result = data_it.first;
+		}
+	}
+	if (pre_max == max)
+	{
+		throw std::exception("Could not find suitable service.");
+	}
+	
+	return result;
+}
