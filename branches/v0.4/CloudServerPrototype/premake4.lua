@@ -353,6 +353,7 @@ function cloud.project.useBoost()
 		"boost_system",
 		"boost_thread",
 		"boost_filesystem",
+		"boost_program_options",
 		"dl"
 		}
 	end
@@ -363,6 +364,7 @@ function cloud.project.useBoost()
 		"boost_system",
 		"boost_thread",
 		"boost_filesystem",
+		"boost_program_options",
 		"dl"
 		}	
 	end 
