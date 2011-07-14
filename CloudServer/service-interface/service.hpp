@@ -28,7 +28,6 @@ public:
 	//We link service to filesystem directory where it should operate (read from / write to)
 	service(boost::property_tree::ptree config)
 	{
-		set_config(config);
 		std::cout << "\nCreated a Service";
 	}
 
@@ -36,24 +35,6 @@ public:
 
 	//We pass user request to service for future inspection
 	virtual bool service_call(http_request request, boost::shared_ptr<boost::asio::ip::tcp::socket> socket){return 1;} // bool for service execution status
-
-	//Here we provide default service model with some frequently used methods	
-	boost::property_tree::ptree get_config(void) {
-		return configuration;
-	}
-	
-	void set_config(boost::property_tree::ptree _configuration) {
-		configuration = _configuration;
-	}
-
-	void update_config(boost::property_tree::ptree new_configuration)
-	{
-		configuration = new_configuration;
-	}
-
-protected:
-	boost::property_tree::ptree configuration;
-
 };
 
 #endif
