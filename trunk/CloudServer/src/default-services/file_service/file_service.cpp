@@ -86,9 +86,6 @@ public:
 						Current << cur;	
 						Expires << expire;
 
-						response->headers.insert(std::pair<std::string, std::string>("Date", Current.str()));
-						response->headers.insert(std::pair<std::string, std::string>("Server", "CF: RAC"));	
-
 						if (  Created.str() == request->headers["If-Modified-Since"])
 						{
 							response->status=304;
