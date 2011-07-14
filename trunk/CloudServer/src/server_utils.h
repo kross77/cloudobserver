@@ -132,6 +132,22 @@ private:
 	// For services creation from shared libraries
 	extension_utils *util; 
 
+	std::string tag_service;
+	std::string tag_library_name;
+	std::string tag_service_name;
+	std::string tag_class_name;
+	std::string tag_properties;
+	std::string tag_root_service_web_path;
+	std::string tag_url;
+	std::string tag_arguments;
+	std::string tag_headers;
+	std::string tag_url_extensions;
+	std::string tag_settings;
+	std::string tag_configuration;
+	std::string tag_path_configuration_services;
+	std::string tag_path_configuration_server_root_path;
+	std::string tag_path_configuration_port;
+
 	template<class T>
 	inline T &empty_class()
 	{

@@ -60,8 +60,6 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 		}
 
 		std::cout << "request url: " << request.url << "\n";
-		util->print->print_map_contents(request.headers, "headers");
-		util->print->print_map_contents(request.arguments, "arguments");
 		try
 		{
 			boost::shared_ptr<service> requested_service = server::find_service(request);
