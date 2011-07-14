@@ -25,7 +25,7 @@ class service
 {
 public:
 	//We pass user request to service for future inspection
-	virtual bool service_call(http_request request, boost::shared_ptr<boost::asio::ip::tcp::socket> socket){return 1;} // bool for service execution status
+	virtual bool service_call(http_request request, boost::shared_ptr<boost::asio::ip::tcp::socket> socket) = 0;
 };
 
 #endif
