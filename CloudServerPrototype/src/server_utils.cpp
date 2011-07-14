@@ -52,6 +52,14 @@ std::map<boost::shared_ptr<service>, server_utils::service_description> server_u
 		}
 
 		BOOST_FOREACH(boost::property_tree::ptree::value_type &va,
+			service_properties_tree.get_child("url", server_utils::empty_class<boost::property_tree::ptree>()))
+		{
+			if (va.first == "equals")
+				one_description.set_of_url_rules.push_back(std::string(va.second.data()));
+			std::cout << "Required url: " << va.second.data() << std::endl;
+		}
+
+		BOOST_FOREACH(boost::property_tree::ptree::value_type &va,
 			service_properties_tree.get_child("arguments", server_utils::empty_class<boost::property_tree::ptree>()))
 		{
 			one_description.set_of_arguments_rules.insert(std::pair<std::string, std::string>( va.first.data(), va.second.data() ) );
@@ -299,6 +307,14 @@ int server_utils::relevance(const server_utils::service_description &r, const se
 	{
 		rel += 100;
 	}
+
+	typedef std::vector<std::string> vector_s_t;
+	BOOST_FOREACH(vector_s_t::value_type rule_it, r.set_of_url_rules)
+	{
+		if (rule_it == d.url)
+			rel += 1000;
+	}
+
 	std::multiset<std::string> libraries_names;
 	typedef std::map<std::string, std::string> map_s_t;
 	typedef boost::unordered_multimap<std::string, std::string> multimap_s_t;
