@@ -4,6 +4,7 @@
 #include "server.h"
 //Boost
 #include <boost/thread.hpp>
+#include <boost/foreach.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
@@ -30,6 +31,7 @@ void print_help()
 	std::cout	<< "Type 'help'                  to see interactive shell help messages again." << std::endl
 		<< "Type 'program_options_help'  to see program start up arguments." << std::endl
 		<< "Type 'config'                to enter path for configuration file." << std::endl
+		<< "Type 'service'               to enter service configuration menu." << std::endl
 		<< "Type 'save'                  to save current configuration into file." << std::endl
 		<< "Type 'start'                 to start this server." << std::endl
 		<< "Type 'exit'                  to stop this server and leave this the application." << std::endl;
@@ -192,6 +194,14 @@ void parse_program_options(int argc, char* argv[])
 	} 
 }
 
+void print_services()
+{
+	BOOST_FOREACH(std::string const si, s->util->get_services_names())
+	{
+		std::cout << si << std::endl;
+	}
+}
+
 int main(int argc, char* argv[])
 { 
 	print_info();
@@ -256,6 +266,43 @@ int main(int argc, char* argv[])
 					break; 
 
 			} while (file_path != "exit");
+			continue;
+		}
+
+		if (input == "service")
+		{
+			if (!server_started)
+			{
+				std::cout << "You must start server in order to use services menu!" << std::endl << "Please start the server" << std::endl;
+				continue;
+			}
+			std::string var;
+			std::cout << "Please enter service name or `ls` to print all currently available services: " << std::endl;
+			do{
+				std::cout << "~: ";
+				std::getline(std::cin, var);
+
+				if (var == "exit")
+					continue;
+
+				if ((var == "ls") || (var == "list services"))
+				{
+					print_services();
+				}
+				else
+				{
+					try
+					{
+						s->util->get_service_by_name(var);
+					}
+					catch (std::exception &e)
+					{
+						std::cout << "Error: " << var << " service not found." << std::endl << "Please review list of currently existing services:" << std::endl;
+						print_services();
+						std::cout << "And try again." << std::endl;
+					}
+				}
+			} while (var != "exit");
 			continue;
 		}
 

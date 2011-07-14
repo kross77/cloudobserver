@@ -118,6 +118,7 @@ public:
 
 	void add_to_services_list(boost::property_tree::ptree config);
 	boost::shared_ptr<service> get_service_by_name(std::string name);
+	std::multiset<std::string> get_services_names();
 	std::multiset<std::string> get_services_class_names();
 	std::multiset<std::string> get_services_libraries_names();
 	boost::shared_ptr<service> find_service(server_utils::request_data &d);
@@ -156,7 +157,6 @@ private:
 		static T pt;
 		return pt;
 	}
-
 };
 
 #endif // SERVER_UTILITIES_H
