@@ -534,7 +534,6 @@ solution "CloudServer"
 		includedirs { "3rdparty/cf-http" }
 		
 		files { "src/default-services/file_service/**"}
-		files { "service-interface/**" }
 
 		configuration "Debug"
 			defines { "DEBUG" }
@@ -556,7 +555,6 @@ solution "CloudServer"
 		includedirs { "3rdparty/cf-http" }
 		
 		files { "src/default-services/cloud_service/**"}
-		files { "service-interface/**" }
 
 		configuration "Debug"
 			defines { "DEBUG" }
