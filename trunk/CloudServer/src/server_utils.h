@@ -42,6 +42,7 @@
 
 //Boost
 #include <boost/asio.hpp>
+#include <boost/filesystem.hpp>
 #include <boost/shared_ptr.hpp> // aka std::shared_ptr
 #include <boost/unordered_map.hpp> // aka std::unordered_map
 #include <boost/foreach.hpp>
