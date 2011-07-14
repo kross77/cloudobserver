@@ -40,10 +40,10 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 {
 	try
 	{
-		http_request request;
+		boost::shared_ptr<http_request> request = boost::make_shared<http_request>();
 		try
 		{
-			request.receive(*socket);
+			request->receive(*socket);
 		}
 		catch (http_request::policy_file_request_exception)
 		{
@@ -59,11 +59,11 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 			return;
 		}
 
-		std::cout << "request url: " << request.url << "\n";
-		http_response response;
+		std::cout << "request url: " << request->url << "\n";
+		boost::shared_ptr<http_response> response = boost::make_shared<http_response>();
 		try
 		{
-			boost::shared_ptr<service> requested_service = server::find_service(request);
+			boost::shared_ptr<service> requested_service = server::find_service(*request);
 			requested_service->service_call(socket, request, response);
 		}
 		catch(std::exception &e)
