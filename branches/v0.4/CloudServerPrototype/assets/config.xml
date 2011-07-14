@@ -28,6 +28,12 @@
 					<action>write</action>
 					<action>read</action>
 				</arguments>
+				<settings>
+					<max_streams>10</max_streams>
+					<dumps_location>dumps</dumps_location>
+					<dump_writers>false</dump_writers>
+					<dump_readers>false</dump_readers>
+				</settings>
 			</properties>
 		</service>
 	</services>
