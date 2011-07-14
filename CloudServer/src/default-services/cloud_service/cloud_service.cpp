@@ -2,8 +2,6 @@
 
 cloud_service::cloud_service(boost::property_tree::ptree config): service(config)
 {
-	this->set_auto_close_socket(false);
-
 	this->max_streams = config.get<int>("max_streams", 10);
 	this->dumps_location = config.get<std::string>("dumps_location", (boost::filesystem::current_path() /= "dumps").string());
 	this->dump_writers = config.get<bool>("dump_writers", false);
