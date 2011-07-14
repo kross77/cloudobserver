@@ -14,9 +14,9 @@ cloud_service::~cloud_service()
 		delete i->second;
 }
 
-void cloud_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, http_request request, http_response response)
+void cloud_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response)
 {
-	if (request.url == "/users.json")
+	if (request->url == "/users.json")
 	{
 		std::ostringstream users_stream;
 		users_stream << "[";
@@ -28,28 +28,28 @@ void cloud_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket>
 		std::string users = users_stream.str();
 		if (this->writers.size() > 0)
 			users = users.substr(0, users.length() - 1);
-		response.body = users.append("\n]");
-		response.body_size = response.body.length();
-		response.headers.insert(std::pair<std::string, std::string>("Content-Length", boost::lexical_cast<std::string>(response.body_size)));
-		response.send(*socket);
+		response->body = users.append("\n]");
+		response->body_size = response->body.length();
+		response->headers.insert(std::pair<std::string, std::string>("Content-Length", boost::lexical_cast<std::string>(response->body_size)));
+		response->send(*socket);
 		return;
 	}
 
-	std::string action = request.arguments["action"];
+	std::string action = request->arguments["action"];
 	client_type type = GENERAL_CLIENT;
 	if (action == "write")
 		type = WRITER_CLIENT;
 	if (action == "read")
 		type = READER_CLIENT;
 
-	std::string nickname = request.url.substr(1);
+	std::string nickname = request->url.substr(1);
 	std::ofstream* dump = NULL;
 	switch (type)
 	{
 	case GENERAL_CLIENT:
-		response.status = 400;
-		response.description = "Bad Request";
-		response.body =
+		response->status = 400;
+		response->description = "Bad Request";
+		response->body =
 			"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n"
 			"<HTML><HEAD>\n"
 			"<META http-equiv=Content-Type content=\"text/html; charset=windows-1252\">\n"
@@ -60,9 +60,9 @@ void cloud_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket>
 	case WRITER_CLIENT:
 		if (!check_nickname(nickname))
 		{
-			response.status = 400;
-			response.description = "Bad Request";
-			response.body =
+			response->status = 400;
+			response->description = "Bad Request";
+			response->body =
 				"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n"
 				"<HTML><HEAD>\n"
 				"<META http-equiv=Content-Type content=\"text/html; charset=windows-1252\">\n"
@@ -72,9 +72,9 @@ void cloud_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket>
 		}
 		else if (this->writers.find(nickname) != this->writers.end())
 		{
-			response.status = 403;
-			response.description = "Forbidden";
-			response.body =
+			response->status = 403;
+			response->description = "Forbidden";
+			response->body =
 				"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n"
 				"<HTML><HEAD>\n"
 				"<META http-equiv=Content-Type content=\"text/html; charset=windows-1252\">\n"
@@ -84,9 +84,9 @@ void cloud_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket>
 		}
 		else if (this->writers.size() >= (unsigned int)this->max_streams)
 		{
-			response.status = 403;
-			response.description = "Forbidden";
-			response.body =
+			response->status = 403;
+			response->description = "Forbidden";
+			response->body =
 				"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n"
 				"<HTML><HEAD>\n"
 				"<META http-equiv=Content-Type content=\"text/html; charset=windows-1252\">\n"
@@ -95,7 +95,7 @@ void cloud_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket>
 		}
 		else
 		{
-			response.body =
+			response->body =
 				"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n"
 				"<HTML><HEAD>\n"
 				"<META http-equiv=Content-Type content=\"text/html; charset=windows-1252\">\n"
@@ -112,9 +112,9 @@ void cloud_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket>
 			nickname = nickname.substr(0, nickname.length() - 4);
 		if (this->writers.find(nickname) == this->writers.end())
 		{
-			response.status = 404;
-			response.description = "Not Found";
-			response.body =
+			response->status = 404;
+			response->description = "Not Found";
+			response->body =
 				"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n"
 				"<HTML><HEAD>\n"
 				"<META http-equiv=Content-Type content=\"text/html; charset=windows-1252\">\n"
@@ -124,8 +124,8 @@ void cloud_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket>
 		}
 		else
 		{
-			response.headers.insert(std::pair<std::string, std::string>("Content-type", "video/x-flv"));
-			response.headers.insert(std::pair<std::string, std::string>("Cache-Control", "no-cache"));
+			response->headers.insert(std::pair<std::string, std::string>("Content-type", "video/x-flv"));
+			response->headers.insert(std::pair<std::string, std::string>("Cache-Control", "no-cache"));
 
 			if (this->dump_readers)
 				dump = new std::ofstream((this->dumps_location.string() + '/' + get_current_date_time() + '-' + nickname + "-reader.flv").c_str(), std::ofstream::binary);
@@ -135,12 +135,12 @@ void cloud_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket>
 
 	if (type != READER_CLIENT)
 	{
-		response.body_size = response.body.length();
-		response.headers.insert(std::pair<std::string, std::string>("Content-Length", boost::lexical_cast<std::string>(response.body_size)));
+		response->body_size = response->body.length();
+		response->headers.insert(std::pair<std::string, std::string>("Content-Length", boost::lexical_cast<std::string>(response->body_size)));
 	}
 
-	response.send(*socket);
-	if (response.status != 200)
+	response->send(*socket);
+	if (response->status != 200)
 		return;
 
 	cloud_writer* writer = NULL;

@@ -47,14 +47,14 @@ public:
 
 	//We provide files download, short files info options.
 	//TODO: remove info to another service  
-	virtual void service_call (boost::shared_ptr<boost::asio::ip::tcp::socket> socket, http_request request, http_response response)
+	virtual void service_call (boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response)
 	{
-		if (!show_directory_contents && (request.url == "/"))
-			request.url = "/index.html";
+		if (!show_directory_contents && (request->url == "/"))
+			request->url = "/index.html";
 
 		std::stringstream body;
-		boost::filesystem::path p = (service_default_path/request.url);
-		response.headers.insert(std::pair<std::string, std::string>("Connection", "close"));
+		boost::filesystem::path p = (service_default_path/request->url);
+		response->headers.insert(std::pair<std::string, std::string>("Connection", "close"));
 		if (exists(p))
 		{
 			if (is_regular_file(p))
@@ -62,7 +62,7 @@ public:
 
 				if(file_size(p) != 0)
 				{
-					if(request.arguments["info"] == "true")
+					if(request->arguments["info"] == "true")
 					{
 						boost::posix_time::ptime t = boost::posix_time::from_time_t(last_write_time(p));
 						body << p.filename() << "<br/> size is : " << file_size(p) <<" bytes. <br/> file was modified last time @ " << t << ".<br/><a href='/" << file_service_get_dif_path(service_default_path, p) << "' > click here to download. </a>";
@@ -86,28 +86,28 @@ public:
 						Current << cur;	
 						Expires << expire;
 
-						response.headers.insert(std::pair<std::string, std::string>("Date", Current.str()));
-						response.headers.insert(std::pair<std::string, std::string>("Server", "CF: RAC"));	
+						response->headers.insert(std::pair<std::string, std::string>("Date", Current.str()));
+						response->headers.insert(std::pair<std::string, std::string>("Server", "CF: RAC"));	
 
-						if (  Created.str() == request.headers["If-Modified-Since"])
+						if (  Created.str() == request->headers["If-Modified-Since"])
 						{
-							response.status=304;
-							response.description="Not Modified";
+							response->status=304;
+							response->description="Not Modified";
 						}
 						else
 						{
 							int length = file_size(p);
 
-							response.headers.insert(std::pair<std::string, std::string>("Last-Modified", Created.str()));
-							response.headers.insert(std::pair<std::string, std::string>("Content-Length", boost::lexical_cast<std::string>(length)));
-							response.headers.insert(std::pair<std::string, std::string>("Cache-Control", "max-age="+lt));
-							response.headers.insert(std::pair<std::string, std::string>("Expires", Expires.str()));
+							response->headers.insert(std::pair<std::string, std::string>("Last-Modified", Created.str()));
+							response->headers.insert(std::pair<std::string, std::string>("Content-Length", boost::lexical_cast<std::string>(length)));
+							response->headers.insert(std::pair<std::string, std::string>("Cache-Control", "max-age="+lt));
+							response->headers.insert(std::pair<std::string, std::string>("Expires", Expires.str()));
 
 							body << std::ifstream( p.string().c_str(), std::ios::binary).rdbuf();
-							response.body = body.str();
+							response->body = body.str();
 						}
 
-						response.send(*socket);
+						response->send(*socket);
 						return;
 					}
 				}
@@ -134,10 +134,10 @@ public:
 		{
 			body << "Error 404!" << p.filename() << "does not exist\n <br/> <a href='/'>Please come again!</a>";
 		}
-		response.body = "<head></head><body><h1>" 
+		response->body = "<head></head><body><h1>" 
 			+ body.str()
 			+"</h1></body>";
-		response.send(*socket);
+		response->send(*socket);
 		return;
 	}
 
