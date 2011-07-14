@@ -4,11 +4,10 @@ cloud_service::cloud_service(boost::property_tree::ptree config): service(config
 {
 	this->set_auto_close_socket(false);
 
-	this->install_location = config.get<std::string>("InstallLocation", boost::filesystem::current_path().string());
-	this->max_streams = config.get<int>("MaxStreams", 10);
-	this->dumps_location = config.get<std::string>("DumpsLocation", (boost::filesystem::current_path() /= "dumps").string());
-	this->dump_writers = config.get<bool>("DumpWriters", false);
-	this->dump_readers = config.get<bool>("DumpReaders", false);
+	this->max_streams = config.get<int>("max_streams", 10);
+	this->dumps_location = config.get<std::string>("dumps_location", (boost::filesystem::current_path() /= "dumps").string());
+	this->dump_writers = config.get<bool>("dump_writers", false);
+	this->dump_readers = config.get<bool>("dump_readers", false);
 }
 
 cloud_service::~cloud_service()

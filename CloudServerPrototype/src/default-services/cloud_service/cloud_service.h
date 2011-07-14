@@ -36,7 +36,6 @@ private:
 
 	enum client_type { GENERAL_CLIENT, WRITER_CLIENT, READER_CLIENT };
 
-	boost::filesystem::path install_location;
 	int max_streams;
 	boost::filesystem::path dumps_location;
 	bool dump_writers;
