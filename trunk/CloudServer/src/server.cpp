@@ -64,10 +64,6 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 		{
 			boost::shared_ptr<service> requested_service = server::find_service(request);
 			requested_service->service_call(request, socket);
-			if (requested_service->get_auto_close_socket())
-			{
-				socket->close();
-			}
 		}
 		catch(std::exception &e)
 		{
