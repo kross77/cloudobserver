@@ -37,7 +37,7 @@
 class file_service : public service
 {
 public:
-	file_service(boost::property_tree::ptree config) : service(config)
+	file_service(boost::property_tree::ptree config)
 	{ 
 		service_default_path = config.get<std::string>("root_file_system_directory", boost::filesystem::current_path().string());
 		show_directory_contents = config.get<bool>("show_directory_contents", false);

@@ -1,6 +1,6 @@
 #include "cloud_service.h"
 
-cloud_service::cloud_service(boost::property_tree::ptree config): service(config)
+cloud_service::cloud_service(boost::property_tree::ptree config)
 {
 	this->max_streams = config.get<int>("max_streams", 10);
 	this->dumps_location = config.get<std::string>("dumps_location", (boost::filesystem::current_path() /= "dumps").string());
