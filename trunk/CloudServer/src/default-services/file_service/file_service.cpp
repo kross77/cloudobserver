@@ -47,7 +47,7 @@ public:
 
 	//We provide files download, short files info options.
 	//TODO: remove info to another service  
-	virtual bool service_call (http_request request, boost::shared_ptr<boost::asio::ip::tcp::socket> socket)
+	virtual void service_call (http_request request, boost::shared_ptr<boost::asio::ip::tcp::socket> socket)
 	{
 		if (!show_directory_contents && (request.url == "/"))
 			request.url = "/index.html";
@@ -109,7 +109,7 @@ public:
 						}
 
 						response.send(*socket);
-						return 1;
+						return;
 					}
 				}
 
@@ -139,7 +139,7 @@ public:
 			+ body.str()
 			+"</h1></body>";
 		response.send(*socket);
-		return 1;
+		return;
 	}
 
 private:
