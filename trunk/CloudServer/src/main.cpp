@@ -128,7 +128,7 @@ bool save(std::string save_file_path)
 	}
 	catch(std::exception &e)
 	{
-		std::cout << "Error: configuration file should be valid JSON or XML file." << std::endl;
+		std::cout << "Error: saving error." << std::endl;
 		return false;
 	}
 	std::cout << "Current configuration saved to '" << save_file_path << "' file." << std::endl;

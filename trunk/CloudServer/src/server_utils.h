@@ -139,9 +139,10 @@ private:
 	std::string tag_properties;
 	std::string tag_root_service_web_path;
 	std::string tag_url;
+	std::string tag_url_equals;
+	std::string tag_url_extensions;
 	std::string tag_arguments;
 	std::string tag_headers;
-	std::string tag_url_extensions;
 	std::string tag_settings;
 	std::string tag_configuration;
 	std::string tag_path_configuration_services;
