@@ -19,6 +19,7 @@ server_utils::server_utils()
 	tag_url_extensions = "url_extensions";
 	tag_settings = "settings";
 	tag_configuration = "config";
+	tag_url_equals = "equals";
 	tag_path_configuration_services = tag_configuration + "." + "services";
 	tag_path_configuration_server_root_path = tag_configuration + "." + "server_root_path";
 	tag_path_configuration_port = tag_configuration + "." + "port";
@@ -61,6 +62,8 @@ std::map<boost::shared_ptr<service>, server_utils::service_description> server_u
 			continue;
 		}
 
+		one_description.service_custome_properties_tree = individual_service_tree.get_child(tag_settings, server_utils::empty_class<boost::property_tree::ptree>());
+
 		boost::property_tree::ptree service_properties_tree = individual_service_tree.get_child(tag_properties, server_utils::empty_class<boost::property_tree::ptree>());
 
 		std::string root_service_web_path = service_properties_tree.get<std::string>(tag_root_service_web_path, "");
@@ -72,7 +75,7 @@ std::map<boost::shared_ptr<service>, server_utils::service_description> server_u
 		BOOST_FOREACH(boost::property_tree::ptree::value_type &va,
 			service_properties_tree.get_child(tag_url, server_utils::empty_class<boost::property_tree::ptree>()))
 		{
-			if (va.first == "equals")
+			if (va.first == tag_url_equals)
 				one_description.set_of_url_rules.push_back(std::string(va.second.data()));
 			std::cout << "Required url: " << va.second.data() << std::endl;
 		}
@@ -97,9 +100,6 @@ std::map<boost::shared_ptr<service>, server_utils::service_description> server_u
 			one_description.url_extensions.insert(vp.second.data());
 			std::cout << "Supported url extension: " << vp.second.data() <<  std::endl;
 		}
-
-		one_description.service_custome_properties_tree = service_properties_tree.get_child(tag_settings, server_utils::empty_class<boost::property_tree::ptree>());
-
 
 		try{
 			boost::shared_ptr<service> one_service = util->give_me_class<service, boost::property_tree::ptree>(service_library_name, service_class_name, one_description.service_custome_properties_tree);
@@ -149,9 +149,9 @@ boost::property_tree::ptree server_utils::save_config( server_utils::server_desc
 		serv.put<std::string>(tag_library_name, sm.library_name);
 		serv.put<std::string>(tag_root_service_web_path, sm.root_service_web_path);
 
-		boost::property_tree::ptree serv_prop, head, arg;
+		boost::property_tree::ptree serv_prop, serv_sett, head, arg, url;
 		typedef boost::unordered_multimap<std::string, std::string> mulmap_t;
-		bool headers_exist = false, args_exist = false;
+		bool headers_exist = false, args_exist = false, urls_exist=false;
 		BOOST_FOREACH(  mulmap_t::value_type &iih, sm.set_of_arguments_rules)
 		{
 			args_exist = true;
@@ -162,6 +162,11 @@ boost::property_tree::ptree server_utils::save_config( server_utils::server_desc
 			headers_exist = true;
 			head.put<std::string>(iia.first.data(), iia.second.data());
 		}
+		BOOST_FOREACH(  std::string &iiu, sm.set_of_url_rules)
+		{
+			urls_exist = true;
+			url.put<std::string>(tag_url_equals, iiu);
+		}
 		if (args_exist)
 		{
 			serv_prop.push_back( std::make_pair(tag_arguments, arg));
@@ -170,14 +175,32 @@ boost::property_tree::ptree server_utils::save_config( server_utils::server_desc
 		{
 			serv_prop.push_back( std::make_pair(tag_headers, head));
 		}
-		if((headers_exist) || (args_exist))
+		if (urls_exist)
+		{
+			serv_prop.push_back( std::make_pair(tag_arguments, url));
+		}
+		if((headers_exist) || (args_exist) || (urls_exist))
 		{
 			serv.push_back(std::make_pair(tag_properties, serv_prop));
 		}
-		serv.push_back(std::make_pair(tag_properties, sm.service_custome_properties_tree));
+		if(!sm.service_custome_properties_tree.empty())
+		{
+			BOOST_FOREACH(boost::property_tree::ptree::value_type &va, sm.service_custome_properties_tree)
+			{
+				if(va.first.empty())
+				{
+					serv_sett.push_back(std::make_pair("", va.second));
+				}
+				else
+				{
+					serv_sett.push_back(std::make_pair(va.first, va.second));
+				}
+			}
+			serv.push_back(std::make_pair(tag_settings, serv_sett));
+		}
 		arr.push_back(std::make_pair(tag_service, serv));
 	}
-	root.put_child("config.services", arr);
+	root.put_child(tag_path_configuration_services, arr);
 	return root;
 }
 
@@ -263,6 +286,7 @@ void server_utils::add_to_services_list( boost::property_tree::ptree config )
 			continue;
 		}
 
+		one_description.service_custome_properties_tree = individual_service_tree.get_child(tag_settings, server_utils::empty_class<boost::property_tree::ptree>());
 		boost::property_tree::ptree service_properties_tree = individual_service_tree.get_child(tag_properties, server_utils::empty_class<boost::property_tree::ptree>());
 
 		std::string root_service_web_path = service_properties_tree.get<std::string>(tag_root_service_web_path, "");
@@ -291,8 +315,6 @@ void server_utils::add_to_services_list( boost::property_tree::ptree config )
 			one_description.url_extensions.insert(vp.second.data());
 			std::cout << "Supported url extension: " << vp.second.data() <<  std::endl;
 		}
-
-		one_description.service_custome_properties_tree = service_properties_tree.get_child(tag_settings, server_utils::empty_class<boost::property_tree::ptree>());
 
 		try{
 			boost::shared_ptr<service> one_service = util->give_me_class<service, boost::property_tree::ptree>(service_library_name, service_class_name, one_description.service_custome_properties_tree);
