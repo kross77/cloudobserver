@@ -29,7 +29,7 @@ class cloud_service: public service
 public:
 	cloud_service(boost::property_tree::ptree config);
 	~cloud_service();
-	virtual bool service_call(http_request request, boost::shared_ptr<boost::asio::ip::tcp::socket> socket);
+	virtual void service_call(http_request request, boost::shared_ptr<boost::asio::ip::tcp::socket> socket);
 private:
 	static bool check_nickname(std::string& nickname);
 	static std::string get_current_date_time();

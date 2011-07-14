@@ -14,7 +14,7 @@ cloud_service::~cloud_service()
 		delete i->second;
 }
 
-bool cloud_service::service_call(http_request request, boost::shared_ptr<boost::asio::ip::tcp::socket> socket)
+void cloud_service::service_call(http_request request, boost::shared_ptr<boost::asio::ip::tcp::socket> socket)
 {
 	http_response response;
 	if (request.url == "/users.json")
@@ -33,7 +33,7 @@ bool cloud_service::service_call(http_request request, boost::shared_ptr<boost::
 		response.body_size = response.body.length();
 		response.headers.insert(std::pair<std::string, std::string>("Content-Length", boost::lexical_cast<std::string>(response.body_size)));
 		response.send(*socket);
-		return true;
+		return;
 	}
 
 	std::string action = request.arguments["action"];
@@ -142,7 +142,7 @@ bool cloud_service::service_call(http_request request, boost::shared_ptr<boost::
 
 	response.send(*socket);
 	if (response.status != 200)
-		return false;
+		return;
 
 	cloud_writer* writer = NULL;
 	switch (type)
@@ -161,8 +161,6 @@ bool cloud_service::service_call(http_request request, boost::shared_ptr<boost::
 		this->writers[nickname]->connect_reader(socket, dump);
 		break;
 	}
-
-	return true;
 }
 
 bool cloud_service::check_nickname(std::string& nickname)
