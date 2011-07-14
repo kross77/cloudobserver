@@ -1,0 +1,280 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    
+    <head>
+        <title>
+            Cloud Observer
+        </title>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script type="text/javascript">
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-21524436-1']);
+			_gaq.push(['_setDomainName', 'none']);
+			_gaq.push(['_setAllowLinker', true]);
+			_gaq.push(['_trackPageview']);
+			
+			(function () {
+			    var ga = document.createElement('script');
+			    ga.type = 'text/javascript';
+			    ga.async = true;
+			    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			    var s = document.getElementsByTagName('script')[0];
+			    s.parentNode.insertBefore(ga, s);
+			})();
+			_gaq.push(['_setCustomVar', 1, // This custom var is set to slot #1
+			'URL', // The name acts as a kind of category for the user activity
+			window.location.toString(), // This value of the custom variable
+			1]);
+			_gaq.push(['_trackEvent', 'Visit on page', // category of activity
+			window.location.toString() // Action
+			]);
+		</script>
+        <style type="text/css">
+			body
+			{ min-width:600;
+			min-height:550;
+			  background-color:#333;
+			  font:100.01% "Trebuchet MS",Verdana,Arial,sans-serif;
+			}
+						
+			h1,h2,p
+			{
+			  margin:0 10px;
+			}
+			
+			a#rol{ color: #000; text-shadow:0px 1px 1px #3AA;} 
+			a#bol{ color: #FFF; text-shadow:1px 1px 1px #3AA;} 
+			
+			h1
+			{
+			  font-size:250%;
+			  color:#222;
+			  text-shadow:0 1px 1px #999;
+			}
+			
+			h2
+			{
+			  font-size:200%;
+			  color:#f0f0f0;
+			  padding-top:.3em;
+			}
+			div.BUTS{
+			height: 100;
+			 margin:0 10%;
+			align: center;
+			text-align:center;
+				   
+			}
+			div.BUT{
+				
+				  -moz-border-radius: 5px;
+  border-radius:5px;
+ 				 border: 1px double  rgba(0,0,0, 0.2);
+				width:150px 
+				display: block; 
+				width: 100;
+				height: 100;
+				margin:10px;
+		padding:10px;
+				float:left;
+				align: center;
+			text-align:center;
+				
+			}
+			div#nifty
+			{
+			  background:#FFF;
+			  margin:0 10%;
+			}
+			
+			b.rtop,b.rbottom
+			{
+			  display:block;
+			  background:#333;
+			  
+			}
+			
+			b.rtop b,b.rbottom b
+			{
+			  display:block;
+			  height:1px;
+			  overflow:hidden;
+			  background:#FFF;
+			  
+			}
+			
+			b.r1
+			{
+			  margin:0 5px;
+			}
+			
+			b.r2
+			{
+			  margin:0 3px;
+			}
+			
+			b.r3
+			{
+			  margin:0 2px;
+			}
+			
+			b.rtop b.r4,b.rbottom b.r4
+			{
+			  height:2px;
+			  margin:0 1px;
+			}
+			
+			p
+			{
+			  color:#000;
+			  text-shadow:0 1px 1px #999;
+			  padding-bottom:1em;
+			}
+			
+			input[type="button"],.eButton
+			{
+			  width:150px;
+			  word-wrap:break-word;
+			  height:auto;
+			  padding:5px 10px;
+			}
+        </style>
+        <script  type="text/javascript" src="js/jquery-1.5.1.min.js" >
+		</script>
+    </head>
+    <body onresize="resized()">
+             <script  type="text/javascript">
+            function getOffset(el) {
+                var _x = 0;
+                var _y = 0;
+                while (el && !isNaN(el.offsetLeft) && !isNaN(el.offsetTop)) {
+                    _x += el.offsetLeft - el.scrollLeft;
+                    _y += el.offsetTop - el.scrollTop;
+                    el = el.parentNode;
+                }
+                return {
+                    top: _y,
+                    left: _x
+                };
+            }
+
+        </script>
+ 
+        <div id="container">	
+        </div>
+        <div id="info">
+            
+          
+            <p/>
+             <div id="nifty">
+                <b class="rtop">
+                    <b class="r1">
+                    </b>
+                    <b class="r2">
+                    </b>
+                    <b class="r3">
+                    </b>
+                    <b class="r4">
+                    </b>
+                </b>
+                <h1>
+                    Downloads
+                </h1>
+                <p>
+                    Here you can get our latest broadcasting software.
+                </p>
+              
+
+                <b class="rbottom">
+                    <b class="r4">
+                    </b>
+                    <b class="r3">
+                    </b>
+                    <b class="r2">
+                    </b>
+                    <b class="r1">
+                    </b>
+                </b>
+          </div>
+            <p/>
+<div id="nifty">
+                <b class="rtop">
+                    <b class="r1">
+                    </b>
+                    <b class="r2">
+                    </b>
+                    <b class="r3">
+                    </b>
+                    <b class="r4">
+                    </b>
+                </b>
+                <h1>
+                    Select Platform
+</h1>
+           <p>     You can choose your platform and download will start immediately. </p>
+                <hr>
+               <div style="min-width:600; min-height:200; display:inline-block">
+<p style="float:left;"/>
+<a id="rol"  href="#Linux">	<div align="center" class="BUT">
+	                  <p><img src="platform-logo-linux-pr.png" /></p>
+	                   
+	                    <span>
+                         Linux 
+                        </span>
+</div></a>
+	<p style="float:left;"/>
+<a id="rol"  href="#Windows">	<div align="center" class="BUT">
+	                  <p><img src="platform-logo-windows-pr.png" /></p>   
+	                    <span>
+                         Windows 
+                        </span>
+</div></a>
+	<p style="float:left;"/>
+<a id="rol"  href="#MacOSX">	<div align="center" class="BUT">
+	                  <p><img src="platform-logo-mac-pr.png" /></p>
+	                    <span>
+                         Mac OS X 
+                        </span>
+</div></a>
+	<p style="float:left;"/>
+    </div>
+
+<script>
+
+                        $('.BUT').each(function(i) {
+                                $('.BUT').eq(i).bind('mouseover', function(e) {
+                                        $('.BUT').eq(i).css({
+ background:'#99CCFF'
+                                        }).show()
+                                })
+                                          $('.BUT').eq(i).bind('mousemove', function(e) {
+                                        $('.BUT').eq(i).css({
+ background:'#99CCFF'
+                                        }).show()
+                                })
+                                $('.BUT').eq(i).bind('mouseout', function() {
+                                                                            $('.BUT').eq(i).css({
+ background:'#FFF'
+                                        }).show()
+                                })
+                        })
+</script>
+<hr>
+
+<p style="font-size: 8pt">
+    Copyright &copy 2011 <a style=" color: #000;" id="rol" href="#cloudobserver" onClick="{	newwindow=window.open('http://code.google.com/p/cloudobserver/','CloudObserver','height=750,width=900');	if (window.focus) {newwindow.focus()}}">Cloud Forever</a>. All rights reserved. </p>
+                <b class="rbottom">
+                    <b class="r4">
+                    </b>
+                    <b class="r3">
+                    </b>
+                    <b class="r2">
+                    </b>
+                    <b class="r1">
+                    </b>
+                </b>
+            </div>
+        </div>
+    </body>
+
+</html>
