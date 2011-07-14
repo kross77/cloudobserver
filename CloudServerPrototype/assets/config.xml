@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+	<port>4773</port>
+	<services>
+		<service>
+			<name>File Service</name>
+			<class_name>file_service</class_name>
+			<library_name>services_file</library_name>
+			<properties>
+				<headers>
+					<Accept-Encoding></Accept-Encoding>
+				</headers>
+			</properties>
+		</service>
+		<service>
+			<name>Cloud Service</name>
+			<class_name>cloud_service</class_name>
+			<library_name>CloudService</library_name>
+			<properties>
+				<url>
+					<equals>/users.json</equals>
+				</url>
+				<arguments>
+					<action>write</action>
+					<action>read</action>
+				</arguments>
+			</properties>
+		</service>
+	</services>
+</config>

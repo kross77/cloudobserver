@@ -380,6 +380,18 @@ function cloud.project.useFFmpeg()
 	end 	
 end
 
+function cloud.project.copyConfig()
+	if not os.isdir("projects/" .. os.get() .. "-" .. action .. "/bin/debug" ) then
+		os.mkdir("projects/" .. os.get() .. "-" .. action .. "/bin/debug")
+	end
+	if not os.isdir("projects/" .. os.get() .. "-" .. action .."/bin/release" ) then
+		os.mkdir("projects/" .. os.get() .. "-" .. action .. "/bin/release")
+	end
+	os.copyfile("assets/config.xml" , "projects/" .. os.get() .. "-" .. action .. "/config.xml" )
+	os.copyfile("assets/config.xml" , "projects/" .. os.get() .. "-" .. action .. "/bin/debug/config.xml" )
+	os.copyfile("assets/config.xml" , "projects/" .. os.get() .. "-" .. action .. "/bin/release/config.xml" )
+end
+
 solution "CloudServerPrototype"
 	location ( "projects/".. os.get() .. "-" ..  action )
 	configurations { "Debug", "Release" }
@@ -405,6 +417,8 @@ solution "CloudServerPrototype"
 		
 		cloud.project.init()
 		cloud.project.useBoost()
+		
+		cloud.project.copyConfig()
 		
 		links { "cf-http" }
 		includedirs { "3rdparty/cf-http"}
