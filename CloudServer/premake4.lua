@@ -522,7 +522,7 @@ solution "CloudServer"
 -- DO NOT CREATE SERVICE PROJECT NAMES WITH "." IN THAM USE "_" INSTEAD			
 ----------------------------------------------------------------------------------------------			
 	
-	project "services_file"
+	project "FileService"
 		kind "SharedLib"
 		language "C++"
 		location ( "projects/" .. os.get() .. "-" .. action )
@@ -531,9 +531,9 @@ solution "CloudServer"
 		cloud.project.useBoost()
 
 		links { "cf-http" }
-		includedirs { "3rdparty/cf-http", "3rdparty/sqlite" }
+		includedirs { "3rdparty/cf-http" }
 		
-		files { "src/default-services/file/**"}
+		files { "src/default-services/file_service/**"}
 		files { "service-interface/**" }
 
 		configuration "Debug"

@@ -5,7 +5,7 @@
 		<service>
 			<name>File Service</name>
 			<class_name>file_service</class_name>
-			<library_name>services_file</library_name>
+			<library_name>FileService</library_name>
 			<properties>
 				<headers>
 					<Accept-Encoding></Accept-Encoding>
