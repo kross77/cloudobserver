@@ -12,6 +12,7 @@
 				</headers>
 				<settings>
 					<root_file_system_directory>htdocs</root_file_system_directory>
+					<show_directory_contents>false</show_directory_contents>
 				</settings>
 			</properties>
 		</service>

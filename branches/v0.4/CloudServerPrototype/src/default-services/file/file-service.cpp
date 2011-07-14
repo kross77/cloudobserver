@@ -40,6 +40,7 @@ public:
 	file_service(boost::property_tree::ptree config) : service(config)
 	{ 
 		service_default_path = config.get<std::string>("root_file_system_directory", boost::filesystem::current_path().string());
+		show_directory_contents = config.get<bool>("show_directory_contents", false);
 		std::cout << "\nCreated a File-Service" << std::endl;
 	}
 	~file_service(void){std::cout << "\nDestroyed a File-Service"<< std::endl;}
@@ -48,6 +49,9 @@ public:
 	//TODO: remove info to another service  
 	virtual bool service_call (http_request request, boost::shared_ptr<boost::asio::ip::tcp::socket> socket)
 	{
+		if (!show_directory_contents && (request.url == "/"))
+			request.url = "/index.html";
+
 		std::stringstream body;
 		boost::filesystem::path p = (service_default_path/request.url);
 		http_response response;
@@ -112,13 +116,15 @@ public:
 			}
 			else if (is_directory(p))
 			{
-				body << p << " is a directory containing:\n";
-
-				for (boost::filesystem::directory_iterator itr(p); itr!=boost::filesystem::directory_iterator(); ++itr)
+				if (show_directory_contents)
 				{
+					body << p << " is a directory containing:\n";
 
-					body << "<br/><a href='/" << file_service_get_dif_path(service_default_path, itr->path())	<< "' >"<< itr->path().filename() << "</a>";
+					for (boost::filesystem::directory_iterator itr(p); itr!=boost::filesystem::directory_iterator(); ++itr)
+						body << "<br/><a href='/" << file_service_get_dif_path(service_default_path, itr->path())	<< "' >"<< itr->path().filename() << "</a>";
 				}
+				else
+					body << "Error 403! Listing the contents of the " << p.filename() << " directory is forbidden.\n";
 			}
 			else
 			{
@@ -138,6 +144,7 @@ public:
 
 private:
 	boost::filesystem::path service_default_path;
+	bool show_directory_contents;
 
 	std::string file_service_get_dif_path(boost::filesystem::path base_path, boost::filesystem::path new_path)
 	{
