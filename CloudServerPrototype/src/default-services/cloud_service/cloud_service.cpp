@@ -19,6 +19,26 @@ cloud_service::~cloud_service()
 
 bool cloud_service::service_call(http_request request, boost::shared_ptr<boost::asio::ip::tcp::socket> socket)
 {
+	http_response response;
+	if (request.url == "/users.json")
+	{
+		std::ostringstream users_stream;
+		users_stream << "[";
+		for (std::map<std::string, cloud_writer*>::iterator i = this->writers.begin(); i != this->writers.end(); ++i)
+			users_stream << "\n\t{\n\t\t\"nickname\": \""
+				<< i->first << "\",\n\t\t\"width\": "
+				<< i->second->get_width() << ",\n\t\t\"height\": "
+				<< i->second->get_height() << "\n\t},";
+		std::string users = users_stream.str();
+		if (this->writers.size() > 0)
+			users = users.substr(0, users.length() - 1);
+		response.body = users.append("\n]");
+		response.body_size = response.body.length();
+		response.headers.insert(std::pair<std::string, std::string>("Content-Length", boost::lexical_cast<std::string>(response.body_size)));
+		response.send(*socket);
+		return true;
+	}
+
 	std::string action = request.arguments["action"];
 	client_type type = GENERAL_CLIENT;
 	if (action == "write")
@@ -26,7 +46,6 @@ bool cloud_service::service_call(http_request request, boost::shared_ptr<boost::
 	if (action == "read")
 		type = READER_CLIENT;
 
-	http_response response;
 	std::string nickname = request.url.substr(1);
 	std::ofstream* dump = NULL;
 	switch (type)
