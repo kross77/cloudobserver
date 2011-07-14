@@ -34,6 +34,7 @@ private:
 	int height;
 
 	std::vector<cloud_reader*> readers;
+	std::vector<std::vector<cloud_reader*>::iterator> disconnected_readers;
 
 	char* header;
 	std::vector<std::pair<char*, int> > script_data, tags_buffer;

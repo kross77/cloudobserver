@@ -195,11 +195,15 @@ void cloud_writer::process()
 				{
 					std::cout << "Cloud Service: Reader connection was closed." << std::endl;
 					delete *i;
-					this->readers.erase(i);
+					this->disconnected_readers.push_back(i);
 				}
 
 				delete[] modified_tag_header;
 			}
+
+			for (std::vector<std::vector<cloud_reader*>::iterator>::iterator i = this->disconnected_readers.begin(); i != this->disconnected_readers.end(); ++i)
+				this->readers.erase(*i);
+			this->disconnected_readers.clear();
 
 			if (!this->key_frames && (tag_header[0] != TAGTYPE_DATA))
 			{
