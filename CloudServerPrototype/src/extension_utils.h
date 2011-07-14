@@ -34,6 +34,7 @@
 #define BOOST_EXTENSION_UTILITIES_H 
 //STD
 #include <iostream>
+#include <stdexcept>
 #include <string>
 #include <map>
 //Boost

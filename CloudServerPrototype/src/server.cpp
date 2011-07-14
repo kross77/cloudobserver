@@ -102,5 +102,6 @@ boost::property_tree::ptree server::get_configuration()
 
 boost::shared_ptr<service> server::find_service( http_request request )
 {
-	return util->find_service(util->parse_request(request));
+	server_utils::request_data request_data = util->parse_request(request);
+	return util->find_service(request_data);
 }
