@@ -11,7 +11,7 @@
 class service
 {
 public:
-	virtual void service_call(http_request, boost::shared_ptr<boost::asio::ip::tcp::socket>) = 0;
+	virtual void service_call(boost::shared_ptr<boost::asio::ip::tcp::socket>, http_request, http_response) = 0;
 };
 
 #endif // SERVICE_HPP

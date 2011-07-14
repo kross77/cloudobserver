@@ -14,9 +14,8 @@ cloud_service::~cloud_service()
 		delete i->second;
 }
 
-void cloud_service::service_call(http_request request, boost::shared_ptr<boost::asio::ip::tcp::socket> socket)
+void cloud_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, http_request request, http_response response)
 {
-	http_response response;
 	if (request.url == "/users.json")
 	{
 		std::ostringstream users_stream;

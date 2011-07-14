@@ -47,14 +47,13 @@ public:
 
 	//We provide files download, short files info options.
 	//TODO: remove info to another service  
-	virtual void service_call (http_request request, boost::shared_ptr<boost::asio::ip::tcp::socket> socket)
+	virtual void service_call (boost::shared_ptr<boost::asio::ip::tcp::socket> socket, http_request request, http_response response)
 	{
 		if (!show_directory_contents && (request.url == "/"))
 			request.url = "/index.html";
 
 		std::stringstream body;
 		boost::filesystem::path p = (service_default_path/request.url);
-		http_response response;
 		response.headers.insert(std::pair<std::string, std::string>("Connection", "close"));
 		if (exists(p))
 		{
