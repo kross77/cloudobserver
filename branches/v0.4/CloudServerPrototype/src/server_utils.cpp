@@ -174,7 +174,7 @@ boost::shared_ptr<service> server_utils::get_service_by_name(std::string name)
 			return it.first;
 		}
 	}
-	throw std::exception("Service with such name was not found map not found!");
+	throw std::runtime_error("Service with such name was not found map not found!");
 	boost::shared_ptr<service> null;
 	return null;
 }
@@ -370,7 +370,7 @@ boost::shared_ptr<service> server_utils::find_service(server_utils::request_data
 	}
 	if (pre_max == max)
 	{
-		throw std::exception("Could not find suitable service.");
+		throw std::runtime_error("Could not find suitable service.");
 	}
 	std::cout << "Found service: " << name << std::endl;
 	return result;
