@@ -392,6 +392,18 @@ function cloud.project.copyConfig()
 	os.copyfile("assets/config.xml" , "projects/" .. os.get() .. "-" .. action .. "/bin/release/config.xml" )
 end
 
+function cloud.project.createDumpsFolder()
+	if not os.isdir("projects/" .. os.get() .. "-" .. action .. "/bin/debug" ) then
+		os.mkdir("projects/" .. os.get() .. "-" .. action .. "/bin/debug")
+	end
+	if not os.isdir("projects/" .. os.get() .. "-" .. action .."/bin/release" ) then
+		os.mkdir("projects/" .. os.get() .. "-" .. action .. "/bin/release")
+	end
+	os.mkdir("projects/" .. os.get() .. "-" .. action .. "/dumps")
+	os.mkdir("projects/" .. os.get() .. "-" .. action .. "/bin/debug/dumps")
+	os.mkdir("projects/" .. os.get() .. "-" .. action .. "/bin/release/dumps")
+end
+
 solution "CloudServerPrototype"
 	location ( "projects/".. os.get() .. "-" ..  action )
 	configurations { "Debug", "Release" }
@@ -419,6 +431,7 @@ solution "CloudServerPrototype"
 		cloud.project.useBoost()
 		
 		cloud.project.copyConfig()
+		cloud.project.createDumpsFolder()
 		
 		links { "cf-http" }
 		includedirs { "3rdparty/cf-http"}
