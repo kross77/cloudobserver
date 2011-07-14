@@ -38,6 +38,7 @@
 #include <string>
 #include <map>
 #include <set>
+#include <vector>
 
 //Boost
 #include <boost/asio.hpp>
@@ -76,6 +77,7 @@ public:
 		boost::property_tree::ptree service_custome_properties_tree;
 
 		//A service might have
+		std::vector<std::string> set_of_url_rules;
 		boost::unordered_multimap<std::string, std::string> set_of_header_rules;
 		boost::unordered_multimap<std::string, std::string> set_of_arguments_rules;
 		std::set<std::string> url_extensions;
