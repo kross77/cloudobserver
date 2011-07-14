@@ -155,17 +155,17 @@ boost::property_tree::ptree server_utils::save_config( server_utils::server_desc
 		BOOST_FOREACH(  mulmap_t::value_type &iih, sm.set_of_arguments_rules)
 		{
 			args_exist = true;
-			arg.put<std::string>(iih.first.data(), iih.second.data());
+			arg.push_back( std::make_pair(iih.first, iih.second));
 		}
 		BOOST_FOREACH(  mulmap_t::value_type &iia, sm.set_of_header_rules)
 		{
 			headers_exist = true;
-			head.put<std::string>(iia.first.data(), iia.second.data());
+			head.push_back( std::make_pair(iia.first, iia.second));
 		}
 		BOOST_FOREACH(  std::string &iiu, sm.set_of_url_rules)
 		{
 			urls_exist = true;
-			url.put<std::string>(tag_url_equals, iiu);
+			url.push_back( std::make_pair(tag_url_equals, iiu));
 		}
 		if (args_exist)
 		{
@@ -177,7 +177,7 @@ boost::property_tree::ptree server_utils::save_config( server_utils::server_desc
 		}
 		if (urls_exist)
 		{
-			serv_prop.push_back( std::make_pair(tag_arguments, url));
+			serv_prop.push_back( std::make_pair(tag_url, url));
 		}
 		if((headers_exist) || (args_exist) || (urls_exist))
 		{
