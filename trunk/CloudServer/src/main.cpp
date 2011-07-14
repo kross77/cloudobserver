@@ -19,7 +19,7 @@ std::string default_configuration_file_name = "config.xml";
 
 void print_info()
 {
-	std::cout << "Expendable Server 1.0" << std::endl;
+	std::cout << "Cloud Server v0.5" << std::endl;
 	std::cout << "Copyright (c) 2011 Cloud Forever. All rights reserved." << std::endl;
 	std::cout << std::endl;
 	std::cout << "Type 'help' to see help messages." << std::endl;

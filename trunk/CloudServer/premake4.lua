@@ -449,7 +449,7 @@ function cloud.project.copyHtdocsFolder()
 	os.copydir("assets/htdocs",  "projects/" .. os.get() .. "-" .. action .. "/htdocs")
 end
 
-solution "CloudServerPrototype"
+solution "CloudServer"
 	location ( "projects/".. os.get() .. "-" ..  action )
 	configurations { "Debug", "Release" }
 	objdir     ( "projects/" .. os.get() .. "-" .. action .. "/bin/obj" )
@@ -467,7 +467,7 @@ solution "CloudServerPrototype"
 -- server ------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------			
 		
-	project "ExtendableServer"
+	project "CloudServer"
 		kind "ConsoleApp"
 		language "C++"
 		location ( "projects/" .. os.get() .. "-" .. action )
