@@ -10,6 +10,9 @@
 				<headers>
 					<Accept-Encoding></Accept-Encoding>
 				</headers>
+				<settings>
+					<root_file_system_directory>htdocs</root_file_system_directory>
+				</settings>
 			</properties>
 		</service>
 		<service>
