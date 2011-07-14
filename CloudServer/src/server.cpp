@@ -60,7 +60,14 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 		}
 
 		std::cout << "request url: " << request->url << "\n";
+
 		boost::shared_ptr<http_response> response = boost::make_shared<http_response>();
+		std::ostringstream formatter;
+		formatter.imbue(std::locale(std::cout.getloc(), new boost::posix_time::time_facet("%a, %d %b %Y %H:%M:%S GMT")));
+		formatter << boost::posix_time::second_clock::local_time();
+		response->headers.insert(std::pair<std::string, std::string>("Date", formatter.str()));
+		response->headers.insert(std::pair<std::string, std::string>("Server", "Cloud Server v0.5"));
+
 		try
 		{
 			boost::shared_ptr<service> requested_service = server::find_service(*request);
