@@ -204,9 +204,20 @@ boost::property_tree::ptree server_utils::save_config( server_utils::server_desc
 	return root;
 }
 
-boost::shared_ptr<service> server_utils::get_service_by_name(std::string name)
+std::multiset<std::string> server_utils::get_services_names()
 {
 	std::multiset<std::string> service_names;
+	typedef std::map<boost::shared_ptr<service>, server_utils::service_description> map_t;
+	BOOST_FOREACH(map_t::value_type &it, description.service_map)
+	{
+		server_utils::service_description descr = it.second;
+		service_names.insert(descr.name);
+	}
+	return service_names;
+}
+
+boost::shared_ptr<service> server_utils::get_service_by_name(std::string name)
+{
 	typedef std::map<boost::shared_ptr<service>, server_utils::service_description> map_t;
 	BOOST_FOREACH(map_t::value_type &it, description.service_map)
 	{
