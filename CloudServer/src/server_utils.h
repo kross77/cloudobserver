@@ -72,7 +72,7 @@ public:
 	struct service_description
 	{
 		//A service must have
-		std::string name;
+		boost::shared_ptr<service> service_ptr;
 		std::string library_name;
 		std::string class_name;
 		std::string root_file_system_directory;
@@ -94,7 +94,7 @@ public:
 		boost::filesystem::path server_root_path;
 
 		//We keep all services and their rules inside of a map
-		std::map<boost::shared_ptr<service>, server_utils::service_description> service_map;
+		std::map<std::string, server_utils::service_description> service_map;
 	};
 
 	//Each request provides us with data
@@ -132,10 +132,12 @@ public:
 
 private:
 
-	std::map<boost::shared_ptr<service>, server_utils::service_description> parse_config_services( boost::property_tree::ptree config );
+	std::map<std::string, server_utils::service_description> parse_config_services( boost::property_tree::ptree config );
 
 	// For services creation from shared libraries
-	extension_utils *util; 
+	extension_utils *util;
+
+	std::stringstream log;
 
 	std::string tag_service;
 	std::string tag_library_name;
@@ -160,7 +162,6 @@ private:
 		static T pt;
 		return pt;
 	}
-	bool find_service_by_name_iterator_function(std::pair<boost::shared_ptr<service>, server_utils::service_description> const & element, std::string name) const;
 };
 
 #endif // SERVER_UTILITIES_H

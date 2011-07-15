@@ -31,6 +31,8 @@ public:
 	~cloud_service();
 	virtual void service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response);
 	virtual void apply_config(boost::property_tree::ptree config);
+	virtual void start(){} // TODO: implement
+	virtual void stop(){} // TODO: implement
 private:
 	static bool check_nickname(std::string& nickname);
 	static std::string get_current_date_time();

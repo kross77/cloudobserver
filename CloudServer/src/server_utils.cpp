@@ -31,23 +31,24 @@ boost::shared_ptr<service> server_utils::create_service(std::string library_name
 }
 
 //Do not forget to change save_config if you change parse_config_services
-std::map<boost::shared_ptr<service>, server_utils::service_description> server_utils::parse_config_services( boost::property_tree::ptree config )
+std::map<std::string, server_utils::service_description> server_utils::parse_config_services( boost::property_tree::ptree config )
 {
-	std::map<boost::shared_ptr<service>, server_utils::service_description> services_map;
+	std::map<std::string, server_utils::service_description> services_map;
 
 	BOOST_FOREACH(boost::property_tree::ptree::value_type &v,
 		config.get_child(tag_path_configuration_services, server_utils::empty_class<boost::property_tree::ptree>()))
 	{
 		server_utils::service_description one_description;
+		std::string service_name;
 		std::string service_library_name;
 		std::string service_class_name;
 		boost::property_tree::ptree individual_service_tree = (boost::property_tree::ptree) v.second ;
 
-		std::string service_name = individual_service_tree.get<std::string>(tag_service_name, "unnamed service");
-		one_description.name = service_name;
-		std::cout << std::endl << "Service name: " << service_name << std::endl;
+		try
+		{
+			service_name = individual_service_tree.get<std::string>(tag_service_name); // Will throw error if not defined
+			std::cout << std::endl << "Service name: " << service_name << std::endl;
 
-		try{
 			service_library_name = individual_service_tree.get<std::string>(tag_library_name); // Will throw error if not defined
 			one_description.library_name = service_library_name;
 			std::cout << "Library name: " << service_library_name << std::endl;
@@ -58,7 +59,7 @@ std::map<boost::shared_ptr<service>, server_utils::service_description> server_u
 		}
 		catch(std::exception &e)
 		{
-			std::cout << std::endl << "Parsing library or class name error in service: " << service_name << std::endl;
+			std::cout << std::endl << "Parsing service library, class or name error in service: " << service_name << std::endl;
 			continue;
 		}
 
@@ -106,12 +107,14 @@ std::map<boost::shared_ptr<service>, server_utils::service_description> server_u
 			try
 			{
 				one_service->apply_config(one_description.service_custome_properties_tree);
+				one_description.service_ptr = one_service;
 			}
 			catch (service::not_configurable_exception)
 			{
 				std::cout << "Service '" << service_name << " is not configurable." << std::endl;
 			}
-			services_map.insert(std::pair<boost::shared_ptr<service>, server_utils::service_description>(one_service, one_description));
+			services_map.insert(std::pair<std::string, server_utils::service_description>(service_name, one_description));
+			one_service->start();
 		}
 		catch(std::exception &e)
 		{
@@ -146,13 +149,13 @@ boost::property_tree::ptree server_utils::save_config( server_utils::server_desc
 	boost::property_tree::ptree root, arr;
 	root.put<int>(tag_path_configuration_port, server_configuration_description.port);
 	root.put<std::string>(tag_path_configuration_server_root_path, server_configuration_description.server_root_path.string());
-	typedef std::map<boost::shared_ptr<service>, server_utils::service_description> map_t;
+	typedef std::map<std::string, server_utils::service_description> map_t;
 	BOOST_FOREACH( map_t::value_type &i, server_configuration_description.service_map)
 	{
 		server_utils::service_description sm = i.second;
 		boost::property_tree::ptree serv;
 
-		serv.put<std::string>(tag_service_name, sm.name);
+		serv.put<std::string>(tag_service_name, i.first);
 		serv.put<std::string>(tag_class_name, sm.class_name);
 		serv.put<std::string>(tag_library_name, sm.library_name);
 		serv.put<std::string>(tag_root_service_web_path, sm.root_service_web_path);
@@ -215,34 +218,28 @@ boost::property_tree::ptree server_utils::save_config( server_utils::server_desc
 std::multiset<std::string> server_utils::get_services_names()
 {
 	std::multiset<std::string> service_names;
-	typedef std::map<boost::shared_ptr<service>, server_utils::service_description> map_t;
+	typedef std::map<std::string, server_utils::service_description> map_t;
 	BOOST_FOREACH(map_t::value_type &it, description.service_map)
 	{
-		server_utils::service_description descr = it.second;
-		service_names.insert(descr.name);
+		service_names.insert(it.first);
 	}
 	return service_names;
 }
 
 server_utils::service_description server_utils::get_service_description_by_name(std::string name)
 {
-	typedef std::map<boost::shared_ptr<service>, server_utils::service_description> map_t;
-	BOOST_FOREACH(map_t::value_type &it, description.service_map)
+	typedef std::map<std::string, server_utils::service_description> map_t;
+	map_t::iterator it = description.service_map.find(name);
+	if (it != description.service_map.end())
 	{
-		server_utils::service_description descr = it.second;
-		if(descr.name == name)
-		{
-			return it.second;
-		}
+		return it->second;
+	} 
+	else
+	{
+		throw std::runtime_error("Service with such name was not found map not found!");
 	}
-	throw std::runtime_error("Service with such name was not found map not found!");
 	server_utils::service_description null;
 	return null;
-}
-
-bool server_utils::find_service_by_name_iterator_function(std::pair<boost::shared_ptr<service>, server_utils::service_description> const & element, std::string name) const
-{
-	return element.second.name == name;
 }
 
 server_utils::service_description server_utils::stop_service_by_name(std::string name)
@@ -264,16 +261,16 @@ server_utils::service_description server_utils::stop_service_by_name(std::string
 
 boost::shared_ptr<service> server_utils::get_service_by_name(std::string name)
 {
-	typedef std::map<boost::shared_ptr<service>, server_utils::service_description> map_t;
-	BOOST_FOREACH(map_t::value_type it, description.service_map)
+	typedef std::map<std::string, server_utils::service_description> map_t;
+	map_t::iterator it = description.service_map.find(name);
+	if (it != description.service_map.end())
 	{
-		server_utils::service_description descr = it.second;
-		if(descr.name == name)
-		{
-			return it.first;
-		}
+		return it->second.service_ptr;
+	} 
+	else
+	{
+		throw std::runtime_error("Service with such name was not found map not found!");
 	}
-	throw std::runtime_error("Service with such name was not found map not found!");
 	boost::shared_ptr<service> null;
 	return null;
 }
@@ -281,7 +278,7 @@ boost::shared_ptr<service> server_utils::get_service_by_name(std::string name)
 std::multiset<std::string> server_utils::get_services_class_names()
 {
 	std::multiset<std::string> class_names;
-	typedef std::map<boost::shared_ptr<service>, server_utils::service_description> map_t;
+	typedef std::map<std::string, server_utils::service_description> map_t;
 	BOOST_FOREACH(map_t::value_type &it, description.service_map)
 	{
 		server_utils::service_description descr = it.second;
@@ -293,7 +290,7 @@ std::multiset<std::string> server_utils::get_services_class_names()
 std::multiset<std::string> server_utils::get_services_libraries_names()
 {
 	std::multiset<std::string> libraries_names;
-	typedef std::map<boost::shared_ptr<service>, server_utils::service_description> map_t;
+	typedef std::map<std::string, server_utils::service_description> map_t;
 	BOOST_FOREACH(map_t::value_type &it, description.service_map)
 	{
 		server_utils::service_description descr = it.second;
@@ -306,7 +303,7 @@ void server_utils::add_to_services_list( boost::property_tree::ptree config )
 {
 	std::multiset<std::string> classes = server_utils::get_services_class_names();
 	std::multiset<std::string> libs = server_utils::get_services_libraries_names();
-
+	typedef std::map<std::string, server_utils::service_description> map_t;
 	BOOST_FOREACH(boost::property_tree::ptree::value_type &v,
 		config.get_child("config.services", server_utils::empty_class<boost::property_tree::ptree>()))
 	{
@@ -314,9 +311,14 @@ void server_utils::add_to_services_list( boost::property_tree::ptree config )
 		std::string service_library_name;
 		std::string service_class_name;
 		boost::property_tree::ptree individual_service_tree = (boost::property_tree::ptree) v.second ;
+		std::string service_name = individual_service_tree.get<std::string>(tag_service_name);
 
-		std::string service_name = individual_service_tree.get<std::string>(tag_service_name, "unnamed service");
-		one_description.name = service_name;
+		map_t::iterator mitr = description.service_map.find(service_name);
+		if(mitr != description.service_map.end())
+		{
+			std::cout << std::endl << "Service: " << service_name << " already exists." << std::endl;
+			continue;
+		}
 		std::cout << std::endl << "Service name: " << service_name << std::endl;
 
 		try{
@@ -331,15 +333,6 @@ void server_utils::add_to_services_list( boost::property_tree::ptree config )
 		catch(std::exception &e)
 		{
 			std::cout << std::endl << "Parsing library or class name error in service: " << service_name << std::endl;
-			continue;
-		}
-		std::multiset<std::string>::iterator cn, ln;
-		cn = classes.find(service_class_name);
-		ln = libs.find(service_library_name);
-
-		if((cn != classes.end()) || (ln != libs.end()))
-		{
-			std::cout << "Service: " << service_name << "already exists" << std::endl; 
 			continue;
 		}
 
@@ -373,9 +366,10 @@ void server_utils::add_to_services_list( boost::property_tree::ptree config )
 			std::cout << "Supported url extension: " << vp.second.data() <<  std::endl;
 		}
 
-		try{
-			boost::shared_ptr<service> one_service = util->give_me_class<service, boost::property_tree::ptree>(service_library_name, service_class_name, one_description.service_custome_properties_tree);
-			description.service_map.insert(std::pair<boost::shared_ptr<service>, server_utils::service_description>(one_service, one_description));
+		try
+		{
+			one_description.service_ptr = util->give_me_class<service, boost::property_tree::ptree>(service_library_name, service_class_name, one_description.service_custome_properties_tree);
+			description.service_map.insert(std::pair<std::string, server_utils::service_description>(service_name, one_description));
 		}
 		catch(std::exception &e)
 		{
@@ -450,7 +444,7 @@ int server_utils::relevance(const server_utils::service_description &r, const se
 
 boost::shared_ptr<service> server_utils::find_service(server_utils::request_data & d)
 {
-	typedef std::map<boost::shared_ptr<service>, server_utils::service_description> map_t;
+	typedef std::map<std::string, server_utils::service_description> map_t;
 	boost::shared_ptr<service> result;
 	int pre_max = -2;
 	int max = -1;
@@ -462,8 +456,8 @@ boost::shared_ptr<service> server_utils::find_service(server_utils::request_data
 		{
 			pre_max = max;
 			max = current;
-			result = data_it.first;
-			name = data_it.second.name;
+			result = data_it.second.service_ptr;
+			name = data_it.first;
 		}
 	}
 	if (pre_max == max)
