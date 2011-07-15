@@ -1,171 +1,92 @@
+#include "file_service.h"
 
-
-#include "../../../service-interface/service.hpp"
-
-//STD
-#include <iostream>
-#include <typeinfo>
-#include <sstream>
-#include <fstream>
-#include <stdio.h>
-#include <time.h>
-#include <vector> 
-
-// Boost
-#include <boost/process.hpp> 
-#include <boost/algorithm/string.hpp>
-#include <boost/lexical_cast.hpp>
-#include <boost/regex.hpp>
-#include <boost/thread.hpp>
-#include <boost/timer.hpp>
-#include <boost/make_shared.hpp>
-#include <boost/date_time.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
-#include <boost/date_time/posix_time/posix_time_io.hpp>
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/xml_parser.hpp>
-
-///////////////////////////////
-#include <map>
-#include <boost/extension/extension.hpp>
-#include <boost/extension/factory.hpp>
-#include <boost/extension/type_map.hpp>
-
-#ifndef _FILE_SERVICE
-#define _FILE_SERVICE
-// class accessible thru Boost Extension for programs with access to service class\interface
-class file_service : public service
+file_service::file_service()
 {
-public:
-	file_service()
-	{ 
-		service_default_path = boost::filesystem::current_path().string();
-		show_directory_contents = false;
-		std::cout << "\nCreated a File-Service" << std::endl;
-	}
-	~file_service(void){std::cout << "\nDestroyed a File-Service"<< std::endl;}
+	this->root_path = boost::filesystem::current_path().string();
+	this->show_directory_contents = false;
+}
 
-	//We provide files download, short files info options.
-	//TODO: remove info to another service  
-	virtual void service_call (boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response)
+void file_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response)
+{
+	if (!this->show_directory_contents && (request->url == "/"))
+		request->url = "/index.html";
+
+	std::ostringstream body;
+	boost::filesystem::path target = this->root_path / request->url;
+
+	response->headers.insert(std::pair<std::string, std::string>("Connection", "close"));
+
+	if (exists(target))
 	{
-		if (!show_directory_contents && (request->url == "/"))
-			request->url = "/index.html";
-
-		std::stringstream body;
-		boost::filesystem::path p = (service_default_path/request->url);
-		response->headers.insert(std::pair<std::string, std::string>("Connection", "close"));
-		if (exists(p))
+		if (is_regular_file(target))
 		{
-			if (is_regular_file(p))
-			{       
-
-				if(file_size(p) != 0)
+			uintmax_t target_size = file_size(target);
+			if (target_size != 0)
+			{
+				boost::posix_time::ptime target_modified = boost::posix_time::from_time_t(last_write_time(target));
+				if (request->arguments["info"] == "true")
+					body << target.filename()
+						<< "<br/> size: " << target_size << " byte" << ((target_size > 1) ? "s" : "")
+						<< "<br/> modified: " << target_modified
+						<< "<br/><a href=\"" << request->url << "\">download</a>";
+				else
 				{
-					if(request->arguments["info"] == "true")
+					std::ostringstream formatter;
+					formatter.imbue(std::locale(std::cout.getloc(), new boost::posix_time::time_facet("%a, %d %b %Y %H:%M:%S GMT")));
+					formatter << target_modified;
+					if (formatter.str() == request->headers["If-Modified-Since"])
 					{
-						boost::posix_time::ptime t = boost::posix_time::from_time_t(last_write_time(p));
-						body << p.filename() << "<br/> size is : " << file_size(p) <<" bytes. <br/> file was modified last time @ " << t << ".<br/><a href='/" << file_service_get_dif_path(service_default_path, p) << "' > click here to download. </a>";
+						response->status = 304;
+						response->description = "Not Fodified";
 					}
 					else
 					{
-						boost::posix_time::ptime t = boost::posix_time::from_time_t(last_write_time(p));
-						boost::posix_time::ptime cur = boost::posix_time::second_clock::local_time();
-						boost::posix_time::time_duration  ex = boost::posix_time::hours(32) + boost::posix_time::minutes(10);
-						boost::posix_time::ptime expire = cur + ex;
-						std::string lt = boost::lexical_cast<std::string>(ex.total_seconds());
+						response->headers.insert(std::pair<std::string, std::string>("Last-Modified", formatter.str()));
+						response->headers.insert(std::pair<std::string, std::string>("Content-Length", boost::lexical_cast<std::string>(target_size)));
+						response->headers.insert(std::pair<std::string, std::string>("Cache-Control", "max-age=" + boost::lexical_cast<std::string>(this->expiration_period.total_seconds())));
 
-						std::ostringstream Created , Current, Expires;
-						static char const* const facet = "%a, %d %b %Y %H:%M:%S GMT";
+						formatter.clear();
+						formatter << boost::posix_time::second_clock::local_time() + this->expiration_period;
+						response->headers.insert(std::pair<std::string, std::string>("Expires", formatter.str()));
 
-						Created.imbue(std::locale(std::cout.getloc(), new boost::posix_time::time_facet(facet)));
-						Current.imbue(std::locale(std::cout.getloc(), new boost::posix_time::time_facet(facet)));
-						Expires.imbue(std::locale(std::cout.getloc(), new boost::posix_time::time_facet(facet)));
-
-						Created << t ;
-						Current << cur;	
-						Expires << expire;
-
-						if (  Created.str() == request->headers["If-Modified-Since"])
-						{
-							response->status=304;
-							response->description="Not Modified";
-						}
-						else
-						{
-							int length = file_size(p);
-
-							response->headers.insert(std::pair<std::string, std::string>("Last-Modified", Created.str()));
-							response->headers.insert(std::pair<std::string, std::string>("Content-Length", boost::lexical_cast<std::string>(length)));
-							response->headers.insert(std::pair<std::string, std::string>("Cache-Control", "max-age="+lt));
-							response->headers.insert(std::pair<std::string, std::string>("Expires", Expires.str()));
-
-							body << std::ifstream( p.string().c_str(), std::ios::binary).rdbuf();
-							response->body = body.str();
-						}
-
-						response->send(*socket);
-						return;
+						body << std::ifstream(target.string().c_str(), std::ios::binary).rdbuf();
+						response->body = body.str();
 					}
-				}
 
+					response->send(*socket);
+					return;
+				}
 			}
-			else if (is_directory(p))
+		}
+		else if (is_directory(target))
+		{
+			if (show_directory_contents)
 			{
-				if (show_directory_contents)
-				{
-					body << p << " is a directory containing:\n";
-
-					for (boost::filesystem::directory_iterator itr(p); itr!=boost::filesystem::directory_iterator(); ++itr)
-						body << "<br/><a href='/" << file_service_get_dif_path(service_default_path, itr->path())	<< "' >"<< itr->path().filename() << "</a>";
-				}
-				else
-					body << "Error 403! Listing the contents of the " << p.filename() << " directory is forbidden.\n";
+				body << target << " is a directory containing:";
+				for (boost::filesystem::directory_iterator i(target); i != boost::filesystem::directory_iterator(); ++i)
+					body << "<br/><a href=\"" << request->url << i->path().filename().string() << "\">" << i->path().filename().string() << "</a>";
 			}
 			else
-			{
-				body << "Error! "<< p.filename() << "exists, but is neither a regular file nor a directory\n";
-			}
+				body << "Error 403! Listing the contents of the " << target.filename() << " directory is forbidden.";
 		}
 		else
-		{
-			body << "Error 404!" << p.filename() << "does not exist\n <br/> <a href='/'>Please come again!</a>";
-		}
-		response->body = "<head></head><body><h1>" 
-			+ body.str()
-			+"</h1></body>";
-		response->send(*socket);
-		return;
+			body << "Error! "<< target.filename() << "exists, but is neither a regular file nor a directory.";
 	}
+	else
+		body << "Error 404!" << target.filename() << "does not exist\n <br/> <a href='/'>Please come again!</a>";
 
-	virtual void apply_config(boost::property_tree::ptree config)
-	{
-		service_default_path = config.get<std::string>("root_file_system_directory", service_default_path.string());
-		show_directory_contents = config.get<bool>("show_directory_contents", show_directory_contents);
-	}
-
-private:
-	boost::filesystem::path service_default_path;
-	bool show_directory_contents;
-
-	std::string file_service_get_dif_path(boost::filesystem::path base_path, boost::filesystem::path new_path)
-	{
-		boost::filesystem::path sdiffpath;
-		boost::filesystem::path stmppath = new_path;
-		while(stmppath != base_path) {
-			sdiffpath = boost::filesystem::path(stmppath.stem().string() + stmppath.extension().string())/ sdiffpath;
-			stmppath = stmppath.parent_path();
-		}
-		std::string diff_path = boost::lexical_cast<std::string>(sdiffpath);
-		diff_path = diff_path.substr(1, (diff_path.length()-2));
-		return diff_path;
-	}
-};
-
-BOOST_EXTENSION_TYPE_MAP_FUNCTION {
-	using namespace boost::extensions;
-	std::map<std::string, factory<service> >&
-		Producer_factories(types.get());
-	Producer_factories["file_service"].set<file_service>();
+	response->body = "<head></head><body><h1>" + body.str() + "</h1></body>";
+	response->send(*socket);
 }
-#endif //_FILE_SERVICE
+
+void file_service::apply_config(boost::property_tree::ptree config)
+{
+	this->root_path = config.get<std::string>("root_file_system_directory", this->root_path.string());
+	this->show_directory_contents = config.get<bool>("show_directory_contents", this->show_directory_contents);
+}
+
+BOOST_EXTENSION_TYPE_MAP_FUNCTION
+{
+	std::map<std::string, boost::extensions::factory<service> > &factories(types.get());
+	factories["file_service"].set<file_service>();
+}
