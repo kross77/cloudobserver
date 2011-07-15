@@ -102,7 +102,15 @@ std::map<boost::shared_ptr<service>, server_utils::service_description> server_u
 		}
 
 		try{
-			boost::shared_ptr<service> one_service = util->give_me_class<service, boost::property_tree::ptree>(service_library_name, service_class_name, one_description.service_custome_properties_tree);
+			boost::shared_ptr<service> one_service = util->give_me_class<service>(service_library_name, service_class_name);
+			try
+			{
+				one_service->apply_config(one_description.service_custome_properties_tree);
+			}
+			catch (service::not_configurable_exception)
+			{
+				std::cout << "Service '" << service_name << " is not configurable." << std::endl;
+			}
 			services_map.insert(std::pair<boost::shared_ptr<service>, server_utils::service_description>(one_service, one_description));
 		}
 		catch(std::exception &e)

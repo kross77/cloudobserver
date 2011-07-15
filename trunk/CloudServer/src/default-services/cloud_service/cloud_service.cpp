@@ -1,11 +1,11 @@
 #include "cloud_service.h"
 
-cloud_service::cloud_service(boost::property_tree::ptree config)
+cloud_service::cloud_service()
 {
-	this->max_streams = config.get<int>("max_streams", 10);
-	this->dumps_location = config.get<std::string>("dumps_location", (boost::filesystem::current_path() /= "dumps").string());
-	this->dump_writers = config.get<bool>("dump_writers", false);
-	this->dump_readers = config.get<bool>("dump_readers", false);
+	this->max_streams = 10;
+	this->dumps_location = (boost::filesystem::current_path() /= "dumps").string();
+	this->dump_writers = false;
+	this->dump_readers = false;
 }
 
 cloud_service::~cloud_service()
@@ -162,6 +162,14 @@ void cloud_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket>
 	}
 }
 
+void cloud_service::apply_config(boost::property_tree::ptree config)
+{
+	this->max_streams = config.get<int>("max_streams", this->max_streams);
+	this->dumps_location = config.get<std::string>("dumps_location", this->dumps_location.string());
+	this->dump_writers = config.get<bool>("dump_writers", this->dump_writers);
+	this->dump_readers = config.get<bool>("dump_readers", this->dump_readers);
+}
+
 bool cloud_service::check_nickname(std::string& nickname)
 {
 	if (nickname.empty())
@@ -189,6 +197,6 @@ std::string cloud_service::get_current_date_time()
 
 BOOST_EXTENSION_TYPE_MAP_FUNCTION
 {
-	std::map<std::string, boost::extensions::factory<service, boost::property_tree::ptree> > &factories(types.get());
+	std::map<std::string, boost::extensions::factory<service> > &factories(types.get());
 	factories["cloud_service"].set<cloud_service>();
 }

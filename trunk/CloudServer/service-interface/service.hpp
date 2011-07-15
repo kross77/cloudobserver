@@ -1,6 +1,8 @@
 #ifndef SERVICE_HPP
 #define SERVICE_HPP
 
+#include <exception>
+
 // Boost
 #include <boost/asio.hpp>
 #include <boost/property_tree/ptree.hpp>
@@ -12,6 +14,9 @@ class service
 {
 public:
 	virtual void service_call(boost::shared_ptr<boost::asio::ip::tcp::socket>, boost::shared_ptr<http_request>, boost::shared_ptr<http_response>) = 0;
+	virtual void apply_config(boost::property_tree::ptree) { throw not_configurable_exception(); };
+
+	class not_configurable_exception: public std::exception { };
 };
 
 #endif // SERVICE_HPP
