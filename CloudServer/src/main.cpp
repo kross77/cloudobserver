@@ -89,8 +89,8 @@ bool config(std::string config_file_path)
 	{
 		if(!server_started)
 		{
-		s = new server(server_config);
-		server_started = true;
+			s = new server(server_config);
+			server_started = true;
 		}
 		else
 		{
@@ -202,6 +202,126 @@ void print_services()
 	}
 }
 
+void service_commandor(std::string name)
+{
+	try
+	{
+		boost::shared_ptr<service> one_service = s->util->get_service_by_name(name);	
+		//std::cout << "service options are: `get state`, `restart`, `stop`, `start`" << std::endl;
+		std::cout << "You can change service configuration. to get into service configuration menu enter `config`" << std::endl;
+		std::string var;
+		do{
+			std::cout << "@" << name <<": ";
+			std::getline(std::cin, var);
+
+			if (var == "stop")
+			{
+				//s->util->stop_service_by_name() //TODO: implement set of turned off services.descriptions
+				continue;
+			}
+
+			if (var == "start")
+			{
+				//s->util->start_service_by_name() //TODO: search thru turned off services.descriptions than thru turned on
+				continue;
+			}
+
+
+			if (var == "restart")
+			{
+				//s->util->stop_service_by_name() //TODO: implement set of turned off services.descriptions
+				//s->util->start_service_by_name() //TODO: search thru turned off services.descriptions than thru turned on
+				continue;
+			}
+
+			if (var == "get state")
+			{
+				//s->util->get_service_state_by_name() //TODO: search thru turned off services.descriptions than thru turned on
+				continue;
+			}
+
+			if (var == "config")
+			{
+
+				std::cout << "Please enter your configuration, enter `launch` to apply it or `exit` to return to main service menu shall" << std::endl;
+				std::string com;
+				std::stringstream conf;
+				do{
+					std::getline(std::cin, com);
+					if (com == "exit")
+						continue;
+
+					if (com == "launch")
+					{
+						bool invalid_config = true;
+						boost::property_tree::ptree pt;
+						try
+						{
+							boost::property_tree::read_json(conf, pt);
+							invalid_config = false;
+						}
+						catch (std::exception& e)
+						{
+							invalid_config = true;
+						}
+						if (invalid_config)
+						{
+							try
+							{
+								boost::property_tree::read_xml(conf, pt);
+								invalid_config = false;
+							}
+							catch (std::exception& e)
+							{
+								invalid_config = true;
+							}
+						}
+
+						if (invalid_config)
+						{
+							std::cout << "invalid configuration input, please input correct JSON or XML config." << std::endl;
+							continue;
+						} 
+						else
+						{
+							try
+							{
+								one_service->apply_config(pt);
+								std::cout << "Configuration applied." << std::endl;
+							}
+							catch(std::exception &e)
+							{
+								std::cout << "Configuration failed" << std::endl;
+								continue;
+							}
+						}
+
+						continue;
+					}
+
+					conf << com;
+				} while (com != "exit");
+				continue;
+			}
+
+			if (var == "exit")
+				continue;
+
+		} while (var != "exit");
+		return;
+	}
+	catch (std::exception &e)
+	{
+		std::cout << "Error: " << name << " service not found." << std::endl << "Please review list of currently existing services:" << std::endl;
+		print_services();
+		std::cout << "And try again." << std::endl;
+		return;
+	}
+
+
+
+}
+
 int main(int argc, char* argv[])
 { 
 	print_info();
@@ -238,7 +358,7 @@ int main(int argc, char* argv[])
 			std::string file_path;
 			std::cout << "Please enter config file path (to XML or JSON file): " << std::endl;
 			do{
-				std::cout << "Path: ";
+				std::cout << "< Path: ";
 				std::cin >> file_path;
 
 				if (file_path == "exit")
@@ -256,7 +376,7 @@ int main(int argc, char* argv[])
 			std::string file_path;
 			std::cout << "Please enter file path and name (to save XML or JSON file): " << std::endl;
 			do{
-				std::cout << "Path: ";
+				std::cout << "> Path: ";
 				std::cin >> file_path;
 
 				if (file_path == "exit")
@@ -276,33 +396,30 @@ int main(int argc, char* argv[])
 				std::cout << "You must start server in order to use services menu!" << std::endl << "Please start the server" << std::endl;
 				continue;
 			}
-			std::string var;
+			std::string svar;
 			std::cout << "Please enter service name or `ls` to print all currently available services: " << std::endl;
 			do{
 				std::cout << "~: ";
-				std::getline(std::cin, var);
+				std::getline(std::cin, svar);
 
-				if (var == "exit")
+				if (svar == "")
+				{
+					std::cout << std::endl;
+					continue;
+				}
+
+				if (svar == "exit")
 					continue;
 
-				if ((var == "ls") || (var == "list services"))
+				if ((svar == "ls") || (svar == "list services"))
 				{
 					print_services();
 				}
 				else
 				{
-					try
-					{
-						s->util->get_service_by_name(var);
-					}
-					catch (std::exception &e)
-					{
-						std::cout << "Error: " << var << " service not found." << std::endl << "Please review list of currently existing services:" << std::endl;
-						print_services();
-						std::cout << "And try again." << std::endl;
-					}
+					service_commandor(svar);
 				}
-			} while (var != "exit");
+			} while (svar != "exit");
 			continue;
 		}
 
