@@ -37,10 +37,10 @@
 class file_service : public service
 {
 public:
-	file_service(boost::property_tree::ptree config)
+	file_service()
 	{ 
-		service_default_path = config.get<std::string>("root_file_system_directory", boost::filesystem::current_path().string());
-		show_directory_contents = config.get<bool>("show_directory_contents", false);
+		service_default_path = boost::filesystem::current_path().string();
+		show_directory_contents = false;
 		std::cout << "\nCreated a File-Service" << std::endl;
 	}
 	~file_service(void){std::cout << "\nDestroyed a File-Service"<< std::endl;}
@@ -138,6 +138,12 @@ public:
 		return;
 	}
 
+	virtual void apply_config(boost::property_tree::ptree config)
+	{
+		service_default_path = config.get<std::string>("root_file_system_directory", service_default_path.string());
+		show_directory_contents = config.get<bool>("show_directory_contents", show_directory_contents);
+	}
+
 private:
 	boost::filesystem::path service_default_path;
 	bool show_directory_contents;
@@ -158,7 +164,7 @@ private:
 
 BOOST_EXTENSION_TYPE_MAP_FUNCTION {
 	using namespace boost::extensions;
-	std::map<std::string, factory<service, boost::property_tree::ptree> >&
+	std::map<std::string, factory<service> >&
 		Producer_factories(types.get());
 	Producer_factories["file_service"].set<file_service>();
 }
