@@ -39,6 +39,7 @@
 #include <map>
 #include <set>
 #include <vector>
+#include <functional>
 
 //Boost
 #include <boost/asio.hpp>
@@ -84,7 +85,7 @@ public:
 		std::set<std::string> url_extensions;
 		std::string root_service_web_path;	
 	};
-	
+
 	struct server_description
 	{
 		int port;
@@ -118,9 +119,11 @@ public:
 
 	void add_to_services_list(boost::property_tree::ptree config);
 	boost::shared_ptr<service> get_service_by_name(std::string name);
+	server_utils::service_description get_service_description_by_name(std::string name);
 	std::multiset<std::string> get_services_names();
 	std::multiset<std::string> get_services_class_names();
 	std::multiset<std::string> get_services_libraries_names();
+	server_utils::service_description stop_service_by_name(std::string name);
 	boost::shared_ptr<service> find_service(server_utils::request_data &d);
 	// For maps contents printing
 	printer *print;
@@ -157,6 +160,7 @@ private:
 		static T pt;
 		return pt;
 	}
+	bool find_service_by_name_iterator_function(std::pair<boost::shared_ptr<service>, server_utils::service_description> const & element, std::string name) const;
 };
 
 #endif // SERVER_UTILITIES_H

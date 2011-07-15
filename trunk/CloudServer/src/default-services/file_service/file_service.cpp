@@ -20,7 +20,7 @@ void file_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> 
 	{
 		if (is_regular_file(target))
 		{
-			uintmax_t target_size = file_size(target);
+			boost::uintmax_t target_size = file_size(target);
 			if (target_size != 0)
 			{
 				boost::posix_time::ptime target_modified = boost::posix_time::from_time_t(last_write_time(target));

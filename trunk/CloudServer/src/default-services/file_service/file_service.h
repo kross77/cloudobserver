@@ -6,6 +6,7 @@
 #include <string>
 
 // Boost
+#include <boost/cstdint.hpp> //boost::uintmax_t
 #include <boost/asio.hpp>
 #include <boost/date_time.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>

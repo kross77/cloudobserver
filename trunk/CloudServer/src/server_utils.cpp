@@ -224,10 +224,48 @@ std::multiset<std::string> server_utils::get_services_names()
 	return service_names;
 }
 
-boost::shared_ptr<service> server_utils::get_service_by_name(std::string name)
+server_utils::service_description server_utils::get_service_description_by_name(std::string name)
 {
 	typedef std::map<boost::shared_ptr<service>, server_utils::service_description> map_t;
 	BOOST_FOREACH(map_t::value_type &it, description.service_map)
+	{
+		server_utils::service_description descr = it.second;
+		if(descr.name == name)
+		{
+			return it.second;
+		}
+	}
+	throw std::runtime_error("Service with such name was not found map not found!");
+	server_utils::service_description null;
+	return null;
+}
+
+bool server_utils::find_service_by_name_iterator_function(std::pair<boost::shared_ptr<service>, server_utils::service_description> const & element, std::string name) const
+{
+	return element.second.name == name;
+}
+
+server_utils::service_description server_utils::stop_service_by_name(std::string name)
+{
+	/*typedef std::map<boost::shared_ptr<service>, server_utils::service_description> map_t;
+	map_t::iterator map_it =   std::find_if(description.service_map.begin(), description.service_map.end(), std::bind1st(std::ptr_fun(&server_utils::find_service_by_name_iterator_function), name)); 
+
+	if (map_it != description.service_map.end())
+	{
+	description.service_map.erase (map_it);
+	} 
+	else
+	{
+	throw std::runtime_error("Service with such name was not found map not found!");
+	}*/
+	server_utils::service_description null;
+	return null;
+}
+
+boost::shared_ptr<service> server_utils::get_service_by_name(std::string name)
+{
+	typedef std::map<boost::shared_ptr<service>, server_utils::service_description> map_t;
+	BOOST_FOREACH(map_t::value_type it, description.service_map)
 	{
 		server_utils::service_description descr = it.second;
 		if(descr.name == name)
