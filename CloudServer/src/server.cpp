@@ -26,7 +26,8 @@ void server::acceptor_loop(){
 			acceptor.accept(*socket);
 			std::cout << "connection accepted." << std::endl;
 			user_info(*socket);
-			boost::thread workerThread(&server::request_response_loop, this, socket);
+			boost::thread* p = new boost::thread(&server::request_response_loop, this, socket);
+			threads_pool.insert(std::make_pair(p->get_id(), p)); 
 		}
 		catch(std::exception &e)
 		{
@@ -70,7 +71,8 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 
 		try
 		{
-			boost::shared_ptr<service> requested_service = server::find_service(*request);
+			server_utils::service_container service_cont = server::find_service(*request);
+			boost::shared_ptr<service> requested_service = service_cont.service_ptr;
 			requested_service->service_call(socket, request, response);
 		}
 		catch(std::exception &e)
@@ -102,7 +104,7 @@ boost::property_tree::ptree server::get_configuration()
 	return util->save_config(util->description);
 }
 
-boost::shared_ptr<service> server::find_service( http_request request )
+server_utils::service_container server::find_service( http_request request )
 {
 	server_utils::request_data request_data = util->parse_request(request);
 	return util->find_service(request_data);

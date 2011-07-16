@@ -31,14 +31,14 @@ boost::shared_ptr<service> server_utils::create_service(std::string library_name
 }
 
 //Do not forget to change save_config if you change parse_config_services
-std::map<std::string, server_utils::service_description> server_utils::parse_config_services( boost::property_tree::ptree config )
+std::map<std::string, server_utils::service_container> server_utils::parse_config_services( boost::property_tree::ptree config )
 {
-	std::map<std::string, server_utils::service_description> services_map;
+	std::map<std::string, server_utils::service_container> services_map;
 
 	BOOST_FOREACH(boost::property_tree::ptree::value_type &v,
 		config.get_child(tag_path_configuration_services, server_utils::empty_class<boost::property_tree::ptree>()))
 	{
-		server_utils::service_description one_description;
+		server_utils::service_container one_description;
 		std::string service_name;
 		std::string service_library_name;
 		std::string service_class_name;
@@ -113,7 +113,7 @@ std::map<std::string, server_utils::service_description> server_utils::parse_con
 			{
 				std::cout << "Service '" << service_name << " is not configurable." << std::endl;
 			}
-			services_map.insert(std::pair<std::string, server_utils::service_description>(service_name, one_description));
+			services_map.insert(std::pair<std::string, server_utils::service_container>(service_name, one_description));
 			one_service->start();
 		}
 		catch(std::exception &e)
@@ -149,10 +149,10 @@ boost::property_tree::ptree server_utils::save_config( server_utils::server_desc
 	boost::property_tree::ptree root, arr;
 	root.put<int>(tag_path_configuration_port, server_configuration_description.port);
 	root.put<std::string>(tag_path_configuration_server_root_path, server_configuration_description.server_root_path.string());
-	typedef std::map<std::string, server_utils::service_description> map_t;
+	typedef std::map<std::string, server_utils::service_container> map_t;
 	BOOST_FOREACH( map_t::value_type &i, server_configuration_description.service_map)
 	{
-		server_utils::service_description sm = i.second;
+		server_utils::service_container sm = i.second;
 		boost::property_tree::ptree serv;
 
 		serv.put<std::string>(tag_service_name, i.first);
@@ -218,7 +218,7 @@ boost::property_tree::ptree server_utils::save_config( server_utils::server_desc
 std::multiset<std::string> server_utils::get_services_names()
 {
 	std::multiset<std::string> service_names;
-	typedef std::map<std::string, server_utils::service_description> map_t;
+	typedef std::map<std::string, server_utils::service_container> map_t;
 	BOOST_FOREACH(map_t::value_type &it, description.service_map)
 	{
 		service_names.insert(it.first);
@@ -226,9 +226,9 @@ std::multiset<std::string> server_utils::get_services_names()
 	return service_names;
 }
 
-server_utils::service_description server_utils::get_service_description_by_name(std::string name)
+server_utils::service_container server_utils::get_service_description_by_name(std::string name)
 {
-	typedef std::map<std::string, server_utils::service_description> map_t;
+	typedef std::map<std::string, server_utils::service_container> map_t;
 	map_t::iterator it = description.service_map.find(name);
 	if (it != description.service_map.end())
 	{
@@ -238,13 +238,13 @@ server_utils::service_description server_utils::get_service_description_by_name(
 	{
 		throw std::runtime_error("Service with such name was not found map not found!");
 	}
-	server_utils::service_description null;
+	server_utils::service_container null;
 	return null;
 }
 
-server_utils::service_description server_utils::stop_service_by_name(std::string name)
+server_utils::service_container server_utils::stop_service_by_name(std::string name)
 {
-	/*typedef std::map<boost::shared_ptr<service>, server_utils::service_description> map_t;
+	/*typedef std::map<boost::shared_ptr<service>, server_utils::service_container> map_t;
 	map_t::iterator map_it =   std::find_if(description.service_map.begin(), description.service_map.end(), std::bind1st(std::ptr_fun(&server_utils::find_service_by_name_iterator_function), name)); 
 
 	if (map_it != description.service_map.end())
@@ -255,13 +255,13 @@ server_utils::service_description server_utils::stop_service_by_name(std::string
 	{
 	throw std::runtime_error("Service with such name was not found map not found!");
 	}*/
-	server_utils::service_description null;
+	server_utils::service_container null;
 	return null;
 }
 
 boost::shared_ptr<service> server_utils::get_service_by_name(std::string name)
 {
-	typedef std::map<std::string, server_utils::service_description> map_t;
+	typedef std::map<std::string, server_utils::service_container> map_t;
 	map_t::iterator it = description.service_map.find(name);
 	if (it != description.service_map.end())
 	{
@@ -278,10 +278,10 @@ boost::shared_ptr<service> server_utils::get_service_by_name(std::string name)
 std::multiset<std::string> server_utils::get_services_class_names()
 {
 	std::multiset<std::string> class_names;
-	typedef std::map<std::string, server_utils::service_description> map_t;
+	typedef std::map<std::string, server_utils::service_container> map_t;
 	BOOST_FOREACH(map_t::value_type &it, description.service_map)
 	{
-		server_utils::service_description descr = it.second;
+		server_utils::service_container descr = it.second;
 		class_names.insert(descr.class_name);
 	}
 	return class_names;
@@ -290,10 +290,10 @@ std::multiset<std::string> server_utils::get_services_class_names()
 std::multiset<std::string> server_utils::get_services_libraries_names()
 {
 	std::multiset<std::string> libraries_names;
-	typedef std::map<std::string, server_utils::service_description> map_t;
+	typedef std::map<std::string, server_utils::service_container> map_t;
 	BOOST_FOREACH(map_t::value_type &it, description.service_map)
 	{
-		server_utils::service_description descr = it.second;
+		server_utils::service_container descr = it.second;
 		libraries_names.insert(descr.library_name);
 	}
 	return libraries_names;
@@ -303,11 +303,11 @@ void server_utils::add_to_services_list( boost::property_tree::ptree config )
 {
 	std::multiset<std::string> classes = server_utils::get_services_class_names();
 	std::multiset<std::string> libs = server_utils::get_services_libraries_names();
-	typedef std::map<std::string, server_utils::service_description> map_t;
+	typedef std::map<std::string, server_utils::service_container> map_t;
 	BOOST_FOREACH(boost::property_tree::ptree::value_type &v,
 		config.get_child("config.services", server_utils::empty_class<boost::property_tree::ptree>()))
 	{
-		server_utils::service_description one_description;
+		server_utils::service_container one_description;
 		std::string service_library_name;
 		std::string service_class_name;
 		boost::property_tree::ptree individual_service_tree = (boost::property_tree::ptree) v.second ;
@@ -369,7 +369,7 @@ void server_utils::add_to_services_list( boost::property_tree::ptree config )
 		try
 		{
 			one_description.service_ptr = util->give_me_class<service, boost::property_tree::ptree>(service_library_name, service_class_name, one_description.service_custome_properties_tree);
-			description.service_map.insert(std::pair<std::string, server_utils::service_description>(service_name, one_description));
+			description.service_map.insert(std::pair<std::string, server_utils::service_container>(service_name, one_description));
 		}
 		catch(std::exception &e)
 		{
@@ -388,22 +388,22 @@ server_utils::request_data server_utils::parse_request( http_request request )
 	return rd;
 }
 
-int server_utils::relevance(const server_utils::service_description &r, const server_utils::request_data &d )
+int server_utils::relevance(const server_utils::service_container &rules_container, const server_utils::request_data &data_container)
 {
 	int rel = 0;
-	if(!d.url.substr(d.url.find(r.root_service_web_path) + 1).empty())
+	if(!data_container.url.substr(data_container.url.find(rules_container.root_service_web_path) + 1).empty())
 	{
 		rel += 100;
 	}
-	if (r.url_extensions.find(d.url_extension) != r.url_extensions.end())
+	if (rules_container.url_extensions.find(data_container.url_extension) != rules_container.url_extensions.end())
 	{
 		rel += 100;
 	}
 
 	typedef std::vector<std::string> vector_s_t;
-	BOOST_FOREACH(vector_s_t::value_type rule_it, r.set_of_url_rules)
+	BOOST_FOREACH(vector_s_t::value_type rule_it, rules_container.set_of_url_rules)
 	{
-		if (rule_it == d.url)
+		if (rule_it == data_container.url)
 			rel += 1000;
 	}
 
@@ -411,9 +411,9 @@ int server_utils::relevance(const server_utils::service_description &r, const se
 	typedef std::map<std::string, std::string> map_s_t;
 	typedef boost::unordered_multimap<std::string, std::string> multimap_s_t;
 
-	BOOST_FOREACH(map_s_t::value_type data_it, d.arguments)
+	BOOST_FOREACH(map_s_t::value_type data_it, data_container.arguments)
 	{
-		BOOST_FOREACH(multimap_s_t::value_type rule_it, r.set_of_arguments_rules)
+		BOOST_FOREACH(multimap_s_t::value_type rule_it, rules_container.set_of_arguments_rules)
 		{
 			if( rule_it.first == data_it.first)
 			{
@@ -425,9 +425,9 @@ int server_utils::relevance(const server_utils::service_description &r, const se
 		}
 	}
 
-	BOOST_FOREACH(map_s_t::value_type data_it, d.headers)
+	BOOST_FOREACH(map_s_t::value_type data_it, data_container.headers)
 	{
-		BOOST_FOREACH(multimap_s_t::value_type rule_it, r.set_of_header_rules)
+		BOOST_FOREACH(multimap_s_t::value_type rule_it, rules_container.set_of_header_rules)
 		{
 			if( rule_it.first == data_it.first)
 			{
@@ -442,21 +442,21 @@ int server_utils::relevance(const server_utils::service_description &r, const se
 	return rel;
 }
 
-boost::shared_ptr<service> server_utils::find_service(server_utils::request_data & d)
+server_utils::service_container server_utils::find_service(server_utils::request_data & d)
 {
-	typedef std::map<std::string, server_utils::service_description> map_t;
-	boost::shared_ptr<service> result;
+	typedef std::map<std::string, server_utils::service_container> map_t;
+	server_utils::service_container result;
 	int pre_max = -2;
 	int max = -1;
 	std::string name = "";
-	BOOST_FOREACH(map_t::value_type data_it, this->description.service_map)
+	BOOST_FOREACH(map_t::value_type &data_it, this->description.service_map)
 	{
 		int current = server_utils::relevance(data_it.second, d);
 		if (current >= max)
 		{
 			pre_max = max;
 			max = current;
-			result = data_it.second.service_ptr;
+			result = data_it.second;
 			name = data_it.first;
 		}
 	}

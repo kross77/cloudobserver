@@ -20,21 +20,16 @@ class server
 {
 public:
 	server(boost::property_tree::ptree config);
-	boost::property_tree::ptree get_configuration();
 	virtual ~server();
 	void acceptor_loop();
-	void user_info(boost::asio::ip::tcp::socket &socket);
+	boost::property_tree::ptree get_configuration();
 	server_utils *util;
 private:
 	void request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socket> socket); //Each request received by server will be sent to a new thread and processed by request_response_loop
-	boost::shared_ptr<service> find_service(http_request request);
-	// Main server thread
-	boost::thread *acceptor_thread; 
-
-	//TODO: get rid of ptr to only one service, replace with some sort of set of services.
-	boost::shared_ptr<service> file_service_ptr;
-
-
+	server_utils::service_container find_service(http_request request);
+	void user_info(boost::asio::ip::tcp::socket &socket);
+	std::map<boost::thread::id, boost::thread*> threads_pool;
+	boost::thread *acceptor_thread;
 };
 
 #endif //SERVER_H
