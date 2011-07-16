@@ -13,9 +13,6 @@
 
 #include "server_utils.h"
 
-//General Service header Class\Interface
-//#include "../service-interface/service.hpp"
-
 class server
 {
 public:
@@ -26,7 +23,6 @@ public:
 	server_utils *util;
 private:
 	void request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socket> socket); //Each request received by server will be sent to a new thread and processed by request_response_loop
-	server_utils::service_container find_service(http_request request);
 	void user_info(boost::asio::ip::tcp::socket &socket);
 	std::map<boost::thread::id, boost::thread*> threads_pool;
 	boost::thread *acceptor_thread;
