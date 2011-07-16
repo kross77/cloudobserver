@@ -96,7 +96,7 @@ public:
 		boost::filesystem::path server_root_path;
 
 		//We keep all services and their rules inside of a map
-		std::map<std::string, server_utils::service_container> service_map;
+		std::map<std::string, boost::shared_ptr<server_utils::service_container>> service_map;
 	};
 
 	//Each request provides us with data
@@ -117,16 +117,16 @@ public:
 
 	server_utils::request_data parse_request(http_request request); 
 
-	int relevance(const server_utils::service_container &rules_container, const server_utils::request_data &data_container);
+	int relevance(boost::shared_ptr<server_utils::service_container> rules_container, const server_utils::request_data &data_container);
 
 	void add_to_services_list(boost::property_tree::ptree config);
 	boost::shared_ptr<service> get_service_by_name(std::string name);
-	server_utils::service_container get_service_description_by_name(std::string name);
+	boost::shared_ptr<server_utils::service_container> get_service_description_by_name(std::string name);
 	std::multiset<std::string> get_services_names();
 	std::multiset<std::string> get_services_class_names();
 	std::multiset<std::string> get_services_libraries_names();
-	server_utils::service_container stop_service_by_name(std::string name);
-	server_utils::service_container find_service(server_utils::request_data &d);
+	boost::shared_ptr<server_utils::service_container> find_service(http_request request);
+
 	// For maps contents printing
 	printer *print;
 
@@ -134,7 +134,7 @@ public:
 
 private:
 
-	std::map<std::string, server_utils::service_container> parse_config_services(boost::property_tree::ptree config);
+	std::map<std::string, boost::shared_ptr<server_utils::service_container>> parse_config_services(boost::property_tree::ptree config);
 
 	// For services creation from shared libraries
 	extension_utils *util;
@@ -164,6 +164,7 @@ private:
 		static T pt;
 		return pt;
 	}
+
 };
 
 #endif // SERVER_UTILITIES_H

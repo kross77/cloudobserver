@@ -68,12 +68,18 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 		formatter << boost::posix_time::second_clock::local_time();
 		response->headers.insert(std::pair<std::string, std::string>("Date", formatter.str()));
 		response->headers.insert(std::pair<std::string, std::string>("Server", "Cloud Server v0.5"));
-
 		try
 		{
-			server_utils::service_container service_cont = server::find_service(*request);
-			boost::shared_ptr<service> requested_service = service_cont.service_ptr;
+			boost::shared_ptr<server_utils::service_container> service_cont = util->find_service(*request);
+			boost::shared_ptr<service> requested_service = service_cont->service_ptr;
+
+			service_cont->threads_ids.insert(boost::this_thread::get_id());
+			std::cout << "ids size: " << service_cont->threads_ids.size() << std::endl;
+
 			requested_service->service_call(socket, request, response);
+
+			service_cont->threads_ids.erase(service_cont->threads_ids.find(boost::this_thread::get_id()));
+
 		}
 		catch(std::exception &e)
 		{
@@ -102,10 +108,4 @@ void server::user_info(boost::asio::ip::tcp::socket &socket)
 boost::property_tree::ptree server::get_configuration()
 {
 	return util->save_config(util->description);
-}
-
-server_utils::service_container server::find_service( http_request request )
-{
-	server_utils::request_data request_data = util->parse_request(request);
-	return util->find_service(request_data);
 }
