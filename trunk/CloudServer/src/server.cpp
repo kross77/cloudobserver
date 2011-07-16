@@ -26,8 +26,8 @@ void server::acceptor_loop(){
 			acceptor.accept(*socket);
 			std::cout << "connection accepted." << std::endl;
 			user_info(*socket);
-			boost::thread* p = new boost::thread(&server::request_response_loop, this, socket);
-			threads_pool.insert(std::make_pair(p->get_id(), p)); 
+			boost::shared_ptr<boost::thread> p(new boost::thread(&server::request_response_loop, this, socket));
+			threads_pool.insert(p->get_id());
 		}
 		catch(std::exception &e)
 		{
