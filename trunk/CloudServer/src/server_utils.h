@@ -43,6 +43,7 @@
 
 //Boost
 #include <boost/asio.hpp>
+#include <boost/thread.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/shared_ptr.hpp> // aka std::shared_ptr
 #include <boost/unordered_map.hpp> // aka std::unordered_map
@@ -69,7 +70,7 @@ public:
 	virtual ~server_utils(){}
 
 	//Each service provides us with rules
-	struct service_description
+	struct service_container
 	{
 		//A service must have
 		boost::shared_ptr<service> service_ptr;
@@ -83,7 +84,8 @@ public:
 		boost::unordered_multimap<std::string, std::string> set_of_header_rules;
 		boost::unordered_multimap<std::string, std::string> set_of_arguments_rules;
 		std::set<std::string> url_extensions;
-		std::string root_service_web_path;	
+		std::string root_service_web_path;
+		std::set<boost::thread::id> threads_ids;
 	};
 
 	struct server_description
@@ -94,7 +96,7 @@ public:
 		boost::filesystem::path server_root_path;
 
 		//We keep all services and their rules inside of a map
-		std::map<std::string, server_utils::service_description> service_map;
+		std::map<std::string, server_utils::service_container> service_map;
 	};
 
 	//Each request provides us with data
@@ -115,16 +117,16 @@ public:
 
 	server_utils::request_data parse_request(http_request request); 
 
-	int relevance(const server_utils::service_description & r, const server_utils::request_data & d);
+	int relevance(const server_utils::service_container &rules_container, const server_utils::request_data &data_container);
 
 	void add_to_services_list(boost::property_tree::ptree config);
 	boost::shared_ptr<service> get_service_by_name(std::string name);
-	server_utils::service_description get_service_description_by_name(std::string name);
+	server_utils::service_container get_service_description_by_name(std::string name);
 	std::multiset<std::string> get_services_names();
 	std::multiset<std::string> get_services_class_names();
 	std::multiset<std::string> get_services_libraries_names();
-	server_utils::service_description stop_service_by_name(std::string name);
-	boost::shared_ptr<service> find_service(server_utils::request_data &d);
+	server_utils::service_container stop_service_by_name(std::string name);
+	server_utils::service_container find_service(server_utils::request_data &d);
 	// For maps contents printing
 	printer *print;
 
@@ -132,7 +134,7 @@ public:
 
 private:
 
-	std::map<std::string, server_utils::service_description> parse_config_services( boost::property_tree::ptree config );
+	std::map<std::string, server_utils::service_container> parse_config_services(boost::property_tree::ptree config);
 
 	// For services creation from shared libraries
 	extension_utils *util;
