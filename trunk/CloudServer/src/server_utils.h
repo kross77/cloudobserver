@@ -96,7 +96,7 @@ public:
 		boost::filesystem::path server_root_path;
 
 		//We keep all services and their rules inside of a map
-		std::map<std::string, boost::shared_ptr<server_utils::service_container>> service_map;
+		std::map<std::string, boost::shared_ptr<server_utils::service_container> > service_map;
 	};
 
 	//Each request provides us with data
@@ -134,7 +134,7 @@ public:
 
 private:
 
-	std::map<std::string, boost::shared_ptr<server_utils::service_container>> parse_config_services(boost::property_tree::ptree config);
+	std::map<std::string, boost::shared_ptr<server_utils::service_container> > parse_config_services(boost::property_tree::ptree config);
 
 	// For services creation from shared libraries
 	extension_utils *util;
