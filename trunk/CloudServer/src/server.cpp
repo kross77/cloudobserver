@@ -27,7 +27,7 @@ void server::acceptor_loop(){
 			std::cout << "connection accepted." << std::endl;
 			user_info(*socket);
 			boost::shared_ptr<boost::thread> p(new boost::thread(&server::request_response_loop, this, socket));
-			threads_pool.insert(p->get_id());
+			util->safe_insert<boost::thread::id, std::set<boost::thread::id> >(p->get_id(),threads_pool);
 		}
 		catch(std::exception &e)
 		{
@@ -73,13 +73,14 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 			boost::shared_ptr<server_utils::service_container> service_cont = util->find_service(*request);
 			boost::shared_ptr<service> requested_service = service_cont->service_ptr;
 
-			service_cont->threads_ids.insert(boost::this_thread::get_id());
+			util->safe_insert<boost::thread::id, std::set<boost::thread::id> >(boost::this_thread::get_id(),service_cont->threads_ids);
+
 			std::cout << "ids size: " << service_cont->threads_ids.size() << std::endl;
 
 			requested_service->service_call(socket, request, response);
 
-			service_cont->threads_ids.erase(service_cont->threads_ids.find(boost::this_thread::get_id()));
-			threads_pool.erase(threads_pool.find(boost::this_thread::get_id()));
+			util->search_and_eraise<boost::thread::id, std::set<boost::thread::id> >(boost::this_thread::get_id(), service_cont->threads_ids);
+			util->search_and_eraise<boost::thread::id, std::set<boost::thread::id> >(boost::this_thread::get_id(),threads_pool);
 		}
 		catch(std::exception &e)
 		{

@@ -132,6 +132,22 @@ public:
 
 	server_description description;
 
+	template <class variable_T, class group_T>
+	void safe_insert(variable_T variable, group_T &into)
+	{
+		boost::mutex::scoped_lock(mut);
+		into.insert(variable);
+		return;
+	}
+
+	template <class variable_T, class group_T>
+	void search_and_eraise(variable_T variable, group_T &into)
+	{
+		boost::mutex::scoped_lock(mut);
+		into.erase(into.find(variable));
+		return;
+	}
+
 private:
 
 	std::map<std::string, boost::shared_ptr<server_utils::service_container> > parse_config_services(boost::property_tree::ptree config);
@@ -157,6 +173,8 @@ private:
 	std::string tag_path_configuration_services;
 	std::string tag_path_configuration_server_root_path;
 	std::string tag_path_configuration_port;
+
+	mutable boost::mutex mut;
 
 	template<class T>
 	inline T &empty_class()
