@@ -36,6 +36,8 @@ There some *unofficial parts of Boost* we use which also require compilation:
 
 == With out administration privileges == 
 
+=== Manually ===
+
  # [http://www.boost.org/users/download/ Download] latest Boost release (currently [http://sourceforge.net/projects/boost/files/boost/1.46.1/ 1.46.1]).
  # Unpack, extract downloaded content into some folder.
  # Open that folder in terminal (for example you ca open 'cmd' or 'terminal' an use command like `cd absolute/path/to/directory/with/extracted/Boost` than use command to show folder contents `ls` on Unix like OS (Mac, Linux) and `dir` on Windows - in output you should be capable to find `boost-build.jam` )
@@ -47,6 +49,15 @@ There some *unofficial parts of Boost* we use which also require compilation:
    * We set -j4 flag to compile on 4 cores. use -j`N` where `N` is number of desired cores to be used during compilation process.
    * We set `--without-mpi` flag because we currently do not use it. (on installing boost with mpi please refer to [http://www.boost.org/doc/libs/1_46_1/doc/html/mpi/getting_started.html#mpi.config this official Boost.MPI page])
 
+=== Automated ways ===
+For Unix distributions (Mac OS X or Linux) you could use our [http://cloudobserver.googlecode.com/svn/wiki/Assets/boost_net_setup.sh Boost network build/setup script].
+
+Here is how you can use it: 
+{{{
+	wget http://cloudobserver.googlecode.com/svn/wiki/Assets/boost_net_setup.sh
+	chmod u+x boost_net_setup.sh
+	./boost_net_setup.sh
+}}}
 
 <wiki:comment>
 ./bjam -j4 link=static  threading=multi toolset=msvc-9.0 --builddir=./build-dir --without-mpi  install --prefix=./install-dir
