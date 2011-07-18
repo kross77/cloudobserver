@@ -77,9 +77,9 @@ fi
 
 echo_run ./bootstrap.sh
 
-echo_run ./bjam -j4 link=static --builddir=./$BOOST_COMPILE_SUBDIR install --without-mpi --without-python --prefix=./$BOOST_INSTALL_SUBDIR
+echo_run ./bjam -j4 link=static --builddir=./$BOOST_COMPILE_SUBDIR install --without-mpi --without-chrono --without-exception --without-graph --without-graph_parallel --without-iostreams --without-wave --without-python --prefix=./$BOOST_INSTALL_SUBDIR
 # or call # echo_run ./bjam -j4 link=static threading=single,multi --builddir=./$BOOST_COMPILE_SUBDIR install --with-mpi --without-python  --prefix=./$BOOST_INSTALL_SUBDIR
 
 echo Done!
 
-exit 0
+exit 0;
