@@ -31,9 +31,9 @@ boost::shared_ptr<service> server_utils::create_service(std::string library_name
 }
 
 //Do not forget to change save_config if you change parse_config_services
-std::map<std::string, boost::shared_ptr<server_utils::service_container>> server_utils::parse_config_services( boost::property_tree::ptree config )
+std::map<std::string, boost::shared_ptr<server_utils::service_container> > server_utils::parse_config_services( boost::property_tree::ptree config )
 {
-	std::map<std::string, boost::shared_ptr<server_utils::service_container>> services_map;
+	std::map<std::string, boost::shared_ptr<server_utils::service_container> > services_map;
 
 	BOOST_FOREACH(boost::property_tree::ptree::value_type &v,
 		config.get_child(tag_path_configuration_services, server_utils::empty_class<boost::property_tree::ptree>()))
@@ -113,7 +113,7 @@ std::map<std::string, boost::shared_ptr<server_utils::service_container>> server
 			{
 				std::cout << "Service '" << service_name << " is not configurable." << std::endl;
 			}
-			services_map.insert(std::pair<std::string, boost::shared_ptr<server_utils::service_container>>(service_name, one_description));
+			services_map.insert(std::pair<std::string, boost::shared_ptr<server_utils::service_container> >(service_name, one_description));
 			one_service->start();
 		}
 		catch(std::exception &e)
@@ -149,7 +149,7 @@ boost::property_tree::ptree server_utils::save_config( server_utils::server_desc
 	boost::property_tree::ptree root, arr;
 	root.put<int>(tag_path_configuration_port, server_configuration_description.port);
 	root.put<std::string>(tag_path_configuration_server_root_path, server_configuration_description.server_root_path.string());
-	typedef std::map<std::string, boost::shared_ptr<server_utils::service_container>> map_t;
+	typedef std::map<std::string, boost::shared_ptr<server_utils::service_container> > map_t;
 	BOOST_FOREACH( map_t::value_type &i, server_configuration_description.service_map)
 	{
 		boost::shared_ptr<server_utils::service_container> sm = i.second;
@@ -218,7 +218,7 @@ boost::property_tree::ptree server_utils::save_config( server_utils::server_desc
 std::multiset<std::string> server_utils::get_services_names()
 {
 	std::multiset<std::string> service_names;
-	typedef std::map<std::string, boost::shared_ptr<server_utils::service_container>> map_t;
+	typedef std::map<std::string, boost::shared_ptr<server_utils::service_container> > map_t;
 	BOOST_FOREACH(map_t::value_type &it, description.service_map)
 	{
 		service_names.insert(it.first);
@@ -228,7 +228,7 @@ std::multiset<std::string> server_utils::get_services_names()
 
 boost::shared_ptr<server_utils::service_container> server_utils::get_service_description_by_name(std::string name)
 {
-	typedef std::map<std::string, boost::shared_ptr<server_utils::service_container>> map_t;
+	typedef std::map<std::string, boost::shared_ptr<server_utils::service_container> > map_t;
 	map_t::iterator it = description.service_map.find(name);
 	if (it != description.service_map.end())
 	{
@@ -244,7 +244,7 @@ boost::shared_ptr<server_utils::service_container> server_utils::get_service_des
 
 boost::shared_ptr<service> server_utils::get_service_by_name(std::string name)
 {
-	typedef std::map<std::string, boost::shared_ptr<server_utils::service_container>> map_t;
+	typedef std::map<std::string, boost::shared_ptr<server_utils::service_container> > map_t;
 	map_t::iterator it = description.service_map.find(name);
 	if (it != description.service_map.end())
 	{
@@ -261,7 +261,7 @@ boost::shared_ptr<service> server_utils::get_service_by_name(std::string name)
 std::multiset<std::string> server_utils::get_services_class_names()
 {
 	std::multiset<std::string> class_names;
-	typedef std::map<std::string, boost::shared_ptr<server_utils::service_container>> map_t;
+	typedef std::map<std::string, boost::shared_ptr<server_utils::service_container> > map_t;
 	BOOST_FOREACH(map_t::value_type &it, description.service_map)
 	{
 		boost::shared_ptr<server_utils::service_container> descr = it.second;
@@ -273,7 +273,7 @@ std::multiset<std::string> server_utils::get_services_class_names()
 std::multiset<std::string> server_utils::get_services_libraries_names()
 {
 	std::multiset<std::string> libraries_names;
-	typedef std::map<std::string, boost::shared_ptr<server_utils::service_container>> map_t;
+	typedef std::map<std::string, boost::shared_ptr<server_utils::service_container> > map_t;
 	BOOST_FOREACH(map_t::value_type &it, description.service_map)
 	{
 		boost::shared_ptr<server_utils::service_container> descr = it.second;
@@ -286,7 +286,7 @@ void server_utils::add_to_services_list( boost::property_tree::ptree config )
 {
 	std::multiset<std::string> classes = server_utils::get_services_class_names();
 	std::multiset<std::string> libs = server_utils::get_services_libraries_names();
-	typedef std::map<std::string, boost::shared_ptr<server_utils::service_container>> map_t;
+	typedef std::map<std::string, boost::shared_ptr<server_utils::service_container> > map_t;
 	BOOST_FOREACH(boost::property_tree::ptree::value_type &v,
 		config.get_child("config.services", server_utils::empty_class<boost::property_tree::ptree>()))
 	{
@@ -352,7 +352,7 @@ void server_utils::add_to_services_list( boost::property_tree::ptree config )
 		try
 		{
 			one_description->service_ptr = util->give_me_class<service, boost::property_tree::ptree>(service_library_name, service_class_name, one_description->service_custome_properties_tree);
-			description.service_map.insert(std::pair<std::string, boost::shared_ptr<server_utils::service_container>>(service_name, one_description));
+			description.service_map.insert(std::pair<std::string, boost::shared_ptr<server_utils::service_container> >(service_name, one_description));
 		}
 		catch(std::exception &e)
 		{
@@ -428,7 +428,7 @@ int server_utils::relevance(boost::shared_ptr<server_utils::service_container> r
 boost::shared_ptr<server_utils::service_container> server_utils::find_service(http_request request)
 {
 	request_data d = parse_request(request);
-	typedef std::map<std::string, boost::shared_ptr<server_utils::service_container>> map_t;
+	typedef std::map<std::string, boost::shared_ptr<server_utils::service_container> > map_t;
 	boost::shared_ptr<server_utils::service_container> result;
 	int pre_max = -2;
 	int max = -1;
