@@ -79,7 +79,7 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 			requested_service->service_call(socket, request, response);
 
 			service_cont->threads_ids.erase(service_cont->threads_ids.find(boost::this_thread::get_id()));
-
+			threads_pool.erase(threads_pool.find(boost::this_thread::get_id()));
 		}
 		catch(std::exception &e)
 		{
