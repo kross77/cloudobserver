@@ -37,7 +37,7 @@ void file_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> 
 					if (formatter.str() == request->headers["If-Modified-Since"])
 					{
 						response->status = 304;
-						response->description = "Not Fodified";
+						response->description = "Not Modified";
 					}
 					else
 					{
