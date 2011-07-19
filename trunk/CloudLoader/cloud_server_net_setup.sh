@@ -51,14 +51,14 @@ fi
 echo_run ${SVN_CMD} --force https://$CLOUD_DISTRO_SITE/svn/trunk/$CLOUD_COMPONENT_NAME/ $CLOUD_COMPONENT_NAME
 
 if [ ! -e $BOOST_SETUP_FILE_NAME ]; then
-    echo_run wget http://cloudobserver.googlecode.com/svn/wiki/Assets/$BOOST_SETUP_FILE_NAME
+    echo_run wget http://cloudobserver.googlecode.com/svn/trunk/CloudLoader/$BOOST_SETUP_FILE_NAME
     echo_run chmod u+x $BOOST_SETUP_FILE_NAME
 fi
 
 echo_run ./$BOOST_SETUP_FILE_NAME
 
 if [ ! -e $PREMAKE_SETUP_FILE_NAME ]; then
-    echo_run wget http://cloudobserver.googlecode.com/svn/wiki/Assets/$PREMAKE_SETUP_FILE_NAME
+    echo_run wget http://cloudobserver.googlecode.com/svn/trunk/CloudLoader/$PREMAKE_SETUP_FILE_NAME
     echo_run chmod u+x $PREMAKE_SETUP_FILE_NAME
 fi
 
