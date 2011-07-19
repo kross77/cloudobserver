@@ -79,7 +79,7 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 
 			requested_service->service_call(socket, request, response);
 
-			util->search_and_erase<boost::thread::id, std::set<boost::thread::id> >(boost::this_thread::get_id(), service_cont->threads_ids);
+			util->safe_erase<boost::thread::id, std::set<boost::thread::id> >(boost::this_thread::get_id(), service_cont->threads_ids);
 		}
 		catch(std::exception &e)
 		{
@@ -92,7 +92,7 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 	{
 		std::cout << e.what() << std::endl; //"The parameter is incorrect" exception
 	}
-	util->search_and_erase<boost::thread::id, std::set<boost::thread::id> >(boost::this_thread::get_id(),threads_pool);
+	util->safe_erase<boost::thread::id, std::set<boost::thread::id> >(boost::this_thread::get_id(),threads_pool);
 }
 
 void server::user_info(boost::asio::ip::tcp::socket &socket)
