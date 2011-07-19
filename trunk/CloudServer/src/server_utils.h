@@ -140,7 +140,7 @@ public:
 	}
 
 	template <class variable_T, class group_T>
-	void search_and_eraise(variable_T variable, group_T &into)
+	void search_and_erase(variable_T variable, group_T &into)
 	{
 		boost::mutex::scoped_lock lock(mut);
 		into.erase(into.find(variable));
