@@ -137,20 +137,13 @@ public:
 	{
 		boost::mutex::scoped_lock lock(mut);
 		into.insert(variable);
-		lock.unlock();
-		the_condition_variable.notify_one();
-		return;
 	}
 
 	template <class variable_T, class group_T>
 	void search_and_eraise(variable_T variable, group_T &into)
 	{
 		boost::mutex::scoped_lock lock(mut);
-		group_T::iterator it =  into.find(variable);
-		if(it != into.end());
-		into.erase(it);
-		lock.unlock();
-		return;
+		into.erase(into.find(variable));
 	}
 
 private:
@@ -180,7 +173,6 @@ private:
 	std::string tag_path_configuration_port;
 
 	mutable boost::mutex mut;
-	boost::condition_variable the_condition_variable;
 
 	template<class T>
 	inline T &empty_class()
