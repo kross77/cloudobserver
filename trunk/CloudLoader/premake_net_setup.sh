@@ -16,12 +16,12 @@ CURL_CMD=curl\ -L
 #
 echo_run ()
 {
-    echo "$@"
-    "$@"
-    r=$?
-    if test $r -ne 0 ; then
-        exit $r
-    fi
+	echo "$@"
+	"$@"
+	r=$?
+	if test $r -ne 0 ; then
+		exit $r
+	fi
 }
 
 WD=`pwd`
@@ -31,22 +31,22 @@ HERE=`dirname $0`
 cd $HERE
 
 if [ "$1" != "" ]; then
-    PREMAKE_DISTRO_SITE="$1"
+	PREMAKE_DISTRO_SITE="$1"
 fi
 
 if [ ! -e $PREMAKE_DISTRO_NAME ]; then
-    # get boost
-    echo_run ${CURL_CMD} http://$PREMAKE_DISTRO_SITE/project/premake/Premake/$PREMAKE_VERSION/$PREMAKE_DISTRO_NAME -o $PREMAKE_DISTRO_NAME
+	# get boost
+	echo_run ${CURL_CMD} http://$PREMAKE_DISTRO_SITE/project/premake/Premake/$PREMAKE_VERSION/$PREMAKE_DISTRO_NAME -o $PREMAKE_DISTRO_NAME
 fi
 
-# move the boost distro into place
-echo_run unzip $PREMAKE_DISTRO_NAME
-
-cd ./premake-4.3/build/gmake.unix
-
-echo_run make config=release
-
-cd ../../bin/release
+if [ ! -d premake-4.3/bin/release ]; then
+	# move the boost distro into place
+	echo_run unzip $PREMAKE_DISTRO_NAME
+	
+	cd ./premake-4.3/build/gmake.unix
+	
+	echo_run make config=release
+fi
 
 echo Done!
 
