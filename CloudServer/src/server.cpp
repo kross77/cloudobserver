@@ -27,7 +27,6 @@ void server::acceptor_loop(){
 			std::cout << "connection accepted." << std::endl;
 			user_info(*socket);
 			boost::shared_ptr<boost::thread> p(new boost::thread(&server::request_response_loop, this, socket));
-			util->safe_insert<boost::thread::id, std::set<boost::thread::id> >(p->get_id(),threads_pool);
 		}
 		catch(std::exception &e)
 		{
@@ -39,6 +38,7 @@ void server::acceptor_loop(){
 // We should forward request to shared library
 void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socket> socket)
 {
+	util->safe_insert<boost::thread::id, std::set<boost::thread::id> >(boost::this_thread::get_id(),threads_pool);
 	try
 	{
 		boost::shared_ptr<http_request> request = boost::make_shared<http_request>();
@@ -80,7 +80,6 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 			requested_service->service_call(socket, request, response);
 
 			util->search_and_eraise<boost::thread::id, std::set<boost::thread::id> >(boost::this_thread::get_id(), service_cont->threads_ids);
-			util->search_and_eraise<boost::thread::id, std::set<boost::thread::id> >(boost::this_thread::get_id(),threads_pool);
 		}
 		catch(std::exception &e)
 		{
@@ -93,6 +92,7 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 	{
 		std::cout << e.what() << std::endl; //"The parameter is incorrect" exception
 	}
+	util->search_and_eraise<boost::thread::id, std::set<boost::thread::id> >(boost::this_thread::get_id(),threads_pool);
 }
 
 void server::user_info(boost::asio::ip::tcp::socket &socket)
