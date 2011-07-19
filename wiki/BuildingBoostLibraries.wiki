@@ -50,11 +50,11 @@ There some *unofficial parts of Boost* we use which also require compilation:
    * We set `--without-mpi` flag because we currently do not use it. (on installing boost with mpi please refer to [http://www.boost.org/doc/libs/1_46_1/doc/html/mpi/getting_started.html#mpi.config this official Boost.MPI page])
 
 === Automated ways ===
-For Unix distributions (Mac OS X or Linux) you could use our [http://cloudobserver.googlecode.com/svn/wiki/Assets/boost_net_setup.sh Boost network build/setup script].
+For Unix distributions (Mac OS X or Linux) you could use our [http://cloudobserver.googlecode.com/svn/trunk/CloudLoader/boost_net_setup.sh Boost network build/setup script].
 
 Here is how you can use it: 
 {{{
-	wget http://cloudobserver.googlecode.com/svn/wiki/Assets/boost_net_setup.sh
+	wget http://cloudobserver.googlecode.com/svn/trunk/CloudLoader/boost_net_setup.sh
 	chmod u+x boost_net_setup.sh
 	./boost_net_setup.sh
 }}}
