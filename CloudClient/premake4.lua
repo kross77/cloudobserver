@@ -434,8 +434,9 @@ solution "CloudClient"
 		cloud.project.useBoost()
 		cloud.project.useAL()
 		cloud.project.useCV()
-		cloud.project.useTcl()
+		--cloud.project.useTcl()
 		files { "src/**.h", "src/**.cpp" }
+		excludes { "src/3rdparty/cpptcl/**", "src/3rdparty/cpptk/**" }
 		
 		configuration "Debug"
 			defines { "DEBUG" }
