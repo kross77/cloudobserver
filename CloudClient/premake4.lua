@@ -249,17 +249,17 @@ function cloud.project.useCV()
 	if os.get() == "windows" then
 		defines { "WIN" }
 		links {
-		"opencv_core220",
-		"opencv_highgui220",
-		"opencv_imgproc220"
+		"opencv_core230",
+		"opencv_highgui230",
+		"opencv_imgproc230"
 		}
 		
-		cloud.win.addLibFromProgrammFiles("OpenCV-2.2.0")
+		cloud.win.addLibFromProgrammFiles("OpenCV-2.3.0")
 		
 		if  _OPTIONS["CopySharedLibraries"] then
-			cloud.win.copyDLL("OpenCV-2.2.0", "opencv_core220.dll")
-			cloud.win.copyDLL("OpenCV-2.2.0", "opencv_highgui220.dll")
-			cloud.win.copyDLL("OpenCV-2.2.0", "opencv_imgproc220.dll")
+			cloud.win.copyDLL("OpenCV-2.3.0", "opencv_core230.dll")
+			cloud.win.copyDLL("OpenCV-2.3.0", "opencv_highgui230.dll")
+			cloud.win.copyDLL("OpenCV-2.3.0", "opencv_imgproc230.dll")
 		end
 	end
 	
