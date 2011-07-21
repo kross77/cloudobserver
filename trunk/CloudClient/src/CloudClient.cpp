@@ -41,12 +41,12 @@ int main(int argc, char* argv[])
 	// Parse command line arguments.
 	for (int i = 1; i < argc; i++)
 	{
-		std::string arg = string(argv[i]);
+		std::string arg(argv[i]);
 		int pos = arg.find("=");
 		if (std::string::npos != pos)
 		{
-			string key = arg.substr(0, pos);
-			string value = arg.substr(pos + 1, arg.length() - pos - 1);
+			std::string key = arg.substr(0, pos);
+			std::string value = arg.substr(pos + 1, arg.length() - pos - 1);
 
 			try
 			{
