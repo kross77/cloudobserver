@@ -3,6 +3,7 @@
 server_utils::server_utils()
 {
 	util = new extension_utils();
+	tread_util = new threading_utils();
 	print = new printer();
 	this->description.server_root_path = boost::filesystem::current_path();
 
