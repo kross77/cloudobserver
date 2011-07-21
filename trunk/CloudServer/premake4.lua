@@ -24,21 +24,9 @@ newoption {
 }
 
 newoption {
-	trigger     = "FFmpegLibsPath",
+	trigger     = "OpenSSLLibsPath",
 	value       = "PATH",
-	description = "Choose a particular directory for FFMpeg libs search"
-}
-
-newoption {
-	trigger     = "OpenALLibsPath",
-	value       = "PATH",
-	description = "Choose a particular directory for OpenAL libs search"
-}
-
-newoption {
-	trigger     = "OpenCVLibsPath",
-	value       = "PATH",
-	description = "Choose a particular directory for OpenCV libs search"
+	description = "Choose a particular directory for OpenSSL libs search"
 }
 
 -- Options for includes
@@ -56,28 +44,9 @@ newoption {
 }
 
 newoption {
-	trigger     = "FFmpegIncludesPath",
+	trigger     = "OpenSSLIncludesPath",
 	value       = "PATH",
-	description = "Choose a particular directory for FFMpeg includes search"
-}
-
-newoption {
-	trigger     = "OpenALIncludesPath",
-	value       = "PATH",
-	description = "Choose a particular directory for OpenAL includes search"
-}
-
-
-newoption {
-	trigger     = "OpenCVIncludesPath",
-	value       = "PATH",
-	description = "Choose a particular directory for OpenCV includes search"
-}
-
-newoption {
-	trigger     = "c99IncludesPath",
-	value       = "PATH",
-	description = "Choose a particular directory for C99 includes search if it is not defined on your system by defauft. WINDOWS-MSVC-SPECIFIC-REQUIRED-FOR-FFMPEG-OPTION! because on 2011.03.** msvc++ does not support C99 and FFmpeg release requires C99 there are errors compiling in VS environment. Choose a particular directory for C99 includes search. Problem described here: http://ffmpeg.arrozcru.org/wiki/index.php?title=Inttypes.h . Currently required files could be found here http://code.google.com/p/msinttypes/downloads/list ."
+	description = "Choose a particular directory for OpenSSL includes search"
 }
 
 -- Options for Shared Libs
@@ -204,12 +173,12 @@ end
 function cloud.win.copyDLL( folderName ,fileName)
 	--
 	if _OPTIONS["soPath"] then
-		pa = os.pathsearch(fileName, disc .. ":/Program Files (x86)/" .. folderName .. "/bin", disc .. ":/Program Files/" .. folderName .. "/bin", string.explode( _OPTIONS["soPath"] , ";") )  .. "/".. fileName
+		pa = os.pathsearch(fileName, disc .. ":/Program Files (x86)/" .. folderName , disc .. ":/Program Files/" .. folderName , string.explode( _OPTIONS["soPath"] , ";") )  .. "/".. fileName
 		if pa then
 			cloud.copyFileIntoBuild(pa, fileName)
 		end
 	else
-		pa = os.pathsearch(fileName,  fileName, disc .. ":/Program Files (x86)/" .. folderName .. "/bin", disc .. ":/Program Files/" .. folderName .. "/bin") .. "/".. fileName
+		pa = os.pathsearch(fileName,  fileName, disc .. ":/Program Files (x86)/" .. folderName , disc .. ":/Program Files/" .. folderName ) .. "/".. fileName
 		if pa then
 			cloud.copyFileIntoBuild(pa, fileName)
 		end
@@ -265,77 +234,6 @@ function cloud.project.init()
 	end 
 end
 
-function cloud.project.useCV()
-	--
-	cloud.addLibDir( _OPTIONS["OpenCVLibsPath"] )
-	cloud.addIncludeDir(  _OPTIONS["OpenCVIncludesPath"] )
-	if os.get() == "windows" then
-		defines { "WIN" }
-		links {
-		"opencv_core220",
-		"opencv_highgui220",
-		"opencv_imgproc220"
-		}
-		
-		cloud.win.addLibFromProgrammFiles("OpenCV-2.2.0")
-		
-		if  _OPTIONS["CopySharedLibraries"] then
-			cloud.win.copyDLL("OpenCV-2.2.0", "opencv_core220.dll")
-			cloud.win.copyDLL("OpenCV-2.2.0", "opencv_highgui220.dll")
-			cloud.win.copyDLL("OpenCV-2.2.0", "opencv_imgproc220.dll")
-		end
-	end
-	
-	if os.get() == "linux" then
-		defines { "LIN" }
-		links {
-		"opencv_core",
-		"opencv_highgui",
-		"opencv_imgproc"
-		}	
-	end
-	
-	if os.get() == "macosx" then
-		defines { "MAC" }
-		links {
-		"opencv_core",
-		"opencv_highgui",
-		"opencv_imgproc",
-		"QuickTime.framework"
-		}	 
-	end 
-end
-
-function cloud.project.useAL()
-	--
-	cloud.addIncludeDir(  _OPTIONS["OpenALIncludesPath"] )
-	cloud.addLibDir(  _OPTIONS["OpenALLibsPath"] )
-	if os.get() == "windows" then
-		defines { "WIN" }
-		links {
-		"openal32"
-		}
-		cloud.win.addLibFromProgrammFiles("OpenAL-1.13")
-		if  _OPTIONS["CopySharedLibraries"] then
-			cloud.win.copyDLL("OpenAL-1.13", "OpenAL32.dll")
-		end
-	end
-	
-	if os.get() == "linux" then
-		defines { "LIN" }
-		links {
-		"openal"
-		}
-	end
-	
-	if os.get() == "macosx" then
-		defines { "MAC" }
-		links {
-		"openal"
-		}
-	end 
-end
-	
 function cloud.project.useBoost()
 	--
 	cloud.addIncludeDir( _OPTIONS["BoostIncludesPath"] )
@@ -370,47 +268,39 @@ function cloud.project.useBoost()
 	end 
 end
 
-function cloud.project.useFFmpeg()
-	--
-	cloud.addLibDir(  _OPTIONS["FFmpegLibsPath"] )
-	cloud.addIncludeDir(  _OPTIONS["FFmpegIncludesPath"] )
-	cloud.addIncludeDir( _OPTIONS["c99IncludesPath"] 	) 
+function cloud.project.useopenSSL()
+	cloud.addLibDir(  _OPTIONS["OpenSSLLibsPath"] )
+	cloud.addIncludeDir(  _OPTIONS["OpenSSLIncludesPath"] )
+	--[[	
 	if os.get() == "windows" then
 		defines { "WIN" }
 		links {
-		"avcodec-52",
-		"avformat-52",
-		"avutil-50",
-		"swscale-0"
+		"libeay32",
+		"ssleay32"
 		}
-		cloud.win.addLibFromProgrammFiles2("FFmpeg-0.6.1", "bin")
+		cloud.win.addLibFromProgrammFiles("openssl-1.0.0d")
 		if  _OPTIONS["CopySharedLibraries"] then
-			cloud.win.copyDLL("FFmpeg-0.6.1", "avcodec-52.dll")
-			cloud.win.copyDLL("FFmpeg-0.6.1", "avformat-52.dll")
-			cloud.win.copyDLL("FFmpeg-0.6.1", "avutil-50.dll")
-			cloud.win.copyDLL("FFmpeg-0.6.1", "swscale-0.dll")
+			cloud.win.copyDLL("openssl-1.0.0d/lib", "libeay32.dll")
+			cloud.win.copyDLL("openssl-1.0.0d/lib", "ssleay32.dll")
 		end
 	end
 	
 	if os.get() == "linux" then
 		defines { "LIN" }
 		links {
-		"avcodec", 
-		"avformat",
-		"avutil",
-		"swscale"
+		"ssl",
+		"crypto"
 		}
 	end
 	
 	if os.get() == "macosx" then
 		defines { "MAC" }
 		links {
-		"avcodec", 
-		"avformat",
-		"avutil",
-		"swscale"
+		"ssl",
+		"crypto"
 		}
-	end 	
+	end 
+	--]]	
 end
 
 function cloud.project.copyConfig()
@@ -474,6 +364,7 @@ solution "CloudServer"
 		
 		cloud.project.init()
 		cloud.project.useBoost()
+		cloud.project.useopenSSL()
 		
 		cloud.project.copyConfig()
 		cloud.project.createDumpsFolder()
