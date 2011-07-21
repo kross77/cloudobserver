@@ -61,6 +61,9 @@
 //Maps printer
 #include "printer.h"
 
+//containers thread safe operations
+#include "threading_utils.h"
+
 class server_utils
 {
 public:
@@ -129,27 +132,15 @@ public:
 
 	// For maps contents printing
 	printer *print;
-
+	threading_utils *tread_util; 
 	server_description description;
 
-	template <class variable_T, class group_T>
-	void safe_insert(variable_T variable, group_T &into)
-	{
-		boost::mutex::scoped_lock lock(mut);
-		into.insert(variable);
-	}
 
-	template <class variable_T, class group_T>
-	void safe_erase(variable_T variable, group_T &into)
-	{
-		boost::mutex::scoped_lock lock(mut);
-		into.erase(into.find(variable));
-	}
 
 private:
 
 	std::map<std::string, boost::shared_ptr<server_utils::service_container> > parse_config_services(boost::property_tree::ptree config);
-
+	
 	// For services creation from shared libraries
 	extension_utils *util;
 
@@ -172,7 +163,7 @@ private:
 	std::string tag_path_configuration_server_root_path;
 	std::string tag_path_configuration_port;
 
-	mutable boost::mutex mut;
+	
 
 	template<class T>
 	inline T &empty_class()
