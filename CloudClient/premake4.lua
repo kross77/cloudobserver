@@ -256,38 +256,91 @@ function cloud.project.useCV()
 	cloud.addIncludeDir(  _OPTIONS["OpenCVIncludesPath"] )
 	if os.get() == "windows" then
 		defines { "WIN" }
-		links {
-		"opencv_core230",
-		"opencv_highgui230",
-		"opencv_imgproc230"
-		}
+		configuration { "DebugShared or ReleaseShared" }
+			links {
+				"opencv_core230",
+				"opencv_highgui230",
+				"opencv_imgproc230"
+			}
+			
+			if  _OPTIONS["CopySharedLibraries"] then
+				cloud.win.copyDLL("OpenCV-2.3.0", "opencv_core230.dll")
+				cloud.win.copyDLL("OpenCV-2.3.0", "opencv_highgui230.dll")
+				cloud.win.copyDLL("OpenCV-2.3.0", "opencv_imgproc230.dll")
+			end
+		configuration { }
+		
+		configuration { "DebugStatic" }
+			links {
+				"opencv_core230d",
+				"opencv_highgui230d",
+				"opencv_imgproc230d",
+				"libjasperd",
+				"libjpegd",
+				"libpngd",
+				"libtiffd",
+				"zlibd",
+				"vfw32"
+			}
+		configuration { }
+		
+		configuration { "ReleaseStatic" }
+			links {
+				"opencv_core230",
+				"opencv_highgui230",
+				"opencv_imgproc230",
+				"libjasper",
+				"libjpeg",
+				"libpng",
+				"libtiff",
+				"zlib",
+				"vfw32"
+			}
+		configuration { }
 		
 		cloud.win.addLibFromProgrammFiles("OpenCV-2.3.0")
-		
-		if  _OPTIONS["CopySharedLibraries"] then
-			cloud.win.copyDLL("OpenCV-2.3.0", "opencv_core230.dll")
-			cloud.win.copyDLL("OpenCV-2.3.0", "opencv_highgui230.dll")
-			cloud.win.copyDLL("OpenCV-2.3.0", "opencv_imgproc230.dll")
-		end
 	end
 	
 	if os.get() == "linux" then
 		defines { "LIN" }
 		links {
-		"opencv_core",
-		"opencv_highgui",
-		"opencv_imgproc"
-		}	
+			"opencv_imgproc",
+			"opencv_core",
+			"opencv_highgui"
+		}
+		
+		configuration { "DebugStatic or ReleaseStatic" }
+			links {
+				"libjasper",
+				"libjpeg",
+				"libpng",
+				"libtiff",
+				"zlib"
+			}
+		configuration { }
 	end
 	
 	if os.get() == "macosx" then
 		defines { "MAC" }
 		links {
-		"opencv_core",
-		"opencv_highgui",
-		"opencv_imgproc",
-		"QuickTime.framework"
-		}	 
+			"opencv_imgproc",
+			"opencv_core",
+			"opencv_highgui",
+			"QuickTime.framework"
+		}
+		
+		configuration { "DebugStatic or ReleaseStatic" }
+			links {
+				"libjasper",
+				"libjpeg",
+				"libpng",
+				"libtiff",
+				"zlib",
+				"AppKit.framework",
+				"CoreVideo.framework",
+				"QTKit.framework",
+			}
+		configuration { }
 	end 
 end
 
