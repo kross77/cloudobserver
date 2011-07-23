@@ -419,10 +419,14 @@ solution "CloudClient"
 	
 	configuration { "Debug" }
 		targetdir ( "projects/" .. os.get() .. "-" .. action .. "/bin/debug" )
+		defines { "DEBUG" }
+		flags { "Symbols" }
 	configuration { }
 	
 	configuration { "Release" }
 		targetdir ( "projects/" .. os.get() .. "-" .. action ..  "/bin/release" )
+		defines { "NDEBUG" }
+		flags { "Optimize" }
 	configuration { }
 	
 	-- A project defines one build target
@@ -439,13 +443,3 @@ solution "CloudClient"
 		--cloud.project.useTcl()
 		files { "src/**.h", "src/**.cpp" }
 		excludes { "src/3rdparty/cpptcl/**", "src/3rdparty/cpptk/**" }
-		
-		configuration "Debug"
-			defines { "DEBUG" }
-			flags { "Symbols" }
-		configuration { }
-		
-		configuration "Release"
-			defines { "NDEBUG" }
-			flags { "Optimize" }
-		configuration { }
