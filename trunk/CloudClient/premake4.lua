@@ -137,14 +137,22 @@ end
 
 function cloud.copyFileIntoBuild(filePath, fileName)
 	--
-	if not os.isdir("projects/" .. os.get() .. "-" .. action .. "/bin/debug" ) then
-		os.mkdir("projects/" .. os.get() .. "-" .. action .. "/bin/debug")
+	if not os.isdir("projects/" .. os.get() .. "-" .. action .. "/bin/debug-shared" ) then
+		os.mkdir("projects/" .. os.get() .. "-" .. action .. "/bin/debug-shared")
 	end
-	if not os.isdir("projects/" .. os.get() .. "-" .. action .."/bin/release" ) then
-		os.mkdir("projects/" .. os.get() .. "-" .. action .. "/bin/release")
+	if not os.isdir("projects/" .. os.get() .. "-" .. action .. "/bin/debug-static" ) then
+		os.mkdir("projects/" .. os.get() .. "-" .. action .. "/bin/debug-static")
 	end
-	os.copyfile(filePath , "projects/" .. os.get() .. "-" .. action .. "/bin/debug/" .. fileName  )
-	os.copyfile(filePath , "projects/" .. os.get() .. "-" .. action .. "/bin/release/" .. fileName )
+	if not os.isdir("projects/" .. os.get() .. "-" .. action .. "/bin/release-shared" ) then
+		os.mkdir("projects/" .. os.get() .. "-" .. action .. "/bin/release-shared")
+	end
+	if not os.isdir("projects/" .. os.get() .. "-" .. action .. "/bin/release-static" ) then
+		os.mkdir("projects/" .. os.get() .. "-" .. action .. "/bin/release-static")
+	end
+	os.copyfile(filePath , "projects/" .. os.get() .. "-" .. action .. "/bin/debug-shared/" .. fileName  )
+	os.copyfile(filePath , "projects/" .. os.get() .. "-" .. action .. "/bin/debug-static/" .. fileName  )
+	os.copyfile(filePath , "projects/" .. os.get() .. "-" .. action .. "/bin/release-shared/" .. fileName )
+	os.copyfile(filePath , "projects/" .. os.get() .. "-" .. action .. "/bin/release-static/" .. fileName )
 end
 
 cloud.win = { }
@@ -414,17 +422,31 @@ end
 
 solution "CloudClient"
 	location ( "projects/".. os.get() .. "-" ..  action )
-	configurations { "Debug", "Release" }
+	configurations { "DebugShared", "DebugStatic", "ReleaseShared", "ReleaseStatic" }
 	objdir     ( "projects/" .. os.get() .. "-" .. action .. "/bin/obj" )
 	
-	configuration { "Debug" }
-		targetdir ( "projects/" .. os.get() .. "-" .. action .. "/bin/debug" )
+	configuration { "DebugShared" }
+		targetdir ( "projects/" .. os.get() .. "-" .. action .. "/bin/debug-shared" )
+	configuration { }
+	
+	configuration { "DebugStatic" }
+		targetdir ( "projects/" .. os.get() .. "-" .. action .. "/bin/debug-static" )
+	configuration { }
+	
+	configuration { "ReleaseShared" }
+		targetdir ( "projects/" .. os.get() .. "-" .. action ..  "/bin/release-shared" )
+	configuration { }
+	
+	configuration { "ReleaseStatic" }
+		targetdir ( "projects/" .. os.get() .. "-" .. action ..  "/bin/release-static" )
+	configuration { }
+	
+	configuration { "DebugShared or DebugStatic" }
 		defines { "DEBUG" }
 		flags { "Symbols" }
 	configuration { }
 	
-	configuration { "Release" }
-		targetdir ( "projects/" .. os.get() .. "-" .. action ..  "/bin/release" )
+	configuration { "ReleaseShared or ReleaseStatic" }
 		defines { "NDEBUG" }
 		flags { "Optimize" }
 	configuration { }
