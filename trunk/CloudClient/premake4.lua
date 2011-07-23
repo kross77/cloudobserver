@@ -419,9 +419,11 @@ solution "CloudClient"
 	
 	configuration { "Debug" }
 		targetdir ( "projects/" .. os.get() .. "-" .. action .. "/bin/debug" )
+	configuration { }
 	
 	configuration { "Release" }
 		targetdir ( "projects/" .. os.get() .. "-" .. action ..  "/bin/release" )
+	configuration { }
 	
 	-- A project defines one build target
 	
@@ -441,8 +443,9 @@ solution "CloudClient"
 		configuration "Debug"
 			defines { "DEBUG" }
 			flags { "Symbols" }
-		
+		configuration { }
 		
 		configuration "Release"
 			defines { "NDEBUG" }
 			flags { "Optimize" }
+		configuration { }
