@@ -4,7 +4,11 @@ server::server(boost::property_tree::ptree config)
 {
 	util = new server_utils();
 	util->description = util->parse_config(config);
+
+	uac = new user_control(util->description.database_name); 
+
 	this->acceptor_thread = new boost::thread(&server::acceptor_loop, this);
+
 	std::cout << "server created on port: " << util->description.port << std::endl;
 }
 
@@ -68,6 +72,18 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 		formatter << boost::posix_time::second_clock::local_time();
 		response->headers.insert(std::pair<std::string, std::string>("Date", formatter.str()));
 		response->headers.insert(std::pair<std::string, std::string>("Server", "Cloud Server v0.5"));
+
+		try
+		{
+		std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > login = uac->service_call(request, response);
+		request = login.first;
+		response = login.second;
+		}
+		catch (std::exception &e)
+		{
+			std::cout << e.what() << std::endl;
+		}
+
 		try
 		{
 			boost::shared_ptr<server_utils::service_container> service_cont = util->find_service(*request);

@@ -24,6 +24,7 @@ server_utils::server_utils()
 	tag_path_configuration_services = tag_configuration + "." + "services";
 	tag_path_configuration_server_root_path = tag_configuration + "." + "server_root_path";
 	tag_path_configuration_port = tag_configuration + "." + "port";
+	tag_path_configuration_database = tag_configuration + "." + "database";
 }
 
 boost::shared_ptr<service> server_utils::create_service(std::string library_name, std::string class_name_inside_lib, boost::property_tree::ptree config)
@@ -136,6 +137,9 @@ server_utils::server_description server_utils::parse_config( boost::property_tre
 
 	server_descr.port = config.get(tag_path_configuration_port, 12345);
 	std::cout << "Server port: " << server_descr.port << std::endl;
+
+	server_descr.database_name = config.get(tag_path_configuration_database, "server.db");
+	std::cout << "Server database: " << server_descr.database_name << std::endl;
 
 	std::cout << std::endl << "Server services: ";
 	server_descr.service_map = server_utils::parse_config_services( config );
