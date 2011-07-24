@@ -1,8 +1,122 @@
-#summary Road Map
-#labels Phase-Implementation,Phase-Design,Deprecated
+#summary In our server product we use SQLite as main DB engine. Here is how we use it from our C++ code
+#labels Phase-Implementation,SQLite,Tutorial,CPlusPlus,sqlite3pp
 
-= План развития =
+= Introduction =
 
-Версия 1 (Реал тайм видео передача просмотр запись видео)
- Версия 1.1 (исправление багов)
-версия 2 ( Фильтры адаптивное сжатие уникальная система комментариев и сообщений)
+[http://www.sqlite.org/ SQLite] is a software library that implements a serverless SQL database engine. We use [http://code.google.com/p/sqlite3pp/ sqlite3pp] to get most of it from our C++ code.
+
+
+= [http://code.google.com/p/sqlite3pp/ sqlite3pp] C++ Tutorial =
+Here is simple tutorial on using sqlite3pp.
+
+== Getting started ==
+What we'll do:
+ * We will create a DB file (if it does not exist) or open it.
+ * Create a table in it (if it does not already exist)
+ * Insert some values
+ * Read out from DB some values.
+
+_Note_ that SQLite DB engine does not usually throw `std::exeptions`, it just [http://www.sqlite.org/c3ref/c_abort.html returns SQLite error codes described here.]
+
+== Code ==
+{{{
+
+#include <iostream>
+#include <sqlite3pp.h>
+
+using namespace std;
+
+int main(int argc, char* argv[])
+{
+	sqlite3pp::database db("test.db");
+	try {
+
+		cout <<	db.execute("CREATE TABLE IF NOT EXISTS users (email varchar(65) UNIQUE NOT NULL primary key, pass varchar(65))") << endl;
+		cout <<	db.execute("INSERT INTO users (email, pass) VALUES ('AAAA', '1234')") << endl;
+
+		sqlite3pp::transaction xct(db);
+
+		sqlite3pp::command cmd(db, "INSERT INTO users (email, pass) VALUES (?, ?)");
+
+		cout << cmd.bind(1, "BBBB") << endl;
+		cout << cmd.bind(2, "1234") << endl;
+		cout << cmd.execute() << endl;
+		cout << cmd.reset() << endl;
+		cmd.binder() << "CCCC" << "1234";
+		cout << cmd.execute() << endl;
+		xct.commit();
+	}
+	catch (exception& ex) {
+		cout << ex.what() << endl;
+	}
+	try 
+	{
+		sqlite3pp::transaction xct(db, true);
+
+		sqlite3pp::query qry(db, "SELECT email, pass FROM users");
+
+		cout << endl;
+
+		for (int i = 0; i < qry.column_count(); ++i) {
+			cout << qry.column_name(i) << "\t";
+		}
+		cout << endl;
+
+		for (sqlite3pp::query::iterator i = qry.begin(); i != qry.end(); ++i) {
+			std::string email, pass;
+			(*i).getter() >> email >> pass;
+			cout << email << "\t" << pass << endl;
+		}
+	}
+	catch (exception& ex) {
+		cout << ex.what() << endl;
+	}
+	cin.get();
+}
+
+}}}
+
+== Output ==
+
+So first time you run this code you will get nex output:
+{{{
+0
+0
+0
+0
+0
+0
+0
+
+email   pass
+AAAA    1234
+BBBB    1234
+CCCC    1234
+}}}
+
+As you can see no errors.
+
+Bu if you will run it again from same location you will get:
+{{{
+0
+19
+0
+0
+1
+19
+1
+column email is not unique
+
+email   pass
+AAAA    1234
+BBBB    1234
+CCCC    1234
+}}}
+
+Where
+ * `0` is successful result
+ * `1` is SQL error or missing database
+ * `19` is abort due to constraint violation
+
+== Conclusion ==
+Please not only wrap your code into `try catch` but also inspect SQL return codes, only 0 is `OK` in most cases.
