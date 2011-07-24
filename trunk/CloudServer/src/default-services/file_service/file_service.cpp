@@ -73,7 +73,7 @@ void file_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> 
 			body << "Error! "<< target.filename() << "exists, but is neither a regular file nor a directory.";
 	}
 	else
-		body << "Error 404!" << target.filename() << "does not exist\n <br/> <a href='/'>Please come again!</a>";
+		body << "Error 404!" << target.filename() << "does not exist\n <br/> <a href='/'>" << "Dear " << this->get_user_name(request) <<", please come again!</a>";
 
 	response->body = "<head></head><body><h1>" + body.str() + "</h1></body>";
 	response->send(*socket);
@@ -83,6 +83,16 @@ void file_service::apply_config(boost::property_tree::ptree config)
 {
 	this->root_path = config.get<std::string>("root_file_system_directory", this->root_path.string());
 	this->show_directory_contents = config.get<bool>("show_directory_contents", this->show_directory_contents);
+}
+
+std::string file_service::get_user_name( boost::shared_ptr<http_request> request )
+{
+	std::string response = "";
+	std::map<std::string, std::string>::iterator it = request->arguments.find("email");
+	if (it != request->arguments.end())
+		response = it->second;
+
+	return response;
 }
 
 BOOST_EXTENSION_TYPE_MAP_FUNCTION
