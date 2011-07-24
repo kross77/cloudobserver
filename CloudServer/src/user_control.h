@@ -27,6 +27,7 @@
 #include <http.h>
 
 #include "threading_utils.h"
+#include "printer.h"
 
 class user_control
 {

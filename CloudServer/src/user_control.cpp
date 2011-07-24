@@ -77,6 +77,8 @@ std::map<std::string, std::string> user_control::parse_cookie( std::string cooki
 
 std::string user_control::is_signed_in_user( std::string session_id_sha256 )
 {
+	printer p;
+	p.print_map_contents(sessions_map);
 	return util->safe_search_in_map< std::string, std::string >(session_id_sha256, sessions_map);
 }
 
@@ -216,7 +218,7 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 			session_id += has_login->second;
 			session_id = get_sha256(session_id);
 
-			util->safe_insert<pair_ss ,map_ss>(pair_ss(has_login->second, session_id), sessions_map);
+			util->safe_insert<pair_ss ,map_ss>(pair_ss(session_id, has_login->second), sessions_map);
 
 			std::string cookie = tag_cookie_name;
 			cookie += "=";
@@ -229,11 +231,13 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 		}
 		else
 		{
+			this->guest_user(user);
 			throw std::runtime_error("Unregistred user!");
 		}
 	}
 	else
 	{
+		this->guest_user(user);
 		throw std::runtime_error("No password found!");
 	}
 }
@@ -252,7 +256,7 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 
 	this->save_cookie(cookie, user.second);
 
-	user.first->arguments.erase(tag_logout);
+	user.first->arguments.erase(user.first->arguments.find(tag_logout));
 	return guest_user(user);
 }
 
@@ -275,17 +279,19 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 			std::cout << cmd.execute() << std::endl;
 			xct.commit();
 
-			user.first->arguments.erase(tag_register);
-			user.first->arguments.erase(tag_pass_sha256);
-			return user;
+			user.first->arguments.insert(std::pair<std::string, std::string>(tag_login, has_register->second));
+			user.first->arguments.erase(has_register);
+			return this->log_in(user);
 		}
 		else
 		{
+			this->guest_user(user);
 			throw std::runtime_error("User already exists!");
 		}
 	}
 	else
 	{
+		this->guest_user(user);
 		throw std::runtime_error("No password provided!");
 	}
 }
@@ -310,17 +316,19 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 			std::cout << cmd.execute() << std::endl;
 			xct.commit();
 
-			user.first->arguments.erase(tag_update);
-			user.first->arguments.erase(tag_pass_sha256);
+			user.first->arguments.erase(user.first->arguments.find(tag_update));
+			user.first->arguments.erase(has_pass);
 			return user;
 		}
 		else
 		{
+			this->guest_user(user);
 			throw std::runtime_error("Not registered user!");
 		}
 	}
 	else
 	{
+		this->guest_user(user);
 		throw std::runtime_error("No original password provided!");
 	}
 
