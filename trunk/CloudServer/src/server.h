@@ -12,6 +12,7 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 
 #include "server_utils.h"
+#include "user_control.h"
 
 class server
 {
@@ -26,6 +27,7 @@ private:
 	void user_info(boost::asio::ip::tcp::socket &socket);
 	std::set<boost::thread::id> threads_pool;
 	boost::thread *acceptor_thread;
+	user_control *uac;
 };
 
 #endif //SERVER_H
