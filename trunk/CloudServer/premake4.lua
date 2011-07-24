@@ -271,7 +271,7 @@ end
 function cloud.project.useopenSSL()
 	cloud.addLibDir(  _OPTIONS["OpenSSLLibsPath"] )
 	cloud.addIncludeDir(  _OPTIONS["OpenSSLIncludesPath"] )
-	--[[	
+		
 	if os.get() == "windows" then
 		defines { "WIN" }
 		links {
@@ -300,7 +300,7 @@ function cloud.project.useopenSSL()
 		"crypto"
 		}
 	end 
-	--]]	
+	
 end
 
 function cloud.project.copyConfig()
@@ -371,7 +371,10 @@ solution "CloudServer"
 		cloud.project.copyHtdocsFolder()
 		
 		links { "cf-http" }
+		links { "sqlite" }
+		
 		includedirs { "3rdparty/cf-http"}
+		includedirs { "3rdparty/sqlite"}
 		
 		files { "src/**.h", "src/**.hpp", "src/**.cpp" }
 		files { "service-interface/**" }
@@ -393,6 +396,27 @@ solution "CloudServer"
 		language "C++"
 		location ( "projects/" .. os.get() .. "-" .. action )
 		files { "3rdparty/cf-http/**.h", "3rdparty/cf-http/**.cpp" }
+		cloud.project.init()
+		cloud.project.useBoost()
+		
+		configuration "gmake"
+			buildoptions { "-fPIC" }
+		
+		configuration "Debug"
+			defines { "DEBUG" }
+			flags { "Symbols", "Unicode" }
+		
+		configuration "Release"
+			defines { "NDEBUG" }
+			flags { "OptimizeSpeed", "Unicode" }
+			
+------------------------------------------------------------------------------------------------
+
+	project "sqlite"
+		kind "StaticLib"
+		language "C++"
+		location ( "projects/" .. os.get() .. "-" .. action )
+		files { "3rdparty/sqlite/**.h",  "3rdparty/sqlite/**.c", "3rdparty/sqlite/**.cpp" }
 		cloud.project.init()
 		cloud.project.useBoost()
 		
