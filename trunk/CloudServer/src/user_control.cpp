@@ -79,7 +79,7 @@ std::string user_control::is_signed_in_user( std::string session_id_sha256 )
 {
 	printer p;
 	p.print_map_contents(sessions_map);
-	return util->safe_search_in_map< std::string, std::string >(session_id_sha256, sessions_map);
+	return util->safe_search_in_map< std::string, std::string, std::map<std::string, std::string>::iterator >(session_id_sha256, sessions_map);
 }
 
 std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user_control::service_call( boost::shared_ptr<http_request> user_request , boost::shared_ptr<http_response> service_response )
@@ -251,6 +251,28 @@ boost::shared_ptr<http_response> user_control::save_cookie( std::string cookie_d
 
 std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user_control::log_out( std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user )
 {
+	typedef std::map<std::string, std::string> map_ss;
+	typedef std::pair<std::string, std::string> pair_ss;
+
+	map_ss::iterator headers_end = user.first->headers.end();
+	map_ss::iterator has_cookie = user.first->headers.find(tag_cookie);
+
+	if (has_cookie != headers_end){
+		std::map<std::string, std::string> parsed_cookie = parse_cookie(has_cookie->second);
+
+		try
+		{
+			std::map<std::string, std::string>::iterator it =  parsed_cookie.find(tag_cookie_name);
+			if (it != parsed_cookie.end())
+			{
+				std::string session_id = it->second; 
+				util->safe_erase< std::string, std::map<std::string, std::string> >(session_id, sessions_map);
+			}
+		}
+		catch(std::exception &e)
+		{}
+	}
+
 	std::string tag_expired_date = "Expires=Wed, 09 Jun 2001 10:18:14 GMT";
 	std::string cookie = tag_cookie_name + "=" + "0" + "; " + tag_expired_date;
 

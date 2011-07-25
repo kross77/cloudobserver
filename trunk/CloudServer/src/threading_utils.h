@@ -25,11 +25,11 @@ public:
 		into.erase(into.find(variable));
 	}
 
-	template <class first_variable_T,class second_variable_T>
+	template <class first_variable_T,class second_variable_T, class iterator_T>
 	second_variable_T safe_search_in_map(first_variable_T variable, std::map<first_variable_T, second_variable_T> &into)
 	{
 		boost::mutex::scoped_lock lock(mut);
-		std::map<first_variable_T, second_variable_T>::iterator return_val = into.find(variable);
+		iterator_T return_val = into.find(variable);
 		if (return_val != into.end())
 		{
 			return return_val->second;
