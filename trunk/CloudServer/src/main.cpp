@@ -137,6 +137,14 @@ bool save(std::string save_file_path)
 	return true;
 }
 
+void print_services()
+{
+	BOOST_FOREACH(std::string const si, s->util->get_services_names())
+	{
+		std::cout << si << std::endl;
+	}
+}
+
 void start(boost::property_tree::ptree server_config)
 {
 	if(!server_started)
@@ -157,6 +165,8 @@ void start(boost::property_tree::ptree server_config)
 		}
 		server_started = true;
 		std::cout << "Server started." << std::endl;
+		std::cout << "Please enter service name or `ls` to print all currently available services: " << std::endl;
+		print_services();
 	}
 	else
 	{
@@ -192,14 +202,6 @@ void parse_program_options(int argc, char* argv[])
 	if (vm.count("start")) {
 		start(server_config);
 	} 
-}
-
-void print_services()
-{
-	BOOST_FOREACH(std::string const si, s->util->get_services_names())
-	{
-		std::cout << si << std::endl;
-	}
 }
 
 void service_commandor(std::string name)
@@ -257,7 +259,7 @@ void service_commandor(std::string name)
 						boost::property_tree::ptree pt;
 						try
 						{
-							boost::property_tree::read_json(conf, pt);
+							boost::property_tree::read_json(conf, pt); // Works,
 							invalid_config = false;
 						}
 						catch (std::exception& e)
@@ -268,7 +270,7 @@ void service_commandor(std::string name)
 						{
 							try
 							{
-								boost::property_tree::read_xml(conf, pt);
+								boost::property_tree::read_xml(conf, pt); // Does not work.
 								invalid_config = false;
 							}
 							catch (std::exception& e)
@@ -279,7 +281,7 @@ void service_commandor(std::string name)
 
 						if (invalid_config)
 						{
-							std::cout << "invalid configuration input, please input correct JSON or XML config." << std::endl;
+							std::cout << "invalid configuration input, please input correct JSON config." << std::endl;
 							continue;
 						} 
 						else
@@ -332,7 +334,7 @@ int main(int argc, char* argv[])
 	do
 	{
 		std::cout << "$ ";
-		std::cin >> input;
+		std::getline(std::cin, input);
 
 		if (input == "help")
 		{
@@ -389,39 +391,23 @@ int main(int argc, char* argv[])
 			continue;
 		}
 
-		if (input == "service")
-		{
-			if (!server_started)
+
+			if (server_started)
 			{
-				std::cout << "You must start server in order to use services menu!" << std::endl << "Please start the server" << std::endl;
-				continue;
-			}
-			std::string svar;
-			std::cout << "Please enter service name or `ls` to print all currently available services: " << std::endl;
-			do{
-				std::cout << "~: ";
-				std::getline(std::cin, svar);
-
-				if (svar == "")
-				{
-					std::cout << std::endl;
-					continue;
-				}
-
-				if (svar == "exit")
-					continue;
-
-				if ((svar == "ls") || (svar == "list services"))
+				if ((input == "ls") || (input == "list services"))
 				{
 					print_services();
+					continue;
 				}
 				else
 				{
-					service_commandor(svar);
+					service_commandor(input);
+					continue;
 				}
-			} while (svar != "exit");
-			continue;
-		}
+			} 
+			else
+				continue;
+		
 
 		if (input == "exit")
 			continue;
