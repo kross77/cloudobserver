@@ -28,9 +28,6 @@
 //Extension includes
 #include "extension_utils.h"
 
-//Maps printer
-#include "printer.h"
-
 //containers thread safe operations
 #include "threading_utils.h"
 
@@ -101,8 +98,6 @@ public:
 	std::multiset<std::string> get_services_libraries_names();
 	boost::shared_ptr<server_utils::service_container> find_service(http_request request);
 
-	// For maps contents printing
-	printer *print;
 	threading_utils *tread_util; 
 	server_description description;
 
