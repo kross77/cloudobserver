@@ -17,9 +17,6 @@
 #include <boost/date_time.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 
-//OpenSSL
-#include "openssl/sha.h"
-
 //SQLite
 #include <sqlite3pp.h>
 
@@ -27,7 +24,7 @@
 #include <http.h>
 
 #include "threading_utils.h"
-#include "printer.h"
+#include "general_utils.h"
 
 class user_control
 {
@@ -53,11 +50,6 @@ private:
 	bool is_registered_user(std::string email);
 	std::string is_signed_in_user(std::string session_id_sha256);
 
-	//Utility functions
-	//TODO: place into some other class
-	std::string to_lower(std::string data); // Cross lingual function to make string lowercase.
-	std::string get_sha256( std::string value); // gets SHA256 from string
-
 	//cf-http extension functions
 	//TODO: join with cf-http
 	std::map<std::string, std::string> parse_cookie(std::string cookie_data);
@@ -67,7 +59,9 @@ private:
 	std::map<std::string,std::string> sessions_map; // session_id to name
 	boost::shared_ptr<sqlite3pp::database> db;
 
-	threading_utils *util;
+	threading_utils *threading_util;
+	general_utils *general_util;
+	
 
 	//Grammar
 	std::string tag_login;

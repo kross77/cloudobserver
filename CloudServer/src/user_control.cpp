@@ -2,7 +2,9 @@
 
 user_control::user_control(std::string DB_name)
 {
-	util = new threading_utils();
+	general_util = new general_utils();
+	threading_util = new threading_utils();
+
 	//Grammar
 	tag_login = "login";
 	tag_register = "register";
@@ -25,22 +27,6 @@ user_control::user_control(std::string DB_name)
 	db = db_;
 	std::cout << db->execute(command_create_users_table.c_str()) << std::endl;
 
-}
-
-std::string user_control::get_sha256( std::string value )
-{
-	char data[65];
-	unsigned char hash[SHA256_DIGEST_LENGTH];
-	SHA256_CTX sha256;
-	SHA256_Init(&sha256);
-	SHA256_Update(&sha256, value.c_str(), value.length());
-	SHA256_Final(hash, &sha256);
-	int i = 0;
-	for(i = 0; i < SHA256_DIGEST_LENGTH; i++)
-	{
-		sprintf(data + (i * 2), "%02x", hash[i]);
-	}
-	return std::string(data);
 }
 
 std::map<std::string, std::string> user_control::parse_cookie( std::string cookie_data )
@@ -69,7 +55,6 @@ std::map<std::string, std::string> user_control::parse_cookie( std::string cooki
 
 			}
 		}
-		std::cout << "name: " << name <<  " value: " << val << std::endl;
 		parsed_cookie.insert(std::pair<std::string, std::string>(name, val));
 	}
 	return parsed_cookie;
@@ -77,9 +62,7 @@ std::map<std::string, std::string> user_control::parse_cookie( std::string cooki
 
 std::string user_control::is_signed_in_user( std::string session_id_sha256 )
 {
-	printer p;
-	p.print_map_contents(sessions_map);
-	return util->safe_search_in_map< std::string, std::string, std::map<std::string, std::string>::iterator >(session_id_sha256, sessions_map);
+	return threading_util->safe_search_in_map< std::string, std::string, std::map<std::string, std::string>::iterator >(session_id_sha256, sessions_map);
 }
 
 std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user_control::service_call( boost::shared_ptr<http_request> user_request , boost::shared_ptr<http_response> service_response )
@@ -146,7 +129,7 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 
 boost::shared_ptr<sqlite3pp::query>  user_control::request( std::string query)
 {
-	user_control::to_lower(query);
+	general_util->to_lower(query);
 	if((query.find("insert") == std::string::npos) && (query.find("delete") == std::string::npos))
 	{
 		boost::shared_ptr<sqlite3pp::query> sql_query(new sqlite3pp::query(*db, query.c_str()));
@@ -185,12 +168,6 @@ bool user_control::is_registered_user( std::string email )
 	}
 }
 
-std::string user_control::to_lower( std::string data)
-{
-	std::use_facet< std::ctype<char> >(std::locale("")).tolower(&data[0], &data[0] + data.size());
-	return data;
-}
-
 std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user_control::guest_user( std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user )
 {
 	user.first->arguments.insert(std::pair<std::string, std::string>(tag_header_email, tag_guest_name));
@@ -216,9 +193,9 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 			formatter << now;
 			std::string session_id = formatter.str();
 			session_id += has_login->second;
-			session_id = get_sha256(session_id);
+			session_id = general_util->get_sha256(session_id);
 
-			util->safe_insert<pair_ss ,map_ss>(pair_ss(session_id, has_login->second), sessions_map);
+			threading_util->safe_insert<pair_ss ,map_ss>(pair_ss(session_id, has_login->second), sessions_map);
 
 			std::string cookie = tag_cookie_name;
 			cookie += "=";
@@ -266,7 +243,7 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 			if (it != parsed_cookie.end())
 			{
 				std::string session_id = it->second; 
-				util->safe_erase< std::string, std::map<std::string, std::string> >(session_id, sessions_map);
+				threading_util->safe_erase< std::string, std::map<std::string, std::string> >(session_id, sessions_map);
 			}
 		}
 		catch(std::exception &e)
