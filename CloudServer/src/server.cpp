@@ -5,7 +5,9 @@ server::server(boost::property_tree::ptree config)
 	util = new server_utils();
 	util->description = util->parse_config(config);
 
-	uac = new user_control(util->description.database_name); 
+	uac = new user_control(); 
+	boost::property_tree::ptree pt; // TODO: extract config for uac in server_utils
+	uac->apply_config(pt);
 
 	this->acceptor_thread = new boost::thread(&server::acceptor_loop, this);
 
@@ -75,7 +77,7 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 
 		try
 		{
-		std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > login = uac->service_call(request, response);
+		std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > login = uac->service_call(socket, request, response);
 		request = login.first;
 		response = login.second;
 		}

@@ -1,11 +1,16 @@
 #include "user_control.h"
 
-user_control::user_control(std::string DB_name)
+user_control::user_control()
 {
 	general_util = new general_utils();
 	threading_util = new threading_utils();
 
+	is_db_set = false;
+
 	//Grammar
+	default_db_name = "server.db";
+	use_recapcha = true;
+
 	tag_login = "login";
 	tag_register = "register";
 	tag_pass_sha256 = "pass";
@@ -18,14 +23,19 @@ user_control::user_control(std::string DB_name)
 	tag_logout = "logout";
 	tag_update = "update";
 
+	recapcha_server_url = "http://www.google.com/recaptcha/api/verify";
+	recapcha_server_key = "6LdRhsYSAAAAACWFAY14BsbhEe0HzOMayMMfAYdj";
+	tag_recaptcha_challenge_field = "recaptcha_challenge_field";
+	tag_recaptcha_response_field = "recaptcha_response_field";
+
+	tag_recaptcha_challenge_for_post = "challenge";
+	tag_recaptcha_remoteip_for_post = "remoteip";
+	tag_recaptcha_privatekey_for_post = "privatekey";
+	tag_recaptcha_response_for_post = "response";
+
 	command_create_users_table = "CREATE TABLE IF NOT EXISTS users (email varchar(65) UNIQUE NOT NULL primary key, pass varchar(65))";
 	command_create_user =  "INSERT INTO users (email, pass) VALUES (?, ?)";
 	command_find_user = "SELECT email, pass FROM users WHERE email=";
-
-	//SQLite
-	boost::shared_ptr<sqlite3pp::database> db_( new sqlite3pp::database(DB_name.c_str())); //I could not get `db = new sqlite3pp::database(DB_name.c_str());` to compile
-	db = db_;
-	std::cout << db->execute(command_create_users_table.c_str()) << std::endl;
 
 }
 
@@ -65,7 +75,7 @@ std::string user_control::is_signed_in_user( std::string session_id_sha256 )
 	return threading_util->safe_search_in_map< std::string, std::string, std::map<std::string, std::string>::iterator >(session_id_sha256, sessions_map);
 }
 
-std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user_control::service_call( boost::shared_ptr<http_request> user_request , boost::shared_ptr<http_response> service_response )
+std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user_control::service_call( boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> user_request , boost::shared_ptr<http_response> service_response )
 {
 	typedef std::map<std::string, std::string> map_ss;
 
@@ -128,7 +138,7 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 	}
 	else if(has_register != arguments_end)
 	{
-		return register_user(std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> >(user_request, service_response));
+		return register_user(socket, std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> >(user_request, service_response));
 	}
 	else
 	{
@@ -269,7 +279,7 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 	return guest_user(user);
 }
 
-std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user_control::register_user( std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user )
+std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user_control::register_user( boost::shared_ptr<boost::asio::ip::tcp::socket> socket, std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user )
 {
 	typedef std::map<std::string, std::string> map_ss;
 	typedef std::pair<std::string, std::string> pair_ss;
@@ -282,6 +292,19 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 	{
 		if (!is_registered_user(has_register->second))
 		{
+			if (use_recapcha)
+			{
+				try{
+					user = this->check_recaptcha( socket, user );
+				}
+				catch(std::exception &e)
+				{
+					user.first->arguments.erase(has_register);
+					user.first->arguments.erase(has_pass);
+					return this->guest_user(user);
+				}
+			}
+
 			sqlite3pp::transaction xct(*db);
 			std::string command_string = "INSERT INTO users (email, pass) VALUES ('" + has_register->second + "', '" +  has_pass->second + "')";
 			sqlite3pp::command cmd(*db, command_string.c_str());
@@ -340,5 +363,125 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 		this->guest_user(user);
 		throw std::runtime_error("No original password provided!");
 	}
+
+}
+
+void user_control::apply_config( boost::property_tree::ptree config )
+{
+	this->default_db_name = config.get<std::string>("database", this->default_db_name);
+	this->use_recapcha = config.get<bool>("use_recapcha", this->use_recapcha);
+	this->recapcha_server_key = config.get<std::string>("recapcha_server_key", this->recapcha_server_key);
+	this->recapcha_server_url = config.get<std::string>("recapcha_server_url", this->recapcha_server_url);
+	start_work_with_db(this->default_db_name);
+}
+
+void user_control::start_work_with_db( std::string db_name )
+{
+	if (!is_db_set) // TODO: find out how to detach from one db and connect to another.
+	{
+		boost::shared_ptr<sqlite3pp::database> db_( new sqlite3pp::database(db_name.c_str())); //I could not get `db = new sqlite3pp::database(DB_name.c_str());` to compile
+		db = db_;
+		std::cout << db->execute(command_create_users_table.c_str()) << std::endl;
+	}
+}
+
+std::string user_control::map_to_post_without_escape( std::map<std::string, std::string> data )
+{
+	std::map<std::string, std::string>::const_iterator end = data.end();
+	std::string result = "";
+	if(data.end() != data.begin())
+	{
+		for (std::map<std::string, std::string>::const_iterator it = data.begin(); it != end; ++it)
+		{
+			result += it->first;
+			result += "=";
+			result += it->second;
+			result += "&";
+		}
+		return result.substr (0,result.length()-1); 
+	}
+	else
+	{
+		return result;
+	}
+}
+
+std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user_control::check_recaptcha(  boost::shared_ptr<boost::asio::ip::tcp::socket> socket, std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user )
+{
+	typedef std::map<std::string, std::string> map_ss;
+	typedef std::pair<std::string, std::string> pair_ss;
+
+	map_ss::iterator arguments_end = user.first->arguments.end();
+
+	map_ss::iterator has_recaptcha_challenge_field = user.first->arguments.find(tag_recaptcha_challenge_field);
+	if (has_recaptcha_challenge_field == arguments_end)
+	{
+		throw std::runtime_error("no recaptcha challenge id field!");
+	}
+
+	map_ss::iterator has_recaptcha_response_field = user.first->arguments.find(tag_recaptcha_response_field);
+	if (has_recaptcha_response_field == arguments_end)
+	{
+		throw std::runtime_error("no recaptcha response field!");
+	}
+
+	map_ss to_recaptcha;
+
+	to_recaptcha.insert(pair_ss(tag_recaptcha_response_for_post,has_recaptcha_response_field->second));
+	to_recaptcha.insert(pair_ss(tag_recaptcha_challenge_for_post, has_recaptcha_challenge_field->second));
+	
+	to_recaptcha.insert(pair_ss(tag_recaptcha_privatekey_for_post, this->recapcha_server_key));
+
+	boost::asio::ip::tcp::endpoint remote_endpoint = socket->remote_endpoint();
+	boost::asio::ip::address addr = remote_endpoint.address();
+	std::string addr_string = addr.to_string();
+	to_recaptcha.insert(pair_ss(tag_recaptcha_remoteip_for_post, addr_string));
+
+	http_request request_to_recap;
+
+	request_to_recap.body = map_to_post_without_escape(to_recaptcha);
+	request_to_recap.headers.insert(pair_ss("Content-Type", "application/x-www-form-urlencoded;"));
+	request_to_recap.headers.insert(pair_ss("User-Agent", "reCAPTCHA/CloudForever"));
+	request_to_recap.headers.insert(pair_ss("Connection","close"));
+//	request_to_recap.headers.insert(pair_ss("Content-Length", boost::lexical_cast<std::string>(request_to_recap.body.size())));
+	request_to_recap.method = "POST";
+
+	std::string cap_err_recaptcha_not_reachable = "recaptcha-not-reachable";
+	std::string cap_err_invalid_site_private_key = "invalid-site-private-key";
+	std::string cap_err_invalid_request_cookie = "invalid-request-cookie";
+	std::string cap_err_incorrect_captcha_sol = "incorrect-captcha-sol";
+	
+
+	http_response response;
+	try
+	{
+		response.receive(request_to_recap.send(this->recapcha_server_url, boost::asio::ip::tcp::socket(boost::asio::io_service())));
+	}
+	catch(std::exception &e)
+	{
+		throw std::runtime_error( "unable to contact the reCAPTCHA verify server.");
+	}
+	std:: cout << "captcha responded: " << std::endl << response.body << std::endl;
+	
+	if (response.body.find("success") != std::string::npos)
+	{
+		user.first->arguments.erase(has_recaptcha_response_field);
+		user.first->arguments.erase(has_recaptcha_challenge_field);
+		return user;
+	}
+
+	if( response.body.find(cap_err_invalid_site_private_key) != std::string::npos)
+	{
+		throw std::runtime_error("We weren't able to verify the private key. \n Possible Solutions: \n \t Did you swap the public and private key? It is important to use the correct one \n \t Did you make sure to copy the entire key, with all hyphens and underscores, but without any spaces? The key should be exactly 40 characters long.");
+	}
+	if( response.body.find(cap_err_invalid_request_cookie) != std::string::npos)
+	{
+		throw std::runtime_error("The challenge parameter of the verify script was incorrect.");
+	}
+	if( response.body.find(cap_err_incorrect_captcha_sol) != std::string::npos)
+	{
+		throw std::runtime_error("The CAPTCHA solution was incorrect.");
+	}
+
 
 }
