@@ -70,6 +70,16 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 	typedef std::map<std::string, std::string> map_ss;
 
 	map_ss::iterator arguments_end = user_request->arguments.end();
+	map_ss::iterator headers_end = user_request->headers.end();
+
+
+	map_ss::iterator has_email = user_request->headers.find(tag_header_email);
+
+	if (has_email != headers_end)
+	{
+		 user_request->headers.erase(has_email);
+	}
+
 	map_ss::iterator has_logout = user_request->arguments.find(tag_logout);
 
 	if (has_logout != arguments_end)
@@ -78,7 +88,7 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 	}
 
 	map_ss::iterator has_update = user_request->arguments.find(tag_update);
-	map_ss::iterator headers_end = user_request->headers.end();
+
 	map_ss::iterator has_cookie = user_request->headers.find(tag_cookie);
 
 	if (has_cookie != headers_end){
@@ -91,7 +101,7 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 			{
 				std::string session_id = it->second; 
 				std::string user_name  = is_signed_in_user(session_id);
-				user_request->arguments.insert(std::pair<std::string, std::string>(tag_header_email, user_name));
+				user_request->headers.insert(std::pair<std::string, std::string>(tag_header_email, user_name));
 				if ( has_update != arguments_end)
 				{
 					return update_user(std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> >(user_request, service_response));
@@ -170,7 +180,7 @@ bool user_control::is_registered_user( std::string email )
 
 std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user_control::guest_user( std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user )
 {
-	user.first->arguments.insert(std::pair<std::string, std::string>(tag_header_email, tag_guest_name));
+	user.first->headers.insert(std::pair<std::string, std::string>(tag_header_email, tag_guest_name));
 	return user;
 }
 
@@ -303,7 +313,7 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 	map_ss::iterator arguments_end = user.first->arguments.end();
 	map_ss::iterator has_pass =  user.first->arguments.find(tag_pass_sha256);
 
-	std::string user_name = user.first->arguments.find(tag_header_email)->second;
+	std::string user_name = user.first->headers.find(tag_header_email)->second;
 
 	if(has_pass != arguments_end)
 	{
