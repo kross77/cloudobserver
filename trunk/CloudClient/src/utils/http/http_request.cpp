@@ -214,3 +214,66 @@ void http_request::send(boost::asio::ip::tcp::socket& socket)
 	request += "\r\n" + this->body;
 	socket.send(boost::asio::buffer(request.c_str(), request.length()));
 }
+
+boost::asio::ip::tcp::socket& http_request::send(std::string& absolute_url, boost::asio::ip::tcp::socket& socket)
+{
+	// Parse the URL.
+	std::vector<std::string> url_parts;
+	boost::regex url_expression(
+		// protocol            host               port
+		"^(\?:([^:/\?#]+)://)\?(\\w+[^/\?#:]*)(\?::(\\d+))\?"
+		// path                file       parameters
+		"(/\?(\?:[^\?#/]*/)*)\?([^\?#]*)\?(\\\?(.*))\?"
+		);
+	boost::regex_split(std::back_inserter(url_parts), absolute_url, url_expression);
+	std::string host = url_parts[1];
+	std::string port = url_parts[2];
+	this->url = url_parts[3] + url_parts[4];
+	
+	// Use the default port if no port is specified.
+	if (port.empty())
+		port = "80";
+	
+	// Use the empty path if no path is specified.
+	if (this->url.empty())
+		this->url = "/";
+	
+	// Resolve the hostname.
+	boost::asio::io_service io_service;
+	boost::asio::ip::tcp::resolver resolver(io_service);
+	boost::asio::ip::tcp::resolver::query query(boost::asio::ip::tcp::v4(), host, port);
+	boost::asio::ip::tcp::resolver::iterator iterator;
+	try
+	{
+		iterator = resolver.resolve(query);
+	}
+	catch (boost::system::system_error&)
+	{
+		throw connection_exception();
+	}
+	
+	// Try to connect to the server using one of the endpoints.
+	bool connected = false;
+	for (iterator; iterator != boost::asio::ip::tcp::resolver::iterator(); ++iterator)
+	{
+		boost::asio::ip::tcp::endpoint endpoint = iterator->endpoint();
+		try
+		{
+			socket.connect(endpoint);
+			connected = true;
+		}
+		catch (boost::system::system_error&)
+		{
+		}
+	}
+	
+	// Check if the connection is successful.
+	if (!connected)
+		throw connection_exception();
+	
+	// Send the request.
+	this->send(socket);
+	
+	// Return the socket.
+	return socket;
+}

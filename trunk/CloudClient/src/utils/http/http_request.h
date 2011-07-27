@@ -5,6 +5,7 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/asio.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/regex.hpp>
 
 #include <exception>
 #include <map>
@@ -21,6 +22,7 @@ public:
 	void reset();
 	void receive(boost::asio::ip::tcp::socket& socket);
 	void send(boost::asio::ip::tcp::socket& socket);
+	boost::asio::ip::tcp::socket& send(std::string& absolute_url, boost::asio::ip::tcp::socket& socket);
 
 	std::string method;
 	std::string url;
@@ -30,6 +32,7 @@ public:
 	int body_size;
 	std::string body;
 
+	class connection_exception: public std::exception { };
 	class policy_file_request_exception: public std::exception { };
 private:
 	enum http_request_parser_state { METHOD, URL, URL_PARAM, URL_VALUE, VERSION, HEADER_KEY, HEADER_VALUE, BODY, OK };
