@@ -26,7 +26,7 @@ public:
 	int body_size;
 	std::string body;
 private:
-	enum http_response_parser_state { VERSION, STATUS, DESCRIPTION, HEADER_KEY, HEADER_VALUE, BODY, OK };
+	enum http_response_parser_state { VERSION, STATUS, DESCRIPTION, HEADER_KEY, HEADER_VALUE, BODY };
 };
 
 #endif // HTTP_RESPONSE_H
