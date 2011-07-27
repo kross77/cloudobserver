@@ -229,6 +229,9 @@ boost::asio::ip::tcp::socket& http_request::send(std::string& absolute_url, boos
 	std::string host = url_parts[1];
 	std::string port = url_parts[2];
 	this->url = url_parts[3] + url_parts[4];
+
+	// Add the 'Host' header to the request. Not doing this is treated as bad request by many servers.
+	this->headers.insert(std::pair<std::string, std::string>("Host", host));
 	
 	// Use the default port if no port is specified.
 	if (port.empty())
