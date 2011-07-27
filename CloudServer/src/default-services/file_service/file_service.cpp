@@ -2,12 +2,14 @@
 
 file_service::file_service()
 {
+	general_util = new general_utils();
 	this->root_path = boost::filesystem::current_path().string();
 	this->show_directory_contents = false;
 }
 
 void file_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response)
 {
+	//std::cout << '\07' << "Request body: " << request->body << std::endl << "Request size: " <<  request->body.length() << std::endl;
 	if (!this->show_directory_contents && (request->url == "/"))
 		request->url = "/index.html";
 
@@ -73,7 +75,7 @@ void file_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> 
 			body << "Error! "<< target.filename() << "exists, but is neither a regular file nor a directory.";
 	}
 	else
-		body << "Error 404!" << target.filename() << "does not exist\n <br/> <a href='/'>" << "Dear " << this->get_user_name(request) <<", please come again!</a>";
+		body << "Error 404!" << target.filename() << "does not exist\n <br/> <a href='/'>" << "Dear " << general_util->url_decode(this->get_user_name(request)) <<", please come again!</a>";
 
 	response->body = "<head></head><body><h1>" + body.str() + "</h1></body>";
 	response->send(*socket);
