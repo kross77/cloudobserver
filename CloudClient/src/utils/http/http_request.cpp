@@ -136,12 +136,10 @@ void http_request::receive(boost::asio::ip::tcp::socket& socket)
 						position++;
 						std::map<std::string, std::string>::iterator iterator = this->headers.find("Content-Length");
 						if (iterator != this->headers.end())
-						{
 							this->body_size = boost::lexical_cast<int>(iterator->second);
-							parser_state = BODY;
-						}
 						else
-							parser_state = OK;
+							this->body_size = 0;
+						parser_state = (this->body_size == 0) ? OK : BODY;
 					}
 					else if (*position == ':')
 						position++;
@@ -177,7 +175,7 @@ void http_request::receive(boost::asio::ip::tcp::socket& socket)
 					break;
 				}
 			} while (position < buffer + bytes_read);
-		} while (socket.available());
+		} while (parser_state != OK);
 	}
 	catch (...)
 	{
