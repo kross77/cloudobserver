@@ -13,7 +13,7 @@
 #include <assert.h>
 
 //OpenSSL
-#include "openssl/sha.h"
+#include <openssl/sha.h>
 
 const char HEX2DEC[256] = 
 {

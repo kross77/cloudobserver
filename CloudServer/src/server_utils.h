@@ -23,13 +23,13 @@
 #include <boost/property_tree/json_parser.hpp>
 
 //General Service header Class\Interface
-#include "../service-interface/service.hpp"
+#include <service.hpp>
 
 //Extension includes
-#include "extension_utils.h"
+#include <extension_utils.h>
 
 //containers thread safe operations
-#include "threading_utils.h"
+#include <threading_utils.h>
 
 class server_utils
 {
