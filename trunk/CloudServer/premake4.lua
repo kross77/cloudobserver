@@ -371,11 +371,12 @@ solution "CloudServer"
 		cloud.project.copyHtdocsFolder()
 		
 		links { "cf-http" }
-		links { "cf-util" }
-		links { "sqlite" }
-		
 		includedirs { "3rdparty/cf-http"}
+		
+		links { "sqlite" }
 		includedirs { "3rdparty/sqlite"}
+		
+		links { "cf-util" }
 		includedirs { "src/cf-util"}
 		
 		includedirs { "service-interface/" }
@@ -469,9 +470,15 @@ solution "CloudServer"
 		
 		cloud.project.init()
 		cloud.project.useBoost()
+		cloud.project.useopenSSL()
 
 		links { "cf-http" }
 		includedirs { "3rdparty/cf-http" }
+		
+		links { "cf-util" }
+		includedirs { "src/cf-util"}
+		
+		includedirs { "service-interface/" }
 		
 		files { "src/default-services/file_service/**"}
 
@@ -482,6 +489,8 @@ solution "CloudServer"
 		configuration "Release"
 			defines { "NDEBUG" }
 			flags { "OptimizeSpeed" , "Unicode"}
+
+------------------------------------------------------------------------------------------------
 
 	project "CloudService"
 		kind "SharedLib"

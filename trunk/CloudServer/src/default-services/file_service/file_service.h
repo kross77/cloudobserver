@@ -19,7 +19,9 @@
 #include <boost/extension/factory.hpp>
 #include <boost/extension/type_map.hpp>
 
-#include "../../../service-interface/service.hpp"
+#include <general_utils.h>
+
+#include <service.hpp>
 
 class file_service: public service
 {
@@ -34,6 +36,7 @@ private:
 	boost::filesystem::path root_path;
 	bool show_directory_contents;
 	boost::posix_time::time_duration expiration_period;
+	general_utils * general_util;
 };
 
 #endif // FILE_SERVICE_H
