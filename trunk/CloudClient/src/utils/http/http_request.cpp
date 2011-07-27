@@ -189,6 +189,8 @@ void http_request::receive(boost::asio::ip::tcp::socket& socket)
 
 void http_request::send(boost::asio::ip::tcp::socket& socket)
 {
+	headers["Content-Length"] = boost::lexical_cast<std::string>(body.length());
+
 	std::string request = this->method + ' ' + this->url;
 	if (arguments.begin() != arguments.end())
 	{
