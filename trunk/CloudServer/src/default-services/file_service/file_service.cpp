@@ -90,8 +90,8 @@ void file_service::apply_config(boost::property_tree::ptree config)
 std::string file_service::get_user_name( boost::shared_ptr<http_request> request )
 {
 	std::string response = "";
-	std::map<std::string, std::string>::iterator it = request->arguments.find("email");
-	if (it != request->arguments.end())
+	std::map<std::string, std::string>::iterator it = request->headers.find("email");
+	if (it != request->headers.end())
 		response = it->second;
 
 	return response;
