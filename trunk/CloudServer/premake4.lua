@@ -371,15 +371,18 @@ solution "CloudServer"
 		cloud.project.copyHtdocsFolder()
 		
 		links { "cf-http" }
+		links { "cf-util" }
 		links { "sqlite" }
 		
 		includedirs { "3rdparty/cf-http"}
 		includedirs { "3rdparty/sqlite"}
+		includedirs { "src/cf-util"}
+		
+		includedirs { "service-interface/" }
 		
 		files { "src/**.h", "src/**.hpp", "src/**.cpp" }
-		files { "service-interface/**" }
 
-		excludes { "src/default-services/**" }
+		excludes { "src/default-services/**" , "src/cf-util/**" }
 
 		configuration "Debug"
 			defines { "DEBUG" }
@@ -389,6 +392,28 @@ solution "CloudServer"
 			defines { "NDEBUG" }
 			flags { "OptimizeSpeed" , "Unicode"}
 
+------------------------------------------------------------------------------------------------
+
+	project "cf-util"
+		kind "StaticLib"
+		language "C++"
+		location ( "projects/" .. os.get() .. "-" .. action )
+		files { "src/cf-util/**.h", "src/cf-util/**.cpp" }
+		cloud.project.init()
+		cloud.project.useBoost()
+		cloud.project.useopenSSL()
+		
+		configuration "gmake"
+			buildoptions { "-fPIC" }
+		
+		configuration "Debug"
+			defines { "DEBUG" }
+			flags { "Symbols", "Unicode" }
+		
+		configuration "Release"
+			defines { "NDEBUG" }
+			flags { "OptimizeSpeed", "Unicode" }
+			
 ------------------------------------------------------------------------------------------------
 
 	project "cf-http"
@@ -409,7 +434,7 @@ solution "CloudServer"
 		configuration "Release"
 			defines { "NDEBUG" }
 			flags { "OptimizeSpeed", "Unicode" }
-			
+
 ------------------------------------------------------------------------------------------------
 
 	project "sqlite"
