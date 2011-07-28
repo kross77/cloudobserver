@@ -95,7 +95,17 @@ void http_response::receive(boost::asio::ip::tcp::socket& socket)
 					else if (*position == '\n')
 					{
 						position++;
-						parser_state = BODY;
+						std::map<std::string, std::string>::iterator iterator = this->headers.find("Content-Length");
+						if (iterator != this->headers.end())
+						{
+							this->body_size = boost::lexical_cast<int>(iterator->second);
+							parser_state = (this->body_size == 0) ? OK : BODY;
+						}
+						else
+						{
+							this->body_size = 0;
+							parser_state = BODY;
+						}
 					}
 					else if (*position == ':')
 						position++;
@@ -123,10 +133,15 @@ void http_response::receive(boost::asio::ip::tcp::socket& socket)
 					break;
 				case BODY:
 					this->body += *position++;
+					if (this->body.length() == this->body_size)
+						parser_state = OK;
+					break;
+				case OK:
+					position = buffer + bytes_read;
 					break;
 				}
 			} while (position < buffer + bytes_read);
-		} while (true);
+		} while (parser_state != OK);
 	}
 	catch (boost::system::system_error& e)
 	{
