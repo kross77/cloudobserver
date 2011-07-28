@@ -18,6 +18,18 @@
 		/>
 		<script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js">
 		</script>
+		<script type="text/javascript">
+			function readCookie(name) {
+				var nameEQ = name + "=";
+				var ca = document.cookie.split(';');
+				for(var i=0;i < ca.length;i++) {
+					var c = ca[i];
+					while (c.charAt(0)==' ') c = c.substring(1,c.length);
+					if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+				}
+				return null;
+			}
+		</script>
 		<style>
 			html { height: 100% } body { height: 90% } body { font-family: Georgia, Times, Times
 			New Roman, serif; font-style: italic; background: #87CEFA; background: -moz-linear-gradient(90deg,
@@ -30,24 +42,50 @@
 			0%,#6960EC 100%); color: #FFF; text-align: center; background-color:#87CEFA; background-repeat:
 			repeat-x; } fieldset { border: 1px solid #2F6FAB; margin: 1em 0 1em 0; padding: 0
 			1em 1em; line-height: 1.5em; } #content { width: 300px ; margin-left: auto ; margin-right:
-			auto ; }
+			auto ;}
 		</style>
 	</head>
 	
 	<body>
-		<script>
+		<script>	
 			$(document).ready(function() {
+				user = readCookie('session-id');
+				if (user != null)
+				{
+					$('.register').hide();
+					$('.login').hide();
+					
+				}
+				else
+				{
+					$('.logout').hide();
+				}
+
 				$("#accordion").accordion({
-					autoHeight: false
+					autoHeight: false,
+					collapsible: true
 				});
-				
 				$("#register").validate();
 				$('#pass_value_register').blur(function() { $('#hidden_pass_value_register').val($.sha256($(this).val())); }); 
 				
 				$("#login").validate();
 				$('#pass_value_login').blur(function() { $('#hidden_pass_value_login').val($.sha256($(this).val())); });
+
+				if(document.location.search != "")
+				{
+					var a = document.location.protocol + "//" + document.location.host  +  document.location.pathname + document.location.hash ;
+					window.location = a.toString();
+				}
+				
 			});
 		</script>
+
+		<br/>
+		<div id="accordion">
+			<h3 class="err-404">
+				<a href="#e404">Error page</a>
+			</h3>
+			<div id="tabs-error-404" class="err-404">
 		<fieldset>
 			<legend>
 				404 error page:
@@ -58,12 +96,13 @@
 				</iframe>
 			</div>
 		</fieldset>
-		<br/>
-		<div id="accordion">
-			<h3>
+			
+			</div>
+			
+			<h3 class="register">
 				<a href="#">Register</a>
 			</h3>
-			<div id="tabs-register">
+			<div id="tabs-register" class="register">
 				<script type="text/javascript">
 						var RecaptchaOptions = { theme: 'white' };
 				</script>
@@ -94,10 +133,10 @@
 					<input type="submit" value="Submit" />
 				</form>
 			</div>
-			<h3>
+			<h3 class="login">
 				<a href="#">Login</a>
 			</h3>
-			<div id="tabs-login">
+			<div id="tabs-login" class="login">
 				<form method="get" id="login" action="./dev.html">
 					<fieldset>
 						<legend>
@@ -115,15 +154,21 @@
 					<input type="submit" value="Submit" />
 				</form>
 			</div>
-			<h3>
+			<h3 class="logout">
 				<a href="#">Logout</a>
 			</h3>
-			<div id="tabs-logout">
-				<form method="get" action="./dev.html">
+			<div id="tabs-logout" class="logout">
+								<fieldset>
+						<legend>
+							Logout?
+						</legend>
+							<form method="get" action="./dev.html">
 					<input type="hidden" name="logout" value="true">
-					Logout?
-					<input type="submit" value="OK" />
+
+						<input type="submit" value="OK" />
+					
 				</form>
+			</fieldset>
 			</div>
 		</div>
 		<script type="text/javascript">
