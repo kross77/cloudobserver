@@ -215,7 +215,7 @@ void http_request::send(boost::asio::ip::tcp::socket& socket)
 	socket.send(boost::asio::buffer(request.c_str(), request.length()));
 }
 
-boost::asio::ip::tcp::socket& http_request::send(std::string& absolute_url, boost::asio::ip::tcp::socket& socket)
+boost::asio::ip::tcp::socket& http_request::send(std::string absolute_url, boost::asio::ip::tcp::socket& socket)
 {
 	// Parse the URL.
 	std::vector<std::string> url_parts;

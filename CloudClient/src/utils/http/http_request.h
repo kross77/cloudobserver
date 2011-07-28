@@ -22,7 +22,7 @@ public:
 	void reset();
 	void receive(boost::asio::ip::tcp::socket& socket);
 	void send(boost::asio::ip::tcp::socket& socket);
-	boost::asio::ip::tcp::socket& send(std::string& absolute_url, boost::asio::ip::tcp::socket& socket);
+	boost::asio::ip::tcp::socket& send(std::string absolute_url, boost::asio::ip::tcp::socket& socket);
 
 	std::string method;
 	std::string url;
