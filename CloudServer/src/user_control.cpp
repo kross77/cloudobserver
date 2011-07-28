@@ -121,7 +121,8 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 		}
 		catch(std::exception &e)
 		{
-			std::cout << e.what() << std::endl; 
+			user_request->arguments.insert(std::pair<std::string, std::string>(tag_logout, "true"));
+			return log_out(std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> >(user_request, service_response));
 		}
 	}
 

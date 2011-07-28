@@ -22,7 +22,11 @@ public:
 	void safe_erase(variable_T variable, group_T &into)
 	{
 		boost::mutex::scoped_lock lock(mut);
-		into.erase(into.find(variable));
+		if (into.find(variable) != into.end())
+		{
+			into.erase(into.find(variable));
+		}
+
 	}
 
 	template <class first_variable_T,class second_variable_T, class iterator_T>
