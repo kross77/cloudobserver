@@ -2,7 +2,7 @@
 
 std::string general_utils::to_lower( std::string data )
 {
-	std::use_facet< std::ctype<char> >(std::locale("")).tolower(&data[0], &data[0] + data.size());
+	std::use_facet< std::ctype<char> >(std::locale()).tolower(&data[0], &data[0] + data.size());
 	return data;
 }
 
