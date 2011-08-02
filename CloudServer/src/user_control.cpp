@@ -456,7 +456,9 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 	http_response response;
 	try
 	{
-		response.receive(request_to_recap.send(this->recapcha_server_url, boost::asio::ip::tcp::socket(boost::asio::io_service())));
+		boost::asio::io_service io_service;
+		boost::asio::ip::tcp::socket socket(io_service);
+		response.receive(request_to_recap.send(this->recapcha_server_url, socket));
 	}
 	catch(std::exception &e)
 	{
