@@ -11,6 +11,7 @@
 #include <functional>
 #include <locale>
 #include <assert.h>
+#include <stdio.h>
 
 //OpenSSL
 #include <openssl/sha.h>
