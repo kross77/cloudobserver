@@ -2,6 +2,10 @@
 
 audio_player::audio_player(ALsizei audio_sample_rate, ALenum audio_format)
 {
+#if defined(WIN) && defined(AL_LIBTYPE_STATIC)
+	alcInit();
+#endif
+
 	this->sample_rate = audio_sample_rate;
 	this->format = audio_format;
 
@@ -29,6 +33,10 @@ audio_player::~audio_player()
 	alcMakeContextCurrent(NULL);
 	alcDestroyContext(this->context);
 	alcCloseDevice(this->device);
+
+#if defined(WIN) && defined(AL_LIBTYPE_STATIC)
+	alcRelease();
+#endif
 }
 
 void audio_player::send(const char* data, int size)
