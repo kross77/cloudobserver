@@ -350,27 +350,45 @@ function cloud.project.useAL()
 	cloud.addLibDir(  _OPTIONS["OpenALLibsPath"] )
 	if os.get() == "windows" then
 		defines { "WIN" }
-		links {
-		"openal32"
-		}
+		
+		configuration { "not DebugStatic" }
+			links { "OpenAL32" }
+		configuration { }
+		
+		configuration { "DebugStatic" }
+			links { "OpenAL32d" }
+		configuration { }
+		
+		configuration { "DebugStatic or ReleaseStatic" }
+			defines { "AL_LIBTYPE_STATIC" }
+			links { "winmm" }
+		configuration { }
+		
+		configuration { "DebugShared or ReleaseShared" }
+			if  _OPTIONS["CopySharedLibraries"] then
+				cloud.win.copyDLL("OpenAL-1.13", "OpenAL32.dll")
+			end
+		configuration { }
+		
 		cloud.win.addLibFromProgrammFiles("OpenAL-1.13")
-		if  _OPTIONS["CopySharedLibraries"] then
-			cloud.win.copyDLL("OpenAL-1.13", "OpenAL32.dll")
-		end
 	end
 	
 	if os.get() == "linux" then
 		defines { "LIN" }
-		links {
-		"openal"
-		}
+		links { "openal" }
+		
+		configuration { "DebugStatic or ReleaseStatic" }
+			links {
+				"dl",
+				"pthread",
+				"rt"
+			}
+		configuration { }
 	end
 	
 	if os.get() == "macosx" then
 		defines { "MAC" }
-		links {
-		"openal"
-		}
+		links { "openal" }
 	end 
 end
 	
