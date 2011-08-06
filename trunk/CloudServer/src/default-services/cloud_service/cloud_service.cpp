@@ -108,8 +108,6 @@ void cloud_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket>
 		}
 		break;
 	case READER_CLIENT:
-		if (nickname.substr(nickname.length() - 4, 4) == ".flv")
-			nickname = nickname.substr(0, nickname.length() - 4);
 		if (this->writers.find(nickname) == this->writers.end())
 		{
 			response->status = 404;
