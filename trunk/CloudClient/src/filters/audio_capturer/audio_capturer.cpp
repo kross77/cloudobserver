@@ -2,6 +2,10 @@
 
 audio_capturer::audio_capturer(int audio_sample_rate, int audio_format, int capture_size)
 {
+#if defined(WIN) && defined(AL_LIBTYPE_STATIC)
+	alcInit();
+#endif
+
 	this->sample_rate = (ALCuint)audio_sample_rate;
 	this->format = (ALCenum)audio_format;
 	this->capture_size = capture_size;
@@ -30,6 +34,9 @@ audio_capturer::audio_capturer(int audio_sample_rate, int audio_format, int capt
 
 audio_capturer::~audio_capturer()
 {
+#if defined(WIN) && defined(AL_LIBTYPE_STATIC)
+	alcRelease();
+#endif
 }
 
 void audio_capturer::connect(audio_player* audio_player_block)
@@ -86,6 +93,10 @@ void audio_capturer::set_capture_size(int capture_size)
 
 std::vector<std::string> audio_capturer::get_capture_devices()
 {
+#if defined(WIN) && defined(AL_LIBTYPE_STATIC)
+	alcInit();
+#endif
+
 	const ALCchar* devices = alcGetString(NULL, ALC_CAPTURE_DEVICE_SPECIFIER);
 	if (devices == NULL)
 	{
@@ -105,6 +116,10 @@ std::vector<std::string> audio_capturer::get_capture_devices()
 		capture_devices.push_back(std::string(devices));
 		devices += strlen(devices) + 1;
 	}
+
+#if defined(WIN) && defined(AL_LIBTYPE_STATIC)
+	alcRelease();
+#endif
 
 	return capture_devices;
 }
