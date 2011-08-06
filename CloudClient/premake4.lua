@@ -388,7 +388,7 @@ function cloud.project.useAL()
 	
 	if os.get() == "macosx" then
 		defines { "MAC" }
-		links { "openal" }
+		links { "OpenAL.framework" }
 	end 
 end
 	
