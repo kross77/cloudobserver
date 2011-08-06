@@ -3,9 +3,7 @@
 
 #define BUFFERS 16
 
-// OpenAL
-#include <AL/al.h>
-#include <AL/alc.h>
+#include "../../3rdparty/openal/openal.h"
 
 #include <list>
 
