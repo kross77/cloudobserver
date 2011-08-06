@@ -4,12 +4,10 @@
 // Boost
 #include <boost/thread.hpp>
 
-// OpenAL
-#include <AL/al.h>
-#include <AL/alc.h>
-
 #include "../audio_player/audio_player.h"
 #include "../audio_encoder/audio_encoder.h"
+
+#include "../../3rdparty/openal/openal.h"
 
 #include <iostream>
 #include <string>
