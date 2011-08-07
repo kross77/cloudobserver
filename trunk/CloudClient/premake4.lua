@@ -448,21 +448,31 @@ function cloud.project.useFFmpeg()
 	if os.get() == "linux" then
 		defines { "LIN" }
 		links {
-		"avcodec", 
-		"avformat",
-		"avutil",
-		"swscale"
+			"avdevice",
+			"avformat",
+			"avcodec",
+			"avutil",
+			"swscale"
 		}
+		
+		configuration { "DebugStatic or ReleaseStatic" }
+			links { "bz2" }
+		configuration { }
 	end
 	
 	if os.get() == "macosx" then
 		defines { "MAC" }
 		links {
-		"avcodec", 
-		"avformat",
-		"avutil",
-		"swscale"
+			"avdevice",
+			"avformat",
+			"avcodec",
+			"avutil",
+			"swscale"
 		}
+		
+		configuration { "DebugStatic or ReleaseStatic" }
+			links { "bz2" }
+		configuration { }
 	end 	
 end
 
