@@ -1,64 +1,66 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
-	
 	<head>
 		<title>
 			Cloud Observer Developers Page
 		</title>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 		<script type="text/javascript" src="js/jquery-1.5.1.min.js">
+										
 		</script>
 		<script type="text/javascript" src="js/jquery-ui-1.8.14.custom.min.js">
+										
 		</script>
 		<script type="text/javascript" src="js/jquery.sha256.min.js">
+										
 		</script>
 		<script type="text/javascript" src="js/jquery.validate.min.js">
+										
 		</script>
-		<link type="text/css" href="css/cloud-blue/jquery-ui-1.8.14.custom.css" rel="stylesheet"
-		/>
+		<link type="text/css" href="css/cloud-blue/jquery-ui-1.8.14.custom.css"
+		rel="stylesheet" />
 		<script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js">
+										
 		</script>
 		<script type="text/javascript">
 			function readCookie(name) {
 				var nameEQ = name + "=";
 				var ca = document.cookie.split(';');
-				for(var i=0;i < ca.length;i++) {
+				for (var i = 0; i < ca.length; i++) {
 					var c = ca[i];
-					while (c.charAt(0)==' ') c = c.substring(1,c.length);
-					if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+					while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+					if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
 				}
 				return null;
 			}
 		</script>
 		<style>
-			html { height: 100% } body { height: 90% } body { font-family: Georgia, Times, Times
-			New Roman, serif; font-style: italic; background: #87CEFA; background: -moz-linear-gradient(90deg,
-			#87CEFA 0%, #6960EC 100%); background: -webkit-gradient(linear, left bottom, left
-			top, color-stop(0%,#87CEFA), color-stop(100%,#6960EC)); background: -webkit-linear-gradient(
-			left bottom, left top, #87CEFA 0%,#6960EC 100%); background: -o-linear-gradient(left,
-			#87CEFA 0%,#6960EC 100%); background: -ms-linear-gradient(left, #87CEFA 0%,#6960EC
-			100%); filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#87CEFA',
-			endColorstr='#6960EC',GradientType=1 ); background: linear-gradient(left, #87CEFA
-			0%,#6960EC 100%); color: #FFF; text-align: center; background-color:#87CEFA; background-repeat:
-			repeat-x; } fieldset { border: 1px solid #2F6FAB; margin: 1em 0 1em 0; padding: 0
-			1em 1em; line-height: 1.5em; } #content { width: 300px ; margin-left: auto ; margin-right:
-			auto ;}
+			html { height: 100% } body { height: 90% } body { font-family: Georgia,
+			Times, Times New Roman, serif; font-style: italic; background: #87CEFA;
+			background: -moz-linear-gradient(90deg, #87CEFA 0%, #6960EC 100%); background:
+			-webkit-gradient(linear, left bottom, left top, color-stop(0%,#87CEFA),
+			color-stop(100%,#6960EC)); background: -webkit-linear-gradient( left bottom,
+			left top, #87CEFA 0%,#6960EC 100%); background: -o-linear-gradient(left,
+			#87CEFA 0%,#6960EC 100%); background: -ms-linear-gradient(left, #87CEFA
+			0%,#6960EC 100%); filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#87CEFA',
+			endColorstr='#6960EC',GradientType=1 ); background: linear-gradient(left,
+			#87CEFA 0%,#6960EC 100%); color: #FFF; text-align: center; background-color:#87CEFA;
+			background-repeat: repeat-x; } fieldset { border: 1px solid #2F6FAB; margin:
+			1em 0 1em 0; padding: 0 1em 1em; line-height: 1.5em; } #content { width:
+			300px ; margin-left: auto ; margin-right: auto ;} ::selection { background:
+			#ff79c5; color: white; text-shadow: none; }
 		</style>
 	</head>
-	
 	<body>
-		<script>	
+		<script>
 			$(document).ready(function() {
 				user = readCookie('session-id');
-				if (user != null)
-				{
+				if (user != null) {
 					$('.register').hide();
 					$('.login').hide();
-					
-				}
-				else
-				{
+				} else {
 					$('.logout').hide();
+					$('.fu').hide();
 				}
 
 				$("#accordion").accordion({
@@ -66,45 +68,49 @@
 					collapsible: true
 				});
 				$("#register").validate();
-				$('#pass_value_register').blur(function() { $('#hidden_pass_value_register').val($.sha256($(this).val())); }); 
-				
-				$("#login").validate();
-				$('#pass_value_login').blur(function() { $('#hidden_pass_value_login').val($.sha256($(this).val())); });
+				$('#pass_value_register').blur(function() {
+					$('#hidden_pass_value_register').val($.sha256($(this).val()));
+				});
 
-				if(document.location.search != "")
-				{
-					var a = document.location.protocol + "//" + document.location.host  +  document.location.pathname + document.location.hash ;
+				$("#login").validate();
+				$('#pass_value_login').blur(function() {
+					$('#hidden_pass_value_login').val($.sha256($(this).val()));
+				});
+
+				$("#form_upload").validate();
+
+				if (document.location.search != "") {
+					var a = document.location.protocol + "//" + document.location.host + document.location.pathname + document.location.hash;
 					window.location = a.toString();
 				}
-				
+
 			});
 		</script>
-
 		<br/>
 		<div id="accordion">
 			<h3 class="err-404">
 				<a href="#e404">Error page</a>
 			</h3>
 			<div id="tabs-error-404" class="err-404">
-		<fieldset>
-			<legend>
-				404 error page:
-			</legend>
-			<div width="100%" height="100%">
-				<iframe src="./banner.html" width="100%" height="130" align="left">
-					Error
-				</iframe>
+				<fieldset>
+					<legend>
+						404 error page:
+					</legend>
+					<div width="100%" height="100%">
+						<iframe src="./banner.html" width="100%" height="130" align="left">
+							Error
+						</iframe>
+					</div>
+				</fieldset>
 			</div>
-		</fieldset>
-			
-			</div>
-			
 			<h3 class="register">
 				<a href="#">Register</a>
 			</h3>
 			<div id="tabs-register" class="register">
 				<script type="text/javascript">
-						var RecaptchaOptions = { theme: 'white' };
+									var RecaptchaOptions = {
+						theme: 'white'
+					};
 				</script>
 				<form method="get" id="register" action="./dev.html">
 					<fieldset>
@@ -117,7 +123,8 @@
 						<legend>
 							Password:
 						</legend>
-						<input type="hidden" name="pass" id="hidden_pass_value_register" value="" />
+						<input type="hidden" name="pass" id="hidden_pass_value_register" value=""
+						/>
 						<input type="password" class="required" id="pass_value_register" />
 					</fieldset>
 					<fieldset>
@@ -126,7 +133,7 @@
 						</legend>
 						<div id="content">
 							<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6LdRhsYSAAAAAAOG1BVM0qPtVtACn4IgU1DeQcJX">
-								
+												                            								
 							</script>
 						</div>
 					</fieldset>
@@ -148,7 +155,8 @@
 						<legend>
 							Password:
 						</legend>
-						<input type="hidden" name="pass" id="hidden_pass_value_login" value="" />
+						<input type="hidden" name="pass" id="hidden_pass_value_login" value=""
+						/>
 						<input type="password" class="required" id="pass_value_login" />
 					</fieldset>
 					<input type="submit" value="Submit" />
@@ -158,39 +166,57 @@
 				<a href="#">Logout</a>
 			</h3>
 			<div id="tabs-logout" class="logout">
-								<fieldset>
-						<legend>
-							Logout?
-						</legend>
-							<form method="get" action="./dev.html">
-					<input type="hidden" name="logout" value="true">
-
+				<fieldset>
+					<legend>
+						Logout?
+					</legend>
+					<form method="get" action="./dev.html">
+						<input type="hidden" name="logout" value="true">
 						<input type="submit" value="OK" />
-					
+					</form>
+				</fieldset>
+			</div>
+			<h3 class="fu">
+				<a href="#">Files Upload</a>
+			</h3>
+			<div id="tabs-fu" class="fu">
+				<form method="POST" id="form_upload" enctype="multipart/form-data" action="./dev.html">
+					<fieldset>
+						<legend>
+							Name:
+						</legend>
+						<input type="text" class="required" name="file_name" />
+					</fieldset>
+					<fieldset>
+						<legend>
+							File:
+						</legend>
+						<input type="file" name="datafile">
+					</fieldset>
+					<input type="submit" value="Upload" />
 				</form>
-			</fieldset>
 			</div>
 		</div>
 		<script type="text/javascript">
-					var _gaq = _gaq || [];
-			_gaq.push(['_setAccount', 'UA-21524436-1']);
-			_gaq.push(['_setDomainName', 'none']);
-			_gaq.push(['_setAllowLinker', true]);
-			_gaq.push(['_trackPageview']);
-			(function() {
-				var ga = document.createElement('script');
-				ga.type = 'text/javascript';
-				ga.async = true;
-				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-				var s = document.getElementsByTagName('script')[0];
-				s.parentNode.insertBefore(ga, s);
-			})();
-			_gaq.push(['_setCustomVar', 1, // This custom var is set to slot #1
-			'URL', // The name acts as a kind of category for the user activity
-			window.location.toString(), // This value of the custom variable
-			1]);
-			_gaq.push(['_trackEvent', 'Visit on page', // category of activity
-			window.location.toString() // Action
+			var _gaq = _gaq || [];
+				_gaq.push(['_setAccount', 'UA-21524436-1']);
+				_gaq.push(['_setDomainName', 'none']);
+				_gaq.push(['_setAllowLinker', true]);
+				_gaq.push(['_trackPageview']);
+				(function() {
+					var ga = document.createElement('script');
+					ga.type = 'text/javascript';
+					ga.async = true;
+					ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+					var s = document.getElementsByTagName('script')[0];
+					s.parentNode.insertBefore(ga, s);
+				})();
+				_gaq.push(['_setCustomVar', 1, // This custom var is set to slot #1
+				'URL', // The name acts as a kind of category for the user activity
+				window.location.toString(), // This value of the custom variable
+				1]);
+				_gaq.push(['_trackEvent', 'Visit on page', // category of activity
+				window.location.toString() // Action
 			]);
 		</script>
 		<style type="text/css">

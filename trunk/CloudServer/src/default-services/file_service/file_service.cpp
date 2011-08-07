@@ -3,15 +3,34 @@
 file_service::file_service()
 {
 	general_util = new general_utils();
+	http_util = new http_utils();
 	this->root_path = boost::filesystem::current_path().string();
 	this->show_directory_contents = false;
 }
 
 void file_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response)
 {
-	//std::cout << '\07' << "Request body: " << request->body << std::endl << "Request size: " <<  request->body.length() << std::endl;
-	if (!this->show_directory_contents && (request->url == "/"))
+	if ((request->url == "/") &&( !boost::filesystem::exists( boost::filesystem::path(this->root_path / "index.html"))))
 		request->url = "/index.html";
+
+	if(http_util->url_decode(this->get_user_name(request)) != "guest")
+	{
+		if(request->body.length() > 0)
+		{
+			try
+			{
+				std::map<std::string, std::string>save_file;
+				save_file = http_util->parse_multipart_form_data(request->body);
+				this->save_string_into_file(save_file.find("datafile")->second, save_file.find("file_name")->second);
+			}
+			catch(std::exception &e)
+			{
+				std::cout << e.what() << std::endl;
+			}
+		}
+	}
+
+	request->url = http_util->url_decode(request->url);
 
 	std::ostringstream body;
 	boost::filesystem::path target = this->root_path / request->url;
@@ -28,9 +47,9 @@ void file_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> 
 				boost::posix_time::ptime target_modified = boost::posix_time::from_time_t(last_write_time(target));
 				if (request->arguments["info"] == "true")
 					body << target.filename()
-						<< "<br/> size: " << target_size << " byte" << ((target_size > 1) ? "s" : "")
-						<< "<br/> modified: " << target_modified
-						<< "<br/><a href=\"" << request->url << "\">download</a>";
+					<< "<br/> size: " << target_size << " byte" << ((target_size > 1) ? "s" : "")
+					<< "<br/> modified: " << target_modified
+					<< "<br/><a href=\"" << http_util->url_encode(request->url) << "\">download</a>";
 				else
 				{
 					std::ostringstream formatter;
@@ -66,7 +85,7 @@ void file_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> 
 			{
 				body << target << " is a directory containing:";
 				for (boost::filesystem::directory_iterator i(target); i != boost::filesystem::directory_iterator(); ++i)
-					body << "<br/><a href=\"" << request->url << i->path().filename().string() << "\">" << i->path().filename().string() << "</a>";
+					body << "<br/><a href=\"" << http_util->url_encode(request->url + i->path().filename().string()) << "\">" << i->path().filename().string() << "</a>";
 			}
 			else
 				body << "Error 403! Listing the contents of the " << target.filename() << " directory is forbidden.";
@@ -75,7 +94,7 @@ void file_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> 
 			body << "Error! "<< target.filename() << "exists, but is neither a regular file nor a directory.";
 	}
 	else
-		body << "Error 404!" << target.filename() << "does not exist\n <br/> <a href='/'>" << "Dear " << general_util->url_decode(this->get_user_name(request)) <<", please come again!</a>";
+		body << "Error 404!" << target.filename() << "does not exist\n <br/> <a href='/'>" << "Dear " << http_util->url_decode(this->get_user_name(request)) <<", please come again!</a>";
 
 	response->body = "<head></head><body><h1>" + body.str() + "</h1></body>";
 	response->send(*socket);
@@ -95,6 +114,19 @@ std::string file_service::get_user_name( boost::shared_ptr<http_request> request
 		response = it->second;
 
 	return response;
+}
+
+void file_service::save_string_into_file( std::string contents, std::string name )
+{
+	std::string pathToUsers = this->root_path.string() + "/users/";
+	boost::filesystem::path users_path ( this->root_path / "users/" );
+	users_directory_path = users_path;
+	general_util->create_directory(users_directory_path);
+	std::ofstream datFile;
+	name = users_directory_path.string() + name;
+	datFile.open(name.c_str(), std::ofstream::binary | std::ofstream::trunc | std::ofstream::out	);
+	datFile.write(contents.c_str(), contents.length());
+	datFile.close();
 }
 
 BOOST_EXTENSION_TYPE_MAP_FUNCTION
