@@ -10,6 +10,8 @@ file_service::file_service()
 
 void file_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response)
 {
+	response->headers.insert(std::pair<std::string, std::string>("Connection", "close"));
+
 	if ((request->url == "/") &&( !boost::filesystem::exists( boost::filesystem::path(this->root_path / "index.html"))))
 		request->url = "/index.html";
 
@@ -21,7 +23,8 @@ void file_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> 
 			{
 				std::map<std::string, std::string>save_file;
 				save_file = http_util->parse_multipart_form_data(request->body);
-				this->save_string_into_file(save_file.find("datafile")->second, save_file.find("file_name")->second);
+				std::string file_name =save_file.find("file_name")->second;
+				this->save_string_into_file(save_file.find("datafile")->second, file_name);
 			}
 			catch(std::exception &e)
 			{
@@ -31,11 +34,8 @@ void file_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> 
 	}
 
 	request->url = http_util->url_decode(request->url);
-
 	std::ostringstream body;
 	boost::filesystem::path target = this->root_path / request->url;
-
-	response->headers.insert(std::pair<std::string, std::string>("Connection", "close"));
 
 	if (exists(target))
 	{
@@ -85,7 +85,7 @@ void file_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> 
 			{
 				body << target << " is a directory containing:";
 				for (boost::filesystem::directory_iterator i(target); i != boost::filesystem::directory_iterator(); ++i)
-					body << "<br/><a href=\"" << http_util->url_encode(request->url + i->path().filename().string()) << "\">" << i->path().filename().string() << "</a>";
+					body << "<br/><a href=\"" << request->url + "/" + http_util->url_encode(i->path().filename().string()) << "\">" << i->path().filename().string() << "</a>";
 			}
 			else
 				body << "Error 403! Listing the contents of the " << target.filename() << " directory is forbidden.";
@@ -116,15 +116,14 @@ std::string file_service::get_user_name( boost::shared_ptr<http_request> request
 	return response;
 }
 
-void file_service::save_string_into_file( std::string contents, std::string name )
+void file_service::save_string_into_file( std::string contents, std::string s_name )
 {
-	std::string pathToUsers = this->root_path.string() + "/users/";
-	boost::filesystem::path users_path ( this->root_path / "users/" );
+	boost::filesystem::path users_path ( this->root_path / "users" );
 	users_directory_path = users_path;
 	general_util->create_directory(users_directory_path);
-	std::ofstream datFile;
-	name = users_directory_path.string() + name;
-	datFile.open(name.c_str(), std::ofstream::binary | std::ofstream::trunc | std::ofstream::out	);
+	boost::filesystem::ofstream datFile;
+	boost::filesystem::path name (users_directory_path / s_name);
+	datFile.open(name, std::ofstream::binary | std::ofstream::trunc | std::ofstream::out	);
 	datFile.write(contents.c_str(), contents.length());
 	datFile.close();
 }

@@ -14,6 +14,7 @@
 #include <boost/filesystem.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/property_tree/ptree.hpp>
+#include <boost/filesystem/fstream.hpp>
 
 // Boost Extension
 #include <boost/extension/extension.hpp>
