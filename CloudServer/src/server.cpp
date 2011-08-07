@@ -77,32 +77,41 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 
 		try
 		{
-		std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > login = uac->service_call(socket, request, response);
-		request = login.first;
-		response = login.second;
+			std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > login = uac->service_call(socket, request, response);
+			request = login.first;
+			response = login.second;
 		}
 		catch (std::exception &e)
 		{
 			std::cout << e.what() << std::endl;
 		}
 
+		boost::shared_ptr<server_utils::service_container> service_cont;
 		try
 		{
-			boost::shared_ptr<server_utils::service_container> service_cont = util->find_service(*request);
-			boost::shared_ptr<service> requested_service = service_cont->service_ptr;
-
-			util->tread_util->safe_insert<boost::thread::id, std::set<boost::thread::id> >(boost::this_thread::get_id(),service_cont->threads_ids);
-
-			std::cout << "ids size: " << service_cont->threads_ids.size() << std::endl;
-
-			requested_service->service_call(socket, request, response);
-
-			util->tread_util->safe_erase<boost::thread::id, std::set<boost::thread::id> >(boost::this_thread::get_id(), service_cont->threads_ids);
+			service_cont = util->find_service(*request);
 		}
 		catch(std::exception &e)
 		{
 			std::cout << "Could not find service for request." << std::endl;
 		}
+
+		boost::shared_ptr<service> requested_service = service_cont->service_ptr;
+
+		util->tread_util->safe_insert<boost::thread::id, std::set<boost::thread::id> >(boost::this_thread::get_id(),service_cont->threads_ids);
+
+		std::cout << "ids size: " << service_cont->threads_ids.size() << std::endl;
+
+		try
+		{
+			requested_service->service_call(socket, request, response);
+		}
+		catch(std::exception &e)
+		{
+			std::cout << e.what() << std::endl; //"The parameter is incorrect" exception
+		}
+
+		util->tread_util->safe_erase<boost::thread::id, std::set<boost::thread::id> >(boost::this_thread::get_id(), service_cont->threads_ids);
 
 		std::cout << "connection resolved." << std::endl;
 	}

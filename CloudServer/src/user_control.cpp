@@ -4,6 +4,7 @@ user_control::user_control()
 {
 	general_util = new general_utils();
 	threading_util = new threading_utils();
+	http_util = new http_utils();
 
 	is_db_set = false;
 
@@ -15,7 +16,6 @@ user_control::user_control()
 	tag_register = "register";
 	tag_pass_sha256 = "pass";
 	//tag_session_sha256 = "session-id";
-	tag_set_cookie = "Set-Cookie";
 	tag_cookie = "Cookie";
 	tag_cookie_name = "session-id";
 	tag_header_email = "email";
@@ -39,36 +39,7 @@ user_control::user_control()
 
 }
 
-std::map<std::string, std::string> user_control::parse_cookie( std::string cookie_data )
-{
-	std::map<std::string, std::string> parsed_cookie;
-	std::string token, token2;
-	std::istringstream iss(cookie_data);
-	while ( getline(iss, token, ' ') )
-	{
-		std::string name, val;
-		std::istringstream iss2(token);
-		int num = 0 ;
-		while ( getline(iss2, token2, '=') )
-		{
-			if ( num == 0)
-			{
-				name = token2;
-				num++;
-			}
-			else
-			{
-				val = token2;
-				std::string::iterator it = val.end() - 1;
-				if (*it == ';')
-					val.erase(it);
 
-			}
-		}
-		parsed_cookie.insert(std::pair<std::string, std::string>(name, val));
-	}
-	return parsed_cookie;
-}
 
 std::string user_control::is_signed_in_user( std::string session_id_sha256 )
 {
@@ -102,7 +73,7 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 	map_ss::iterator has_cookie = user_request->headers.find(tag_cookie);
 
 	if (has_cookie != headers_end){
-		std::map<std::string, std::string> parsed_cookie = parse_cookie(has_cookie->second);
+		std::map<std::string, std::string> parsed_cookie = http_util->parse_cookie(has_cookie->second);
 
 		try
 		{
@@ -221,7 +192,7 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 			std::string cookie = tag_cookie_name;
 			cookie += "=";
 			cookie += session_id;
-			this->save_cookie(cookie, user.second);
+			http_util->save_cookie(cookie, user.second);
 
 			user.first->arguments.erase(has_login);
 			user.first->arguments.erase(has_pass);
@@ -240,13 +211,6 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 	}
 }
 
-boost::shared_ptr<http_response> user_control::save_cookie( std::string cookie_data , boost::shared_ptr<http_response> response )
-{
-	typedef std::pair<std::string, std::string> pair_ss;
-	response->headers.insert(pair_ss(tag_set_cookie, cookie_data));
-	return response;
-}
-
 std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user_control::log_out( std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user )
 {
 	typedef std::map<std::string, std::string> map_ss;
@@ -256,7 +220,7 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 	map_ss::iterator has_cookie = user.first->headers.find(tag_cookie);
 
 	if (has_cookie != headers_end){
-		std::map<std::string, std::string> parsed_cookie = parse_cookie(has_cookie->second);
+		std::map<std::string, std::string> parsed_cookie = http_util->parse_cookie(has_cookie->second);
 
 		try
 		{
@@ -274,7 +238,7 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 	std::string tag_expired_date = "Expires=Wed, 09 Jun 2001 10:18:14 GMT";
 	std::string cookie = tag_cookie_name + "=" + "0" + "; " + tag_expired_date;
 
-	this->save_cookie(cookie, user.second);
+	http_util->save_cookie(cookie, user.second);
 
 	user.first->arguments.erase(user.first->arguments.find(tag_logout));
 	return guest_user(user);
@@ -386,27 +350,6 @@ void user_control::start_work_with_db( std::string db_name )
 	}
 }
 
-std::string user_control::map_to_post_without_escape( std::map<std::string, std::string> data )
-{
-	std::map<std::string, std::string>::const_iterator end = data.end();
-	std::string result = "";
-	if(data.end() != data.begin())
-	{
-		for (std::map<std::string, std::string>::const_iterator it = data.begin(); it != end; ++it)
-		{
-			result += it->first;
-			result += "=";
-			result += it->second;
-			result += "&";
-		}
-		return result.substr (0,result.length()-1); 
-	}
-	else
-	{
-		return result;
-	}
-}
-
 std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user_control::check_recaptcha(  boost::shared_ptr<boost::asio::ip::tcp::socket> socket, std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user )
 {
 	typedef std::map<std::string, std::string> map_ss;
@@ -440,7 +383,7 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 
 	http_request request_to_recap;
 
-	request_to_recap.body = map_to_post_without_escape(to_recaptcha);
+	request_to_recap.body = http_util->map_to_post_without_escape(to_recaptcha);
 	request_to_recap.headers.insert(pair_ss("Content-Type", "application/x-www-form-urlencoded;"));
 	request_to_recap.headers.insert(pair_ss("User-Agent", "reCAPTCHA/CloudForever"));
 	request_to_recap.headers.insert(pair_ss("Connection","close"));
