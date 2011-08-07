@@ -431,15 +431,15 @@ function cloud.project.useFFmpeg()
 	if os.get() == "windows" then
 		defines { "WIN" }
 		links {
-		"avcodec-52",
-		"avformat-52",
-		"avutil-50",
-		"swscale-0"
+			"avformat-52",
+			"avcodec-52",
+			"avutil-50",
+			"swscale-0"
 		}
 		cloud.win.addLibFromProgrammFiles2("FFmpeg-0.6.1", "bin")
 		if  _OPTIONS["CopySharedLibraries"] then
-			cloud.win.copyDLL("FFmpeg-0.6.1", "avcodec-52.dll")
 			cloud.win.copyDLL("FFmpeg-0.6.1", "avformat-52.dll")
+			cloud.win.copyDLL("FFmpeg-0.6.1", "avcodec-52.dll")
 			cloud.win.copyDLL("FFmpeg-0.6.1", "avutil-50.dll")
 			cloud.win.copyDLL("FFmpeg-0.6.1", "swscale-0.dll")
 		end
