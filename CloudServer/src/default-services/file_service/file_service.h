@@ -1,6 +1,7 @@
 #ifndef FILE_SERVICE_H
 #define FILE_SERVICE_H
 
+#include <iostream>
 #include <fstream>
 #include <map>
 #include <string>
@@ -20,6 +21,7 @@
 #include <boost/extension/type_map.hpp>
 
 #include <general_utils.h>
+#include <http_utils.h>
 
 #include <service.hpp>
 
@@ -36,7 +38,11 @@ private:
 	boost::filesystem::path root_path;
 	bool show_directory_contents;
 	boost::posix_time::time_duration expiration_period;
-	general_utils * general_util;
+	general_utils *general_util;
+	http_utils *http_util;
+	void save_string_into_file(std::string contents, std::string name);
+
+	boost::filesystem::path users_directory_path;
 };
 
 #endif // FILE_SERVICE_H
