@@ -25,6 +25,7 @@
 
 #include <threading_utils.h>
 #include <general_utils.h>
+#include <http_utils.h>
 
 class user_control
 {
@@ -57,18 +58,13 @@ private:
 
 	void start_work_with_db(std::string db_name);
 
-	//cf-http extension functions
-	//TODO: join with cf-http
-	std::map<std::string, std::string> parse_cookie(std::string cookie_data);
-	boost::shared_ptr<http_response> save_cookie(std::string cookie_data, boost::shared_ptr<http_response> response);
-	std::string map_to_post_without_escape(std::map<std::string, std::string> request_map); // you shall provide one with automated escape and one without. Because escape(escape(str)) will produce bad results.
-
 	//User_control variables
 	std::map<std::string,std::string> sessions_map; // session_id to name
 	boost::shared_ptr<sqlite3pp::database> db;
 
 	threading_utils *threading_util;
 	general_utils *general_util;
+	http_utils *http_util;
 	
 
 	//Grammar
@@ -78,7 +74,6 @@ private:
 	std::string tag_pass_sha256;
 	//std::string tag_session_sha256;
 	std::string tag_header_email;
-	std::string tag_set_cookie; // TODO get rid of.
 	std::string tag_cookie; // TODO get rid of.
 	std::string tag_cookie_name;
 	std::string tag_guest_name;
