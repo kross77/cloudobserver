@@ -408,17 +408,17 @@ function cloud.project.useBoost()
 	if os.get() == "linux" then
 		defines { "LIN" }
 		links {
-		"boost_regex",
-		"boost_system",
-		"boost_thread"
+			"boost_regex",
+			"boost_system",
+			"boost_thread"
 		}
 	end
 	if os.get() == "macosx" then
 		defines { "MAC" }
 		links {
-		"boost_regex",
-		"boost_system",
-		"boost_thread"
+			"boost_regex",
+			"boost_system",
+			"boost_thread"
 		}	
 	end 
 end
