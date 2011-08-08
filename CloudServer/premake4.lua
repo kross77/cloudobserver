@@ -370,20 +370,24 @@ solution "CloudServer"
 		cloud.project.createDumpsFolder()
 		cloud.project.copyHtdocsFolder()
 		
-		links { "cf-http" }
-		includedirs { "3rdparty/cf-http"}
-		
-		links { "sqlite" }
-		includedirs { "3rdparty/sqlite"}
-		
-		links { "cf-util" }
-		includedirs { "src/cf-util"}
 		
 		includedirs { "service-interface/" }
 		
-		files { "src/**.h", "src/**.hpp", "src/**.cpp" }
+		links { "sqlite" }
+		includedirs { "3rdparty/sqlite"}	
+		
+		links { "cf-http" }
+		includedirs { "3rdparty/cf-http"}
+		
+		links { "cf-util" }
+		includedirs { "src/cf-util"}
+	
+		links { "cf-server" }
+		includedirs { "src/cf-server"}
+		
+		files { "src/main.cpp" }
 
-		excludes { "src/default-services/**" , "src/cf-util/**" }
+		excludes { "src/default-services/**" , "src/cf-util/**", "src/cf-server/**" }
 
 		configuration "Debug"
 			defines { "DEBUG" }
@@ -395,13 +399,26 @@ solution "CloudServer"
 
 ------------------------------------------------------------------------------------------------
 
-	project "cf-http"
+	project "cf-server"
 		kind "StaticLib"
 		language "C++"
 		location ( "projects/" .. os.get() .. "-" .. action )
-		files { "3rdparty/cf-http/**.h", "3rdparty/cf-http/**.cpp" }
+		files { "src/cf-server/**.h", "src/cf-server/**.cpp" }
+		
 		cloud.project.init()
+		cloud.project.useopenSSL()
 		cloud.project.useBoost()
+
+		links { "sqlite" }
+		includedirs { "3rdparty/sqlite"}	
+		
+		links { "cf-http" }
+		includedirs { "3rdparty/cf-http"}
+		
+		links { "cf-util" }
+		includedirs { "src/cf-util"}
+		
+		includedirs { "service-interface/" }
 		
 		configuration "gmake"
 			buildoptions { "-fPIC" }
@@ -413,7 +430,7 @@ solution "CloudServer"
 		configuration "Release"
 			defines { "NDEBUG" }
 			flags { "OptimizeSpeed", "Unicode" }
-
+			
 ------------------------------------------------------------------------------------------------
 
 	project "cf-util"
@@ -421,6 +438,7 @@ solution "CloudServer"
 		language "C++"
 		location ( "projects/" .. os.get() .. "-" .. action )
 		files { "src/cf-util/**.h", "src/cf-util/**.cpp" }
+		
 		cloud.project.init()
 		cloud.project.useopenSSL()
 		cloud.project.useBoost()
@@ -441,11 +459,34 @@ solution "CloudServer"
 			
 ------------------------------------------------------------------------------------------------
 
+	project "cf-http"
+		kind "StaticLib"
+		language "C++"
+		location ( "projects/" .. os.get() .. "-" .. action )
+		files { "3rdparty/cf-http/**.h", "3rdparty/cf-http/**.cpp" }
+		
+		cloud.project.init()
+		cloud.project.useBoost()
+		
+		configuration "gmake"
+			buildoptions { "-fPIC" }
+		
+		configuration "Debug"
+			defines { "DEBUG" }
+			flags { "Symbols", "Unicode" }
+		
+		configuration "Release"
+			defines { "NDEBUG" }
+			flags { "OptimizeSpeed", "Unicode" }
+
+------------------------------------------------------------------------------------------------
+
 	project "sqlite"
 		kind "StaticLib"
 		language "C++"
 		location ( "projects/" .. os.get() .. "-" .. action )
 		files { "3rdparty/sqlite/**.h",  "3rdparty/sqlite/**.c", "3rdparty/sqlite/**.cpp" }
+		
 		cloud.project.init()
 		cloud.project.useBoost()
 		
