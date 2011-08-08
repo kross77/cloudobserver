@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
-#include "server.h"
+
 //Boost
+#include <boost/asio.hpp>
 #include <boost/thread.hpp>
 #include <boost/foreach.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
@@ -10,6 +11,12 @@
 #include <boost/property_tree/xml_parser.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/program_options.hpp>
+
+//cf service interface
+#include <service.hpp>
+
+//cf-server
+#include <server.h>
 
 boost::program_options::options_description desc("Allowed options");
 server *s;
