@@ -531,6 +531,8 @@ solution "CloudClient"
 	configurations { "DebugShared", "DebugStatic", "ReleaseShared", "ReleaseStatic" }
 	objdir     ( "projects/" .. os.get() .. "-" .. action .. "/bin/obj" )
 	
+	flags { "StaticRuntime" }
+	
 	configuration { "DebugShared" }
 		targetdir ( "projects/" .. os.get() .. "-" .. action .. "/bin/debug-shared" )
 	configuration { }
