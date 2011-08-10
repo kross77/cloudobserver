@@ -13,6 +13,9 @@ project "CloudServer"
 	
 	
 	includedirs { "service-interface/" }
+
+	links { "cf-server" }
+	includedirs { "src/cf-server"}
 	
 	links { "sqlite" }
 	includedirs { "3rdparty/sqlite"}	
@@ -22,9 +25,6 @@ project "CloudServer"
 	
 	links { "cf-util" }
 	includedirs { "src/cf-util"}
-
-	links { "cf-server" }
-	includedirs { "src/cf-server"}
 	
 	files { "src/main.cpp" }
 
