@@ -94,6 +94,8 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 		catch(std::exception &e)
 		{
 			std::cout << "Could not find service for request." << std::endl;
+			util->tread_util->safe_erase<boost::thread::id, std::set<boost::thread::id> >(boost::this_thread::get_id(),threads_pool);
+			return;
 		}
 
 		boost::shared_ptr<service> requested_service = service_cont->service_ptr;
