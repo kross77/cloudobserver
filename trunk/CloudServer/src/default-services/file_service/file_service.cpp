@@ -12,7 +12,7 @@ void file_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> 
 {
 	response->headers.insert(std::pair<std::string, std::string>("Connection", "close"));
 
-	if ((request->url == "/") &&( !boost::filesystem::exists( boost::filesystem::path(this->root_path / "index.html"))))
+	if ((request->url == "/") &&( boost::filesystem::exists( boost::filesystem::path(this->root_path / "index.html"))))
 		request->url = "/index.html";
 
 	if(http_util->url_decode(this->get_user_name(request)) != "guest")
