@@ -430,19 +430,39 @@ function cloud.project.useFFmpeg()
 	cloud.addIncludeDir( _OPTIONS["c99IncludesPath"] 	) 
 	if os.get() == "windows" then
 		defines { "WIN" }
-		links {
-			"avformat-52",
-			"avcodec-52",
-			"avutil-50",
-			"swscale-0"
-		}
-		cloud.win.addLibFromProgrammFiles2("FFmpeg-0.6.1", "bin")
-		if  _OPTIONS["CopySharedLibraries"] then
-			cloud.win.copyDLL("FFmpeg-0.6.1", "avformat-52.dll")
-			cloud.win.copyDLL("FFmpeg-0.6.1", "avcodec-52.dll")
-			cloud.win.copyDLL("FFmpeg-0.6.1", "avutil-50.dll")
-			cloud.win.copyDLL("FFmpeg-0.6.1", "swscale-0.dll")
-		end
+		
+		configuration { "DebugStatic or ReleaseStatic" }
+			links {
+				"libavformat",
+				"libavcodec",
+				"libavutil",
+				"libswscale",
+				"libcoldname",
+				"libgcc",
+				"libmingwex",
+				"wsock32"
+			}
+			
+			cloud.win.addLibFromProgrammFiles2("FFmpeg-0.6.1", "lib")
+		configuration { }
+		
+		configuration { "DebugShared or ReleaseShared" }
+			links {
+				"avformat-52",
+				"avcodec-52",
+				"avutil-50",
+				"swscale-0"
+			}
+			
+			cloud.win.addLibFromProgrammFiles2("FFmpeg-0.6.1", "bin")
+			
+			if  _OPTIONS["CopySharedLibraries"] then
+				cloud.win.copyDLL("FFmpeg-0.6.1", "avformat-52.dll")
+				cloud.win.copyDLL("FFmpeg-0.6.1", "avcodec-52.dll")
+				cloud.win.copyDLL("FFmpeg-0.6.1", "avutil-50.dll")
+				cloud.win.copyDLL("FFmpeg-0.6.1", "swscale-0.dll")
+			end
+		configuration { }
 	end
 	
 	if os.get() == "linux" then
