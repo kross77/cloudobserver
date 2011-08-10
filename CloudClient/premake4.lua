@@ -558,6 +558,10 @@ solution "CloudClient"
 		linkoptions { "/OPT:NOREF" }
 	configuration { }
 	
+	configuration { "vs*" }
+		defines { "_WIN32_WINNT=0x0501" }
+	configuration { }
+	
 	-- A project defines one build target
 	
 	project "CloudClient"
