@@ -18,6 +18,7 @@
 #include <boost/shared_ptr.hpp> // aka std::shared_ptr
 #include <boost/unordered_map.hpp> // aka std::unordered_map
 #include <boost/foreach.hpp>
+#include <boost/lexical_cast.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 #include <boost/property_tree/json_parser.hpp>
@@ -62,8 +63,13 @@ public:
 	{
 		int port;
 
+		//Database name, DB will be created if it does not exist.
 		std::string database_name;
-		// Server path (by default app path) //TODO: make it configurable via config ptree
+		
+		//Containse pairs of services properties values, used in find_service algorithm
+		std::map<std::string, int> properties_manager_map;
+
+		// Server path (by default app path)
 		boost::filesystem::path server_root_path;
 
 		//We keep all services and their rules inside of a map
@@ -91,17 +97,18 @@ public:
 	int relevance(boost::shared_ptr<server_utils::service_container> rules_container, const server_utils::request_data &data_container);
 
 	void add_to_services_list(boost::property_tree::ptree config);
+
 	boost::shared_ptr<service> get_service_by_name(std::string name);
 	boost::shared_ptr<server_utils::service_container> get_service_description_by_name(std::string name);
+
 	std::multiset<std::string> get_services_names();
 	std::multiset<std::string> get_services_class_names();
 	std::multiset<std::string> get_services_libraries_names();
+
 	boost::shared_ptr<server_utils::service_container> find_service(http_request request);
 
 	threading_utils *tread_util; 
 	server_description description;
-
-
 
 private:
 
@@ -129,8 +136,11 @@ private:
 	std::string tag_path_configuration_server_root_path;
 	std::string tag_path_configuration_port;
 	std::string tag_path_configuration_database;
+	std::string tag_path_configuration_properties_manager;
+	std::string tag_arguments_price;
+	std::string tag_headers_price;
+	std::string tag_url_price;
 
-	
 
 	template<class T>
 	inline T &empty_class()

@@ -24,6 +24,10 @@ server_utils::server_utils()
 	tag_path_configuration_server_root_path = tag_configuration + "." + "server_root_path";
 	tag_path_configuration_port = tag_configuration + "." + "port";
 	tag_path_configuration_database = tag_configuration + "." + "database";
+	tag_path_configuration_properties_manager = tag_configuration + "." +"properties_manager";
+	tag_arguments_price = "arguments_price";
+	tag_headers_price = "headers_price";
+	tag_url_price = "url_price";
 }
 
 boost::shared_ptr<service> server_utils::create_service(std::string library_name, std::string class_name_inside_lib, boost::property_tree::ptree config)
@@ -139,6 +143,21 @@ server_utils::server_description server_utils::parse_config( boost::property_tre
 
 	server_descr.database_name = config.get(tag_path_configuration_database, "server.db");
 	std::cout << "Server database: " << server_descr.database_name << std::endl;
+
+	std::cout << std::endl << "Request properties prices: " << std::endl;
+	BOOST_FOREACH(boost::property_tree::ptree::value_type &vh,
+		config.get_child(tag_path_configuration_properties_manager, server_utils::empty_class<boost::property_tree::ptree>()))
+	{
+		try
+		{
+			server_descr.properties_manager_map.insert(std::pair<std::string, int>(vh.first.data(), boost::lexical_cast<int>(vh.second.data())));
+			std::cout << vh.first.data() << " : " << vh.second.data() <<  std::endl;
+		}
+		catch(boost::bad_lexical_cast &e)
+		{
+			throw std::runtime_error("Incorrect price value");
+		}
+	}
 
 	std::cout << std::endl << "Server services: ";
 	server_descr.service_map = server_utils::parse_config_services( config );
@@ -377,6 +396,7 @@ server_utils::request_data server_utils::parse_request( http_request request )
 
 int server_utils::relevance(boost::shared_ptr<server_utils::service_container> rules_container, const server_utils::request_data &data_container)
 {
+
 	int rel = 0;
 	if(!data_container.url.substr(data_container.url.find(rules_container->root_service_web_path) + 1).empty())
 	{
