@@ -554,6 +554,10 @@ solution "CloudClient"
 		flags { "Optimize" }
 	configuration { }
 	
+	configuration { "ReleaseStatic", "vs*" }
+		linkoptions { "/OPT:NOREF" }
+	configuration { }
+	
 	-- A project defines one build target
 	
 	project "CloudClient"
