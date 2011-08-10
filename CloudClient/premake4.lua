@@ -554,6 +554,10 @@ solution "CloudClient"
 		flags { "Optimize" }
 	configuration { }
 	
+	configuration { "linux", "gmake", "DebugStatic or ReleaseStatic" }
+		linkoptions { "-static" }
+	configuration { }
+	
 	configuration { "ReleaseStatic", "vs*" }
 		linkoptions { "/OPT:NOREF" }
 	configuration { }
