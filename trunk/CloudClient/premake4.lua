@@ -397,12 +397,7 @@ function cloud.project.useBoost()
 	cloud.addIncludeDir( _OPTIONS["BoostIncludesPath"] )
 	cloud.addLibDir( _OPTIONS["BoostLibsPath"])
 	if os.get() == "windows" then
-		defines { "WIN" } 
-		
-		configuration { "DebugShared or ReleaseShared" }
-			defines { "BOOST_ALL_DYN_LINK" }
-		configuration { }
-		
+		defines { "WIN" }
 		cloud.win.addLibFromProgrammFiles("Boost-1.47.0")
 	end	
 	if os.get() == "linux" then
