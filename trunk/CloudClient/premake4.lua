@@ -554,16 +554,16 @@ solution "CloudClient"
 		flags { "Optimize" }
 	configuration { }
 	
-	configuration { "linux", "gmake", "DebugStatic or ReleaseStatic" }
-		linkoptions { "-static" }
+	configuration { "windows", "vs*" }
+		defines { "_WIN32_WINNT=0x0501" }
 	configuration { }
 	
-	configuration { "ReleaseStatic", "vs*" }
+	configuration { "windows", "vs*", "ReleaseStatic" }
 		linkoptions { "/OPT:NOREF" }
 	configuration { }
 	
-	configuration { "vs*" }
-		defines { "_WIN32_WINNT=0x0501" }
+	configuration { "linux", "gmake", "DebugStatic or ReleaseStatic" }
+		linkoptions { "-static" }
 	configuration { }
 	
 	-- A project defines one build target
