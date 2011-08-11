@@ -556,8 +556,12 @@ solution "CloudClient"
 		defines { "_WIN32_WINNT=0x0501", "_CRT_SECURE_NO_WARNINGS", "_SCL_SECURE_NO_WARNINGS" }
 	configuration { }
 	
+	configuration { "windows", "vs*", "DebugStatic" }
+		linkoptions { "/IGNORE:4049", "/IGNORE:4217" }
+	configuration { }
+	
 	configuration { "windows", "vs*", "ReleaseStatic" }
-		linkoptions { "/OPT:NOREF" }
+		linkoptions { "/OPT:NOREF", "/IGNORE:4049" }
 	configuration { }
 	
 	configuration { "linux", "gmake", "DebugStatic or ReleaseStatic" }
