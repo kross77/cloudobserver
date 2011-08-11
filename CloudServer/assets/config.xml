@@ -21,18 +21,7 @@
 				<show_directory_contents>false</show_directory_contents>
 			</settings>
 			<properties>
-				<default_value>50</default_value>
-				<url>
-					<equals>/</equals>
-				</url>
-				<url_extensions>
-					<extension>html</extension>
-					<extension>js</extension>
-					<extension>css</extension>
-					<extension>jpg</extension>
-					<extension>png</extension>
-					<extension>swf</extension>
-				</url_extensions>
+				<default_price>50</default_price>
 			</properties>
 		</service>
 		<service>
