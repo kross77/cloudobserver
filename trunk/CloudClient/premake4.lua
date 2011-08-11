@@ -553,7 +553,7 @@ solution "CloudClient"
 	configuration { }
 	
 	configuration { "windows", "vs*" }
-		defines { "_WIN32_WINNT=0x0501" }
+		defines { "_WIN32_WINNT=0x0501", "_CRT_SECURE_NO_WARNINGS" }
 	configuration { }
 	
 	configuration { "windows", "vs*", "ReleaseStatic" }
