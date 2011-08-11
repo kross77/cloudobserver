@@ -55,8 +55,11 @@ public:
 		boost::unordered_multimap<std::string, std::string> set_of_header_rules;
 		boost::unordered_multimap<std::string, std::string> set_of_arguments_rules;
 		std::set<std::string> url_extensions;
-		std::string root_service_web_path;
+		int default_price;
 		std::set<boost::thread::id> threads_ids;
+		//TODO: remove
+		std::string root_service_web_path;
+
 	};
 
 	struct server_description
@@ -107,16 +110,18 @@ public:
 
 	boost::shared_ptr<server_utils::service_container> find_service(http_request request);
 
+	void update_properties_manager();
+
 	threading_utils *tread_util; 
 	server_description description;
 
 private:
 
 	std::map<std::string, boost::shared_ptr<server_utils::service_container> > parse_config_services(boost::property_tree::ptree config);
-	
+	int find_or_null( std::map<std::string, int> map, std::string to_find);
 	// For services creation from shared libraries
 	extension_utils *util;
-
+	threading_utils *tread_util_local; 
 	std::stringstream log;
 
 	std::string tag_service;
@@ -137,9 +142,20 @@ private:
 	std::string tag_path_configuration_port;
 	std::string tag_path_configuration_database;
 	std::string tag_path_configuration_properties_manager;
+
+	std::string tag_default_price;
+
+	std::string tag_url_extensions_price;
 	std::string tag_arguments_price;
 	std::string tag_headers_price;
 	std::string tag_url_price;
+
+	int default_price;
+
+	int arguments_price;
+	int headers_price;
+	int url_price;
+	int url_extensions_price;
 
 
 	template<class T>

@@ -4,7 +4,7 @@ server::server(boost::property_tree::ptree config)
 {
 	util = new server_utils();
 	util->description = util->parse_config(config);
-
+	util->update_properties_manager();
 	uac = new user_control(); 
 	boost::property_tree::ptree pt; // TODO: extract config for uac in server_utils
 	uac->apply_config(pt);
