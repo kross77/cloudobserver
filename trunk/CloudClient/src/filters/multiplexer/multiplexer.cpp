@@ -30,14 +30,14 @@ void multiplexer::connect(transmitter* transmitter_block)
 	this->transmitter_block = transmitter_block;
 
 	// Write a header.
-	url_open_dyn_buf(&this->format_context->pb);
-	if (av_write_header(this->format_context) != 0)
+	avio_open_dyn_buf(&this->format_context->pb);
+	if (avformat_write_header(this->format_context, NULL) != 0)
 	{
 		std::cout << "Multiplexer: failed to write a haeder." << std::endl;
 		throw internal_exception();
 	}
 	char* buffer;
-	int length = url_close_dyn_buf(this->format_context->pb, (uint8_t**)(&buffer));
+	int length = avio_close_dyn_buf(this->format_context->pb, (uint8_t**)(&buffer));
 	this->transmitter_block->send(buffer, length);
 	av_free(buffer);
 }
@@ -47,14 +47,14 @@ void multiplexer::disconnect()
 	if (this->format_context)
 	{
 		// Write a trailer.
-		url_open_dyn_buf(&this->format_context->pb);
+		avio_open_dyn_buf(&this->format_context->pb);
 		if (av_write_trailer(this->format_context) != 0)
 		{
 			std::cout << "Multiplexer: failed to write a trailer." << std::endl;
 			throw internal_exception();
 		}
 		char* buffer;
-		int length = url_close_dyn_buf(this->format_context->pb, (uint8_t**)(&buffer));
+		int length = avio_close_dyn_buf(this->format_context->pb, (uint8_t**)(&buffer));
 		this->transmitter_block->send(buffer, length);
 		av_free(buffer);
 
@@ -78,14 +78,14 @@ void multiplexer::send(AVPacket* packet)
 {
 	boost::mutex::scoped_lock lock(this->send_mutex);
 
-	url_open_dyn_buf(&this->format_context->pb);
+	avio_open_dyn_buf(&this->format_context->pb);
 	if (av_interleaved_write_frame(this->format_context, packet) != 0)
 	{
 		std::cout << "Multiplexer: failed to send a packet." << std::endl;
 		throw internal_exception();
 	}
 	char* buffer;
-	int length = url_close_dyn_buf(this->format_context->pb, (uint8_t**)(&buffer));
+	int length = avio_close_dyn_buf(this->format_context->pb, (uint8_t**)(&buffer));
 	this->transmitter_block->send(buffer, length);
 	av_free(buffer);
 }
