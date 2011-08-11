@@ -55,7 +55,7 @@ struct point {int x,y;};
 /*----------------------------------------------------------------------------*/
 /** Fatal error, print a message to standard-error output and exit.
 */
-static void error(char * msg)
+static void error(const char * msg)
 {
 	fprintf(stderr,"LSD Error: %s\n",msg);
 	exit(EXIT_FAILURE);
