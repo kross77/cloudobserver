@@ -76,7 +76,7 @@ void video_encoder::connect(multiplexer* multiplexer_block)
 		throw internal_exception();
 	}
 
-	this->raw_data = format_context->oformat->flags & AVFMT_RAWPICTURE;
+	this->raw_data = ((format_context->oformat->flags & AVFMT_RAWPICTURE) == AVFMT_RAWPICTURE) ? true : false;
 	this->need_convert = (this->stream->codec->pix_fmt != PIX_FMT_RGB24);
 	if (this->need_convert)
 		this->convert_context = sws_getContext(this->stream->codec->width, this->stream->codec->height, PIX_FMT_RGB24,
