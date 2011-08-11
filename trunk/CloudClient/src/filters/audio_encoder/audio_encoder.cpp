@@ -11,7 +11,7 @@ audio_encoder::audio_encoder(int samplerate)
 	this->buffer = new char[BUFFER_SIZE];
 	this->buffer_position = 0;
 
-	this->encode_buffer = (uint8_t*)av_malloc(ENCODE_BUFFER_SIZE);
+	this->encode_buffer = (uint8_t*)av_malloc(AUDIO_ENCODE_BUFFER_SIZE);
 	
 	this->multiplexer_block = NULL;
 }
@@ -86,7 +86,7 @@ void audio_encoder::send(const char* data, int size)
 			AVPacket* packet = new AVPacket();
 			av_init_packet(packet);
 
-			packet->size = avcodec_encode_audio(this->stream->codec, this->encode_buffer, ENCODE_BUFFER_SIZE, (const short*)position);
+			packet->size = avcodec_encode_audio(this->stream->codec, this->encode_buffer, AUDIO_ENCODE_BUFFER_SIZE, (const short*)position);
 
 			if (this->stream->codec->coded_frame && this->stream->codec->coded_frame->pts != AV_NOPTS_VALUE)
 				packet->pts = av_rescale_q(this->stream->codec->coded_frame->pts, this->stream->codec->time_base, this->stream->time_base);

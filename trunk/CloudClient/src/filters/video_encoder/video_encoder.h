@@ -2,7 +2,7 @@
 #define VIDEO_ENCODER_H
 
 // The encode buffer size.
-#define ENCODE_BUFFER_SIZE (1024 * 1024 * 10)
+#define VIDEO_ENCODE_BUFFER_SIZE (1024 * 1024 * 10)
 
 #include "../multiplexer/multiplexer.h"
 

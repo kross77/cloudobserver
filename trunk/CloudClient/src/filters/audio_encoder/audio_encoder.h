@@ -8,7 +8,7 @@
 #define BUFFER_SIZE (1024 * 1024 * 4)
 
 // The encode buffer size.
-#define ENCODE_BUFFER_SIZE (4 * MAX_AUDIO_PACKET_SIZE)
+#define AUDIO_ENCODE_BUFFER_SIZE (4 * MAX_AUDIO_PACKET_SIZE)
 
 #include "../multiplexer/multiplexer.h"
 
