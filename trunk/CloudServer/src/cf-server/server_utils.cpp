@@ -401,18 +401,18 @@ server_utils::request_data server_utils::parse_request( http_request request )
 int server_utils::relevance(boost::shared_ptr<server_utils::service_container> rules_container, const server_utils::request_data &data_container)
 {
 
-	int rel = 0;
+	int rel = default_price;
 
 	if (rules_container->url_extensions.find(data_container.url_extension) != rules_container->url_extensions.end())
 	{
-		rel += 100;
+		rel += url_extensions_price;
 	}
 
 	typedef std::vector<std::string> vector_s_t;
 	BOOST_FOREACH(vector_s_t::value_type rule_it, rules_container->set_of_url_rules)
 	{
 		if (rule_it == data_container.url)
-			rel += 1000;
+			rel += url_price;
 	}
 
 	std::multiset<std::string> libraries_names;
@@ -427,7 +427,7 @@ int server_utils::relevance(boost::shared_ptr<server_utils::service_container> r
 			{
 				if(data_it.second.find(rule_it.second) !=std::string::npos)
 				{
-					rel += 100;
+					rel += arguments_price;
 				}
 			}
 		}
@@ -441,7 +441,7 @@ int server_utils::relevance(boost::shared_ptr<server_utils::service_container> r
 			{
 				if(data_it.second.find(rule_it.second) !=std::string::npos)
 				{
-					rel += 100;
+					rel += headers_price;
 				}
 			}
 		}

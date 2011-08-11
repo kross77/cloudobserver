@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config>
+	<!-- Prot on which server will be started -->
 	<port>4773</port>
+	
+	<!-- Description of how valuable request properties are -->
+	<properties_manager>
+		<arguments_price>100</arguments_price>
+		<url_extensions_price>100</url_extensions_price>
+		<url_price>1000</url_price>
+	</properties_manager>
+
+	<!-- List of services to be started on server -->
 	<services>
 		<service>
 			<name>File Service</name>
@@ -11,9 +21,18 @@
 				<show_directory_contents>false</show_directory_contents>
 			</settings>
 			<properties>
-				<headers>
-					<Accept-Encoding></Accept-Encoding>
-				</headers>
+				<default_value>50</default_value>
+				<url>
+					<equals>/</equals>
+				</url>
+				<url_extensions>
+					<extension>html</extension>
+					<extension>js</extension>
+					<extension>css</extension>
+					<extension>jpg</extension>
+					<extension>png</extension>
+					<extension>swf</extension>
+				</url_extensions>
 			</properties>
 		</service>
 		<service>
