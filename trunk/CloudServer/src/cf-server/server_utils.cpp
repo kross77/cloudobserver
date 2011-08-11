@@ -4,6 +4,7 @@ server_utils::server_utils()
 {
 	util = new extension_utils();
 	tread_util = new threading_utils();
+	tread_util_local = new threading_utils();
 	this->description.server_root_path = boost::filesystem::current_path();
 
 	//grammar
@@ -28,6 +29,14 @@ server_utils::server_utils()
 	tag_arguments_price = "arguments_price";
 	tag_headers_price = "headers_price";
 	tag_url_price = "url_price";
+	tag_url_extensions_price = "url_extensions_price";
+	tag_default_price = "default_price";
+
+	default_price = 0;
+	arguments_price = default_price;
+	headers_price = default_price;
+	url_price = default_price;
+	url_extensions_price = default_price;
 }
 
 boost::shared_ptr<service> server_utils::create_service(std::string library_name, std::string class_name_inside_lib, boost::property_tree::ptree config)
@@ -72,10 +81,17 @@ std::map<std::string, boost::shared_ptr<server_utils::service_container> > serve
 
 		boost::property_tree::ptree service_properties_tree = individual_service_tree.get_child(tag_properties, server_utils::empty_class<boost::property_tree::ptree>());
 
+		//TODO: remove
 		std::string root_service_web_path = service_properties_tree.get<std::string>(tag_root_service_web_path, "");
 		if(!root_service_web_path.empty()){
 			one_description->root_service_web_path = root_service_web_path;
 			std::cout << "Service web root directory path: " << root_service_web_path << std::endl;
+		}
+
+		int service_price = service_properties_tree.get<int>(tag_default_price, default_price);
+		one_description->default_price = service_price;
+		if(service_price != default_price){
+			std::cout << "Service price: " << service_price << std::endl;
 		}
 
 		BOOST_FOREACH(boost::property_tree::ptree::value_type &va,
@@ -158,7 +174,7 @@ server_utils::server_description server_utils::parse_config( boost::property_tre
 			throw std::runtime_error("Incorrect price value");
 		}
 	}
-
+	
 	std::cout << std::endl << "Server services: ";
 	server_descr.service_map = server_utils::parse_config_services( config );
 	std::cout << std::endl;
@@ -398,6 +414,7 @@ int server_utils::relevance(boost::shared_ptr<server_utils::service_container> r
 {
 
 	int rel = 0;
+
 	if(!data_container.url.substr(data_container.url.find(rules_container->root_service_web_path) + 1).empty())
 	{
 		rel += 100;
@@ -474,4 +491,25 @@ boost::shared_ptr<server_utils::service_container> server_utils::find_service(ht
 	}
 	std::cout << "Found service: " << name << std::endl;
 	return result;
+}
+
+void server_utils::update_properties_manager()
+{
+	arguments_price = server_utils::find_or_null(description.properties_manager_map, tag_arguments_price);
+	headers_price = server_utils::find_or_null(description.properties_manager_map, tag_headers_price);
+	url_price = server_utils::find_or_null(description.properties_manager_map, tag_url_price);
+	url_extensions_price = server_utils::find_or_null(description.properties_manager_map, tag_url_extensions_price);
+}
+
+int server_utils::find_or_null( std::map<std::string, int> map, std::string to_find)
+{
+	typedef std::map<std::string, int> map_si;
+	try
+	{
+		return tread_util_local->safe_search_in_map<std::string, int, map_si::iterator>(to_find, map);
+	}
+	catch(std::exception &e)
+	{
+		return 0;
+	}
 }
