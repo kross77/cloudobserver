@@ -1,0 +1,20 @@
+diff -cr original/libavutil/common.h modified/libavutil/common.h
+*** original/libavutil/common.h	Wed Aug 10 12:16:41 2011
+--- modified/libavutil/common.h	Wed Aug 10 17:59:28 2011
+***************
+*** 168,174 ****
+  static av_always_inline av_const int32_t av_clipl_int32_c(int64_t a)
+  {
+      if ((a+0x80000000u) & ~UINT64_C(0xFFFFFFFF)) return (a>>63) ^ 0x7FFFFFFF;
+!     else                                         return a;
+  }
+  
+  /**
+--- 168,174 ----
+  static av_always_inline av_const int32_t av_clipl_int32_c(int64_t a)
+  {
+      if ((a+0x80000000u) & ~UINT64_C(0xFFFFFFFF)) return (a>>63) ^ 0x7FFFFFFF;
+!     else                                         return (int32_t)a;
+  }
+  
+  /**
