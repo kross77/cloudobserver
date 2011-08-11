@@ -104,7 +104,7 @@ std::vector<std::string> audio_capturer::get_capture_devices()
 		throw internal_exception();
 	}
 
-	if (*devices == NULL)
+	if (*devices == 0)
 	{
 		std::cout << "Audio capturer: no audio capture devices found." << std::endl;
 		throw internal_exception();
