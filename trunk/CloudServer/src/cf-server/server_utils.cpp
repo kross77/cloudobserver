@@ -403,6 +403,8 @@ int server_utils::relevance(boost::shared_ptr<server_utils::service_container> r
 
 	int rel = default_price;
 
+	rel += rules_container->default_price;
+
 	if (rules_container->url_extensions.find(data_container.url_extension) != rules_container->url_extensions.end())
 	{
 		rel += url_extensions_price;
