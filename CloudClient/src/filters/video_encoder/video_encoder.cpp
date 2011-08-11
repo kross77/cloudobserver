@@ -12,7 +12,7 @@ video_encoder::video_encoder(int bitrate, int framerate, int width, int height)
 	this->raw_data = false;
 	this->need_convert = false;
 	
-	this->encode_buffer = (uint8_t*)av_malloc(ENCODE_BUFFER_SIZE);
+	this->encode_buffer = (uint8_t*)av_malloc(VIDEO_ENCODE_BUFFER_SIZE);
 	this->convert_context = NULL;
 
 	this->multiplexer_block = NULL;
@@ -126,7 +126,7 @@ void video_encoder::send(AVFrame* frame)
 		}
 		else
 		{
-			int output_size = avcodec_encode_video(this->stream->codec, this->encode_buffer, ENCODE_BUFFER_SIZE, picture);
+			int output_size = avcodec_encode_video(this->stream->codec, this->encode_buffer, VIDEO_ENCODE_BUFFER_SIZE, picture);
 			if (output_size > 0)
 			{
 				AVPacket* packet = new AVPacket();
