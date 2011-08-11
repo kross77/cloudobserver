@@ -1,8 +1,6 @@
 #ifndef AUDIO_GENERATOR_H
 #define AUDIO_GENERATOR_H
 
-#define _USE_MATH_DEFINES
-
 // Boost
 #include <boost/thread.hpp>
 

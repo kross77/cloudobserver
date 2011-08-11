@@ -1,8 +1,6 @@
 #ifndef VIDEO_GENERATOR_RAINBOW_H
 #define VIDEO_GENERATOR_RAINBOW_H
 
-#define _USE_MATH_DEFINES
-
 // Boost
 #include <boost/asio.hpp>
 #include <boost/date_time.hpp>
