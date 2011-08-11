@@ -37,7 +37,7 @@ void audio_encoder::connect(multiplexer* multiplexer_block)
 	}
 	
 	this->stream->codec->codec_id = format_context->oformat->audio_codec;
-	this->stream->codec->codec_type = CODEC_TYPE_AUDIO;
+	this->stream->codec->codec_type = AVMEDIA_TYPE_AUDIO;
 	this->stream->codec->bit_rate = MAX_AUDIO_PACKET_SIZE;
 	this->stream->codec->sample_rate = this->samplerate;
 	this->stream->codec->channels = 1;
@@ -91,7 +91,7 @@ void audio_encoder::send(const char* data, int size)
 			if (this->stream->codec->coded_frame && this->stream->codec->coded_frame->pts != AV_NOPTS_VALUE)
 				packet->pts = av_rescale_q(this->stream->codec->coded_frame->pts, this->stream->codec->time_base, this->stream->time_base);
 
-			packet->flags |= PKT_FLAG_KEY;
+			packet->flags |= AV_PKT_FLAG_KEY;
 			packet->stream_index = this->stream->index;
 			packet->data = this->encode_buffer;
 			this->multiplexer_block->send(packet);

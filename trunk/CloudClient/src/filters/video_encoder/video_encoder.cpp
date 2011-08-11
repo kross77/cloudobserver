@@ -38,7 +38,7 @@ void video_encoder::connect(multiplexer* multiplexer_block)
 	}
 
 	this->stream->codec->codec_id = format_context->oformat->video_codec;
-	this->stream->codec->codec_type = CODEC_TYPE_VIDEO;
+	this->stream->codec->codec_type = AVMEDIA_TYPE_VIDEO;
 	this->stream->codec->frame_number = 0;
 	this->stream->codec->bit_rate = this->bitrate;
 	this->stream->codec->width = this->width;
@@ -117,7 +117,7 @@ void video_encoder::send(AVFrame* frame)
 		{
 			AVPacket* packet = new AVPacket();
 			av_init_packet(packet);
-			packet->flags |= PKT_FLAG_KEY;
+			packet->flags |= AV_PKT_FLAG_KEY;
 			packet->stream_index = this->stream->index;
 			packet->data = (uint8_t*)picture;
 			packet->size = sizeof(AVPicture);
@@ -136,7 +136,7 @@ void video_encoder::send(AVFrame* frame)
 					packet->pts = av_rescale_q(this->stream->codec->coded_frame->pts, this->stream->codec->time_base, this->stream->time_base);
 
 				if (this->stream->codec->coded_frame->key_frame)
-					packet->flags |= PKT_FLAG_KEY;
+					packet->flags |= AV_PKT_FLAG_KEY;
 
 				packet->stream_index = this->stream->index;
 				packet->data = this->encode_buffer;
