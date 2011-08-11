@@ -13,7 +13,6 @@ server_utils::server_utils()
 	tag_service_name = "name";
 	tag_class_name = "class_name";
 	tag_properties = "properties";
-	tag_root_service_web_path = "root_service_web_path";
 	tag_url = "url";
 	tag_arguments = "arguments";
 	tag_headers = "headers";
@@ -32,6 +31,7 @@ server_utils::server_utils()
 	tag_url_extensions_price = "url_extensions_price";
 	tag_default_price = "default_price";
 
+	//request properties pricing manager set up.
 	default_price = 0;
 	arguments_price = default_price;
 	headers_price = default_price;
@@ -80,13 +80,6 @@ std::map<std::string, boost::shared_ptr<server_utils::service_container> > serve
 		one_description->service_custome_properties_tree = individual_service_tree.get_child(tag_settings, server_utils::empty_class<boost::property_tree::ptree>());
 
 		boost::property_tree::ptree service_properties_tree = individual_service_tree.get_child(tag_properties, server_utils::empty_class<boost::property_tree::ptree>());
-
-		//TODO: remove
-		std::string root_service_web_path = service_properties_tree.get<std::string>(tag_root_service_web_path, "");
-		if(!root_service_web_path.empty()){
-			one_description->root_service_web_path = root_service_web_path;
-			std::cout << "Service web root directory path: " << root_service_web_path << std::endl;
-		}
 
 		int service_price = service_properties_tree.get<int>(tag_default_price, default_price);
 		one_description->default_price = service_price;
@@ -182,6 +175,8 @@ server_utils::server_description server_utils::parse_config( boost::property_tre
 	return server_descr;
 }
 
+//This does not work correctly, do not use this.
+//TODO: rewrite this.
 //Do not forget to change parse_config and/or parse_config_services if you change save_config
 boost::property_tree::ptree server_utils::save_config( server_utils::server_description server_configuration_description )
 {
@@ -197,7 +192,6 @@ boost::property_tree::ptree server_utils::save_config( server_utils::server_desc
 		serv.put<std::string>(tag_service_name, i.first);
 		serv.put<std::string>(tag_class_name, sm->class_name);
 		serv.put<std::string>(tag_library_name, sm->library_name);
-		serv.put<std::string>(tag_root_service_web_path, sm->root_service_web_path);
 
 		boost::property_tree::ptree serv_prop, serv_sett, head, arg, url;
 		typedef boost::unordered_multimap<std::string, std::string> mulmap_t;
@@ -361,12 +355,6 @@ void server_utils::add_to_services_list( boost::property_tree::ptree config )
 		one_description->service_custome_properties_tree = individual_service_tree.get_child(tag_settings, server_utils::empty_class<boost::property_tree::ptree>());
 		boost::property_tree::ptree service_properties_tree = individual_service_tree.get_child(tag_properties, server_utils::empty_class<boost::property_tree::ptree>());
 
-		std::string root_service_web_path = service_properties_tree.get<std::string>(tag_root_service_web_path, "");
-		if(!root_service_web_path.empty()){
-			one_description->root_service_web_path = root_service_web_path;
-			std::cout << "Service web root directory path: " << root_service_web_path << std::endl;
-		}
-
 		BOOST_FOREACH(boost::property_tree::ptree::value_type &va,
 			service_properties_tree.get_child(tag_arguments, server_utils::empty_class<boost::property_tree::ptree>()))
 		{
@@ -415,10 +403,6 @@ int server_utils::relevance(boost::shared_ptr<server_utils::service_container> r
 
 	int rel = 0;
 
-	if(!data_container.url.substr(data_container.url.find(rules_container->root_service_web_path) + 1).empty())
-	{
-		rel += 100;
-	}
 	if (rules_container->url_extensions.find(data_container.url_extension) != rules_container->url_extensions.end())
 	{
 		rel += 100;

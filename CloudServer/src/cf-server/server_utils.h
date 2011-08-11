@@ -57,9 +57,6 @@ public:
 		std::set<std::string> url_extensions;
 		int default_price;
 		std::set<boost::thread::id> threads_ids;
-		//TODO: remove
-		std::string root_service_web_path;
-
 	};
 
 	struct server_description
@@ -129,7 +126,6 @@ private:
 	std::string tag_service_name;
 	std::string tag_class_name;
 	std::string tag_properties;
-	std::string tag_root_service_web_path;
 	std::string tag_url;
 	std::string tag_url_equals;
 	std::string tag_url_extensions;
