@@ -54,13 +54,13 @@ void video_generator_rainbow::generation_loop()
 			char* line = (char*)this->frame->data[0] + i * this->frame->linesize[0];
 			for (int j = 0; j < this->width; ++j)
 			{
-				line[0] = 255 * sin(((float)i / wxh * seed) * M_PI);
-				line[1] = 255 * cos(((float)j / wxh * seed) * M_PI);
-				line[2] = 255 * sin(((float)(i + j) / wxh * seed) * M_PI);
+				line[0] = (char)(255 * sin(((float)i / wxh * seed) * M_PI));
+				line[1] = (char)(255 * cos(((float)j / wxh * seed) * M_PI));
+				line[2] = (char)(255 * sin(((float)(i + j) / wxh * seed) * M_PI));
 				line += 3;
 			}
 		}
-		seed = seed + 2.2;
+		seed = seed + 2.2f;
 
 		this->video_encoder_block->send(this->frame);
 
