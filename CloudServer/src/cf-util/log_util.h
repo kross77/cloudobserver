@@ -13,13 +13,13 @@
 
 #include "threading_utils.h"
 
-class FlushInternal;
+class flush_internal;
 
 class log_util
 {
 public:
 
-	static FlushInternal *endl;
+	static flush_internal *endl;
 
 	log_util( int buffer_length, bool do_print=true);
 	log_util( int buffer_length, bool do_print, bool do_save, boost::filesystem::path save_file_path);
@@ -29,21 +29,21 @@ public:
 	template <class T>
 	log_util &operator<<(const T &v)
 	{
-		boost::shared_ptr<std::stringstream> this_stream = find_stream(boost::this_thread::get_id());
+		boost::shared_ptr<std::ostringstream> this_stream = find_stream(boost::this_thread::get_id());
 		*this_stream << v;
 		return *this;
 	}
 
 	log_util &operator<<(std::ostream&(*f)(std::ostream&)) 
 	{
-		boost::shared_ptr<std::stringstream> this_stream = find_stream(boost::this_thread::get_id());
+		boost::shared_ptr<std::ostringstream> this_stream = find_stream(boost::this_thread::get_id());
 		*this_stream << *f;
 		return *this;
 	}
 
-	log_util &operator<<(FlushInternal*)
+	log_util &operator<<(flush_internal*)
 	{
-		boost::shared_ptr<std::stringstream> this_stream = find_stream(boost::this_thread::get_id());
+		boost::shared_ptr<std::ostringstream> this_stream = find_stream(boost::this_thread::get_id());
 		std::string this_message = "";
 		if (add_prefix)
 		{
@@ -59,15 +59,16 @@ public:
 		this_message += this_stream->str();
 		this_message += "\n";
 		boost::mutex::scoped_lock lock(mut);
-		++i;
-		messages_buffer->push_back(this_message);
+		messages_buffer[i] = this_message;
+		i++;
 		if(print)
 		{
 			std::cout << this_message;
 		}
 		is_filled();
 		lock.unlock();
-		clean_stringstream(*this_stream);
+		typedef std::map<boost::thread::id, boost::shared_ptr<std::ostringstream> > map_io;
+		thread_util->safe_erase_in_map<boost::thread::id, map_io, map_io::iterator>(boost::this_thread::get_id(), threads_pool);
 		return *this;
 	}
 
@@ -75,28 +76,28 @@ public:
 
 	void use_prefix(std::string pref);
 
-	boost::circular_buffer<std::string> *messages_buffer;
-
+	std::string *messages_buffer;
+	bool print;
+	bool save;
+	boost::filesystem::path file_path;
 private:
 	int i;
 	int log_length;
-	bool print;
-	bool save;
 	bool add_time;
 	bool add_prefix;
 	std::string prefix;
-	boost::filesystem::path file_path;
+	
 	mutable boost::mutex mut;
 	threading_utils *thread_util;
 
 	// current_message;
-	std::map<boost::thread::id, boost::shared_ptr<std::stringstream> > threads_pool;
+	std::map<boost::thread::id, boost::shared_ptr<std::ostringstream> > threads_pool;
 
 	void is_filled();
 
-	boost::shared_ptr<std::stringstream> find_stream(boost::thread::id thread_id);
+	boost::shared_ptr<std::ostringstream> find_stream(boost::thread::id thread_id);
 
-	void clean_stringstream(std::stringstream &message);
+	void clean_ostringstream(std::ostringstream &message);
 	void add_string_into_file( std::string contents, boost::filesystem::path file_path );
 };
 

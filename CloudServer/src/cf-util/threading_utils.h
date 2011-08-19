@@ -26,7 +26,6 @@ public:
 		{
 			into.erase(into.find(variable));
 		}
-
 	}
 
 	template <class first_variable_T,class second_variable_T, class iterator_T>
@@ -41,6 +40,17 @@ public:
 		else
 		{
 			throw std::runtime_error("Not found.");
+		}
+	}
+
+	template <class variable_T,class group_T, class iterator_T>
+	void safe_erase_in_map(variable_T variable, group_T &into)
+	{
+		boost::mutex::scoped_lock lock(mut);
+		iterator_T it = into.find(variable);
+		if (it != into.end())
+		{
+			into.erase(it);
 		}
 	}
 
