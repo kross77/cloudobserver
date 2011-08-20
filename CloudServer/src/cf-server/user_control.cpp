@@ -39,6 +39,12 @@ user_control::user_control()
 
 }
 
+user_control::~user_control()
+{
+	delete general_util;
+	delete threading_util;
+	delete http_util;
+}
 
 
 std::string user_control::is_signed_in_user( std::string session_id_sha256 )
