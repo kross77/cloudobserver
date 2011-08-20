@@ -10,8 +10,7 @@
 #include <boost/filesystem/fstream.hpp>
 #include <boost/date_time.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
-
-#include "threading_utils.h"
+#include <boost/thread.hpp>
 
 class flush_internal;
 
@@ -68,8 +67,12 @@ public:
 			}
 			is_filled();
 		};
-		typedef std::map<boost::thread::id, boost::shared_ptr<std::ostringstream> > map_io;
-		thread_util->safe_erase_in_map<boost::thread::id, map_io, map_io::iterator>(boost::this_thread::get_id(), threads_pool);
+		
+		{
+			boost::mutex::scoped_lock lock(mut_threads_pool);
+			threads_pool.erase(boost::this_thread::get_id());
+		};
+
 		return *this;
 	}
 
@@ -89,7 +92,7 @@ private:
 	std::string prefix;
 	
 	mutable boost::mutex mut;
-	threading_utils *thread_util;
+	mutable boost::mutex mut_threads_pool;
 
 	// current_message;
 	std::map<boost::thread::id, boost::shared_ptr<std::ostringstream> > threads_pool;
