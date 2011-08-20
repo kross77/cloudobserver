@@ -38,7 +38,7 @@ void log_util::use_prefix(std::string pref)
 
 void log_util::is_filled()
 {
-	if (i >= messages_buffer->capacity())
+	if (i >= log_length)
 	{
 		if (save)
 		{
