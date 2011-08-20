@@ -21,7 +21,7 @@ class server
 {
 public:
 	server(boost::property_tree::ptree config);
-	virtual ~server();
+	~server();
 	void acceptor_loop();
 	boost::property_tree::ptree get_configuration();
 	server_utils *util;
