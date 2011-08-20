@@ -20,7 +20,6 @@
 
 boost::program_options::options_description desc("Allowed options");
 server *s;
-server_utils su;
 boost::property_tree::ptree server_config;
 bool server_started = false, server_config_was_set = false;
 std::string default_configuration_file_name = "config.xml";
