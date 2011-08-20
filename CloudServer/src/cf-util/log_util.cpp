@@ -2,7 +2,6 @@
 
 log_util::log_util( int buffer_length, bool do_print)
 {
-	this->thread_util = new threading_utils();
 	this->i = 0;
 	this->log_length = buffer_length;
 	this->messages_buffer = new std::string[log_length];
@@ -14,7 +13,6 @@ log_util::log_util( int buffer_length, bool do_print)
 
 log_util::log_util( int buffer_length, bool do_print, bool do_save, boost::filesystem::path save_file_path)
 {
-	this->thread_util = new threading_utils();
 	this->i = 0;
 	this->log_length = buffer_length;
 	this->messages_buffer = new std::string[log_length];
@@ -52,18 +50,11 @@ void log_util::is_filled()
 
 boost::shared_ptr<std::ostringstream> log_util::find_stream(boost::thread::id thread_id)
 {
-	typedef std::map<boost::thread::id, boost::shared_ptr<std::ostringstream> > map_ts;
-	typedef std::pair<boost::thread::id, boost::shared_ptr<std::ostringstream> > pair_ts;
-	try
-	{
-		return thread_util->safe_search_in_map<boost::thread::id, boost::shared_ptr<std::ostringstream>, map_ts::iterator>(thread_id, threads_pool);
-	}
-	catch(std::exception &e)
-	{
-		boost::shared_ptr<std::ostringstream> thread_stream(new std::ostringstream());
-		thread_util->safe_insert<pair_ts, map_ts>(std::make_pair(thread_id, thread_stream), threads_pool);
-		return thread_stream;
-	}
+	boost::mutex::scoped_lock lock(mut_threads_pool);
+	boost::shared_ptr<std::ostringstream> result = threads_pool[thread_id];
+	if (result == 0)
+		result = boost::shared_ptr<std::ostringstream>(new std::ostringstream());
+	return result;
 }
 
 void log_util::clean_ostringstream(std::ostringstream &message)
