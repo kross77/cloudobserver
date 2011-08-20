@@ -11,6 +11,9 @@
 #include <boost/make_shared.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 
+//Thread safe logging
+#include <log_util.h>
+
 #include "server_utils.h"
 #include "user_control.h"
 

@@ -31,6 +31,8 @@
 
 //containers thread safe operations
 #include <threading_utils.h>
+//Thread safe logging
+#include <log_util.h>
 
 class server_utils
 {
@@ -111,6 +113,7 @@ public:
 
 	threading_utils *tread_util; 
 	server_description description;
+	log_util *warning, *info, *error;
 
 private:
 
