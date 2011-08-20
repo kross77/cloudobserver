@@ -2,6 +2,14 @@
 
 server_utils::server_utils()
 {
+	error = new log_util(200, true, true, "log.txt");
+	error->use_prefix("error: ");
+	error->use_time();
+	warning = new log_util(200, true, true, "log.txt");
+	warning->use_prefix("warning: ");
+	warning->use_time();
+	info = new log_util(200, true, true, "log.txt");
+
 	util = new extension_utils();
 	tread_util = new threading_utils();
 	tread_util_local = new threading_utils();
@@ -61,19 +69,19 @@ std::map<std::string, boost::shared_ptr<server_utils::service_container> > serve
 		try
 		{
 			service_name = individual_service_tree.get<std::string>(tag_service_name); // Will throw error if not defined
-			std::cout << std::endl << "Service name: " << service_name << std::endl;
+			*info << std::endl << "Service name: " << service_name << log_util::endl;
 
 			service_library_name = individual_service_tree.get<std::string>(tag_library_name); // Will throw error if not defined
 			one_description->library_name = service_library_name;
-			std::cout << "Library name: " << service_library_name << std::endl;
+			*info << "Library name: " << service_library_name << log_util::endl;
 
 			service_class_name = individual_service_tree.get<std::string>(tag_class_name); // Will throw error if not defined
 			one_description->class_name = service_class_name;
-			std::cout << "Class name: " << service_class_name << std::endl;
+			*info << "Class name: " << service_class_name << log_util::endl;
 		}
 		catch(std::exception &e)
 		{
-			std::cout << std::endl << "Parsing service library, class or name error in service: " << service_name << std::endl;
+			*error << std::endl << "Parsing service library, class or name error in service: " << service_name << log_util::endl;
 			continue;
 		}
 
@@ -84,7 +92,7 @@ std::map<std::string, boost::shared_ptr<server_utils::service_container> > serve
 		int service_price = service_properties_tree.get<int>(tag_default_price, default_price);
 		one_description->default_price = service_price;
 		if(service_price != default_price){
-			std::cout << "Service price: " << service_price << std::endl;
+			*info << "Service price: " << service_price << log_util::endl;
 		}
 
 		BOOST_FOREACH(boost::property_tree::ptree::value_type &va,
@@ -92,28 +100,28 @@ std::map<std::string, boost::shared_ptr<server_utils::service_container> > serve
 		{
 			if (va.first == tag_url_equals)
 				one_description->set_of_url_rules.push_back(std::string(va.second.data()));
-			std::cout << "Required url: " << va.second.data() << std::endl;
+			*info << "Required url: " << va.second.data() << log_util::endl;
 		}
 
 		BOOST_FOREACH(boost::property_tree::ptree::value_type &va,
 			service_properties_tree.get_child(tag_arguments, server_utils::empty_class<boost::property_tree::ptree>()))
 		{
 			one_description->set_of_arguments_rules.insert(std::pair<std::string, std::string>( va.first.data(), va.second.data() ) );
-			std::cout << "Required argument: " << va.first.data() << " : " << va.second.data() <<  std::endl;
+			*info << "Required argument: " << va.first.data() << " : " << va.second.data() <<  log_util::endl;
 		}
 
 		BOOST_FOREACH(boost::property_tree::ptree::value_type &vh,
 			service_properties_tree.get_child(tag_headers, server_utils::empty_class<boost::property_tree::ptree>()))
 		{
 			one_description->set_of_header_rules.insert(std::pair<std::string, std::string>(vh.first.data(), vh.second.data()));
-			std::cout << "Required header: " << vh.first.data() << " : " << vh.second.data() <<  std::endl;
+			*info << "Required header: " << vh.first.data() << " : " << vh.second.data() <<  log_util::endl;
 		}
 
 		BOOST_FOREACH(boost::property_tree::ptree::value_type &vp,
 			service_properties_tree.get_child(tag_url_extensions, server_utils::empty_class<boost::property_tree::ptree>()))
 		{
 			one_description->url_extensions.insert(vp.second.data());
-			std::cout << "Supported url extension: " << vp.second.data() <<  std::endl;
+			*info << "Supported url extension: " << vp.second.data() <<  log_util::endl;
 		}
 
 		try{
@@ -125,14 +133,14 @@ std::map<std::string, boost::shared_ptr<server_utils::service_container> > serve
 			}
 			catch (service::not_configurable_exception)
 			{
-				std::cout << "Service '" << service_name << " is not configurable." << std::endl;
+				*warning << "Service '" << service_name << " is not configurable." << log_util::endl;
 			}
 			services_map.insert(std::pair<std::string, boost::shared_ptr<server_utils::service_container> >(service_name, one_description));
 			one_service->start();
 		}
 		catch(std::exception &e)
 		{
-			std::cout << "Error while creating service: " << service_name << std::endl;
+			*error << "error while creating service: " << service_name << log_util::endl;
 		}
 	}
 	return services_map;
@@ -142,25 +150,25 @@ std::map<std::string, boost::shared_ptr<server_utils::service_container> > serve
 server_utils::server_description server_utils::parse_config( boost::property_tree::ptree config )
 {
 	server_utils::server_description server_descr;
-	std::cout << std::endl << "Server description: " << std::endl;
+	*info << std::endl << "Server description: " << log_util::endl;
 
 	server_descr.server_root_path = config.get(tag_path_configuration_server_root_path, boost::filesystem::current_path());
-	std::cout << "Server root path: " << server_descr.server_root_path << std::endl;
+	*info << "Server root path: " << server_descr.server_root_path << log_util::endl;
 
 	server_descr.port = config.get(tag_path_configuration_port, 12345);
-	std::cout << "Server port: " << server_descr.port << std::endl;
+	*info << "Server port: " << server_descr.port << log_util::endl;
 
 	server_descr.database_name = config.get(tag_path_configuration_database, "server.db");
-	std::cout << "Server database: " << server_descr.database_name << std::endl;
+	*info << "Server database: " << server_descr.database_name << log_util::endl;
 
-	std::cout << std::endl << "Request properties prices: " << std::endl;
+	*info << std::endl << "Request properties prices: " << log_util::endl;
 	BOOST_FOREACH(boost::property_tree::ptree::value_type &vh,
 		config.get_child(tag_path_configuration_properties_manager, server_utils::empty_class<boost::property_tree::ptree>()))
 	{
 		try
 		{
 			server_descr.properties_manager_map.insert(std::pair<std::string, int>(vh.first.data(), boost::lexical_cast<int>(vh.second.data())));
-			std::cout << vh.first.data() << " : " << vh.second.data() <<  std::endl;
+			*info << vh.first.data() << " : " << vh.second.data() <<  log_util::endl;
 		}
 		catch(boost::bad_lexical_cast &e)
 		{
@@ -168,9 +176,9 @@ server_utils::server_description server_utils::parse_config( boost::property_tre
 		}
 	}
 	
-	std::cout << std::endl << "Server services: ";
+	*info << std::endl << "Server services: ";
 	server_descr.service_map = server_utils::parse_config_services( config );
-	std::cout << std::endl;
+	*info << log_util::endl;
 
 	return server_descr;
 }
@@ -332,23 +340,23 @@ void server_utils::add_to_services_list( boost::property_tree::ptree config )
 		map_t::iterator mitr = description.service_map.find(service_name);
 		if(mitr != description.service_map.end())
 		{
-			std::cout << std::endl << "Service: " << service_name << " already exists." << std::endl;
+			*warning << std::endl << "Service: " << service_name << " already exists." << log_util::endl;
 			continue;
 		}
-		std::cout << std::endl << "Service name: " << service_name << std::endl;
+		*info << std::endl << "Service name: " << service_name << log_util::endl;
 
 		try{
 			service_library_name = individual_service_tree.get<std::string>(tag_library_name); // Will throw error if not defined
 			one_description->library_name = service_library_name;
-			std::cout << "Library name: " << service_library_name << std::endl;
+			*info << "Library name: " << service_library_name << log_util::endl;
 
 			service_class_name = individual_service_tree.get<std::string>(tag_class_name); // Will throw error if not defined
 			one_description->class_name = service_class_name;
-			std::cout << "Class name: " << service_class_name << std::endl;
+			*info << "Class name: " << service_class_name << log_util::endl;
 		}
 		catch(std::exception &e)
 		{
-			std::cout << std::endl << "Parsing library or class name error in service: " << service_name << std::endl;
+			*error << std::endl << "Parsing library or class name error in service: " << service_name << log_util::endl;
 			continue;
 		}
 
@@ -359,21 +367,21 @@ void server_utils::add_to_services_list( boost::property_tree::ptree config )
 			service_properties_tree.get_child(tag_arguments, server_utils::empty_class<boost::property_tree::ptree>()))
 		{
 			one_description->set_of_arguments_rules.insert(std::pair<std::string, std::string>( va.first.data(), va.second.data() ) );
-			std::cout << "Required argument: " << va.first.data() << " : " << va.second.data() <<  std::endl;
+			*info << "Required argument: " << va.first.data() << " : " << va.second.data() <<  log_util::endl;
 		}
 
 		BOOST_FOREACH(boost::property_tree::ptree::value_type &vh,
 			service_properties_tree.get_child(tag_headers, server_utils::empty_class<boost::property_tree::ptree>()))
 		{
 			one_description->set_of_header_rules.insert(std::pair<std::string, std::string>(vh.first.data(), vh.second.data()));
-			std::cout << "Required header: " << vh.first.data() << " : " << vh.second.data() <<  std::endl;
+			*info << "Required header: " << vh.first.data() << " : " << vh.second.data() <<  log_util::endl;
 		}
 
 		BOOST_FOREACH(boost::property_tree::ptree::value_type &vp,
 			service_properties_tree.get_child(tag_url_extensions, server_utils::empty_class<boost::property_tree::ptree>()))
 		{
 			one_description->url_extensions.insert(vp.second.data());
-			std::cout << "Supported url extension: " << vp.second.data() <<  std::endl;
+			*info << "Supported url extension: " << vp.second.data() <<  log_util::endl;
 		}
 
 		try
@@ -383,7 +391,7 @@ void server_utils::add_to_services_list( boost::property_tree::ptree config )
 		}
 		catch(std::exception &e)
 		{
-			std::cout << "Error while creating service: " << service_name << std::endl;
+			*error << "error while creating service: " << service_name << log_util::endl;
 		}
 	}
 }
@@ -475,7 +483,7 @@ boost::shared_ptr<server_utils::service_container> server_utils::find_service(ht
 	{
 		throw std::runtime_error("Could not find suitable service.");
 	}
-	std::cout << "Found service: " << name << std::endl;
+	*info << "Found service: " << name << log_util::endl;
 	return result;
 }
 

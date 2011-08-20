@@ -2,6 +2,7 @@
 
 server::server(boost::property_tree::ptree config) 
 {
+
 	util = new server_utils();
 	util->description = util->parse_config(config);
 	util->update_properties_manager();
@@ -11,7 +12,7 @@ server::server(boost::property_tree::ptree config)
 
 	this->acceptor_thread = new boost::thread(&server::acceptor_loop, this);
 
-	std::cout << "server created on port: " << util->description.port << std::endl;
+	*(util->info) << "server created on port: " << util->description.port << log_util::endl;
 }
 
 server::~server()
@@ -22,7 +23,7 @@ void server::acceptor_loop(){
 	boost::asio::io_service io_service;
 	int m_nPort = util->description.port;
 	boost::asio::ip::tcp::acceptor acceptor(io_service, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), m_nPort));
-	std::cout << "Waiting for connection..." << std::endl << std::endl;
+	*(util->info) << "Waiting for connection..." << std::endl << log_util::endl;
 	while(true)
 	{
 		try
@@ -30,13 +31,13 @@ void server::acceptor_loop(){
 			boost::shared_ptr<boost::asio::ip::tcp::socket> socket =
 				boost::make_shared<boost::asio::ip::tcp::socket>(boost::ref(io_service));			
 			acceptor.accept(*socket);
-			std::cout << "connection accepted." << std::endl;
+			*(util->info) << "connection accepted." << log_util::endl;
 			user_info(*socket);
 			boost::shared_ptr<boost::thread> p(new boost::thread(&server::request_response_loop, this, socket));
 		}
 		catch(std::exception &e)
 		{
-			std::cout << e.what() << std::endl; //"The parameter is incorrect" exception
+			*(util->error) << e.what() << log_util::endl; //"The parameter is incorrect" exception
 		}
 	}
 }
@@ -54,7 +55,7 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 		}
 		catch (http_request::policy_file_request_exception)
 		{
-			std::cout << "Sending the 'crossdomain.xml' file." << std::endl;
+			*(util->info) << "Sending the 'crossdomain.xml' file." << log_util::endl;
 			std::string policy_file =
 				"<?xml version=\"1.0\"?>\n"
 				"<!DOCTYPE cross-domain-policy SYSTEM \"http://www.macromedia.com/xml/dtds/cross-domain-policy.dtd\">\n"
@@ -66,7 +67,7 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 			return;
 		}
 
-		std::cout << "request url: " << request->url << "\n";
+		*(util->info) << "request url: " << request->url << "\n";
 
 		boost::shared_ptr<http_response> response = boost::make_shared<http_response>();
 		std::ostringstream formatter;
@@ -83,7 +84,7 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 		}
 		catch (std::exception &e)
 		{
-			std::cout << e.what() << std::endl;
+			*(util->error) << e.what() << log_util::endl;
 		}
 
 		boost::shared_ptr<server_utils::service_container> service_cont;
@@ -93,7 +94,7 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 		}
 		catch(std::exception &e)
 		{
-			std::cout << "Could not find service for request." << std::endl;
+			*(util->error) << "Could not find service for request." << log_util::endl;
 			util->tread_util->safe_erase<boost::thread::id, std::set<boost::thread::id> >(boost::this_thread::get_id(),threads_pool);
 			return;
 		}
@@ -102,7 +103,7 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 
 		util->tread_util->safe_insert<boost::thread::id, std::set<boost::thread::id> >(boost::this_thread::get_id(),service_cont->threads_ids);
 
-		std::cout << "ids size: " << service_cont->threads_ids.size() << std::endl;
+		*(util->info) << "ids size: " << service_cont->threads_ids.size() << log_util::endl;
 
 		try
 		{
@@ -110,16 +111,16 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 		}
 		catch(std::exception &e)
 		{
-			std::cout << e.what() << std::endl; //"The parameter is incorrect" exception
+			*(util->error) << e.what() << log_util::endl; //"The parameter is incorrect" exception
 		}
 
 		util->tread_util->safe_erase<boost::thread::id, std::set<boost::thread::id> >(boost::this_thread::get_id(), service_cont->threads_ids);
 
-		std::cout << "connection resolved." << std::endl;
+		*(util->info) << "connection resolved." << log_util::endl;
 	}
 	catch(std::exception &e)
 	{
-		std::cout << e.what() << std::endl; //"The parameter is incorrect" exception
+		*(util->error) << e.what() << log_util::endl; //"The parameter is incorrect" exception
 	}
 	util->tread_util->safe_erase<boost::thread::id, std::set<boost::thread::id> >(boost::this_thread::get_id(),threads_pool);
 }
@@ -131,8 +132,8 @@ void server::user_info(boost::asio::ip::tcp::socket &socket)
 	std::string addr_string = addr.to_string();
 	unsigned short port = remote_endpoint.port();
 
-	std::cout << "User address: " << addr_string << std::endl;
-	std::cout << "User port: " << port << std::endl;
+	*(util->info) << "User address: " << addr_string << log_util::endl;
+	*(util->info) << "User port: " << port << log_util::endl;
 }
 
 boost::property_tree::ptree server::get_configuration()
