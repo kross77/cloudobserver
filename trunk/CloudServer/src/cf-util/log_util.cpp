@@ -51,9 +51,9 @@ void log_util::is_filled()
 boost::shared_ptr<std::ostringstream> log_util::find_stream(boost::thread::id thread_id)
 {
 	boost::mutex::scoped_lock lock(mut_threads_pool);
-	boost::shared_ptr<std::ostringstream> result = threads_pool[thread_id];
-	if (result == 0)
-		result = boost::shared_ptr<std::ostringstream>(new std::ostringstream());
+	boost::shared_ptr<std::ostringstream>& result = threads_pool[thread_id];
+	if (result.get() == 0)
+		result.reset(new std::ostringstream());
 	return result;
 }
 
