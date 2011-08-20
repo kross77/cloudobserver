@@ -4,9 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include <map>
-#include <boost/circular_buffer.hpp>
 #include <boost/shared_ptr.hpp>
-#include <boost/foreach.hpp>
 #include <boost/filesystem/fstream.hpp>
 #include <boost/date_time.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
@@ -101,7 +99,6 @@ private:
 
 	boost::shared_ptr<std::ostringstream> find_stream(boost::thread::id thread_id);
 
-	void clean_ostringstream(std::ostringstream &message);
 	void add_string_into_file( std::string contents, boost::filesystem::path file_path );
 };
 
