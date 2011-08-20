@@ -5,7 +5,7 @@ log_util::log_util( int buffer_length, bool do_print)
 	this->i = 0;
 	this->log_length = buffer_length;
 	this->messages_buffer = new std::string[log_length];
-	this->print = true;
+	this->print = do_print;
 	this->save = false;
 	this->add_prefix = false;
 	this->add_time = false;
@@ -16,12 +16,14 @@ log_util::log_util( int buffer_length, bool do_print, bool do_save, boost::files
 	this->i = 0;
 	this->log_length = buffer_length;
 	this->messages_buffer = new std::string[log_length];
-	this->print = true;
-	this->save = true;
+	this->print = do_print;
+	this->save = do_save;
 	this->add_prefix = false;
 	this->add_time = false;
 	this->file_path = save_file_path;
 }
+
+
 
 void log_util::use_time()
 {
