@@ -24,6 +24,11 @@ boost::property_tree::ptree server_config;
 bool server_started = false, server_config_was_set = false;
 std::string default_configuration_file_name = "config.xml";
 
+void cleanup()
+{
+	delete s;
+}
+
 void print_info()
 {
 	std::cout << "Cloud Server v0.5" << std::endl;
@@ -96,6 +101,7 @@ bool config(std::string config_file_path)
 		if(!server_started)
 		{
 			s = new server(server_config);
+			atexit(cleanup);
 			server_started = true;
 		}
 		else
@@ -162,6 +168,7 @@ void start(boost::property_tree::ptree server_config)
 				std::cout << "Starting server with empty configuration." <<  std::endl;
 				boost::property_tree::ptree server_config;
 				s = new server(server_config);
+				atexit(cleanup);
 			}
 		}
 		catch(std::exception &e)
