@@ -40,7 +40,7 @@ public:
 
 	server_utils();
 
-	virtual ~server_utils(){}
+	~server_utils();
 
 	//Each service provides us with rules
 	struct service_container

@@ -47,6 +47,17 @@ server_utils::server_utils()
 	url_extensions_price = default_price;
 }
 
+server_utils::~server_utils()
+{
+	delete error;
+	delete warning;
+	delete info;
+
+	delete util;
+	delete tread_util;
+	delete tread_util_local;
+}
+
 boost::shared_ptr<service> server_utils::create_service(std::string library_name, std::string class_name_inside_lib, boost::property_tree::ptree config)
 {
 	return util->give_me_class<service, boost::property_tree::ptree>(library_name, class_name_inside_lib, config);
