@@ -17,6 +17,8 @@ server::server(boost::property_tree::ptree config)
 
 server::~server()
 {
+	delete util;
+	delete uac;
 }
 
 void server::acceptor_loop(){
