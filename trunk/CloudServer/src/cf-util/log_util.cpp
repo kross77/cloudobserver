@@ -57,14 +57,6 @@ boost::shared_ptr<std::ostringstream> log_util::find_stream(boost::thread::id th
 	return result;
 }
 
-void log_util::clean_ostringstream(std::ostringstream &message)
-{
-	message.flush();
-	message.clear();
-	message.seekp(0);
-	message.str("");
-}
-
 void log_util::add_string_into_file( std::string contents, boost::filesystem::path file_path )
 {
 	boost::filesystem::ofstream datFile;
