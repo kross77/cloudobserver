@@ -40,7 +40,7 @@ void log_util::is_filled()
 	{
 		if (save)
 		{
-			for(int j = 0; j==i; ++j)
+			for(int j = 0; j < i; ++j)
 				add_string_into_file(messages_buffer[j], this->file_path);
 			
 			i = 0;
@@ -70,7 +70,7 @@ log_util::~log_util()
 	boost::mutex::scoped_lock lock(mut);
 	if (save)
 	{
-		for(int j = 0; j==i; ++j)
+		for(int j = 0; j < i; ++j)
 			add_string_into_file(messages_buffer[j], this->file_path);
 
 		i = 0;
