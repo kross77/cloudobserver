@@ -58,15 +58,16 @@ public:
 		}
 		this_message += this_stream->str();
 		this_message += "\n";
-		boost::mutex::scoped_lock lock(mut);
-		messages_buffer[i] = this_message;
-		i++;
-		if(print)
 		{
-			std::cout << this_message;
-		}
-		is_filled();
-		lock.unlock();
+			boost::mutex::scoped_lock lock(mut);
+			messages_buffer[i] = this_message;
+			i++;
+			if(print)
+			{
+				std::cout << this_message;
+			}
+			is_filled();
+		};
 		typedef std::map<boost::thread::id, boost::shared_ptr<std::ostringstream> > map_io;
 		thread_util->safe_erase_in_map<boost::thread::id, map_io, map_io::iterator>(boost::this_thread::get_id(), threads_pool);
 		return *this;
