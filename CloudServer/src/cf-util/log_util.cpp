@@ -42,15 +42,17 @@ void log_util::is_filled()
 	{
 		if (save)
 		{
+			std::string ls = "";
 			for(int j = 0; j < i; ++j)
-				add_string_into_file(messages_buffer[j], this->file_path);
-			
+				ls += messages_buffer[j];
+
+			add_string_into_file(ls, this->file_path);
 			i = 0;
 		}
 	}
 }
 
-boost::shared_ptr<std::ostringstream> log_util::find_stream(boost::thread::id thread_id)
+boost::shared_ptr<std::ostringstream> log_util::find_stream(std::string thread_id)
 {
 	boost::mutex::scoped_lock lock(mut_threads_pool);
 	boost::shared_ptr<std::ostringstream>& result = threads_pool[thread_id];
@@ -72,9 +74,11 @@ log_util::~log_util()
 	boost::mutex::scoped_lock lock(mut);
 	if (save)
 	{
+		std::string ls = "";
 		for(int j = 0; j < i; ++j)
-			add_string_into_file(messages_buffer[j], this->file_path);
+			ls += messages_buffer[j];
 
+		add_string_into_file(ls, this->file_path);
 		i = 0;
 	}
 }
