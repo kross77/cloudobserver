@@ -9,6 +9,7 @@
 #include <boost/date_time.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/thread.hpp>
+#include <boost/lexical_cast.hpp>
 
 class flush_internal;
 
@@ -26,21 +27,24 @@ public:
 	template <class T>
 	log_util &operator<<(const T &v)
 	{
-		boost::shared_ptr<std::ostringstream> this_stream = find_stream(boost::this_thread::get_id());
+		std::string thread_id = boost::lexical_cast<std::string>(boost::this_thread::get_id());
+		boost::shared_ptr<std::ostringstream> this_stream = find_stream(thread_id);
 		*this_stream << v;
 		return *this;
 	}
 
 	log_util &operator<<(std::ostream&(*f)(std::ostream&)) 
 	{
-		boost::shared_ptr<std::ostringstream> this_stream = find_stream(boost::this_thread::get_id());
+		std::string thread_id = boost::lexical_cast<std::string>(boost::this_thread::get_id());
+		boost::shared_ptr<std::ostringstream> this_stream = find_stream(thread_id);
 		*this_stream << *f;
 		return *this;
 	}
 
 	log_util &operator<<(flush_internal*)
 	{
-		boost::shared_ptr<std::ostringstream> this_stream = find_stream(boost::this_thread::get_id());
+		std::string thread_id = boost::lexical_cast<std::string>(boost::this_thread::get_id());
+		boost::shared_ptr<std::ostringstream> this_stream = find_stream(thread_id);
 		std::string this_message = "";
 		if (add_prefix)
 		{
@@ -68,7 +72,7 @@ public:
 		
 		{
 			boost::mutex::scoped_lock lock(mut_threads_pool);
-			threads_pool.erase(boost::this_thread::get_id());
+			threads_pool.erase(thread_id);
 		};
 
 		return *this;
@@ -93,11 +97,11 @@ private:
 	mutable boost::mutex mut_threads_pool;
 
 	// current_message;
-	std::map<boost::thread::id, boost::shared_ptr<std::ostringstream> > threads_pool;
+	std::map<std::string, boost::shared_ptr<std::ostringstream> > threads_pool;
 
 	void is_filled();
 
-	boost::shared_ptr<std::ostringstream> find_stream(boost::thread::id thread_id);
+	boost::shared_ptr<std::ostringstream> find_stream(std::string thread_id);
 
 	void add_string_into_file( std::string contents, boost::filesystem::path file_path );
 };
