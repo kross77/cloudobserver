@@ -509,12 +509,6 @@ void server_utils::update_properties_manager()
 int server_utils::find_or_null( std::map<std::string, int> map, std::string to_find)
 {
 	typedef std::map<std::string, int> map_si;
-	try
-	{
-		return tread_util_local->safe_search_in_map<std::string, int, map_si::iterator>(to_find, map);
-	}
-	catch(std::exception &e)
-	{
-		return 0;
-	}
+	return tread_util_local->safe_search_in_map<std::string, int, map_si::iterator>(to_find, map);
+	
 }

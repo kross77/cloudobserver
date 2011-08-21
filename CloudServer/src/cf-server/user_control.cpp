@@ -74,8 +74,6 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 		return log_out(std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> >(user_request, service_response));
 	}
 
-	map_ss::iterator has_update = user_request->arguments.find(tag_update);
-
 	map_ss::iterator has_cookie = user_request->headers.find(tag_cookie);
 
 	if (has_cookie != headers_end){
@@ -88,6 +86,12 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 			{
 				std::string session_id = it->second; 
 				std::string user_name  = is_signed_in_user(session_id);
+				if (user_name.empty())
+				{
+					user_request->arguments.insert(std::pair<std::string, std::string>(tag_logout, "true"));
+					return log_out(std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> >(user_request, service_response));
+				}
+				map_ss::iterator has_update = user_request->arguments.find(tag_update);
 				user_request->headers.insert(std::pair<std::string, std::string>(tag_header_email, user_name));
 				if ( has_update != arguments_end)
 				{
