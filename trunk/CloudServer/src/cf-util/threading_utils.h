@@ -22,36 +22,21 @@ public:
 	void safe_erase(variable_T variable, group_T &into)
 	{
 		boost::mutex::scoped_lock lock(mut);
-		if (into.find(variable) != into.end())
-		{
-			into.erase(into.find(variable));
-		}
+		into.erase(into.find(variable));
 	}
 
 	template <class first_variable_T,class second_variable_T, class iterator_T>
 	second_variable_T safe_search_in_map(first_variable_T variable, std::map<first_variable_T, second_variable_T> &into)
 	{
 		boost::mutex::scoped_lock lock(mut);
-		iterator_T return_val = into.find(variable);
-		if (return_val != into.end())
-		{
-			return return_val->second;
-		}
-		else
-		{
-			throw std::runtime_error("Not found.");
-		}
+		return into[variable];
 	}
 
 	template <class variable_T,class group_T, class iterator_T>
 	void safe_erase_in_map(variable_T variable, group_T &into)
 	{
 		boost::mutex::scoped_lock lock(mut);
-		iterator_T it = into.find(variable);
-		if (it != into.end())
-		{
-			into.erase(it);
-		}
+		into.erase(into.find(variable));
 	}
 
 private:
