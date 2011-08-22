@@ -52,23 +52,18 @@ void file_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> 
 					<< "<br/><a href=\"" << http_util->url_encode(request->url) << "\">download</a>";
 				else
 				{
-					std::ostringstream formatter;
-					formatter.imbue(std::locale(std::cout.getloc(), new boost::posix_time::time_facet("%a, %d %b %Y %H:%M:%S GMT")));
-					formatter << target_modified;
-					if (formatter.str() == request->headers["If-Modified-Since"])
+					std::string modified = boost::posix_time::to_iso_extended_string( target_modified );
+					if ( modified == request->headers["If-Modified-Since"])
 					{
 						response->status = 304;
 						response->description = "Not Modified";
 					}
 					else
 					{
-						response->headers.insert(std::pair<std::string, std::string>("Last-Modified", formatter.str()));
+						response->headers.insert(std::pair<std::string, std::string>("Last-Modified", modified	));
 						response->headers.insert(std::pair<std::string, std::string>("Content-Length", boost::lexical_cast<std::string>(target_size)));
 						response->headers.insert(std::pair<std::string, std::string>("Cache-Control", "max-age=" + boost::lexical_cast<std::string>(this->expiration_period.total_seconds())));
-
-						formatter.clear();
-						formatter << boost::posix_time::second_clock::local_time() + this->expiration_period;
-						response->headers.insert(std::pair<std::string, std::string>("Expires", formatter.str()));
+						response->headers.insert(std::pair<std::string, std::string>("Expires", boost::posix_time::to_iso_extended_string( boost::posix_time::second_clock::local_time() + this->expiration_period ) ));
 
 						body << std::ifstream(target.string().c_str(), std::ios::binary).rdbuf();
 						response->body = body.str();
