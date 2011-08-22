@@ -57,6 +57,8 @@ void file_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> 
 					{
 						response->status = 304;
 						response->description = "Not Modified";
+						response->send(*socket);
+						return;
 					}
 					else
 					{
@@ -64,13 +66,21 @@ void file_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> 
 						response->headers.insert(std::pair<std::string, std::string>("Content-Length", boost::lexical_cast<std::string>(target_size)));
 						response->headers.insert(std::pair<std::string, std::string>("Cache-Control", "max-age=" + boost::lexical_cast<std::string>(this->expiration_period.total_seconds())));
 						response->headers.insert(std::pair<std::string, std::string>("Expires", boost::posix_time::to_iso_extended_string( boost::posix_time::second_clock::local_time() + this->expiration_period ) ));
+						response->send(*socket);
 
-						body << std::ifstream(target.string().c_str(), std::ios::binary).rdbuf();
-						response->body = body.str();
+						std::ifstream stream;
+						int buff_length = 8192;
+						char* buffer = new char[buff_length];
+						stream.open( target.string().c_str(), std::ios_base::binary );
+						while (stream)
+						{
+							stream.read(buffer, buff_length);
+							boost::asio::write(*socket, boost::asio::buffer(buffer, stream.gcount()));  
+						}
+						return;
 					}
 
-					response->send(*socket);
-					return;
+
 				}
 			}
 		}
