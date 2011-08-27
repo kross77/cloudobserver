@@ -62,6 +62,7 @@ function cloud.project.useBoost()
 		"boost_thread",
 		"boost_filesystem",
 		"boost_program_options",
+		"boost_date_time",
 		"dl"
 		}
 	end
@@ -73,6 +74,7 @@ function cloud.project.useBoost()
 		"boost_thread",
 		"boost_filesystem",
 		"boost_program_options",
+		"boost_date_time",
 		"dl"
 		}	
 	end 
