@@ -26,7 +26,8 @@ public:
 	~general_utils(){}
 
 	void create_directory( boost::filesystem::path path);
-
+	std::string get_dif_path(boost::filesystem::path base_path, boost::filesystem::path new_path);
+	std::wstring get_dif_path_wstring(boost::filesystem::path base_path, boost::filesystem::path new_path);
 	std::string to_lower(std::string data); // Cross lingual function to make string lowercase.
 	std::string get_sha256( std::string value); // gets SHA256 from string
 	void print_map_contents(std::map <std::string, std::string> data);

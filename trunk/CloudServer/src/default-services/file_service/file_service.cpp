@@ -90,7 +90,7 @@ void file_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> 
 			{
 				body << target << " is a directory containing:";
 				for (boost::filesystem::directory_iterator i(target); i != boost::filesystem::directory_iterator(); ++i)
-					body << "<br/><a href=\"/" << get_dif_path(root_path, (*i)) << "\">" << i->path().filename().string() << "</a>";
+					body << "<br/><a href=\"/" << general_util->get_dif_path(root_path, (*i)) << "\">" << i->path().filename().string() << "</a>";
 
 			}
 			else
@@ -132,20 +132,6 @@ void file_service::save_string_into_file( std::string contents, std::string s_na
 	datFile.open(name, std::ofstream::binary | std::ofstream::trunc | std::ofstream::out	);
 	datFile.write(contents.c_str(), contents.length());
 	datFile.close();
-}
-
-std::string file_service::get_dif_path(boost::filesystem::path base_path, boost::filesystem::path new_path)
-{
-	boost::filesystem::path sdiffpath;
-	boost::filesystem::path stmppath = new_path;
-	while(stmppath != base_path) {
-		sdiffpath = boost::filesystem::path(stmppath.stem().string() + stmppath.extension().string())/ sdiffpath;
-		stmppath = stmppath.parent_path();
-	}
-	std::string diff_path =sdiffpath.string();// boost::lexical_cast<string>(sdiffpath);
-	diff_path = diff_path.substr(0, (diff_path.length()));
-	std::replace(diff_path.begin(), diff_path.end(), '\\', '/');
-	return diff_path;
 }
 
 BOOST_EXTENSION_TYPE_MAP_FUNCTION
