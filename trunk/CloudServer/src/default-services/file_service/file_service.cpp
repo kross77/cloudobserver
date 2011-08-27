@@ -97,6 +97,12 @@ void file_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> 
 					<<   http_util->url_encode(http_util->utf16_to_utf8(general_util->get_dif_path_wstring(root_path, (*i)))) 
 					<< "\">"
 					<< http_util->utf16_to_utf8(i->path().filename().wstring()) << "</a>";
+
+				target /= "./../";
+				body << "<br/><a href=\"/"
+					<<  http_util->url_encode(http_util->utf16_to_utf8(general_util->get_dif_path_wstring(root_path, target)))
+					<< "/\"> up (../) </a>"
+					<< "<br/><a href='/'>site root</a>";
 			}
 			else
 				body << "Error 403! Listing the contents of the " << target.filename() << " directory is forbidden.";
