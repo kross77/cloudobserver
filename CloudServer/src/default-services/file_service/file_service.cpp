@@ -35,7 +35,8 @@ void file_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> 
 
 	request->url = http_util->url_decode(request->url);
 	std::ostringstream body;
-	boost::filesystem::path target = this->root_path / request->url;
+	boost::filesystem::path target = root_path.wstring();
+	target /= http_util->utf8_to_utf16(http_util->url_decode(request->url));
 
 	if (exists(target))
 	{
@@ -88,10 +89,14 @@ void file_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> 
 		{
 			if (show_directory_contents)
 			{
-				body << target << " is a directory containing:";
+				response->headers.insert(std::pair<std::string, std::string>("Content-Type", "Content-Type: text/html; charset=utf-8"));
+				body << http_util->utf16_to_utf8(target.wstring()) << " is a directory containing:" ;
 				for (boost::filesystem::directory_iterator i(target); i != boost::filesystem::directory_iterator(); ++i)
-					body << "<br/><a href=\"/" << general_util->get_dif_path(root_path, (*i)) << "\">" << i->path().filename().string() << "</a>";
-
+					body
+					<< "<br/><a href=\"/"
+					<<   http_util->url_encode(http_util->utf16_to_utf8(general_util->get_dif_path_wstring(root_path, (*i)))) 
+					<< "\">"
+					<< http_util->utf16_to_utf8(i->path().filename().wstring()) << "</a>";
 			}
 			else
 				body << "Error 403! Listing the contents of the " << target.filename() << " directory is forbidden.";
