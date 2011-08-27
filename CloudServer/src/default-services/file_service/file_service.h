@@ -36,7 +36,7 @@ public:
 	virtual void stop(){}
 private:
 	std::string get_user_name(boost::shared_ptr<http_request> request);
-	std::string get_dif_path(boost::filesystem::path base_path, boost::filesystem::path new_path);
+	
 	boost::filesystem::path root_path;
 	bool show_directory_contents;
 	boost::posix_time::time_duration expiration_period;

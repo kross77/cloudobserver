@@ -64,3 +64,31 @@ void general_utils::create_directory( boost::filesystem::path path )
 		}
 	}
 }
+
+std::wstring general_utils::get_dif_path_wstring( boost::filesystem::path base_path, boost::filesystem::path new_path )
+{
+	boost::filesystem::path sdiffpath;
+	boost::filesystem::path stmppath = new_path;
+	while(stmppath != base_path) {
+		sdiffpath = boost::filesystem::path(stmppath.stem().string() + stmppath.extension().string())/ sdiffpath;
+		stmppath = stmppath.parent_path();
+	}
+	std::wstring diff_path =sdiffpath.wstring();// boost::lexical_cast<string>(sdiffpath);
+	diff_path = diff_path.substr(0, (diff_path.length()));
+	std::replace(diff_path.begin(), diff_path.end(), '\\', '/');
+	return diff_path;
+}
+
+std::string general_utils::get_dif_path( boost::filesystem::path base_path, boost::filesystem::path new_path )
+{
+	boost::filesystem::path sdiffpath;
+	boost::filesystem::path stmppath = new_path;
+	while(stmppath != base_path) {
+		sdiffpath = boost::filesystem::path(stmppath.stem().string() + stmppath.extension().string())/ sdiffpath;
+		stmppath = stmppath.parent_path();
+	}
+	std::string diff_path =sdiffpath.string();// boost::lexical_cast<string>(sdiffpath);
+	diff_path = diff_path.substr(0, (diff_path.length()));
+	std::replace(diff_path.begin(), diff_path.end(), '\\', '/');
+	return diff_path;
+}
