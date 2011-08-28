@@ -23,7 +23,8 @@ public:
 		n = threads_number;
 		wait = true;
 		work = new boost::asio::io_service::work(io_service);
-		for (std::size_t i = 0; i < 4; ++i)
+		int cores_number = boost::thread::hardware_concurrency(); 
+		for (std::size_t i = 0; i < cores_number; ++i)
 			threads.create_thread(boost::bind(&boost::asio::io_service::run, &io_service));
 	}
 
