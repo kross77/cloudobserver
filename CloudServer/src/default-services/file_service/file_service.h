@@ -15,8 +15,7 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/filesystem/fstream.hpp>
-
-
+#include <boost/shared_array.hpp>
 // Boost Extension
 #include <boost/extension/extension.hpp>
 #include <boost/extension/factory.hpp>
