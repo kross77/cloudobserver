@@ -71,14 +71,13 @@ void file_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> 
 
 						std::ifstream stream;
 						int buff_length = 8192;
-						char *buffer = new char[buff_length];
+						boost::shared_array<char> buffer( new char[buff_length]);
 						stream.open( target.string().c_str(), std::ios_base::binary );
 						while (stream)
 						{
-							stream.read(buffer, buff_length);
-							boost::asio::write(*socket, boost::asio::buffer(buffer, stream.gcount()));  
+							stream.read(buffer.get(), buff_length);
+							boost::asio::write(*socket, boost::asio::buffer(buffer.get(), stream.gcount()));  
 						}
-						delete[] buffer;
 						stream.close();
 						return;
 					}
