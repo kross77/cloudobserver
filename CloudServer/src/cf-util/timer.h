@@ -1,8 +1,6 @@
 #ifndef TIMER_H
 #define TIMER_H
 
-#include <boost/asio.hpp>
-
 #include <boost/date_time.hpp>
 
 class timer 
