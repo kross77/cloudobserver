@@ -14,6 +14,7 @@
 #include "filters/video_generator/video_generator.h"
 #include "filters/video_generator_rainbow/video_generator_rainbow.h"
 
+#include "utils/graph_runner/graph_runner.h"
 #include "utils/selector/selector.h"
 
 // Application entry point.
@@ -231,12 +232,14 @@ int main(int argc, char* argv[])
 
 	multiplexer_block->connect(transmitter_block);
 
+	graph_runner* graph_runner_block = new graph_runner(1000 / video_frame_rate);
+
 	if (!flag_disable_audio)
 	{
 		if (flag_generate_audio)
-			audio_generator_block->start();
+			graph_runner_block->connect(audio_generator_block);
 		else
-			audio_capturer_block->start();
+			graph_runner_block->connect(audio_capturer_block);
 	}
 
 	if (!flag_disable_video)
@@ -244,13 +247,15 @@ int main(int argc, char* argv[])
 		if (flag_generate_video)
 		{
 			if (flag_rainbow)
-				video_generator_rainbow_block->start();
+				graph_runner_block->connect(video_generator_rainbow_block);
 			else
-				video_generator_block->start();
+				graph_runner_block->connect(video_generator_block);
 		}
 		else
-			video_capturer_block->start();
+			graph_runner_block->connect(video_capturer_block);
 	}
+
+	graph_runner_block->start();
 
 	std::cout << "Type 'exit' and hit enter to stop broadcasting and close the application..." << std::endl;
 	std::string exit;
@@ -259,6 +264,10 @@ int main(int argc, char* argv[])
 		std::cin >> exit;
 		boost::this_thread::sleep(boost::posix_time::milliseconds(250));
 	} while (exit != "exit");
+
+	graph_runner_block->stop();
+	graph_runner_block->disconnect();
+	delete graph_runner_block;
 
 	if (!flag_disable_audio)
 	{

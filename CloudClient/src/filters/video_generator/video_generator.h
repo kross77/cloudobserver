@@ -4,7 +4,6 @@
 // Boost
 #include <boost/asio.hpp>
 #include <boost/date_time.hpp>
-#include <boost/thread.hpp>
 
 // OpenCV
 #include <opencv2/opencv.hpp>
@@ -23,13 +22,10 @@ public:
 	~video_generator();
 	void connect(video_encoder* video_encoder_block);
 	void disconnect();
-	void start();
-	void stop();
+	void send();
 
 	class internal_exception: public std::exception { };
 private:
-	void generation_loop();
-
 	int width;
 	int height;
 	int frame_rate;
@@ -40,8 +36,6 @@ private:
 	IplImage* resized_frame;
 
 	ffmpeg::AVFrame* frame;
-
-	boost::thread* generation_thread;
 
 	video_encoder* video_encoder_block;
 };

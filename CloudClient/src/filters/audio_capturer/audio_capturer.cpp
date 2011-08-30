@@ -26,7 +26,7 @@ audio_capturer::audio_capturer(int audio_sample_rate, int audio_format, int capt
 	this->buffer = new ALchar[this->sample_rate * this->format_multiplier];
 
 	this->capture_device = alcCaptureOpenDevice(NULL, this->sample_rate, this->format, this->sample_rate);
-	this->capture_thread = NULL;
+	alcCaptureStart(this->capture_device);
 
 	this->audio_player_block = NULL;
 	this->audio_encoder_block = NULL;
@@ -34,6 +34,8 @@ audio_capturer::audio_capturer(int audio_sample_rate, int audio_format, int capt
 
 audio_capturer::~audio_capturer()
 {
+	alcCaptureStop(this->capture_device);
+
 #if defined(WIN) && defined(AL_LIBTYPE_STATIC)
 	alcRelease();
 #endif
@@ -55,30 +57,35 @@ void audio_capturer::disconnect()
 	this->audio_encoder_block = NULL;
 }
 
-void audio_capturer::start()
+void audio_capturer::send()
 {
-	alcCaptureStart(this->capture_device);
+	int captured_samples;
+	do
+	{
+		alcGetIntegerv(this->capture_device, ALC_CAPTURE_SAMPLES, 1, &captured_samples);
+	} while (captured_samples < this->capture_size);
 
-	this->capture_thread = new boost::thread(&audio_capturer::capture_loop, this);
-}
+	alcCaptureSamples(this->capture_device, this->buffer, this->capture_size);
 
-void audio_capturer::stop()
-{
-	this->capture_thread->interrupt();
+	if (this->audio_player_block != NULL)
+		this->audio_player_block->send(this->buffer, this->capture_size * this->format_multiplier);
 
-	alcCaptureStop(this->capture_device);
+	if (this->audio_encoder_block != NULL)
+		this->audio_encoder_block->send(this->buffer, this->capture_size * this->format_multiplier);
 }
 
 void audio_capturer::set_capture_device(int capture_device_index)
 {
 	std::vector<std::string> capture_devices = get_capture_devices();
 
+	alcCaptureStop(this->capture_device);
 	alcCaptureCloseDevice(this->capture_device);
 
 	if (capture_device_index == 0)
 		this->capture_device = alcCaptureOpenDevice(NULL, this->sample_rate, this->format, this->sample_rate);
 	else
 		this->capture_device = alcCaptureOpenDevice((ALCchar*)capture_devices[capture_device_index - 1].c_str(), this->sample_rate, this->format, this->sample_rate);
+	alcCaptureStart(this->capture_device);
 }
 
 void audio_capturer::set_capture_size(int capture_size)
@@ -122,25 +129,4 @@ std::vector<std::string> audio_capturer::get_capture_devices()
 #endif
 
 	return capture_devices;
-}
-
-void audio_capturer::capture_loop()
-{
-	int captured_samples;
-	while (true)
-	{
-		alcGetIntegerv(this->capture_device, ALC_CAPTURE_SAMPLES, 1, &captured_samples);
-
-		if (captured_samples >= this->capture_size)
-		{
-			alcCaptureSamples(this->capture_device, this->buffer, this->capture_size);
-
-			if (this->audio_player_block != NULL)
-				this->audio_player_block->send(this->buffer, this->capture_size * this->format_multiplier);
-
-			if (this->audio_encoder_block != NULL)
-				this->audio_encoder_block->send(this->buffer, this->capture_size * this->format_multiplier);
-		}
-		boost::this_thread::sleep(boost::posix_time::milliseconds(1000 * this->capture_size / this->sample_rate));
-	}
 }
