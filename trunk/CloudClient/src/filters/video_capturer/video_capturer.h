@@ -3,7 +3,6 @@
 
 // Boost
 #include <boost/asio.hpp>
-#include <boost/thread.hpp>
 
 // OpenCV
 #include <opencv2/opencv.hpp>
@@ -44,16 +43,13 @@ public:
 	void connect(line_segment_detector* line_segment_detector_block);
 	void connect(video_encoder* video_encoder_block);
 	void disconnect();
-	void start();
-	void stop();
+	void send();
 	void set_capture_device(int capture_device_index);
 
 	static std::vector<std::string> get_capture_devices();
 
 	class internal_exception: public std::exception { };
 private:
-	void capture_loop();
-
 	int width;
 	int height;
 	int frame_rate;
@@ -64,7 +60,6 @@ private:
 	ffmpeg::AVFrame* frame;
 
 	CvCapture* capture_device;
-	boost::thread* capture_thread;
 
 	line_segment_detector* line_segment_detector_block;
 	video_encoder* video_encoder_block;

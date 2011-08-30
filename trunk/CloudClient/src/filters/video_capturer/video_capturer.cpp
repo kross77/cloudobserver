@@ -16,7 +16,6 @@ video_capturer::video_capturer(int video_width, int video_height, int video_fram
 	avpicture_fill((AVPicture*)frame, frame_buffer, PIX_FMT_BGR24, this->width, this->height);
 
 	this->capture_device = NULL;
-	this->capture_thread = NULL;
 
 	this->line_segment_detector_block = NULL;
 	this->video_encoder_block = NULL;
@@ -48,14 +47,25 @@ void video_capturer::disconnect()
 	this->video_encoder_block = NULL;
 }
 
-void video_capturer::start()
+void video_capturer::send()
 {
-	this->capture_thread = new boost::thread(&video_capturer::capture_loop, this);
-}
+	this->captured_frame = cvQueryFrame(this->capture_device);
+	cvResize(this->captured_frame, this->resized_frame);
 
-void video_capturer::stop()
-{
-	this->capture_thread->interrupt();
+	if (this->line_segment_detector_block != NULL)
+		this->line_segment_detector_block->send(this->resized_frame);
+
+	char* buffer = (char*)this->frame->data[0];
+	for (int i = 0; i < this->resized_frame->imageSize; i += 3)
+	{
+		buffer[2] = this->resized_frame->imageData[i];
+		buffer[1] = this->resized_frame->imageData[i + 1];
+		buffer[0] = this->resized_frame->imageData[i + 2];
+		buffer += 3;
+	}
+
+	if (this->video_encoder_block != NULL)
+		this->video_encoder_block->send(this->frame);
 }
 
 void video_capturer::set_capture_device(int capture_device_index)
@@ -239,30 +249,4 @@ std::vector<std::string> video_capturer::get_capture_devices()
 #endif
 
 	return capture_devices;
-}
-
-void video_capturer::capture_loop()
-{
-	while (true)
-	{
-		this->captured_frame = cvQueryFrame(this->capture_device);
-		cvResize(this->captured_frame, this->resized_frame);
-
-		if (this->line_segment_detector_block != NULL)
-			this->line_segment_detector_block->send(this->resized_frame);
-
-		char* buffer = (char*)this->frame->data[0];
-		for (int i = 0; i < this->resized_frame->imageSize; i += 3)
-		{
-			buffer[2] = this->resized_frame->imageData[i];
-			buffer[1] = this->resized_frame->imageData[i + 1];
-			buffer[0] = this->resized_frame->imageData[i + 2];
-			buffer += 3;
-		}
-
-		if (this->video_encoder_block != NULL)
-			this->video_encoder_block->send(this->frame);
-
-		boost::this_thread::sleep(boost::posix_time::milliseconds(1000 / this->frame_rate));
-	}
 }

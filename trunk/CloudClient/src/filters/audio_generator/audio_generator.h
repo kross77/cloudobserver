@@ -1,9 +1,6 @@
 #ifndef AUDIO_GENERATOR_H
 #define AUDIO_GENERATOR_H
 
-// Boost
-#include <boost/thread.hpp>
-
 #include "../audio_player/audio_player.h"
 #include "../audio_encoder/audio_encoder.h"
 
@@ -25,22 +22,22 @@ public:
 	void connect(audio_player* audio_player_block);
 	void connect(audio_encoder* audio_encoder_block);
 	void disconnect();
-	void start();
-	void stop();
+	void send();
 	void set_generation_size(int generation_size);
 
 	class internal_exception: public std::exception { };
 private:
-	void generation_loop();
-
 	int sample_rate;
 	int format;
 	int generation_size;
+	double angular_frequency;
+
+	int amplitude;
+	int frequency;
+	int time;
 
 	int format_multiplier;
 	char* buffer;
-
-	boost::thread* generation_thread;
 
 	audio_player* audio_player_block;
 	audio_encoder* audio_encoder_block;

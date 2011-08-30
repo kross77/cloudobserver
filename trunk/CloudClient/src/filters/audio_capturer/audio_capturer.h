@@ -1,9 +1,6 @@
 #ifndef AUDIO_CAPTURER_H
 #define AUDIO_CAPTURER_H
 
-// Boost
-#include <boost/thread.hpp>
-
 #include "../audio_player/audio_player.h"
 #include "../audio_encoder/audio_encoder.h"
 
@@ -25,8 +22,7 @@ public:
 	void connect(audio_player* audio_player_block);
 	void connect(audio_encoder* audio_encoder_block);
 	void disconnect();
-	void start();
-	void stop();
+	void send();
 	void set_capture_device(int capture_device_index);
 	void set_capture_size(int capture_size);
 
@@ -34,8 +30,6 @@ public:
 
 	class internal_exception: public std::exception { };
 private:
-	void capture_loop();
-
 	ALCuint sample_rate;
 	ALCenum format;
 	int capture_size;
@@ -44,7 +38,6 @@ private:
 	ALchar* buffer;
 
 	ALCdevice* capture_device;
-	boost::thread* capture_thread;
 
 	audio_player* audio_player_block;
 	audio_encoder* audio_encoder_block;
