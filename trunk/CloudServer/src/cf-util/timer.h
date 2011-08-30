@@ -3,17 +3,6 @@
 
 #include <boost/asio.hpp>
 
-#ifdef WIN
-#include "Windows.h"
-#define _USE_32_BIT_TIME_T
-#elif defined LIN
-#include <unistd.h>
-#elif defined MAC
-#include <unistd.h> // probably...
-#else
-#error "unknown platform";
-#endif
-
 #include <boost/date_time.hpp>
 
 class timer 
