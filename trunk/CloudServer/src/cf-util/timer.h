@@ -6,17 +6,9 @@
 class timer
 {
 public:
-	timer() : start_time(boost::posix_time::microsec_clock::local_time()) { }
-
-	void restart()
-	{
-		start_time = boost::posix_time::microsec_clock::local_time();
-	}
-
-	boost::posix_time::time_duration elapsed() const
-	{
-		return boost::posix_time::microsec_clock::local_time() - start_time;
-	}
+	timer();
+	void restart();
+	boost::posix_time::time_duration elapsed() const;
 private:
 	boost::posix_time::ptime start_time;
 };
