@@ -130,3 +130,33 @@ std::vector<std::string> audio_capturer::get_capture_devices()
 
 	return capture_devices;
 }
+
+void audio_capturer::set_synchronization_callback(boost::function<void ()> synchronization_callback)
+{
+	this->synchronization_callback = synchronization_callback;
+}
+
+void audio_capturer::set_synchronization_period(int synchronization_period) { }
+
+void audio_capturer::start()
+{
+	this->synchronization_thread = boost::shared_ptr<boost::thread>(new boost::thread(&audio_capturer::synchronization_loop, this));
+}
+
+void audio_capturer::stop()
+{
+	this->synchronization_thread->interrupt();
+}
+
+void audio_capturer::synchronization_loop()
+{
+	int captured_samples;
+	while (true)
+	{
+		do
+		{
+			alcGetIntegerv(this->capture_device, ALC_CAPTURE_SAMPLES, 1, &captured_samples);
+		} while (captured_samples < this->capture_size);
+		this->synchronization_callback();
+	}
+}
