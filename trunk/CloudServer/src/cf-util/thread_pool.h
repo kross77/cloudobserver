@@ -42,7 +42,6 @@ public:
 		for (std::size_t i = 0; i < cores_number; ++i)
 		{
 			boost::shared_ptr<boost::thread> internal_thread;
-			boost::packaged_task<void> internal_task_w(boost::bind(&thread_pool::internal_run, this, internal_thread));
 			internal_thread = boost::shared_ptr<boost::thread>( new boost::thread(boost::bind(&thread_pool::internal_run, this, internal_thread)));
 			internal_threads.add(internal_thread);
 		}
