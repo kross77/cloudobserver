@@ -128,18 +128,24 @@ int main(int argc, char* argv[])
 	if (!flag_disable_video && !flag_generate_video && (video_capture_device == -1))
 		video_capture_device = selector::simple_select(video_capturer::get_capture_devices(), "Please, select the video capture device:");
 
+	synchronizer* synchronizer_block = NULL;
+
 	audio_capturer* audio_capturer_block = NULL;
 	audio_encoder* audio_encoder_block = NULL;
 	audio_generator* audio_generator_block = NULL;
 	audio_player* audio_player_block = NULL;
 	line_segment_detector* line_segment_detector_block = NULL;
 	multiplexer* multiplexer_block = NULL;
-	synchronizer* synchronizer_block = NULL;
+	simple_synchronizer* simple_synchronizer_block = NULL;
 	transmitter* transmitter_block = NULL;
 	video_capturer* video_capturer_block = NULL;
 	video_encoder* video_encoder_block = NULL;
 	video_generator* video_generator_block = NULL;
 	video_generator_rainbow* video_generator_rainbow_block = NULL;
+
+	// Use the 'simple_synchronizer' by default.
+	simple_synchronizer_block = new simple_synchronizer();
+	synchronizer_block = simple_synchronizer_block;
 
 	// Initialize the transmitter block.
 	transmitter_block = new transmitter();
@@ -234,7 +240,6 @@ int main(int argc, char* argv[])
 
 	multiplexer_block->connect(transmitter_block);
 
-	synchronizer_block = new simple_synchronizer();
 	synchronizer_block->set_synchronization_period(1000 / video_frame_rate);
 	graph_runner* graph_runner_block = new graph_runner(synchronizer_block);
 
