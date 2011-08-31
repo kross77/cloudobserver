@@ -8,7 +8,7 @@
 #include "test_data_structure.h"
 
 template <class map_t_1, class map_t_2>
-class general_map_data_structure_shared_locks: public test_data_structure<map_t_1, map_t_2>
+class general_map_data_structure_shared_locks //: public test_data_structure<map_t_1, map_t_2>
 {
 private:
 
@@ -31,7 +31,7 @@ public:
 	map_t_1 put(map_t_1 key, map_t_2 value) {
 		boost::upgrade_lock<boost::shared_mutex> lock(mut_);
 		boost::upgrade_to_unique_lock<boost::shared_mutex> uniqueLock(lock);
-		_ds.insert(std::pair<int, int>(key,value));
+		_ds.insert(std::pair<map_t_1, map_t_2>(key,value));
 		return key;
 	}
 

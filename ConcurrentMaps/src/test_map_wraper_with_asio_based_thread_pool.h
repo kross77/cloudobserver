@@ -2,7 +2,7 @@
 #define TEST_MAP_WRAPER_WITH_ASIO_BASED_THREAD_POOL_H
 
 #include <iostream>
-
+#include <map>
 #include <boost/asio.hpp>
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_int_distribution.hpp>
@@ -13,7 +13,7 @@
 
 #include "timer.h"
 
-template <class map_wraper_t>
+template <typename  map_wraper_t, typename  map_t_1, typename  map_t_2>
 class test_map_wraper_pooled
 {
 public:
@@ -55,7 +55,7 @@ public:
 		{
 			submit_test(i);
 		}
-		io_service.post(boost::bind(&test_map_wraper_pooled<map_wraper_t>::result, this));
+		io_service.post(boost::bind(&test_map_wraper_pooled<map_wraper_t, map_t_1, map_t_2>::result, this));
 		timerForCaptureFame.restart();
 	}
 
@@ -83,22 +83,45 @@ private:
 	{
 		if (test_type == "int")
 		{
-			io_service.post(boost::bind(&test_map_wraper_pooled<map_wraper_t>::test_int, this, test_number));
+			io_service.post(boost::bind(&test_map_wraper_pooled<map_wraper_t, map_t_1, map_t_2>::test_int, this, test_number));
 		}
+		else if (test_type == "string")
+		{
+			io_service.post(boost::bind(&test_map_wraper_pooled<map_wraper_t, map_t_1, map_t_2>::test_string, this, boost::lexical_cast<std::string>(test_number)));
+		}
+	}
+
+	template< typename  t1, typename  t2>
+	void test(t1 k1, t2 v1)
+	{
+		map_t_1 k = boost::lexical_cast<map_t_1>(k1);
+		map_t_2 v = boost::lexical_cast<map_t_2>(v1);
+
+		Ds.put(k, v);
+		if (Ds.containsKey(k))
+		{
+			Ds.get(k);
+			Ds.get(k);
+			Ds.get(k);
+		}
+		Ds.remove(k);
 	}
 
 	void test_int( int i)
 	{
 		boost::shared_lock<boost::shared_mutex> lock_r(results);
 		boost::shared_lock<boost::shared_mutex> lock(tests);
-		Ds.put(i, i);
-		if (Ds.containsKey(i))
-		{
-			Ds.get(i);
-			Ds.get(i);
-			Ds.get(i);
-		}
-		Ds.remove(i);
+		test<int, int>(i, i);
+	}
+
+	void test_string( std::string s)
+	{
+		s += "abcdefghigklmnop";
+		std::string r = "abcdefghigklmnop" + s;
+
+		boost::shared_lock<boost::shared_mutex> lock_r(results);
+		boost::shared_lock<boost::shared_mutex> lock(tests);
+		test<std::string, std::string>(s, r);
 	}
 
 	void result()
