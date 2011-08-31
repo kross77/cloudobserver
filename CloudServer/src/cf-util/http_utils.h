@@ -72,13 +72,13 @@ public:
 	/* reads std::string with utf8 encoded charecters
 	/* into utf16 encoded std::wstring
 	/************************************************************************/
-	std::wstring http_utils::utf8_to_utf16(const std::string& utf8);
+	std::wstring utf8_to_utf16(const std::string& utf8);
 
 	/************************************************************************/
 	/* reads std::wstring with utf16 encoded charecters
 	/* into utf8 encoded std::string 
 	/************************************************************************/
-	std::string http_utils::utf16_to_utf8(const std::wstring & in);
+	std::string utf16_to_utf8(const std::wstring & in);
 
 private:
 	std::string parse_file_upload_body(std::string contents);
