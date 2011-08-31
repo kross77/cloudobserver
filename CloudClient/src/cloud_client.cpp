@@ -14,6 +14,7 @@
 #include "filters/video_encoder/video_encoder.h"
 #include "filters/video_generator/video_generator.h"
 #include "filters/video_generator_rainbow/video_generator_rainbow.h"
+#include "filters/video_player/video_player.h"
 
 #include "utils/graph_runner/graph_runner.h"
 #include "utils/selector/selector.h"
@@ -30,8 +31,11 @@ int main(int argc, char* argv[])
 	bool flag_echo = false;
 	bool flag_generate_audio = false;
 	bool flag_generate_video = false;
+	bool flag_preview = false;
 	bool flag_rainbow = false;
 	bool flag_lsd = false;
+	int preview_width = -1;
+	int preview_height = -1;
 	std::string server = "";
 	int stream_bitrate = 1048576;
 	std::string username = "";
@@ -58,6 +62,10 @@ int main(int argc, char* argv[])
 					audio_sample_rate = boost::lexical_cast<int>(value);
 				if (key == "--container")
 					container = value;
+				if (key == "--preview-width")
+					preview_width = boost::lexical_cast<int>(value);
+				if (key == "--preview-height")
+					preview_height = boost::lexical_cast<int>(value);
 				if (key == "--server")
 					server = value;
 				if (key == "--stream-bitrate")
@@ -90,6 +98,8 @@ int main(int argc, char* argv[])
 				flag_generate_audio = true;
 			if (arg == "--generate-video")
 				flag_generate_video = true;
+			if (arg == "--preview")
+				flag_preview = true;
 			if (arg == "--rainbow")
 				flag_rainbow = true;
 			if (arg == "--lsd")
@@ -142,6 +152,7 @@ int main(int argc, char* argv[])
 	video_encoder* video_encoder_block = NULL;
 	video_generator* video_generator_block = NULL;
 	video_generator_rainbow* video_generator_rainbow_block = NULL;
+	video_player* video_player_block = NULL;
 
 	// Use the 'simple_synchronizer' by default.
 	simple_synchronizer_block = new simple_synchronizer();
@@ -235,7 +246,17 @@ int main(int argc, char* argv[])
 				video_capturer_block->connect(line_segment_detector_block);
 			}
 			else
+			{
 				video_capturer_block->connect(video_encoder_block);
+
+				if (flag_preview)
+				{
+					video_player_block = new video_player("Cloud Client Preview - " + username,
+						preview_width > 0 ? preview_width : video_width,
+						preview_height > 0 ? preview_height : video_height);
+					video_capturer_block->connect(video_player_block);
+				}
+			}
 		}
 	}
 
@@ -327,6 +348,9 @@ int main(int argc, char* argv[])
 		{
 			video_capturer_block->disconnect();
 			delete video_capturer_block;
+
+			if (flag_preview)
+				delete video_player_block;
 		}
 	}
 
