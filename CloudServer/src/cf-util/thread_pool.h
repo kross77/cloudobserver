@@ -2,7 +2,7 @@
 #define THREAD_POOL_H
 
 #include <exception>
-
+#include <boost/bind.hpp>
 #include <boost/asio.hpp>
 #include <boost/thread.hpp>
 #include <boost/thread/locks.hpp>
@@ -63,13 +63,6 @@ public:
 		tasks.post(boost::bind(&thread_pool::pool_item<task_return_t>, this, pt));
 	}
 
-	template <class task_return_t>
-	void post(boost::shared_ptr<boost::packaged_task<task_return_t> > pt, boost::shared_future<task_return_t> fi)
-	{
-		std::cout <<  threads.size() <<  std::endl;
-		tasks.post(boost::bind(&thread_pool::pool_item<task_return_t>, this, pt, fi));
-	}
-
 private:
 
 	boost::asio::io_service tasks;
@@ -120,9 +113,11 @@ private:
 	template <class task_return_t>
 	void pool_item( boost::shared_ptr< boost::packaged_task<task_return_t> > pt)
 	{
-		boost::shared_future<task_return_t> fi= pt->get_future();
+		boost::shared_ptr < boost::packaged_task<void> > task (  new boost::packaged_task<void> ( boost::bind(&thread_pool::run_item<task_return_t>, this, pt)));
+		boost::unique_future<void> fi= task->get_future();
 
-		internal_tasks.post(boost::bind(&thread_pool::run_item<task_return_t>, this, pt, fi));
+		//internal_tasks.post( *task);
+		internal_tasks.post(boost::bind(&thread_pool::run_item<task_return_t>, this, task));
 
 		if(fi.timed_wait(boost::posix_time::milliseconds(time_limit)))
 		{
@@ -137,24 +132,7 @@ private:
 	}
 
 	template <class task_return_t>
-	void pool_item( boost::shared_ptr< boost::packaged_task<task_return_t> > pt, boost::shared_future<task_return_t> fi)
-	{
-		internal_tasks.post(boost::bind(&thread_pool::run_item<task_return_t>, this, pt, fi));
-
-		if(fi.timed_wait(boost::posix_time::milliseconds(time_limit)))
-		{
-			std::cout << "sucsess function returned: " << fi.get() << std::endl;
-		}
-		else
-		{
-			boost::shared_ptr<boost::thread> thread;
-			thread = boost::shared_ptr<boost::thread>(new boost::thread(boost::bind(&thread_pool::internal_run, this, thread)));
-			internal_threads.add(thread);
-		}
-	}
-
-	template <class task_return_t>
-	void run_item( boost::shared_ptr< boost::packaged_task<task_return_t> > pt, boost::shared_future<task_return_t> fi)
+	void run_item( boost::shared_ptr< boost::packaged_task<task_return_t> > pt)
 	{
 		timer t;
 		t.restart();
