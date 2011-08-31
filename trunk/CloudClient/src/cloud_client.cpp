@@ -8,6 +8,7 @@
 #include "filters/audio_player/audio_player.h"
 #include "filters/line_segment_detector/line_segment_detector.h"
 #include "filters/multiplexer/multiplexer.h"
+#include "filters/simple_synchronizer/simple_synchronizer.h"
 #include "filters/transmitter/transmitter.h"
 #include "filters/video_capturer/video_capturer.h"
 #include "filters/video_encoder/video_encoder.h"
@@ -133,6 +134,7 @@ int main(int argc, char* argv[])
 	audio_player* audio_player_block = NULL;
 	line_segment_detector* line_segment_detector_block = NULL;
 	multiplexer* multiplexer_block = NULL;
+	synchronizer* synchronizer_block = NULL;
 	transmitter* transmitter_block = NULL;
 	video_capturer* video_capturer_block = NULL;
 	video_encoder* video_encoder_block = NULL;
@@ -232,7 +234,9 @@ int main(int argc, char* argv[])
 
 	multiplexer_block->connect(transmitter_block);
 
-	graph_runner* graph_runner_block = new graph_runner(1000 / video_frame_rate);
+	synchronizer_block = new simple_synchronizer();
+	synchronizer_block->set_synchronization_period(1000 / video_frame_rate);
+	graph_runner* graph_runner_block = new graph_runner(synchronizer_block);
 
 	if (!flag_disable_audio)
 	{
