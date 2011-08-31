@@ -129,7 +129,7 @@ private:
 		boost::upgrade_lock<boost::shared_mutex> lock(results);
 		boost::upgrade_to_unique_lock<boost::shared_mutex> uniqueLock(lock);
 
-		std::cout <<  std::endl << "test of " << Ds.name() << " complite;" << std::endl << "test performed on " << n << " items" << std::endl << "test duration: " << timerForCaptureFame.elapsed() << std::endl;
+		std::cout << "test duration: " << timerForCaptureFame.elapsed() << std::endl;
 		wait = false;
 	}
 };
