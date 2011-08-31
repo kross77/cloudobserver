@@ -192,6 +192,7 @@ int main(int argc, char* argv[])
 			audio_capturer_block = new audio_capturer(audio_sample_rate, AL_FORMAT_MONO16, audio_sample_rate / video_frame_rate);
 			audio_capturer_block->set_capture_device(audio_capture_device);
 			audio_capturer_block->connect(audio_encoder_block);
+			synchronizer_block = audio_capturer_block;
 		}
 
 		if (flag_echo)
