@@ -12,8 +12,8 @@ int main()
 	for(int i = 1; i < tests+1; ++i)
 	{
 		std::cout << "number of tasks == number of created threads in this test (number: " << i << ")" << std::endl;
-		test_map_wraper_pooled<general_map_data_structure_shared_locks> GeneralMapTest(threads_n, threads_n);
-		GeneralMapTest.start_tests();
+		test_map_wraper_pooled<general_map_data_structure_shared_locks<int, int> > GeneralMapTest(threads_n, threads_n);
+		GeneralMapTest.start_tests("int");
 		GeneralMapTest.tests_end();
 		std::cout << "test complete" << std::endl <<  std::endl; 
 	}
@@ -21,8 +21,8 @@ int main()
 	for(int i = 1; i < tests+1; ++i)
 	{
 		std::cout << "Thread pool used - number of tasks != number of created threads in this test (number: " << i << ")" << std::endl;
-		test_map_wraper_pooled<general_map_data_structure> GeneralMapTest(threads_n);
-		GeneralMapTest.start_tests();
+		test_map_wraper_pooled<general_map_data_structure<int, int> > GeneralMapTest(threads_n);
+		GeneralMapTest.start_tests("int");
 		GeneralMapTest.tests_end();
 		std::cout << std::endl << "test complete" << std::endl <<  std::endl; 
 	}
@@ -30,8 +30,8 @@ int main()
 	for(int i = 1; i < tests+1; ++i)
 	{
 		std::cout << "number of tasks == number of created threads in this test (number: " << i << ")" << std::endl;
-		test_map_wraper_pooled<general_map_data_structure_shared_locks> GeneralMapTest(threads_n, threads_n);
-		GeneralMapTest.start_tests();
+		test_map_wraper_pooled<general_map_data_structure_shared_locks<int, int> > GeneralMapTest(threads_n, threads_n);
+		GeneralMapTest.start_tests("int");
 		GeneralMapTest.tests_end();
 		std::cout << "test complete" << std::endl <<  std::endl; 
 	}
@@ -39,8 +39,8 @@ int main()
 	for(int i = 1; i < tests+1; ++i)
 	{
 		std::cout << "Thread pool used - number of tasks != number of created threads in this test (number: " << i << ")" << std::endl;
-		test_map_wraper_pooled<general_map_data_structure_shared_locks> GeneralMapTest(threads_n);
-		GeneralMapTest.start_tests();
+		test_map_wraper_pooled<general_map_data_structure_shared_locks<int, int> > GeneralMapTest(threads_n);
+		GeneralMapTest.start_tests("int");
 		GeneralMapTest.tests_end();
 		std::cout << std::endl << "test complete" << std::endl <<  std::endl; 
 	}

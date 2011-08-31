@@ -1,14 +1,15 @@
 #ifndef TEST_DATA_STRUCTURE_H
 #define TEST_DATA_STRUCTURE_H
 
+template <class map_t_1, class map_t_2>
 class test_data_structure 
 {
 public:
 
-	virtual bool containsKey(int key)=0;
-	virtual int get(int key)=0;
-	virtual int put(int key, int value)=0;
-	virtual int remove(int key)=0;
+	virtual bool containsKey(map_t_1 key)=0;
+	virtual map_t_2 get(map_t_1 key)=0;
+	virtual map_t_1 put(map_t_1 key, map_t_2 value)=0;
+	virtual int remove(map_t_1 key)=0;
 
 	virtual int size()=0;
 	virtual const char* name()=0;
