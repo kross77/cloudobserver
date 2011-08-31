@@ -43,9 +43,9 @@ public:
 		threads.join_all();
 	}
 
-	void start_tests()
+	void start_tests(std::string test_types)
 	{
-
+		test_type = test_types;
 		boost::upgrade_lock<boost::shared_mutex> lock(tests);
 		boost::upgrade_to_unique_lock<boost::shared_mutex> uniqueLock(lock);
 
@@ -66,8 +66,9 @@ public:
 			boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
 		}
 	}
-
+	
 private:
+	std::string test_type;
 	int n;
 	bool wait;
 	boost::shared_mutex  tests;
@@ -80,7 +81,10 @@ private:
 
 	void submit_test( int test_number )
 	{
-		io_service.post(boost::bind(&test_map_wraper_pooled<map_wraper_t>::test_int, this, test_number));
+		if (test_type == "int")
+		{
+			io_service.post(boost::bind(&test_map_wraper_pooled<map_wraper_t>::test_int, this, test_number));
+		}
 	}
 
 	void test_int( int i)
