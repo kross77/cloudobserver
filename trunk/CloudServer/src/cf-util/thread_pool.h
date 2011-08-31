@@ -116,7 +116,6 @@ private:
 		boost::shared_ptr < boost::packaged_task<void> > task (  new boost::packaged_task<void> ( boost::bind(&thread_pool::run_item<task_return_t>, this, pt)));
 		boost::unique_future<void> fi= task->get_future();
 
-		//internal_tasks.post( *task);
 		internal_tasks.post(boost::bind(&thread_pool::run_item<task_return_t>, this, task));
 
 		if(fi.timed_wait(boost::posix_time::milliseconds(time_limit)))
