@@ -10,10 +10,15 @@ video_capturer::video_capturer(int video_width, int video_height, int video_fram
 
 	this->captured_frame = NULL;
 	this->resized_frame = NULL;
+	this->ready_resized_frame = NULL;
 
 	this->frame = avcodec_alloc_frame();
 	uint8_t* frame_buffer = (uint8_t*)av_mallocz(avpicture_get_size(PIX_FMT_BGR24, this->width, this->height));
 	avpicture_fill((AVPicture*)frame, frame_buffer, PIX_FMT_BGR24, this->width, this->height);
+
+	this->ready_frame = avcodec_alloc_frame();
+	uint8_t* ready_frame_buffer = (uint8_t*)av_mallocz(avpicture_get_size(PIX_FMT_BGR24, this->width, this->height));
+	avpicture_fill((AVPicture*)ready_frame, ready_frame_buffer, PIX_FMT_BGR24, this->width, this->height);
 
 	this->capture_device = NULL;
 
@@ -29,6 +34,9 @@ video_capturer::~video_capturer()
 
 	av_free(this->frame->data[0]);
 	av_free(this->frame);
+
+	av_free(this->ready_frame->data[0]);
+	av_free(this->ready_frame);
 }
 
 void video_capturer::connect(line_segment_detector* line_segment_detector_block)
@@ -49,23 +57,20 @@ void video_capturer::disconnect()
 
 void video_capturer::send()
 {
-	this->captured_frame = cvQueryFrame(this->capture_device);
-	cvResize(this->captured_frame, this->resized_frame);
-
 	if (this->line_segment_detector_block != NULL)
-		this->line_segment_detector_block->send(this->resized_frame);
-
-	char* buffer = (char*)this->frame->data[0];
-	for (int i = 0; i < this->resized_frame->imageSize; i += 3)
-	{
-		buffer[2] = this->resized_frame->imageData[i];
-		buffer[1] = this->resized_frame->imageData[i + 1];
-		buffer[0] = this->resized_frame->imageData[i + 2];
-		buffer += 3;
-	}
-
+		this->line_segment_detector_block->send(this->ready_resized_frame);
 	if (this->video_encoder_block != NULL)
-		this->video_encoder_block->send(this->frame);
+		this->video_encoder_block->send(this->ready_frame);
+}
+
+void video_capturer::start()
+{
+	this->capture_thread = boost::shared_ptr<boost::thread>(new boost::thread(&video_capturer::capture_loop, this));
+}
+
+void video_capturer::stop()
+{
+	this->capture_thread->interrupt();
 }
 
 void video_capturer::set_capture_device(int capture_device_index)
@@ -94,6 +99,7 @@ void video_capturer::set_capture_device(int capture_device_index)
 
 	this->captured_frame = cvQueryFrame(this->capture_device);
 	this->resized_frame = cvCreateImage(cvSize(this->width, this->height), this->captured_frame->depth, this->captured_frame->nChannels);
+	this->ready_resized_frame = cvCreateImage(cvSize(this->width, this->height), this->captured_frame->depth, this->captured_frame->nChannels);
 }
 
 std::vector<std::string> video_capturer::get_capture_devices()
@@ -249,4 +255,36 @@ std::vector<std::string> video_capturer::get_capture_devices()
 #endif
 
 	return capture_devices;
+}
+
+void video_capturer::capture_loop()
+{
+	timer time;
+	boost::posix_time::time_duration period(boost::posix_time::milliseconds(1000 / this->frame_rate));
+	while (true)
+	{
+		time.restart();
+
+		this->captured_frame = cvQueryFrame(this->capture_device);
+		cvResize(this->captured_frame, this->resized_frame);
+
+		IplImage* swap_resized_frame = this->ready_resized_frame;
+		this->ready_resized_frame = this->resized_frame;
+		this->resized_frame = swap_resized_frame;
+
+		char* buffer = (char*)this->frame->data[0];
+		for (int i = 0; i < this->resized_frame->imageSize; i += 3)
+		{
+			buffer[2] = this->resized_frame->imageData[i];
+			buffer[1] = this->resized_frame->imageData[i + 1];
+			buffer[0] = this->resized_frame->imageData[i + 2];
+			buffer += 3;
+		}
+
+		AVFrame* swap_frame = this->ready_frame;
+		this->ready_frame = this->frame;
+		this->frame = swap_frame;
+
+		boost::this_thread::sleep(period - time.elapsed());
+	}
 }

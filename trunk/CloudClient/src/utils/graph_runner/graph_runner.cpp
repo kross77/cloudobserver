@@ -53,11 +53,17 @@ void graph_runner::disconnect()
 
 void graph_runner::start()
 {
+	if (this->video_capturer_block != NULL)
+		this->video_capturer_block->start();
+
 	this->synchronizer_block->start();
 }
 
 void graph_runner::stop()
 {
+	if (this->video_capturer_block != NULL)
+		this->video_capturer_block->stop();
+
 	this->synchronizer_block->stop();
 }
 
