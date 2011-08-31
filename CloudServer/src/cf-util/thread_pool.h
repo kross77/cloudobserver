@@ -35,8 +35,7 @@ public:
 		for (std::size_t i = 0; i < cores_number; ++i)
 		{
 			boost::shared_ptr<boost::thread> thread;
-			boost::packaged_task<void> task_w(boost::bind(&thread_pool::run, this, thread));
-			thread = boost::shared_ptr<boost::thread>( new boost::thread(std::move(task_w)));
+			thread = boost::shared_ptr<boost::thread>( new boost::thread(boost::bind(&thread_pool::run, this, thread)));
 			threads.add(thread);
 		}
 
@@ -44,7 +43,7 @@ public:
 		{
 			boost::shared_ptr<boost::thread> internal_thread;
 			boost::packaged_task<void> internal_task_w(boost::bind(&thread_pool::internal_run, this, internal_thread));
-			internal_thread = boost::shared_ptr<boost::thread>( new boost::thread(std::move(internal_task_w)));
+			internal_thread = boost::shared_ptr<boost::thread>( new boost::thread(boost::bind(&thread_pool::internal_run, this, internal_thread)));
 			internal_threads.add(internal_thread);
 		}
 
@@ -94,8 +93,7 @@ private:
 		{
 			std::cout << e.what() << std::endl;
 			boost::shared_ptr<boost::thread> thread;
-			boost::packaged_task<void> ptt(boost::bind(&thread_pool::run, this, thread));
-			thread = boost::shared_ptr<boost::thread>(new boost::thread(std::move(ptt)));
+			thread = boost::shared_ptr<boost::thread>(new boost::thread(boost::bind(&thread_pool::run, this, thread)));
 			threads.add(thread);
 			threads.remove(thread_ptr);
 			return;
@@ -134,8 +132,7 @@ private:
 		else
 		{
 			boost::shared_ptr<boost::thread> thread;
-			boost::packaged_task<void> task(boost::bind(&thread_pool::internal_run, this, thread));
-			thread = boost::shared_ptr<boost::thread>(new boost::thread(std::move(task)));
+			thread = boost::shared_ptr<boost::thread>(new boost::thread(boost::bind(&thread_pool::internal_run, this, thread)));
 			internal_threads.add(thread);
 		}
 	}
@@ -152,8 +149,7 @@ private:
 		else
 		{
 			boost::shared_ptr<boost::thread> thread;
-			boost::packaged_task<void> task(boost::bind(&thread_pool::internal_run, this, thread));
-			thread = boost::shared_ptr<boost::thread>(new boost::thread(std::move(task)));
+			thread = boost::shared_ptr<boost::thread>(new boost::thread(boost::bind(&thread_pool::internal_run, this, thread)));
 			internal_threads.add(thread);
 		}
 	}
