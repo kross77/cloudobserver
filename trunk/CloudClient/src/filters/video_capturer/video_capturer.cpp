@@ -23,6 +23,7 @@ video_capturer::video_capturer(int video_width, int video_height, int video_fram
 	this->capture_device = NULL;
 
 	this->line_segment_detector_block = NULL;
+	this->video_player_block = NULL;
 	this->video_encoder_block = NULL;
 
 	this->set_capture_device(0);
@@ -44,6 +45,11 @@ void video_capturer::connect(line_segment_detector* line_segment_detector_block)
 	this->line_segment_detector_block = line_segment_detector_block;
 }
 
+void video_capturer::connect(video_player* video_player_block)
+{
+	this->video_player_block = video_player_block;
+}
+
 void video_capturer::connect(video_encoder* video_encoder_block)
 {
 	this->video_encoder_block = video_encoder_block;
@@ -52,6 +58,7 @@ void video_capturer::connect(video_encoder* video_encoder_block)
 void video_capturer::disconnect()
 {
 	this->line_segment_detector_block = NULL;
+	this->video_player_block = NULL;
 	this->video_encoder_block = NULL;
 }
 
@@ -266,6 +273,8 @@ void video_capturer::capture_loop()
 		time.restart();
 
 		this->captured_frame = cvQueryFrame(this->capture_device);
+		if (this->video_player_block != NULL)
+			this->video_player_block->send(this->captured_frame);
 		cvResize(this->captured_frame, this->resized_frame);
 
 		IplImage* swap_resized_frame = this->ready_resized_frame;

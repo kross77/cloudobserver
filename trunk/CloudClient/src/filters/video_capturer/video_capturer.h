@@ -11,6 +11,7 @@
 #include <opencv2/opencv.hpp>
 
 #include "../line_segment_detector/line_segment_detector.h"
+#include "../video_player/video_player.h"
 #include "../video_encoder/video_encoder.h"
 
 #include "../../3rdparty/ffmpeg/ffmpeg.h"
@@ -46,6 +47,7 @@ public:
 	video_capturer(int video_width, int video_height, int video_frame_rate);
 	~video_capturer();
 	void connect(line_segment_detector* line_segment_detector_block);
+	void connect(video_player* video_player_block);
 	void connect(video_encoder* video_encoder_block);
 	void disconnect();
 	void send();
@@ -73,6 +75,7 @@ private:
 	boost::shared_ptr<boost::thread> capture_thread;
 
 	line_segment_detector* line_segment_detector_block;
+	video_player* video_player_block;
 	video_encoder* video_encoder_block;
 };
 
