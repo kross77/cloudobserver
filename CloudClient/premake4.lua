@@ -280,7 +280,8 @@ function cloud.project.useCV()
 				"libpngd",
 				"libtiffd",
 				"zlibd",
-				"vfw32"
+				"vfw32",
+				"comctl32"
 			}
 		configuration { }
 		
@@ -294,7 +295,8 @@ function cloud.project.useCV()
 				"libpng",
 				"libtiff",
 				"zlib",
-				"vfw32"
+				"vfw32",
+				"comctl32"
 			}
 		configuration { }
 		
