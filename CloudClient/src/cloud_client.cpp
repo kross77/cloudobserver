@@ -335,5 +335,7 @@ int main(int argc, char* argv[])
 	transmitter_block->disconnect();
 	delete transmitter_block;
 
+	delete simple_synchronizer_block;
+
 	return 0;
 }
