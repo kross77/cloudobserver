@@ -18,13 +18,22 @@ class test_map_wraper_pooled
 {
 public:
 
-	test_map_wraper_pooled(int threads_number)
+	test_map_wraper_pooled(int tasks_to_run)
 	{
-		n = threads_number;
+		n = tasks_to_run;
 		wait = true;
 		work = new boost::asio::io_service::work(io_service);
 		int cores_number = boost::thread::hardware_concurrency(); 
 		for (std::size_t i = 0; i < cores_number; ++i)
+			threads.create_thread(boost::bind(&boost::asio::io_service::run, &io_service));
+	}
+
+	test_map_wraper_pooled(int tasks_to_run, int threads_number)
+	{
+		n = threads_number;
+		wait = true;
+		work = new boost::asio::io_service::work(io_service);
+		for (std::size_t i = 0; i < threads_number; ++i)
 			threads.create_thread(boost::bind(&boost::asio::io_service::run, &io_service));
 	}
 
@@ -44,7 +53,7 @@ public:
 
 		for(int i=0; i<n; i++)
 		{
-			io_service.post(boost::bind(&test_map_wraper_pooled<map_wraper_t>::test, this, i));
+			submit_test(i);
 		}
 		io_service.post(boost::bind(&test_map_wraper_pooled<map_wraper_t>::result, this));
 		timerForCaptureFame.restart();
@@ -57,6 +66,7 @@ public:
 			boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
 		}
 	}
+
 private:
 	int n;
 	bool wait;
@@ -68,13 +78,20 @@ private:
 	boost::asio::io_service::work *work;
 	boost::thread_group threads;
 
-	void test( int i)
+	void submit_test( int test_number )
+	{
+		io_service.post(boost::bind(&test_map_wraper_pooled<map_wraper_t>::test_int, this, test_number));
+	}
+
+	void test_int( int i)
 	{
 		boost::shared_lock<boost::shared_mutex> lock_r(results);
 		boost::shared_lock<boost::shared_mutex> lock(tests);
-		Ds.put(i, 0);
+		Ds.put(i, i);
 		if (Ds.containsKey(i))
 		{
+			Ds.get(i);
+			Ds.get(i);
 			Ds.get(i);
 		}
 		Ds.remove(i);
