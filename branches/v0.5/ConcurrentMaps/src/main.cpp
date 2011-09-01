@@ -6,7 +6,7 @@
 int main()
 {
 	int tests = 5;
-	int tasks_n = 1000;
+	int tasks_n = 10000;
 	std::cout << "Number of required tests: " << tests << std::endl << "Number of threads in each test: " << tasks_n << std::endl << "Wait for it..." << std::endl;
 
 	std::cout << std::endl << "----" << std::endl << "Int tests" << std::endl << "----" << std::endl;
@@ -25,7 +25,9 @@ int main()
 		GeneralMapTest.start_tests("int");
 		GeneralMapTest.tests_end();
 	}
+
 	std::cout << std::endl << "----" << std::endl << "String tests" << std::endl << "----" << std::endl;
+
 	std::cout << std::endl << "testing general_map_data_structure:" << std::endl;
 	for(int i = 1; i < tests+1; ++i)
 	{
