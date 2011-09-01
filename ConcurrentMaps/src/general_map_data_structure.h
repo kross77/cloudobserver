@@ -8,7 +8,7 @@
 #include "test_data_structure.h"
 
 template <class map_t_1, class map_t_2>
-class general_map_data_structure//: public test_data_structure<map_t_1, map_t_2>
+class general_map_data_structure: public test_data_structure<map_t_1, map_t_2>
 {
 private:
 
