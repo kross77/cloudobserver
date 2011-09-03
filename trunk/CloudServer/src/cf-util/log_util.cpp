@@ -4,7 +4,6 @@ log_util::log_util( int buffer_length, bool do_print)
 {
 	this->i = 0;
 	this->log_length = buffer_length;
-	this->messages_buffer = new std::string[log_length];
 	this->print = do_print;
 	this->save = false;
 	this->add_prefix = false;
@@ -15,7 +14,6 @@ log_util::log_util( int buffer_length, bool do_print, bool do_save, boost::files
 {
 	this->i = 0;
 	this->log_length = buffer_length;
-	this->messages_buffer = new std::string[log_length];
 	this->print = do_print;
 	this->save = do_save;
 	this->add_prefix = false;
@@ -23,7 +21,45 @@ log_util::log_util( int buffer_length, bool do_print, bool do_save, boost::files
 	this->file_path = save_file_path;
 }
 
+void log_util::write(log_message *message)
+{
+	if (!print && !save)
+		return;
 
+	std::string this_message = "";
+	if (add_prefix)
+	{
+		this_message += this->prefix;
+	}
+	if (add_time)
+	{
+		std::ostringstream formatter;
+		formatter.imbue(std::locale(std::cout.getloc(), new boost::posix_time::time_facet("%a, %d %b %Y %H:%M:%S GMT:")));
+		formatter <<  boost::posix_time::second_clock::local_time();	
+		this_message +=formatter.str();
+	}
+	this_message += message->data.str();
+	this_message += "\n";
+
+	if(print)
+	{
+		std::cout << this_message;
+	}
+
+	if (save)
+	{
+		{
+			boost::mutex::scoped_lock lock(mut);
+			buffer += this_message;
+		};
+		i += this_message.length();
+		if (i >= log_length)
+		{
+			flush();
+			i = 0;
+		}
+	}
+}
 
 void log_util::use_time()
 {
@@ -36,50 +72,22 @@ void log_util::use_prefix(std::string pref)
 	this->prefix = pref;
 }
 
-void log_util::is_filled()
-{
-	if (i >= log_length)
-	{
-		if (save)
-		{
-			std::string ls = "";
-			for(int j = 0; j < i; ++j)
-				ls += messages_buffer[j];
-
-			add_string_into_file(ls, this->file_path);
-			i = 0;
-		}
-	}
-}
-
-boost::shared_ptr<std::ostringstream> log_util::find_stream(std::string thread_id)
-{
-	boost::mutex::scoped_lock lock(mut_threads_pool);
-	boost::shared_ptr<std::ostringstream>& result = threads_pool[thread_id];
-	if (result.get() == 0)
-		result.reset(new std::ostringstream());
-	return result;
-}
-
-void log_util::add_string_into_file( std::string contents, boost::filesystem::path file_path )
+void log_util::flush()
 {
 	boost::filesystem::ofstream datFile;
-	datFile.open(file_path, std::ofstream::binary | std::ofstream::app | std::ofstream::out	);
-	datFile.write(contents.c_str(), contents.length());
+	datFile.open(file_path, std::ofstream::app | std::ofstream::out	);
+	{
+		boost::mutex::scoped_lock lock(mut);
+		datFile.write(buffer.c_str(), buffer.length());
+		buffer.clear();
+	};
 	datFile.close();
 }
 
 log_util::~log_util()
 {
-	boost::mutex::scoped_lock lock(mut);
 	if (save)
-	{
-		std::string ls = "";
-		for(int j = 0; j < i; ++j)
-			ls += messages_buffer[j];
-
-		add_string_into_file(ls, this->file_path);
-		i = 0;
-	}
+		flush();
 }
+
 flush_internal* log_util::endl = 0;
