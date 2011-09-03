@@ -63,7 +63,8 @@ function cloud.project.useBoost()
 		"boost_filesystem",
 		"boost_program_options",
 		"boost_date_time",
-		"dl"
+		"dl",
+		"pthread"
 		}
 	end
 	if os.get() == "macosx" then
@@ -75,7 +76,8 @@ function cloud.project.useBoost()
 		"boost_filesystem",
 		"boost_program_options",
 		"boost_date_time",
-		"dl"
+		"dl",
+		"pthread"
 		}	
 	end 
 end
