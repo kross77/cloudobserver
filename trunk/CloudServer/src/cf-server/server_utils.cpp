@@ -187,9 +187,8 @@ server_utils::server_description server_utils::parse_config( boost::property_tre
 		}
 	}
 	
-	*info << std::endl << "Server services: ";
+	*info << std::endl << "Server services: " << log_util::endl;
 	server_descr.service_map = server_utils::parse_config_services( config );
-	*info << log_util::endl;
 
 	return server_descr;
 }
