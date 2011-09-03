@@ -2,13 +2,13 @@
 
 server_utils::server_utils()
 {
-	error = new log_util(10, true, true, "log.txt");
+	error = new log_util(1024, true, true, "log.txt");
 	error->use_prefix("error: ");
 	error->use_time();
-	warning = new log_util(100, false, true, "log.txt");
+	warning = new log_util(1024 * 8, false, true, "log.txt");
 	warning->use_prefix("warning: ");
 	warning->use_time();
-	info = new log_util(1000, false, true, "log.txt");
+	info = new log_util(1024 * 32, false, true, "log.txt");
 
 	util = new extension_utils();
 	tread_util = new threading_utils();
