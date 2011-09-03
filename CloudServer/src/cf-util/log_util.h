@@ -16,6 +16,33 @@ class flush_internal;
 class log_util
 {
 public:
+	class log_message
+	{
+		friend class log_util;
+	public:
+		explicit log_message(log_util &parent) : parent(parent) { }
+
+		template <class T> log_message &operator<<(const T &v)
+		{
+			data << v;
+			return *this;
+		}
+
+		log_message &operator<<(std::ostream&(*f)(std::ostream&))
+		{
+			data << *f;
+			return *this;
+		}
+
+		void operator<<(flush_internal*)
+		{
+			parent.write(this);
+			delete this; // commit suicide =(
+		}
+	private:
+		log_util &parent;
+		std::ostringstream data;
+	};
 
 	static flush_internal *endl;
 
@@ -25,64 +52,26 @@ public:
 	~log_util();
 	
 	template <class T>
-	log_util &operator<<(const T &v)
+	log_message &operator<<(const T &v)
 	{
-		std::string thread_id = boost::lexical_cast<std::string>(boost::this_thread::get_id());
-		boost::shared_ptr<std::ostringstream> this_stream = find_stream(thread_id);
-		*this_stream << v;
-		return *this;
+		return *(new log_message(*this)) << v;
 	}
 
-	log_util &operator<<(std::ostream&(*f)(std::ostream&)) 
+	log_message &operator<<(std::ostream&(*f)(std::ostream&)) 
 	{
-		std::string thread_id = boost::lexical_cast<std::string>(boost::this_thread::get_id());
-		boost::shared_ptr<std::ostringstream> this_stream = find_stream(thread_id);
-		*this_stream << *f;
-		return *this;
+		return *(new log_message(*this)) << f;
 	}
 
-	log_util &operator<<(flush_internal*)
-	{
-		std::string thread_id = boost::lexical_cast<std::string>(boost::this_thread::get_id());
-		boost::shared_ptr<std::ostringstream> this_stream = find_stream(thread_id);
-		std::string this_message = "";
-		if (add_prefix)
-		{
-			this_message += this->prefix;
-		}
-		if (add_time)
-		{
-			std::ostringstream formatter;
-			formatter.imbue(std::locale(std::cout.getloc(), new boost::posix_time::time_facet("%a, %d %b %Y %H:%M:%S GMT:")));
-			formatter <<  boost::posix_time::second_clock::local_time();	
-			this_message +=formatter.str();
-		}
-		this_message += this_stream->str();
-		this_message += "\n";
-		{
-			boost::mutex::scoped_lock lock(mut);
-			messages_buffer[i] = this_message;
-			i++;
-			if(print)
-			{
-				std::cout << this_message;
-			}
-			is_filled();
-		};
-		
-		{
-			boost::mutex::scoped_lock lock(mut_threads_pool);
-			threads_pool.erase(thread_id);
-		};
+	// No definition is provided to force the 'unresolved external' error when
+	// trying to use this operator with 'endl' argument as it is meaningless.
+	void operator<<(flush_internal* endl);
 
-		return *this;
-	}
+	void write(log_message *message);
 
 	void use_time();
 
 	void use_prefix(std::string pref);
 
-	std::string *messages_buffer;
 	bool print;
 	bool save;
 	boost::filesystem::path file_path;
@@ -92,18 +81,11 @@ private:
 	bool add_time;
 	bool add_prefix;
 	std::string prefix;
-	
+	std::string buffer;
+
 	mutable boost::mutex mut;
-	mutable boost::mutex mut_threads_pool;
 
-	// current_message;
-	std::map<std::string, boost::shared_ptr<std::ostringstream> > threads_pool;
-
-	void is_filled();
-
-	boost::shared_ptr<std::ostringstream> find_stream(std::string thread_id);
-
-	void add_string_into_file( std::string contents, boost::filesystem::path file_path );
+	void flush();
 };
 
 #endif // LOG_UTIL
