@@ -91,10 +91,10 @@ function cloud.project.useopenSSL()
 		links {
 		"libeay32"
 		}
-		cloud.win.addLibFromProgrammFiles("openssl-1.0.0d")
+		cloud.win.addLibFromProgrammFiles("OpenSSL-1.0.0d")
 		if  _OPTIONS["CopySharedLibraries"] then
-			cloud.win.copyDLL("openssl-1.0.0d/lib", "libeay32.dll")
-			cloud.win.copyDLL("openssl-1.0.0d/lib", "ssleay32.dll")
+			cloud.win.copyDLL("OpenSSL-1.0.0d/lib", "libeay32.dll")
+			cloud.win.copyDLL("OpenSSL-1.0.0d/lib", "ssleay32.dll")
 		end
 	end
 	
