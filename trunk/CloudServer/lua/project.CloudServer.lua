@@ -4,8 +4,6 @@ project "CloudServer"
 	location ( "projects/" .. os.get() .. "-" .. action )
 	
 	cloud.project.init()
-	cloud.project.useBoost()
-	cloud.project.useopenSSL()
 	
 	cloud.project.copyConfig()
 	cloud.project.createDumpsFolder()
@@ -25,6 +23,9 @@ project "CloudServer"
 	
 	links { "cf-util" }
 	includedirs { "src/cf-util"}
+
+	cloud.project.useBoost()
+	cloud.project.useopenSSL()
 	
 	files { "src/main.cpp" }
 
