@@ -67,7 +67,7 @@ extract_and_clean()
 		echo_run mkdir $OPENSSL_INSTALL_SUBDIR/include
 	fi
 
-	echo_run cp -r ./include/* ./$OPENSSL_INSTALL_SUBDIR/include/
+	echo_run cp -rL ./include/* ./$OPENSSL_INSTALL_SUBDIR/include/
 	echo_run cp ./libcrypto.a ./$OPENSSL_INSTALL_SUBDIR/lib
 	echo_run cp ./libssl.a ./$OPENSSL_INSTALL_SUBDIR/lib
 }
