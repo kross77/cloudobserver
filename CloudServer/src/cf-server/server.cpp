@@ -70,7 +70,7 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 			return;
 		}
 
-		*(util->info) << "request url: " << request->url << "\n";
+		*(util->info) << "request url: " << request->url << log_util::endl;
 
 		boost::shared_ptr<http_response> response = boost::make_shared<http_response>();
 		std::ostringstream formatter;
