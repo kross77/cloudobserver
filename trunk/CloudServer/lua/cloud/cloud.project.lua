@@ -89,8 +89,7 @@ function cloud.project.useopenSSL()
 	if os.get() == "windows" then
 		defines { "WIN" }
 		links {
-		"libeay32",
-		"ssleay32"
+		"libeay32"
 		}
 		cloud.win.addLibFromProgrammFiles("openssl-1.0.0d")
 		if  _OPTIONS["CopySharedLibraries"] then
@@ -102,7 +101,6 @@ function cloud.project.useopenSSL()
 	if os.get() == "linux" then
 		defines { "LIN" }
 		links {
-		"ssl",
 		"crypto"
 		}
 	end
@@ -110,7 +108,6 @@ function cloud.project.useopenSSL()
 	if os.get() == "macosx" then
 		defines { "MAC" }
 		links {
-		"ssl",
 		"crypto"
 		}
 	end 
