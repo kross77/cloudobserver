@@ -14,11 +14,11 @@
 #include "timer.h"
 
 template <typename  map_wraper_t, typename  map_t_1, typename  map_t_2>
-class test_map_wraper_pooled
+class general_test
 {
 public:
 
-	test_map_wraper_pooled(int tasks_to_run)
+	general_test(int tasks_to_run)
 	{
 		n = tasks_to_run;
 		wait = true;
@@ -28,7 +28,7 @@ public:
 			threads.create_thread(boost::bind(&boost::asio::io_service::run, &io_service));
 	}
 
-	test_map_wraper_pooled(int tasks_to_run, int threads_number)
+	general_test(int tasks_to_run, int threads_number)
 	{
 		n = threads_number;
 		wait = true;
@@ -37,7 +37,7 @@ public:
 			threads.create_thread(boost::bind(&boost::asio::io_service::run, &io_service));
 	}
 
-	~test_map_wraper_pooled()
+	~general_test()
 	{
 		io_service.stop();
 		threads.join_all();
@@ -55,7 +55,7 @@ public:
 		{
 			submit_test(i);
 		}
-		io_service.post(boost::bind(&test_map_wraper_pooled<map_wraper_t, map_t_1, map_t_2>::result, this));
+		io_service.post(boost::bind(&general_test<map_wraper_t, map_t_1, map_t_2>::result, this));
 		timerForCaptureFame.restart();
 	}
 
@@ -83,11 +83,11 @@ private:
 	{
 		if (test_type == "int")
 		{
-			io_service.post(boost::bind(&test_map_wraper_pooled<map_wraper_t, map_t_1, map_t_2>::test_int, this, test_number));
+			io_service.post(boost::bind(&general_test<map_wraper_t, map_t_1, map_t_2>::test_int, this, test_number));
 		}
 		else if (test_type == "string")
 		{
-			io_service.post(boost::bind(&test_map_wraper_pooled<map_wraper_t, map_t_1, map_t_2>::test_string, this, boost::lexical_cast<std::string>(test_number)));
+			io_service.post(boost::bind(&general_test<map_wraper_t, map_t_1, map_t_2>::test_string, this, boost::lexical_cast<std::string>(test_number)));
 		}
 	}
 
