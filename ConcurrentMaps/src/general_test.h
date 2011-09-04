@@ -97,6 +97,9 @@ private:
 		map_t_1 k = boost::lexical_cast<map_t_1>(k1);
 		map_t_2 v = boost::lexical_cast<map_t_2>(v1);
 
+		boost::shared_lock<boost::shared_mutex> lock_r(results);
+		boost::shared_lock<boost::shared_mutex> lock(tests);
+
 		Ds.put(k, v);
 		if (Ds.containsKey(k))
 		{
@@ -109,8 +112,6 @@ private:
 
 	void test_int( int i)
 	{
-		boost::shared_lock<boost::shared_mutex> lock_r(results);
-		boost::shared_lock<boost::shared_mutex> lock(tests);
 		test<int, int>(i, i);
 	}
 
@@ -118,9 +119,6 @@ private:
 	{
 		s += "abcdefghigklmnop";
 		std::string r = "abcdefghigklmnop" + s;
-
-		boost::shared_lock<boost::shared_mutex> lock_r(results);
-		boost::shared_lock<boost::shared_mutex> lock(tests);
 		test<std::string, std::string>(s, r);
 	}
 
