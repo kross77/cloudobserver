@@ -1,7 +1,7 @@
 #include <iostream>
 #include "general_map_data_structure.h"
 #include "general_map_data_structure_shared_locks.h"
-#include "test_map_wraper_with_asio_based_thread_pool.h"
+#include "general_test.h"
 
 int main()
 {
@@ -14,14 +14,14 @@ int main()
 	std::cout << std::endl << "testing general_map_data_structure:" << std::endl;
 	for(int i = 1; i < tests+1; ++i)
 	{
-		test_map_wraper_pooled<general_map_data_structure<int, int>, int, int > GeneralMapTest(tasks_n);
+		general_test<general_map_data_structure<int, int>, int, int > GeneralMapTest(tasks_n);
 		GeneralMapTest.start_tests("int");
 		GeneralMapTest.tests_end();
 	}
 	std::cout << std::endl << "testing general_map_data_structure_shared_locks:" << std::endl;
 	for(int i = 1; i < tests+1; ++i)
 	{
-		test_map_wraper_pooled<general_map_data_structure_shared_locks<int, int>, int, int > GeneralMapTest(tasks_n);
+		general_test<general_map_data_structure_shared_locks<int, int>, int, int > GeneralMapTest(tasks_n);
 		GeneralMapTest.start_tests("int");
 		GeneralMapTest.tests_end();
 	}
@@ -31,14 +31,14 @@ int main()
 	std::cout << std::endl << "testing general_map_data_structure:" << std::endl;
 	for(int i = 1; i < tests+1; ++i)
 	{
-		test_map_wraper_pooled<general_map_data_structure<std::string, std::string>, std::string, std::string > GeneralMapTest(tasks_n);
+		general_test<general_map_data_structure<std::string, std::string>, std::string, std::string > GeneralMapTest(tasks_n);
 		GeneralMapTest.start_tests("string");
 		GeneralMapTest.tests_end();
 	}
 	std::cout << std::endl << "testing general_map_data_structure_shared_locks:" << std::endl;
 	for(int i = 1; i < tests+1; ++i)
 	{
-		test_map_wraper_pooled<general_map_data_structure_shared_locks<std::string, std::string>, std::string, std::string > GeneralMapTest(tasks_n);
+		general_test<general_map_data_structure_shared_locks<std::string, std::string>, std::string, std::string > GeneralMapTest(tasks_n);
 		GeneralMapTest.start_tests("string");
 		GeneralMapTest.tests_end();
 	}
