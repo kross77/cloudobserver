@@ -23,12 +23,12 @@ public:
 		boost::uintmax_t totall_removed = 0;
 		for (std::set<std::string>::iterator i = r.begin(); i != r.end(); ++i) {
 			try{
-			std::map<map_t_1, map_t_2>::iterator it = _ds.find(*i);
-			if (it != _ds.end())
-				totall_removed += it->second->size;
+				std::map<map_t_1, map_t_2>::iterator it = _ds.find(*i);
+				if (it != _ds.end())
+					totall_removed += it->second->size;
 
-			_ds.erase(*i);
-			_queue.erase(std::remove(_queue.begin(), _queue.end(), *i), _queue.end());
+				_ds.erase(*i);
+				_queue.erase(std::remove(_queue.begin(), _queue.end(), *i), _queue.end());
 			}
 			catch(std::exception){}
 		}
@@ -43,7 +43,7 @@ public:
 	map_t_2 find(map_t_1 key)
 	{
 		boost::mutex::scoped_lock lock(mut_);
-	//	std::for_each(_ds.begin(), _ds.end(), [](std::pair<std::string, boost::shared_ptr<fs_file> > s){std::cout << s.first << std::endl;});
+		//	std::for_each(_ds.begin(), _ds.end(), [](std::pair<std::string, boost::shared_ptr<fs_file> > s){std::cout << s.first << std::endl;});
 		std::map<map_t_1, map_t_2>::iterator a = _ds.find(key);
 		if (a != _ds.end())
 		{
