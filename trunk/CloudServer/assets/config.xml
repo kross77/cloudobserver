@@ -17,8 +17,8 @@
 			<class_name>file_service</class_name>
 			<library_name>FileService</library_name>
 			<settings>
-				<root_file_system_directory>htdocs</root_file_system_directory>
-				<show_directory_contents>false</show_directory_contents>
+			<root_file_system_directory>htdocs</root_file_system_directory>
+			<show_directory_contents>true</show_directory_contents>
 			</settings>
 			<properties>
 				<default_price>50</default_price>
@@ -29,10 +29,12 @@
 			<class_name>cloud_service</class_name>
 			<library_name>CloudService</library_name>
 			<settings>
+			<!--
 				<max_streams>10</max_streams>
 				<dumps_location>dumps</dumps_location>
 				<dump_writers>false</dump_writers>
 				<dump_readers>false</dump_readers>
+			-->
 			</settings>
 			<properties>
 				<url>
