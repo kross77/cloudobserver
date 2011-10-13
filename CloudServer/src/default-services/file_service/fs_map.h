@@ -37,7 +37,7 @@ public:
 		}
 
 		output.erase("");
-		
+
 		if (output.size() == 0)
 		{
 			throw std::runtime_error("directory not found");
@@ -51,11 +51,11 @@ public:
 	{
 		std::set<std::string> result;
 		std::set<std::string> old;
-		
+
 		boost::upgrade_lock<boost::shared_mutex> lock(mut_);
 		boost::upgrade_to_unique_lock<boost::shared_mutex> uniqueLock(lock);
 
-		
+
 		for (std::map<std::string, boost::shared_ptr<fs_file> >::iterator mi = _ds.begin(); mi != _ds.end(); ++mi)
 			old.insert(mi->first);
 
