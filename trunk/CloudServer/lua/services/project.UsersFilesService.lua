@@ -7,8 +7,8 @@ project "UsersFilesService"
 	cloud.project.useBoost()
 	cloud.project.useopenSSL()
 
-	links { "sqlite" }
-	includedirs { "3rdparty/sqlite"}
+	links { "boost-sqlite" }
+	includedirs { "3rdparty/boost-sqlite"}
 
 	links { "cf-http" }
 	includedirs { "3rdparty/cf-http" }
