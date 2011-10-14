@@ -13,6 +13,9 @@ project "FileService"
 	links { "cf-util" }
 	includedirs { "src/cf-util"}
 	
+	links { "cf-fs" }
+	includedirs { "src/cf-fs"}
+	
 	includedirs { "service-interface/" }
 	
 	files { "src/default-services/file_service/**"}

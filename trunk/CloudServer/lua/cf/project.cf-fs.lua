@@ -1,26 +1,18 @@
-project "cf-server"
+project "cf-fs"
 	kind "StaticLib"
 	language "C++"
 	location ( "projects/" .. os.get() .. "-" .. action )
-	files { "src/cf-server/**.h", "src/cf-server/**.cpp" }
+	files { "src/cf-fs/**.h", "src/cf-fs/**.cpp" }
 	
 	cloud.project.init()
 	cloud.project.useopenSSL()
 	cloud.project.useBoost()
-
-	links { "sqlite" }
-	includedirs { "3rdparty/sqlite"}	
 	
 	links { "cf-http" }
 	includedirs { "3rdparty/cf-http"}
 	
 	links { "cf-util" }
 	includedirs { "src/cf-util"}
-	
-	links { "cf-fs" }
-	includedirs { "src/cf-fs"}
-	
-	includedirs { "service-interface/" }
 	
 	configuration "gmake"
 		buildoptions { "-fPIC" }

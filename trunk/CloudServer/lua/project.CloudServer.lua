@@ -27,6 +27,9 @@ project "CloudServer"
 	cloud.project.useBoost()
 	cloud.project.useopenSSL()
 	
+	links { "cf-fs" }
+	includedirs { "src/cf-fs"}
+	
 	files { "src/main.cpp" }
 
 	excludes { "src/default-services/**" , "src/cf-util/**", "src/cf-server/**" }
