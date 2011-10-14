@@ -8,8 +8,8 @@ project "cf-server"
 	cloud.project.useopenSSL()
 	cloud.project.useBoost()
 
-	links { "sqlite" }
-	includedirs { "3rdparty/sqlite"}	
+	links { "boost-sqlite" }
+	includedirs { "3rdparty/boost-sqlite"}	
 	
 	links { "cf-http" }
 	includedirs { "3rdparty/cf-http"}

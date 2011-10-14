@@ -1,8 +1,8 @@
-project "sqlite"
+project "boost-sqlite"
 	kind "StaticLib"
 	language "C++"
 	location ( "projects/" .. os.get() .. "-" .. action )
-	files { "3rdparty/sqlite/**.h",  "3rdparty/sqlite/**.c", "3rdparty/sqlite/**.cpp" }
+	files { "3rdparty/boost-sqlite/**.h",  "3rdparty/boost-sqlite/**.c", "3rdparty/boost-sqlite/**.cpp" }
 	
 	cloud.project.init()
 	cloud.project.useBoost()

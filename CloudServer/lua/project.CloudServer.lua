@@ -15,8 +15,8 @@ project "CloudServer"
 	links { "cf-server" }
 	includedirs { "src/cf-server"}
 	
-	links { "sqlite" }
-	includedirs { "3rdparty/sqlite"}	
+	links { "boost-sqlite" }
+	includedirs { "3rdparty/boost-sqlite"}	
 	
 	links { "cf-http" }
 	includedirs { "3rdparty/cf-http"}
