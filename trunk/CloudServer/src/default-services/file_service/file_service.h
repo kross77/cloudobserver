@@ -65,7 +65,7 @@ private:
 
 	fs_map fs;
 	std::set<std::string> new_fs;
-	concurrent_queued_map<std::string, boost::shared_ptr<fs_file> > cached_files;
+	fs_concurrent_queued_map cached_files;
 
 	boost::shared_array<char> cach_file(boost::shared_ptr<fs_file> f);
 	boost::shared_ptr<fs_file> create_file(boost::filesystem::path p);
