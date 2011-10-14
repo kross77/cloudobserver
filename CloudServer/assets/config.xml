@@ -12,6 +12,7 @@
 
 	<!-- List of services to be started on server -->
 	<services>
+
 		<service>
 			<name>File Service</name>
 			<class_name>file_service</class_name>
@@ -24,6 +25,21 @@
 				<default_price>50</default_price>
 			</properties>
 		</service>
+
+		<service>
+			<name>Users Files Service</name>
+			<class_name>users_files_service</class_name>
+			<library_name>UsersFilesService</library_name>
+			<settings>
+			<users_files_directory>ufs</users_files_directory>
+			</settings>
+			<properties>
+				<url_extensions>
+                    <extension>user.file</extension>
+	            </url_extensions>
+			</properties>
+		</service>
+
 		<service>
 			<name>Cloud Service</name>
 			<class_name>cloud_service</class_name>
