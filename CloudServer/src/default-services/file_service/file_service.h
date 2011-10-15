@@ -58,8 +58,8 @@ private:
 	boost::uintmax_t cachable_file_size_limit;
 
 	boost::timer timerFame;
-	int64_t desiredTimeFame;
-	int64_t spendedTimeFame;
+	long long desiredTimeFame;
+	long long spendedTimeFame;
 	boost::posix_time::ptime oldTime;
 	boost::posix_time::ptime nowTime;
 
