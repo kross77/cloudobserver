@@ -13,7 +13,7 @@ file_service::file_service()
 	first_time = true;
 
 	//TODO: make editable from config
-	desiredTimeFame = (int64_t)(5000.0f);
+	desiredTimeFame = (long long)(5000.0f);
 	cach_size_limit = 500000;
 	cachable_file_size_limit = 200000;
 
@@ -91,7 +91,7 @@ void file_service::files_walker()
 		is_dir(root_path, fs, new_fs);
 		first_time=false;
 		current_cach_size -= cached_files.remove_set(fs.compare_and_clean(new_fs));
-		spendedTimeFame = (int64_t)timerFame.elapsed();
+		spendedTimeFame = (long long)timerFame.elapsed();
 		if (spendedTimeFame < desiredTimeFame)
 			boost::this_thread::sleep(boost::posix_time::milliseconds(desiredTimeFame - spendedTimeFame));
 	}
