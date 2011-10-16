@@ -63,10 +63,10 @@ public:
 	virtual ~extension_utils(){}
 	
 	template <class BaseClass, class ConstructorType>
-	std::map<std::string, boost::extensions::factory<BaseClass, ConstructorType> > get_factories (boost::extensions::shared_library & lib);
+	std::map<std::string, boost::extensions::factory<BaseClass, ConstructorType> > get_factories (boost::extensions::shared_library & lib, std::string class_name);
 
 	template <class BaseClass>
-	std::map<std::string, boost::extensions::factory<BaseClass> > get_factories (boost::extensions::shared_library & lib);
+	std::map<std::string, boost::extensions::factory<BaseClass> > get_factories (boost::extensions::shared_library & lib, std::string class_name);
 
 	//Way to get pointer to class with constructor from created by you shared_library object.
 	template <class BaseClass, class ConstructorType>
