@@ -55,6 +55,7 @@ private:
 	void send_uncachable_file(boost::shared_ptr<fs_file> f,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response){}
 	void send_404(std::string encoded_url,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response){}
 
+	CLOUD_SERVICE_AUXILIARIES;
 };
 
 #endif // FILE_SERVICE_H
