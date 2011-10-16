@@ -139,7 +139,8 @@ std::map<std::string, boost::shared_ptr<server_utils::service_container> > serve
 			boost::shared_ptr<service> one_service = util->give_me_class<service>(service_library_name, service_class_name);
 			try
 			{
-				one_service->apply_config(one_description->service_custome_properties_tree);
+				boost::shared_ptr<boost::property_tree::ptree> service_custom_properties_tree(new boost::property_tree::ptree(one_description->service_custome_properties_tree));
+				one_service->apply_config(service_custom_properties_tree);
 				one_description->service_ptr = one_service;
 			}
 			catch (service::not_configurable_exception)

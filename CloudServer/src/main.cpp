@@ -301,7 +301,8 @@ void service_commandor(std::string name)
 						{
 							try
 							{
-								one_service->apply_config(pt);
+								boost::shared_ptr<boost::property_tree::ptree> properties_tree(new boost::property_tree::ptree(pt));
+								one_service->apply_config(properties_tree);
 								std::cout << "Configuration applied." << std::endl;
 							}
 							catch(std::exception &e)
