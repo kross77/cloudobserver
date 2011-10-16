@@ -14,7 +14,7 @@ class service
 {
 public:
 	virtual void service_call(boost::shared_ptr<boost::asio::ip::tcp::socket>, boost::shared_ptr<http_request>, boost::shared_ptr<http_response>) = 0;
-	virtual void apply_config(boost::property_tree::ptree) { throw not_configurable_exception(); };
+	virtual void apply_config(boost::shared_ptr<boost::property_tree::ptree>) { throw not_configurable_exception(); };
 
 	virtual void start() { throw not_startable_exception(); };
 	virtual void stop() { throw not_stopable_exception(); };
