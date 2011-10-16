@@ -340,6 +340,7 @@ void file_service::save_string_into_file( std::string contents, std::string s_na
 
 void file_service::send_cached_file( boost::uintmax_t size, boost::shared_array<char> buffer, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response )
 {
+	response->send(*socket);
 	boost::asio::write(*socket, boost::asio::buffer(buffer.get(), size));
 }
 
@@ -377,6 +378,7 @@ void file_service::send_directory_contents( std::set<std::string> list, boost::s
 
 void file_service::send_uncachable_file( boost::shared_ptr<fs_file> f,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response )
 {
+	response->send(*socket);
 	//std::cout << "I have sent a big file!" << std::endl;
 	boost::shared_lock<boost::shared_mutex> lock_r(f->mutex_);
 	std::ifstream stream;
