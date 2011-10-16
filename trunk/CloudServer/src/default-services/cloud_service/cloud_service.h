@@ -45,6 +45,8 @@ private:
 	bool dump_readers;
 
 	std::map<std::string, cloud_writer*> writers;
+
+	CLOUD_SERVICE_AUXILIARIES;
 };
 
 #endif // CLOUD_SERVICE_H
