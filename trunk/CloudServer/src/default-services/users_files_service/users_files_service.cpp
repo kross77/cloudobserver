@@ -22,7 +22,7 @@ void users_files_service::service_call( boost::shared_ptr<boost::asio::ip::tcp::
 
 }
 
-void users_files_service::apply_config( boost::property_tree::ptree config )
+void users_files_service::apply_config( boost::shared_ptr<boost::property_tree::ptree> config )
 {
-	this->root_path = config.get<std::string>("users_files_directory", this->root_path.string());
+	this->root_path = config->get<std::string>("users_files_directory", this->root_path.string());
 }

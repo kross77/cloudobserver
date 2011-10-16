@@ -160,12 +160,12 @@ void cloud_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket>
 	}
 }
 
-void cloud_service::apply_config(boost::property_tree::ptree config)
+void cloud_service::apply_config(boost::shared_ptr<boost::property_tree::ptree> config)
 {
-	this->max_streams = config.get<int>("max_streams", this->max_streams);
-	this->dumps_location = config.get<std::string>("dumps_location", this->dumps_location.string());
-	this->dump_writers = config.get<bool>("dump_writers", this->dump_writers);
-	this->dump_readers = config.get<bool>("dump_readers", this->dump_readers);
+	this->max_streams = config->get<int>("max_streams", this->max_streams);
+	this->dumps_location = config->get<std::string>("dumps_location", this->dumps_location.string());
+	this->dump_writers = config->get<bool>("dump_writers", this->dump_writers);
+	this->dump_readers = config->get<bool>("dump_readers", this->dump_readers);
 }
 
 bool cloud_service::check_nickname(std::string& nickname)

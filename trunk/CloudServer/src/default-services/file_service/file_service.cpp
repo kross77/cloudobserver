@@ -19,12 +19,12 @@ file_service::file_service()
 
 }
 
-void file_service::apply_config(boost::property_tree::ptree config)
+void file_service::apply_config(boost::shared_ptr<boost::property_tree::ptree> config)
 {
-	this->root_path = config.get<std::string>("root_file_system_directory", this->root_path.string());
+	this->root_path = config->get<std::string>("root_file_system_directory", this->root_path.string());
 	first_time = true;
 	boost::thread workerThread(boost::bind(&file_service::files_walker, this));
-	this->show_directory_contents = config.get<bool>("show_directory_contents", this->show_directory_contents);
+	this->show_directory_contents = config->get<bool>("show_directory_contents", this->show_directory_contents);
 }
 
 boost::shared_array<char> file_service::cach_file( boost::shared_ptr<fs_file> f )
