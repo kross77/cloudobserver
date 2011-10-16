@@ -10,11 +10,24 @@
 // Cloud Forever
 #include <http.h>
 
+// A macro to be included in the declaration of every derived service.
+#define CLOUD_SERVICE_AUXILIARIES \
+	public: \
+	virtual void make_service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, \
+	boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response) { \
+	service::make_service_call(socket, request, response); }
+
 class service
 {
 public:
 	virtual void make_service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response)
 	{
+#ifdef WIN
+		// The request and response should be copied on Windows because of the separate heaps in
+		// every instance of CRT (which is included in every DLL because of the static linking).
+		request = boost::shared_ptr<http_request>(new http_request(*request));
+		response = boost::shared_ptr<http_response>(new http_response(*response));
+#endif
 		service_call(socket, request, response);
 	}
 
