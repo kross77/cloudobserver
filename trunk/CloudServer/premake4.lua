@@ -17,6 +17,8 @@ solution "CloudServer"
 	configurations { "Debug", "Release" }
 	objdir     ( "projects/" .. os.get() .. "-" .. action .. "/bin/obj" )
 	
+	flags { "StaticRuntime" }
+	
 	configuration { "Debug" }
 		targetdir ( "projects/" .. os.get() .. "-" .. action .. "/bin/debug" )
 	
