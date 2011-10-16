@@ -38,7 +38,7 @@ class file_service: public service
 public:
 	file_service();
 	virtual void service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response);
-	virtual void apply_config(boost::property_tree::ptree config);
+	virtual void apply_config(boost::shared_ptr<boost::property_tree::ptree> config);
 	virtual void start(){}
 	virtual void stop(){}
 private:
