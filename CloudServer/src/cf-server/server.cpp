@@ -109,7 +109,7 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 
 		try
 		{
-			requested_service->service_call(socket, request, response);
+			requested_service->make_service_call(socket, request, response);
 		}
 		catch(std::exception &e)
 		{
