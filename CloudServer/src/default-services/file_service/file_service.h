@@ -31,6 +31,7 @@
 #include <fs_file.h>
 #include <fs_map.h>
 #include <fs_concurrent_queued_map.h>
+#include <fs_utils.h>
 
 
 class file_service: public service
@@ -49,6 +50,7 @@ private:
 	boost::posix_time::time_duration expiration_period;
 	general_utils *general_util;
 	http_utils *http_util;
+	fs_utils *fs_util;
 	boost::filesystem::path users_directory_path;
 	std::string max_age;
 	bool first_time;
@@ -79,12 +81,11 @@ private:
 	void insert_file_headers( boost::shared_ptr<fs_file> f, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response );
 	boost::shared_array<char> load_file_into_memory(boost::shared_ptr<fs_file> f);
 	void process_request(std::string encoded_url,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response);
-	void send_not_modified_304( boost::shared_ptr<boost::asio::ip::tcp::socket> socket,  boost::shared_ptr<http_response> response );
-	void save_string_into_file(std::string contents, std::string name);
+
 	void send_cached_file(boost::uintmax_t size, boost::shared_array<char> buffer, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response);
 	void send_uncachable_file(boost::shared_ptr<fs_file> f,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response);
 	void send_directory_contents(std::set<std::string> list,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response);
-	void send_404(std::string encoded_url,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response);
+
 	void send_info(boost::shared_ptr<fs_file> f,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response);
 
 	CLOUD_SERVICE_AUXILIARIES;
