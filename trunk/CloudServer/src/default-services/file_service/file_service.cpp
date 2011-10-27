@@ -4,6 +4,7 @@ file_service::file_service()
 {
 	general_util = new general_utils();
 	http_util = new http_utils();
+	fs_util = new fs_utils();
 	this->root_path = boost::filesystem::current_path().string();
 	this->show_directory_contents = false;
 	this->expiration_period = boost::posix_time::minutes(200);
@@ -109,6 +110,7 @@ std::string file_service::get_user_name( boost::shared_ptr<http_request> request
 
 void file_service::insert_file_headers( boost::shared_ptr<fs_file> f, boost::shared_ptr<boost::asio::ip::tcp::socket > socket, boost::shared_ptr<http_response> response )
 {
+
 	response->headers.insert(std::pair<std::string, std::string>("Last-Modified", f->modified));
 	response->headers.insert(std::pair<std::string, std::string>("Content-Length", boost::lexical_cast<std::string>(f->size)));
 	response->headers.insert(std::pair<std::string, std::string>("Cache-Control", max_age ));
@@ -206,7 +208,7 @@ void file_service::process_request( std::string encoded_url,boost::shared_ptr<bo
 		}
 		catch (std::exception)
 		{
-			send_404(encoded_url, socket, request, response);
+			fs_util->send_404(encoded_url, socket, request, response);
 			return;
 		}
 	}
@@ -258,7 +260,7 @@ void file_service::process_request( std::string encoded_url,boost::shared_ptr<bo
 		}
 		catch(std::exception)
 		{
-			send_404(encoded_url, socket,request,response);
+			fs_util->send_404(encoded_url, socket,request,response);
 			return;
 		}
 
@@ -326,17 +328,7 @@ void file_service::process_request( std::string encoded_url,boost::shared_ptr<bo
 
 }
 
-void file_service::save_string_into_file( std::string contents, std::string s_name )
-{
-	boost::filesystem::path users_path ( this->root_path / "users" );
-	users_directory_path = users_path;
-	general_util->create_directory(users_directory_path);
-	boost::filesystem::ofstream datFile;
-	boost::filesystem::path name (users_directory_path / s_name);
-	datFile.open(name, std::ofstream::binary | std::ofstream::trunc | std::ofstream::out	);
-	datFile.write(contents.c_str(), contents.length());
-	datFile.close();
-}
+
 
 void file_service::send_cached_file( boost::uintmax_t size, boost::shared_array<char> buffer, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response )
 {
@@ -393,15 +385,6 @@ void file_service::send_uncachable_file( boost::shared_ptr<fs_file> f,boost::sha
 	stream.close();
 }
 
-void file_service::send_404( std::string encoded_url,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response )
-{
-	std::ostringstream body;
-	body << "Error 404! " << http_util->url_decode(request->url) << " does not exist\n <br/> <a href='/'>" << "Dear " << http_util->url_decode(get_user_name(request)) <<", please come again!</a>";
-
-	response->body = "<head></head><body><h1>" + body.str() + "</h1></body>";
-	response->send(*socket);
-}
-
 void file_service::send_info( boost::shared_ptr<fs_file> f,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response )
 {
 	std::ostringstream body;
@@ -410,13 +393,6 @@ void file_service::send_info( boost::shared_ptr<fs_file> f,boost::shared_ptr<boo
 		<< "<br/> modified: " << f->modified
 		<< "<br/><a href=\"" << http_util->url_encode(request->url) << "\">download</a>";
 	response->body = "<head></head><body><h1>" + body.str() + "</h1></body>";
-	response->send(*socket);
-}
-
-void file_service::send_not_modified_304( boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response )
-{
-	response->status = 304;
-	response->description = "Not Modified";
 	response->send(*socket);
 }
 
@@ -442,7 +418,7 @@ void file_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> 
 				std::map<std::string, std::string> save_file;
 				save_file = http_util->parse_multipart_form_data(request->body);
 				std::string file_name =save_file.find("file_name")->second;
-				this->save_string_into_file(save_file.find("datafile")->second, file_name);
+				fs_util->save_string_into_file(save_file.find("datafile")->second, file_name,  this->root_path / "users");
 			}
 			catch(std::exception &e)
 			{
