@@ -27,6 +27,7 @@
 
 #include <general_utils.h>
 #include <http_utils.h>
+#include <log_util.h>
 #include <fs_file.h>
 #include <fs_utils.h>
 
@@ -41,13 +42,17 @@ public:
 		general_util = new general_utils();
 		http_util = new http_utils();
 		fs_util = new fs_utils();
+		
 		this->root_path = boost::filesystem::current_path().string();
 
 		this->expiration_period = boost::posix_time::minutes(200);
 		this->max_age = "max-age=" + boost::lexical_cast<std::string>(this->expiration_period.total_seconds());
 
+		this->default_lu_path = "ufs_log.txt";
 		this->default_db_name = "ufs.db";
-		is_db_set=false;
+
+		is_db_set = false;
+		is_lu_set = false;
 
 		this->command_create_files_table = "CREATE TABLE IF NOT EXISTS files (encoded_url varchar(300) UNIQUE NOT NULL primary key, file_name varchar(150) NOT NULL, user_name varchar(65) NOT NULL, is_public BOOLEAN NOT NULL, modified DATETIME NOT NULL default CURRENT_TIMESTAMP )";
 		this->command_create_file =  "INSERT INTO files (encoded_url, file_name, user_name, is_public ) VALUES (:encoded_url, :file_name, :user_name, :is_public)";
@@ -66,7 +71,9 @@ public:
 	virtual void apply_config(boost::shared_ptr<boost::property_tree::ptree> config)
 	{
 		this->root_path = config->get<std::string>("users_files_directory", this->root_path.string());
+		this->default_lu_path = config->get<std::string>("log_util_file", this->default_lu_path);
 		this->default_db_name = config->get<std::string>("database", this->default_db_name);
+		create_log_util(this->default_lu_path);
 		create_files_table(this->default_db_name);
 	}
 
@@ -75,13 +82,18 @@ public:
 
 private:
 
+	void create_log_util( std::string lu_path )
+	{
+		lu = new log_util(50, true, true, true, lu_path);
+	}
+
 	void create_files_table( std::string db_name )
 	{
-		if (!is_db_set) // TODO: find out how to detach from one db and connect to another.
+		if(!is_db_set) // TODO: find out how to detach from one db and connect to another.
 		{
 			boost::shared_ptr<sqlite3pp::database> db_( new sqlite3pp::database(db_name.c_str())); //I could not get `db = new sqlite3pp::database(DB_name.c_str());` to compile
 			db = db_;
-			std::cout << db->execute(command_create_files_table.c_str()) << std::endl;
+			*lu << "Connected to db and created a table with SQLite return code: " << db->execute(command_create_files_table.c_str()) << log_util::endl;
 			is_db_set = true;
 		}
 	}
@@ -94,6 +106,9 @@ private:
 	general_utils *general_util;
 	http_utils *http_util;
 	fs_utils *fs_util;
+	log_util *lu;
+	bool is_lu_set;
+
 	std::string max_age;
 
 
@@ -104,6 +119,7 @@ private:
 	std::string command_find_file;
 	std::string default_db_name;
 	std::string command_find_all_user_files;
+	std::string default_lu_path;
 	void insert_file_headers( boost::shared_ptr<fs_file> f, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response ){}
 	void send_uncachable_file(boost::shared_ptr<fs_file> f,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response){}
 	
