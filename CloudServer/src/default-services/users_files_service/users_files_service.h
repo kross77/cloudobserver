@@ -47,6 +47,7 @@ public:
 		this->max_age = "max-age=" + boost::lexical_cast<std::string>(this->expiration_period.total_seconds());
 
 		this->default_db_name = "ufs.db";
+		is_db_set=false;
 
 		this->command_create_files_table = "CREATE TABLE IF NOT EXISTS files (encoded_url varchar(300) UNIQUE NOT NULL primary key, file_name varchar(150) NOT NULL, user_name varchar(65) NOT NULL, is_public BOOLEAN NOT NULL, modified DATETIME NOT NULL default CURRENT_TIMESTAMP )";
 		this->command_create_file =  "INSERT INTO files (encoded_url, file_name, user_name, is_public ) VALUES (:encoded_url, :file_name, :user_name, :is_public)";
@@ -65,18 +66,36 @@ public:
 	virtual void apply_config(boost::shared_ptr<boost::property_tree::ptree> config)
 	{
 		this->root_path = config->get<std::string>("users_files_directory", this->root_path.string());
+		this->default_db_name = config->get<std::string>("database", this->default_db_name);
+		create_files_table(this->default_db_name);
 	}
 
 	virtual void start(){}
 	virtual void stop(){}
 
 private:
+
+	void create_files_table( std::string db_name )
+	{
+		if (!is_db_set) // TODO: find out how to detach from one db and connect to another.
+		{
+			boost::shared_ptr<sqlite3pp::database> db_( new sqlite3pp::database(db_name.c_str())); //I could not get `db = new sqlite3pp::database(DB_name.c_str());` to compile
+			db = db_;
+			std::cout << db->execute(command_create_files_table.c_str()) << std::endl;
+			is_db_set = true;
+		}
+	}
+
 	boost::filesystem::path root_path;
+	boost::shared_ptr<sqlite3pp::database> db;
+	bool is_db_set;
+
 	boost::posix_time::time_duration expiration_period;
 	general_utils *general_util;
 	http_utils *http_util;
 	fs_utils *fs_util;
 	std::string max_age;
+
 
 	std::string command_create_files_table;
 	std::string command_update_file;
