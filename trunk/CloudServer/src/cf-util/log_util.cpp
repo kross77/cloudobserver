@@ -21,6 +21,12 @@ log_util::log_util( int buffer_length, bool do_print, bool do_save, boost::files
 	this->file_path = save_file_path;
 }
 
+log_util::log_util( int buffer_length, bool do_print, bool do_save, bool do_print_time, boost::filesystem::path save_file_path)
+{
+	log_util( buffer_length, do_print, do_save, save_file_path);
+	add_time = do_print_time;
+}
+
 void log_util::write(log_message *message)
 {
 	if (!print && !save)
