@@ -48,6 +48,7 @@ public:
 
 	log_util( int buffer_length, bool do_print=true);
 	log_util( int buffer_length, bool do_print, bool do_save, boost::filesystem::path save_file_path);
+	log_util( int buffer_length, bool do_print, bool do_save, bool do_print_time, boost::filesystem::path save_file_path);
 
 	~log_util();
 	
