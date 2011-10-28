@@ -48,6 +48,11 @@ std::string general_utils::get_sha256( std::string value )
 	return std::string(data);
 }
 
+std::string general_utils::get_utc_now_time()
+{
+	return  boost::posix_time::to_iso_extended_string( boost::posix_time::second_clock::universal_time() );
+}
+
 void general_utils::create_directory( boost::filesystem::path path )
 {
 	if (boost::filesystem::exists( path ))
