@@ -7,8 +7,9 @@ user_control::user_control()
 	http_util = new http_utils();
 
 	is_db_set = false;
-
+	is_lu_set = false;
 	//Grammar
+	default_lu_path = "log.txt";
 	default_db_name = "server.db";
 	use_recapcha = true;
 
@@ -64,7 +65,7 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 
 	if (has_email != headers_end)
 	{
-		 user_request->headers.erase(has_email);
+		user_request->headers.erase(has_email);
 	}
 
 	map_ss::iterator has_logout = user_request->arguments.find(tag_logout);
@@ -343,11 +344,23 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 
 void user_control::apply_config( boost::property_tree::ptree config )
 {
+	this->default_db_name = config.get<std::string>("log_util_file", this->default_lu_path);
 	this->default_db_name = config.get<std::string>("database", this->default_db_name);
 	this->use_recapcha = config.get<bool>("use_recapcha", this->use_recapcha);
 	this->recapcha_server_key = config.get<std::string>("recapcha_server_key", this->recapcha_server_key);
 	this->recapcha_server_url = config.get<std::string>("recapcha_server_url", this->recapcha_server_url);
+	start_work_with_lu( this->default_lu_path);
 	start_work_with_db(this->default_db_name);
+}
+
+void user_control::start_work_with_lu( std::string lu_path )
+{
+	if (!is_lu_set)
+	{
+		lu = new log_util(50, false, true, true, lu_path);
+		is_lu_set = true;
+	}
+
 }
 
 void user_control::start_work_with_db( std::string db_name )
@@ -356,7 +369,7 @@ void user_control::start_work_with_db( std::string db_name )
 	{
 		boost::shared_ptr<sqlite3pp::database> db_( new sqlite3pp::database(db_name.c_str())); //I could not get `db = new sqlite3pp::database(DB_name.c_str());` to compile
 		db = db_;
-		std::cout << db->execute(command_create_users_table.c_str()) << std::endl;
+		*lu << "Connected to "<< db_name << " database and created a table with SQLite return code: " << db->execute(command_create_users_table.c_str()) << log_util::endl;
 	}
 }
 
@@ -383,7 +396,7 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 
 	to_recaptcha.insert(pair_ss(tag_recaptcha_response_for_post,has_recaptcha_response_field->second));
 	to_recaptcha.insert(pair_ss(tag_recaptcha_challenge_for_post, has_recaptcha_challenge_field->second));
-	
+
 	to_recaptcha.insert(pair_ss(tag_recaptcha_privatekey_for_post, this->recapcha_server_key));
 
 	boost::asio::ip::tcp::endpoint remote_endpoint = socket->remote_endpoint();
@@ -397,14 +410,13 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 	request_to_recap.headers.insert(pair_ss("Content-Type", "application/x-www-form-urlencoded;"));
 	request_to_recap.headers.insert(pair_ss("User-Agent", "reCAPTCHA/CloudForever"));
 	request_to_recap.headers.insert(pair_ss("Connection","close"));
-//	request_to_recap.headers.insert(pair_ss("Content-Length", boost::lexical_cast<std::string>(request_to_recap.body.size())));
+	//	request_to_recap.headers.insert(pair_ss("Content-Length", boost::lexical_cast<std::string>(request_to_recap.body.size())));
 	request_to_recap.method = "POST";
 
 	std::string cap_err_recaptcha_not_reachable = "recaptcha-not-reachable";
 	std::string cap_err_invalid_site_private_key = "invalid-site-private-key";
 	std::string cap_err_invalid_request_cookie = "invalid-request-cookie";
 	std::string cap_err_incorrect_captcha_sol = "incorrect-captcha-sol";
-	
 
 	http_response response;
 	try
@@ -418,7 +430,7 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 		throw std::runtime_error( "unable to contact the reCAPTCHA verify server.");
 	}
 	std:: cout << "captcha responded: " << std::endl << response.body << std::endl;
-	
+
 	if (response.body.find("success") != std::string::npos)
 	{
 		user.first->arguments.erase(has_recaptcha_response_field);
