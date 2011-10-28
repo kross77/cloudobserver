@@ -82,7 +82,17 @@ public:
 
 private:
 
-
+	void create_file_table_entry(std::string encoded_url, std::string file_name, std::string user_name, bool is_public)
+	{
+		sqlite3pp::transaction xct(*db);
+		sqlite3pp::command cmd(*db, command_create_file.c_str());
+		cmd.bind(":encoded_url", encoded_url) ;
+		cmd.bind(":file_name", file_name) ;
+		cmd.bind(":user_name", user_name) ;
+		cmd.bind(":is_public", is_public);
+		cmd.execute() ;
+		xct.commit();
+	}
 
 	void create_log_util( std::string lu_path )
 	{
