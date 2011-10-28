@@ -26,6 +26,7 @@
 #include <threading_utils.h>
 #include <general_utils.h>
 #include <http_utils.h>
+#include <log_util.h>
 
 class user_control
 {
@@ -57,7 +58,7 @@ private:
 	std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > check_recaptcha( boost::shared_ptr<boost::asio::ip::tcp::socket> socket, std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user);
 
 	void start_work_with_db(std::string db_name);
-
+	void start_work_with_lu( std::string lu_path );
 	//User_control variables
 	std::map<std::string,std::string> sessions_map; // session_id to name
 	boost::shared_ptr<sqlite3pp::database> db;
@@ -65,10 +66,16 @@ private:
 	threading_utils *threading_util;
 	general_utils *general_util;
 	http_utils *http_util;
+	log_util *lu;
 	
 
 	//Grammar
 	std::string default_db_name;
+	std::string default_lu_path;
+
+	bool is_lu_set;
+	bool is_db_set;
+
 	std::string tag_login;
 	std::string tag_register;
 	std::string tag_pass_sha256;
@@ -91,8 +98,7 @@ private:
 	std::string tag_recaptcha_remoteip_for_post;
 	std::string tag_recaptcha_privatekey_for_post;
 	std::string tag_recaptcha_response_for_post;
-
-	bool is_db_set;
+	
 	bool use_recapcha;
 
 };
