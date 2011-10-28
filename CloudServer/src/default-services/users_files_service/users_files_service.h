@@ -55,7 +55,7 @@ public:
 		is_lu_set = false;
 
 		this->tag_ufs_extension = "extension";
-		this->default_ufs_extension = "extension";
+		this->default_ufs_extension = "user.file";
 
 		this->command_create_files_table = "CREATE TABLE IF NOT EXISTS files (encoded_url varchar(300) UNIQUE NOT NULL primary key, file_name varchar(150) NOT NULL, user_name varchar(65) NOT NULL, is_public BOOLEAN NOT NULL, modified DATETIME NOT NULL default CURRENT_TIMESTAMP )";
 		this->command_create_file =  "INSERT INTO files (encoded_url, file_name, user_name, is_public ) VALUES (:encoded_url, :file_name, :user_name, :is_public)";
@@ -66,6 +66,14 @@ public:
 
 	}
 
+	//UFS POST API:
+	//	required:
+	//		file_name : string,
+	//		redirect_location : string,
+	//		is_public : bool (as string),
+	//		datafile : data (as string)
+	//	use:
+	//		users files upload.
 	virtual void service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response)
 	{
 		std::string user_name = http_util->url_decode(fs_util->get_user_name(request));
@@ -75,14 +83,23 @@ public:
 			{
 				try
 				{
-					std::map<std::string, std::string> save_file;
+					std::map<std::string, std::string> save_file; 
 					save_file = http_util->parse_multipart_form_data(request->body);
 
 					std::string file_name =save_file.find("file_name")->second;
-					bool is_public = boost::lexical_cast<bool, std::string>( save_file.find("is_public")->second ); // this lexical_cast may not work.
-					std::string encoded_url = http_util->url_encode( general_util->get_sha256(user_name + file_name + general_util->get_utc_now_time()) + this->default_ufs_extension );
-					fs_util->save_string_into_file(save_file.find("datafile")->second, file_name,  this->root_path);
+					std::string redirect_location = save_file.find("redirect_location")->second;
+					bool is_public = save_file.find("is_public")->second == "true" ? true : false ;
+
+					std::string encoded_url = "";
+					encoded_url = user_name + file_name + general_util->get_utc_now_time();
+					encoded_url = general_util->get_sha256(encoded_url);
+					encoded_url = encoded_url + "." + this->default_ufs_extension;
+					encoded_url = http_util->url_encode( encoded_url );
+
+					fs_util->save_string_into_file(save_file.find("datafile")->second, encoded_url,  this->root_path);
 					this->create_file_table_entry(encoded_url, file_name, user_name, is_public);
+					fs_util->send_found_302(redirect_location, socket, response);
+					return;
 				}
 				catch(std::exception &e)
 				{
