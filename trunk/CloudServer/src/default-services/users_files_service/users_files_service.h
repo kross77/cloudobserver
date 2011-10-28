@@ -42,7 +42,7 @@ public:
 		general_util = new general_utils();
 		http_util = new http_utils();
 		fs_util = new fs_utils();
-		
+
 		this->root_path = boost::filesystem::current_path().string();
 
 		this->expiration_period = boost::posix_time::minutes(200);
@@ -62,10 +62,10 @@ public:
 		this->command_find_all_user_files = "SELECT encoded_url, file_name, user_name, is_public, modified FROM files WHERE user_name=:user_name";
 
 	}
-	
+
 	virtual void service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response)
 	{
-		
+
 	}
 
 	virtual void apply_config(boost::shared_ptr<boost::property_tree::ptree> config)
@@ -84,7 +84,11 @@ private:
 
 	void create_log_util( std::string lu_path )
 	{
-		lu = new log_util(50, true, true, true, lu_path);
+		if (!is_lu_set)
+		{
+			lu = new log_util(50, false, true, true, lu_path);
+			is_lu_set = true;
+		}
 	}
 
 	void create_files_table( std::string db_name )
@@ -93,7 +97,7 @@ private:
 		{
 			boost::shared_ptr<sqlite3pp::database> db_( new sqlite3pp::database(db_name.c_str())); //I could not get `db = new sqlite3pp::database(DB_name.c_str());` to compile
 			db = db_;
-			*lu << "Connected to db and created a table with SQLite return code: " << db->execute(command_create_files_table.c_str()) << log_util::endl;
+			*lu << "Connected to "<< db_name << " database and created a table with SQLite return code: " << db->execute(command_create_files_table.c_str()) << log_util::endl;
 			is_db_set = true;
 		}
 	}
@@ -122,7 +126,7 @@ private:
 	std::string default_lu_path;
 	void insert_file_headers( boost::shared_ptr<fs_file> f, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response ){}
 	void send_uncachable_file(boost::shared_ptr<fs_file> f,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response){}
-	
+
 	CLOUD_SERVICE_AUXILIARIES;
 };
 
