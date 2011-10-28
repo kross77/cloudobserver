@@ -18,6 +18,7 @@
 
 //Boost
 #include <boost/filesystem.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
 
 class general_utils
 {
@@ -32,6 +33,7 @@ public:
 	std::string get_sha256( std::string value); // gets SHA256 from string
 	void print_map_contents(std::map <std::string, std::string> data);
 	void print_map_contents(std::map <std::string, std::string> data, std::string name);
+	std::string get_utc_now_time();
 };
 
 #endif // GENERAL_UTILITIES_H
