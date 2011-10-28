@@ -66,6 +66,11 @@ public:
 
 	}
 
+	std::string find_all_user_files_command(std::string user_name)
+	{
+		return std::string( this->command_find_all_user_files + user_name );
+	}
+
 	//UFS POST API:
 	//	required:
 	//		file_name : string,
@@ -106,7 +111,50 @@ public:
 					*lu << e.what() << log_util::endl;
 				}
 			}
+
+			if (request->url == "/ufs.json")
+			{
+				list_user_files(user_name, socket, response);
+				return;
+			}
 		}
+	}
+
+	void list_user_files(std::string user_name, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response)
+	{
+
+		std::ostringstream user_files_stream;
+		user_files_stream << "[";
+
+		std::string query = general_util->to_lower(find_all_user_files_command(user_name));
+
+		sqlite3pp::transaction xct(*db, true);
+		{
+			sqlite3pp::query qry(*db, this->command_find_all_user_files.c_str());
+			qry.bind(":user_name", user_name);
+
+			for (sqlite3pp::query::iterator i = qry.begin(); i != qry.end(); ++i) {
+				bool is_public;
+				std::string encoded_url, file_name, user_name;
+				(*i).getter() >> encoded_url >> file_name >> user_name >> is_public ;
+
+				user_files_stream << "\n\t{\n\t\t\"encoded_url\": \""
+					<< encoded_url << "\",\n\t\t\"file_name\": \""
+					<< file_name << "\",\n\t\t\"user_name\": \""
+					<< user_name << "\",\n\t\t\"is_public\": "
+					<< is_public << "\n\t},";
+			}
+
+		}
+		std::string files_ = user_files_stream.str();
+		if (files_.length() > 5)
+			files_ = files_.substr(0, files_.length() - 1);
+
+		response->body = files_.append("\n]");
+		response->body_size = response->body.length();
+		response->headers.insert(std::pair<std::string, std::string>("Content-Length", boost::lexical_cast<std::string>(response->body_size)));
+		response->send(*socket);
+		return;
 	}
 
 	virtual void apply_config(boost::shared_ptr<boost::property_tree::ptree> config)
@@ -118,6 +166,8 @@ public:
 		create_log_util(this->default_lu_path);
 		create_files_table(this->default_db_name);
 	}
+
+
 
 	virtual void start(){}
 	virtual void stop(){}
