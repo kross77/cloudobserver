@@ -32,6 +32,14 @@ void fs_utils::send_not_modified_304( boost::shared_ptr<boost::asio::ip::tcp::so
 	response->send(*socket);
 }
 
+void fs_utils::send_found_302( std::string redirect_lication, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response )
+{
+	response->status = 302;
+	response->description = "Found";
+	response->headers.insert(std::pair<std::string, std::string>("Location", redirect_lication));
+	response->send(*socket);
+}
+
 void fs_utils::save_string_into_file( std::string contents, std::string s_name, boost::filesystem::path users_path )
 {
 	general_util->create_directory(users_path);
