@@ -87,6 +87,8 @@ private:
 	mutable boost::mutex mut;
 
 	void flush();
+	void init();
+	void set_options( int buffer_length, bool do_print, bool do_save, bool do_print_time, boost::filesystem::path save_file_path);
 };
 
 #endif // LOG_UTIL
