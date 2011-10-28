@@ -54,6 +54,9 @@ public:
 		is_db_set = false;
 		is_lu_set = false;
 
+		this->tag_ufs_extension = "extension";
+		this->default_ufs_extension = "extension";
+
 		this->command_create_files_table = "CREATE TABLE IF NOT EXISTS files (encoded_url varchar(300) UNIQUE NOT NULL primary key, file_name varchar(150) NOT NULL, user_name varchar(65) NOT NULL, is_public BOOLEAN NOT NULL, modified DATETIME NOT NULL default CURRENT_TIMESTAMP )";
 		this->command_create_file =  "INSERT INTO files (encoded_url, file_name, user_name, is_public ) VALUES (:encoded_url, :file_name, :user_name, :is_public)";
 		this->command_update_file = " UPDATE files SET encoded_url=:new_encoded_url, file_name=:new_file_name, is_public=:is_public, modified=CURRENT_TIMESTAMP  WHERE encoded_url=:encoded_url";
@@ -65,12 +68,34 @@ public:
 
 	virtual void service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response)
 	{
+		std::string user_name = http_util->url_decode(fs_util->get_user_name(request));
+		if(user_name != "guest")
+		{
+			if(request->body.length() > 0)
+			{
+				try
+				{
+					std::map<std::string, std::string> save_file;
+					save_file = http_util->parse_multipart_form_data(request->body);
 
+					std::string file_name =save_file.find("file_name")->second;
+					bool is_public = boost::lexical_cast<bool, std::string>( save_file.find("is_public")->second ); // this lexical_cast may not work.
+					std::string encoded_url = http_util->url_encode( general_util->get_sha256(user_name + file_name + general_util->get_utc_now_time()) + this->default_ufs_extension );
+					fs_util->save_string_into_file(save_file.find("datafile")->second, file_name,  this->root_path);
+					this->create_file_table_entry(encoded_url, file_name, user_name, is_public);
+				}
+				catch(std::exception &e)
+				{
+					*lu << e.what() << log_util::endl;
+				}
+			}
+		}
 	}
 
 	virtual void apply_config(boost::shared_ptr<boost::property_tree::ptree> config)
 	{
 		this->root_path = config->get<std::string>("users_files_directory", this->root_path.string());
+		this->default_ufs_extension = config->get<std::string>(this->tag_ufs_extension, this->default_ufs_extension);
 		this->default_lu_path = config->get<std::string>("log_util_file", this->default_lu_path);
 		this->default_db_name = config->get<std::string>("database", this->default_db_name);
 		create_log_util(this->default_lu_path);
@@ -135,7 +160,8 @@ private:
 	std::string default_db_name;
 	std::string command_find_all_user_files;
 	std::string default_lu_path;
-
+	std::string tag_ufs_extension;
+	std::string default_ufs_extension;
 	void insert_file_headers( boost::shared_ptr<fs_file> f, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response ){}
 	void send_uncachable_file(boost::shared_ptr<fs_file> f,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response){}
 
