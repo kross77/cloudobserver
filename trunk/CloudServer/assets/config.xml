@@ -34,6 +34,10 @@
 			<users_files_directory>ufs</users_files_directory>
 			</settings>
 			<properties>
+				<url>
+					<equals>/ufs.service</equals>
+					<equals>/ufs.json</equals>
+				</url>
 				<url_extensions>
                     <extension>user.file</extension>
 	            </url_extensions>
