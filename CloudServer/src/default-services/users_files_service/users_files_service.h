@@ -39,9 +39,9 @@ class users_files_service: public service
 public:
 	users_files_service()
 	{
-		general_util = new general_utils();
-		http_util = new http_utils();
-		fs_util = new fs_utils();
+		general_util =boost::shared_ptr<general_utils>( new general_utils());
+		http_util = boost::shared_ptr<http_utils>(new http_utils());
+		fs_util =  boost::shared_ptr<fs_utils>(new fs_utils());
 
 		this->root_path = boost::filesystem::current_path().string();
 
@@ -82,11 +82,13 @@ public:
 
 private:
 
+
+
 	void create_log_util( std::string lu_path )
 	{
 		if (!is_lu_set)
 		{
-			lu = new log_util(50, false, true, true, lu_path);
+			lu = boost::shared_ptr<log_util>(new log_util(50, false, true, true, lu_path));
 			is_lu_set = true;
 		}
 	}
@@ -107,14 +109,13 @@ private:
 	bool is_db_set;
 
 	boost::posix_time::time_duration expiration_period;
-	general_utils *general_util;
-	http_utils *http_util;
-	fs_utils *fs_util;
-	log_util *lu;
+	boost::shared_ptr<general_utils> general_util;
+	boost::shared_ptr<http_utils> http_util;
+	boost::shared_ptr<fs_utils> fs_util;
+	boost::shared_ptr<log_util> lu;
 	bool is_lu_set;
 
 	std::string max_age;
-
 
 	std::string command_create_files_table;
 	std::string command_update_file;
@@ -124,6 +125,7 @@ private:
 	std::string default_db_name;
 	std::string command_find_all_user_files;
 	std::string default_lu_path;
+
 	void insert_file_headers( boost::shared_ptr<fs_file> f, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response ){}
 	void send_uncachable_file(boost::shared_ptr<fs_file> f,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response){}
 
