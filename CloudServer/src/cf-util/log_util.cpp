@@ -2,29 +2,37 @@
 
 log_util::log_util( int buffer_length, bool do_print)
 {
+	this->set_options(buffer_length,  do_print,  false,  false, "");
+}
+
+log_util::log_util( int buffer_length, bool do_print, bool do_save, boost::filesystem::path save_file_path)
+{
+	this->set_options(buffer_length,  do_print,  do_save,  false, save_file_path);
+}
+
+log_util::log_util( int buffer_length, bool do_print, bool do_save, bool do_print_time, boost::filesystem::path save_file_path)
+{
+	this->set_options(buffer_length,  do_print,  do_save,  do_print_time, save_file_path);
+}
+
+void log_util::init()
+{
 	this->i = 0;
-	this->log_length = buffer_length;
-	this->print = do_print;
+	this->print = false;
 	this->save = false;
 	this->add_prefix = false;
 	this->add_time = false;
 }
 
-log_util::log_util( int buffer_length, bool do_print, bool do_save, boost::filesystem::path save_file_path)
+void log_util::set_options( int buffer_length, bool do_print, bool do_save, bool do_print_time, boost::filesystem::path save_file_path)
 {
-	this->i = 0;
+	init();
+
 	this->log_length = buffer_length;
 	this->print = do_print;
 	this->save = do_save;
-	this->add_prefix = false;
-	this->add_time = false;
 	this->file_path = save_file_path;
-}
-
-log_util::log_util( int buffer_length, bool do_print, bool do_save, bool do_print_time, boost::filesystem::path save_file_path)
-{
-	log_util( buffer_length, do_print, do_save, save_file_path);
-	add_time = do_print_time;
+	this->add_time = do_print_time;
 }
 
 void log_util::write(log_message *message)
