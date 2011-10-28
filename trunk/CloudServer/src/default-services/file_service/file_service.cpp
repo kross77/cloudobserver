@@ -231,15 +231,15 @@ void file_service::process_request( std::string encoded_url,boost::shared_ptr<bo
 				return;
 			}
 
-			//std::map<std::string, std::string>::iterator it= request->headers.find("If-Modified-Since");
-			//if (it != request->headers.end() )
-			//{
-			//	if (f->modified == it->second)
-			//	{
-			//		send_not_modified_403(socket, response);
-			//		return;
-			//	}
-			//}
+			std::map<std::string, std::string>::iterator it= request->headers.find("If-Modified-Since");
+			if (it != request->headers.end() )
+			{
+				if (f->modified == it->second)
+				{
+					fs_util->send_not_modified_304(socket, response);
+					return;
+				}
+			}
 
 			insert_file_headers(f, socket, response);
 
@@ -272,16 +272,15 @@ void file_service::process_request( std::string encoded_url,boost::shared_ptr<bo
 				return;
 			}
 
-			/*
 			std::map<std::string, std::string>::iterator it= request->headers.find("If-Modified-Since");
 			if (it != request->headers.end() )
 			{
-			if (f->modified == it->second)
-			{
-			send_not_modified_304(socket, response);
-			return;
+				if (f->modified == it->second)
+				{
+					fs_util->send_not_modified_304(socket, response);
+					return;
+				}
 			}
-			}*/
 
 			insert_file_headers(f, socket, response);
 
