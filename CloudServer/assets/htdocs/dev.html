@@ -61,6 +61,7 @@
 				} else {
 					$('.logout').hide();
 					$('.fu').hide();
+					$('.ufs').hide();
 				}
 
 				$("#accordion").accordion({
@@ -176,8 +177,36 @@
 					</form>
 				</fieldset>
 			</div>
+			<h3 class="ufs">
+				<a href="#">User Files Service Files Upload</a>
+			</h3>
+			<div id="tabs-ufs" class="ufs">
+				<form method="POST" id="ufs_form_upload" enctype="multipart/form-data" action="/ufs.service">
+					<input type="hidden" name="redirect_location" value="/dev.html">
+					<fieldset>
+						<legend>
+							Name:
+						</legend>
+						<input type="text" class="required" name="file_name" />
+					</fieldset>
+					<fieldset>
+						<legend>
+							Sharing settings:
+						</legend>
+						<p><input type="radio" name="is_public" value="true"> Public </p>
+						<p><input type="radio" name="is_public" value="false" checked> Private</p>
+					</fieldset>
+					<fieldset>
+						<legend>
+							File:
+						</legend>
+						<input type="file" name="datafile">
+					</fieldset>
+					<input type="submit" value="Upload" />
+				</form>
+			</div>			
 			<h3 class="fu">
-				<a href="#">Files Upload</a>
+				<a href="#">FS Global Old Deprecated Files Upload</a>
 			</h3>
 			<div id="tabs-fu" class="fu">
 				<form method="POST" id="form_upload" enctype="multipart/form-data" action="./dev.html">
