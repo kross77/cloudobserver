@@ -65,7 +65,7 @@ std::string fs_map::put( std::string key, boost::shared_ptr<fs_file> value )
 {
 	boost::upgrade_lock<boost::shared_mutex> lock(mut_);
 	boost::upgrade_to_unique_lock<boost::shared_mutex> uniqueLock(lock);
-	_ds.insert(std::pair<std::string, boost::shared_ptr<fs_file> >(key,value));
+	_ds[key] = value;
 	return key;
 }
 

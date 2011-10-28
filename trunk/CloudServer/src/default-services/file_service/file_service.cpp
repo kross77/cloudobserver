@@ -65,6 +65,11 @@ void file_service::create_file( boost::filesystem::path p, fs_map &m1, std::set<
 	std::string ue = "/" + encode_path( f->path );
 	m1.put(ue, f);
 	m2.insert(ue);
+	try
+	{
+		cached_files.remove(ue);
+	}
+	catch(std::exception){}
 }
 
 void file_service::create_file( boost::filesystem::path p, std::set<std::string> &m )
@@ -170,6 +175,17 @@ void file_service::is_file( boost::filesystem::path p, fs_map &old_fs, std::set<
 		boost::posix_time::ptime lastAccessTime = boost::posix_time::from_time_t( t );
 		if ( lastAccessTime >= oldTime && lastAccessTime <= nowTime )
 		{
+
+			/*
+			// Debug info
+			std::cout << "updating file:" << p.filename() << std::endl 
+			<< " that has been modified between : " <<  boost::posix_time::to_iso_extended_string(oldTime)
+			<< " and " << boost::posix_time::to_iso_extended_string(nowTime)
+			<< " at " << boost::posix_time::to_iso_extended_string(lastAccessTime) 
+			<< std::endl;
+			*/
+
+
 			create_file(p, old_fs, new_fs);
 			return;
 		}
