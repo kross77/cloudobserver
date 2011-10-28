@@ -45,6 +45,7 @@ user_control::~user_control()
 	delete general_util;
 	delete threading_util;
 	delete http_util;
+	delete lu;
 }
 
 
