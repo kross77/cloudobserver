@@ -80,6 +80,13 @@ public:
 	/************************************************************************/
 	std::string utf16_to_utf8(const std::wstring & in);
 
+	std::string escape ( const std::string& content );
+	void escape ( std::istream& in, std::ostream& out );
+
+	template<typename InIter, typename OutIter>
+	OutIter escape ( InIter begin, InIter end, OutIter out );
+
+
 private:
 	std::string parse_file_upload_body(std::string contents);
 	std::string tag_set_cookie;
@@ -87,6 +94,10 @@ private:
 	template<typename _OutputIterator>
 	inline void split(std::string str, std::string delim, _OutputIterator result);
 
+	template<typename InIter, typename OutIter>
+	OutIter copy_asciiz ( InIter begin, OutIter out );
+
 };
+
 #include "http_utils_inl.h"
 #endif HTTP_UTILITIES_H

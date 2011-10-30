@@ -345,3 +345,20 @@ std::string http_utils::utf16_to_utf8(const std::wstring & in)
 	}
 	return out;
 }
+
+// Get escaped version of "content".
+std::string  http_utils::escape ( const std::string& content )
+{
+	std::string result;
+	result.reserve(content.size());
+	escape(content.begin(), content.end(), std::back_inserter(result));
+	return (result);
+}
+
+// Escape data on the fly, using "constant" memory.
+void  http_utils::escape ( std::istream& in, std::ostream& out )
+{
+	escape(std::istreambuf_iterator<char>(in),
+		std::istreambuf_iterator<char>(),
+		std::ostreambuf_iterator<char>(out));
+}
