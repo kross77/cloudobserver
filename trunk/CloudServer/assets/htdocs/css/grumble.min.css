@@ -1,0 +1,124 @@
+.grumble {
+position:absolute;
+background-image:url(../textures/pop-up/bubble-sprite.png);
+background-repeat:no-repeat;
+z-index:99999;
+}
+
+.grumble-text {
+position:absolute;
+text-align:center;
+z-index:99999;
+display:table;
+overflow:hidden;
+text-transform:uppercase;
+font-size:14px;
+line-height:14px;
+}
+
+.ie6 .grumble-text {
+display:block;
+}
+
+.grumble-text .outer {
+display:table-cell;
+vertical-align:middle;
+color:#FFF;
+}
+
+.ie6 .grumble-text .outer {
+display:block;
+position:absolute;
+top:48%;
+left:0;
+}
+
+.ie6 .inner {
+position:relative;
+top:-50%;
+}
+
+.grumble-text50 .outer {
+padding:6px;
+}
+
+.grumble-text100 .outer {
+padding:8px;
+}
+
+.grumble-text150 .outer {
+padding:10px;
+}
+
+.grumble-text200 .outer {
+padding:12px;
+}
+
+.grumble50 {
+background-position:0 0;
+}
+
+.grumble100 {
+background-position:0 -50px;
+}
+
+.grumble150 {
+background-position:0 -150px;
+}
+
+.grumble200 {
+background-position:0 -300px;
+}
+
+.alt-grumble50 {
+background-position:-200px -150px;
+}
+
+.alt-grumble100 {
+background-position:-200px -50px;
+}
+
+.alt-grumble200 {
+background-position:-200px -300px;
+}
+
+.grumble-button {
+	
+-webkit-box-shadow: rgb(204, 204, 204) 1px 1px 1px 0px;
+background-attachment: scroll;
+background-clip: border-box;
+background-color: #FF5C00;
+background-image: none;
+background-origin: padding-box;
+border-bottom-left-radius: 3px;
+border-bottom-right-radius: 3px;
+border-top-left-radius: 3px;
+border-top-right-radius: 3px;
+box-shadow: rgb(204, 204, 204) 1px 1px 1px 0px;
+color: white;
+cursor: pointer;
+display: block;
+font-family: Georgia, FreeSerif, serif;
+font-size: 8px;
+line-height: 9px;
+opacity: 1;
+padding-left: 0px;
+	
+	
+font-family: "Georgia", FreeSerif, serif;
+position:absolute;
+width:20px;
+height:12px;
+-moz-border-radius:3px;
+border-radius:3px;
+background:#ff5c00;
+color:#fff;
+text-align:center;
+font-style: normal;
+line-height:.9em;
+-moz-box-shadow:1px 1px 1px #ccc;
+-webkit-box-shadow:1px 1px 1px #ccc;
+box-shadow:1px 1px 1px #ccc;
+cursor:pointer;
+z-index:99999;
+}
