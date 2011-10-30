@@ -62,13 +62,8 @@ public:
 		this->command_update_file = " UPDATE files SET encoded_url=:new_encoded_url, file_name=:new_file_name, is_public=:is_public, modified=CURRENT_TIMESTAMP  WHERE encoded_url=:encoded_url";
 		this->command_delete_file = "DELETE FROM files WHERE encoded_url=:encoded_url";
 		this->command_find_file = "SELECT file_name, user_name, is_public, modified FROM files WHERE encoded_url=:encoded_url";
-		this->command_find_all_user_files = "SELECT encoded_url, file_name, user_name, is_public, modified FROM files WHERE user_name=:user_name";
+		this->command_find_all_user_files = "SELECT encoded_url, file_name, user_name, modified, is_public FROM files WHERE user_name=:user_name";
 
-	}
-
-	std::string find_all_user_files_command(std::string user_name)
-	{
-		return std::string( this->command_find_all_user_files + user_name );
 	}
 
 	//UFS POST API:
@@ -118,15 +113,29 @@ public:
 				return;
 			}
 		}
+		fs_util->send_404(request->url, socket, request, response);
 	}
+
+	virtual void apply_config(boost::shared_ptr<boost::property_tree::ptree> config)
+	{
+		this->root_path = config->get<std::string>("users_files_directory", this->root_path.string());
+		this->default_ufs_extension = config->get<std::string>(this->tag_ufs_extension, this->default_ufs_extension);
+		this->default_lu_path = config->get<std::string>("log_util_file", this->default_lu_path);
+		this->default_db_name = config->get<std::string>("database", this->default_db_name);
+		create_log_util(this->default_lu_path);
+		create_files_table(this->default_db_name);
+	}
+
+	virtual void start(){}
+	virtual void stop(){}
+
+private:
 
 	void list_user_files(std::string user_name, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response)
 	{
 
 		std::ostringstream user_files_stream;
 		user_files_stream << "[";
-
-		std::string query = general_util->to_lower(find_all_user_files_command(user_name));
 
 		sqlite3pp::transaction xct(*db, true);
 		{
@@ -135,13 +144,14 @@ public:
 
 			for (sqlite3pp::query::iterator i = qry.begin(); i != qry.end(); ++i) {
 				bool is_public;
-				std::string encoded_url, file_name, user_name;
-				(*i).getter() >> encoded_url >> file_name >> user_name >> is_public ;
-
+				std::string encoded_url, file_name, user_name, modified;
+				(*i).getter() >> encoded_url >> file_name >> user_name >> modified >> is_public ;
+				
 				user_files_stream << "\n\t{\n\t\t\"encoded_url\": \""
 					<< encoded_url << "\",\n\t\t\"file_name\": \""
-					<< file_name << "\",\n\t\t\"user_name\": \""
-					<< user_name << "\",\n\t\t\"is_public\": "
+					<< http_util->escape(file_name) << "\",\n\t\t\"user_name\": \""
+					<< user_name << "\",\n\t\t\"modified\": \""
+					<< modified << "\",\n\t\t\"is_public\": "
 					<< is_public << "\n\t},";
 			}
 
@@ -156,23 +166,6 @@ public:
 		response->send(*socket);
 		return;
 	}
-
-	virtual void apply_config(boost::shared_ptr<boost::property_tree::ptree> config)
-	{
-		this->root_path = config->get<std::string>("users_files_directory", this->root_path.string());
-		this->default_ufs_extension = config->get<std::string>(this->tag_ufs_extension, this->default_ufs_extension);
-		this->default_lu_path = config->get<std::string>("log_util_file", this->default_lu_path);
-		this->default_db_name = config->get<std::string>("database", this->default_db_name);
-		create_log_util(this->default_lu_path);
-		create_files_table(this->default_db_name);
-	}
-
-
-
-	virtual void start(){}
-	virtual void stop(){}
-
-private:
 
 	void create_file_table_entry(std::string encoded_url, std::string file_name, std::string user_name, bool is_public)
 	{
