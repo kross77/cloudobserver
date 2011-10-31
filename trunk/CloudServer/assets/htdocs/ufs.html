@@ -1,458 +1,476 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
-	<head>
-		<title>
-			Cloud Observer Developers UFS Page
-		</title>
-		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-		<script type="text/javascript" src="js/jquery-1.5.1.min.js">
-										
-		</script>
-		<script type="text/javascript" src="js/jquery-ui-1.8.14.custom.min.js">
-										
-		</script>
-		<script type="text/javascript" src="js/jquery.sha256.min.js">
-										
-		</script>
-		<script type="text/javascript" src="js/jquery.validate.min.js">
-										
-		</script>
-		
-		<script type="text/javascript" src="js/tempo.min.js">
-										
-		</script>
-		<link type="text/css" href="css/cloud-blue/jquery-ui-1.8.14.custom.css"
-		rel="stylesheet" />
-		<script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js">
-		
-	
-		<script  type='text/javascript' src="js/jquery.grumble.min.js">
-		</script>
-		<script type='text/javascript' src="js/jquery.event.drag-1.5.min.js"></script>								
-		</script>
-		<script type="text/javascript">
-			function readCookie(name) {
-				var nameEQ = name + "=";
-				var ca = document.cookie.split(';');
-				for (var i = 0; i < ca.length; i++) {
-					var c = ca[i];
-					while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-					if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-				}
-				return null;
-			}	
-			
-			(function($){
-			     $.fn.extend({
-			          center: function () {
-			                return this.each(function() {
-			                        var top = ($(window).height() - $(this).outerHeight()) / 2;
-			                        var left = ($(window).width() - $(this).outerWidth()) / 2;
-			                        $(this).css({position:'absolute', margin:0, top: (top > 0 ? top : 0)+'px', left: (left > 0 ? left : 0)+'px'});
+    
+    <head>
+        <title>
+            Cloud Observer Developers UFS Page
+        </title>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <script type="text/javascript" src="js/jquery-1.5.1.min.js">
+        										
+        </script>
+        <script type="text/javascript" src="js/jquery-ui-1.8.14.custom.min.js">
+        										
+        </script>
+        <script type="text/javascript" src="js/jquery.sha256.min.js">
+        										
+        </script>
+        <script type="text/javascript" src="js/jquery.validate.min.js">
+        										
+        </script>
+        <script type="text/javascript" src="js/tempo.min.js">
+        										
+        </script>
+        <link type="text/css" href="css/cloud-blue/jquery-ui-1.8.14.custom.css"
+        rel="stylesheet" />
+        <script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js">
+        		< script type = 'text/javascript'
+		src = "js/jquery.grumble.min.js" >
+        </script>
+        <script type='text/javascript' src="js/jquery.event.drag-1.5.min.js">
+        </script>
+        </script>
+        <script type="text/javascript">
+        			function readCookie(name) {
+			    var nameEQ = name + "=";
+			    var ca = document.cookie.split(';');
+			    for (var i = 0; i < ca.length; i++) {
+			        var c = ca[i];
+			        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+			        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+			    }
+			    return null;
+			}
+
+			(function($) {
+			    $.fn.extend({
+			        center: function() {
+			            return this.each(function() {
+			                var top = ($(window).height() - $(this).outerHeight()) / 2;
+			                var left = ($(window).width() - $(this).outerWidth()) / 2;
+			                $(this).css({
+			                    position: 'absolute',
+			                    margin: 0,
+			                    top: (top > 0 ? top : 0) + 'px',
+			                    left: (left > 0 ? left : 0) + 'px'
 			                });
+			            });
 			        }
-			     });
+			    });
 			})(jQuery);
+
 			
-		</script>
-
-
-
-
-	<style>
-body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td { 
-	margin:0;
-	padding:0;
-}
-table {
-	border-collapse:collapse;
-	border-spacing:0;
-}
-fieldset,img { 
-	border:0;
-}
-address,caption,cite,code,dfn,em,strong,th,var {
-	font-style:normal;
-	font-weight:normal;
-}
-ol,ul {
-	list-style:none;
-}
-caption,th {
-	text-align:left;
-}
-h1,h2,h3,h4,h5,h6 {
-	font-size:100%;
-	font-weight:normal;
-}
-q:before,q:after {
-	content:'';
-}
-abbr,acronym { border:0;}
-
-	</style>
-	
-	<style>
-	
-	html { height: 100% } body { height: 100% } body { font-family: Georgia,
-			Times, Times New Roman, serif; font-style: italic; background: #87CEFA;
-			background: -moz-linear-gradient(90deg, #87CEFA 0%, #6960EC 100%); background:
-			-webkit-gradient(linear, left bottom, left top, color-stop(0%,#87CEFA),
-			color-stop(100%,#6960EC)); background: -webkit-linear-gradient( left bottom,
-			left top, #87CEFA 0%,#6960EC 100%); background: -o-linear-gradient(left,
-			#87CEFA 0%,#6960EC 100%); background: -ms-linear-gradient(left, #87CEFA
-			0%,#6960EC 100%); filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#87CEFA',
-			endColorstr='#6960EC',GradientType=1 ); background: linear-gradient(left,
-			#87CEFA 0%,#6960EC 100%); color: #FFF; text-align: center; background-color:#87CEFA;
-			background-repeat: repeat-x; } fieldset { border: 1px solid #2F6FAB; margin:
-			1em 0 1em 0; padding: 0 1em 1em; line-height: 1.5em; } #content { width:
-			300px ; margin-left: auto ; margin-right: auto ;} ::selection { background:
-			#ff79c5; color: white; text-shadow: none; }
-			
-			
-		.ex {
-			display:inline-block;
-			width: 150px;
-			margin-left:300px;
-			margin-top:300px;
-			height:20px;
-			font-size: 12px;
-			font-family: Consolas, "Lucida Console", monospace;
-			}
-			
-		.grumble-button {
-			font-size:11px;
-			}
-			
-			div.alert {
-			    display: none;
-			   
-			}
-		a
-		{
-			color : #FFF;
-			text-shadow: 1px 1px 1px rgba(0,0,0, 0.3);
-		}	
- a:link{
-			text-decoration:none;
-			}
-			a:hover{
-			text-decoration:underline;
-			cursor:hand;
-			}
-
-div {
-    display: block;
-}
-
-div.alert, div.hidden-c {
-    display: none;
-}
-
-.box{
-	 background: rgba(0,0,0,0.1);
-	  background-color: rgba(0,0,0,0.1);
-}
-
-.overlay {
-  -webkit-box-align: center;
-  -webkit-box-pack: center;
-  -webkit-transition: 0.25s opacity;
-  background: -webkit-radial-gradient(rgba(127, 127, 127, 0.5),
-                                      rgba(127, 127, 127, 0.5) 35%,
-                                      rgba(0, 0, 0, 0.7));
-  bottom: 0;
-  display: -webkit-box;
-  left: 0;
-  position: fixed;
-  right: 0;
-  top: 0;
-  z-index: 0;
-}
-
-.message{
-    -webkit-box-shadow: 0 5px 80px #505050;
-    -moz-box-shadow: 0 5px 80px #505050;
-    box-shadow: 0 5px 80px #505050;
-    position: absolute;
-    top: 37.5% ;
-    left: 37.5%;
-    align: center;
-    width: 25%;
-    height: 25%;
-}
-
-
-
-.box {
-    position: absolute;
-    background: #fcfdff;
-    border: 0px solid #418bd7;
-    text-align: center;
-    font-size: 15px;
-    border-radius: 4px;
-}
-.handle {
-    cursor: move;
-}
-.bar {
-    background: #57b0ff;
-    border-bottom: 1px solid #418bd7;
-    height: 34px;
-    border-radius: 4px 4px 0px 0px;
-}
-.resize{
-    width: 10px;
-    height: 10px;
-    position:absolute;
-    bottom:0;
-    right:0;
-    background-image: url(http://jqueryui.com/themeroller/images/?new=222222&w=256&h=240&f=png&fltr[]=rcd|256&fltr[]=mask|icons/icons.png);
-    background-position: -80px -228px;
-    background-repeat: no-repeat;
-}
-
-h2{font-size: 120%;}
-.nifty{ margin: 0 1%;
-	background: #258ffd;
-	background: rgba(110,209,255, 0.85);
-	}
-
-
-b.rtop b.r4, b.rbottom b.r4{margin: 0 1px;height: 2px}
-
-.eButton {width: 150px;padding: 5px 10px;word-wrap: break-word;height: auto;}}
-::-moz-selection {   background-color: #fbfdfe;  color: #ff6c24; text-shadow: 0px 1px 1px #258ffd;}
-::selection {  background-color: #fbfdfe;   color: #fff;   text-shadow: 0px 1px 1px #258ffd;}
-
-
-
-			li.file-1 {background-color:#adf481;}
-			li.file-0 {background-color:#a1e6f9;}
-			fieldset {border: 1px solid #FFF; margin : 5px}
-			.hilight { border:1px solid #ddd;
-				 background-color:#ff6c24;
-				  }
-				  			.border { border:1px solid #ddd;
-				  }
-				  
-				  .butt{
-				  				display:inline-block;
-			width: 150px;
-			height:20px;
-			font-size: 12px;
-			font-family: Consolas, "Lucida Console", monospace;
-				  }
-				  				  .butt2{
-				  				display:inline-block;
-			width: 100%;
-			
-			font-size: 12px;
-			font-family: Consolas, "Lucida Console", monospace;
-			color: black;
-				  }
- 
- 
-	</style>
-	<link rel="stylesheet" href="css/grumble.min.css?v=1">
-</head>
-
-<body>
-
-<div id="prap">
-			<p class="ex butt" id="grumble3">With close button</p>
-</div>
-
-
-	<p id="alert_button" class="butt"> show alert! </p>
-	<p id="upload_button" class="butt"> show upload! </p>
-	<div class="alert">
-	    <div class="overlay"></div>
-	    
-	    <div id="demo4_box" class="box message nifty" data-minwidth="75" data-minheight="50">
-	        <div class="handle bar" id="alert_name"><h2 class="handle bar">Handle</h2></div>
-	        <div class="contents" id="alert_content"><h1>#demo2_box <h1></div>
-	        <div class="handle resize"></div>
-	    </div> 
-	</div>
-<script src="js/jquery.grumble.min.js?v=1"></script>
-	<script>
-
+        </script>
+        <style>
+            body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td
+            { margin:0; padding:0; } table { border-collapse:collapse; border-spacing:0;
+            } fieldset,img { border:0; } address,caption,cite,code,dfn,em,strong,th,var
+            { font-style:normal; font-weight:normal; } ol,ul { list-style:none; } caption,th
+            { text-align:left; } h1,h2,h3,h4,h5,h6 { font-size:100%; font-weight:normal;
+            } q:before,q:after { content:''; } abbr,acronym { border:0;} html { height:
+            100% } body { height: 100% } body { font-family: Georgia, Times, Times
+            New Roman, serif; font-style: italic; background: #87CEFA; background:
+            -moz-linear-gradient(90deg, #87CEFA 0%, #6960EC 100%); background: -webkit-gradient(linear,
+            left bottom, left top, color-stop(0%,#87CEFA), color-stop(100%,#6960EC));
+            background: -webkit-linear-gradient( left bottom, left top, #87CEFA 0%,#6960EC
+            100%); background: -o-linear-gradient(left, #87CEFA 0%,#6960EC 100%); background:
+            -ms-linear-gradient(left, #87CEFA 0%,#6960EC 100%); filter: progid:DXImageTransform.Microsoft.gradient(
+            startColorstr='#87CEFA', endColorstr='#6960EC',GradientType=1 ); background:
+            linear-gradient(left, #87CEFA 0%,#6960EC 100%); color: #FFF; text-align:
+            center; background-color:#87CEFA; background-repeat: repeat-x; } fieldset
+            { border: 1px solid #2F6FAB; margin: 1em 0 1em 0; padding: 0 1em 1em; line-height:
+            1.5em; } #content { width: 300px ; margin-left: auto ; margin-right: auto
+            ;} ::selection { background: #ff79c5; color: white; text-shadow: none;
+            } .ex { display:inline-block; width: 150px; margin-left:150px; margin-top:150px;
+            height:20px; font-size: 12px; font-family: Consolas, "Lucida Console",
+            monospace; } .grumble-button { font-size:11px; } div.alert { display: none;
+            } a { color : #FFF; text-shadow: 1px 1px 1px rgba(0,0,0, 0.3); } a:link{
+            text-decoration:none; } a:hover{ text-decoration:underline; cursor:hand;
+            } div { display: block; } div.alert, div.hidden-c { display: none; } .box{
+            background: rgba(0,0,0,0.1); background-color: rgba(0,0,0,0.1); } .overlay
+            { -webkit-box-align: center; -webkit-box-pack: center; -webkit-transition:
+            0.25s opacity; background: -webkit-radial-gradient(rgba(127, 127, 127,
+            0.5), rgba(127, 127, 127, 0.5) 35%, rgba(0, 0, 0, 0.7)); bottom: 0; display:
+            -webkit-box; left: 0; position: fixed; right: 0; top: 0; z-index: 0; }
+            .message{ -webkit-box-shadow: 0 5px 80px #505050; -moz-box-shadow: 0 5px
+            80px #505050; box-shadow: 0 5px 80px #505050; position: absolute; top:
+            37.5% ; left: 37.5%; align: center; width: 25%; height: 25%; } .box { position:
+            absolute; background: #fcfdff; border: 0px solid #418bd7; text-align: center;
+            font-size: 15px; border-radius: 4px; } .handle { cursor: move; } .bar {
+            background: #57b0ff; border-bottom: 1px solid #418bd7; height: 34px; border-radius:
+            4px 4px 0px 0px; } .resize{ width: 10px; height: 10px; position:absolute;
+            bottom:0; right:0; background-image: url(http://jqueryui.com/themeroller/images/?new=222222&w=256&h=240&f=png&fltr[]=rcd|256&fltr[]=mask|icons/icons.png);
+            background-position: -80px -228px; background-repeat: no-repeat; } h2{font-size:
+            120%;} .nifty{ margin: 0 1%; background: #258ffd; background: rgba(110,209,255,
+            0.85); } b.rtop b.r4, b.rbottom b.r4{margin: 0 1px;height: 2px} .eButton
+            {width: 150px;padding: 5px 10px;word-wrap: break-word;height: auto;}} ::-moz-selection
+            { background-color: #fbfdfe; color: #ff6c24; text-shadow: 0px 1px 1px #258ffd;}
+            ::selection { background-color: #fbfdfe; color: #fff; text-shadow: 0px
+            1px 1px #258ffd;} li.file-1 {background-color:#adf481;} li.file-0 {background-color:#a1e6f9;}
+            fieldset {border: 1px solid #FFF; margin : 5px} .hilight { border:1px solid
+            #ddd; background-color:#ff6c24; } .border { border:1px solid #ddd; } .butt{
+            display:inline-block; width: 150px; height:20px; font-size: 12px; font-family:
+            Consolas, "Lucida Console", monospace; } .butt2{ display:inline-block;
+            width: 100%; font-size: 12px; font-family: Consolas, "Lucida Console",
+            monospace; color: black; }
+        </style>
+        <link rel="stylesheet" href="css/grumble.min.css?v=1">
+        <script src="js/jquery.grumble.min.js?v=1">
+        </script>
+    </head>
     
+    <body>
+        <div class="not-loged-in-user">
+            <p id="login_button" class="butt">
+                Log In!
+            </p>
+            <p id="register_button" class="butt">
+                Register!
+            </p>
+            <div/>
+            <br/>
+            <div class="loged-in-user-ui">
+                <div id="prap">
+                    <p class="ex butt" id="grumble3">
+                        With close button
+                    </p>
+                </div>
+                <p id="alert_button" class="butt">
+                    show alert!
+                </p>
+                <p id="upload_button" class="butt">
+                    show upload!
+                </p>
+                <div class="alert">
+                    <div class="overlay">
+                    </div>
+                    <div id="demo4_box" class="box message nifty" data-minwidth="75" data-minheight="50">
+                        <div class="handle bar" id="alert_name">
+                            <h2 class="handle bar">
+                                Handle
+                            </h2>
+                        </div>
+                        <div class="contents" id="alert_content">
+                            <h1>
+                                #demo2_box
+                                <h1>
+                        </div>
+                        <div class="handle resize">
+                        </div>
+                    </div>
+                </div>
+                <h3 class="fun">
+                    <a href="#">FS</a>
+                </h3>
+                <div id="tabs-fun" class="fun">
+                    <ol id="marx-brothers">
+                        <div data-template>
+                            <li class="file-{{is_public}}">
+                                <p id="item-file-{{_tempo.index}}" class="butt2">
+                                    {{file_name}} | {{modified}} | {{_tempo.index}}
+                                </p>
+                            </li>
+                            <script>
+                            				      		$('#item-file-{{_tempo.index}}').mouseup(function() {
+				      		    alert('hello!');
+				      		});
+
+				      		
+                            </script>
+                        </div>
+                        <li data-template-fallback>
+                            Sorry, JavaScript required!
+                        </li>
+                    </ol>
+                </div>
+                <div>
+                    <div class="hidden-c">
+                        <!-- -->
+                        <div id="tabs-ufs" class="ufs">
+                            <form method="POST" id="ufs_form_upload" enctype="multipart/form-data"
+                            action="/ufs.service">
+                                <input type="hidden" name="redirect_location" value="/ufs.html">
+                                <fieldset>
+                                    <legend>
+                                        Name:
+                                    </legend>
+                                    <input type="text" class="required" name="file_name" />
+                                </fieldset>
+                                <fieldset>
+                                    <legend>
+                                        Sharing settings:
+                                    </legend>
+                                    <p>
+                                        <input type="radio" name="is_public" value="true">
+                                        Public
+                                    </p>
+                                    <p>
+                                        <input type="radio" name="is_public" value="false" checked>
+                                        Private
+                                    </p>
+                                </fieldset>
+                                <fieldset>
+                                    <legend>
+                                        File:
+                                    </legend>
+                                    <input type="file" name="datafile">
+                                </fieldset>
+                                <input type="submit" class="eButton" value="Upload" />
+                                <input type="button" class="eButton" value="Cancel" onClick=$(".alert").hide() />
+                            </form>
+                        </div>
+                        <!-- -->
+                        <div id="tabs-ufs-update" class="ufs">
+                            <form method="POST" id="ufs_form_upload" enctype="multipart/form-data"
+                            action="/ufs.service">
+                                <input type="hidden" name="redirect_location" value="/ufs.html">
+                                <input type="hidden" id="tabs-ufs-update-file_eu" name="tabs-ufs-update-file_eu"
+                                value="sha256.user.file">
+                                <fieldset>
+                                    <legend>
+                                        Name:
+                                    </legend>
+                                    <input type="text" class="required" id="tabs-ufs-update-file_name" name="file_name"
+                                    />
+                                </fieldset>
+                                <fieldset>
+                                    <legend>
+                                        Sharing settings:
+                                    </legend>
+                                    <p>
+                                        <input type="radio" name="is_public" value="true">
+                                        Public
+                                    </p>
+                                    <p>
+                                        <input type="radio" name="is_public" value="false" checked>
+                                        Private
+                                    </p>
+                                </fieldset>
+                                <fieldset>
+                                    <legend>
+                                        New File:
+                                    </legend>
+                                    <input type="file" name="datafile">
+                                </fieldset>
+                                <input type="submit" class="eButton" value="Upload" />
+                                <input type="button" class="eButton" value="Cancel" onClick=$(".alert").hide() />
+                            </form>
+                        </div>
+                        <!-- -->
+                        <div id="tabs-login" class="login">
+                            <form method="get" id="login" action="./ufs.html">
+                                <fieldset>
+                                    <legend>
+                                        Email:
+                                    </legend>
+                                    <input type="text" class="required email" name="login" />
+                                </fieldset>
+                                <fieldset>
+                                    <legend>
+                                        Password:
+                                    </legend>
+                                    <input type="hidden" name="pass" id="hidden_pass_value_login" value=""
+                                    />
+                                    <input type="password" class="required" id="pass_value_login" />
+                                </fieldset>
+                                <input type="submit" class="eButton" value="Submit" />
+                                <input type="button" class="eButton" value="Cancel" onClick=$(".alert").hide() />
+                            </form>
+                        </div>
+                        <!-- -->
+                        <div id="tabs-register" class="register">
+                            <script type="text/javascript">
+                            									var RecaptchaOptions = {
+									    theme: 'white'
+									};
+                            </script>
+                            <form method="get" id="register" action="./dev.html">
+                                <fieldset>
+                                    <legend>
+                                        Email:
+                                    </legend>
+                                    <input type="text" class="required email" name="register" />
+                                </fieldset>
+                                <fieldset>
+                                    <legend>
+                                        Password:
+                                    </legend>
+                                    <input type="hidden" name="pass" id="hidden_pass_value_register" value=""
+                                    />
+                                    <input type="password" class="required" id="pass_value_register" />
+                                </fieldset>
+                                <fieldset>
+                                    <legend>
+                                        Captcha
+                                    </legend>
+                                    <div id="content">
+                                        <script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6LdRhsYSAAAAAAOG1BVM0qPtVtACn4IgU1DeQcJX">
+                                        												                            								
+                                        </script>
+                                    </div>
+                                </fieldset>
+                                <input type="submit" class="eButton" value="Submit" />
+                                <input type="button" class="eButton" value="Cancel" onClick=$(".alert").hide() />
+                            </form>
+                        </div>
+                        <1-- -->
+                    </div>
+                    <script type="text/javascript">
+$(document).ready(function() {
+
+
     $('#demo4_box').bind('dragstart', function(event) {
-	    return $(event.target).is('.handle');
-	}).bind('drag', function(event) {
-	    $(this).css({
-	        top: event.offsetY,
-	        left: event.offsetX
-	    });
-	});
-	
-	$(".resize").bind('dragstart', function(event) {
-	    var $box = $(this).closest(".box");
-	
-	    $box.data("width", $box.width());
-	    $box.data("height", $box.height());
-	    $box.data("x", event.offsetX);
-	    $box.data("y", event.offsetY);
-	
-	}).bind("drag", function(event) {
-	    var $box = $(this).closest(".box");
-	
-	    $box.width(Math.max($box.data("width") - $box.data("x") + event.offsetX, $box.data("minwidth")));
-	    $box.height(Math.max($box.data("height") - $box.data("y") + event.offsetY, $box.data("minheight")));
-	});
-	
-	function showAlert(w, h, name, body_text)
-	{	
-		$("#alert_name").html(name);
-		$("#alert_content").html( body_text);
-		$(".box").width = w;
-		$(".box").height= h;
-		$(".alert").show();
-	}
-	
-		function showUpload()
-	{	
-		$("#alert_name").html("Files Uploader");
-		$("#alert_content").html( $("#tabs-ufs").html());
-		$(".alert").show();
-		$("#demo4_box").width(460);
-		$("#demo4_box").height(295);
-		$('#demo4_box').center();
-		$(window).bind('resize', function() {
-		    $('#demo4_box').center();
-		});
-	}
-	
-	function showEdit(ue, name)
-	{
-		 showAlert(200, 50, '<h2 class="handle bar">Alert</h2>', '<div onClick=$(".alert").hide()><h1>Contents</h1><h3>click to hide alert</h3></div>' );
-	}
-    $('#alert_button').mouseup( function()
-                            {
-                                showAlert(200, 50, '<h2 class="handle bar">Alert</h2>', '<div onClick=$(".alert").hide()><h1>Contents</h1><h3>click to hide alert</h3></div>' );
-                                
-                            }
-	);
-	
-	    $('#upload_button').mouseup( function()
-                            {
-                                showUpload();
-                                
-                            }
-	);
-	
-	function doStuff()
-	{
-		 showAlert(200, 50, '<h2 class="handle bar">Alert</h2>', '<div onClick=$(".alert").hide()><h1>Contents</h1><h3>click to hide alert</h3></div>' );
-	}
-	
-	
-	$('#grumble3').mouseup(function(eventObj){
+        return $(event.target).is('.handle');
+    }).bind('drag', function(event) {
+        $(this).css({
+            top: event.offsetY,
+            left: event.offsetX
+        });
+    });
 
-    var elemZIndex = $(this).css('z-index', '100');
-    var elemPos = $(this).offset();
+    $(".resize").bind('dragstart', function(event) {
+        var $box = $(this).closest(".box");
 
-    $('#prap').append('<div id="newer" class="new" style="position:absolute; left:' + (eventObj.pageX) + 'px; top:' + elemPos.top + 'px; z-index:' + (elemZIndex + 10) + '">&nbsp;</div>');
-    
-  		 $('#newer').grumble(
-				{
-					text: ' <a href="#me" target="_blank"><h3>Download me</h3></a> <br/> <a href="#edit" onClick=doStuff()> <h3>Edit me</h3> </a>  <br/><a href="#delete" onClick=alert("del")> <h3>Delete me</h3> </a>',
-					angle: (Math.random()*360+150),
-					distance: 3,
-					showAfter: 15,
-					hideAfter: false,
-					//type : 'alt-',
-					hasHideButton: true, // just shows the button
-					buttonHideText: 'Pop!',
-					onShow: function(){
-					},
-					onBeginHide: function(){
-					},
-        onHide: function() {
-            $("#newer").empty();
-            $("#newer").detach();
-            $("#newer").remove();
-            $('grumble-text').remove();
-            $('grumble').remove();
-            $('grumble-button').remove();
-        }
-			});
-		}).mousedown(function(){ $('#grumble3').addClass("border"); });
-		
-		
-	
-	</script>
-	
-		<div class="hidden-c">
-			<div id="tabs-ufs" class="ufs">
-				<form method="POST" id="ufs_form_upload" enctype="multipart/form-data" action="/ufs.service">
-					<input type="hidden" name="redirect_location" value="/ufs.html">
-					<fieldset>
-						<legend>
-							Name:
-						</legend>
-						<input type="text" class="required" name="file_name" />
-					</fieldset>
-					<fieldset>
-						<legend>
-							Sharing settings:
-						</legend>
-						<p><input type="radio" name="is_public" value="true"> Public </p>
-						<p><input type="radio" name="is_public" value="false" checked> Private</p>
-					</fieldset>
-					<fieldset>
-						<legend>
-							File:
-						</legend>
-						<input type="file" name="datafile">
-					</fieldset>
-					<input type="submit" class="eButton" value="Upload" />
-					<input type="button" class="eButton" value="Cancel" onClick=$(".alert").hide() />
-				</form>
-			</div>	
-		</div>		
-		
-			<h3 class="fun">
-				<a href="#">FS</a>
-			</h3>
-			<div id="tabs-fun" class="fun">
-				<ol id="marx-brothers">
-				      <div data-template> <li class="file-{{is_public}}" > <p id="item-file-{{_tempo.index}}" class="butt2">{{file_name}} | {{modified}} | {{_tempo.index}} </p></li>
-				      <script>
-				      		$('#item-file-{{_tempo.index}}').mouseup(function(){
-								alert('hello!');
-							});
+        $box.data("width", $box.width());
+        $box.data("height", $box.height());
+        $box.data("x", event.offsetX);
+        $box.data("y", event.offsetY);
 
-				      </script>
-				      </div>
-				      <li data-template-fallback>Sorry, JavaScript required!</li>
-				</ol>
-			</div>
-		    <script type="text/javascript">
-				$(document).ready(function() {
-					$('.butt').mousedown(function(){ $(this).addClass("hilight"); }).mouseup(function(){$(this).removeClass("hilight"); }).mouseover(function(){$(this).addClass("border");}).mouseout(function(){$(this).removeClass("border"); $(this).removeClass("hilight");});
-					
+    }).bind("drag", function(event) {
+        var $box = $(this).closest(".box");
 
-					
-					
-					var twitter = Tempo.prepare('marx-brothers');
-					twitter.starting();
-					
-					 $.get("ufs.json", function(json)
-					 {
-					 	var data = $.parseJSON( json );
-						twitter.render(data);
-						
-						$('.butt2').mousedown(function(){ $(this).addClass("hilight"); }).mouseup(function(){$(this).removeClass("hilight"); }).mouseover(function(){$(this).addClass("border");}).mouseout(function(){$(this).removeClass("border"); $(this).removeClass("hilight");});
-					});
-					
-					
-				});
-		    </script>
-			<style>
+        $box.width(Math.max($box.data("width") - $box.data("x") + event.offsetX, $box.data("minwidth")));
+        $box.height(Math.max($box.data("height") - $box.data("y") + event.offsetY, $box.data("minheight")));
+    });
 
-			</style>
-</body>
+    function showAlert(w, h, name, body_text) {
+        $("#alert_name").html(name);
+        $("#alert_content").html(body_text);
+        $(".box").width = w;
+        $(".box").height = h;
+        $(".alert").show();
+    }
+
+    function showForm(sourceElement, PopupName, w, h) {
+        $("#alert_name").html(PopupName);
+        $("#alert_content").html(sourceElement.html());
+        $(".alert").show();
+        $("#demo4_box").width(w);
+        $("#demo4_box").height(h);
+        $('#demo4_box').center();
+        $(window).bind('resize', function() {
+            $('#demo4_box').center();
+        });
+    }
+
+    function showUpdate(fileEU, name) {
+        $("#tabs-ufs-update-file_eu").html(fileEU);
+        $("#tabs-ufs-update-file_name").html(name);
+        showForm($("#tabs-ufs-update"), "Files update form", 350, 295);
+
+    }
+
+    function showEdit(ue, name) {
+        showUpdate("eu", "name");
+    }
+
+    $('#login_button').mouseup(function() {
+        showForm($("#tabs-login"), "Login  form", 350, 205);
+
+    });
+
+    $("#register_button").mouseup(function() {
+    	
+        showForm($("#tabs-register"), "Register  form",430, 380);
+
+    });
+
+    $('#alert_button').mouseup(function() {
+        showUpdate("eu", "name");
+    });
+
+    $('#upload_button').mouseup(function() {
+        showForm($("#tabs-ufs"), "Files upload form", 350, 295);
+
+    });
+
+
+
+
+    function doStuff() {
+        showAlert(200, 50, '<h2 class="handle bar">Alert</h2>', '<div onClick=$(".alert").hide()><h1>Contents</h1><h3>click to hide alert</h3></div>');
+    }
+
+
+    $('#grumble3').mouseup(function(eventObj) {
+
+        var elemZIndex = $(this).css('z-index', '100');
+        var elemPos = $(this).offset();
+
+        $('#prap').append('<div id="newer" class="new" style="position:absolute; left:' + (eventObj.pageX) + 'px; top:' + elemPos.top + 'px; z-index:' + (elemZIndex + 10) + '">&nbsp;</div>');
+
+        $('#newer').grumble({
+            text: ' <a href="#me" target="_blank"><h3>Download me</h3></a> <br/> <a href="#edit" onClick=doStuff()> <h3>Edit me</h3> </a>  <br/><a href="#delete" onClick=alert("del")> <h3>Delete me</h3> </a>',
+            angle: (Math.random() * 50 + 150),
+            distance: 3,
+            showAfter: 15,
+            hideAfter: false,
+            //type : 'alt-',
+            hasHideButton: true,
+            // just shows the button
+            buttonHideText: 'Pop!',
+            onShow: function() {},
+            onBeginHide: function() {},
+            onHide: function() {
+                $("#newer").empty();
+                $("#newer").detach();
+                $("#newer").remove();
+                $('grumble-text').remove();
+                $('grumble').remove();
+                $('grumble-button').remove();
+            }
+        });
+    }).mousedown(function() {
+        $('#grumble3').addClass("border");
+    });
+
+
+    $('.butt').mousedown(function() {
+        $(this).addClass("hilight");
+    }).mouseup(function() {
+        $(this).removeClass("hilight");
+    }).mouseover(function() {
+        $(this).addClass("border");
+    }).mouseout(function() {
+        $(this).removeClass("border");
+        $(this).removeClass("hilight");
+    });
+
+
+
+
+    var twitter = Tempo.prepare('marx-brothers');
+    twitter.starting();
+
+    $.get("ufs.json", function(json) {
+        var data = $.parseJSON(json);
+        twitter.render(data);
+
+        $('.butt2').mousedown(function() {
+            $(this).addClass("hilight");
+        }).mouseup(function() {
+            $(this).removeClass("hilight");
+        }).mouseover(function() {
+            $(this).addClass("border");
+        }).mouseout(function() {
+            $(this).removeClass("border");
+            $(this).removeClass("hilight");
+        });
+    });
+
+
+});
+                    </script>
+    </body>
+
 </html>
