@@ -83,8 +83,7 @@
             ;} ::selection { background: #ff79c5; color: white; text-shadow: none;
             } .ex { display:inline-block; width: 150px; margin-left:150px; margin-top:150px;
             height:20px; font-size: 12px; font-family: Consolas, "Lucida Console",
-            monospace; } .grumble-button { font-size:11px; } div.alert { display: none;
-            } a { color : #FFF; text-shadow: 1px 1px 1px rgba(0,0,0, 0.3); } a:link{
+            monospace; } .grumble-button { font-size:11px; } a { color : #FFF; text-shadow: 1px 1px 1px rgba(0,0,0, 0.3); } a:link{
             text-decoration:none; } a:hover{ text-decoration:underline; cursor:hand;
             } div { display: block; } div.alert, div.hidden-c { display: none; } .box{
             background: rgba(0,0,0,0.1); background-color: rgba(0,0,0,0.1); } .overlay
@@ -106,13 +105,16 @@
             {width: 150px;padding: 5px 10px;word-wrap: break-word;height: auto;}} ::-moz-selection
             { background-color: #fbfdfe; color: #ff6c24; text-shadow: 0px 1px 1px #258ffd;}
             ::selection { background-color: #fbfdfe; color: #fff; text-shadow: 0px
-            1px 1px #258ffd;} li.file-1 {background-color:#adf481;} li.file-0 {background-color:#a1e6f9;}
+            1px 1px #258ffd;} li.file-1 {background-color: rgb(140,250,100);background-color: rgba(140,250,100, 0.2);} li.file-0 {background-color:#a1e6f9;}
             fieldset {border: 1px solid #FFF; margin : 5px} .hilight { border:1px solid
             #ddd; background-color:#ff6c24; } .border { border:1px solid #ddd; } .butt{
             display:inline-block; width: 150px; height:20px; font-size: 12px; font-family:
             Consolas, "Lucida Console", monospace; } .butt2{ display:inline-block;
             width: 100%; font-size: 12px; font-family: Consolas, "Lucida Console",
             monospace; color: black; }
+            
+.not-loged-in-user{width:50%;}
+            
         </style>
         <link rel="stylesheet" href="css/grumble.min.css?v=1">
         <script src="js/jquery.grumble.min.js?v=1">
@@ -120,70 +122,6 @@
     </head>
     
     <body>
-        <div class="not-loged-in-user">
-            <p id="login_button" class="butt">
-                Log In!
-            </p>
-            <p id="register_button" class="butt">
-                Register!
-            </p>
-            <div/>
-            <br/>
-            <div class="loged-in-user-ui">
-                <div id="prap">
-                    <p class="ex butt" id="grumble3">
-                        With close button
-                    </p>
-                </div>
-                <p id="alert_button" class="butt">
-                    show alert!
-                </p>
-                <p id="upload_button" class="butt">
-                    show upload!
-                </p>
-                <div class="alert">
-                    <div class="overlay">
-                    </div>
-                    <div id="demo4_box" class="box message nifty" data-minwidth="75" data-minheight="50">
-                        <div class="handle bar" id="alert_name">
-                            <h2 class="handle bar">
-                                Handle
-                            </h2>
-                        </div>
-                        <div class="contents" id="alert_content">
-                            <h1>
-                                #demo2_box
-                                <h1>
-                        </div>
-                        <div class="handle resize">
-                        </div>
-                    </div>
-                </div>
-                <h3 class="fun">
-                    <a href="#">FS</a>
-                </h3>
-                <div id="tabs-fun" class="fun">
-                    <ol id="marx-brothers">
-                        <div data-template>
-                            <li class="file-{{is_public}}">
-                                <p id="item-file-{{_tempo.index}}" class="butt2">
-                                    {{file_name}} | {{modified}} | {{_tempo.index}}
-                                </p>
-                            </li>
-                            <script>
-                            				      		$('#item-file-{{_tempo.index}}').mouseup(function() {
-				      		    alert('hello!');
-				      		});
-
-				      		
-                            </script>
-                        </div>
-                        <li data-template-fallback>
-                            Sorry, JavaScript required!
-                        </li>
-                    </ol>
-                </div>
-                <div>
                     <div class="hidden-c">
                         <!-- -->
                         <div id="tabs-ufs" class="ufs">
@@ -313,11 +251,130 @@
                                 <input type="button" class="eButton" value="Cancel" onClick=$(".alert").hide() />
                             </form>
                         </div>
-                        <1-- -->
+                        <!-- -->
+						<div id="tabs-logout" class="logout">
+							<fieldset>
+								<legend>
+									Logout?
+								</legend>
+								<form method="get" action="./ufs.html">
+									<input type="hidden" name="logout" value="true">
+									<input type="submit" class="eButton" 	value="OK" />
+									<input type="button" class="eButton" value="Cancel" onClick=$(".alert").hide() />
+								</form>
+							</fieldset>
+						</div>
+                        <!-- -->
                     </div>
+                    
+
+                    
+            <div class="not-loged-in-user">
+	            <p id="login_button" class="butt">
+	                Log In!
+	            </p>
+	            <p id="register_button" class="butt">
+	                Register!
+	            </p>
+            </div>
+            <br/>
+            <div class="loged-in-user">
+                <div id="prap">
+                    <p class="ex butt" id="grumble3">
+                        With close button
+                    </p>
+                    <p class="butt" id="logout_button">
+                        Log out
+                    </p>
+                </div>
+            
+                <p id="alert_button" class="butt">
+                    show alert!
+                </p>
+                <p id="upload_button" class="butt">
+                    show upload!
+                </p>
+                
+                <h3 class="fun">
+                    <a href="#">FS</a>
+                </h3>
+                <div id="tabs-fun" class="fun">
+                    <ol id="marx-brothers">
+                        <div data-template>
+                            <li class="file-{{is_public}}">
+                                <p id="item-file-{{_tempo.index}}" class="butt2">
+                                    {{file_name}} | {{modified}} | {{_tempo.index}}
+                                </p>
+                            </li>
+                            <script>
+                            				      		$('#item-file-{{_tempo.index}}').mouseup(function() {
+				      		    alert('hello!');
+				      		});
+
+				      		
+                            </script>
+                        </div>
+                        <li data-template-fallback>
+                            Sorry, JavaScript required!
+                        </li>
+                    </ol>
+                </div>
+                </div>
+                </div>
+                	
+                	                <div class="alert">
+                    <div class="overlay">
+                    </div>
+                    <div id="demo4_box" class="box message nifty" data-minwidth="75" data-minheight="50">
+                        <div class="handle bar" id="alert_name">
+                            <h2 class="handle bar">
+                                Handle
+                            </h2>
+                        </div>
+                        <div class="contents" id="alert_content">
+                            <h1>
+                                #demo2_box
+                                <h1>
+                        </div>
+                        <div class="handle resize">
+                        </div>
+                    </div>
+                </div>
+                	
                     <script type="text/javascript">
 $(document).ready(function() {
+	
+	user = readCookie('session-id');
+	if (user != null) {
+		
+		$('.loged-in-user').show();
+		$('.not-loged-in-user').remove();
+		   var twitter = Tempo.prepare('marx-brothers');
+    		twitter.starting();
 
+    $.get("ufs.json", function(json) {
+        var data = $.parseJSON(json);
+        twitter.render(data);
+
+        $('.butt2').mousedown(function() {
+            $(this).addClass("hilight");
+        }).mouseup(function() {
+            $(this).removeClass("hilight");
+        }).mouseover(function() {
+            $(this).addClass("border");
+        }).mouseout(function() {
+            $(this).removeClass("border");
+            $(this).removeClass("hilight");
+        });
+    });
+		} else {
+		$('.not-loged-in-user').removeClass("hidden-c");
+
+		$('.loged-in-user').remove();
+		$('.not-loged-in-user').show();
+		$('.not-loged-in-user').center();
+		
+	}
 
     $('#demo4_box').bind('dragstart', function(event) {
         return $(event.target).is('.handle');
@@ -384,6 +441,12 @@ $(document).ready(function() {
         showForm($("#tabs-register"), "Register  form",430, 380);
 
     });
+    
+    $("#logout_button").mouseup(function() {
+    	
+        showForm($("#tabs-logout"), "Logout form",350, 120);
+
+    });
 
     $('#alert_button').mouseup(function() {
         showUpdate("eu", "name");
@@ -391,11 +454,21 @@ $(document).ready(function() {
 
     $('#upload_button').mouseup(function() {
         showForm($("#tabs-ufs"), "Files upload form", 350, 295);
-
     });
-
-
-
+    
+	$("#register").validate();
+	$('#pass_value_register').blur(function() {
+		$('#hidden_pass_value_register').val($.sha256($(this).val()));
+	});
+	
+	$("#login").validate();
+	$('#pass_value_login').blur(function() {
+		$('#hidden_pass_value_login').val($.sha256($('#pass_value_login').val()));
+	});
+	$('#pass_value_login').keyup(function () {
+      var value = $(this).val();
+     $('#hidden_pass_value_login').val($.sha256(value));
+    }).keyup();
 
     function doStuff() {
         showAlert(200, 50, '<h2 class="handle bar">Alert</h2>', '<div onClick=$(".alert").hide()><h1>Contents</h1><h3>click to hide alert</h3></div>');
@@ -447,30 +520,10 @@ $(document).ready(function() {
     });
 
 
-
-
-    var twitter = Tempo.prepare('marx-brothers');
-    twitter.starting();
-
-    $.get("ufs.json", function(json) {
-        var data = $.parseJSON(json);
-        twitter.render(data);
-
-        $('.butt2').mousedown(function() {
-            $(this).addClass("hilight");
-        }).mouseup(function() {
-            $(this).removeClass("hilight");
-        }).mouseover(function() {
-            $(this).addClass("border");
-        }).mouseout(function() {
-            $(this).removeClass("border");
-            $(this).removeClass("hilight");
-        });
-    });
-
-
 });
                     </script>
+                    
+
     </body>
 
 </html>
