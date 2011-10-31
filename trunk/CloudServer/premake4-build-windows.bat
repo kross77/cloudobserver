@@ -1,1 +1,1 @@
-cmd /k premake4 --os=windows --CopySharedLibraries=true --platform=x32 vs2010
+cmd /k premake4 --os=windows --platform=x32 vs2010
