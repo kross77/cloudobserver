@@ -196,7 +196,7 @@
                         </div>
                         <!-- -->
                         <div id="tabs-login" class="login">
-                            <form method="get" id="login" action="./ufs.html">
+                            <form id="login" action="./ufs.html">
                                 <fieldset>
                                     <legend>
                                         Email:
@@ -222,7 +222,7 @@
 									    theme: 'white'
 									};
                             </script>
-                            <form method="get" id="register" action="./dev.html">
+                            <form id="register" action="./ufs.html">
                                 <fieldset>
                                     <legend>
                                         Email:
@@ -257,7 +257,7 @@
 								<legend>
 									Logout?
 								</legend>
-								<form method="get" action="./ufs.html">
+								<form  action="./ufs.html">
 									<input type="hidden" name="logout" value="true">
 									<input type="submit" class="eButton" 	value="OK" />
 									<input type="button" class="eButton" value="Cancel" onClick=$(".alert").hide() />
@@ -460,6 +460,10 @@ $(document).ready(function() {
 	$('#pass_value_register').blur(function() {
 		$('#hidden_pass_value_register').val($.sha256($(this).val()));
 	});
+	$('#pass_value_register').keyup(function () {
+      var value = $(this).val();
+     $('#hidden_pass_value_register').val($.sha256(value));
+    }).keyup();
 	
 	$("#login").validate();
 	$('#pass_value_login').blur(function() {
