@@ -32,10 +32,11 @@ public:
 		return into[variable];
 	}
 
-	template <class variable_T,class group_T, class iterator_T>
+	template <class variable_T,class group_T>
 	void safe_erase_in_map(variable_T variable, group_T &into)
 	{
 		boost::mutex::scoped_lock lock(mut);
+		into[variable];
 		into.erase(into.find(variable));
 	}
 
