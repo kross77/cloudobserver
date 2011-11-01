@@ -23,6 +23,7 @@ user_control::user_control()
 	tag_guest_name = "guest";
 	tag_logout = "logout";
 	tag_update = "update";
+	tag_user_control = "user_control";
 
 	recapcha_server_url = "http://www.google.com/recaptcha/api/verify";
 	recapcha_server_key = "6LdRhsYSAAAAACWFAY14BsbhEe0HzOMayMMfAYdj";
@@ -34,9 +35,9 @@ user_control::user_control()
 	tag_recaptcha_privatekey_for_post = "privatekey";
 	tag_recaptcha_response_for_post = "response";
 
-	command_create_users_table = "CREATE TABLE IF NOT EXISTS users (email varchar(65) UNIQUE NOT NULL primary key, pass varchar(65))";
-	command_create_user =  "INSERT INTO users (email, pass) VALUES (?, ?)";
-	command_find_user = "SELECT email, pass FROM users WHERE email=";
+	command_create_users_table = "CREATE TABLE IF NOT EXISTS users (email varchar(100) UNIQUE NOT NULL primary key, pass varchar(100))";
+	command_create_user =  "INSERT INTO users (email, pass) VALUES (:user_name, :pass)";
+	command_find_user = "SELECT email, pass FROM users WHERE email=:email";
 
 }
 
@@ -77,7 +78,7 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 	}
 
 	map_ss::iterator has_cookie = user_request->headers.find(tag_cookie);
-
+	 
 	if (has_cookie != headers_end){
 		std::map<std::string, std::string> parsed_cookie = http_util->parse_cookie(has_cookie->second);
 
@@ -109,25 +110,19 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 		}
 	}
 
-	map_ss::iterator has_login = user_request->arguments.find(tag_login);
-	map_ss::iterator has_register = user_request->arguments.find(tag_register);
+	std::string service_action = user_request->arguments[tag_user_control];
 
-	if((has_register != arguments_end) && (has_login != arguments_end))
-	{
-		throw std::runtime_error("User is trying to register and log in at the same time. violation!");
-	}
-	else if (has_login != arguments_end)
+	if ( service_action == tag_login)
 	{
 		return log_in(std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> >(user_request, service_response));		
 	}
-	else if(has_register != arguments_end)
+
+	if( service_action == tag_register)
 	{
 		return register_user(socket, std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> >(user_request, service_response));
 	}
-	else
-	{
-		return guest_user(std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> >(user_request, service_response));
-	}
+
+	return guest_user(std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> >(user_request, service_response));
 
 }
 
@@ -146,30 +141,58 @@ boost::shared_ptr<sqlite3pp::query>  user_control::request( std::string query)
 	}
 }
 
-bool user_control::is_registered_user( std::string email, std::string pass_sha256 )
+bool user_control::is_registered_user( std::string given_email, std::string pass_sha256 )
 {
-	boost::shared_ptr<sqlite3pp::query>  qry = request(command_find_user + "'" + email + "'" + "AND pass=" + "'" + pass_sha256 + "'" );
-	if(qry->begin() == qry->end())
+	std::string email="", pass="";
+	sqlite3pp::transaction xct(*db, true);
 	{
-		return false;
+		sqlite3pp::query qry(*db, this->command_find_user.c_str());
+		qry.bind(":email", given_email);
+
+		for (sqlite3pp::query::iterator i = qry.begin(); i != qry.end(); ++i) {
+			bool is_public;
+			(*i).getter() >> email >> pass ;
+		}
+
 	}
-	else
+
+	std::string given_pass = general_util->get_sha256(pass_sha256);
+	if (given_pass == pass)
 	{
 		return true;
 	}
+
+	return false;
+
 }
 
-bool user_control::is_registered_user( std::string email )
+bool user_control::is_registered_user( std::string given_email )
 {
-	boost::shared_ptr<sqlite3pp::query>  qry = request(command_find_user + "'" + email + "'");
-	if(qry->begin() == qry->end())
+	if (given_email == "")
 	{
 		return false;
 	}
-	else
+
+	std::string email="", pass="";
+
+	sqlite3pp::transaction xct(*db, true);
+	{
+		sqlite3pp::query qry(*db, this->command_find_user.c_str());
+		qry.bind(":email", given_email);
+
+		for (sqlite3pp::query::iterator i = qry.begin(); i != qry.end(); ++i) {
+			bool is_public;
+			(*i).getter() >> email >> pass ;
+		}
+
+	}
+
+	if (given_email == email)
 	{
 		return true;
 	}
+
+	return false;
 }
 
 std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user_control::guest_user( std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user )
@@ -283,8 +306,11 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 			}
 
 			sqlite3pp::transaction xct(*db);
-			std::string command_string = "INSERT INTO users (email, pass) VALUES ('" + has_register->second + "', '" +  has_pass->second + "')";
-			sqlite3pp::command cmd(*db, command_string.c_str());
+
+			sqlite3pp::command cmd(*db, command_create_user.c_str());
+
+			cmd.bind(":user_name", has_register->second);
+			cmd.bind(":pass", general_util->get_sha256(has_pass->second) );
 			std::cout << cmd.execute() << std::endl;
 			xct.commit();
 

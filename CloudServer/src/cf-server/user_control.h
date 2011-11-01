@@ -100,7 +100,7 @@ private:
 	std::string tag_recaptcha_response_for_post;
 	
 	bool use_recapcha;
-
+	std::string tag_user_control;
 };
 
 #endif // USER_CONTROL_H
