@@ -54,32 +54,20 @@ padding:10px;
 padding:12px;
 }
 
-.grumble50 {
-background-position:0 0;
+.grumble55 {
+background-position:-10px -6px;
 }
 
-.grumble100 {
-background-position:0 -50px;
+.grumble105 {
+background-position:-7px -60px;
 }
 
-.grumble150 {
-background-position:0 -150px;
+.grumble155 {
+background-position:-7px -165px;
 }
 
-.grumble200 {
-background-position:0 -300px;
-}
-
-.alt-grumble50 {
-background-position:-200px -150px;
-}
-
-.alt-grumble100 {
-background-position:-200px -50px;
-}
-
-.alt-grumble200 {
-background-position:-200px -300px;
+.grumble205 {
+background-position:-7px -325px;
 }
 
 .grumble-button {
