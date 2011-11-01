@@ -112,7 +112,8 @@
 			display:inline-block; width: 150px; height:20px; font-size: 12px; font-family:
 			Consolas, "Lucida Console", monospace; } .butt2{ display:inline-block;
 			width: 100%; font-size: 12px; font-family: Consolas, "Lucida Console",
-			monospace; color: black; }
+			monospace; color: black; } .butt_u{ font-size: 12px; font-family: Consolas, "Lucida Console",
+			monospace; color: white; padding:5px;}
 			
 			
 			.top-right{ display: block; position:absolute; top:5px; right:30px;}
@@ -285,18 +286,7 @@
 			</div>
 			<br/>
 			<div class="loged-in-user">
-				<div id="prap">
-					<p class="ex butt" id="grumble3">
-						With close button
-					</p>
-					<p class="butt" id="logout_button">
-						Log out
-					</p>
-				</div>
 			
-				<p id="alert_button" class="butt">
-					show alert!
-				</p>
 				<p id="upload_button" class="butt">
 					show upload!
 				</p>
@@ -322,7 +312,7 @@
 				
 				<div id="u_name">
 					<div data-template>
-					<p class="top-right butt" id="user_name">{{user_name}}</p>
+					<p class="top-right butt_u" id="user_name">{{user_name}}</p>
 					</div>
 				</div>
 				
@@ -464,11 +454,7 @@ $(document).ready(function() {
 
 	});
 	
-	$("#logout_button").mouseup(function() {
-		
-		showForm($("#tabs-logout"), "Logout form",350, 120);
 
-	});
 
 	$('#alert_button').mouseup(function() {
 		showUpdate("eu", "name");
@@ -501,48 +487,17 @@ $(document).ready(function() {
 	}
 
 
-	$('#grumble3').mouseup(function(eventObj) {
-
-		var elemZIndex = $(this).css('z-index', '100');
-		var elemPos = $(this).offset();
-
-		$('#prap').append('<div id="newer" class="new" style="position:absolute; left:' + (eventObj.pageX) + 'px; top:' + elemPos.top + 'px; z-index:' + (elemZIndex + 10) + '">&nbsp;</div>');
-
-		$('#newer').grumble({
-			text: ' <a href="#me" target="_blank"><h3>Download me</h3></a> <br/> <a href="#edit" onClick=doStuff()> <h3>Edit me</h3> </a>  <br/><a href="#delete" onClick=alert("del")> <h3>Delete me</h3> </a>',
-			angle: (Math.random() * 50 + 150),
-			distance: 3,
-			showAfter: 15,
-			hideAfter: false,
-			//type : 'alt-',
-			hasHideButton: true,
-			// just shows the button
-			buttonHideText: 'Pop!',
-			onShow: function() {
-				$('#grumble3').addClass("border2");
-			},
-			onBeginHide: function() {
-				$('.border2').removeClass("border2");
-			},
-			onHide: function() {
-				$("#newer").empty();
-				$("#newer").detach();
-				$("#newer").remove();
-			}
-		});
-	}).mousedown(function() {
-		$('#grumble3').addClass("border");
-	});
-
 
 $("#user_name").live('mouseup', function(eventObj){
+	
+		th =  $(this);
 		var elemZIndex = $(this).css('z-index', '100');
 		var elemPos = $(this).offset();
 
 		$('#u_name').append('<div id="newer" class="new" style="position:absolute; left:' + (eventObj.pageX) + 'px; top:' + elemPos.top + 'px; z-index:' + (elemZIndex + 10) + '">&nbsp;</div>');
 
 		$('#newer').grumble({
-			text: '  <a href="#me" target="_blank"><h3>Log me out</h3></a> <br/> <a href="#cancel" target="_blank"><h3>Cancel</h3></a>    ',
+			text: "  <a href='#' class='logout-but'><h3>Log me out</h3></a> <br/> <a href='#' ><h3>Cancel</h3></a>    ",
 			angle: (Math.random() * 50 + 190),
 			distance: 3,
 			showAfter: 15,
@@ -552,17 +507,31 @@ $("#user_name").live('mouseup', function(eventObj){
 			// just shows the button
 			buttonHideText: 'Pop!',
 			onShow: function() {
-				$('#user_name').addClass("border2");
+				$('.logout-but').mouseup(function() {
+					showForm($('#tabs-logout'), 'Logout form',350, 120);
+				});
+				th.addClass("border");
 			},
 			onBeginHide: function() {
-				$('.border2').removeClass("border2");
+				$('.border').removeClass("border");
 			},
 			onHide: function() {
 				$("#newer").empty();
 				$("#newer").detach();
 				$("#newer").remove();
 			}
-    	}); });
+    	});
+
+    	 }).live('mousedown', function(){
+			$(this).addClass("hilight");
+		}).live('mouseup', function(){
+			$(this).removeClass("hilight");
+		}).live('mouseover', function(){
+			$(this).addClass("border");
+		}).live('mouseout', function(eventObj){
+			$(this).removeClass("border");
+			$(this).removeClass("hilight");
+		});
 
 		$('.butt').mousedown(function() {
 			$(this).addClass("hilight");
@@ -574,6 +543,8 @@ $("#user_name").live('mouseup', function(eventObj){
 			$(this).removeClass("border");
 			$(this).removeClass("hilight");
 		});
+		
+
 
 
 });
