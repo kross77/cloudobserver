@@ -119,6 +119,14 @@ public:
 				return;
 			}
 		}
+
+		std::map<std::string, std::string>::iterator redirect_iterator= request->arguments.find("redirect_to");
+		if (redirect_iterator != request->arguments.end() )
+		{
+			http_util->send_found_302(redirect_iterator->second, socket, response);
+			return;
+		}
+
 		fs_util->send_404(request->url, socket, request, response);
 	}
 
