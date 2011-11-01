@@ -290,6 +290,16 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 
 	if (has_pass != arguments_end)
 	{
+		if (has_pass->second == "")
+		{
+			throw std::runtime_error("Bad User Pass!");
+		}
+
+		if (has_register->second == "")
+		{
+			throw std::runtime_error("Bad User Name!");
+		}
+
 		if (!is_registered_user(has_register->second))
 		{
 			if (use_recapcha)
@@ -371,7 +381,7 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 
 void user_control::apply_config( boost::property_tree::ptree config )
 {
-	this->default_db_name = config.get<std::string>("log_util_file", this->default_lu_path);
+	this->default_lu_path = config.get<std::string>("log_util_file", this->default_lu_path);
 	this->default_db_name = config.get<std::string>("database", this->default_db_name);
 	this->use_recapcha = config.get<bool>("use_recapcha", this->use_recapcha);
 	this->recapcha_server_key = config.get<std::string>("recapcha_server_key", this->recapcha_server_key);
