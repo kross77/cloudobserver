@@ -202,6 +202,7 @@
 						<div id="tabs-login" class="login">
 							<form id="login"  action="./ufs.service" >
 								<input type="hidden" name="redirect_to" value="ufs.html">
+								<input type="hidden" name="user_control" value="login">
 								<fieldset>
 									<legend>
 										Email:
@@ -212,9 +213,9 @@
 									<legend>
 										Password:
 									</legend>
-									<input type="hidden" name="pass" id="hidden_pass_value_login" value=""
+									<input type="hidden" name="pass" class="hidden_pass_value" value=""
 									/>
-									<input type="password" class="required" id="pass_value_login" />
+									<input type="password" class="required pass_value" />
 								</fieldset>
 								<input type="submit" class="eButton" value="Submit" />
 								<input type="button" class="eButton" value="Cancel" onClick=$(".alert").hide() />
@@ -229,6 +230,7 @@
 							</script>
 							<form id="register" action="./ufs.service">
 								<input type="hidden" name="redirect_to" value="ufs.html">
+								<input type="hidden" name="user_control" value="register">
 								<fieldset>
 									<legend>
 										Email:
@@ -239,9 +241,9 @@
 									<legend>
 										Password:
 									</legend>
-									<input type="hidden" name="pass" id="hidden_pass_value_register" value=""
+									<input type="hidden" name="pass" class="hidden_pass_value" value=""
 									/>
-									<input type="password" class="required" id="pass_value_register" />
+									<input type="password" class="required pass_value" />
 								</fieldset>
 								<fieldset>
 									<legend>
@@ -265,6 +267,7 @@
 								</legend>
 								<form  action="./ufs.service">
 									<input type="hidden" name="redirect_to" value="ufs.html">
+									<input type="hidden" name="user_control" value="logout">
 									<input type="hidden" name="logout" value="true">
 									<input type="submit" class="eButton" 	value="OK" />
 									<input type="button" class="eButton" value="Cancel" onClick=$(".alert").hide() />
@@ -465,22 +468,15 @@ $(document).ready(function() {
 	});
 	
 	$("#register").validate();
-	$('#pass_value_register').blur(function() {
-		$('#hidden_pass_value_register').val($.sha256($(this).val()));
-	});
-	$('#pass_value_register').keyup(function () {
-	  var value = $(this).val();
-	 $('#hidden_pass_value_register').val($.sha256(value));
-	}).keyup();
-	
 	$("#login").validate();
-	$('#pass_value_login').blur(function() {
-		$('#hidden_pass_value_login').val($.sha256($('#pass_value_login').val()));
-	});
-	$('#pass_value_login').keyup(function () {
+	
+	
+	$('.pass_value').live('blur',function() {
+		$('.hidden_pass_value').val($.sha256($(this).val()));
+	}).live('keyup', function () {
 	  var value = $(this).val();
-	 $('#hidden_pass_value_login').val($.sha256(value));
-	}).keyup();
+	 $('.hidden_pass_value').val($.sha256(value));
+	});
 
 	function doStuff() {
 		showAlert(200, 50, '<h2 class="handle bar">Alert</h2>', '<div onClick=$(".alert").hide()><h1>Contents</h1><h3>click to hide alert</h3></div>');
