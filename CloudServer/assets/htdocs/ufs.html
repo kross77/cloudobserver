@@ -1,3 +1,4 @@
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 	
@@ -107,11 +108,13 @@
 			::selection { background-color: #fbfdfe; color: #fff; text-shadow: 0px
 			1px 1px #258ffd;} li.file-1 {background-color: rgb(140,250,100);background-color: rgba(140,250,100, 0.2);} li.file-0 {background-color:#a1e6f9;}
 			fieldset {border: 1px solid #FFF; margin : 5px} .hilight { border:1px solid
-			#ddd; background-color:#ff6c24; } .border { border:1px solid #ddd; } .butt{
+			#ddd; background-color:#ff6c24; } .border, .border2 { border:1px solid #ddd; } .butt, .butt3{
 			display:inline-block; width: 150px; height:20px; font-size: 12px; font-family:
 			Consolas, "Lucida Console", monospace; } .butt2{ display:inline-block;
 			width: 100%; font-size: 12px; font-family: Consolas, "Lucida Console",
 			monospace; color: black; }
+			
+			
 			.top-right{ display: block; position:absolute; top:5px; right:30px;}
 .not-loged-in-user{width:50%;}
 			
@@ -386,13 +389,6 @@ $(document).ready(function() {
 		user_name.render(data);
 	});
 	
-	
-	$('#u_name').live('mouseup', function() {
-        alert(this.id);
-    });
-	
-	
-	
 		} else {
 		$('.not-loged-in-user').removeClass("hidden-c");
 
@@ -522,15 +518,16 @@ $(document).ready(function() {
 			hasHideButton: true,
 			// just shows the button
 			buttonHideText: 'Pop!',
-			onShow: function() {},
-			onBeginHide: function() {},
+			onShow: function() {
+				$('#grumble3').addClass("border2");
+			},
+			onBeginHide: function() {
+				$('.border2').removeClass("border2");
+			},
 			onHide: function() {
 				$("#newer").empty();
 				$("#newer").detach();
 				$("#newer").remove();
-				$('grumble-text').remove();
-				$('grumble').remove();
-				$('grumble-button').remove();
 			}
 		});
 	}).mousedown(function() {
@@ -538,16 +535,45 @@ $(document).ready(function() {
 	});
 
 
-	$('.butt').mousedown(function() {
-		$(this).addClass("hilight");
-	}).mouseup(function() {
-		$(this).removeClass("hilight");
-	}).mouseover(function() {
-		$(this).addClass("border");
-	}).mouseout(function() {
-		$(this).removeClass("border");
-		$(this).removeClass("hilight");
-	});
+$("#user_name").live('mouseup', function(eventObj){
+		var elemZIndex = $(this).css('z-index', '100');
+		var elemPos = $(this).offset();
+
+		$('#u_name').append('<div id="newer" class="new" style="position:absolute; left:' + (eventObj.pageX) + 'px; top:' + elemPos.top + 'px; z-index:' + (elemZIndex + 10) + '">&nbsp;</div>');
+
+		$('#newer').grumble({
+			text: '  <a href="#me" target="_blank"><h3>Log me out</h3></a> <br/> <a href="#cancel" target="_blank"><h3>Cancel</h3></a>    ',
+			angle: (Math.random() * 50 + 190),
+			distance: 3,
+			showAfter: 15,
+			hideAfter: false,
+			//type : 'alt-',
+			hasHideButton: true,
+			// just shows the button
+			buttonHideText: 'Pop!',
+			onShow: function() {
+				$('#user_name').addClass("border2");
+			},
+			onBeginHide: function() {
+				$('.border2').removeClass("border2");
+			},
+			onHide: function() {
+				$("#newer").empty();
+				$("#newer").detach();
+				$("#newer").remove();
+			}
+    	}); });
+
+		$('.butt').mousedown(function() {
+			$(this).addClass("hilight");
+		}).mouseup(function() {
+			$(this).removeClass("hilight");
+		}).mouseover(function() {
+			$(this).addClass("border");
+		}).mouseout(function() {
+			$(this).removeClass("border");
+			$(this).removeClass("hilight");
+		});
 
 
 });
