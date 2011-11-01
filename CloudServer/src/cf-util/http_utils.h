@@ -86,6 +86,8 @@ public:
 	template<typename InIter, typename OutIter>
 	OutIter escape ( InIter begin, InIter end, OutIter out );
 
+	void send_found_302( std::string redirect_lication, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response ); // This shall be turned into 303 for pure HTTP/1.1.
+
 
 private:
 	std::string parse_file_upload_body(std::string contents);

@@ -362,3 +362,11 @@ void  http_utils::escape ( std::istream& in, std::ostream& out )
 		std::istreambuf_iterator<char>(),
 		std::ostreambuf_iterator<char>(out));
 }
+
+void http_utils::send_found_302( std::string redirect_lication, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response )
+{
+	response->status = 302;
+	response->description = "Found";
+	response->headers.insert(std::pair<std::string, std::string>("Location", redirect_lication));
+	response->send(*socket);
+}

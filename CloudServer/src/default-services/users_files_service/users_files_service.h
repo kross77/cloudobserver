@@ -98,7 +98,7 @@ public:
 
 					fs_util->save_string_into_file(save_file.find("datafile")->second, encoded_url,  this->root_path);
 					this->create_file_table_entry(encoded_url, file_name, user_name, is_public);
-					fs_util->send_found_302(redirect_location, socket, response);
+					http_util->send_found_302(redirect_location, socket, response);
 					return;
 				}
 				catch(std::exception &e)
@@ -110,6 +110,12 @@ public:
 			if (request->url == "/ufs.json")
 			{
 				list_user_files(user_name, socket, response);
+				return;
+			}
+
+			if(request->arguments["user_name"] == "true")
+			{
+				send_json( std::pair<std::string, std::string>("user_name", user_name), socket, response);
 				return;
 			}
 		}
@@ -130,6 +136,19 @@ public:
 	virtual void stop(){}
 
 private:
+
+	//TODO: move to http_utils, add std::map variant
+	void send_json(std::pair<std::string, std::string> pair, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response)
+	{
+			std::ostringstream data_stream;
+			data_stream << "\n{\n\t\"" << http_util->escape(pair.first) << "\": \""	<< http_util->escape(pair.second)  << "\"\n}";
+			std::string data = data_stream.str();
+			response->body = data;
+			response->body_size = response->body.length();
+			response->headers.insert(std::pair<std::string, std::string>("Content-Length", boost::lexical_cast<std::string>(response->body_size)));
+			response->send(*socket);
+			return;
+	}
 
 	void list_user_files(std::string user_name, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response)
 	{
