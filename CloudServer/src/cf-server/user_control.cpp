@@ -239,8 +239,8 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 			std::map<std::string, std::string>::iterator it =  parsed_cookie.find(tag_cookie_name);
 			if (it != parsed_cookie.end())
 			{
-				std::string session_id = it->second; 
-				threading_util->safe_erase< std::string, std::map<std::string, std::string> >(session_id, sessions_map);
+				std::string session_id = it->second;
+				threading_util->safe_erase_in_map< std::string, std::map<std::string, std::string> >(session_id, sessions_map);
 			}
 		}
 		catch(std::exception &e)
