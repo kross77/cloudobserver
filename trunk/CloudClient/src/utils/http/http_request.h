@@ -35,7 +35,8 @@ public:
 	class connection_exception: public std::exception { };
 	class policy_file_request_exception: public std::exception { };
 private:
-	enum http_request_parser_state { METHOD, URL, URL_PARAM, URL_VALUE, VERSION, HEADER_KEY, HEADER_VALUE, BODY, OK };
+	typedef enum { METHOD, URL, URL_PARAM, URL_VALUE, VERSION, HEADER_KEY, HEADER_VALUE, BODY, OK } http_request_parser_state;
+	void parse_buffer(char* buffer, http_request_parser_state &parser_state, std::string &key, std::string &value, int bytes_read);
 };
 
 #endif // HTTP_REQUEST_H
