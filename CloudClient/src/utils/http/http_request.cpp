@@ -52,129 +52,8 @@ void http_request::receive(boost::asio::ip::tcp::socket& socket)
 		do
 		{
 			int bytes_read = socket.read_some(boost::asio::buffer(buffer, buffer_size));
+			parse_buffer(buffer, parser_state, key, value, bytes_read);
 
-			char* position = buffer;
-			do
-			{
-				switch (parser_state)
-				{
-				case METHOD:
-					if (this->method == "<policy-file-request/>")
-						throw policy_file_request_exception();
-					if (*position != ' ')
-						this->method += *position++;
-					else
-					{
-						position++;
-						parser_state = URL;
-					}
-					break;
-				case URL:
-					if (*position == '?')
-					{
-						position++;
-						key = "";
-						parser_state = URL_PARAM;
-					}
-					else if (*position != ' ')
-						this->url += *position++;
-					else
-					{
-						position++;
-						parser_state = VERSION;
-					}
-					break;
-				case URL_PARAM:
-					if (*position == '=')
-					{
-						position++;
-						value = "";
-						parser_state = URL_VALUE;
-					}
-					else if (*position == ' ')
-					{
-						position++;
-						parser_state = VERSION;
-					}
-					else
-						key += *position++;
-					break;
-				case URL_VALUE:
-					if (*position == '&')
-					{
-						position++;
-						this->arguments[key] += value;
-						key = "";
-						parser_state = URL_PARAM;
-					}
-					else if (*position == ' ')
-					{
-						position++;
-						this->arguments[key] += value;
-						parser_state = VERSION;
-					}
-					else
-						value += *position++;
-					break;
-				case VERSION:
-					if (*position == '\r')
-						position++;
-					else if (*position != '\n')
-						this->version += *position++;
-					else
-					{
-						position++;
-						key = "";
-						parser_state = HEADER_KEY;
-					}
-					break;
-				case HEADER_KEY:
-					if (*position == '\r')
-						position++;
-					else if (*position == '\n')
-					{
-						position++;
-						std::map<std::string, std::string>::iterator iterator = this->headers.find("Content-Length");
-						if (iterator != this->headers.end())
-							this->body_size = boost::lexical_cast<int>(iterator->second);
-						else
-							this->body_size = 0;
-						parser_state = (this->body_size == 0) ? OK : BODY;
-					}
-					else if (*position == ':')
-						position++;
-					else if (*position != ' ')
-						key += *position++;
-					else
-					{
-						position++;
-						value = "";
-						parser_state = HEADER_VALUE;
-					}
-					break;
-				case HEADER_VALUE:
-					if (*position == '\r')
-						position++;
-					else if (*position != '\n')
-						value += *position++;
-					else
-					{
-						position++;
-						this->headers.insert(std::pair<std::string, std::string>(key, value));
-						key = "";
-						parser_state = HEADER_KEY;
-					}
-					break;
-				case BODY:
-					this->body += *position++;
-					if (this->body.length() == this->body_size)
-						parser_state = OK;
-					break;
-				case OK:
-					position = buffer + bytes_read;
-					break;
-				}
-			} while (position < buffer + bytes_read);
 		} while (parser_state != OK);
 	}
 	catch (...)
@@ -184,6 +63,134 @@ void http_request::receive(boost::asio::ip::tcp::socket& socket)
 	}
 	delete buffer;
 }
+
+typedef enum { METHOD, URL, URL_PARAM, URL_VALUE, VERSION, HEADER_KEY, HEADER_VALUE, BODY, OK } http_request_parser_state;
+void http_request::parse_buffer(char* buffer, http_request_parser_state &parser_state, std::string &key, std::string &value, int bytes_read)
+{
+	char* position = buffer;
+	do
+	{
+		switch (parser_state)
+		{
+		case METHOD:
+			if (this->method == "<policy-file-request/>")
+				throw policy_file_request_exception();
+			if (*position != ' ')
+				this->method += *position++;
+			else
+			{
+				position++;
+				parser_state = URL;
+			}
+			break;
+		case URL:
+			if (*position == '?')
+			{
+				position++;
+				key = "";
+				parser_state = URL_PARAM;
+			}
+			else if (*position != ' ')
+				this->url += *position++;
+			else
+			{
+				position++;
+				parser_state = VERSION;
+			}
+			break;
+		case URL_PARAM:
+			if (*position == '=')
+			{
+				position++;
+				value = "";
+				parser_state = URL_VALUE;
+			}
+			else if (*position == ' ')
+			{
+				position++;
+				parser_state = VERSION;
+			}
+			else
+				key += *position++;
+			break;
+		case URL_VALUE:
+			if (*position == '&')
+			{
+				position++;
+				this->arguments[key] += value;
+				key = "";
+				parser_state = URL_PARAM;
+			}
+			else if (*position == ' ')
+			{
+				position++;
+				this->arguments[key] += value;
+				parser_state = VERSION;
+			}
+			else
+				value += *position++;
+			break;
+		case VERSION:
+			if (*position == '\r')
+				position++;
+			else if (*position != '\n')
+				this->version += *position++;
+			else
+			{
+				position++;
+				key = "";
+				parser_state = HEADER_KEY;
+			}
+			break;
+		case HEADER_KEY:
+			if (*position == '\r')
+				position++;
+			else if (*position == '\n')
+			{
+				position++;
+				std::map<std::string, std::string>::iterator iterator = this->headers.find("Content-Length");
+				if (iterator != this->headers.end())
+					this->body_size = boost::lexical_cast<int>(iterator->second);
+				else
+					this->body_size = 0;
+				parser_state = (this->body_size == 0) ? OK : BODY;
+			}
+			else if (*position == ':')
+				position++;
+			else if (*position != ' ')
+				key += *position++;
+			else
+			{
+				position++;
+				value = "";
+				parser_state = HEADER_VALUE;
+			}
+			break;
+		case HEADER_VALUE:
+			if (*position == '\r')
+				position++;
+			else if (*position != '\n')
+				value += *position++;
+			else
+			{
+				position++;
+				this->headers.insert(std::pair<std::string, std::string>(key, value));
+				key = "";
+				parser_state = HEADER_KEY;
+			}
+			break;
+		case BODY:
+			this->body += *position++;
+			if (this->body.length() == this->body_size)
+				parser_state = OK;
+			break;
+		case OK:
+			position = buffer + bytes_read;
+			break;
+		}
+	} while (position < buffer + bytes_read);
+}
+
 
 void http_request::send(boost::asio::ip::tcp::socket& socket)
 {
