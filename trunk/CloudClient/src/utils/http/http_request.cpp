@@ -64,7 +64,6 @@ void http_request::receive(boost::asio::ip::tcp::socket& socket)
 	delete buffer;
 }
 
-typedef enum { METHOD, URL, URL_PARAM, URL_VALUE, VERSION, HEADER_KEY, HEADER_VALUE, BODY, OK } http_request_parser_state;
 void http_request::parse_buffer(char* buffer, http_request_parser_state &parser_state, std::string &key, std::string &value, int bytes_read)
 {
 	char* position = buffer;
@@ -239,15 +238,15 @@ boost::asio::ip::tcp::socket& http_request::send(std::string absolute_url, boost
 
 	// Add the 'Host' header to the request. Not doing this is treated as bad request by many servers.
 	this->headers["Host"] = host;
-	
+
 	// Use the default port if no port is specified.
 	if (port.empty())
 		port = "80";
-	
+
 	// Use the empty path if no path is specified.
 	if (this->url.empty())
 		this->url = "/";
-	
+
 	// Resolve the hostname.
 	boost::asio::io_service io_service;
 	boost::asio::ip::tcp::resolver resolver(io_service);
@@ -261,7 +260,7 @@ boost::asio::ip::tcp::socket& http_request::send(std::string absolute_url, boost
 	{
 		throw connection_exception();
 	}
-	
+
 	// Try to connect to the server using one of the endpoints.
 	bool connected = false;
 	for (iterator; iterator != boost::asio::ip::tcp::resolver::iterator(); ++iterator)
@@ -276,14 +275,14 @@ boost::asio::ip::tcp::socket& http_request::send(std::string absolute_url, boost
 		{
 		}
 	}
-	
+
 	// Check if the connection is successful.
 	if (!connected)
 		throw connection_exception();
-	
+
 	// Send the request.
 	this->send(socket);
-	
+
 	// Return the socket.
 	return socket;
 }
