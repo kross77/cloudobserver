@@ -3,6 +3,8 @@
 server::server(boost::property_tree::ptree config) 
 {
 	threads_pool = boost::shared_ptr<thread_pool>(new thread_pool(40));
+	request_max_time = 5;
+	general_util = new general_utils();
 	util = new server_utils();
 	util->description = util->parse_config(config);
 	util->update_properties_manager();
@@ -48,82 +50,154 @@ void server::acceptor_loop(){
 // We should forward request to shared library
 void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socket> socket)
 {
-	
 	try
 	{
-		boost::shared_ptr<http_request> request = boost::make_shared<http_request>();
-		try
+		bool connection_close = true;
+		bool alive = false;
+		
+		do
 		{
-			request->receive(*socket);
+			boost::shared_ptr<http_request> request = boost::make_shared<http_request>();
+			try
+			{ 
+			alive =	request->timed_receive(*socket, request_max_time);
+			}
+			catch (http_request::policy_file_request_exception)
+			{
+				*(util->info) << "Sending the 'crossdomain.xml' file." << log_util::endl;
+				std::string policy_file =
+					"<?xml version=\"1.0\"?>\n"
+					"<!DOCTYPE cross-domain-policy SYSTEM \"http://www.macromedia.com/xml/dtds/cross-domain-policy.dtd\">\n"
+					"<cross-domain-policy>\n"
+					"  <allow-access-from domain=\"*\" to-ports=\"*\" />\n"
+					"</cross-domain-policy>\n";
+				socket->send(boost::asio::buffer(policy_file));
+				socket->close();
+				return;
+			}
+			if (!alive)
+			{
+				return;
+			}
+
+			//*(util->info) << "request url: " << request->url << log_util::endl;
+
+			boost::shared_ptr<http_response> response = boost::make_shared<http_response>();
+			std::ostringstream formatter;
+			//formatter.imbue(std::locale(std::cout.getloc(), new boost::posix_time::time_facet("%a, %d %b %Y %H:%M:%S GMT")));
+			//formatter << boost::posix_time::second_clock::local_time();
+			response->headers.insert(std::pair<std::string, std::string>("Date",  boost::posix_time::to_iso_extended_string(  boost::posix_time::second_clock::universal_time() )));//formatter.str()));
+			response->headers.insert(std::pair<std::string, std::string>("Server", "Cloud Server v0.5"));
+
+			if (request->headers["Connection"] == "Keep-Alive")
+			{
+				connection_close = false;
+				response->headers.insert(std::pair<std::string, std::string>("Connection", "Keep-Alive"));
+
+			}
+			else
+			{
+				response->headers.insert(std::pair<std::string, std::string>("Connection", "Close"));
+			}
+
+			try
+			{
+				std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > login = uac->service_call(socket, request, response);
+				request = login.first;
+				response = login.second;
+			}
+			catch (std::exception &e)
+			{
+				*(util->error) << e.what() << log_util::endl;
+			}
+
+			if (request->url == util->description.server_service_url)
+			{
+				server_service_call(socket, request, response);
+				return;
+			}
+
+
+			boost::shared_ptr<server_utils::service_container> service_cont;
+			try
+			{
+				service_cont = util->find_service(*request);
+			}
+			catch(std::exception &e)
+			{
+				*(util->error) << "Could not find service for request." << log_util::endl;
+				return;
+			}
+
+			boost::shared_ptr<service> requested_service = service_cont->service_ptr;
+
+			util->tread_util->safe_insert<boost::thread::id, std::set<boost::thread::id> >(boost::this_thread::get_id(),service_cont->threads_ids);
+
+			//*(util->info) << "ids size: " << service_cont->threads_ids.size() << log_util::endl;
+
+			try
+			{
+				requested_service->make_service_call(socket, request, response);
+			}
+			catch(std::exception &e)
+			{
+				*(util->error) << e.what() << log_util::endl; //"The parameter is incorrect" exception
+			}
+
+			util->tread_util->safe_erase<boost::thread::id, std::set<boost::thread::id> >(boost::this_thread::get_id(), service_cont->threads_ids);
+
+			//*(util->info) << "connection resolved." << log_util::endl;
 		}
-		catch (http_request::policy_file_request_exception)
-		{
-			*(util->info) << "Sending the 'crossdomain.xml' file." << log_util::endl;
-			std::string policy_file =
-				"<?xml version=\"1.0\"?>\n"
-				"<!DOCTYPE cross-domain-policy SYSTEM \"http://www.macromedia.com/xml/dtds/cross-domain-policy.dtd\">\n"
-				"<cross-domain-policy>\n"
-				"  <allow-access-from domain=\"*\" to-ports=\"*\" />\n"
-				"</cross-domain-policy>\n";
-			socket->send(boost::asio::buffer(policy_file));
-			socket->close();
-			return;
-		}
-
-		*(util->info) << "request url: " << request->url << log_util::endl;
-
-		boost::shared_ptr<http_response> response = boost::make_shared<http_response>();
-		std::ostringstream formatter;
-		formatter.imbue(std::locale(std::cout.getloc(), new boost::posix_time::time_facet("%a, %d %b %Y %H:%M:%S GMT")));
-		formatter << boost::posix_time::second_clock::local_time();
-		response->headers.insert(std::pair<std::string, std::string>("Date", formatter.str()));
-		response->headers.insert(std::pair<std::string, std::string>("Server", "Cloud Server v0.5"));
-
-		try
-		{
-			std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > login = uac->service_call(socket, request, response);
-			request = login.first;
-			response = login.second;
-		}
-		catch (std::exception &e)
-		{
-			*(util->error) << e.what() << log_util::endl;
-		}
-
-		boost::shared_ptr<server_utils::service_container> service_cont;
-		try
-		{
-			service_cont = util->find_service(*request);
-		}
-		catch(std::exception &e)
-		{
-			*(util->error) << "Could not find service for request." << log_util::endl;
-			return;
-		}
-
-		boost::shared_ptr<service> requested_service = service_cont->service_ptr;
-
-		util->tread_util->safe_insert<boost::thread::id, std::set<boost::thread::id> >(boost::this_thread::get_id(),service_cont->threads_ids);
-
-		*(util->info) << "ids size: " << service_cont->threads_ids.size() << log_util::endl;
-
-		try
-		{
-			requested_service->make_service_call(socket, request, response);
-		}
-		catch(std::exception &e)
-		{
-			*(util->error) << e.what() << log_util::endl; //"The parameter is incorrect" exception
-		}
-
-		util->tread_util->safe_erase<boost::thread::id, std::set<boost::thread::id> >(boost::this_thread::get_id(), service_cont->threads_ids);
-
-		*(util->info) << "connection resolved." << log_util::endl;
+		while(!connection_close);
 	}
+
 	catch(std::exception &e)
 	{
 		*(util->error) << e.what() << log_util::endl; //"The parameter is incorrect" exception
 	}
+	//*(util->info) << "dis-connection" <<  log_util::endl;
+}
+
+void server::server_service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response)
+{
+	server_services_list(socket, response);
+}
+
+void server::server_services_list(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response)
+{
+	/*
+	std::ostringstream user_files_stream;
+	user_files_stream << "[";
+
+	sqlite3pp::transaction xct(*db, true);
+	{
+	sqlite3pp::query qry(*db, this->command_find_all_user_files.c_str());
+	qry.bind(":user_name", user_name);
+
+	for (sqlite3pp::query::iterator i = qry.begin(); i != qry.end(); ++i) {
+	bool is_public;
+	std::string encoded_url, file_name, user_name, modified;
+	(*i).getter() >> encoded_url >> file_name >> user_name >> modified >> is_public ;
+
+	user_files_stream << "\n\t{\n\t\t\"encoded_url\": \""
+	<< encoded_url << "\",\n\t\t\"file_name\": \""
+	<< http_util->escape(file_name) << "\",\n\t\t\"user_name\": \""
+	<< user_name << "\",\n\t\t\"modified\": \""
+	<< modified << "\",\n\t\t\"is_public\": "
+	<< is_public << "\n\t},";
+	}
+
+	}
+	std::string files_ = user_files_stream.str();
+	if (files_.length() > 5)
+	files_ = files_.substr(0, files_.length() - 1);
+
+	response->body = files_.append("\n]");
+	response->body_size = response->body.length();
+	response->headers.insert(std::pair<std::string, std::string>("Content-Length", boost::lexical_cast<std::string>(response->body_size)));
+	response->send(*socket);
+	*/
+	return;
 }
 
 void server::user_info(boost::asio::ip::tcp::socket &socket)

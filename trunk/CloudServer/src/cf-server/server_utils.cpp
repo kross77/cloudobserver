@@ -26,11 +26,13 @@ server_utils::server_utils()
 	tag_headers = "headers";
 	tag_url_extensions = "url_extensions";
 	tag_settings = "settings";
+	tag_description = "description";
 	tag_configuration = "config";
 	tag_url_equals = "equals";
 	tag_path_configuration_services = tag_configuration + "." + "services";
 	tag_path_configuration_server_root_path = tag_configuration + "." + "server_root_path";
 	tag_path_configuration_port = tag_configuration + "." + "port";
+	tag_path_configuration_server_service_url = tag_configuration + "." + "server_service_url";
 	tag_path_configuration_database = tag_configuration + "." + "database";
 	tag_path_configuration_properties_manager = tag_configuration + "." +"properties_manager";
 	tag_arguments_price = "arguments_price";
@@ -95,6 +97,17 @@ std::map<std::string, boost::shared_ptr<server_utils::service_container> > serve
 			*error << std::endl << "Parsing service library, class or name error in service: " << service_name << log_util::endl;
 			continue;
 		}
+
+		boost::property_tree::ptree service_description_tree = individual_service_tree.get_child(tag_description, server_utils::empty_class<boost::property_tree::ptree>());
+		/*
+		int service_price = service_properties_tree.get<int>(tag_default_price, default_price);
+		one_description->default_price = service_price;
+		if(service_price != default_price){
+			*info << "Service price: " << service_price << log_util::endl;
+		}*/
+
+
+
 
 		one_description->service_custome_properties_tree = individual_service_tree.get_child(tag_settings, server_utils::empty_class<boost::property_tree::ptree>());
 
@@ -169,6 +182,9 @@ server_utils::server_description server_utils::parse_config( boost::property_tre
 
 	server_descr.port = config.get(tag_path_configuration_port, 12345);
 	*info << "Server port: " << server_descr.port << log_util::endl;
+
+	server_descr.server_service_url = config.get(tag_path_configuration_server_service_url, "server.json");
+	*info << "Server Service Url: " << server_descr.server_service_url << log_util::endl;
 
 	server_descr.database_name = config.get(tag_path_configuration_database, "server.db");
 	*info << "Server database: " << server_descr.database_name << log_util::endl;
