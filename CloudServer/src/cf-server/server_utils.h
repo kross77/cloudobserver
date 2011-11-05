@@ -50,6 +50,14 @@ public:
 		std::string library_name;
 		std::string class_name;
 		std::string root_file_system_directory;
+
+		std::string type;
+		std::string description;
+		std::string icon_file_path;
+		std::string default_url_path;
+
+
+
 		boost::property_tree::ptree service_custome_properties_tree;
 
 		//A service might have
@@ -64,6 +72,8 @@ public:
 	struct server_description
 	{
 		int port;
+
+		std::string server_service_url;
 
 		//Database name, DB will be created if it does not exist.
 		std::string database_name;
@@ -139,6 +149,7 @@ private:
 	std::string tag_path_configuration_services;
 	std::string tag_path_configuration_server_root_path;
 	std::string tag_path_configuration_port;
+	std::string tag_path_configuration_server_service_url;
 	std::string tag_path_configuration_database;
 	std::string tag_path_configuration_properties_manager;
 
@@ -155,7 +166,7 @@ private:
 	int headers_price;
 	int url_price;
 	int url_extensions_price;
-
+	std::string tag_description;
 
 	template<class T>
 	inline T &empty_class()

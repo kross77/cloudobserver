@@ -30,9 +30,13 @@ public:
 private:
 	void request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socket> socket); //Each request received by server will be sent to a new thread and processed by request_response_loop
 	void user_info(boost::asio::ip::tcp::socket &socket);
+	void server_services_list(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response);
+	void server_service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response);
 	boost::thread *acceptor_thread;
 	user_control *uac;
 	boost::shared_ptr<thread_pool> threads_pool;
+	general_utils *general_util;
+	int request_max_time;
 };
 
 #endif //SERVER_H

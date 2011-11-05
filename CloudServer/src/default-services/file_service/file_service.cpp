@@ -413,7 +413,6 @@ void file_service::send_info( boost::shared_ptr<fs_file> f,boost::shared_ptr<boo
 
 void file_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response)
 {
-	response->headers.insert(std::pair<std::string, std::string>("Connection", "close"));
 	if (request->url == "/")
 	{
 		try
