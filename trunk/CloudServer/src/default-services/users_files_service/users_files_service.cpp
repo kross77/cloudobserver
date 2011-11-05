@@ -93,7 +93,7 @@ void users_files_service::service_call( boost::shared_ptr<boost::asio::ip::tcp::
 void users_files_service::apply_config( boost::shared_ptr<boost::property_tree::ptree> config )
 {
 	this->root_path = config->get<std::string>("users_files_directory", this->root_path.string());
-	this->default_ufs_extension = config->get<std::string>(this->tag_ufs_extension, this->default_ufs_extension);
+	this->default_ufs_extension = config->get<std::string>("extension", this->default_ufs_extension);
 	this->default_lu_path = config->get<std::string>("log_util_file", this->default_lu_path);
 	this->default_db_name = config->get<std::string>("database", this->default_db_name);
 	create_log_util(this->default_lu_path);
