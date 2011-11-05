@@ -64,6 +64,61 @@ void http_request::receive(boost::asio::ip::tcp::socket& socket)
 	delete buffer;
 }
 
+bool http_request::timed_receive(boost::asio::ip::tcp::socket &socket, int& seconds_to_wait)
+{
+	size_t buffer_size = 1024;
+	return this->timed_receive_base( socket, buffer_size, seconds_to_wait);
+}
+
+int http_request::read_some( boost::asio::ip::tcp::socket *sock, char* buffer, size_t& buffer_size )
+{
+	return sock->read_some(boost::asio::buffer(buffer, buffer_size));
+}
+
+bool http_request::timed_receive_base(boost::asio::ip::tcp::socket& socket, size_t& buffer_size, int& seconds_to_wait)
+{
+	this->clear();
+
+	http_request_parser_state parser_state = METHOD;
+
+	char* buffer = new char[buffer_size];
+	std::string key = "";
+	std::string value = "";
+
+	try
+	{
+		do
+		{
+
+			boost::packaged_task<int> pt(boost::bind(&http_request::read_some , this,  &socket, buffer, buffer_size));
+
+			boost::unique_future<int> fi=pt.get_future();
+
+			boost::thread task(boost::interprocess::move(pt)); // launch task on a thread
+			size_t as = 1;
+			fi.timed_wait_until(boost::get_system_time()+boost::posix_time::seconds(seconds_to_wait));
+
+			if (fi.has_value())
+			{
+				int bytes_read = fi.get();
+				parse_buffer(buffer, parser_state, key, value, bytes_read);
+			}
+			else
+			{
+				task.interrupt();
+				return false;
+			}
+
+		} while (parser_state != OK);
+	}
+	catch (...)
+	{
+		delete buffer;
+		throw;
+	}
+	delete buffer;
+}
+
 void http_request::parse_buffer(char* buffer, http_request_parser_state &parser_state, std::string &key, std::string &value, int bytes_read)
 {
 	char* position = buffer;
