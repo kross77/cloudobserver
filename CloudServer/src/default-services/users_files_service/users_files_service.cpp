@@ -1,11 +1,5 @@
 #include "users_files_service.h"
 
-BOOST_EXTENSION_TYPE_MAP_FUNCTION
-{
-	std::map<std::string, boost::extensions::factory<service> > &factories(types.get());
-	factories["users_files_service"].set<users_files_service>();
-}
-
 users_files_service::users_files_service()
 {
 	general_util =boost::shared_ptr<general_utils>( new general_utils());
@@ -32,6 +26,16 @@ users_files_service::users_files_service()
 	this->command_delete_file = "DELETE FROM files WHERE encoded_url=:encoded_url";
 	this->command_find_file = "SELECT file_name, user_name, is_public, modified FROM files WHERE encoded_url=:encoded_url";
 	this->command_find_all_user_files = "SELECT encoded_url, file_name, user_name, modified, is_public FROM files WHERE user_name=:user_name";
+}
+
+void users_files_service::apply_config( boost::shared_ptr<boost::property_tree::ptree> config )
+{
+	this->root_path = config->get<std::string>("users_files_directory", this->root_path.string());
+	this->default_ufs_extension = config->get<std::string>("extension", this->default_ufs_extension);
+	this->default_lu_path = config->get<std::string>("log_util_file", this->default_lu_path);
+	this->default_db_name = config->get<std::string>("database", this->default_db_name);
+	create_log_util(this->default_lu_path);
+	create_files_table(this->default_db_name);
 }
 
 void users_files_service::service_call( boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response )
@@ -90,15 +94,7 @@ void users_files_service::service_call( boost::shared_ptr<boost::asio::ip::tcp::
 	fs_util->send_404(request->url, socket, request, response);
 }
 
-void users_files_service::apply_config( boost::shared_ptr<boost::property_tree::ptree> config )
-{
-	this->root_path = config->get<std::string>("users_files_directory", this->root_path.string());
-	this->default_ufs_extension = config->get<std::string>("extension", this->default_ufs_extension);
-	this->default_lu_path = config->get<std::string>("log_util_file", this->default_lu_path);
-	this->default_db_name = config->get<std::string>("database", this->default_db_name);
-	create_log_util(this->default_lu_path);
-	create_files_table(this->default_db_name);
-}
+
 
 void users_files_service::send_json( std::pair<std::string, std::string> pair, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response )
 {
@@ -177,4 +173,10 @@ void users_files_service::create_files_table( std::string db_name )
 		*lu << "Connected to "<< db_name << " database and created a table with SQLite return code: " << db->execute(command_create_files_table.c_str()) << log_util::endl;
 		is_db_set = true;
 	}
+}
+
+BOOST_EXTENSION_TYPE_MAP_FUNCTION
+{
+	std::map<std::string, boost::extensions::factory<service> > &factories(types.get());
+	factories["users_files_service"].set<users_files_service>();
 }

@@ -18,8 +18,8 @@
 			<class_name>file_service</class_name>
 			<library_name>FileService</library_name>
 			<settings>
-			<root_file_system_directory>htdocs</root_file_system_directory>
-			<show_directory_contents>true</show_directory_contents>
+				<root_file_system_directory>htdocs</root_file_system_directory>
+				<show_directory_contents>true</show_directory_contents>
 			</settings>
 			<properties>
 				<default_price>50</default_price>
@@ -31,7 +31,10 @@
 			<class_name>users_files_service</class_name>
 			<library_name>UsersFilesService</library_name>
 			<settings>
-			<users_files_directory>ufs</users_files_directory>
+				<users_files_directory>ufs</users_files_directory>
+				<extension>user.file</extension>
+				<log_util_file>ufs_log.txt</log_util_file>
+				<database>ufs.db</database>
 			</settings>
 			<properties>
 				<url>
