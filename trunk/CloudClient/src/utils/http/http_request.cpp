@@ -90,11 +90,11 @@ bool http_request::timed_receive_base(boost::asio::ip::tcp::socket& socket, size
 		do
 		{
 
-			boost::packaged_task<int> pt(boost::bind(&http_request::read_some , this,  &socket, buffer, buffer_size));
+			boost::shared_ptr<boost::packaged_task<int> >  pt( new boost::packaged_task<int>(boost::bind(&http_request::read_some , this,  &socket, buffer, buffer_size)));
 
-			boost::unique_future<int> fi=pt.get_future();
+			boost::unique_future<int> fi=pt->get_future();
 
-			boost::thread task(boost::interprocess::move(pt)); // launch task on a thread
+			boost::thread task(boost::bind(&http_request::run_item<int>, this, pt)); // launch task on a thread
 			size_t as = 1;
 			fi.timed_wait_until(boost::get_system_time()+boost::posix_time::seconds(seconds_to_wait));
 
@@ -117,6 +117,7 @@ bool http_request::timed_receive_base(boost::asio::ip::tcp::socket& socket, size
 		throw;
 	}
 	delete buffer;
+	return true;
 }
 
 void http_request::parse_buffer(char* buffer, http_request_parser_state &parser_state, std::string &key, std::string &value, int bytes_read)
