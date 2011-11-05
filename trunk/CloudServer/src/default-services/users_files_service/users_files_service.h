@@ -1,5 +1,5 @@
-#ifndef FILE_SERVICE_H
-#define FILE_SERVICE_H
+#ifndef USERS_FILES_SERVICE_H
+#define USERS_FILES_SERVICE_H
 
 #include <iostream>
 #include <fstream>
@@ -94,4 +94,4 @@ private:
 	CLOUD_SERVICE_AUXILIARIES;
 };
 
-#endif // FILE_SERVICE_H
+#endif // USERS_FILES_SERVICE_H
