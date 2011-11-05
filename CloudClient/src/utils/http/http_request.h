@@ -51,6 +51,12 @@ private:
 	void parse_buffer(char* buffer, http_request_parser_state &parser_state, std::string &key, std::string &value, int bytes_read);
 	bool timed_receive_base(boost::asio::ip::tcp::socket& socket, size_t& buffer_size, int& seconds_to_wait);
 	int read_some( boost::asio::ip::tcp::socket *sock, char* buffer, size_t& buffer_size );
+	
+	template <class task_return_t>
+	void run_item(  boost::shared_ptr<boost::packaged_task<task_return_t> > pt)
+	{
+		(*pt)();
+	}
 };
 
 #endif // HTTP_REQUEST_H
