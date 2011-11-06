@@ -14,6 +14,7 @@
 //Boost
 #include <boost/asio.hpp>
 #include <boost/thread.hpp>
+#include <boost/thread/shared_mutex.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/shared_ptr.hpp> // aka std::shared_ptr
 #include <boost/unordered_map.hpp> // aka std::unordered_map
@@ -51,12 +52,12 @@ public:
 		std::string class_name;
 		std::string root_file_system_directory;
 
-		std::string type;
-		std::string description;
-		std::string icon_file_path;
-		std::string default_url_path;
+		std::string description_type;
+		std::string description_text;
+		std::string description_icon_file_path;
+		std::string description_default_url_path;
 
-
+		boost::shared_mutex edit_mutex_;
 
 		boost::property_tree::ptree service_custome_properties_tree;
 
@@ -77,7 +78,7 @@ public:
 
 		//Database name, DB will be created if it does not exist.
 		std::string database_name;
-		
+
 		//Containse pairs of services properties values, used in find_service algorithm
 		std::map<std::string, int> properties_manager_map;
 
@@ -127,7 +128,8 @@ public:
 
 private:
 
-	std::map<std::string, boost::shared_ptr<server_utils::service_container> > parse_config_services(boost::property_tree::ptree config);
+
+	std::map<std::string, boost::shared_ptr<server_utils::service_container> > parse_config_services( boost::property_tree::ptree config );
 	int find_or_null( std::map<std::string, int> map, std::string to_find);
 	// For services creation from shared libraries
 	extension_utils *util;
@@ -166,7 +168,16 @@ private:
 	int headers_price;
 	int url_price;
 	int url_extensions_price;
+
 	std::string tag_description;
+	std::string tag_description_type;
+	std::string tag_description_text;
+	std::string tag_description_icon;
+	std::string tag_description_default_url;
+	std::string tag_default_description_type;
+	std::string tag_default_description_text;
+	std::string tag_default_description_icon;
+	std::string tag_default_description_url;
 
 	template<class T>
 	inline T &empty_class()
