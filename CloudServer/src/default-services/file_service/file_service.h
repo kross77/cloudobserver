@@ -47,12 +47,12 @@ private:
 
 	boost::filesystem::path root_path;
 	bool show_directory_contents;
-	boost::posix_time::time_duration expiration_period;
+
 	general_utils *general_util;
 	http_utils *http_util;
 	fs_utils *fs_util;
 	boost::filesystem::path users_directory_path;
-	std::string max_age;
+
 	bool first_time;
 
 	boost::uintmax_t cach_size_limit;
@@ -70,7 +70,7 @@ private:
 	fs_concurrent_queued_map cached_files;
 
 	boost::shared_array<char> cach_file(boost::shared_ptr<fs_file> f);
-	boost::shared_ptr<fs_file> create_file(boost::filesystem::path p);
+	boost::shared_ptr<fs_file> create_file( boost::filesystem::path p );
 	void create_file(boost::filesystem::path p, fs_map &m1, std::set<std::string> &m2);
 	void create_file(boost::filesystem::path p, std::set<std::string> &m);
 	std::string encode_path(boost::filesystem::path &p);
@@ -78,12 +78,12 @@ private:
 	void is_dir( boost::filesystem::path dir, fs_map &old_fs, std::set<std::string> &new_fs );
 	bool is_directory_call(std::string &s);
 	void is_file(boost::filesystem::path p, fs_map &old_fs, std::set<std::string> &new_fs);
-	void insert_file_headers( boost::shared_ptr<fs_file> f, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response );
+
 	boost::shared_array<char> load_file_into_memory(boost::shared_ptr<fs_file> f);
 	void process_request(std::string encoded_url,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response);
 
 	void send_cached_file(boost::uintmax_t size, boost::shared_array<char> buffer, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response);
-	void send_uncachable_file(boost::shared_ptr<fs_file> f,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response);
+
 	void send_directory_contents(std::set<std::string> list,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response);
 
 	void send_info(boost::shared_ptr<fs_file> f,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response);

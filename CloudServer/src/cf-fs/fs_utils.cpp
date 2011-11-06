@@ -4,6 +4,10 @@ fs_utils::fs_utils()
 {
 	general_util = new general_utils();
 	http_util = new http_utils();
+
+	this->expiration_period = boost::posix_time::minutes(200);
+	this->max_age = "max-age=" + boost::lexical_cast<std::string>(this->expiration_period.total_seconds());
+
 }
 
 void fs_utils::send_404( std::string encoded_url,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response )
@@ -40,4 +44,46 @@ void fs_utils::save_string_into_file( std::string contents, std::string s_name, 
 	datFile.open(name, std::ofstream::binary | std::ofstream::trunc | std::ofstream::out	);
 	datFile.write(contents.c_str(), contents.length());
 	datFile.close();
+}
+
+void fs_utils::send_uncachable_file( boost::shared_ptr<fs_file> f,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response )
+{
+	response->send(*socket);
+	//std::cout << "I have sent a big file!" << std::endl;
+	boost::shared_lock<boost::shared_mutex> lock_r(f->mutex_);
+	std::ifstream stream;
+	int buff_length = 8192;
+	boost::shared_array<char> buffer( new char[buff_length]);
+	stream.open( f->path.string().c_str(), std::ios_base::binary);
+	while (stream)
+	{
+		stream.read(buffer.get(), buff_length);
+		boost::asio::write(*socket, boost::asio::buffer(buffer.get(), stream.gcount()));
+	}
+	stream.close();
+}
+
+void fs_utils::insert_file_headers( boost::shared_ptr<fs_file> f, boost::shared_ptr<boost::asio::ip::tcp::socket > socket, boost::shared_ptr<http_response> response )
+{
+	response->headers.insert(std::pair<std::string, std::string>("Last-Modified", f->modified));
+	response->headers.insert(std::pair<std::string, std::string>("Content-Length", boost::lexical_cast<std::string>(f->size)));
+	response->headers.insert(std::pair<std::string, std::string>("Cache-Control", max_age ));
+	response->headers.insert(std::pair<std::string, std::string>("Expires", boost::posix_time::to_iso_extended_string( boost::posix_time::second_clock::local_time() + this->expiration_period ) ));
+}
+
+boost::shared_ptr<fs_file> fs_utils::create_file( boost::filesystem::path p )
+{
+	boost::shared_ptr<fs_file> f( new fs_file());
+	f->path = p;
+	{
+		f->is_cachable = false;
+		f->is_cached = false;
+		f->buffer.reset();
+	}
+
+	f->size = boost::filesystem::file_size(p);
+	f->modified = boost::posix_time::to_iso_extended_string( boost::posix_time::from_time_t(last_write_time(p)) );
+	f->is_cachable = false;
+
+	return f;
 }

@@ -7,8 +7,7 @@ file_service::file_service()
 	fs_util = new fs_utils();
 	this->root_path = boost::filesystem::current_path().string();
 	this->show_directory_contents = false;
-	this->expiration_period = boost::posix_time::minutes(200);
-	this->max_age = "max-age=" + boost::lexical_cast<std::string>(this->expiration_period.total_seconds());
+
 	current_cach_size = 0;
 	nowTime = boost::posix_time::second_clock::universal_time();
 	first_time = true;
@@ -18,6 +17,20 @@ file_service::file_service()
 	cach_size_limit = 500000;
 	cachable_file_size_limit = 200000;
 
+}
+
+boost::shared_ptr<fs_file> file_service::create_file( boost::filesystem::path p )
+{
+	boost::shared_ptr<fs_file> f = fs_util->create_file(p);
+	if (f->size <= cachable_file_size_limit)
+	{
+		f->is_cachable = true;
+		f->is_cached = false;
+	}
+	else
+		f->is_cachable = false;
+
+	return f;
 }
 
 void file_service::apply_config(boost::shared_ptr<boost::property_tree::ptree> config)
@@ -36,28 +49,7 @@ boost::shared_array<char> file_service::cach_file( boost::shared_ptr<fs_file> f 
 	return b;
 }
 
-boost::shared_ptr<fs_file> file_service::create_file( boost::filesystem::path p )
-{
-	boost::shared_ptr<fs_file> f( new fs_file());
-	f->path = p;
-	{
-		f->is_cachable = false;
-		f->is_cached = false;
-		f->buffer.reset();
-	}
 
-	f->size = boost::filesystem::file_size(p);
-	f->modified = boost::posix_time::to_iso_extended_string( boost::posix_time::from_time_t(last_write_time(p)) );
-	if (f->size <= cachable_file_size_limit)
-	{
-		f->is_cachable = true;
-		f->is_cached = false;
-	}
-	else
-		f->is_cachable = false;
-
-	return f;
-}
 
 void file_service::create_file( boost::filesystem::path p, fs_map &m1, std::set<std::string> &m2 )
 {
@@ -78,6 +70,7 @@ void file_service::create_file( boost::filesystem::path p, std::set<std::string>
 	std::string ue = "/" + encode_path( f->path );
 	m.insert(ue);
 }
+
 
 std::string file_service::encode_path( boost::filesystem::path &p )
 {
@@ -113,14 +106,7 @@ std::string file_service::get_user_name( boost::shared_ptr<http_request> request
 	return response;
 }
 
-void file_service::insert_file_headers( boost::shared_ptr<fs_file> f, boost::shared_ptr<boost::asio::ip::tcp::socket > socket, boost::shared_ptr<http_response> response )
-{
 
-	response->headers.insert(std::pair<std::string, std::string>("Last-Modified", f->modified));
-	response->headers.insert(std::pair<std::string, std::string>("Content-Length", boost::lexical_cast<std::string>(f->size)));
-	response->headers.insert(std::pair<std::string, std::string>("Cache-Control", max_age ));
-	response->headers.insert(std::pair<std::string, std::string>("Expires", boost::posix_time::to_iso_extended_string( boost::posix_time::second_clock::local_time() + this->expiration_period ) ));
-}
 
 void file_service::is_dir( boost::filesystem::path dir, fs_map &old_fs, std::set<std::string> &new_fs )
 {
@@ -257,7 +243,7 @@ void file_service::process_request( std::string encoded_url,boost::shared_ptr<bo
 				}
 			}
 
-			insert_file_headers(f, socket, response);
+			fs_util->insert_file_headers(f, socket, response);
 
 			{
 				boost::shared_lock<boost::shared_mutex> lock_r(f->mutex_);
@@ -298,7 +284,7 @@ void file_service::process_request( std::string encoded_url,boost::shared_ptr<bo
 				}
 			}
 
-			insert_file_headers(f, socket, response);
+			fs_util->insert_file_headers(f, socket, response);
 
 			if (f->is_cachable)
 			{
@@ -335,7 +321,7 @@ void file_service::process_request( std::string encoded_url,boost::shared_ptr<bo
 			}
 			else
 			{
-				send_uncachable_file(f, socket, response);
+				fs_util->send_uncachable_file(f, socket, response);
 				return;
 			}
 		}
@@ -383,22 +369,7 @@ void file_service::send_directory_contents( std::set<std::string> list, boost::s
 	response->send(*socket);
 }
 
-void file_service::send_uncachable_file( boost::shared_ptr<fs_file> f,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response )
-{
-	response->send(*socket);
-	//std::cout << "I have sent a big file!" << std::endl;
-	boost::shared_lock<boost::shared_mutex> lock_r(f->mutex_);
-	std::ifstream stream;
-	int buff_length = 8192;
-	boost::shared_array<char> buffer( new char[buff_length]);
-	stream.open( f->path.string().c_str(), std::ios_base::binary);
-	while (stream)
-	{
-		stream.read(buffer.get(), buff_length);
-		boost::asio::write(*socket, boost::asio::buffer(buffer.get(), stream.gcount()));
-	}
-	stream.close();
-}
+
 
 void file_service::send_info( boost::shared_ptr<fs_file> f,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response )
 {
