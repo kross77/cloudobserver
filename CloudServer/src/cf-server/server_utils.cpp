@@ -26,7 +26,20 @@ server_utils::server_utils()
 	tag_headers = "headers";
 	tag_url_extensions = "url_extensions";
 	tag_settings = "settings";
+
 	tag_description = "description";
+	tag_description_type = "type" ;
+	tag_description_text = "text";
+	tag_description_icon = "icon";
+	tag_description_default_url = "default_url";
+
+	tag_default_description_type = "private";
+	tag_default_description_text = "description text";
+	tag_default_description_icon = "default_service_icon.png";
+	tag_default_description_url = "../";
+
+
+
 	tag_configuration = "config";
 	tag_url_equals = "equals";
 	tag_path_configuration_services = tag_configuration + "." + "services";
@@ -99,11 +112,16 @@ std::map<std::string, boost::shared_ptr<server_utils::service_container> > serve
 		}
 
 		boost::property_tree::ptree service_description_tree = individual_service_tree.get_child(tag_description, server_utils::empty_class<boost::property_tree::ptree>());
+		one_description->description_default_url_path = service_description_tree.get<std::string>(tag_description_default_url,  tag_default_description_url);
+		one_description->description_icon_file_path = service_description_tree.get<std::string>(tag_description_icon,  tag_default_description_icon);
+		one_description->description_text = service_description_tree.get<std::string>(tag_description_text,  tag_default_description_text);
+		one_description->description_type = service_description_tree.get<std::string>(tag_description_type,  tag_default_description_type);
+
 		/*
 		int service_price = service_properties_tree.get<int>(tag_default_price, default_price);
 		one_description->default_price = service_price;
 		if(service_price != default_price){
-			*info << "Service price: " << service_price << log_util::endl;
+		*info << "Service price: " << service_price << log_util::endl;
 		}*/
 
 
@@ -183,7 +201,7 @@ server_utils::server_description server_utils::parse_config( boost::property_tre
 	server_descr.port = config.get(tag_path_configuration_port, 12345);
 	*info << "Server port: " << server_descr.port << log_util::endl;
 
-	server_descr.server_service_url = config.get(tag_path_configuration_server_service_url, "server.json");
+	server_descr.server_service_url = config.get(tag_path_configuration_server_service_url, "/server.json");
 	*info << "Server Service Url: " << server_descr.server_service_url << log_util::endl;
 
 	server_descr.database_name = config.get(tag_path_configuration_database, "server.db");
@@ -203,7 +221,7 @@ server_utils::server_description server_utils::parse_config( boost::property_tre
 			throw std::runtime_error("Incorrect price value");
 		}
 	}
-	
+
 	*info << std::endl << "Server services: " << log_util::endl;
 	server_descr.service_map = server_utils::parse_config_services( config );
 
@@ -526,5 +544,5 @@ int server_utils::find_or_null( std::map<std::string, int> map, std::string to_f
 {
 	typedef std::map<std::string, int> map_si;
 	return tread_util_local->safe_search_in_map<std::string, int, map_si::iterator>(to_find, map);
-	
+
 }

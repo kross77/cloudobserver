@@ -166,38 +166,36 @@ void server::server_service_call(boost::shared_ptr<boost::asio::ip::tcp::socket>
 
 void server::server_services_list(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response)
 {
-	/*
+
 	std::ostringstream user_files_stream;
 	user_files_stream << "[";
 
-	sqlite3pp::transaction xct(*db, true);
+	std::map<std::string, boost::shared_ptr<server_utils::service_container> >::iterator it;
+
+	for ( it=util->description.service_map.begin() ; it != util->description.service_map.end(); it++ )
 	{
-	sqlite3pp::query qry(*db, this->command_find_all_user_files.c_str());
-	qry.bind(":user_name", user_name);
+		boost::shared_lock<boost::shared_mutex> lock_r(it->second->edit_mutex_);
 
-	for (sqlite3pp::query::iterator i = qry.begin(); i != qry.end(); ++i) {
-	bool is_public;
-	std::string encoded_url, file_name, user_name, modified;
-	(*i).getter() >> encoded_url >> file_name >> user_name >> modified >> is_public ;
-
-	user_files_stream << "\n\t{\n\t\t\"encoded_url\": \""
-	<< encoded_url << "\",\n\t\t\"file_name\": \""
-	<< http_util->escape(file_name) << "\",\n\t\t\"user_name\": \""
-	<< user_name << "\",\n\t\t\"modified\": \""
-	<< modified << "\",\n\t\t\"is_public\": "
-	<< is_public << "\n\t},";
-	}
+		if (boost::iequals(it->second->description_type , "public"))
+		{
+			user_files_stream << "\n\t{\n\t\t\"name\": \""
+				<< it->first << "\",\n\t\t\"description\": \""
+				<<  it->second->description_text << "\",\n\t\t\"url\": \""
+				<< it->second->description_default_url_path << "\",\n\t\t\"icon\": \""
+				<< it->second->description_icon_file_path << "\"\n\t},";
+		}
 
 	}
+
 	std::string files_ = user_files_stream.str();
 	if (files_.length() > 5)
-	files_ = files_.substr(0, files_.length() - 1);
+		files_ = files_.substr(0, files_.length() - 1);
 
 	response->body = files_.append("\n]");
 	response->body_size = response->body.length();
 	response->headers.insert(std::pair<std::string, std::string>("Content-Length", boost::lexical_cast<std::string>(response->body_size)));
 	response->send(*socket);
-	*/
+
 	return;
 }
 
