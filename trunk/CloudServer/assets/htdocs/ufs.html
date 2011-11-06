@@ -338,7 +338,7 @@
 						<div data-template>
 							<li class="file-{{is_public}}">
 								<p id="item-file-{{_tempo.index}}" class="butt2">
-									{{file_name}} | {{modified}} | {{type}} | {{_tempo.index}}
+									{{title}} | {{modified}} | {{type}} | {{size}} | {{_tempo.index}}
 								</p>
 							</li>
 						</div>
@@ -434,10 +434,10 @@ $(document).ready(function() {
 		  {
 		  	$('.f_type').val("image");
 		  }
-		  if(ext == 'mask')
-		  {
-		  	$('.f_type').val("mask");
-		  }
+		else
+			{
+				$('.f_type').val(ext);
+			}  
 		  
 	});
 
