@@ -336,11 +336,13 @@
 					
 					<ol id="marx-brothers">
 						<div data-template>
-							<li class="file-{{is_public}}">
-								<p id="item-file-{{_tempo.index}}" class="butt2">
+							<ul class="lst">
+							<li class="uf file-{{is_public}}">
+								<p id="{{href}}" class="butt2">
 									{{title}} | {{modified}} | {{type}} | {{size}} | {{_tempo.index}}
 								</p>
 							</li>
+							</ul>
 						</div>
 						<li data-template-fallback>
 							Sorry, JavaScript required!
@@ -590,7 +592,50 @@ $("#user_name").live('mouseup', function(eventObj){
 			$(this).removeClass("hilight");
 		});
 		
+    $('.lst .uf .butt2').live('mouseup', function(eventObj) {
+       // alert(this.id);
+        
+        th =  $(this);
+		var elemZIndex = $(this).css('z-index', '100');
+		var elemPos = $(this).offset();
 
+		$(this).append('<div id="newer" class="new" style="position:absolute; left:' + (eventObj.pageX) + 'px; top:' + elemPos.top + 'px; z-index:' + (elemZIndex + 10) + '">&nbsp;</div>');
+
+		$('#newer').grumble({
+			text: "  <a href='/" + this.id + "' target='_blank' class='logout-but'><h3>Download</h3></a> <br/> <a href='#' ><h3>Cancel</h3></a>    ",
+			angle: (Math.random() * 50 + 190),
+			distance: 3,
+			showAfter: 15,
+			hideAfter: false,
+			//type : 'alt-',
+			hasHideButton: true,
+			// just shows the button
+			buttonHideText: 'Pop!',
+			onShow: function() {
+				th.addClass("border");
+			},
+			onBeginHide: function() {
+				$('.border').removeClass("border");
+			},
+			onHide: function() {
+				$("#newer").empty();
+				$("#newer").detach();
+				$("#newer").remove();
+			}
+    	});
+
+    	 }).live('mousedown', function(){
+			$(this).addClass("hilight");
+		}).live('mouseup', function(){
+			$(this).removeClass("hilight");
+		}).live('mouseover', function(){
+			$(this).addClass("border");
+		}).live('mouseout', function(eventObj){
+			$(this).removeClass("border");
+			$(this).removeClass("hilight");
+		//});
+        
+    });
 
 
 });
