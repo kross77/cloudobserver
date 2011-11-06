@@ -56,13 +56,13 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 	{
 		bool connection_close = true;
 		bool alive = false;
-		
+
 		do
 		{
 			boost::shared_ptr<http_request> request = boost::make_shared<http_request>();
 			try
 			{ 
-			alive =	request->timed_receive(*socket, request_max_time);
+				alive =	request->timed_receive(*socket, request_max_time);
 			}
 			catch (http_request::policy_file_request_exception)
 			{
@@ -91,11 +91,10 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 			response->headers.insert(std::pair<std::string, std::string>("Date",  boost::posix_time::to_iso_extended_string(  boost::posix_time::second_clock::universal_time() )));//formatter.str()));
 			response->headers.insert(std::pair<std::string, std::string>("Server", "Cloud Server v0.5"));
 
-			if (request->headers["Connection"] == "Keep-Alive")
+			if (boost::iequals(request->headers["Connection"], "Keep-Alive"))
 			{
 				connection_close = false;
 				response->headers.insert(std::pair<std::string, std::string>("Connection", "Keep-Alive"));
-
 			}
 			else
 			{
