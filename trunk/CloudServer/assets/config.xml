@@ -39,6 +39,10 @@
 				<extension>user.file</extension>
 				<log_util_file>ufs_log.txt</log_util_file>
 				<database>ufs.db</database>
+				<types>
+					<type>image</type>
+					<type>mask</type>
+				</types>
 			</settings>
 			<description>
 				<type>public</type>

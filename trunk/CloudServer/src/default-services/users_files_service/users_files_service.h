@@ -61,8 +61,7 @@ private:
 
 	void list_user_files(std::string user_name, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response);
 
-	void create_file_table_entry(std::string encoded_url, std::string file_name, std::string user_name, bool is_public);
-
+	void create_file_table_entry( std::string encoded_url, std::string file_name, std::string user_name, std::string f_type, bool is_public );
 	void create_log_util( std::string lu_path );
 
 	void create_files_table( std::string db_name );
@@ -80,6 +79,10 @@ private:
 
 	std::string max_age;
 
+	std::string tag_ufs_file_types;
+	std::string tag_ufs_file_type;
+	std::set<std::string> file_types;
+
 	std::string command_create_files_table;
 	std::string command_update_file;
 	std::string command_delete_file;
@@ -90,6 +93,13 @@ private:
 	std::string default_lu_path;
 	std::string tag_ufs_extension;
 	std::string default_ufs_extension;
+
+	template<class T>
+	inline T &empty()
+	{
+		static T pt;
+		return pt;
+	}
 
 	CLOUD_SERVICE_AUXILIARIES;
 };

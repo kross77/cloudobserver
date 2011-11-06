@@ -20,20 +20,33 @@ users_files_service::users_files_service()
 	this->tag_ufs_extension = "extension";
 	this->default_ufs_extension = "user.file";
 
-	this->command_create_files_table = "CREATE TABLE IF NOT EXISTS files (encoded_url varchar(300) UNIQUE NOT NULL primary key, file_name varchar(150) NOT NULL, user_name varchar(65) NOT NULL, is_public BOOLEAN NOT NULL, modified DATETIME NOT NULL default CURRENT_TIMESTAMP )";
-	this->command_create_file =  "INSERT INTO files (encoded_url, file_name, user_name, is_public ) VALUES (:encoded_url, :file_name, :user_name, :is_public)";
-	this->command_update_file = " UPDATE files SET encoded_url=:new_encoded_url, file_name=:new_file_name, is_public=:is_public, modified=CURRENT_TIMESTAMP  WHERE encoded_url=:encoded_url";
+	this->tag_ufs_file_types = "types";
+	this->tag_ufs_file_type = "type";
+
+
+
+	this->command_create_files_table = "CREATE TABLE IF NOT EXISTS files (encoded_url varchar(300) UNIQUE NOT NULL primary key, file_name varchar(150) NOT NULL, user_name varchar(65) NOT NULL, is_public BOOLEAN NOT NULL, modified DATETIME NOT NULL default CURRENT_TIMESTAMP, type varchar(40) )";
+	this->command_create_file =  "INSERT INTO files (encoded_url, file_name, user_name, is_public, type ) VALUES (:encoded_url, :file_name, :user_name, :is_public, :type)";
+	this->command_update_file = " UPDATE files SET encoded_url=:new_encoded_url, file_name=:new_file_name, is_public=:is_public, modified=CURRENT_TIMESTAMP, type=:type  WHERE encoded_url=:encoded_url";
 	this->command_delete_file = "DELETE FROM files WHERE encoded_url=:encoded_url";
 	this->command_find_file = "SELECT file_name, user_name, is_public, modified FROM files WHERE encoded_url=:encoded_url";
-	this->command_find_all_user_files = "SELECT encoded_url, file_name, user_name, modified, is_public FROM files WHERE user_name=:user_name";
+	this->command_find_all_user_files = "SELECT encoded_url, file_name, user_name, modified, type, is_public FROM files WHERE user_name=:user_name";
 }
 
 void users_files_service::apply_config( boost::shared_ptr<boost::property_tree::ptree> config )
 {
+	config = boost::shared_ptr<boost::property_tree::ptree>(new boost::property_tree::ptree(*config));
 	this->root_path = config->get<std::string>("users_files_directory", this->root_path.string());
 	this->default_ufs_extension = config->get<std::string>("extension", this->default_ufs_extension);
 	this->default_lu_path = config->get<std::string>("log_util_file", this->default_lu_path);
 	this->default_db_name = config->get<std::string>("database", this->default_db_name);
+
+	BOOST_FOREACH(boost::property_tree::ptree::value_type &vh,	config->get_child(tag_ufs_file_types, users_files_service::empty<boost::property_tree::ptree>()))
+	{
+		std::string ext = vh.second.data();
+		file_types.insert(ext);
+	}
+
 	create_log_util(this->default_lu_path);
 	create_files_table(this->default_db_name);
 }
@@ -52,6 +65,7 @@ void users_files_service::service_call( boost::shared_ptr<boost::asio::ip::tcp::
 
 				std::string file_name =save_file.find("file_name")->second;
 				std::string redirect_location = save_file.find("redirect_location")->second;
+				std::string f_type = save_file.find("type")->second;
 				bool is_public = save_file.find("is_public")->second == "true" ? true : false ;
 
 				std::string encoded_url = "";
@@ -60,9 +74,18 @@ void users_files_service::service_call( boost::shared_ptr<boost::asio::ip::tcp::
 				encoded_url = encoded_url + "." + this->default_ufs_extension;
 				encoded_url = http_util->url_encode( encoded_url );
 
+				std::set<std::string>::iterator iter_set;
+				iter_set  =	file_types.find(f_type);
+				if (iter_set == file_types.end())
+				{
+					f_type = "unknown";
+				}
+
 				fs_util->save_string_into_file(save_file.find("datafile")->second, encoded_url,  this->root_path);
-				this->create_file_table_entry(encoded_url, file_name, user_name, is_public);
+				this->create_file_table_entry(encoded_url, file_name, user_name, f_type, is_public);
+
 				http_util->send_found_302(redirect_location, socket, response);
+
 				return;
 			}
 			catch(std::exception &e)
@@ -120,14 +143,15 @@ void users_files_service::list_user_files( std::string user_name, boost::shared_
 
 		for (sqlite3pp::query::iterator i = qry.begin(); i != qry.end(); ++i) {
 			bool is_public;
-			std::string encoded_url, file_name, user_name, modified;
-			(*i).getter() >> encoded_url >> file_name >> user_name >> modified >> is_public ;
+			std::string encoded_url, file_name, user_name, modified, f_type;
+			(*i).getter() >> encoded_url >> file_name >> user_name >> modified >> f_type >> is_public ;
 
 			user_files_stream << "\n\t{\n\t\t\"encoded_url\": \""
 				<< encoded_url << "\",\n\t\t\"file_name\": \""
 				<< http_util->escape(file_name) << "\",\n\t\t\"user_name\": \""
 				<< user_name << "\",\n\t\t\"modified\": \""
-				<< modified << "\",\n\t\t\"is_public\": "
+				<< modified << "\",\n\t\t\"type\": \""
+				<< f_type << "\",\n\t\t\"is_public\": "
 				<< is_public << "\n\t},";
 		}
 
@@ -143,7 +167,7 @@ void users_files_service::list_user_files( std::string user_name, boost::shared_
 	return;
 }
 
-void users_files_service::create_file_table_entry( std::string encoded_url, std::string file_name, std::string user_name, bool is_public )
+void users_files_service::create_file_table_entry( std::string encoded_url, std::string file_name, std::string user_name, std::string f_type, bool is_public )
 {
 	sqlite3pp::transaction xct(*db);
 	sqlite3pp::command cmd(*db, command_create_file.c_str());
@@ -151,6 +175,7 @@ void users_files_service::create_file_table_entry( std::string encoded_url, std:
 	cmd.bind(":file_name", file_name) ;
 	cmd.bind(":user_name", user_name) ;
 	cmd.bind(":is_public", is_public);
+	cmd.bind(":type", f_type);
 	cmd.execute() ;
 	xct.commit();
 }
