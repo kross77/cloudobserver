@@ -11,7 +11,7 @@
 		
 		<script type="text/javascript">
 		
-		            var _gaq = _gaq || [];
+			var _gaq = _gaq || [];
             _gaq.push(['_setAccount', 'UA-21524436-1']);
             _gaq.push(['_setDomainName', 'none']);
             _gaq.push(['_setAllowLinker', true]);
@@ -165,6 +165,7 @@
 							<form method="POST" id="ufs_form_upload" enctype="multipart/form-data"
 							action="/ufs.service">
 								<input type="hidden" name="redirect_location" value="/ufs.html">
+								<input type="hidden" class="f_type" name="type" value="none">
 								<fieldset>
 									<legend>
 										Name:
@@ -188,7 +189,7 @@
 									<legend>
 										File:
 									</legend>
-									<input type="file" name="datafile">
+									<input type="file" class="f_f" name="datafile">
 								</fieldset>
 								<input type="submit" class="eButton" value="Upload" />
 								<input type="button" class="eButton" value="Cancel" onClick=$(".alert").hide() />
@@ -199,6 +200,7 @@
 							<form method="POST" id="ufs_form_upload" enctype="multipart/form-data"
 							action="/ufs.service">
 								<input type="hidden" name="redirect_location" value="/ufs.html">
+								<input type="hidden" class="f_type" name="type" value="none">
 								<input type="hidden" id="tabs-ufs-update-file_eu" name="tabs-ufs-update-file_eu"
 								value="sha256.user.file">
 								<fieldset>
@@ -225,7 +227,7 @@
 									<legend>
 										New File:
 									</legend>
-									<input type="file" name="datafile">
+									<input type="file" class="f_f" name="datafile">
 								</fieldset>
 								<input type="submit" class="eButton" value="Upload" />
 								<input type="button" class="eButton" value="Cancel" onClick=$(".alert").hide() />
@@ -336,7 +338,7 @@
 						<div data-template>
 							<li class="file-{{is_public}}">
 								<p id="item-file-{{_tempo.index}}" class="butt2">
-									{{file_name}} | {{modified}} | {{_tempo.index}}
+									{{file_name}} | {{modified}} | {{type}} | {{_tempo.index}}
 								</p>
 							</li>
 						</div>
@@ -423,6 +425,21 @@ $(document).ready(function() {
 		$('.not-loged-in-user').center();
 		
 	}
+	
+	$('.f_f').live('change', function(e){
+		  var file = $(this).val();
+		  var ext = file.split('.').pop().toLowerCase();
+		//  alert(ext);
+		  if((ext == 'png')||(ext == 'jpg')||(ext == 'jpeg'))
+		  {
+		  	$('.f_type').val("image");
+		  }
+		  if(ext == 'mask')
+		  {
+		  	$('.f_type').val("mask");
+		  }
+		  
+	});
 
 	$('#demo4_box').bind('dragstart', function(event) {
 		return $(event.target).is('.handle');
