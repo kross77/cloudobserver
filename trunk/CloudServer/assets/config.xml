@@ -51,7 +51,7 @@
 					<equals>/ufs.json</equals>
 				</url>
 				<url_extensions>
-                    <extension>user.file</extension>
+                    <extension>file</extension>
 	            </url_extensions>
 			</properties>
 		</service>

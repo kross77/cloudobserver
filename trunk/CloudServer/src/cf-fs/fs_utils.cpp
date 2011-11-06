@@ -63,6 +63,14 @@ void fs_utils::send_uncachable_file( boost::shared_ptr<fs_file> f,boost::shared_
 	stream.close();
 }
 
+void fs_utils::send_uncachable_file( boost::shared_ptr<fs_file> f , boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response )
+{
+	if(!was_modified( f, socket, request , response))
+	{
+		insert_file_headers(f, socket, response);
+		send_uncachable_file( f, socket, response);
+	}
+}
 void fs_utils::insert_file_headers( boost::shared_ptr<fs_file> f, boost::shared_ptr<boost::asio::ip::tcp::socket > socket, boost::shared_ptr<http_response> response )
 {
 	response->headers.insert(std::pair<std::string, std::string>("Last-Modified", f->modified));
@@ -86,4 +94,18 @@ boost::shared_ptr<fs_file> fs_utils::create_file( boost::filesystem::path p )
 	f->is_cachable = false;
 
 	return f;
+}
+
+bool fs_utils::was_modified( boost::shared_ptr<fs_file> f, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response )
+{
+	std::map<std::string, std::string>::iterator it= request->headers.find("If-Modified-Since");
+	if (it != request->headers.end() )
+	{
+		if (f->modified == it->second)
+		{
+			send_not_modified_304(socket, response);
+			return true;
+		}
+	}
+	return false;
 }

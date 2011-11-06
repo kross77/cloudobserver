@@ -16,6 +16,9 @@ public:
 
 	boost::shared_ptr<fs_file> create_file( boost::filesystem::path p );
 
+	bool was_modified( boost::shared_ptr<fs_file> f, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response);
+
+	void send_uncachable_file(boost::shared_ptr<fs_file> f ,  boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response);
 
 	void insert_file_headers( boost::shared_ptr<fs_file> f, boost::shared_ptr<boost::asio::ip::tcp::socket > socket, boost::shared_ptr<http_response> response );
 

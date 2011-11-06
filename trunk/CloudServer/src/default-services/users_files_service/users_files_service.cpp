@@ -102,11 +102,53 @@ void users_files_service::service_call( boost::shared_ptr<boost::asio::ip::tcp::
 		http_util->send_found_302(redirect_iterator->second, socket, response);
 		return;
 	}
-
-	fs_util->send_404(request->url, socket, request, response);
+	bool sent;
+	try{
+		sent = send_file(request->url, user_name, socket, request, response);
+		if (!sent)
+		{
+			fs_util->send_404(request->url, socket, request, response);
+		}
+	}
+	catch(...)
+	{
+		fs_util->send_404(request->url, socket, request, response);
+	}
 }
 
 
+
+bool users_files_service::send_file( std::string href, std::string user_name, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response )
+{
+		href.erase(0,1);
+	sqlite3pp::transaction xct(*db, true);
+	{
+		sqlite3pp::query qry(*db, this->command_find_file.c_str());
+		qry.bind(":encoded_url", href);
+		//file_name, user_name, is_public, modifie
+		for (sqlite3pp::query::iterator i = qry.begin(); i != qry.end(); ++i) {
+			bool is_public=false;
+			std::string  file_name, f_user_name, modified;
+			(*i).getter() >> file_name >> f_user_name >>  is_public >> modified;
+
+			if (is_public)
+			{
+				boost::shared_ptr<fs_file> f = fs_util->create_file(boost::filesystem::path(root_path / href));
+				fs_util->send_uncachable_file(f, socket,request, response);
+				return true;
+			}
+			else if (f_user_name == user_name)
+			{
+				boost::shared_ptr<fs_file> f = fs_util->create_file(boost::filesystem::path(root_path / href));
+				fs_util->send_uncachable_file(f, socket,request, response);
+				return true;
+			}
+			return false;
+		}
+
+	}
+	return false;
+}
 
 void users_files_service::send_json( std::pair<std::string, std::string> pair, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response )
 {
@@ -119,6 +161,8 @@ void users_files_service::send_json( std::pair<std::string, std::string> pair, b
 	response->send(*socket);
 	return;
 }
+
+
 
 void users_files_service::list_user_files( std::string user_name, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response )
 {
