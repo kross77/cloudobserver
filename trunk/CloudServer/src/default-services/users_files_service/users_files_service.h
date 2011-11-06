@@ -18,6 +18,7 @@
 #include <boost/filesystem/fstream.hpp>
 #include <boost/shared_array.hpp>
 #include <boost/foreach.hpp>
+#include <boost/algorithm/string.hpp>
 // Boost Extension
 #include <boost/extension/extension.hpp>
 #include <boost/extension/factory.hpp>
@@ -60,6 +61,7 @@ private:
 	void send_json(std::pair<std::string, std::string> pair, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response);
 
 	void list_user_files(std::string user_name, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response);
+	void list_user_files_of_type( std::string user_name, std::string f_type, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response );
 
 	void create_file_table_entry( std::string encoded_url, std::string file_name, std::string user_name, std::string f_type, int f_size, bool is_public );
 	void create_log_util( std::string lu_path );
@@ -90,6 +92,7 @@ private:
 	std::string command_find_file;
 	std::string default_db_name;
 	std::string command_find_all_user_files;
+	std::string command_find_all_user_files_of_type;
 	std::string default_lu_path;
 	std::string tag_ufs_extension;
 	std::string default_ufs_extension;
@@ -102,6 +105,7 @@ private:
 	}
 
 	CLOUD_SERVICE_AUXILIARIES;
+	
 };
 
 #endif // USERS_FILES_SERVICE_H
