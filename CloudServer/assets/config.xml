@@ -17,6 +17,10 @@
 			<name>File Service</name>
 			<class_name>file_service</class_name>
 			<library_name>FileService</library_name>
+			<description>
+				<type>private</type>
+				<text>Fast and simple service for files returning. Responds to underlying file system changes</text>
+			</description>
 			<settings>
 				<root_file_system_directory>htdocs</root_file_system_directory>
 				<show_directory_contents>true</show_directory_contents>
@@ -36,6 +40,11 @@
 				<log_util_file>ufs_log.txt</log_util_file>
 				<database>ufs.db</database>
 			</settings>
+			<description>
+				<type>public</type>
+				<text>Service for user personal and publicly avaliable files storing and managing.</text>
+				<default_url>ufs.html</default_url>
+			</description>
 			<properties>
 				<url>
 					<equals>/ufs.service</equals>
@@ -48,17 +57,22 @@
 		</service>
 
 		<service>
-			<name>Cloud Service</name>
+			<name>Observer Service</name>
 			<class_name>cloud_service</class_name>
 			<library_name>CloudService</library_name>
 			<settings>
-			<!--
-				<max_streams>10</max_streams>
-				<dumps_location>dumps</dumps_location>
-				<dump_writers>false</dump_writers>
-				<dump_readers>false</dump_readers>
-			-->
+				<!--
+					<max_streams>10</max_streams>
+					<dumps_location>dumps</dumps_location>
+					<dump_writers>false</dump_writers>
+					<dump_readers>false</dump_readers>
+				-->
 			</settings>
+			<description>
+				<type>public</type>
+				<text>Demo service for public video conferencing, it does not require user account and its free!</text>
+				<default_url>observer.html</default_url>
+			</description>
 			<properties>
 				<url>
 					<equals>/users.json</equals>
