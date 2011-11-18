@@ -22,6 +22,11 @@
 #include <boost/random/uniform_real.hpp>
 #include <boost/random/mersenne_twister.hpp>
 
+#include <boost/iostreams/filtering_streambuf.hpp>
+#include <boost/iostreams/copy.hpp>
+#include <boost/iostreams/filter/gzip.hpp>
+#include <boost/iostreams/stream.hpp>
+
 //This file is stored in 3rdparty folder, it differs from original Boost.Trunk
 #include <boost/geometry/extensions/io/svg/svg_mapper.hpp>
 
@@ -76,11 +81,11 @@ namespace filter_utils
 		wkt << "(";
 		for(int i = 0; i < vobs; ++i)
 		{
-			wkt <<	border[i].x << " " << border[i].y << ", ";
+			wkt <<  border[i].x << " " << border[i].y << ", ";
 			//if(i != vobs_less_one)
-			//	wkt  << ", ";
+			//      wkt  << ", ";
 			if(i == vobs_less_one)
-				wkt  << 	border[0].x << " " << border[0].y;
+				wkt  <<         border[0].x << " " << border[0].y;
 
 		}
 		wkt << ")";
@@ -236,7 +241,7 @@ std::vector<cv::Mat> load_source( const std::string & file_name, int & w, int & 
 	std::vector< std::vector<unsigned char> > image(sy); // to array
 
 	//std::cout << std::endl <<  "reading .mask file" << std::endl;
-	//	boost::progress_display show_progress0( sy);
+	//      boost::progress_display show_progress0( sy);
 	for(int i =0; i < sy; ++i)
 	{
 		std::vector<unsigned char> row(sx);
@@ -368,7 +373,7 @@ std::string render_svg( std::vector< std::vector<filter_utils::vector_object> > 
 std::string render_opencv(const std::string & extension, std::vector< filter_utils::opencv_vector_object > & clusters,  const int & w, const  int  & h)
 {
 	cv::Mat dst = cv::Mat::ones(  h, w, CV_8UC3);
-	dst =	cv::Scalar(255, 255, 255);
+	dst =   cv::Scalar(255, 255, 255);
 
 	BOOST_FOREACH(filter_utils::opencv_vector_object & o, clusters)
 	{
@@ -490,6 +495,16 @@ int main(  )
 	jpeg_file.close();
 	std::cout << "rendered out a JPEG image: " << out_file_name <<".jpg in: " << local_timer.elapsed() << std::endl;
 
+	{
+		std::ofstream zip_png_file( std::string( out_file_name + ".jpg" + ".gz").c_str(),  std::ofstream::binary);
+		boost::iostreams::filtering_streambuf< boost::iostreams::input> in;
+		in.push( boost::iostreams::gzip_compressor());
+		std::stringstream data;
+		data << jpg;
+		in.push(data);
+		boost::iostreams::copy(in, zip_png_file);
+	}
+
 	local_timer.restart();
 	std::ofstream png_file( std::string( out_file_name + ".png").c_str(),  std::stringstream::binary);
 	std::string png =  render_opencv(".png", opencv_countors, w, h);
@@ -497,6 +512,15 @@ int main(  )
 	png_file.close();
 	std::cout << "rendered out a PNG image: " << out_file_name <<".png  in: " << local_timer.elapsed() << std::endl;
 
+	{
+		std::ofstream zip_png_file( std::string( out_file_name + ".png" + ".gz").c_str(),  std::ofstream::binary);
+		boost::iostreams::filtering_streambuf< boost::iostreams::input> in;
+		in.push( boost::iostreams::gzip_compressor());
+		std::stringstream data;
+		data << png;
+		in.push(data);
+		boost::iostreams::copy(in, zip_png_file);
+	}
 
 	local_timer.restart();
 	std::vector< std::vector<filter_utils::vector_object> > boost_ready_countors = find_objects(opencv_countors);
@@ -506,9 +530,19 @@ int main(  )
 	std::ofstream svg_file( std::string( out_file_name + ".svg").c_str(),  std::stringstream::binary);
 	std::string svg = render_svg(boost_ready_countors, w,h);
 	svg_file <<  svg;
-	
+
 	svg_file.close();
 	std::cout << "rendered out a SVG image: " << out_file_name <<".svg  in: " << local_timer.elapsed() << std::endl;
+
+	{
+		std::ofstream zip_png_file( std::string( out_file_name + ".svg" + ".gz").c_str(),  std::ofstream::binary);
+		boost::iostreams::filtering_streambuf< boost::iostreams::input> in;
+		in.push( boost::iostreams::gzip_compressor());
+		std::stringstream data;
+		data << svg;
+		in.push(data);
+		boost::iostreams::copy(in, zip_png_file);
+	}
 
 	std::cout << "All ready in: " << totall_timer.elapsed() << std::endl;
 
