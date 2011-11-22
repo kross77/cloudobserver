@@ -1,16 +1,28 @@
 #!/bin/bash
 
 BOOST_DISTRO_SITE=surfnet.dl.sourceforge.net
-BOOST_NAME=boost_1_47_0
-BOOST_VERSION=1.47.0
+BOOST_PROJECT_URL=project/boost/boost
+BOOST_NAME=boost_1_48_0
+BOOST_VERSION=1.48.0
 BOOST_DISTRO_NAME="$BOOST_NAME".tar.gz
 BOOST_ROOT_DIR=boost_libraries
 BOOST_INSTALL_SUBDIR=install-dir
 BOOST_COMPILE_SUBDIR=build-dir
 
+ZLIB_NAME=zlib-1.2.5
+ZLIB_PROJECT_URL=project/libpng/zlib
+ZLIB_VERSION=1.2.5
+ZLIB_DISTRO_NAME="$ZLIB_NAME".tar.gz
+ZLIB_ROOT_DIR=zlib_libraries
+ZLIB_INSTALL_SUBDIR=install-dir
+ZLIB_COMPILE_SUBDIR=build-dir
+
+
+
 KEEP_OLD="true"
 
 echo API: boost_net_setup.sh BOOST_ROOT_DIR BOOST_INSTALL_SUBDIR KEEP_OLD BOOST_VERSION BOOST_NAME BOOST_DISTRO_SITE
+echo Warning: This script shall be executed from a path that contains no spaces or non English latters!
 
 if [ "$1" != "" ]; then
 	BOOST_ROOT_DIR="$1"
@@ -54,17 +66,32 @@ echo_run ()
 	fi
 }
 
-extract_and_clean()
+extract() # 1=DISTRO_NAME 2=ROOT_DIR 3=NAME
 {
-	echo_run tar -xzf $BOOST_DISTRO_NAME
-	echo_run rm -rf $BOOST_ROOT_DIR
-	echo_run mv $BOOST_NAME $BOOST_ROOT_DIR
+	echo_run tar -xzf $1
+	echo_run rm -rf $2
+	echo_run mv $3 $2
+}
+
+load() # 1=DISTRO_NAME 2=ROOT_DIR 3=NAME 4=VERSION 5=BOOST_DISTRO_SITE 6=INSTALL_SUBDIR 7=PROJECT_URL
+{
+	if [ ! -e $1 ]; then
+		# get boost
+		echo_run ${CURL_CMD} http://$5/$7/$4/$1 -o $1
+	fi
+	  
+	if [ ! -d $2 ]; then
+		echo_run mkdir $2
+	fi
 	
-	cd $BOOST_ROOT_DIR
-
-	echo_run ./bootstrap.sh
-
-	echo_run ./bjam -j4 link=shared --builddir=./$BOOST_COMPILE_SUBDIR install --without-mpi --without-chrono --without-exception --without-graph --without-graph_parallel --without-iostreams --without-wave --without-python --prefix=./$BOOST_INSTALL_SUBDIR
+	# move the boost distro into place
+	if [ ! -d $2/$6/lib ]; then
+		extract  $1 $2 $3
+	else
+		if [ ! KEEP_OLD=="true" ]; then
+			extract $1 $2 $3
+		fi
+	fi
 }
 
 
@@ -74,23 +101,14 @@ HERE=`dirname $0`
 
 cd $HERE
 
-if [ ! -e $BOOST_DISTRO_NAME ]; then
-	# get boost
-	echo_run ${CURL_CMD} http://$BOOST_DISTRO_SITE/project/boost/boost/$BOOST_VERSION/$BOOST_DISTRO_NAME -o $BOOST_DISTRO_NAME
-fi
-  
-if [ ! -d $BOOST_ROOT_DIR ]; then
-	echo_run mkdir $BOOST_ROOT_DIR
-fi
+load $ZLIB_DISTRO_NAME $ZLIB_ROOT_DIR $ZLIB_NAME $ZLIB_VERSION $BOOST_DISTRO_SITE $ZLIB_INSTALL_SUBDIR $ZLIB_PROJECT_URL
 
-# move the boost distro into place
-if [ ! -d $BOOST_ROOT_DIR/$BOOST_INSTALL_SUBDIR/lib ]; then
-	extract_and_clean
-else
-	if [ ! KEEP_OLD=="true" ]; then
-		extract_and_clean
-	fi
-fi
+load $BOOST_DISTRO_NAME $BOOST_ROOT_DIR $BOOST_NAME $BOOST_VERSION $BOOST_DISTRO_SITE $BOOST_INSTALL_SUBDIR $BOOST_PROJECT_URL
+cd $BOOST_ROOT_DIR
+
+echo_run ./bootstrap.sh
+
+echo_run ./b2 -j4 -d0 --with-thread --with-system --with-filesystem --with-program_options --with-regex --with-date_time --with-iostreams -sZLIB_SOURCE="$WD"/"$ZLIB_ROOT_DIR"/ -sNO_BZIP2=1 link=static runtime-link=static --prefix=./$BOOST_INSTALL_SUBDIR release --builddir=./$BOOST_COMPILE_SUBDIR install
 
 echo Done!
 
