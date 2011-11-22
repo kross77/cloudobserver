@@ -582,5 +582,8 @@ solution "CloudClient"
 		cloud.project.useAL()
 		cloud.project.useCV()
 		--cloud.project.useTcl()
+		
+		includedirs { "src/3rdparty/ffmpeg"}
+		
 		files { "src/**.h", "src/**.cpp" }
 		excludes { "src/3rdparty/cpptcl/**", "src/3rdparty/cpptk/**" }
