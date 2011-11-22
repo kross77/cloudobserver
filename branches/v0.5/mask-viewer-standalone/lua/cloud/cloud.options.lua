@@ -18,6 +18,12 @@ newoption {
 	description = "Choose a particular directory for OpenSSL libs search"
 }
 
+newoption {
+	trigger     = "OpenCVLibsPath",
+	value       = "PATH",
+	description = "Choose a particular directory for OpenCV libs search"
+}
+
 -- Options for includes
 
 newoption {
@@ -30,6 +36,18 @@ newoption {
 	trigger     = "BoostIncludesPath",
 	value       = "PATH",
 	description = "Choose a particular directory for Boost includes search"
+}
+
+newoption {
+	trigger     = "OpenCVIncludesPath",
+	value       = "PATH",
+	description = "Choose a particular directory for OpenCV includes search"
+}
+
+newoption {
+	trigger     = "OpenSSLIncludesPath",
+	value       = "PATH",
+	description = "Choose a particular directory for OpenSSL includes search"
 }
 
 -- Options for Shared Libs
