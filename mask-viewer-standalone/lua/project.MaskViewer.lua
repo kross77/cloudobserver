@@ -9,6 +9,10 @@ project "MaskViewer"
 	
 	cloud.project.useBoost()
 	cloud.project.useCV()
+
+	configuration "gmake"
+		buildoptions { "-fPIC" }
+	configuration {}
 	
 	links { "cf-util" }
 	includedirs { "src/cf-util"}
