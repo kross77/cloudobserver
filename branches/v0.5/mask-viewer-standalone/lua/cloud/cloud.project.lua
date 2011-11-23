@@ -50,7 +50,7 @@ function cloud.project.useCV()
 	cloud.addIncludeDir(  _OPTIONS["OpenCVIncludesPath"] )
 	if os.get() == "windows" then
 		defines { "WIN" }
-		if  _OPTIONS["OpenCV-Shared"] then
+		if  _OPTIONS["OpenCVshared"] then
 				links {
 					"opencv_core230",
 					"opencv_highgui230",
@@ -103,7 +103,7 @@ function cloud.project.useCV()
 			"opencv_core",
 			"opencv_highgui"
 		}
-		if  _OPTIONS["OpenCV-Shared"] then else
+		if  _OPTIONS["OpenCVshared"] then else
 			links {
 				"libjasper",
 				"libjpeg",
@@ -111,6 +111,7 @@ function cloud.project.useCV()
 				"libtiff",
 				"zlib"
 			}
+
 		end
 	end
 	
@@ -123,7 +124,7 @@ function cloud.project.useCV()
 			"QuickTime.framework"
 		}
 		
-		if  _OPTIONS["OpenCV-Shared"] then else
+		if  _OPTIONS["OpenCVshared"] then else
 			links {
 				"libjasper",
 				"libjpeg",
@@ -156,9 +157,9 @@ function cloud.project.useBoost()
 		"boost_regex",
 		"boost_system",
 		"boost_thread",
+		"boost_date_time",
 		"boost_filesystem",
 		"boost_program_options",
-		"boost_date_time",
 		"boost_iostreams",
 		"dl",
 		"pthread"
