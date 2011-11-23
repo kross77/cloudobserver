@@ -159,6 +159,7 @@ function cloud.project.useBoost()
 		"boost_filesystem",
 		"boost_program_options",
 		"boost_date_time",
+		"boost_iostreams",
 		"dl",
 		"pthread"
 		}
@@ -172,6 +173,7 @@ function cloud.project.useBoost()
 		"boost_filesystem",
 		"boost_program_options",
 		"boost_date_time",
+		"boost_iostreams",
 		"dl",
 		"pthread"
 		}	
