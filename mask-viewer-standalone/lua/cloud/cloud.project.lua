@@ -160,6 +160,7 @@ function cloud.project.useBoost()
 		"boost_date_time",
 		"boost_filesystem",
 		"boost_program_options",
+		"libboost_zlib",
 		"boost_iostreams",
 		"dl",
 		"pthread"
@@ -174,6 +175,7 @@ function cloud.project.useBoost()
 		"boost_filesystem",
 		"boost_program_options",
 		"boost_date_time",
+		"libboost_zlib",
 		"boost_iostreams",
 		"dl",
 		"pthread"
