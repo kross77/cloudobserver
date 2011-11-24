@@ -135,10 +135,30 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 			util->tread_util->safe_insert<boost::thread::id, std::set<boost::thread::id> >(boost::this_thread::get_id(),service_cont->threads_ids);
 
 			//*(util->info) << "ids size: " << service_cont->threads_ids.size() << log_util::endl;
-
+			boost::shared_ptr<std::exception> err;
 			try
 			{
-				requested_service->make_service_call(socket, request, response);
+				#ifdef WIN
+				{
+					err = boost::shared_ptr<std::exception>(new std::exception(* requested_service->make_service_call(socket, request, response)));
+				}
+				#else 
+				err = requested_service->make_service_call(socket, request, response);
+				#endif
+				if (err)
+				{
+
+					std::ostringstream body;
+					body << "@"<< service_cont->class_name <<" error: " << (*err).what() << "\n <br/> <a href='/'>please come again!</a>";
+
+					response->body = "<head></head><body><h1>" + body.str() + "</h1></body>";
+					response->headers["Content-Length"] = boost::lexical_cast<std::string>(response->body.length());
+					response->send(*socket);
+		
+					*(util->error) << (*err).what() << log_util::endl;
+				}
+				
+
 			}
 			catch(std::exception &e)
 			{
