@@ -11,6 +11,8 @@
 #include <boost/assign.hpp>
 #include <boost/foreach.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/thread.hpp>
+#include <boost/thread/locks.hpp>
 #include <boost/algorithm/string.hpp>
 
 #include <boost/progress.hpp>
@@ -162,27 +164,35 @@ namespace filter_utils
 		return;
 
 	}
+
+	#ifndef FILL_UTILS_H
+	#define FILL_UTILS_H
+
 	class fill_utils
 	{
 	public:
 		fill_utils()
 		{
-			rng.seed(static_cast<unsigned int>(std::time(0)));
+			//rng.seed(static_cast<unsigned int>(std::time(0)));
+			adder_ = static_cast<unsigned int>(std::time(0));
 			hue_r = boost::shared_ptr<boost::random::uniform_real_distribution<float> >(new boost::random::uniform_real_distribution<float>(-3.1f,3.1f));
 			sat_r = boost::shared_ptr<boost::random::uniform_real_distribution<float> >(new boost::random::uniform_real_distribution<float>(0.5f,1.0f/sqrt(2.0f)));
 			lum_r = boost::shared_ptr<boost::random::uniform_real_distribution<float> >(new boost::random::uniform_real_distribution<float>(0.5f,0.7f));
 		}
 
-		cv::Scalar random_RGB_color()
+		cv::Scalar random_RGB_color( const int & class_name)
 		{
 			int red, green, blue;
-			set_RGB(red, green,blue);
-			cv::Scalar color( red, green, blue );
+			set_RGB(red, green, blue, class_name);
+			cv::Scalar color( blue , green, red  );
 			return color;
 		}
 
-		void set_RGB(int & red, int & green, int & blue  )
+		void set_RGB(int & red, int & green, int & blue, const int & class_name )
 		{
+			boost::mutex::scoped_lock lock(mut_);
+			unsigned int class_name_ = class_name + adder_;
+			rng.seed(class_name_);
 			float hue = (*hue_r)(rng);// hue is an angle in radians (-Pi...Pi)
 			float saturation =  (*sat_r)(rng);// for saturation the range 0...1/sqrt(2) equals 0% ... 100%
 			float luminance =  (*lum_r)(rng);// luminance is in the range 0...1
@@ -190,17 +200,18 @@ namespace filter_utils
 			float u = cos( hue ) * saturation;
 			float v = sin( hue ) * saturation;
 			float r =  (luminance  + 1.139837398373983740  * v) * 255;
-			float g = (luminance  - 0.3946517043589703515  * u - 0.5805986066674976801 * v) * 255;
+			float g = (luminance  - 0.3946517043589703515  * u - 0.5805986066674976801 * v) * 125;
 			float b = (luminance + 2.03211091743119266 * u) * 255;
 
 			red = r;
 			green =g;
 			blue = b;
 		}
-		std::string fill_rule()
+		std::string fill_rule(  const int & class_name )
 		{ 
+			
 			int red, green, blue;
-			set_RGB(red, green,blue);
+			set_RGB(red, green, blue, class_name);
 			std::ostringstream rule;
 			rule << "fill-rule:nonzero;fill-opacity:0.5;fill:rgb("
 				<< red  << ","  << green << "," << blue
@@ -211,12 +222,16 @@ namespace filter_utils
 		}
 
 	private:
+		int adder_;
+		mutable boost::mutex mut_;
 		boost::random::mt19937 rng;  
 		boost::shared_ptr<boost::random::uniform_real_distribution<float> > hue_r;
 		boost::shared_ptr<boost::random::uniform_real_distribution<float> > lum_r;
 		boost::shared_ptr<boost::random::uniform_real_distribution<float> > sat_r;
 
 	};
+
+	#endif // FILL_UTILS_H
 }
 
 boost::shared_ptr<filter_utils::fill_utils>  fill_util;
@@ -276,16 +291,9 @@ std::vector<cv::Mat> load_source( const std::string & file_name, int & w, int & 
 		cv::Mat filled(cv::Size(w, h), (*it->second).type());
 		cv::resize((*it->second), filled, filled.size()  , 0,0 , CV_INTER_CUBIC );
 
-		//cv::Mat filled_t(cv::Size(w, h), black.type());
-		//cv::resize(black, filled_t, filled_t.size(), 0,0 , CV_INTER_CUBIC );
-		//cv::Mat del(cv::Size(3, 3), CV_8UC1);
-		//del.setTo(cv::Scalar(1));
-		//cv::dilate(filled_t, filled, del);
-
 		cv::threshold( filled, filled, 1, 255, CV_THRESH_BINARY );
 		result.push_back(filled);
 	}
-	//std::cout << "resized each cluster mat in: " << local_sub_timer.elapsed() <<  std::endl;
 
 	return result;
 }
@@ -363,7 +371,7 @@ std::string render_svg( std::vector< std::vector<filter_utils::vector_object> > 
 
 		for (int i = 0; i< image.size(); ++i)
 		{
-			mapper.map(image[i], fill_util->fill_rule() );
+			mapper.map(image[i], fill_util->fill_rule(i) );
 		}
 	}
 
@@ -374,17 +382,17 @@ std::string render_opencv(const std::string & extension, std::vector< filter_uti
 {
 	cv::Mat dst = cv::Mat::ones(  h, w, CV_8UC3);
 	dst =   cv::Scalar(255, 255, 255);
-
+	int iter_int=0;
 	BOOST_FOREACH(filter_utils::opencv_vector_object & o, clusters)
 	{
-		cv::Scalar color= fill_util->random_RGB_color();
+		cv::Scalar color= fill_util->random_RGB_color(iter_int);
 		int idx = 0;
 		for( ; idx >= 0; idx = o.hierarchy[idx][0] )
 		{
 			//std::cout << idx << " " <<  o.hierarchy[idx][0]  << " "  << o.hierarchy[idx][1] << " " <<  o.hierarchy[idx][2]  << std::endl;
 			cv::drawContours( dst, o.contours, idx, color , CV_FILLED, 8, o.hierarchy );
 		}
-
+		++iter_int;
 	}
 
 	//cv::namedWindow( "Components", CV_WINDOW_AUTOSIZE );
