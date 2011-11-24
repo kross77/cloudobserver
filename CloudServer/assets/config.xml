@@ -55,6 +55,22 @@
 	            </url_extensions>
 			</properties>
 		</service>
+		
+		<service>
+			<name>Image Renderer Service</name>
+			<class_name>image_renderer_service</class_name>
+			<library_name>ImageRendererService</library_name>
+			<description>
+				<type>public</type>
+				<text>Service for images rendering, transcoding, mapping.</text>
+				<default_url>images.html</default_url>
+			</description>
+			<properties>
+				<url>
+					<equals>/image_renderer.service</equals>
+				</url>
+			</properties>
+		</service>
 
 		<service>
 			<name>Observer Service</name>
