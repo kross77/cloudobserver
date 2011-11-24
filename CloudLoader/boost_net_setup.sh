@@ -2,8 +2,8 @@
 
 BOOST_DISTRO_SITE=surfnet.dl.sourceforge.net
 BOOST_PROJECT_URL=project/boost/boost
-BOOST_NAME=boost_1_48_0
-BOOST_VERSION=1.48.0
+BOOST_NAME=boost_1_47_0
+BOOST_VERSION=1.47.0
 BOOST_DISTRO_NAME="$BOOST_NAME".tar.gz
 BOOST_ROOT_DIR=boost_libraries
 BOOST_INSTALL_SUBDIR=install-dir
