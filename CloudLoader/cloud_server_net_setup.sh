@@ -21,6 +21,10 @@ OPENSSL_ROOT_DIR=openssl_libraries
 OPENSSL_INSTALL_SUBDIR=install-dir
 OPENSSL_SETUP_FILE_NAME=openssl_net_setup.sh
 
+OPENCV_ROOT_DIR=opencv_libraries
+OPENCV_INSTALL_SUBDIR=install-dir
+OPENCV_SETUP_FILE_NAME=opencv_net_setup.sh
+
 PREMAKE_SETUP_FILE_NAME=premake_net_setup.sh
 
 
@@ -98,6 +102,14 @@ else
 	echo_run ${SVN_CMD} https://$CLOUD_DISTRO_SITE/svn/trunk/$CLOUD_COMPONENT_NAME/ $CLOUD_COMPONENT_NAME
 fi
 
+
+if [ ! -e $OPENCV_SETUP_FILE_NAME ]; then
+	echo_run wget http://cloudobserver.googlecode.com/svn/trunk/CloudLoader/$OPENCV_SETUP_FILE_NAME 
+	echo_run chmod u+x $OPENCV_SETUP_FILE_NAME 
+fi
+
+echo_run ./$OPENCV_SETUP_FILE_NAME
+
 if [ ! -e $BOOST_SETUP_FILE_NAME ]; then
 	echo_run wget http://cloudobserver.googlecode.com/svn/trunk/CloudLoader/$BOOST_SETUP_FILE_NAME
 	echo_run chmod u+x $BOOST_SETUP_FILE_NAME
@@ -122,7 +134,7 @@ echo_run ./$PREMAKE_SETUP_FILE_NAME
 cd $CLOUD_COMPONENT_NAME
 
 if [ ! -e $CLOUD_LOCAL_BUILDING_FILE_NAME ]; then
-	echo_run echo ../premake-4.3/bin/release/premake4 --os=$OS_NAME --BoostLibsPath=../$BOOST_ROOT_DIR/$BOOST_INSTALL_SUBDIR/lib  --OpenSSLLibsPath=../$OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR/lib  --BoostIncludesPath=../$BOOST_ROOT_DIR/$BOOST_INSTALL_SUBDIR/include --OpenSSLIncludesPath=../$OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR/include  --platform=x32 gmake > $CLOUD_LOCAL_BUILDING_FILE_NAME
+	echo_run echo ../premake-4.3/bin/release/premake4 --os=$OS_NAME --BoostLibsPath=../$BOOST_ROOT_DIR/$BOOST_INSTALL_SUBDIR/lib  --OpenCVLibsPath=../$OPENCV_ROOT_DIR/$OPENCV_INSTALL_SUBDIR/lib --OpenSSLLibsPath=../$OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR/lib  --BoostIncludesPath=../$BOOST_ROOT_DIR/$BOOST_INSTALL_SUBDIR/include  --OpenCVIncludesPath=../$OPENCV_ROOT_DIR/$OPENCV_INSTALL_SUBDIR/include --OpenSSLIncludesPath=../$OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR/include --OpenCVshared=1  --platform=x32 gmake > $CLOUD_LOCAL_BUILDING_FILE_NAME
 	echo_run chmod u+x ./$CLOUD_LOCAL_BUILDING_FILE_NAME
 fi
 
@@ -135,11 +147,16 @@ echo_run make config=release
 if [ ! -d ../../../$CLOUD_INSTALL_SUBDIR/lib_boost ]; then
 	echo_run mkdir ../../../$CLOUD_INSTALL_SUBDIR/lib_boost
 	echo_run cp -r ../../../$BOOST_ROOT_DIR/$BOOST_INSTALL_SUBDIR/lib/* ../../../$CLOUD_INSTALL_SUBDIR/lib_boost/
+	
+	echo_run mkdir ../../../$CLOUD_INSTALL_SUBDIR/lib_opencv
+	echo_run cp -r ../../../$OPENCV_ROOT_DIR/$OPENCV_INSTALL_SUBDIR/lib/* ../../../$CLOUD_INSTALL_SUBDIR/lib_opencv/
 fi
 
 echo_run cp -r ./bin/release/* ../../../$CLOUD_INSTALL_SUBDIR/
 cd ../../../
+export LD_LIBRARY_PATH=./:./lib_boost/:./lib_opencv/
 echo -------------------------------------------------------------------------------
+echo DO NOT FORGET TO CALL "export LD_LIBRARY_PATH=./:./lib_boost/:./lib_opencv/"
 echo Done!
 
 exit 0
