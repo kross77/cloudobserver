@@ -1,5 +1,6 @@
 #summary We show how we do it and how you can do it.
 #labels Featured,Phase-Implementation,Phase-Requirements,Phase-Deploy
+#sidebar
 
 = Introduction =
 
@@ -18,3 +19,11 @@ Here is how you can use it:
 	chmod u+x cloud_server_net_setup.sh
 	./cloud_server_net_setup.sh
 }}}
+
+=== Warning ===
+Scripts have problems with paths containing either non-ASCII characters or spaces. (you can use `pwd` command to find your current path)
+
+= Warranty Disclaimer =
+CO CF PROVIDES THE CF SERVER AND ITS COMPONENTS TO YOU "AS IS." CO MEMBERS AND THERE SUPPLIERS DISCLAIM ANY EXPRESS, IMPLIED, STATUTORY OR OTHER WARRANTY OF ANY KIND WITH RESPECT TO THE CF SERVER AND ITS COMPONENTS INCLUDING ANY WARRANTY WITH REGARD TO PERFORMANCE, MERCHANTABILITY, INTEGRATION, SATISFACTORY QUALITY, NONINFRINGEMENT OR FITNESS FOR ANY PARTICULAR PURPOSE. YOU BEAR THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF OR RESULTS OBTAINED BY USING THE CF SERVER AND ITS COMPONENTS.
+
+The foregoing exclusions and limitations will apply to the maximum extent permitted by applicable law, even if any remedy fails its essential purpose.
