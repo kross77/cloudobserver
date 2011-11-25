@@ -13,14 +13,14 @@
 // A macro to be included in the declaration of every derived service.
 #define CLOUD_SERVICE_AUXILIARIES \
 	public: \
-	virtual boost::shared_ptr<std::exception> make_service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, \
+	virtual boost::shared_ptr<std::string> make_service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, \
 	boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response) { \
 	return service::make_service_call(socket, request, response); }
 
 class service
 {
 public:
-	virtual boost::shared_ptr<std::exception> make_service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response)
+	virtual boost::shared_ptr<std::string> make_service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response)
 	{
 #ifdef WIN
 		// The request and response should be copied on Windows because of the separate heaps in
@@ -28,14 +28,14 @@ public:
 		request = boost::shared_ptr<http_request>(new http_request(*request));
 		response = boost::shared_ptr<http_response>(new http_response(*response));
 #endif
-		boost::shared_ptr<std::exception> err;
+		boost::shared_ptr<std::string> err(new std::string(""));
 		try
 		{
 			service_call(socket, request, response);
 		}
 		catch(std::exception &e)
 		{
-			err = boost::shared_ptr<std::exception>(new std::exception(e));
+			err = boost::shared_ptr<std::string>(new std::string( e.what()));
 		}
 		return err;
 	}

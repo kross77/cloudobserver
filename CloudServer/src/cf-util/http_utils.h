@@ -88,7 +88,9 @@ public:
 
 	void send_found_302( std::string redirect_lication, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response ); // This shall be turned into 303 for pure HTTP/1.1.
 
-
+	void send_error( const int & error_code, const std::string & description,   boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response );
+	void send( const std::string & data,   boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response);
+	void send( const int & code, const std::string & data, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response );
 private:
 	std::string parse_file_upload_body(std::string contents);
 	std::string tag_set_cookie;
