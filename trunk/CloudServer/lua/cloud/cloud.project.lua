@@ -187,6 +187,7 @@ end
 function cloud.project.useMPI()
 	--
 	cloud.project.useBoost()
+	defines { "MPI" }
 	if os.get() == "windows" then
 		links
 		{
