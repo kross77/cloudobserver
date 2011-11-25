@@ -370,3 +370,23 @@ void http_utils::send_found_302( std::string redirect_lication, boost::shared_pt
 	response->headers.insert(std::pair<std::string, std::string>("Location", redirect_lication));
 	response->send(*socket);
 }
+
+void http_utils::send_error( const int & error_code, const std::string & description, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response )
+{
+	response->status = error_code;
+	response->description = description;
+	response->send(*socket);
+}
+
+void http_utils::send( const std::string & data, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response )
+{
+	http_utils::send(404, data, socket, response);
+}
+
+void http_utils::send( const int & code, const std::string & data, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response )
+{
+	response->status = code;
+	response->body = data;
+	response->headers["Content-Length"] = boost::lexical_cast<std::string>(response->body.length());
+	response->send(*socket);
+}
