@@ -260,7 +260,7 @@ namespace filter_utils
 
 			in.read(reinterpret_cast<char*>(&sy), sizeof(int));
 			in.read(reinterpret_cast<char*>(&sx), sizeof(int));
-			
+
 			if ((sy <= 0) || (sx <= 0))
 			{
 				throw std::runtime_error("bad or no such file!");
@@ -433,8 +433,8 @@ namespace filter_utils
 		{
 			fill_util = your_fill_utils;
 		}
-		private:
-	boost::shared_ptr<filter_utils::fill_utils>  fill_util;
+	private:
+		boost::shared_ptr<filter_utils::fill_utils>  fill_util;
 	};
 #endif //MASK_UTILS_H
 }
@@ -450,7 +450,7 @@ public:
 	{
 		http_util = boost::shared_ptr<http_utils>(new http_utils());
 		fill_util = boost::shared_ptr<filter_utils::fill_utils>(new filter_utils::fill_utils());
-		
+
 	}
 
 	virtual void service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response)
@@ -483,6 +483,7 @@ public:
 						boost::asio::ip::tcp::socket socket_(io_service_);
 						external_server_response.receive(request_to_external_server.send(from_url->second, socket_));
 						cv::Mat original;
+						cv::Mat result;
 						int sx, sy;
 						int desired_w = boost::lexical_cast<int>(to_w->second);
 						int desired_h = boost::lexical_cast<int>(to_h->second);
@@ -490,7 +491,7 @@ public:
 						if (from_format->second == "mask")
 						{
 							std::stringstream in;
-							
+
 							in << external_server_response.body;
 							filter_utils::mask_utils mask_util(fill_util);
 							std::vector<cv::Mat> image;
@@ -506,7 +507,7 @@ public:
 							}
 							else
 								encoded = mask_util.render_opencv(std::string("."+ desired_ext), opencv_countors, desired_w, desired_h);
-							
+
 							http_util->send(encoded, socket, response);
 
 						}
@@ -523,6 +524,11 @@ public:
 								original = cv::imdecode(data, 1);
 								sy = original.rows;
 								sx = original.cols;
+								util::resize_coefs(sx, sy,desired_w, desired_h);
+								result.create(cv::Size(desired_w, desired_h), original.type());
+								cv::resize(original, result, result.size()  , 0,0 , CV_INTER_CUBIC );
+
+
 
 							}
 							catch(...)
@@ -531,36 +537,42 @@ public:
 								return;
 							}
 						}
-					
-					std::vector<int> p;
-					p.push_back(CV_IMWRITE_JPEG_QUALITY);
-					p.push_back(90);
-					std::vector<uchar> buff;
-					cv::imencode(".jpg", original, buff, p);
-					std::stringstream b2;
-					util::send_data(b2, buff);
-					http_util->send(b2.str(), socket, response);
-					return;
-				}
-				catch(...)
-				{
-					http_util->send_error( 500, "unable to contact the external server.", socket, response);
-					return;
+
+						std::vector<uchar> buff;
+						if ((desired_ext == "jpg")||(desired_ext == "JPG")||(desired_ext == "JPEG")||(desired_ext == "jpeg"))
+						{
+							std::vector<int> p;
+							p.push_back(CV_IMWRITE_JPEG_QUALITY);
+							p.push_back(90);
+							cv::imencode(".jpg", result, buff, p);
+						}
+						else
+							cv::imencode(std::string("."+ desired_ext), result, buff);
+
+						std::stringstream b2;
+						util::send_data(b2, buff);
+						http_util->send(b2.str(), socket, response);
+						return;
+					}
+					catch(...)
+					{
+						http_util->send_error( 500, "unable to contact the external server.", socket, response);
+						return;
+					}
 				}
 			}
 		}
+
+
+		response->body = "hello image renderer service";
+		response->headers.insert(pair_ss("Content-Length", boost::lexical_cast<std::string>(response->body.length())));
+		response->send(*socket);
 	}
 
+	virtual void apply_config(boost::shared_ptr<boost::property_tree::ptree> config){}
 
-	response->body = "hello image renderer service";
-	response->headers.insert(pair_ss("Content-Length", boost::lexical_cast<std::string>(response->body.length())));
-	response->send(*socket);
-}
-
-virtual void apply_config(boost::shared_ptr<boost::property_tree::ptree> config){}
-
-virtual void start(){}
-virtual void stop(){}
+	virtual void start(){}
+	virtual void stop(){}
 
 private:
 	boost::shared_ptr<http_utils> http_util;
