@@ -50,6 +50,28 @@
 //SERVICE INTERFACE
 #include <service.hpp>
 
+namespace util
+{
+	template < class T>
+	void send_data(T & o, const std::vector<uchar> & v)
+	{
+		std::copy( v.begin(), v.end(), std::ostream_iterator<uchar>(o) );
+	}
+
+	void resize_coefs(const int original_w, const int original_h, int & new_w, int & new_h)
+	{
+		int num, den;
+		if (new_w * original_h < new_h * original_w) {
+			num = new_w;
+			den = original_w;
+		} else {
+			num = new_h;
+			den = original_h;
+		}
+		new_w = original_w * num / den;
+		new_h = original_h * num / den;
+	}
+}
 
 class image_renderer_service: public service
 { 
@@ -70,7 +92,7 @@ public:
 		{
 			if (it->second == "resize")
 			{
-				// api image_renderer.service?from_format=jpg&from_url=absolut_url&to_format=png&w=200&h=200
+				// api image_renderer.service?action=resize&from_format=jpg&from_url=absolut_url&to_format=png&w=200&h=200
 				map_ss::iterator from_format = request->arguments.find("from_format");
 				map_ss::iterator from_url = request->arguments.find("from_url");
 				map_ss::iterator to_format = request->arguments.find("to_format");
@@ -88,7 +110,26 @@ public:
 							boost::asio::io_service io_service_;
 							boost::asio::ip::tcp::socket socket_(io_service_);
 							external_server_response.receive(request_to_external_server.send(from_url->second, socket_));
-							http_util->send(external_server_response.body, socket, response);
+							cv::Mat a;
+							try
+							{
+								std::vector<char> data(external_server_response.body.begin(), external_server_response.body.end());
+
+								a = cv::imdecode(data, 1);
+							}
+							catch(...)
+							{
+								http_util->send_error( 500, "unable to read the external server file.", socket, response);
+								return;
+							}
+							std::vector<int> p;
+							p.push_back(CV_IMWRITE_JPEG_QUALITY);
+							p.push_back(90);
+							std::vector<uchar> buff;
+							cv::imencode(".jpg", a, buff, p);
+							std::stringstream b2;
+							util::send_data(b2, buff);
+							http_util->send(b2.str(), socket, response);
 							return;
 						}
 						catch(...)
