@@ -45,6 +45,7 @@
 
 //CF-UTIL
 #include <general_utils.h>
+#include <http_utils.h>
 
 //SERVICE INTERFACE
 #include <service.hpp>
@@ -53,12 +54,55 @@
 class image_renderer_service: public service
 { 
 public:
-	image_renderer_service(){}
+	image_renderer_service()
+	{
+		http_util = boost::shared_ptr<http_utils>(new http_utils());
+	}
 
 	virtual void service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response)
 	{
+		typedef std::map<std::string, std::string> map_ss;
+		typedef std::pair<std::string, std::string> pair_ss;
+
+		map_ss::iterator it = request->arguments.find("action");
+
+		if (it != request->arguments.end())
+		{
+			if (it->second == "resize")
+			{
+				// api image_renderer.service?from_format=jpg&from_url=absolut_url&to_format=png&w=200&h=200
+				map_ss::iterator from_format = request->arguments.find("from_format");
+				map_ss::iterator from_url = request->arguments.find("from_url");
+				map_ss::iterator to_format = request->arguments.find("to_format");
+				map_ss::iterator to_w = request->arguments.find("w");
+				map_ss::iterator to_h = request->arguments.find("h");
+				if((from_format != request->arguments.end())&&(from_url != request->arguments.end())&&(to_format != request->arguments.end())&&(to_w != request->arguments.end())&&(to_h != request->arguments.end()))
+				{
+						http_request request_to_external_server;
+						request_to_external_server.headers.insert(pair_ss("Connection","close"));
+						request_to_external_server.method = "GET";
+
+						http_response external_server_response;
+						try
+						{
+							boost::asio::io_service io_service_;
+							boost::asio::ip::tcp::socket socket_(io_service_);
+							external_server_response.receive(request_to_external_server.send(from_url->second, socket_));
+							http_util->send(external_server_response.body, socket, response);
+							return;
+						}
+						catch(...)
+						{
+							http_util->send_error( 500, "unable to contact the external server.", socket, response);
+							return;
+						}
+				}
+			}
+		}
+		
+
 		response->body = "hello image renderer service";
-		response->headers.insert(std::pair<std::string, std::string>("Content-Length", boost::lexical_cast<std::string>(response->body.length())));
+		response->headers.insert(pair_ss("Content-Length", boost::lexical_cast<std::string>(response->body.length())));
 		response->send(*socket);
 	}
 
@@ -68,7 +112,7 @@ public:
 	virtual void stop(){}
 
 private:
-
+	boost::shared_ptr<http_utils> http_util;
 
 	CLOUD_SERVICE_AUXILIARIES;
 
