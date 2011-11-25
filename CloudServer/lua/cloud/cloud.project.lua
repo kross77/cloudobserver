@@ -183,6 +183,42 @@ function cloud.project.useBoost()
 	end 
 end
 
+
+function cloud.project.useMPI()
+	--
+	cloud.project.useBoost()
+	if os.get() == "windows" then
+		links
+		{
+			"msmpi"
+		}
+		libdirs 
+		{
+		"C:/Program Files/Microsoft HPC Pack 2008 SDK/Lib/i386" -- there is also "C:/Program Files/Microsoft HPC Pack 2008 SDK/Lib/amd64"
+		}
+		
+		includedirs 
+		{
+		"C:/Program Files/Microsoft HPC Pack 2008 SDK/Include"
+		}
+		
+	end	
+	if os.get() == "linux" then
+		links {
+		"boost_mpi",
+		"boost_serialization"
+		}
+	end
+	if os.get() == "macosx" then
+		links {
+		"boost_mpi",
+		"boost_serialization"
+		}	
+	end 
+end
+
+
+
 function cloud.project.useopenSSL()
 	cloud.addLibDir(  _OPTIONS["OpenSSLLibsPath"] )
 	cloud.addIncludeDir(  _OPTIONS["OpenSSLIncludesPath"] )
