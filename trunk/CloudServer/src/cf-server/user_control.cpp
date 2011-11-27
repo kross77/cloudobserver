@@ -4,7 +4,6 @@ user_control::user_control()
 {
 	general_util = new general_utils();
 	threading_util = new threading_utils();
-	http_util = new http_utils();
 
 	is_db_set = false;
 	is_lu_set = false;
@@ -45,7 +44,6 @@ user_control::~user_control()
 {
 	delete general_util;
 	delete threading_util;
-	delete http_util;
 	delete lu;
 }
 
@@ -80,7 +78,7 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 	map_ss::iterator has_cookie = user_request->headers.find(tag_cookie);
 	 
 	if (has_cookie != headers_end){
-		std::map<std::string, std::string> parsed_cookie = http_util->parse_cookie(has_cookie->second);
+		std::map<std::string, std::string> parsed_cookie = http_utils::parse_cookie(has_cookie->second);
 
 		try
 		{
@@ -227,7 +225,7 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 			std::string cookie = tag_cookie_name;
 			cookie += "=";
 			cookie += session_id;
-			http_util->save_cookie(cookie, user.second);
+			http_utils::save_cookie(cookie, user.second);
 
 			user.first->arguments.erase(has_login);
 			user.first->arguments.erase(has_pass);
@@ -255,7 +253,7 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 	map_ss::iterator has_cookie = user.first->headers.find(tag_cookie);
 
 	if (has_cookie != headers_end){
-		std::map<std::string, std::string> parsed_cookie = http_util->parse_cookie(has_cookie->second);
+		std::map<std::string, std::string> parsed_cookie = http_utils::parse_cookie(has_cookie->second);
 
 		try
 		{
@@ -273,7 +271,7 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 	std::string tag_expired_date = "Expires=Wed, 09 Jun 2001 10:18:14 GMT";
 	std::string cookie = tag_cookie_name + "=" + "0" + "; " + tag_expired_date;
 
-	http_util->save_cookie(cookie, user.second);
+	http_utils::save_cookie(cookie, user.second);
 
 	user.first->arguments.erase(user.first->arguments.find(tag_logout));
 	return guest_user(user);
@@ -443,7 +441,7 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 
 	http_request request_to_recap;
 
-	request_to_recap.body = http_util->map_to_post_without_escape(to_recaptcha);
+	request_to_recap.body = http_utils::map_to_post_without_escape(to_recaptcha);
 	request_to_recap.headers.insert(pair_ss("Content-Type", "application/x-www-form-urlencoded;"));
 	request_to_recap.headers.insert(pair_ss("User-Agent", "reCAPTCHA/CloudForever"));
 	request_to_recap.headers.insert(pair_ss("Connection","close"));

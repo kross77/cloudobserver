@@ -1,10 +1,5 @@
 #include "http_utils.h"
 
-http_utils::http_utils()
-{
-	tag_set_cookie = "Set-Cookie";
-}
-
 std::map<std::string, std::string> http_utils::parse_cookie( std::string cookie_data )
 {
 	std::map<std::string, std::string> parsed_cookie;
@@ -40,7 +35,7 @@ std::map<std::string, std::string> http_utils::parse_cookie( std::string cookie_
 boost::shared_ptr<http_response> http_utils::save_cookie( std::string cookie_data, boost::shared_ptr<http_response> response )
 {
 	typedef std::pair<std::string, std::string> pair_ss;
-	response->headers.insert(pair_ss(tag_set_cookie, cookie_data));
+	response->headers.insert(pair_ss("Set-Cookie", cookie_data));
 	return response;
 }
 
@@ -73,7 +68,7 @@ std::map<std::string, std::string> http_utils::parse_multipart_form_data( std::s
 	taf_argument_name += "=\"";
 	std::vector < std::string > strings;
 	std::string  temp;
-	this->split(form_data	, tag_delimiter_content_disposition, std::insert_iterator<std::vector<std::string> >(strings, strings.begin()));
+	http_utils::split(form_data	, tag_delimiter_content_disposition, std::insert_iterator<std::vector<std::string> >(strings, strings.begin()));
 	BOOST_FOREACH(std::string str, strings)
 	{
 		size_t  found_name = str.find(taf_argument_name);
@@ -86,7 +81,7 @@ std::map<std::string, std::string> http_utils::parse_multipart_form_data( std::s
 			{
 				std::string filename(str, found_name + taf_argument_name.length(), end_of_file_name - (found_name + taf_argument_name.length()));
 				std::string request_body_from_file_name_to_end(str, found_name + taf_argument_name.length(), str.length() - (found_name + taf_argument_name.length()));
-				parsed_data.insert(std::pair<std::string, std::string>(filename, this->parse_file_upload_body(request_body_from_file_name_to_end)));
+				parsed_data.insert(std::pair<std::string, std::string>(filename, http_utils::parse_file_upload_body(request_body_from_file_name_to_end)));
 			}
 		}
 	}
