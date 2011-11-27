@@ -5,7 +5,7 @@
 /*!
  * \brief Provides a stopwatch mechanism 
  *
- * Designed designed to measure the amount of time elapsed from a particular time when activated to when is deactivated.
+ * Designed to measure the amount of time elapsed from a particular time when activated to when is deactivated.
  *
  * \note timer class requires boost_date_time library
  * 
