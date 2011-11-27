@@ -7,26 +7,71 @@
 #include <boost/thread/locks.hpp>
 #include <boost/foreach.hpp>
 
+/*!
+* \brief Provides a thread group std::set based container.
+* can be used in thread pools
+* is thread safe but not throw safe.
+*
+*/
 class thread_group
 {
 public:
+	/*!
+	 * \brief adds a thread into thread group
+	 *
+	 * \n FullName:  thread_group::add
+	 * \n Access:    public  
+	 *
+	 * \param to_add boost::shared_ptr<boost::thread> 
+	 * \return void 
+	 *
+	 */
 	void add( boost::shared_ptr<boost::thread> to_add)
 	{
 		boost::mutex::scoped_lock lock(m);
 		ds_.insert(to_add);
 	}
+	/*!
+	 * \brief removes thread from thread group
+	 *
+	 * \n FullName:  thread_group::remove
+	 * \n Access:    public  
+	 *
+	 * \param to_remove boost::shared_ptr<boost::thread> 
+	 * \return void
+	 *
+	 */
 	void remove( boost::shared_ptr<boost::thread> to_remove)
 	{
 		boost::mutex::scoped_lock lock(m);
 		ds_.erase(to_remove);
 	}
 
+	/*!
+	 * \brief returns current group size
+	 *
+	 * \n FullName:  thread_group::size
+	 * \n Access:    public  
+	 *
+	 * \return int group size
+	 *
+	 */
 	int size()
 	{
 		boost::mutex::scoped_lock lock(m);
 		return ds_.size();
 	}
 
+	/*!
+	 * \brief gives to all group threads some time and than kills them
+	 *
+	 * \n FullName:  thread_group::join_all
+	 * \n Access:    public  
+	 *
+	 * \param interuption_time boost::posix_time::milliseconds time to geive to each thread  before interrupting it
+	 * \return void 
+	 *
+	 */
 	void join_all(boost::posix_time::milliseconds interuption_time=boost::posix_time::milliseconds(1000))
 	{
 		boost::mutex::scoped_lock lock(m);
