@@ -3,7 +3,6 @@
 users_files_service::users_files_service()
 {
 	general_util =boost::shared_ptr<general_utils>( new general_utils());
-	http_util = boost::shared_ptr<http_utils>(new http_utils());
 	fs_util =  boost::shared_ptr<fs_utils>(new fs_utils());
 
 	this->root_path = boost::filesystem::current_path().string();
@@ -43,7 +42,7 @@ void users_files_service::apply_config( boost::shared_ptr<boost::property_tree::
 
 void users_files_service::service_call( boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response )
 {
-	std::string user_name = http_util->url_decode(fs_util->get_user_name(request));
+	std::string user_name = http_utils::url_decode(fs_util->get_user_name(request));
 	if(user_name != "guest")
 	{
 		if(request->body.length() > 0)
@@ -51,7 +50,7 @@ void users_files_service::service_call( boost::shared_ptr<boost::asio::ip::tcp::
 			try
 			{
 				std::map<std::string, std::string> save_file; 
-				save_file = http_util->parse_multipart_form_data(request->body);
+				save_file = http_utils::parse_multipart_form_data(request->body);
 
 				std::string file_name =save_file.find("file_name")->second;
 				std::string redirect_location = save_file.find("redirect_location")->second;
@@ -62,12 +61,12 @@ void users_files_service::service_call( boost::shared_ptr<boost::asio::ip::tcp::
 				encoded_url = user_name + file_name + general_util->get_utc_now_time();
 				encoded_url = general_util->get_sha256(encoded_url);
 				encoded_url = encoded_url + "." + this->default_ufs_extension;
-				encoded_url = http_util->url_encode( encoded_url );
+				encoded_url = http_utils::url_encode( encoded_url );
 				int f_size = save_file.find("datafile")->second.length();
 				fs_util->save_string_into_file(save_file.find("datafile")->second, encoded_url,  this->root_path);
 				this->create_file_table_entry(encoded_url, file_name, user_name, f_type, f_size, is_public);
 
-				http_util->send_found_302(redirect_location, socket, response);
+				http_utils::send_found_302(redirect_location, socket, response);
 
 				return;
 			}
@@ -99,7 +98,7 @@ void users_files_service::service_call( boost::shared_ptr<boost::asio::ip::tcp::
 	std::map<std::string, std::string>::iterator redirect_iterator= request->arguments.find("redirect_to");
 	if (redirect_iterator != request->arguments.end() )
 	{
-		http_util->send_found_302(redirect_iterator->second, socket, response);
+		http_utils::send_found_302(redirect_iterator->second, socket, response);
 		return;
 	}
 	bool sent;
@@ -153,7 +152,7 @@ bool users_files_service::send_file( std::string href, std::string user_name, bo
 void users_files_service::send_json( std::pair<std::string, std::string> pair, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response )
 {
 	std::ostringstream data_stream;
-	data_stream << "\n{\n\t\"" << http_util->escape(pair.first) << "\": \""	<< http_util->escape(pair.second)  << "\"\n}";
+	data_stream << "\n{\n\t\"" << http_utils::escape(pair.first) << "\": \""	<< http_utils::escape(pair.second)  << "\"\n}";
 	std::string data = data_stream.str();
 	response->body = data;
 	response->body_size = response->body.length();
@@ -182,7 +181,7 @@ void users_files_service::list_user_files( std::string user_name, boost::shared_
 
 			user_files_stream << "\n\t{\n\t\t\"href\": \""
 				<< encoded_url << "\",\n\t\t\"title\": \""
-				<< http_util->escape(file_name) << "\",\n\t\t\"user_name\": \""
+				<< http_utils::escape(file_name) << "\",\n\t\t\"user_name\": \""
 				<< user_name << "\",\n\t\t\"modified\": \""
 				<< modified << "\",\n\t\t\"type\": \""
 				<< f_type << "\",\n\t\t\"is_public\": "
@@ -221,7 +220,7 @@ void users_files_service::list_user_files_of_type( std::string user_name,  std::
 
 			user_files_stream << "\n\t{\n\t\t\"href\": \""
 				<< encoded_url << "\",\n\t\t\"title\": \""
-				<< http_util->escape(file_name) << "\",\n\t\t\"user_name\": \""
+				<< http_utils::escape(file_name) << "\",\n\t\t\"user_name\": \""
 				<< user_name << "\",\n\t\t\"modified\": \""
 				<< modified << "\",\n\t\t\"is_public\": "
 				<< is_public << ",\n\t\t\"size\": " 

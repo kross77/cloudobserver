@@ -49,7 +49,6 @@ private:
 	bool show_directory_contents;
 
 	general_utils *general_util;
-	http_utils *http_util;
 	fs_utils *fs_util;
 	boost::filesystem::path users_directory_path;
 

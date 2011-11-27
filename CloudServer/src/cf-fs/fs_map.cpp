@@ -85,10 +85,10 @@ int fs_map::size()
 void fs_map::print()
 {
 	boost::shared_lock<boost::shared_mutex> lock_r(mut_);
-	http_utils h;
+
 	for (std::map<std::string, boost::shared_ptr<fs_file> >::iterator i = _ds.begin(); i != _ds.end(); ++i) 
 	{
-		boost::filesystem::path pa = h.utf8_to_utf16(h.url_decode(i->first));
+		boost::filesystem::path pa = http_utils::utf8_to_utf16(http_utils::url_decode(i->first));
 		std::cout << pa.string() << std::endl;
 	}
 }

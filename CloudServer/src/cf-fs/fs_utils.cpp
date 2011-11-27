@@ -3,7 +3,6 @@
 fs_utils::fs_utils()
 {
 	general_util = new general_utils();
-	http_util = new http_utils();
 
 	this->expiration_period = boost::posix_time::minutes(200);
 	this->max_age = "max-age=" + boost::lexical_cast<std::string>(this->expiration_period.total_seconds());
@@ -13,7 +12,7 @@ fs_utils::fs_utils()
 void fs_utils::send_404( std::string encoded_url,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response )
 {
 	std::ostringstream body;
-	body << "Error 404! " << http_util->url_decode(request->url) << " does not exist\n <br/> <a href='/'>" << "Dear " << http_util->url_decode(get_user_name(request)) <<", please come again!</a>";
+	body << "Error 404! " << http_utils::url_decode(request->url) << " does not exist\n <br/> <a href='/'>" << "Dear " << http_utils::url_decode(get_user_name(request)) <<", please come again!</a>";
 
 	response->body = "<head></head><body><h1>" + body.str() + "</h1></body>";
 	response->send(*socket);

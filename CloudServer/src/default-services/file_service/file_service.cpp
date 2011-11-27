@@ -3,7 +3,6 @@
 file_service::file_service()
 {
 	general_util = new general_utils();
-	http_util = new http_utils();
 	fs_util = new fs_utils();
 	this->root_path = boost::filesystem::current_path().string();
 	this->show_directory_contents = false;
@@ -74,7 +73,7 @@ void file_service::create_file( boost::filesystem::path p, std::set<std::string>
 
 std::string file_service::encode_path( boost::filesystem::path &p )
 {
-	return http_util->url_encode(http_util->utf16_to_utf8(general_util->get_dif_path_wstring(root_path, p)));
+	return http_utils::url_encode(http_utils::utf16_to_utf8(general_util->get_dif_path_wstring(root_path, p)));
 }
 
 void file_service::files_walker()
@@ -341,24 +340,24 @@ void file_service::send_directory_contents( std::set<std::string> list, boost::s
 {
 	std::ostringstream body;
 	boost::filesystem::path target = root_path.wstring();
-	target /= http_util->utf8_to_utf16(http_util->url_decode(request->url));
+	target /= http_utils::utf8_to_utf16(http_utils::url_decode(request->url));
 	if (show_directory_contents)
 	{
 		response->headers.insert(std::pair<std::string, std::string>("Content-Type", "text/html; charset=utf-8"));
-		body << http_util->utf16_to_utf8(target.wstring()) << " is a directory containing:" ;
+		body << http_utils::utf16_to_utf8(target.wstring()) << " is a directory containing:" ;
 
 		BOOST_FOREACH(std::string s, list)
 		{
 			body << "<br/><a href=\""
 				<< s
 				<< "\">"
-				<< http_util->url_decode(s) << "</a>";
+				<< http_utils::url_decode(s) << "</a>";
 
 		}
 
 		target /= "./../";
 		body << "<br/><a href=\"/"
-			<<  http_util->url_encode(http_util->utf16_to_utf8(general_util->get_dif_path_wstring(root_path, target)))
+			<<  http_utils::url_encode(http_utils::utf16_to_utf8(general_util->get_dif_path_wstring(root_path, target)))
 			<< "/\"> up (../) </a>"
 			<< "<br/><a href='/'>site root</a>";
 	}
@@ -377,7 +376,7 @@ void file_service::send_info( boost::shared_ptr<fs_file> f,boost::shared_ptr<boo
 	body << f->path.filename()
 		<< "<br/> size: " << f->size << " byte" << ((f->size > 1) ? "s" : "")
 		<< "<br/> modified: " << f->modified
-		<< "<br/><a href=\"" << http_util->url_encode(request->url) << "\">download</a>";
+		<< "<br/><a href=\"" << http_utils::url_encode(request->url) << "\">download</a>";
 	response->body = "<head></head><body><h1>" + body.str() + "</h1></body>";
 	response->send(*socket);
 }
@@ -394,14 +393,14 @@ void file_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> 
 		catch(std::exception){}
 	}
 
-	if(http_util->url_decode(this->get_user_name(request)) != "guest")
+	if(http_utils::url_decode(this->get_user_name(request)) != "guest")
 	{
 		if(request->body.length() > 0)
 		{
 			try
 			{
 				std::map<std::string, std::string> save_file;
-				save_file = http_util->parse_multipart_form_data(request->body);
+				save_file = http_utils::parse_multipart_form_data(request->body);
 				std::string file_name =save_file.find("file_name")->second;
 				fs_util->save_string_into_file(save_file.find("datafile")->second, file_name,  this->root_path / "users");
 			}

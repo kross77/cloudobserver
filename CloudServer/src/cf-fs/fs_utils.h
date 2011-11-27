@@ -33,7 +33,6 @@ public:
 
 private:
 	general_utils *general_util;
-	http_utils *http_util;
 
 	std::string max_age;
 	boost::posix_time::time_duration expiration_period;

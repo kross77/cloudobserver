@@ -25,15 +25,8 @@
 
 #include "general_utils.h"
 
-class http_utils
+namespace http_utils
 {
-public:
-	/************************************************************************/
-	/* Sets grammar (`tag_set_cookie`)
-	/************************************************************************/
-	http_utils();
-
-	~http_utils(){}
 
 	/************************************************************************/
 	/* Encodes string 
@@ -91,9 +84,8 @@ public:
 	void send_error( const int & error_code, const std::string & description,   boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response );
 	void send( const std::string & data,   boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response);
 	void send( const int & code, const std::string & data, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response );
-private:
+
 	std::string parse_file_upload_body(std::string contents);
-	std::string tag_set_cookie;
 
 	template<typename _OutputIterator>
 	inline void split(std::string str, std::string delim, _OutputIterator result);
@@ -101,7 +93,7 @@ private:
 	template<typename InIter, typename OutIter>
 	OutIter copy_asciiz ( InIter begin, OutIter out );
 
-};
+}
 
 #include "http_utils_inl.h"
 #endif HTTP_UTILITIES_H

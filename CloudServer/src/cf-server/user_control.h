@@ -65,7 +65,7 @@ private:
 
 	threading_utils *threading_util;
 	general_utils *general_util;
-	http_utils *http_util;
+
 	log_util *lu;
 	
 

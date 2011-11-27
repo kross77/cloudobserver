@@ -448,7 +448,6 @@ class image_renderer_service: public service
 public:
 	image_renderer_service()
 	{
-		http_util = boost::shared_ptr<http_utils>(new http_utils());
 		fill_util = boost::shared_ptr<filter_utils::fill_utils>(new filter_utils::fill_utils());
 
 	}
@@ -508,7 +507,7 @@ public:
 							else
 								encoded = mask_util.render_opencv(std::string("."+ desired_ext), opencv_countors, desired_w, desired_h);
 
-							http_util->send(encoded, socket, response);
+							http_utils::send(encoded, socket, response);
 
 						}
 						else
@@ -533,7 +532,7 @@ public:
 							}
 							catch(...)
 							{
-								http_util->send_error( 500, "unable to read the external server file.", socket, response);
+								http_utils::send_error( 500, "unable to read the external server file.", socket, response);
 								return;
 							}
 						}
@@ -551,12 +550,12 @@ public:
 
 						std::stringstream b2;
 						util::send_data(b2, buff);
-						http_util->send(b2.str(), socket, response);
+						http_utils::send(b2.str(), socket, response);
 						return;
 					}
 					catch(...)
 					{
-						http_util->send_error( 500, "unable to contact the external server.", socket, response);
+						http_utils::send_error( 500, "unable to contact the external server.", socket, response);
 						return;
 					}
 				}
@@ -575,7 +574,6 @@ public:
 	virtual void stop(){}
 
 private:
-	boost::shared_ptr<http_utils> http_util;
 	boost::shared_ptr<filter_utils::fill_utils>  fill_util;
 	CLOUD_SERVICE_AUXILIARIES;
 
