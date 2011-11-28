@@ -64,7 +64,6 @@ private:
 	boost::shared_ptr<sqlite3pp::database> db;
 
 	threading_utils *threading_util;
-	general_utils *general_util;
 
 	log_util *lu;
 	

@@ -2,7 +2,6 @@
 
 user_control::user_control()
 {
-	general_util = new general_utils();
 	threading_util = new threading_utils();
 
 	is_db_set = false;
@@ -42,7 +41,6 @@ user_control::user_control()
 
 user_control::~user_control()
 {
-	delete general_util;
 	delete threading_util;
 	delete lu;
 }
@@ -126,7 +124,7 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 
 boost::shared_ptr<sqlite3pp::query>  user_control::request( std::string query)
 {
-	general_util->to_lower(query);
+	general_utils::to_lower(query);
 	if((query.find("insert") == std::string::npos) && (query.find("delete") == std::string::npos))
 	{
 		boost::shared_ptr<sqlite3pp::query> sql_query(new sqlite3pp::query(*db, query.c_str()));
@@ -154,7 +152,7 @@ bool user_control::is_registered_user( std::string given_email, std::string pass
 
 	}
 
-	std::string given_pass = general_util->get_sha256(pass_sha256);
+	std::string given_pass = general_utils::get_sha256(pass_sha256);
 	if (given_pass == pass)
 	{
 		return true;
@@ -218,7 +216,7 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 			formatter << now;
 			std::string session_id = formatter.str();
 			session_id += has_login->second;
-			session_id = general_util->get_sha256(session_id);
+			session_id = general_utils::get_sha256(session_id);
 
 			threading_util->safe_insert<pair_ss ,map_ss>(pair_ss(session_id, has_login->second), sessions_map);
 
@@ -318,7 +316,7 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 			sqlite3pp::command cmd(*db, command_create_user.c_str());
 
 			cmd.bind(":user_name", has_register->second);
-			cmd.bind(":pass", general_util->get_sha256(has_pass->second) );
+			cmd.bind(":pass", general_utils::get_sha256(has_pass->second) );
 			std::cout << cmd.execute() << std::endl;
 			xct.commit();
 

@@ -75,7 +75,6 @@ private:
 	bool is_db_set;
 
 	boost::posix_time::time_duration expiration_period;
-	boost::shared_ptr<general_utils> general_util;
 	boost::shared_ptr<fs_utils> fs_util;
 	boost::shared_ptr<log_util> lu;
 	bool is_lu_set;

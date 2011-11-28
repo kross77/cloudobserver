@@ -2,8 +2,6 @@
 
 fs_utils::fs_utils()
 {
-	general_util = new general_utils();
-
 	this->expiration_period = boost::posix_time::minutes(200);
 	this->max_age = "max-age=" + boost::lexical_cast<std::string>(this->expiration_period.total_seconds());
 
@@ -37,7 +35,7 @@ void fs_utils::send_not_modified_304( boost::shared_ptr<boost::asio::ip::tcp::so
 
 void fs_utils::save_string_into_file( std::string contents, std::string s_name, boost::filesystem::path users_path )
 {
-	general_util->create_directory(users_path);
+	general_utils::create_directory(users_path);
 	boost::filesystem::ofstream datFile;
 	boost::filesystem::path name (users_path / s_name);
 	datFile.open(name, std::ofstream::binary | std::ofstream::trunc | std::ofstream::out	);

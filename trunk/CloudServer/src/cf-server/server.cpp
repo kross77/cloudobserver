@@ -4,7 +4,6 @@ server::server(boost::property_tree::ptree config)
 {
 	threads_pool = boost::shared_ptr<thread_pool>(new thread_pool(40));
 	request_max_time = 5;
-	general_util = new general_utils();
 
 	uac = new user_control();
 	boost::property_tree::ptree pt;
