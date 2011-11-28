@@ -70,8 +70,7 @@ public:
 	 * \n Access:    public  
 	 *
 	 * \param variable first_variable_T
-	 * \param  std::map<first_variable_T 
-	 * \param into second_variable_T> & 
+	 * \param  into std::map<first_variable_T , second_variable_T> & 
 	 * \return second_variable_T 
 	 *
 	 */
