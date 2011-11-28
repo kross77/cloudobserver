@@ -2,7 +2,6 @@
 
 file_service::file_service()
 {
-	general_util = new general_utils();
 	fs_util = new fs_utils();
 	this->root_path = boost::filesystem::current_path().string();
 	this->show_directory_contents = false;
@@ -73,7 +72,7 @@ void file_service::create_file( boost::filesystem::path p, std::set<std::string>
 
 std::string file_service::encode_path( boost::filesystem::path &p )
 {
-	return http_utils::url_encode(http_utils::utf16_to_utf8(general_util->get_dif_path_wstring(root_path, p)));
+	return http_utils::url_encode(http_utils::utf16_to_utf8(general_utils::get_dif_path_wstring(root_path, p)));
 }
 
 void file_service::files_walker()
@@ -357,7 +356,7 @@ void file_service::send_directory_contents( std::set<std::string> list, boost::s
 
 		target /= "./../";
 		body << "<br/><a href=\"/"
-			<<  http_utils::url_encode(http_utils::utf16_to_utf8(general_util->get_dif_path_wstring(root_path, target)))
+			<<  http_utils::url_encode(http_utils::utf16_to_utf8(general_utils::get_dif_path_wstring(root_path, target)))
 			<< "/\"> up (../) </a>"
 			<< "<br/><a href='/'>site root</a>";
 	}

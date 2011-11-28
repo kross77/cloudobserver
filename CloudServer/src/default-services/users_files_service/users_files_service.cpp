@@ -2,7 +2,6 @@
 
 users_files_service::users_files_service()
 {
-	general_util =boost::shared_ptr<general_utils>( new general_utils());
 	fs_util =  boost::shared_ptr<fs_utils>(new fs_utils());
 
 	this->root_path = boost::filesystem::current_path().string();
@@ -58,8 +57,8 @@ void users_files_service::service_call( boost::shared_ptr<boost::asio::ip::tcp::
 				bool is_public = save_file.find("is_public")->second == "true" ? true : false ;
 
 				std::string encoded_url = "";
-				encoded_url = user_name + file_name + general_util->get_utc_now_time();
-				encoded_url = general_util->get_sha256(encoded_url);
+				encoded_url = user_name + file_name + general_utils::get_utc_now_time();
+				encoded_url = general_utils::get_sha256(encoded_url);
 				encoded_url = encoded_url + "." + this->default_ufs_extension;
 				encoded_url = http_utils::url_encode( encoded_url );
 				int f_size = save_file.find("datafile")->second.length();

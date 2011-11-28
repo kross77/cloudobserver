@@ -32,8 +32,6 @@ public:
 	void send_not_modified_304( boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response );
 
 private:
-	general_utils *general_util;
-
 	std::string max_age;
 	boost::posix_time::time_duration expiration_period;
 

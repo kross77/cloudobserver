@@ -36,7 +36,6 @@ private:
 	boost::thread *acceptor_thread;
 	user_control *uac;
 	boost::shared_ptr<thread_pool> threads_pool;
-	general_utils *general_util;
 	int request_max_time;
 };
 
