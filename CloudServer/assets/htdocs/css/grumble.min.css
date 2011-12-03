@@ -1,6 +1,6 @@
 .grumble {
 position:absolute;
-background-image:url(../textures/pop-up/bubble-sprite.png);
+background-image:url(../textures/pop-up/bubbles-flat.png);
 background-repeat:no-repeat;
 z-index:99999;
 }
@@ -52,22 +52,30 @@ padding:10px;
 
 .grumble-text200 .outer {
 padding:12px;
-}
+} 
 
 .grumble55 {
-background-position:-10px -6px;
+    width: 57px;
+    height: 57px;
+    background-position: -359px -0px;
 }
 
 .grumble105 {
-background-position:-7px -60px;
+    width: 105px;
+    height: 104px;
+    background-position: -203px -158px;
 }
 
 .grumble155 {
-background-position:-7px -165px;
+    width: 155px;
+    height: 157px;
+    background-position: -203px -0px;
 }
 
 .grumble205 {
-background-position:-7px -325px;
+    width: 202px;
+    height: 203px;
+    background-position: -0px -0px;
 }
 
 .grumble-button {
