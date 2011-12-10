@@ -1,0 +1,142 @@
+#summary Randome Notes/Code samples
+#labels Featured,tutorials,snippets
+
+= Boost serialization tutorial =
+
+Based on [http://www.boost.org/doc/libs/1_48_0/libs/serialization/doc/tutorial.html  official tutorial], shows simple nested classes serialisation demo:
+
+{{{
+
+#include <boost/serialization/serialization.hpp>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <string>
+#include <fstream>
+
+class A{
+private:
+	friend class boost::serialization::access;
+
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & a_;
+	}
+
+	int a_;
+
+public:
+	A(){ std::cout << "A constructed" << std::endl; }
+	A(int a): a_(a) { std::cout << "A constructed with 'a' ==" << a << std::endl; }
+	void print()
+	{
+		std::cout << "a == " << a_ << std::endl;
+	}
+};
+class B{
+private:
+	friend class boost::serialization::access;
+
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & b_;
+	}
+
+	std::string b_;
+public:
+	B(){ std::cout << "B constructed" << std::endl; }
+	B(std::string b): b_(b) { std::cout << "B constructed with 'b' ==" << b << std::endl; }
+	void print()
+	{
+		std::cout << "b == " << b_ << std::endl;
+	}
+};
+
+class C{
+private:
+	friend class boost::serialization::access;
+
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & a_;
+		ar & b_;
+		ar & d_;
+	}
+
+	A a_;
+	B b_;
+	double d_;
+
+public:
+	C(){  std::cout << "C constructed" << std::endl; }
+	C(int a, std::string b, double d ): a_(a), b_(b), d_(d) { std::cout << "C constructed with 'd' == " << d << std::endl; }
+	void print()
+	{
+		std::cout << "d == " << d_ << std::endl;
+		a_.print();
+		b_.print();
+	}
+};
+
+int main() {
+	// create and open a character archive for output
+	std::ofstream ofs("filename");
+
+	// create class instance
+	std::cout << "create a class:" << std::endl;
+	C c(15, "rock and roll", 25.8);
+
+	// save data to archive
+	std::cout << "encode:" << std::endl;
+	{
+		boost::archive::text_oarchive oa(ofs);
+		// write class instance to archive
+		oa << c;
+		// archive and stream closed when destructors are called
+	}
+	std::cout << "encoded." << std::endl;
+
+	C c_recreated;
+	std::cout << "print empty:" << std::endl;
+	c_recreated.print();
+	{
+		// create and open an archive for input
+		std::ifstream ifs("filename");
+		boost::archive::text_iarchive ia(ifs);
+		// read class state from archive
+		ia >> c_recreated;
+		// archive and stream closed when destructors are called
+	}
+	std::cout << "print filled:" << std::endl;
+	c_recreated.print();
+
+	std::cin.get();
+}
+
+}}}
+
+outputs:
+
+{{{
+
+create a class:
+A constructed with 'a' ==15
+B constructed with 'b' ==rock and roll
+C constructed with 'd' == 25.8
+encode:
+encoded.
+A constructed
+B constructed
+C constructed
+print empty:
+d == -9.25596e+061
+a == -858993460
+b ==
+print filled:
+d == 25.8
+a == 15
+b == rock and roll
+
+}}}
