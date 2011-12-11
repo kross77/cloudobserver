@@ -13,7 +13,7 @@ Result of Concurrent-Maps project run is a “log.txt” file with stats that ca
 = Research results =
 
 == 4 cores, Windows, Core 2 Quad ==
-[http://code.google.com/p/cloudobserver/wiki/ConcurrentMapsResearch http://cloudobserver.googlecode.com/svn-history/r1637/wiki/Assets/tp_performance.jpg]
+[http://code.google.com/p/cloudobserver/wiki/ConcurrentMapsResearch http://cloudobserver.googlecode.com/svn-history/r1643/wiki/Assets/tp_performance_4.jpg]
 
 == 8 cores, Windows, Core i7 ==
 [http://code.google.com/p/cloudobserver/wiki/ConcurrentMapsResearch http://cloudobserver.googlecode.com/svn-history/r1641/wiki/Assets/tp_performance_8.jpg]
