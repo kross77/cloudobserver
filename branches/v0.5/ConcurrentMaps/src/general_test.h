@@ -30,7 +30,7 @@ public:
 
 	general_test(int tasks_to_run, int threads_number)
 	{
-		n = threads_number;
+		n = tasks_to_run;
 		wait = true;
 		work = new boost::asio::io_service::work(io_service);
 		for (std::size_t i = 0; i < threads_number; ++i)
