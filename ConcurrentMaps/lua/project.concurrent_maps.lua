@@ -11,8 +11,8 @@ project "MapsTests"
 
 	configuration "Debug"
 		defines { "DEBUG" }
-		flags { "Symbols" , "Unicode"}
+		flags { "Symbols" , "Unicode",  "EnableSSE2", "StaticRuntime"}
 	
 	configuration "Release"
 		defines { "NDEBUG" }
-		flags { "OptimizeSpeed" , "Unicode"}
+		flags { "OptimizeSpeed" , "Unicode", "EnableSSE2", "StaticRuntime"}
