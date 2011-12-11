@@ -13,6 +13,7 @@ private:
 	int tests;
 	int tasks_n;
 	int threads_n;
+	log_util lu;
 public:
 	general_test_runer(int tests_number=5, int tasks_number=10000, int threads_number=0)
 	{
@@ -30,20 +31,20 @@ public:
 
 	void start()
 	{
-	std::cout << "Each test task will put a value into container, get it 3 times, remove it from container." << std::endl;
-	std::cout << "Number of required tests: " << tests << std::endl << "Number of tasks in each test: " << tasks_n << std::endl <<  "Number of threads in each test: " << threads_n << std::endl << "Wait for it..." << std::endl;
+	lu << "Each test task will put a value into container, get it 3 times, remove it from container." << log_util::endl;
+	lu << "Number of required tests: " << tests << std::endl << "Number of tasks in each test: " << tasks_n << std::endl <<  "Number of threads in each test: " << threads_n << std::endl << "Wait for it..." << log_util::endl;
 
-	std::cout << std::endl << "----" << std::endl << "Int tests" << std::endl << "----" << std::endl;
+	lu << std::endl << "----" << std::endl << "Int tests" << std::endl << "----" << log_util::endl;
 	// Boost Unordered
 	//---------------------------------------------------------
-	std::cout << std::endl << "testing unordered_map_data_structure_shared_locks:" << std::endl;
+	lu << std::endl << "testing unordered_map_data_structure_shared_locks:" << log_util::endl;
 	for(int i = 1; i < tests+1; ++i)
 	{
 		general_test<unordered_map_data_structure_shared_locks<int, int>, int, int > GeneralMapTest(tasks_n, threads_n);
 		GeneralMapTest.start_tests("int");
 		GeneralMapTest.tests_end();
 	}
-	std::cout << std::endl << "testing unordered_map_data_structure:" << std::endl;
+	lu << std::endl << "testing unordered_map_data_structure:" << log_util::endl;
 	for(int i = 1; i < tests+1; ++i)
 	{
 		general_test<unordered_map_data_structure<int, int>, int, int > GeneralMapTest(tasks_n, threads_n);
@@ -52,14 +53,14 @@ public:
 	}
 	// STD Map
 	//---------------------------
-	std::cout << std::endl << "testing general_map_data_structure:" << std::endl;
+	lu << std::endl << "testing general_map_data_structure:" << log_util::endl;
 	for(int i = 1; i < tests+1; ++i)
 	{
 		general_test<general_map_data_structure<int, int>, int, int > GeneralMapTest(tasks_n, threads_n);
 		GeneralMapTest.start_tests("int");
 		GeneralMapTest.tests_end();
 	}
-	std::cout << std::endl << "testing general_map_data_structure_shared_locks:" << std::endl;
+	lu << std::endl << "testing general_map_data_structure_shared_locks:" << log_util::endl;
 	for(int i = 1; i < tests+1; ++i)
 	{
 		general_test<general_map_data_structure_shared_locks<int, int>, int, int > GeneralMapTest(tasks_n, threads_n);
@@ -67,17 +68,17 @@ public:
 		GeneralMapTest.tests_end();
 	}
 
-	std::cout << std::endl << "----" << std::endl << "String tests" << std::endl << "----" << std::endl;
+	lu << std::endl << "----" << std::endl << "String tests" << std::endl << "----" << log_util::endl;
 	// Boost Unordered
 	//---------------------------------------------------------
-	std::cout << std::endl << "testing unordered_map_data_structure_shared_locks:" << std::endl;
+	lu << std::endl << "testing unordered_map_data_structure_shared_locks:" << log_util::endl;
 	for(int i = 1; i < tests+1; ++i)
 	{
 		general_test<unordered_map_data_structure_shared_locks<std::string, std::string>, std::string, std::string > GeneralMapTest(tasks_n, threads_n);
 		GeneralMapTest.start_tests("string");
 		GeneralMapTest.tests_end();
 	}
-	std::cout << std::endl << "testing unordered_map_data_structure:" << std::endl;
+	lu << std::endl << "testing unordered_map_data_structure:" << log_util::endl;
 	for(int i = 1; i < tests+1; ++i)
 	{
 		general_test<unordered_map_data_structure<std::string, std::string>, std::string, std::string > GeneralMapTest(tasks_n, threads_n);
@@ -87,14 +88,14 @@ public:
 	
 	// STD Map
 	//---------------------------
-	std::cout << std::endl << "testing general_map_data_structure:" << std::endl;
+	lu << std::endl << "testing general_map_data_structure:" << log_util::endl;
 	for(int i = 1; i < tests+1; ++i)
 	{
 		general_test<general_map_data_structure<std::string, std::string>, std::string, std::string > GeneralMapTest(tasks_n , threads_n);
 		GeneralMapTest.start_tests("string");
 		GeneralMapTest.tests_end();
 	}
-	std::cout << std::endl << "testing general_map_data_structure_shared_locks:" << std::endl;
+	lu << std::endl << "testing general_map_data_structure_shared_locks:" << log_util::endl;
 	for(int i = 1; i < tests+1; ++i)
 	{
 		general_test<general_map_data_structure_shared_locks<std::string, std::string>, std::string, std::string > GeneralMapTest(tasks_n, threads_n);
@@ -102,6 +103,6 @@ public:
 		GeneralMapTest.tests_end();
 	}
 
-	std::cout << std::endl  << "General_test_runer tests complete" << std::endl;
+	lu << std::endl  << "General_test_runer tests complete" << log_util::endl;
 	}
 };

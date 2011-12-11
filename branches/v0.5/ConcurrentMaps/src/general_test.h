@@ -12,6 +12,7 @@
 #include <boost/date_time.hpp>
 
 #include "timer.h"
+#include "log_util.h"
 
 template <typename  map_wraper_t, typename  map_t_1, typename  map_t_2>
 class general_test
@@ -78,6 +79,7 @@ private:
 	boost::asio::io_service io_service;
 	boost::asio::io_service::work *work;
 	boost::thread_group threads;
+	log_util lu;
 
 	void submit_test( int test_number )
 	{
@@ -127,7 +129,7 @@ private:
 		boost::upgrade_lock<boost::shared_mutex> lock(results);
 		boost::upgrade_to_unique_lock<boost::shared_mutex> uniqueLock(lock);
 
-		std::cout << "test duration: " << timerForCaptureFame.elapsed() << std::endl;
+		lu << "test duration: " << timerForCaptureFame.elapsed() << log_util::endl;
 		wait = false;
 	}
 };
