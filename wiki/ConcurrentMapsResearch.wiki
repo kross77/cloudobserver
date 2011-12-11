@@ -1,0 +1,17 @@
+#summary Here we show results of research performed in Concurrent Maps brunch 0.5 project.
+#labels Phase-Implementation
+
+= Introduction =
+
+We need to select most fast concurrent map container that would work with our thread pool. Also we want to see how to tween and tweak our thread pool for best performance.
+
+
+= Details =
+
+Result of Concurrent-Maps project run is a “log.txt” file with stats that can be easily brought into excel.
+
+= Research results =
+
+[http://code.google.com/p/cloudobserver/wiki/ConcurrentMapsResearch http://cloudobserver.googlecode.com/svn-history/r1637/wiki/Assets/tp_performance.jpg]
+
+As you can see optimal performance is gained on {{{boost::thread::hardware_concurrency() - 1}}} threads, and unordered boost maps.
