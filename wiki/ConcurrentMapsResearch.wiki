@@ -13,9 +13,9 @@ Result of Concurrent-Maps project run is a “log.txt” file with stats that ca
 = Research results =
 
 == 4 cores, Windows, Core 2 Quad ==
-[http://code.google.com/p/cloudobserver/wiki/ConcurrentMapsResearch http://cloudobserver.googlecode.com/svn-history/r1643/wiki/Assets/tp_performance_4.jpg]
+[http://code.google.com/p/cloudobserver/wiki/ConcurrentMapsResearch http://cloudobserver.googlecode.com/svn-history/r1643/wiki/Assets/tp_performance_4_2.jpg]
 
 == 8 cores, Windows, Core i7 ==
-[http://code.google.com/p/cloudobserver/wiki/ConcurrentMapsResearch http://cloudobserver.googlecode.com/svn-history/r1641/wiki/Assets/tp_performance_8.jpg]
+[http://code.google.com/p/cloudobserver/wiki/ConcurrentMapsResearch http://cloudobserver.googlecode.com/svn-history/r1641/wiki/Assets/tp_performance_8_2.jpg]
 
 As you can see optimal thread pool performance is not gained on some constant/relative number of cores, while we can see that unordered boost maps beat STL maps.
