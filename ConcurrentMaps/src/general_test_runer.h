@@ -32,7 +32,7 @@ public:
 	void start()
 	{
 	lu << "Each test task will put a value into container, get it 3 times, remove it from container." << log_util::endl;
-	lu << "Number of required tests: " << tests << std::endl << "Number of tasks in each test: " << tasks_n << std::endl <<  "Number of threads in each test: " << threads_n << std::endl << "Wait for it..." << log_util::endl;
+	lu << "Number of required tests: " << tests << std::endl << "Number of tasks in each test: " << tasks_n << std::endl <<  "Number of threads in each test \t\t " << threads_n << std::endl << "Wait for it..." << log_util::endl;
 
 	lu << std::endl << "----" << std::endl << "Int tests" << std::endl << "----" << log_util::endl;
 	// Boost Unordered
