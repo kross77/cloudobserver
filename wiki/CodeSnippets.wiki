@@ -448,3 +448,7 @@ template < class T0, class T1, class T2 > class my_map < T0, T1, T2, EmptyType >
 
 
 }}}
+
+== reflection \ introspection ==
+Please note that we will not provide full-blown  reflection\introspection library. There already is one grate called 
+[https://github.com/tegesoft/camp/ camp] (tutorial [http://blog.mestan.fr/2009/09/02/c-introspection-library-and-portable-industrial-graphical-components-for-gpl-and-commercial-use/ here]) and also boost.Reflection... they both mostly aim at Classes.
