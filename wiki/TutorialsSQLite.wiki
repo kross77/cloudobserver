@@ -1,5 +1,5 @@
-#summary In our server product we use SQLite as main DB engine. Here is how we use it from our C++ code
-#labels Phase-Implementation,SQLite,Tutorial,CPlusPlus,sqlite3pp
+#summary SQLite C++ Notes/Code samples
+#labels SQLite,CPlusPlus,sqlite3pp,tutorials,snippets
 
 = Introduction =
 

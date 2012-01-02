@@ -1,0 +1,53 @@
+#summary Boost IOstreams Notes/Code samples
+#labels Boost,CPlusPlus,tutorials,snippets
+
+= Boost IOstreams Tutorial =
+Based on [http://www.boost.org/doc/libs/1_41_0/libs/iostreams/doc/classes/gzip.html official tutorial], shows how to encode into gzip.
+ 
+== Code ==
+
+{{{
+
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <fstream>
+
+#include <boost/iostreams/filtering_streambuf.hpp>
+#include <boost/iostreams/copy.hpp>
+#include <boost/iostreams/filter/gzip.hpp>
+#include <boost/iostreams/stream.hpp>
+
+
+int main(  )
+{
+	std::cout << "create data." << std::endl;
+	std::string data_part_1 = "rock in clouds";
+	std::string data_part_2 = "!";
+
+	std::cout << "encode data:" << std::endl;
+	{
+		std::ofstream file( std::string( "hello world.gz" ).c_str(),  std::ofstream::binary);
+		boost::iostreams::filtering_streambuf< boost::iostreams::input> in;
+		in.push( boost::iostreams::gzip_compressor());
+		std::stringstream data;
+		data << data_part_1 << data_part_2;
+		in.push(data);
+		boost::iostreams::copy(in, file);
+	}
+		std::cout << "data encoded." << std::endl;
+	std::cin.get();
+	return 0;
+}
+
+}}}
+
+== Output ==
+
+{{{
+
+create data.
+encode data:
+data encoded.
+
+}}}
