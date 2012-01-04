@@ -10,7 +10,6 @@ server_utils::server_utils()
 	warning->use_time();
 	info = new log_util(1024 * 32, false, true, "log.txt");
 
-	util = new extension_utils();
 	tread_util = new threading_utils();
 	tread_util_local = new threading_utils();
 	this->description.server_root_path = boost::filesystem::current_path();
@@ -68,14 +67,13 @@ server_utils::~server_utils()
 	delete warning;
 	delete info;
 
-	delete util;
 	delete tread_util;
 	delete tread_util_local;
 }
 
 boost::shared_ptr<service> server_utils::create_service(std::string library_name, std::string class_name_inside_lib, boost::property_tree::ptree config)
 {
-	return util->give_me_class<service, boost::property_tree::ptree>(library_name, class_name_inside_lib, config);
+	return extension_utils::give_me_class<service, boost::property_tree::ptree>(library_name, class_name_inside_lib, config);
 }
 
 //Do not forget to change save_config if you change parse_config_services
@@ -167,7 +165,7 @@ std::map<std::string, boost::shared_ptr<server_utils::service_container> > serve
 		}
 
 		try{
-			boost::shared_ptr<service> one_service = util->give_me_class<service>(service_library_name, service_class_name);
+			boost::shared_ptr<service> one_service = extension_utils::give_me_class<service>(service_library_name, service_class_name);
 			try
 			{
 				boost::shared_ptr<boost::property_tree::ptree> service_custom_properties_tree(new boost::property_tree::ptree(one_description->service_custome_properties_tree));
@@ -431,7 +429,7 @@ void server_utils::add_to_services_list( boost::property_tree::ptree config )
 
 		try
 		{
-			one_description->service_ptr = util->give_me_class<service, boost::property_tree::ptree>(service_library_name, service_class_name, one_description->service_custome_properties_tree);
+			one_description->service_ptr = extension_utils::give_me_class<service, boost::property_tree::ptree>(service_library_name, service_class_name, one_description->service_custome_properties_tree);
 			description.service_map.insert(std::pair<std::string, boost::shared_ptr<server_utils::service_container> >(service_name, one_description));
 		}
 		catch(std::exception &e)

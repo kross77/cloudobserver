@@ -1,29 +1,4 @@
 #include "extension_utils.h"
-extension_utils::extension_utils()
-{
-	// Shared library suffixes
-	#ifdef WIN
-		current_extention = ".dll";
-	#elif defined LIN
-		current_extention = ".so";
-	#elif defined MAC
-		current_extention = ".dylib"; // as wall .bundle can be used.
-	#else
-	#error "unknown platform";
-	#endif
-
-	// Shared library prefixes
-	#ifdef WIN
-		current_prefix = "";
-	#elif defined LIN
-		current_prefix = "lib";
-	#elif defined MAC
-		current_prefix = "lib"; // as wall .bundle can be used.
-	#else
-	#error "unknown platform";
-	#endif
-}
-
 
 std::string extension_utils::add_prefix_and_suffix(std::string &name)
 {
