@@ -122,21 +122,6 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 
 }
 
-boost::shared_ptr<sqlite3pp::query>  user_control::request( std::string query)
-{
-	general_utils::to_lower(query);
-	if((query.find("insert") == std::string::npos) && (query.find("delete") == std::string::npos))
-	{
-		boost::shared_ptr<sqlite3pp::query> sql_query(new sqlite3pp::query(*db, query.c_str()));
-
-		return sql_query;
-	}
-	else
-	{
-		throw std::runtime_error("Not allowed query arguments use!");
-	}
-}
-
 bool user_control::is_registered_user( std::string given_email, std::string pass_sha256 )
 {
 	std::string email="", pass="";

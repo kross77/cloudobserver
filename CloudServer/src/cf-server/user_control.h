@@ -36,8 +36,6 @@ public:
 
 	void apply_config(boost::property_tree::ptree config);
 
-	//This metod shall be called by services to read data from server DB.
-	boost::shared_ptr<sqlite3pp::query> request(std::string query);
 	//This method shall be called for requests filtering
 	std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > service_call( boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> user_request , boost::shared_ptr<http_response> service_response);
 private:

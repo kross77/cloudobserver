@@ -1,37 +1,5 @@
 #include "general_utils.h"
 
-std::string general_utils::to_lower( std::string data )
-{
-	std::use_facet< std::ctype<char> >(std::locale()).tolower(&data[0], &data[0] + data.size());
-	return data;
-}
-
-void general_utils::print_map_contents( std::map <std::string, std::string> data )
-{
-	std::map<std::string, std::string>::const_iterator end = data.end();
-	if(data.end() != data.begin())
-	{
-		std::cout << "Received request contained:\n";
-		for (std::map<std::string, std::string>::const_iterator it = data.begin(); it != end; ++it)
-		{
-			std::cout << it->first << " : " << it->second << '\n';
-		}
-	}
-}
-
-void general_utils::print_map_contents( std::map <std::string, std::string> data, std::string name )
-{
-	std::map<std::string, std::string>::const_iterator end = data.end();
-	if(data.end() != data.begin())
-	{
-		std::cout << "Received request contained next "<< name << ":\n";
-		for (std::map<std::string, std::string>::const_iterator it = data.begin(); it != end; ++it)
-		{
-			std::cout << it->first << " : " << it->second << '\n';
-		}
-	}
-}
-
 std::string general_utils::get_sha256( std::string value )
 {
 	char data[65];
