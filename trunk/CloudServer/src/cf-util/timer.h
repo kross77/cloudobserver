@@ -3,6 +3,11 @@
 
 #include <boost/date_time.hpp>
 /*!
+ *  \addtogroup Utilities
+ *  @{
+ */
+
+/*!
  * \brief Provides a stopwatch mechanism 
  *
  * Designed to measure the amount of time elapsed from a particular time when activated to when is deactivated.
@@ -54,5 +59,5 @@ public:
 private:
 	boost::posix_time::ptime start_time;
 };
-
+/*! @} */
 #endif // TIMER_H

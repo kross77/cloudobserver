@@ -25,7 +25,7 @@
 
 #include "general_utils.h"
 /*!
- *  \addtogroup http_utils
+ *  \addtogroup Utilities
  *  @{
  */
 

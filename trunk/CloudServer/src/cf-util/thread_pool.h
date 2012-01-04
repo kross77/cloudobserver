@@ -16,6 +16,12 @@
  */
 class not_finished_on_time_exception: public std::exception { };
 
+
+/*!
+ *  \addtogroup Utilities
+ *  @{
+ */
+
 /*!
 * \brief Provides a thread pool mechanism 
 *
@@ -219,5 +225,5 @@ private:
 		}
 	}
 };
-
+/*! @} */
 #endif // THREAD_POOL_H
