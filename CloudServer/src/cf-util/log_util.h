@@ -12,7 +12,10 @@
 #include <boost/lexical_cast.hpp>
 
 class flush_internal;
-
+/*!
+ *  \addtogroup Utilities
+ *  @{
+ */
 class log_util
 {
 public:
@@ -90,5 +93,5 @@ private:
 	void init();
 	void set_options( int buffer_length, bool do_print, bool do_save, bool do_print_time, boost::filesystem::path save_file_path);
 };
-
+/*! @} */
 #endif // LOG_UTIL

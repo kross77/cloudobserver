@@ -7,6 +7,12 @@
 #include <set>
 #include <vector>
 #include <boost/thread.hpp>
+
+/*!
+ *  \addtogroup Utilities
+ *  @{
+ */
+
 /*!
  * \brief provides data independent, thread safe, search/insert/delete
  *
@@ -105,4 +111,6 @@ public:
 private:
 	mutable boost::mutex mut;
 };
+
+/*! @} */
 #endif //THREADING_UTILITIES_H 
