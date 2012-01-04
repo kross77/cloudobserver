@@ -132,7 +132,6 @@ private:
 	std::map<std::string, boost::shared_ptr<server_utils::service_container> > parse_config_services( boost::property_tree::ptree config );
 	int find_or_null( std::map<std::string, int> map, std::string to_find);
 	// For services creation from shared libraries
-	extension_utils *util;
 	threading_utils *tread_util_local; 
 	std::stringstream log;
 
