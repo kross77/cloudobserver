@@ -368,11 +368,11 @@ function cloud.project.useAL()
 		
 		configuration { "DebugShared or ReleaseShared" }
 			if  _OPTIONS["CopySharedLibraries"] then
-				cloud.win.copyDLL("OpenAL-1.13", "OpenAL32.dll")
+				cloud.win.copyDLL("OpenAL Soft-1.13", "OpenAL32.dll")
 			end
 		configuration { }
 		
-		cloud.win.addLibFromProgrammFiles("OpenAL-1.13")
+		cloud.win.addLibFromProgrammFiles("OpenAL Soft-1.13")
 	end
 	
 	if os.get() == "linux" then
