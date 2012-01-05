@@ -4,7 +4,7 @@ CF cross-platform client:
 Preparation instructions:
   - Download or build latest official distributions of library's and headers for next libs (if distributions are not presented you should compile library's manually on your own or call for help )
     - FFmpeg ( http://www.ffmpeg.org/ ) (we tested with version 0.8.2)
-    - Boost C++ library's ( http://www.boost.org/ )  (we tested with version 1.47.0)
+    - Boost C++ library's ( http://www.boost.org/ )  (we tested with version 1.48.0)
     - OpenCV ( http://opencv.willowgarage.com/wiki/ ) (we tested with version 2.3)
     - OpenAL ( http://connect.creativelabs.com/openal/default.aspx ) (we tested with version 1.13)
 	- Tcl with Tk ( http://www.tcl.tk/ ) (we tested with version 8.5.10)
