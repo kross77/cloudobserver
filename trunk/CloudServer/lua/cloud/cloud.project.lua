@@ -57,9 +57,9 @@ function cloud.project.useCV()
 					"opencv_imgproc231"
 				}
 			
-				cloud.win.copyDLL("OpenCV-2.3.1", "opencv_core231.dll")
-				cloud.win.copyDLL("OpenCV-2.3.1", "opencv_highgui231.dll")
-				cloud.win.copyDLL("OpenCV-2.3.1", "opencv_imgproc231.dll")
+				cloud.win.copyDLL("OpenCV", "opencv_core231.dll")
+				cloud.win.copyDLL("OpenCV", "opencv_highgui231.dll")
+				cloud.win.copyDLL("OpenCV", "opencv_imgproc231.dll")
 			else	
 				configuration { }
 				
@@ -93,7 +93,7 @@ function cloud.project.useCV()
 					}
 				configuration { }
 			end
-		cloud.win.addLibFromProgrammFiles("OpenCV-2.3.1")
+		cloud.win.addLibFromProgrammFiles("OpenCV")
 	end
 	
 	if os.get() == "linux" then
@@ -230,9 +230,9 @@ function cloud.project.useopenSSL()
 		links {
 		"libeay32"
 		}
-		cloud.win.addLibFromProgrammFiles("OpenSSL-1.0.0f")
+		cloud.win.addLibFromProgrammFiles("OpenSSL")
 		if  _OPTIONS["CopySharedLibraries"] then
-			cloud.win.copyDLL("OpenSSL-1.0.0f/lib", "libeay32.dll")
+			cloud.win.copyDLL("OpenSSL/lib", "libeay32.dll")
 		end
 	end
 	
