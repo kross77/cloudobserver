@@ -400,7 +400,8 @@ function cloud.project.useBoost()
 	cloud.addLibDir( _OPTIONS["BoostLibsPath"])
 	if os.get() == "windows" then
 		defines { "WIN" }
-		cloud.win.addLibFromProgrammFiles("Boost-1.48.0")
+		cloud.win.addIncludeDirFromProgrammFiles("Boost/include/boost-1_48")
+		cloud.win.addLibDirFromProgrammFiles("Boost/lib")
 	end	
 	if os.get() == "linux" then
 		defines { "LIN" }
