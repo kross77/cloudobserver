@@ -94,6 +94,7 @@ function cloud.project.useCV()
 				configuration { }
 			end
 		cloud.win.addLibFromProgrammFiles("OpenCV")
+		cloud.win.addLibDirFromProgrammFiles("OpenCV/share/OpenCV/3rdparty/lib")
 	end
 	
 	if os.get() == "linux" then
