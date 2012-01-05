@@ -439,24 +439,24 @@ function cloud.project.useFFmpeg()
 				"libmingwex"
 			}
 			
-			cloud.win.addLibFromProgrammFiles2("FFmpeg-0.8.2", "lib")
+			cloud.win.addLibFromProgrammFiles2("FFmpeg-0.9", "lib")
 		configuration { }
 		
 		configuration { "DebugShared or ReleaseShared" }
 			links {
-				"avformat-53",
-				"avcodec-53",
-				"avutil-51",
-				"swscale-2"
+				"avformat",
+				"avcodec",
+				"avutil",
+				"swscale"
 			}
 			
-			cloud.win.addLibFromProgrammFiles2("FFmpeg-0.8.2", "bin")
+			cloud.win.addLibFromProgrammFiles2("FFmpeg-0.9", "bin")
 			
 			if  _OPTIONS["CopySharedLibraries"] then
-				cloud.win.copyDLL("FFmpeg-0.8.2", "avformat-53.dll")
-				cloud.win.copyDLL("FFmpeg-0.8.2", "avcodec-53.dll")
-				cloud.win.copyDLL("FFmpeg-0.8.2", "avutil-51.dll")
-				cloud.win.copyDLL("FFmpeg-0.8.2", "swscale-2.dll")
+				cloud.win.copyDLL("FFmpeg-0.9", "avformat-53.dll")
+				cloud.win.copyDLL("FFmpeg-0.9", "avcodec-53.dll")
+				cloud.win.copyDLL("FFmpeg-0.9", "avutil-51.dll")
+				cloud.win.copyDLL("FFmpeg-0.9", "swscale-2.dll")
 			end
 		configuration { }
 	end
