@@ -3,7 +3,7 @@ Server - read-me:
 Project idea is simple  -  server is a gateway\container that receives requests and redirect them into services (which shall be declared in configuration file and exist in form of shared libraries, which are metres of separate projects)
 -----------------------------------------------------------------------------------------------------------------------
 This project require and use:
-    - Boost C++ library's ( http://www.boost.org/ )  (we tested with version 1.4.6)
+    - Boost C++ library's ( http://www.boost.org/ )  (we tested with version 1.48.0)
 	- Boost-Reflection ( we use it because of this tutorial http://boost-extension.redshoelace.com/docs/boost/extension/boost_extension/extension_reflection.html, we use latest revision 71517 http://svn.boost.org/svn/boost/sandbox/boost/reflection/, we adress it as part of boost 'boost/reflection/**' )
     - Boost.Process ( we use our costume modification of it that can be found in our SVN but we base it on  http://svn.boost.org/svn/boost/sandbox/SOC/2010/process/ r71393  )
     - Boost.Extension ( http://boost-extension.redshoelace.com/docs/boost/extension/index.html, we use costume modification of revision 50116 http://svn.boost.org/svn/boost/sandbox/boost/extension/, we address it as part of boost 'boost/extension/**' and store it in project svn - so just download this project svn - boost-extension will be in it)

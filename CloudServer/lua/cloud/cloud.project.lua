@@ -149,7 +149,7 @@ function cloud.project.useBoost()
 		defines{ "BOOST_ASIO_DISABLE_IOCP" }
 	if os.get() == "windows" then
 		defines { "WIN" } 
-		cloud.win.addLibFromProgrammFiles("Boost")
+		cloud.win.addLibFromProgrammFiles("Boost-1.48.0")
 	end	
 	if os.get() == "linux" then
 		defines { "LIN" }
