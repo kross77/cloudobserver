@@ -52,22 +52,22 @@ function cloud.project.useCV()
 		defines { "WIN" }
 		if  _OPTIONS["OpenCVshared"] then
 				links {
-					"opencv_core230",
-					"opencv_highgui230",
-					"opencv_imgproc230"
+					"opencv_core231",
+					"opencv_highgui231",
+					"opencv_imgproc231"
 				}
 			
-				cloud.win.copyDLL("OpenCV-2.3.0", "opencv_core230.dll")
-				cloud.win.copyDLL("OpenCV-2.3.0", "opencv_highgui230.dll")
-				cloud.win.copyDLL("OpenCV-2.3.0", "opencv_imgproc230.dll")
+				cloud.win.copyDLL("OpenCV-2.3.1", "opencv_core231.dll")
+				cloud.win.copyDLL("OpenCV-2.3.1", "opencv_highgui231.dll")
+				cloud.win.copyDLL("OpenCV-2.3.1", "opencv_imgproc231.dll")
 			else	
 				configuration { }
 				
 				configuration { "Debug" }
 					links {
-						"opencv_core230d",
-						"opencv_highgui230d",
-						"opencv_imgproc230d",
+						"opencv_core231d",
+						"opencv_highgui231d",
+						"opencv_imgproc231d",
 						"libjasperd",
 						"libjpegd",
 						"libpngd",
@@ -80,9 +80,9 @@ function cloud.project.useCV()
 				
 				configuration { "Release" }
 					links {
-						"opencv_core230",
-						"opencv_highgui230",
-						"opencv_imgproc230",
+						"opencv_core231",
+						"opencv_highgui231",
+						"opencv_imgproc231",
 						"libjasper",
 						"libjpeg",
 						"libpng",
@@ -93,7 +93,7 @@ function cloud.project.useCV()
 					}
 				configuration { }
 			end
-		cloud.win.addLibFromProgrammFiles("OpenCV-2.3.0")
+		cloud.win.addLibFromProgrammFiles("OpenCV-2.3.1")
 	end
 	
 	if os.get() == "linux" then
