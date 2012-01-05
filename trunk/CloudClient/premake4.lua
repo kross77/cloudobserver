@@ -264,9 +264,9 @@ function cloud.project.useCV()
 			}
 			
 			if  _OPTIONS["CopySharedLibraries"] then
-				cloud.win.copyDLL("OpenCV-2.3.1", "opencv_core231.dll")
-				cloud.win.copyDLL("OpenCV-2.3.1", "opencv_highgui231.dll")
-				cloud.win.copyDLL("OpenCV-2.3.1", "opencv_imgproc231.dll")
+				cloud.win.copyDLL("OpenCV", "opencv_core231.dll")
+				cloud.win.copyDLL("OpenCV", "opencv_highgui231.dll")
+				cloud.win.copyDLL("OpenCV", "opencv_imgproc231.dll")
 			end
 		configuration { }
 		
@@ -300,7 +300,7 @@ function cloud.project.useCV()
 			}
 		configuration { }
 		
-		cloud.win.addLibFromProgrammFiles("OpenCV-2.3.1")
+		cloud.win.addLibFromProgrammFiles("OpenCV")
 	end
 	
 	if os.get() == "linux" then
@@ -368,11 +368,11 @@ function cloud.project.useAL()
 		
 		configuration { "DebugShared or ReleaseShared" }
 			if  _OPTIONS["CopySharedLibraries"] then
-				cloud.win.copyDLL("OpenAL Soft-1.13", "OpenAL32.dll")
+				cloud.win.copyDLL("OpenAL Soft", "OpenAL32.dll")
 			end
 		configuration { }
 		
-		cloud.win.addLibFromProgrammFiles("OpenAL Soft-1.13")
+		cloud.win.addLibFromProgrammFiles("OpenAL Soft")
 	end
 	
 	if os.get() == "linux" then
@@ -439,7 +439,7 @@ function cloud.project.useFFmpeg()
 				"libmingwex"
 			}
 			
-			cloud.win.addLibFromProgrammFiles2("FFmpeg-0.9", "lib")
+			cloud.win.addLibFromProgrammFiles2("FFmpeg", "lib")
 		configuration { }
 		
 		configuration { "DebugShared or ReleaseShared" }
@@ -450,13 +450,13 @@ function cloud.project.useFFmpeg()
 				"swscale"
 			}
 			
-			cloud.win.addLibFromProgrammFiles2("FFmpeg-0.9", "bin")
+			cloud.win.addLibFromProgrammFiles2("FFmpeg", "bin")
 			
 			if  _OPTIONS["CopySharedLibraries"] then
-				cloud.win.copyDLL("FFmpeg-0.9", "avformat-53.dll")
-				cloud.win.copyDLL("FFmpeg-0.9", "avcodec-53.dll")
-				cloud.win.copyDLL("FFmpeg-0.9", "avutil-51.dll")
-				cloud.win.copyDLL("FFmpeg-0.9", "swscale-2.dll")
+				cloud.win.copyDLL("FFmpeg", "avformat-53.dll")
+				cloud.win.copyDLL("FFmpeg", "avcodec-53.dll")
+				cloud.win.copyDLL("FFmpeg", "avutil-51.dll")
+				cloud.win.copyDLL("FFmpeg", "swscale-2.dll")
 			end
 		configuration { }
 	end
