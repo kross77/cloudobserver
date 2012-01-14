@@ -1,4 +1,4 @@
-project "CloudService"
+project "ObserverService"
 	kind "SharedLib"
 	language "C++"
 	location ( "projects/" .. os.get() .. "-" .. action )
@@ -9,7 +9,7 @@ project "CloudService"
 	links { "cf-http" }
 	includedirs { "3rdparty/cf-http" }
 	
-	files { "src/default-services/cloud_service/**"}
+	files { "src/default-services/observer_service/**"}
 
 	configuration "Debug"
 		defines { "DEBUG" }

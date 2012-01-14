@@ -1,5 +1,5 @@
-#ifndef CLOUD_WRITER_H
-#define CLOUD_WRITER_H
+#ifndef OBSERVER_WRITER_H
+#define OBSERVER_WRITER_H
 
 #include <exception>
 #include <fstream>
@@ -8,13 +8,13 @@
 #include <boost/asio.hpp>
 #include <boost/thread.hpp>
 
-#include "cloud_reader.h"
+#include "observer_reader.h"
 
-class cloud_writer
+class observer_writer
 {
 public:
-	cloud_writer(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, std::ofstream* dump);
-	~cloud_writer();
+	observer_writer(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, std::ofstream* dump);
+	~observer_writer();
 	void connect_reader(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, std::ofstream* dump);
 	void process();
 	int get_width() { return this->width; }
@@ -33,8 +33,8 @@ private:
 	int width;
 	int height;
 
-	std::vector<cloud_reader*> readers;
-	std::vector<std::vector<cloud_reader*>::iterator> disconnected_readers;
+	std::vector<observer_reader*> readers;
+	std::vector<std::vector<observer_reader*>::iterator> disconnected_readers;
 
 	char* header;
 	std::vector<std::pair<char*, int> > script_data, tags_buffer;
@@ -54,4 +54,4 @@ private:
     const char TAGTYPE_DATA;
 };
 
-#endif // CLOUD_WRITER_H
+#endif // OBSERVER_WRITER_H

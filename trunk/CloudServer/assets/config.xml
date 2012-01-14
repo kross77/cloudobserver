@@ -74,8 +74,8 @@
 
 		<service>
 			<name>Observer Service</name>
-			<class_name>cloud_service</class_name>
-			<library_name>CloudService</library_name>
+			<class_name>observer_service</class_name>
+			<library_name>ObserverService</library_name>
 			<settings>
 				<!--
 					<max_streams>10</max_streams>

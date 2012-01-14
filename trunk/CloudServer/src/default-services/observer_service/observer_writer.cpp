@@ -1,6 +1,6 @@
-#include "cloud_writer.h"
+#include "observer_writer.h"
 
-cloud_writer::cloud_writer(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, std::ofstream* dump)
+observer_writer::observer_writer(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, std::ofstream* dump)
 	: HEADER_LENGTH(13), SIGNATURE1(0x46), SIGNATURE2(0x4C), SIGNATURE3(0x56),
 	VERSION(1), TAG_HEADER_LENGTH(11), TAGTYPE_AUDIO(8), TAGTYPE_VIDEO(9), TAGTYPE_DATA(18)
 {
@@ -15,7 +15,7 @@ cloud_writer::cloud_writer(boost::shared_ptr<boost::asio::ip::tcp::socket> socke
 	this->key_frames = false;
 }
 
-cloud_writer::~cloud_writer()
+observer_writer::~observer_writer()
 {
 	this->socket->close();
 
@@ -25,7 +25,7 @@ cloud_writer::~cloud_writer()
 		delete dump;
 	}
 
-	for (std::vector<cloud_reader*>::iterator i = this->readers.begin(); i != this->readers.end(); ++i)
+	for (std::vector<observer_reader*>::iterator i = this->readers.begin(); i != this->readers.end(); ++i)
 		delete *i;
 
 	delete[] this->header;
@@ -39,7 +39,7 @@ cloud_writer::~cloud_writer()
 	this->tags_buffer.clear();
 }
 
-void cloud_writer::connect_reader(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, std::ofstream* dump)
+void observer_writer::connect_reader(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, std::ofstream* dump)
 {
 	boost::mutex::scoped_lock lock(this->mutex);
 	socket->send(boost::asio::buffer(this->header, HEADER_LENGTH));
@@ -84,10 +84,10 @@ void cloud_writer::connect_reader(boost::shared_ptr<boost::asio::ip::tcp::socket
 
 		tag_header = !tag_header;
 	}
-	this->readers.push_back(new cloud_reader(socket, dump, this->buffered_timestamp));
+	this->readers.push_back(new observer_reader(socket, dump, this->buffered_timestamp));
 }
 
-void cloud_writer::process()
+void observer_writer::process()
 {
 	try
 	{
@@ -168,7 +168,7 @@ void cloud_writer::process()
 			else
 				this->buffered_timestamp = timestamp;
 
-			for (std::vector<cloud_reader*>::iterator i = this->readers.begin(); i != this->readers.end(); ++i)
+			for (std::vector<observer_reader*>::iterator i = this->readers.begin(); i != this->readers.end(); ++i)
 			{
 				// Update timestamp.
 				unsigned int modified_timestamp = timestamp - (*i)->timestamp_delta;
@@ -201,7 +201,7 @@ void cloud_writer::process()
 				delete[] modified_tag_header;
 			}
 
-			for (std::vector<std::vector<cloud_reader*>::iterator>::iterator i = this->disconnected_readers.begin(); i != this->disconnected_readers.end(); ++i)
+			for (std::vector<std::vector<observer_reader*>::iterator>::iterator i = this->disconnected_readers.begin(); i != this->disconnected_readers.end(); ++i)
 				this->readers.erase(*i);
 			this->disconnected_readers.clear();
 
@@ -222,7 +222,7 @@ void cloud_writer::process()
 	}
 }
 
-double cloud_writer::get_double_variable_from_flv_script_tag(char* script_tag_data, int data_size, std::string variable_name)
+double observer_writer::get_double_variable_from_flv_script_tag(char* script_tag_data, int data_size, std::string variable_name)
 {
 	char* script_data = new char[data_size + 1];
 	for (int i = 0; i < data_size; ++i)
@@ -239,17 +239,17 @@ double cloud_writer::get_double_variable_from_flv_script_tag(char* script_tag_da
 	return result;
 }
 
-unsigned short cloud_writer::to_ui16(unsigned char* value, int start_index)
+unsigned short observer_writer::to_ui16(unsigned char* value, int start_index)
 {
 	return (unsigned short)(value[start_index] << 8 | value[start_index + 1]);
 }
 
-unsigned int cloud_writer::to_ui24(unsigned char* value, int start_index)
+unsigned int observer_writer::to_ui24(unsigned char* value, int start_index)
 {
 	return (unsigned int)(value[start_index] << 16 | value[start_index + 1] << 8 | value[start_index + 2]);
 }
 
-unsigned int cloud_writer::to_ui32(unsigned char* value, int start_index)
+unsigned int observer_writer::to_ui32(unsigned char* value, int start_index)
 {
 	return (unsigned int)(value[start_index] << 24 | value[start_index + 1] << 16 | value[start_index + 2] << 8 | value[start_index + 3]);
 }
