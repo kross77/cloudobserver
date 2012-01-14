@@ -1,5 +1,5 @@
-#ifndef CLOUD_SERVICE_H
-#define CLOUD_SERVICE_H
+#ifndef OBSERVER_SERVICE_H
+#define OBSERVER_SERVICE_H
 
 #include <fstream>
 #include <iostream>
@@ -22,13 +22,13 @@
 
 #include "../../../service-interface/service.hpp"
 
-#include "cloud_writer.h"
+#include "observer_writer.h"
 
-class cloud_service: public service
+class observer_service: public service
 {
 public:
-	cloud_service();
-	~cloud_service();
+	observer_service();
+	~observer_service();
 	virtual void service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response);
 	virtual void apply_config(boost::shared_ptr<boost::property_tree::ptree> config);
 	virtual void start(){} // TODO: implement
@@ -44,9 +44,9 @@ private:
 	bool dump_writers;
 	bool dump_readers;
 
-	std::map<std::string, cloud_writer*> writers;
+	std::map<std::string, observer_writer*> writers;
 
 	CLOUD_SERVICE_AUXILIARIES;
 };
 
-#endif // CLOUD_SERVICE_H
+#endif // OBSERVER_SERVICE_H

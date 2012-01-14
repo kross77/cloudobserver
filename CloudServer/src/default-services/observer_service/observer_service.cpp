@@ -1,6 +1,6 @@
-#include "cloud_service.h"
+#include "observer_service.h"
 
-cloud_service::cloud_service()
+observer_service::observer_service()
 {
 	this->max_streams = 10;
 	this->dumps_location = (boost::filesystem::current_path() /= "dumps").string();
@@ -8,19 +8,19 @@ cloud_service::cloud_service()
 	this->dump_readers = false;
 }
 
-cloud_service::~cloud_service()
+observer_service::~observer_service()
 {
-	for (std::map<std::string, cloud_writer*>::iterator i = writers.begin(); i != writers.end(); ++i)
+	for (std::map<std::string, observer_writer*>::iterator i = writers.begin(); i != writers.end(); ++i)
 		delete i->second;
 }
 
-void cloud_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response)
+void observer_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response)
 {
 	if (request->url == "/users.json")
 	{
 		std::ostringstream users_stream;
 		users_stream << "[";
-		for (std::map<std::string, cloud_writer*>::iterator i = this->writers.begin(); i != this->writers.end(); ++i)
+		for (std::map<std::string, observer_writer*>::iterator i = this->writers.begin(); i != this->writers.end(); ++i)
 			users_stream << "\n\t{\n\t\t\"nickname\": \""
 				<< i->first << "\",\n\t\t\"width\": "
 				<< i->second->get_width() << ",\n\t\t\"height\": "
@@ -141,11 +141,11 @@ void cloud_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket>
 	if (response->status != 200)
 		return;
 
-	cloud_writer* writer = NULL;
+	observer_writer* writer = NULL;
 	switch (type)
 	{
 	case WRITER_CLIENT:
-		writer = new cloud_writer(socket, dump);
+		writer = new observer_writer(socket, dump);
 		this->writers[nickname] = writer;
 
 		writer->process();
@@ -160,7 +160,7 @@ void cloud_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket>
 	}
 }
 
-void cloud_service::apply_config(boost::shared_ptr<boost::property_tree::ptree> config)
+void observer_service::apply_config(boost::shared_ptr<boost::property_tree::ptree> config)
 {
 	this->max_streams = config->get<int>("max_streams", this->max_streams);
 	this->dumps_location = config->get<std::string>("dumps_location", this->dumps_location.string());
@@ -168,7 +168,7 @@ void cloud_service::apply_config(boost::shared_ptr<boost::property_tree::ptree> 
 	this->dump_readers = config->get<bool>("dump_readers", this->dump_readers);
 }
 
-bool cloud_service::check_nickname(std::string& nickname)
+bool observer_service::check_nickname(std::string& nickname)
 {
 	if (nickname.empty())
 		return false;
@@ -181,7 +181,7 @@ bool cloud_service::check_nickname(std::string& nickname)
 	return result;
 }
 
-std::string cloud_service::get_current_date_time()
+std::string observer_service::get_current_date_time()
 {
 	boost::local_time::local_date_time now = boost::local_time::local_sec_clock::local_time(boost::local_time::time_zone_ptr());
 	boost::local_time::local_time_facet* facet(new boost::local_time::local_time_facet("%Y-%m-%d-%H-%M-%S"));
@@ -196,5 +196,5 @@ std::string cloud_service::get_current_date_time()
 BOOST_EXTENSION_TYPE_MAP_FUNCTION
 {
 	std::map<std::string, boost::extensions::factory<service> > &factories(types.get());
-	factories["cloud_service"].set<cloud_service>();
+	factories["observer_service"].set<observer_service>();
 }
