@@ -3,11 +3,10 @@
 	
 	<head>
 		<title>
-			Cloud Server UFS Developers Page
+			Cloud Server Developers Image Service Page
 		</title>
 		
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-		
 		<script type="text/javascript" src="js/jquery-1.5.1.min.js">								
 		</script>
 		
@@ -118,14 +117,55 @@
 			width: 100%; font-size: 12px; font-family: Consolas, "Lucida Console",
 			monospace; color: black; } .butt_u{ font-size: 12px; font-family: Consolas, "Lucida Console",
 			monospace; color: white; padding:5px;}
+			
+			
 			.top-right{ display: block; position:absolute; top:5px; right:30px;}
-			.not-loged-in-user{width:50%;}
+.not-loged-in-user{width:50%;}
+			
 		</style>
 		<link rel="stylesheet" href="css/grumble.min.css?v=1">
 		<script src="js/jquery.grumble.min.js?v=1">
 		</script>
+		<meta http-equiv="imagetoolbar" content="no" />
+
+	<script type="text/javascript" src="js/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+	<script type="text/javascript" src="js/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+	<link rel="stylesheet" type="text/css" href="js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+ 
+ 	
+	
+
 </head>
 <body>
+
+
+<script type="text/javascript">
+		$(document).ready(function() {
+			/*
+			*   Examples - images
+			*/
+		   var twitter = Tempo.prepare('marx-brothers2');
+                    twitter.starting();
+
+	        $.get("ufs.json?action=type&type=image", function(json) {
+	                var data = $.parseJSON(json);
+	                twitter.render(data);
+	                
+	     
+	
+				$("a[rel=example_group]").fancybox({
+					'transitionIn'		: 'none',
+					'transitionOut'		: 'none',
+					'titlePosition' 	: 'over',
+						'type'              : 'image',
+					'titleFormat'		: function(title, currentArray, currentIndex, currentOpts) {
+						return '<span id="fancybox-title-over">Image ' + (currentIndex + 1) + ' / ' + currentArray.length + (title.length ? ' &nbsp; ' + title : '') + '</span>';
+					}
+				});
+			
+			});
+		});
+			</script>
 					<div class="hidden-c">
 						<!-- -->
 						<div id="tabs-ufs" class="ufs">
@@ -295,35 +335,20 @@
 				<p id="upload_button" class="butt">
 					show upload!
 				</p>
-				
-				<h3 class="fun">
-					<a href="#">FS</a>
-				</h3>
-				<div id="tabs-fun" class="fun">
-					
-					<ol id="marx-brothers">
-						<div data-template>
-							<ul class="lst">
-							<li class="uf file-{{is_public}}">
-								<p id="{{href}}" class="butt2">
-									{{title}} | {{modified}} | {{type}} | {{size}} | {{_tempo.index}}
-								</p>
-							</li>
-							</ul>
-						</div>
-						<li data-template-fallback>
-							Sorry, JavaScript required!
-						</li>
-					</ol>
-				</div>
 				<br/>
+				<h1>Images</h1>
+					 <ol id="marx-brothers2">
+					 <div data-template>
+                     <a rel="example_group" href="./{{href}}" title="{{title}}"><p>{{title}}</p></a>                         
+                            </div>
+				</ol>
 				<div id="u_name">
 					<div data-template>
 					<p class="top-right butt_u" id="user_name">{{user_name}}</p>
 					</div>
 				</div>
-				</div>
 				</div>	
+				</div>
 				<div class="alert">
 					<div class="overlay">
 					</div>
@@ -342,8 +367,9 @@
 						</div>
 					</div>
 				</div>
-						
-				<script type="text/javascript">
+
+					
+					<script type="text/javascript">
 $(document).ready(function() {
 	
 	user = readCookie('session-id');
@@ -351,14 +377,8 @@ $(document).ready(function() {
 		
 		$('.loged-in-user').show();
 		$('.not-loged-in-user').remove();
-		   var twitter = Tempo.prepare('marx-brothers');
-			twitter.starting();
 
-	$.get("ufs.json", function(json) {
-		var data = $.parseJSON(json);
-		twitter.render(data);
-
-		$('.butt2').mousedown(function() {
+			$('.butt2').mousedown(function() {
 			$(this).addClass("hilight");
 		}).mouseup(function() {
 			$(this).removeClass("hilight");
@@ -368,8 +388,6 @@ $(document).ready(function() {
 			$(this).removeClass("border");
 			$(this).removeClass("hilight");
 		});
-	});
-	
 	var user_name = Tempo.prepare('u_name');
 	user_name.starting();
 	$.get("ufs.service?user_name=true", function(json) {
