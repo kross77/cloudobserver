@@ -383,7 +383,9 @@ $(document).ready(function() {
 		$('.loged-in-user').remove();
 		$('.not-loged-in-user').show();
 		$('.not-loged-in-user').center();
-		
+		$(window).bind('resize', function() {
+			$('.not-loged-in-user').center();
+		});		
 	}
 	
 	$('.f_f').live('change', function(e){
