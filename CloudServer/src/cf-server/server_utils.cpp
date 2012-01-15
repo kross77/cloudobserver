@@ -2,13 +2,20 @@
 
 server_utils::server_utils()
 {
+	#ifdef DEBUG
+	error = new log_util(512, true, true, "log.txt");
+	warning = new log_util(512 * 8, true, true, "log.txt");
+	info = new log_util(512 * 32, false, true, "log.txt");
+	#else
 	error = new log_util(1024, true, true, "log.txt");
+	warning = new log_util(1024 * 8, false, true, "log.txt");
+	info = new log_util(1024 * 32, false, false, "log.txt");
+	#endif
 	error->use_prefix("error: ");
 	error->use_time();
-	warning = new log_util(1024 * 8, false, true, "log.txt");
+
 	warning->use_prefix("warning: ");
 	warning->use_time();
-	info = new log_util(1024 * 32, false, true, "log.txt");
 
 	tread_util = new threading_utils();
 	tread_util_local = new threading_utils();
