@@ -212,6 +212,7 @@ void server::server_services_list(boost::shared_ptr<boost::asio::ip::tcp::socket
 	response->body = files_.append("\n]");
 	response->body_size = response->body.length();
 	response->headers.insert(std::pair<std::string, std::string>("Content-Length", boost::lexical_cast<std::string>(response->body_size)));
+	http_utils::set_json_content_type(response);
 	response->send(*socket);
 
 	return;

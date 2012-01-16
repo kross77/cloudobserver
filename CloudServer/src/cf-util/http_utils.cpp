@@ -383,3 +383,23 @@ void http_utils::send( const int & code, const std::string & data, boost::shared
 	response->headers["Content-Length"] = boost::lexical_cast<std::string>(response->body.length());
 	response->send(*socket);
 }
+
+boost::shared_ptr<http_response> http_utils::set_json_content_type( boost::shared_ptr<http_response> response )
+{
+	response->headers.insert(std::pair<std::string, std::string>("Content-type", "application/json"));
+	response->headers.insert(std::pair<std::string, std::string>("Cache-Control", "no-cache"));
+	return response;
+}
+
+void http_utils::send_json( std::pair<std::string, std::string> pair, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response )
+{
+	std::ostringstream data_stream;
+	data_stream << "\n{\n\t\"" << http_utils::escape(pair.first) << "\": \""	<< http_utils::escape(pair.second)  << "\"\n}";
+	std::string data = data_stream.str();
+	response->body = data;
+	response->body_size = response->body.length();
+	response->headers.insert(std::pair<std::string, std::string>("Content-Length", boost::lexical_cast<std::string>(response->body_size)));
+	http_utils::set_json_content_type(response);
+	response->send(*socket);
+	return;
+}

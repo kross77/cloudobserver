@@ -89,7 +89,7 @@ void users_files_service::service_call( boost::shared_ptr<boost::asio::ip::tcp::
 
 		if(request->arguments["user_name"] == "true")
 		{
-			send_json( std::pair<std::string, std::string>("user_name", user_name), socket, response);
+			http_utils::send_json( std::pair<std::string, std::string>("user_name", user_name), socket, response);
 			return;
 		}
 	}
@@ -148,20 +148,6 @@ bool users_files_service::send_file( std::string href, std::string user_name, bo
 	return false;
 }
 
-void users_files_service::send_json( std::pair<std::string, std::string> pair, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response )
-{
-	std::ostringstream data_stream;
-	data_stream << "\n{\n\t\"" << http_utils::escape(pair.first) << "\": \""	<< http_utils::escape(pair.second)  << "\"\n}";
-	std::string data = data_stream.str();
-	response->body = data;
-	response->body_size = response->body.length();
-	response->headers.insert(std::pair<std::string, std::string>("Content-Length", boost::lexical_cast<std::string>(response->body_size)));
-	response->send(*socket);
-	return;
-}
-
-
-
 void users_files_service::list_user_files( std::string user_name, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response )
 {
 	std::ostringstream user_files_stream;
@@ -196,6 +182,7 @@ void users_files_service::list_user_files( std::string user_name, boost::shared_
 	response->body = files_.append("\n]");
 	response->body_size = response->body.length();
 	response->headers.insert(std::pair<std::string, std::string>("Content-Length", boost::lexical_cast<std::string>(response->body_size)));
+	http_utils::set_json_content_type(response);
 	response->send(*socket);
 	return;
 }
@@ -234,6 +221,7 @@ void users_files_service::list_user_files_of_type( std::string user_name,  std::
 	response->body = files_.append("\n]");
 	response->body_size = response->body.length();
 	response->headers.insert(std::pair<std::string, std::string>("Content-Length", boost::lexical_cast<std::string>(response->body_size)));
+	http_utils::set_json_content_type(response);
 	response->send(*socket);
 	return;
 }

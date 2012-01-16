@@ -31,6 +31,8 @@ void observer_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::sock
 		response->body = users.append("\n]");
 		response->body_size = response->body.length();
 		response->headers.insert(std::pair<std::string, std::string>("Content-Length", boost::lexical_cast<std::string>(response->body_size)));
+		response->headers.insert(std::pair<std::string, std::string>("Content-type", "application/json"));
+		response->headers.insert(std::pair<std::string, std::string>("Cache-Control", "no-cache"));
 		response->send(*socket);
 		return;
 	}

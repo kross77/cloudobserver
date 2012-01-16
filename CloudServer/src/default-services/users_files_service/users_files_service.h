@@ -57,9 +57,6 @@ public:
 
 private:
 
-	//TODO: move to http_utils, add std::map variant
-	void send_json(std::pair<std::string, std::string> pair, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response);
-
 	void list_user_files(std::string user_name, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response);
 	void list_user_files_of_type( std::string user_name, std::string f_type, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response );
 

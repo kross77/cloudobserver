@@ -107,6 +107,21 @@ namespace http_utils
 	boost::shared_ptr<http_response> save_cookie(std::string cookie_data, boost::shared_ptr<http_response> response);
 
 	/*!
+	 * \brief adds to the response json  "Content-type", "application/json" and "Cache-Control", "no-cache"
+	 * 
+	 * All details for why this shall be performed see RFC 4627 http://www.ietf.org/rfc/rfc4627.txt
+	 * 
+	 * \n FullName:  http_utils::set_json_content_type
+	 * \n Access:    public  
+	 *
+	 * \param response boost::shared_ptr<http_response>
+	 * \return boost::shared_ptr<http_response> 
+	 * \note adds not only "Content-type" but also sets "Cache-Control" to "no-cache"
+	 *
+	 */
+	boost::shared_ptr<http_response> set_json_content_type(boost::shared_ptr<http_response> response);
+
+	/*!
 	 * \brief turns map of <std::string, std::string> into string formated as POST request
 	 *
 	 * \n FullName:  http_utils::map_to_post_without_escape
@@ -242,6 +257,26 @@ namespace http_utils
 	 */
 	void send( const int & code, const std::string & data, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response );
 
+	/*!
+	 * \brief Sends one std::pair as JSON formated message
+	 * 
+	 * use sample
+	 * \code
+	 * http_utils::send_json( std::pair<std::string, std::string>("user_name", user.name()), socket, response);
+	 * \endcode
+	 *
+	 * \n FullName:  http_utils::send_json
+	 * \n Access:    public  
+	 *
+	 * \param  std::pair<std::string, std::string>
+	 * \param socket boost::shared_ptr<boost::asio::ip::tcp::socket>
+	 * \param response boost::shared_ptr<http_response>
+	 * \return void 
+	 *
+	 */
+	void send_json( std::pair<std::string, std::string> pair, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response );
+
+
 	std::string parse_file_upload_body(std::string contents);
 
 	template<typename _OutputIterator>
@@ -249,7 +284,6 @@ namespace http_utils
 
 	template<typename InIter, typename OutIter>
 	OutIter copy_asciiz ( InIter begin, OutIter out );
-
 }
 /*! @} */
 
