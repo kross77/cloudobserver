@@ -1,6 +1,6 @@
 $(document).ready(function() {
-	$('body').append("<div class='header'><div id='marx-user-name' ><div data-template><a><p class='header-item' id='user_name' class='hidden-c' >{{user_name}}</p></a></div></div><div id='marx-services-list'><div data-template><a href='{{url}}'><p class='header-item'>{{name}}</p></a></div></div></div>");
-	
+	$('body').append("<div class='header'><div id='marx-user-name' > <div><a href='index.html' alt='Cloud Server Main Page'><p style='background: url(/logo-small.png); width:40px; height:40px;' class='logo'></p></a></div> <div data-template><a><p class='header-item' id='user_name' class='hidden-c' >{{user_name}}</p></a></div></div><div id='marx-services-list'><div data-template><a href='{{url}}'><p class='header-item'>{{name}}</p></a></div></div></div>");
+
    var servicesList = Tempo.prepare('marx-services-list');
 			servicesList.starting();
 
@@ -9,7 +9,7 @@ $(document).ready(function() {
 			servicesList.render(data);	
 	});
 
-	$('.header-item').live('mousedown', function(){
+	$('.header-item, .logo').live('mousedown', function(){
 		$(this).addClass("hilight");
 	}).live('mouseup', function(){
 		$(this).removeClass("hilight");
@@ -74,5 +74,7 @@ $(document).ready(function() {
 			$(this).removeClass("border");
 			$(this).removeClass("hilight");
 		});					
-	}else{$('#marx-user-name').hide();}
+	}else{
+		$('#user_name').hide();
+		}
 });
