@@ -81,7 +81,7 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 				return;
 			}
 
-			//*(util->info) << "request url: " << request->url << log_util::endl;
+			*(util->info) << "request url: " << request->url << log_util::endl;
 
 			boost::shared_ptr<http_response> response = boost::make_shared<http_response>();
 			std::ostringstream formatter;
@@ -165,7 +165,7 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 
 			util->tread_util->safe_erase<boost::thread::id, std::set<boost::thread::id> >(boost::this_thread::get_id(), service_cont->threads_ids);
 
-			//*(util->info) << "connection resolved." << log_util::endl;
+			*(util->info) << "request resolved." << log_util::endl;
 		}
 		while(!connection_close);
 	}
@@ -174,7 +174,7 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 	{
 		*(util->error) << e.what() << log_util::endl; //"The parameter is incorrect" exception
 	}
-	//*(util->info) << "dis-connection" <<  log_util::endl;
+	*(util->info) << "connection closed, socket disconnected" <<  log_util::endl;
 }
 
 void server::server_service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response)
