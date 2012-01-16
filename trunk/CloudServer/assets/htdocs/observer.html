@@ -3,423 +3,393 @@
     
     <head>
         <title>
-            Cloud Observer
+            Observer Service
         </title>
-        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        		<!-- Info-->
+		<title>	Cloud Server UFS Developers Page</title>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+        <meta name="description" content="Services List" />
+        <meta name="keywords" content="files, navigation, C++, services, web, web-services, upload" />
+        <meta name="author" content="CF2011" />
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<!-- End Of Info-->
+		
+		<!-- Public CSS-->
+		<link rel="stylesheet" href="css/grumble.min.css?v=1">
+		<!-- End Of CSS-->
+		
+		<!-- Public JS-->
+		<script type="text/javascript" src="js/jquery-1.5.1.min.js">								
+		</script>
+		
+		<script type="text/javascript" src="js/jquery-ui-1.8.14.custom.min.js">								
+		</script>
+		
+		<script type="text/javascript" src="js/jquery.sha256.min.js">								
+		</script>
+		
+		<script type="text/javascript" src="js/jquery.validate.min.js">								
+		</script>
+		
+		<script type="text/javascript" src="js/tempo.min.js">									
+		</script>
+		
+		<script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js">
+		</script>
+		
+		<script type = 'text/javascript'src = "js/jquery.grumble.min.js" >
+		</script>
+		
+		<script type='text/javascript' src="js/jquery.event.drag-1.5.min.js">
+		</script>
+
+		<script src="js/jquery.grumble.min.js?v=1">
+		</script>
+		<!-- End Of Public JS-->
+		
+		<!-- CF JS -->
+		<script type='text/javascript' src="js/cf.js"></script>
+		
+		<script type="text/javascript" src="js/cf.windows.js"></script>
+		
+		<script type="text/javascript" src="js/cf.head.panel.js"></script>
+		
+		<!-- End Of CF JS-->
+		
+		<!-- CF CSS -->
+		<!--[if gte IE 9]>
+			  <style type="text/css">
+				.gradient {
+					filter: none;
+				}
+			  </style>
+		<![endif]-->
+		<link rel="stylesheet" href="css/cf.css">
+		<link rel="stylesheet" href="css/cf.head.panel.css">
+		<!-- End of CF CSS-->
+        
+
 		<script type="text/javascript">
 		//Current Broadcasing clients URL's.
         current_windows_client_url = "http://code.google.com/p/cloudobserver/downloads/detail?name=cloudobserverwriter-0.4.0.927-windows-x86-with-libraries.zip";
         current_linux_client_url = "http://code.google.com/p/cloudobserver/downloads/detail?name=cloudobserverwriter-0.4.0.927-linux-x86_64-with-libraries.tar.gz";
         current_mac_client_url = "http://code.google.com/p/cloudobserver/downloads/detail?name=cloudobserverwriter-0.4.0.927-macosx-i386-with-libraries.tar.gz";
         </script>
-        <style type="text/css">
-			body{
-			background-color:#FFF;
-			font:100.01% "Trebuchet MS",Verdana,Arial,sans-serif;
-			}
-			a:link{
-			text-decoration:none;
-			}
-			a:hover{
-			text-decoration:underline;
-			cursor:hand;
-			}
-			h1,p{
-			margin:0 10px;
-			}
-			h1{
-			font-size:250%;
-			color:#FFF;
-			text-shadow:0 1px 1px #000;
-			}
-			div.BUT{
-			-webkit-border-radius:5px;
-			-moz-border-radius:5px;
-			border-radius:5px;
-			border:1px double  rgba(0,0,0, 0.2);
-			display: inline-block;
-			width:87px;
-			height:85px;
-			position:relative;
-			padding:10px;
-			max-width:100;
-			float:left;
-			align:center;
-			text-align:center;
-			}
-			a#rol{
-			color:#FFF;
-			text-shadow:0px 1px 1px #000;
-			}
-			a.rol2{
-			text-shadow:0px 1px 1px #000;
-			}
-			div#nifty{
-			background:#9BD1FA;
-			margin:0 10%;
-			}
-			b.rtop,b.rbottom{
-			display:block;
-			background:#FFF;
-			}
-			b.rtop b,b.rbottom b{
-			display:block;
-			height:1px;
-			overflow:hidden;
-			background:#9BD1FA;
-			}
-			b.r1{
-			margin:0 5px;
-			}
-			b.r2{
-			margin:0 3px;
-			}
-			b.r3{
-			margin:0 2px;
-			}
-			b.rtop b.r4,b.rbottom b.r4{
-			height:2px;
-			margin:0 1px;
-			}
-			div#info{
-			position:absolute;
-			width:100%;
-			overflow:auto;
-			}
-			p{
-			color:#000;
-			text-shadow:0 1px 1px #fff;
-			padding-bottom:1em;
-			}
-			hr{
-			color:rgba(0, 0, 0, 0.1);
-			height:0.5px;
-			background-color:rgba(0, 0, 0, 0.1);
-			}
-			input[type="button"],.eButton{
-			width:150px;
-			word-wrap:break-word;
-			height:auto;
-			padding:5px 10px;
-			}
-        </style>
-         <script  type="text/javascript" src="js/jquery-1.5.1.min.js" >
-		 </script>
-         <script type="text/javascript" src="./js/Three.js">
-        </script>
-        <script type="text/javascript" src="./js/Cube.js">
-        </script>
-        <script type="text/javascript" src="./js/Hi-Res-Stats.js">
-        </script>
-                <script type="text/javascript" src="./js/browser-detect.js">
-        </script>
-                <script type="text/javascript" src="./js/clouds.js">
-        </script>
-                <script type="text/javascript" src="./js/script.js">
-        </script>
-		<script>
+        
+        <script type="text/javascript" src="./js/browser-detect.js"> </script>
+        <script type="text/javascript" src="./js/script.js"></script>
 
- 
-        </script>
     </head>
     <body>
-        <script>
-            update();
-            setInterval(update, 3000);
-        </script>
-        
-        <div id="containerHolder" style="position:absolute">
-        </div>
-		<div id='statsCont' style="top:0; left:0; position:absolute;">
-        </div>
-        <div id="info">
-            <p/>
-            <div id="nifty">
-                <b class="rtop">
-                    <b class="r1">
-                    </b>
-                    <b class="r2">
-                    </b>
-                    <b class="r3">
-                    </b>
-                    <b class="r4">
-                    </b>
-                </b>
-                <h1>
-                    <img src="logo.png" width="397" height="93" alt="Cloud Observer" border="0" usemap="#Map2" >
-                    <map name="Map2">
-                      <area shape="rect" coords="0,0,400,100" href="index.html" alt="Cloud Observer Main Page">
-                  </map>
-					</img>
-              </h1>
-                <b class="rbottom">
-                    <b class="r4">
-                    </b>
-                    <b class="r3">
-                    </b>
-                    <b class="r2">
-                    </b>
-                    <b class="r1">
-                    </b>
-                </b>
-            </div>
-            <p/>
-            <div  id="nifty">
-                <b class="rtop">
-                    <b class="r1">
-                    </b>
-                    <b class="r2">
-                    </b>
-                    <b class="r3">
-                    </b>
-                    <b class="r4">
-                    </b>
-                </b>
-                <h1>
-                    Online users 
-                </h1>
-                
-                   <p>  <dfn id="supportedPlatform"> You can join them - download our application for <a class="homeLink" href="#platform" id="rol" > your platform.</a></dfn><dfn> </dfn><a class="allLink" href="#OptionsAppeared" id="rol" >Show downloads section.</a>
-                   </p>
-              
-                <hr>
-                <ul id="usersList">
-                </ul>
-                <hr>
-
-<p>
-    <div id="footer1">
- 
-    </div>
-
-     <b class="rbottom">
-                    <b class="r4">
-                    </b>
-                    <b class="r3">
-                    </b>
-                    <b class="r2">
-                    </b>
-                    <b class="r1">
-                    </b>
-                </b>
-            </div>
-        
-            
-          
-            <p/>
-            <p/>
-<div id="nifty" class="downloads" style="visibility:hidden">
-                <b class="rtop">
-                    <b class="r1">
-                    </b>
-                    <b class="r2">
-                    </b>
-                    <b class="r3">
-                    </b>
-                    <b class="r4">
-                    </b>
-                </b>
-                <h1>All downloads</h1>
-           <p>     You can choose your platform and download will start immediately.</p>
-                <hr>
-               <div style="min-width:600; min-height:100; display:inline-block">
-<p style="float:left;"/>
-<a class="rol2 linux_link"  href="#Linux">	<div align="center" class="BUT" onclick="location.href=current_linux_client_url">
-	                 <img src="platform-logo-linux-pr.png" height="50" width="52"/>
-	                    <p><span  style="width:100; color: #FFF; text-shadow:0px 1px 1px #000;">
-                         Linux 
-                        </span></p>
-</div></a>
-	<p style="float:left;"/>
-<a class="rol2 windows_link"  href="#Windows">	<div align="center" class="BUT" onclick="location.href=current_windows_client_url">
-	                 <img src="platform-logo-windows-pr.png" height="50" width="56" /> 
-	                   <p style=" color: #FFF; text-shadow:0px 1px 1px #000;">
-
-                         Windows 
-          </p>  
-</div></a>
-	<p style="float:left;"/>
-<a class="rol2 mac_link"  href="#MacOSX">	<div align="center" class="BUT"  onclick="location.href=current_mac_client_url">
-	                  <img src="platform-logo-mac-pr.png" height="50" width="52"/>
-              <p style=" color: #FFF; width:100; text-shadow:0px 1px 1px #000;">Mac OS X</p>
-</div></a>
+			<br/><br/>
 	
-    </div>
-
-<script>
-
-                        $('.BUT').each(function(i) {
-                                $('.BUT').eq(i).bind('mouseover', function(e) {
-                                        $('.BUT').eq(i).css({
- background:'#99CCFF'
-                                        }).show()
-                                })
-                                          $('.BUT').eq(i).bind('mousemove', function(e) {
-                                        $('.BUT').eq(i).css({
- background:'#99CCFF'
-                                        }).show()
-                                })
-                                $('.BUT').eq(i).bind('mouseout', function() {
-                                                                            $('.BUT').eq(i).css({
- background:''
-                                        }).show()
-                                })
-                        })
-</script>
-<hr>
-    <div id="footer2">
- 
-    
-<br/>
-    </div>
-
-                <b class="rbottom">
-                    <b class="r4">
-                    </b>
-                    <b class="r3">
-                    </b>
-                    <b class="r2">
-                    </b>
-                    <b class="r1">
-                    </b>
-                </b>
-            </div>
-      <br/>
-        
-    </div>
-	<script type="text/javascript">
-        $('#footer1').html("<p style='font-size: 8pt'> Copyright &copy 2011 <a id='rol' href='#cloudobserver' onClick=\"{	newwindow=window.open('http://code.google.com/p/cloudobserver/','CloudObserver','height=750,width=900');	if (window.focus) {newwindow.focus()}}\">Cloud Forever</a>. All rights reserved. </p>");
-    
-        $('.downloads').hide()
-        $('.downloads').css(
-        {
-            visibility: 'visible'
-        })
-        var Dshow = false;
-        $('.allLink').toggle(
-    
-        function()
-        {
-            if (!Dshow)
-            {
-                Dshow = true;
-    
-                $('#footer2').fadeOut("slow", function()
-                {
-                    $('#footer1').fadeOut("slow");
-                    $('#footer2').html("<p style='font-size: 8pt'> Copyright &copy 2011 <a id='rol' href='#cloudobserver' onClick=\"{	newwindow=window.open('http://code.google.com/p/cloudobserver/','CloudObserver','height=750,width=900');	if (window.focus) {newwindow.focus()}}\">Cloud Forever</a>. All rights reserved. </p>");
-                    $('#footer1').html('');
-                    $(".downloads").fadeIn("slow");
-                    $('#footer2').fadeIn("slow");
-                });
-                $('.allLink').html('Hide downloads section.');
-            }
-        }, function()
-        {
-            if ( !! Dshow)
-            {
-                Dshow = false;
-                $(".downloads").fadeOut("slow", function()
-                {
-                    $('#footer2').fadeOut("fast", function()
-                    {
-                        $('#footer1').fadeOut("fast");
-                        $('#footer1').html("<p style='font-size: 8pt'> Copyright &copy 2011 <a id='rol' href='#cloudobserver' onClick=\"{	newwindow=window.open('http://code.google.com/p/cloudobserver/','CloudObserver','height=750,width=900');	if (window.focus) {newwindow.focus()}}\">Cloud Forever</a>. All rights reserved. </p>");
-                        $('#footer2').html('');
-                        $('#footer1').fadeIn("slow");
-                    });
-                });
-    
-                $('.allLink').html('Show downloads section.');
+	<div class="hidden-c">
+		<!-- -->
+		<div id="tabs-ufs" class="ufs">
+			<form method="POST" id="ufs_form_upload" enctype="multipart/form-data"
+			action="/ufs.service">
+				<input type="hidden" name="redirect_location" value="/observer.html">
+				<input type="hidden" class="f_type" name="type" value="none">
+				<fieldset>
+					<legend>
+						Name:
+					</legend>
+					<input type="text" class="required" name="file_name" />
+				</fieldset>
+				<fieldset>
+					<legend>
+						Sharing settings:
+					</legend>
+					<p>
+						<input type="radio" name="is_public" value="true">
+						Public
+					</p>
+					<p>
+						<input type="radio" name="is_public" value="false" checked>
+						Private
+					</p>
+				</fieldset>
+				<fieldset>
+					<legend>
+						File:
+					</legend>
+					<input type="file" class="f_f" name="datafile">
+				</fieldset>
+				<input type="submit" class="eButton" value="Upload" />
+				<input type="button" class="eButton" value="Cancel" onClick=$(".alert").hide() />
+			</form>
+		</div>
+		<!-- -->
+		<div id="tabs-ufs-update" class="ufs">
+			<form method="POST" id="ufs_form_upload" enctype="multipart/form-data"
+			action="/ufs.service">
+				<input type="hidden" name="redirect_location" value="/observer.html">
+				<input type="hidden" class="f_type" name="type" value="none">
+				<input type="hidden" id="tabs-ufs-update-file_eu" name="tabs-ufs-update-file_eu"
+				value="sha256.user.file">
+				<fieldset>
+					<legend>
+						Name:
+					</legend>
+					<input type="text" class="required" id="tabs-ufs-update-file_name" name="file_name"
+					/>
+				</fieldset>
+				<fieldset>
+					<legend>
+						Sharing settings:
+					</legend>
+					<p>
+						<input type="radio" name="is_public" value="true">
+						Public
+					</p>
+					<p>
+						<input type="radio" name="is_public" value="false" checked>
+						Private
+					</p>
+				</fieldset>
+				<fieldset>
+					<legend>
+						New File:
+					</legend>
+					<input type="file" class="f_f" name="datafile">
+				</fieldset>
+				<input type="submit" class="eButton" value="Upload" />
+				<input type="button" class="eButton" value="Cancel" onClick=$(".alert").hide() />
+			</form>
+		</div>
+		<!-- -->
+		<div id="tabs-login" class="login">
+			<form id="login"  action="./ufs.service" >
+				<input type="hidden" name="redirect_to" value="observer.html">
+				<input type="hidden" name="user_control" value="login">
+				<fieldset>
+					<legend>
+						Email:
+					</legend>
+					<input type="text" class="required email" name="login" />
+				</fieldset>
+				<fieldset>
+					<legend>
+						Password:
+					</legend>
+					<input type="hidden" name="pass" class="hidden_pass_value" value=""
+					/>
+					<input type="password" class="required pass_value" />
+				</fieldset>
+				<input type="submit" class="eButton" value="Submit" />
+				<input type="button" class="eButton" value="Cancel" onClick=$(".alert").hide() />
+			</form>
+		</div>
+		<!-- -->
+		<div id="tabs-register" class="register">
+			<script type="text/javascript">
+					var RecaptchaOptions = {
+						theme: 'white'
+					};
+			</script>
+			<form id="register" action="./ufs.service">
+				<input type="hidden" name="redirect_to" value="observer.html">
+				<input type="hidden" name="user_control" value="register">
+				<fieldset>
+					<legend>
+						Email:
+					</legend>
+					<input type="text" class="required email" name="register" />
+				</fieldset>
+				<fieldset>
+					<legend>
+						Password:
+					</legend>
+					<input type="hidden" name="pass" class="hidden_pass_value" value=""
+					/>
+					<input type="password" class="required pass_value" />
+				</fieldset>
+				<fieldset>
+					<legend>
+						Captcha
+					</legend>
+					<div id="content">
+						<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6LdRhsYSAAAAAAOG1BVM0qPtVtACn4IgU1DeQcJX">
+																																	
+						</script>
+					</div>
+				</fieldset>
+				<input type="submit" class="eButton" value="Submit" />
+				<input type="button" class="eButton" value="Cancel" onClick=$(".alert").hide() />
+			</form>
+		</div>
+		<!-- -->
+		<div id="tabs-logout" class="logout">
+			<fieldset>
+				<legend>
+					Logout?
+				</legend>
+				<form  action="./ufs.service">
+					<input type="hidden" name="redirect_to" value="observer.html">
+					<input type="hidden" name="user_control" value="logout">
+					<input type="hidden" name="logout" value="true">
+					<input type="submit" class="eButton" 	value="OK" />
+					<input type="button" class="eButton" value="Cancel" onClick=$(".alert").hide() />
+				</form>
+			</fieldset>
+		</div>
+		<!-- -->
+	</div>
+	
+	
+			<div  class="files-box fun not-loged-in-user list" style=" text-align:center; position:fixed; top:0;">	
 				
-            }
-        }
-    
-        );
-    
-        BrowserDetect.init();
+				<h3 style="text-align:center;">
+					Live Streams
+				</h3>
+				
+      			<ul class="usersList">
+                </ul>
+			</div>
+			
+			<div class="not-loged-in-user">
+				<a style="text-decoration:none;">
+				<p id="login_button" class="butt">
+					Log In!
+				</p>
+				</a>
+				<div style="display:inline-block; width: 190px; heigth:1;"> </div>
+				<a style="text-decoration:none;">
+				<p id="register_button" class="butt">
+					Register!
+				</p>
+				</a>
+			</div>
+			<br/>
+			<div class="loged-in-user" >
+				<a style="text-decoration:none; width:49%">
+					<h3  style=" position:absolute;  width:49%; right:0;">
+					Live Streams
+					</h3> 
+				</a>
+			</div>
+			<div class="description-box loged-in-user">
+				<h3 class="fun">
+					Observer Service Welcomes You.
+				</h3>
+				<br/>
+				<p style="text-align:left;">
+					This service provides you with ability to live stream video and audio streams to the Cloud server. You can stream from a web cam, or just having a microphone. Also if you just want to check it out you can stream a robot test stream (no camera required).
+				</p>
         
-        var user_os = BrowserDetect.OS;
-        if(user_os == "Windows")
-        {
-        	 $('.homeLink').attr("href", current_windows_client_url);
-        }
-        else if(BrowserDetect.OS == "Linux")
-        {
-        	$('.homeLink').attr("href", current_linux_client_url);
-        }
-        else if(BrowserDetect.OS == "Mac")
-        {
-        	$('.homeLink').attr("href", current_mac_client_url);
-        }
-        else
-        {
-        	$('#supportedPlatform').html("");
-        }
-        
-        $('.linux_link').attr("href", current_linux_client_url);
-		$('.windows_link').attr("href", current_windows_client_url);
-		$('.mac_link').attr("href", current_mac_client_url);
-        
-        
-        var user_browser = BrowserDetect.browser;
-        var user_browser_version = BrowserDetect.version;
-        if (((user_browser == "Chrome") && (user_browser_version >= 8)) || ((user_browser == "Explorer") && (user_browser_version >= 9)) || ((user_browser == "Opera") && (user_browser_version >= 10)) || ((user_browser == "Firefox") && (user_browser_version >= 4)))
-        {
-			lon = 360 * Math.random();
-			lat = 0;
-			startHtml5();
-var stats = new Stats();
+       <p>  <dfn id="supportedPlatform"> You can join other users online  - download our application for <a class="homeLink" href="#platform" id="rol" > your platform.</a></dfn><dfn> </dfn><a class="butt allLink " style="width: 190px; text-decoration:none;" href="#OptionsAppeared" id="rol" > Or see downloads section.</a>
+       </p>      
 
-// Align top-left
-stats.domElement.style.position = 'absolute';
-stats.domElement.style.left = '0px';
-stats.domElement.style.top = '0px';
-//$('body').append(stats.domElement );
-setInterval( function () { stats.update();}, 1000 / 30 );
-var htstopped = false;
-setInterval(function () { if(stats.getFPS() <= 4){
-	stopHtml5(); htstopped = true;
-	} else{ if(htstopped){startHtml5(); htstopped=false; }}}, 3000 );
-	
-        }	
-		var vind = -2;
-		var doit;
-			$('*').keypress(function(e){     
-    if(e.keyCode == 112 || e.keyCode == 1079 ){
-        stopHtml5();
-    }
-    if(e.keyCode == 111 || e.keyCode == 1097){
-       startHtml5(); 
-       }
-	if(e.keyCode == 102 || e.keyCode == 1072 ){
-		$('#statsCont').append(stats.domElement );
-	}
-	if(e.keyCode == 103 || e.keyCode == 1087 ){
-	
-		$('#statsCont').html('');
-	}
-	if(e.keyCode == 101 || e.keyCode == 1091 ){
+		<div class="downloads" style="visibility:hidden;">
+			<p>You can choose your platform and download will start immediately.</p>
+            <hr>
+           <div style="min-width:600; min-height:100; display:inline-block">
+				<p style="float:left;"/>
+				<a class="rol2 linux_link"  href="#Linux">	<div align="center" class="BUT butt" onclick="location.href=current_linux_client_url">
+					                 <img src="platform-logo-linux-pr.png" height="50" width="52"/>
+					                    <p><span  style="width:100; color: #FFF; text-shadow:0px 1px 1px #000;">
+				                         Linux 
+				                        </span></p>
+				</div></a>
+				<p style="float:left;"/>
+				<a class="rol2 windows_link"  href="#Windows">	<div align="center" class="BUT butt" onclick="location.href=current_windows_client_url">
+					                 <img src="platform-logo-windows-pr.png" height="50" width="56" /> 
+					                   <p style=" color: #FFF; text-shadow:0px 1px 1px #000;">
+				
+				                         Windows 
+				          </p>  
+				</div></a>
+				<p style="float:left;"/>
+				<a class="rol2 mac_link"  href="#MacOSX">	<div align="center" class="BUT butt"  onclick="location.href=current_mac_client_url">
+					                  <img src="platform-logo-mac-pr.png" height="50" width="52"/>
+				              <p style=" color: #FFF; width:100; text-shadow:0px 1px 1px #000;">Mac OS X</p>
+				</div></a>
+			</div>    
+		<style>
+			.BUT{display:inline-block;}
+		</style>
+			<script type="text/javascript">
+		        $('.downloads').hide();
+		        $('.downloads').css(
+		        {
+		            visibility: 'visible'
+		        });
+		        
+		        var Dshow = false;
+		        
+		        $('.allLink').toggle(
+		        function()
+		        {
+		            if (!Dshow)
+		            {
+		                Dshow = true;
+		                $(".downloads").fadeIn("slow");
+		                $('.allLink').html('Hide downloads section.');
+		            }
+		        }, function()
+		        {
+		            if ( !! Dshow)
+		            {
+		                Dshow = false;
+		                $(".downloads").fadeOut("slow");
+		                $('.allLink').html('Show downloads section.');
+		            }
+		        });
+		    
+		        BrowserDetect.init();
+		        var user_os = BrowserDetect.OS;
+		        if(user_os == "Windows")
+		        {
+		        	 $('.homeLink').attr("href", current_windows_client_url);
+		        }
+		        else if(BrowserDetect.OS == "Linux")
+		        {
+		        	$('.homeLink').attr("href", current_linux_client_url);
+		        }
+		        else if(BrowserDetect.OS == "Mac")
+		        {
+		        	$('.homeLink').attr("href", current_mac_client_url);
+		        }
+		        else
+		        {
+		        	$('#supportedPlatform').html("");
+		        }
+		        
+		        $('.linux_link').attr("href", current_linux_client_url);
+				$('.windows_link').attr("href", current_windows_client_url);
+				$('.mac_link').attr("href", current_mac_client_url);
+		    </script>	
+		</div>
+	</div>
+			<br/><br/>
+			<div id="tabs-fun" class="files-box fun loged-in-user">	
+      			<ul class="usersList">
+                </ul>
+			</div>
+			<br/>
 
-if( Math.random()<=0.5){vind = vind *(0-1);}else{vind = vind *(0-1)*(0-1);}
-clearTimeout(doit);
-doit = setInterval(function () { if(stats.getFPS() <= 5){} else{  lon = lon + 0.02*(vind);  render();}}, 1000/ 10 );
-		}
-		if(e.keyCode == 115 || e.keyCode == 1099 ){
-clearTimeout(doit);
-		}
-				if(e.keyCode == 45  ){
-vind= vind-1;
-		}
-						if(e.keyCode == 43 ||  e.keyCode == 61  ){
-vind= vind+1;
-		}
-});	
+		</div>
+	</div>	
+	<div class="alert">
+		<div class="overlay">
+		</div>
+		<div id="demo4_box" class="box message nifty" data-minwidth="75" data-minheight="50">
+			<div class="handle bar" id="alert_name">
+				<h2 class="handle bar">
+					Handle
+				</h2>
+			</div>
+			<div class="contents" id="alert_content">
+				<h1>
+					#demo2_box
+				<h1>
+			</div>
+				<div class="handle resize">
+				</div>
+			</div>
+		</div>		
 
-    </script>
-    <noscript>
-    <h1><a href="https://www.google.com/adsense/support/bin/answer.py?answer=12654">Please turn on JavaScript</a></h1>
-    </noscript>
     </body>
-
 </html>
