@@ -197,6 +197,12 @@
 					
 					<div id="content" style="font-size: 10pt; ">
 						<script>
+						
+								var RecaptchaOptions = {
+									theme: 'custom',
+									custom_theme_widget: 'recaptcha_widget'
+								};
+								
 								$(document).ready(function() {
 									$('.recap_get_audio').mouseup(function() {
 										Recaptcha.switch_type('audio');
