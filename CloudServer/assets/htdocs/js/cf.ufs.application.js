@@ -7,10 +7,9 @@ $(document).ready(function() {
 			   var fs = Tempo.prepare('marx-brothers');
 				fs.starting();
 	
-		$.get("ufs.json", function(json) {
-			var data = $.parseJSON(json);
-			fs.render(data);
-	
+		$.getJSON("ufs.json", function(data) {
+		    fs.render(data);
+
 			$('.butt2').mousedown(function() {
 				$(this).addClass("hilight2");
 			}).mouseup(function() {

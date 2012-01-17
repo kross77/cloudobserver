@@ -3,10 +3,9 @@ $(document).ready(function() {
 
    var servicesList = Tempo.prepare('marx-services-list');
 			servicesList.starting();
-
-	$.get("server.json", function(json) {
-			var data = $.parseJSON(json);
-			servicesList.render(data);	
+	
+	$.getJSON("server.json", function(data) {
+		    servicesList.render(data);
 	});
 
 	$('.header-item, .logo').live('mousedown', function(){
@@ -24,9 +23,9 @@ $(document).ready(function() {
 	if (user != null) {
 		var user_name = Tempo.prepare('marx-user-name');
 		user_name.starting();
-		$.get("ufs.service?user_name=true", function(json) {
-			var data = $.parseJSON(json);
-			user_name.render(data);
+		
+		$.getJSON("ufs.service?user_name=true", function(data) {
+		    user_name.render(data);
 		});
 		
 		$("#marx-user-name").show();
