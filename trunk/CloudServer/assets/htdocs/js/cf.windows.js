@@ -7,6 +7,11 @@ $.wait = function( callback, seconds){
    return window.setTimeout( callback, seconds * 1000 );
 }
 
+var RecaptchaOptions = {
+	theme: 'custom',
+	custom_theme_widget: 'recaptcha_widget'
+};
+
 $(document).ready(function() {
 	user = readCookie('session-id');
 	if (user != null) {
