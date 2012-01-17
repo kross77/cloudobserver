@@ -11,7 +11,11 @@ file_service::file_service()
 	first_time = true;
 
 	//TODO: make editable from config
-	desiredTimeFame = (long long)(5000.0f);
+	#ifdef DEBUG
+	desiredTimeFame = (long long)(1000.0f);
+	#else
+	desiredTimeFame = (long long)(10000.0f);
+	#endif
 	cach_size_limit = 500000;
 	cachable_file_size_limit = 200000;
 
