@@ -1,0 +1,20 @@
+diff -cr original/util/mk1mf.pl modified/util/mk1mf.pl
+*** original/util/mk1mf.pl	Fri Dec  3 23:31:06 2010
+--- modified/util/mk1mf.pl	Tue Jan 17 05:15:54 2012
+***************
+*** 317,323 ****
+  for (;;)
+  	{
+  	chop;
+! 
+  	($key,$val)=/^([^=]+)=(.*)/;
+  	if ($key eq "RELATIVE_DIRECTORY")
+  		{
+--- 317,323 ----
+  for (;;)
+  	{
+  	chop;
+! 	s/\r$//; #remove carriage return too! 
+  	($key,$val)=/^([^=]+)=(.*)/;
+  	if ($key eq "RELATIVE_DIRECTORY")
+  		{
