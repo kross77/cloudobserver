@@ -70,6 +70,54 @@ void fs_utils::send_uncachable_file( boost::shared_ptr<fs_file> f , boost::share
 }
 void fs_utils::insert_file_headers( boost::shared_ptr<fs_file> f, boost::shared_ptr<boost::asio::ip::tcp::socket > socket, boost::shared_ptr<http_response> response )
 {
+	if (f->type_extension.length() > 1)
+	{
+		if (boost::iequals(f->type_extension, ".html"))
+		{
+			response->headers.insert(std::pair<std::string, std::string>("Content-Type", "text/html"));
+		}
+		else if ( boost::iequals(f->type_extension, ".css"))
+		{
+			response->headers.insert(std::pair<std::string, std::string>("Content-Type", "text/css"));
+		}
+		else if (boost::iequals(f->type_extension, ".js"))
+		{
+			response->headers.insert(std::pair<std::string, std::string>("Content-Type", "text/javascript"));
+		}
+		else if (boost::iequals(f->type_extension, ".xml"))
+		{
+			response->headers.insert(std::pair<std::string, std::string>("Content-Type", "text/xml"));
+		}
+		else if (boost::iequals(f->type_extension, ".jpeg") || boost::iequals(f->type_extension, ".jpg"))
+		{
+			response->headers.insert(std::pair<std::string, std::string>("Content-Type", "image/jpeg"));
+		}
+		else if (boost::iequals(f->type_extension, ".png"))
+		{
+			response->headers.insert(std::pair<std::string, std::string>("Content-Type", "image/png"));
+		}
+		else if (boost::iequals(f->type_extension, ".gif"))
+		{
+			response->headers.insert(std::pair<std::string, std::string>("Content-Type", "image/gif"));
+		}
+		else if (boost::iequals(f->type_extension, ".svg"))
+		{
+			response->headers.insert(std::pair<std::string, std::string>("Content-Type", "image/svg+xml"));
+		}
+		else if (boost::iequals(f->type_extension, ".zip"))
+		{
+			response->headers.insert(std::pair<std::string, std::string>("Content-Type", "application/zip"));
+		}
+		else if (boost::iequals(f->type_extension, ".Gzip"))
+		{
+			response->headers.insert(std::pair<std::string, std::string>("Content-Type", "application/x-gzip"));
+		}
+		else if (boost::iequals(f->type_extension, ".pdf"))
+		{
+			response->headers.insert(std::pair<std::string, std::string>("Content-Type", "application/pdf"));
+		}
+	}
+
 	response->headers.insert(std::pair<std::string, std::string>("Last-Modified", f->modified));
 	response->headers.insert(std::pair<std::string, std::string>("Content-Length", boost::lexical_cast<std::string>(f->size)));
 	response->headers.insert(std::pair<std::string, std::string>("Cache-Control", max_age ));
@@ -85,7 +133,7 @@ boost::shared_ptr<fs_file> fs_utils::create_file( boost::filesystem::path p )
 		f->is_cached = false;
 		f->buffer.reset();
 	}
-
+	f->type_extension = boost::filesystem::extension(p);
 	f->size = boost::filesystem::file_size(p);
 	f->modified = boost::posix_time::to_iso_extended_string( boost::posix_time::from_time_t(last_write_time(p)) );
 	f->is_cachable = false;

@@ -11,6 +11,7 @@ struct fs_file
 {
 	boost::shared_mutex mutex_;
 	boost::filesystem::path path;
+	std::string type_extension;
 	boost::uintmax_t size;
 	bool is_cachable;
 	bool is_cached;
