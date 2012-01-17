@@ -206,10 +206,6 @@
 					
 					<div id="content" style="font-size: 10pt; ">
 						<script>
-								var RecaptchaOptions = {
-									theme: 'custom',
-									custom_theme_widget: 'recaptcha_widget'
-								};
 								$(document).ready(function() {
 									$('.recap_get_audio').mouseup(function() {
 										Recaptcha.switch_type('audio');
@@ -245,7 +241,8 @@
 						<span class="recaptcha_only_if_audio">Type what you hear:<br/></span>
 						</div>
 						<div style=" width:320px; font-size: 8pt; display:inline-block; y:100%; x:0px; ">
-						<input type="text" style="width:100%;" id="recaptcha_response_field" name="recaptcha_response_field"><br/> 
+
+						<input name="recaptcha_response_field" style="width:100%;" id="recaptcha_response_field" type="text" autocorrect="off" autocapitalize="off" autocomplete="off"><br/> 
 						
 			<a style="text-decoration:none;">
 				<p class=" recaptcha_only_if_image butt recap_get_another_image">
@@ -269,8 +266,11 @@
 				</p>
 			</a>
 						
-		
+
 					</div>
+					</div>
+				</div>
+			   <script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6LdRhsYSAAAAAAOG1BVM0qPtVtACn4IgU1DeQcJX"></script>
 				</fieldset>
 				<input type="submit" class="eButton" value="Submit" />
 				<input type="button" class="eButton" value="Cancel" onClick='{Recaptcha.reload();$(".alert").hide();}' />
@@ -293,10 +293,8 @@
 		</div>
 		<!-- -->
 	</div>
-	<script type="text/javascript" src="https://www.google.com/recaptcha/api/challenge?k=6Ld4iQsAAAAAAM3nfX_K0vXaUudl2Gk0lpTF3REf"></script>
 	
-	
-			<div  class="files-box fun not-loged-in-user list" style=" text-align:center; position:fixed; top:0;">	
+	<div  class="files-box fun not-loged-in-user list" style=" text-align:center; position:fixed; top:0;">	
 				
 				<h3 style="text-align:center;">
 					Live Streams
