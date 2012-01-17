@@ -76,6 +76,7 @@
 	<br/><br/>
 	
 	<div class="hidden-c">
+		
 		<!-- -->
 		<div id="tabs-ufs" class="ufs">
 			<form method="POST" id="ufs_form_upload" enctype="multipart/form-data"
@@ -146,7 +147,7 @@
 					<input type="file" class="f_f" name="datafile">
 				</fieldset>
 				<input type="submit" class="eButton" value="Upload" />
-				<input type="button" class="eButton" value="Cancel" onClick=$(".alert").hide() />
+				<input type="button" class="eButton" value="Cancel" onClick='$(".alert").hide();' />
 			</form>
 		</div>
 		<!-- -->
@@ -169,16 +170,11 @@
 					<input type="password" class="required pass_value" />
 				</fieldset>
 				<input type="submit" class="eButton" value="Submit" />
-				<input type="button" class="eButton" value="Cancel" onClick=$(".alert").hide() />
+				<input type="button" class="eButton" value="Cancel" onClick='$(".alert").hide();' />
 			</form>
 		</div>
 		<!-- -->
 		<div id="tabs-register" class="register">
-			<script type="text/javascript">
-					var RecaptchaOptions = {
-						theme: 'white'
-					};
-			</script>
 			<form id="register" action="./ufs.service">
 				<input type="hidden" name="redirect_to" value="images.html">
 				<input type="hidden" name="user_control" value="register">
@@ -200,14 +196,73 @@
 					<legend>
 						Captcha
 					</legend>
-					<div id="content">
-						<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6LdRhsYSAAAAAAOG1BVM0qPtVtACn4IgU1DeQcJX">
-																																	
+					
+					<div id="content" style="font-size: 10pt; ">
+						<script>
+								$(document).ready(function() {
+									$('.recap_get_audio').mouseup(function() {
+										Recaptcha.switch_type('audio');
+										$.wait( function(){showRegisterForm(); }, 1);
+									});
+									
+									$('.recaptcha_audio_cant_hear_link').mouseup(function() {
+										Recaptcha.playAgain();
+										$.wait( function(){showRegisterForm(); }, 1);
+									});
+									
+									$('.recap_get_image').mouseup(function() {
+										Recaptcha.switch_type('image');
+										$.wait( function(){showRegisterForm(); }, 1);
+									});
+									
+									$('.recap_get_help').mouseup(function() {
+										Recaptcha.showhelp();
+									});
+									
+									$('.recap_get_another_image').mouseup(function() {
+										Recaptcha.reload();
+										$.wait( function(){showRegisterForm(); }, 1);
+									});
+								});
 						</script>
+						
+						<div id="recaptcha_widget" style="display:none">
+						<div style=" width:300px; x:0px; y:0px;">
+							<div id="recaptcha_image"></div>
+						<div class="recaptcha_only_if_incorrect_sol" style="color:red">Incorrect, please try again</div>
+						<span class="recaptcha_only_if_image">Enter the words above:<br/></span>
+						<span class="recaptcha_only_if_audio">Type what you hear:<br/></span>
+						</div>
+						<div style=" width:320px; font-size: 8pt; display:inline-block; y:100%; x:0px; ">
+						<input type="text" style="width:100%;" id="recaptcha_response_field" name="recaptcha_response_field"><br/> 
+						
+			<a style="text-decoration:none;">
+				<p class=" recaptcha_only_if_image butt recap_get_another_image">
+						Get another image
+				</p>
+			</a>
+
+			<a style="text-decoration:none;">
+				<p class=" recaptcha_only_if_image butt recap_get_audio">
+						Get an audio.
+				</p>
+			</a>
+			<a style="text-decoration:none;">			
+				<p class=" recaptcha_only_if_audio butt recap_get_image">
+					Get an image
+				</p>
+			</a>
+			<a style="text-decoration:none;">			
+				<p class="butt recap_get_help">
+					CAPTCHA Help
+				</p>
+			</a>
+						
+		
 					</div>
 				</fieldset>
 				<input type="submit" class="eButton" value="Submit" />
-				<input type="button" class="eButton" value="Cancel" onClick=$(".alert").hide() />
+				<input type="button" class="eButton" value="Cancel" onClick='{Recaptcha.reload();$(".alert").hide();}' />
 			</form>
 		</div>
 		<!-- -->
@@ -221,12 +276,14 @@
 					<input type="hidden" name="user_control" value="logout">
 					<input type="hidden" name="logout" value="true">
 					<input type="submit" class="eButton" 	value="OK" />
-					<input type="button" class="eButton" value="Cancel" onClick=$(".alert").hide() />
+					<input type="button" class="eButton" value="Cancel" onClick='$(".alert").hide();' />
 				</form>
 			</fieldset>
 		</div>
 		<!-- -->
 	</div>
+	<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6Ld4iQsAAAAAAM3nfX_K0vXaUudl2Gk0lpTF3REf"></script>
+	
 	<div class="not-loged-in-user">
 				<a style="text-decoration:none;">
 				<p id="login_button" class="butt">

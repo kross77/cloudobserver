@@ -63,7 +63,7 @@ function doStuff() {
 }
 
 $(document).ready(function() {
-$('body').append("<div style='position:fixed;min-height:20px;height:auto !important;height:20px;background-color:#3f3b8d;background-color:rgba(0,0,0,0.6);bottom:0; width:100%'><p style='font-size: 8pt'> Copyright &copy; 2012 <a id='rol' href='#cloudobserver' onclick=\"{	newwindow=window.open(\'http://code.google.com/p/cloudobserver/\',\'CloudObserver\',\'height=750,width=900\');	if (window.focus) {newwindow.focus()}}\">Cloud Forever</a>. All rights reserved. </p><div>");
+$('body').append("<div style='position:fixed;min-height:20px;height:auto !important;height:20px;background-color:#3f3b8d;background-color:rgba(0,0,0,0.6);bottom:0; width:100%'><p style='font-size: 8pt'> Copyright &copy; 2012 <a id='rol' href='#cloudobserver' onclick=\"{	newwindow=window.open(\'http://code.google.com/p/cloudobserver/\',\'CloudObserver\',\'height=750,width=900\');	if (window.focus) {newwindow.focus()}}\">Cloud Forever</a>. Some rights reserved. </p><div>");
 
 	var _gaq = _gaq || [];
 	_gaq.push(['_setAccount', 'UA-21524436-1']);
