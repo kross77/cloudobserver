@@ -386,7 +386,7 @@ void http_utils::send( const int & code, const std::string & data, boost::shared
 
 boost::shared_ptr<http_response> http_utils::set_json_content_type( boost::shared_ptr<http_response> response )
 {
-	response->headers.insert(std::pair<std::string, std::string>("Content-type", "application/json"));
+	response->headers.insert(std::pair<std::string, std::string>("Content-Type", "application/json"));
 	response->headers.insert(std::pair<std::string, std::string>("Cache-Control", "no-cache"));
 	return response;
 }
