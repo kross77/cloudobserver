@@ -22,10 +22,7 @@
 		<!-- End Of CSS-->
 		
 		<!-- Public JS-->
-		<script type="text/javascript" src="js/jquery-1.5.1.min.js">								
-		</script>
-		
-		<script type="text/javascript" src="js/jquery-ui-1.8.14.custom.min.js">								
+		<script type="text/javascript" src="js/jquery-1.7.1.min.js">								
 		</script>
 		
 		<script type="text/javascript" src="js/jquery.sha256.min.js">								
@@ -299,16 +296,16 @@
 		   var is = Tempo.prepare('marx-images');
 			is.starting();
 			var joinedJSON = [];
-			$.get("ufs.json?action=type&type=image", function(json_image) {
-				joinedJSON = joinedJSON.concat($.parseJSON(json_image));
-					$.get("ufs.json?action=type&type=png", function(json_png) {
-						joinedJSON = joinedJSON.concat($.parseJSON(json_png));
-							$.get("ufs.json?action=type&type=jpg", function(json_jpg) {
-								joinedJSON = joinedJSON.concat($.parseJSON(json_jpg));
-									$.get("ufs.json?action=type&type=jpeg", function(json_jpeg) {
-										joinedJSON = joinedJSON.concat($.parseJSON(json_jpeg));
-											$.get("ufs.json?action=type&type=svg", function(json_svg) {
-												joinedJSON = joinedJSON.concat($.parseJSON(json_svg));
+			$.getJSON("ufs.json?action=type&type=image", function(json_image) {
+				joinedJSON = joinedJSON.concat(json_image);
+					$.getJSON("ufs.json?action=type&type=png", function(json_png) {
+						joinedJSON = joinedJSON.concat(json_png);
+							$.getJSON("ufs.json?action=type&type=jpg", function(json_jpg) {
+								joinedJSON = joinedJSON.concat(json_jpg);
+									$.getJSON("ufs.json?action=type&type=jpeg", function(json_jpeg) {
+										joinedJSON = joinedJSON.concat(json_jpeg);
+											$.getJSON("ufs.json?action=type&type=svg", function(json_svg) {
+												joinedJSON = joinedJSON.concat(json_svg);
 												joinedJSON = shuffle(joinedJSON);
 												is.render(joinedJSON);
 												$("a[rel=example_group]").fancybox({
