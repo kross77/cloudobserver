@@ -1,3 +1,17 @@
+function showRegisterForm()
+{
+	showForm($("#tabs-register"), "Register  form",430, 380);
+}
+
+$.wait = function( callback, seconds){
+   return window.setTimeout( callback, seconds * 1000 );
+}
+
+var RecaptchaOptions = {
+	theme: 'custom',
+	custom_theme_widget: 'recaptcha_widget'
+};
+
 $(document).ready(function() {
 	user = readCookie('session-id');
 	if (user != null) {
@@ -61,9 +75,7 @@ $(document).ready(function() {
 	});
 
 	$("#register_button").mouseup(function() {
-		
-		showForm($("#tabs-register"), "Register  form",430, 380);
-
+		showRegisterForm();
 	});
 	
 	$('#alert_button').mouseup(function() {
