@@ -52,7 +52,7 @@ void users_files_service::service_call( boost::shared_ptr<boost::asio::ip::tcp::
 				save_file = http_utils::parse_multipart_form_data(request->body);
 
 				std::string file_name =save_file.find("file_name")->second;
-				std::string redirect_location = http_utils::url_decode(save_file.find("redirect_location")->second);
+				std::string redirect_location =save_file.find("redirect_location")->second;
 				std::string f_type = save_file.find("type")->second;
 				bool is_public = save_file.find("is_public")->second == "true" ? true : false ;
 
