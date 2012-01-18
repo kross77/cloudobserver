@@ -1,3 +1,7 @@
+$.wait = function( callback, seconds){
+   return window.setTimeout( callback, seconds * 1000 );
+}
+
 function readCookie(name) {
 	var nameEQ = name + "=";
 	var ca = document.cookie.split(';');
@@ -26,44 +30,19 @@ function readCookie(name) {
 	});
 })(jQuery);
 
-
-function showAlert(w, h, name, body_text) {
-	$("#alert_name").html(name);
-	$("#alert_content").html(body_text);
-	$(".box").width = w;
-	$(".box").height = h;
-	$(".alert").show();
-}
-
-function showForm(sourceElement, PopupName, w, h) {
-	$("#alert_name").html(PopupName);
-	$("#alert_content").html(sourceElement.html());
-	$(".alert").show();
-	$("#demo4_box").width(w);
-	$("#demo4_box").height(h);
-	$('#demo4_box').center();
-	$(window).bind('resize', function() {
-		$('#demo4_box').center();
-	});
-}
-
-function showUpdate(fileEU, name) {
-	$("#tabs-ufs-update-file_eu").html(fileEU);
-	$("#tabs-ufs-update-file_name").html(name);
-	showForm($("#tabs-ufs-update"), "Files update form", 350, 295);
-
-}
-
-function showEdit(ue, name) {
-	showUpdate("eu", "name");
-}
-
-function doStuff() {
-	showAlert(200, 50, '<h2 class="handle bar">Alert</h2>', '<div onClick=$(".alert").hide()><h1>Contents</h1><h3>click to hide alert</h3></div>');
-}
-
 $(document).ready(function() {
-$('body').append("<div style='position:fixed;min-height:20px;height:auto !important;height:20px;background-color:#3f3b8d;background-color:rgba(0,0,0,0.6);bottom:0; width:100%'><p style='font-size: 8pt'> Copyright &copy; 2012 <a id='rol' href='#cloudobserver' onclick=\"{	newwindow=window.open(\'http://code.google.com/p/cloudobserver/\',\'CloudObserver\',\'height=750,width=900\');	if (window.focus) {newwindow.focus()}}\">Cloud Forever</a>. Some rights reserved. </p><div>");
+	$('body').append("<div style='position:fixed;min-height:20px;height:auto !important;height:20px;background-color:#3f3b8d;background-color:rgba(0,0,0,0.6);bottom:0; width:100%'><p style='font-size: 8pt'> Copyright &copy; 2012 <a id='rol' href='#cloudobserver' onclick=\"{	newwindow=window.open(\'http://code.google.com/p/cloudobserver/\',\'CloudObserver\',\'height=750,width=900\');	if (window.focus) {newwindow.focus()}}\">Cloud Forever</a>. Some rights reserved. </p><div>");
+
+	$(".butt").live('mousedown', function(){
+		$(this).addClass("hilight2");
+	}).live('mouseup', function(){
+		$(this).removeClass("hilight2");
+	}).live('mouseover', function(){
+		$(this).addClass("border2");
+	}).live('mouseout', function(eventObj){
+		$(this).removeClass("border2");
+		$(this).removeClass("hilight2");
+	});
 
 	var _gaq = _gaq || [];
 	_gaq.push(['_setAccount', 'UA-21524436-1']);
