@@ -58,6 +58,12 @@
 		
 		<script type="text/javascript" src="js/cf.head.panel.js"></script>
 		
+		<script type="text/javascript" src="js/cf.windows.login_and_register.js"></script>
+		
+		<script type="text/javascript" src="js/cf.user.js"></script>
+		
+		<script type="text/javascript" src="js/cf.windows.ufs.file.js"></script>
+		
 		<!-- End Of CF JS-->
 		
 		<!-- CF CSS -->
@@ -74,231 +80,6 @@
 </head>
 <body>
 	<br/><br/>
-		<div class="hidden-c">
-		
-		<!-- -->
-		<div id="tabs-ufs" class="ufs">
-			<form method="POST" id="ufs_form_upload" enctype="multipart/form-data"
-			action="/ufs.service">
-				<input type="hidden" name="redirect_location" value="/images.html">
-				<input type="hidden" class="f_type" name="type" value="none">
-				<fieldset>
-					<legend>
-						Name:
-					</legend>
-					<input type="text" class="required" name="file_name" />
-				</fieldset>
-				<fieldset>
-					<legend>
-						Sharing settings:
-					</legend>
-					<p>
-						<input type="radio" name="is_public" value="true">
-						Public
-					</p>
-					<p>
-						<input type="radio" name="is_public" value="false" checked>
-						Private
-					</p>
-				</fieldset>
-				<fieldset>
-					<legend>
-						File:
-					</legend>
-					<input type="file" class="f_f" name="datafile">
-				</fieldset>
-				<input type="submit" class="eButton" value="Upload" />
-				<input type="button" class="eButton" value="Cancel" onClick=$(".alert").hide() />
-			</form>
-		</div>
-		<!-- -->
-		<div id="tabs-ufs-update" class="ufs">
-			<form method="POST" id="ufs_form_upload" enctype="multipart/form-data"
-			action="/ufs.service">
-				<input type="hidden" name="redirect_location" value="/images.html">
-				<input type="hidden" class="f_type" name="type" value="none">
-				<input type="hidden" id="tabs-ufs-update-file_eu" name="tabs-ufs-update-file_eu"
-				value="sha256.user.file">
-				<fieldset>
-					<legend>
-						Name:
-					</legend>
-					<input type="text" class="required" id="tabs-ufs-update-file_name" name="file_name"
-					/>
-				</fieldset>
-				<fieldset>
-					<legend>
-						Sharing settings:
-					</legend>
-					<p>
-						<input type="radio" name="is_public" value="true">
-						Public
-					</p>
-					<p>
-						<input type="radio" name="is_public" value="false" checked>
-						Private
-					</p>
-				</fieldset>
-				<fieldset>
-					<legend>
-						New File:
-					</legend>
-					<input type="file" class="f_f" name="datafile">
-				</fieldset>
-				<input type="submit" class="eButton" value="Upload" />
-				<input type="button" class="eButton" value="Cancel" onClick='$(".alert").hide();' />
-			</form>
-		</div>
-		<!-- -->
-		<div id="tabs-login" class="login">
-			<form id="login"  action="./ufs.service" >
-				<input type="hidden" name="redirect_to" value="images.html">
-				<input type="hidden" name="user_control" value="login">
-				<fieldset>
-					<legend>
-						Email:
-					</legend>
-					<input type="text" class="required email" name="login" />
-				</fieldset>
-				<fieldset>
-					<legend>
-						Password:
-					</legend>
-					<input type="hidden" name="pass" class="hidden_pass_value" value=""
-					/>
-					<input type="password" class="required pass_value" />
-				</fieldset>
-				<input type="submit" class="eButton" value="Submit" />
-				<input type="button" class="eButton" value="Cancel" onClick='$(".alert").hide();' />
-			</form>
-		</div>
-		<!-- -->
-		<div id="tabs-register" class="register">
-			<form id="register" action="./ufs.service">
-				<input type="hidden" name="redirect_to" value="images.html">
-				<input type="hidden" name="user_control" value="register">
-				<fieldset>
-					<legend>
-						Email:
-					</legend>
-					<input type="text" class="required email" name="register" />
-				</fieldset>
-				<fieldset>
-					<legend>
-						Password:
-					</legend>
-					<input type="hidden" name="pass" class="hidden_pass_value" value=""
-					/>
-					<input type="password" class="required pass_value" />
-				</fieldset>
-				<fieldset>
-					<legend>
-						Captcha
-					</legend>
-					
-					<div id="content" style="font-size: 10pt; ">
-						<script>
-								$(document).ready(function() {
-									$('.recap_get_audio').mouseup(function() {
-										Recaptcha.switch_type('audio');
-										$.wait( function(){showRegisterForm(); }, 1);
-									});
-									
-									$('.recaptcha_audio_cant_hear_link').mouseup(function() {
-										Recaptcha.playAgain();
-										$.wait( function(){showRegisterForm(); }, 1);
-									});
-									
-									$('.recap_get_image').mouseup(function() {
-										Recaptcha.switch_type('image');
-										$.wait( function(){showRegisterForm(); }, 1);
-									});
-									
-									$('.recap_get_help').mouseup(function() {
-										Recaptcha.showhelp();
-									});
-									
-									$('.recap_get_another_image').mouseup(function() {
-										Recaptcha.reload();
-										$.wait( function(){showRegisterForm(); }, 1);
-									});
-								});
-						</script>
-						
-						<div id="recaptcha_widget" style="display:none">
-						<div style=" width:300px; x:0px; y:0px;">
-							<div id="recaptcha_image"></div>
-						<div class="recaptcha_only_if_incorrect_sol" style="color:red">Incorrect, please try again</div>
-						<span class="recaptcha_only_if_image">Enter the words above:<br/></span>
-						<span class="recaptcha_only_if_audio">Type what you hear:<br/></span>
-						</div>
-						<div style=" width:320px; font-size: 8pt; display:inline-block; y:100%; x:0px; ">
-
-						<input name="recaptcha_response_field" style="width:100%;" id="recaptcha_response_field" type="text" autocorrect="off" autocapitalize="off" autocomplete="off"><br/> 
-						
-			<a style="text-decoration:none;">
-				<p class=" recaptcha_only_if_image butt recap_get_another_image">
-						Get another image
-				</p>
-			</a>
-
-			<a style="text-decoration:none;">
-				<p class=" recaptcha_only_if_image butt recap_get_audio">
-						Get an audio.
-				</p>
-			</a>
-			<a style="text-decoration:none;">			
-				<p class=" recaptcha_only_if_audio butt recap_get_image">
-					Get an image
-				</p>
-			</a>
-			<a style="text-decoration:none;">			
-				<p class="butt recap_get_help">
-					CAPTCHA Help
-				</p>
-			</a>
-						
-
-					</div>
-					</div>
-				</div>
-			   <script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6LdRhsYSAAAAAAOG1BVM0qPtVtACn4IgU1DeQcJX"></script>
-				</fieldset>
-				<input type="submit" class="eButton" value="Submit" />
-				<input type="button" class="eButton" value="Cancel" onClick='{Recaptcha.reload();$(".alert").hide();}' />
-			</form>
-		</div>
-		<!-- -->
-		<div id="tabs-logout" class="logout">
-			<fieldset>
-				<legend>
-					Logout?
-				</legend>
-				<form  action="./ufs.service">
-					<input type="hidden" name="redirect_to" value="images.html">
-					<input type="hidden" name="user_control" value="logout">
-					<input type="hidden" name="logout" value="true">
-					<input type="submit" class="eButton" 	value="OK" />
-					<input type="button" class="eButton" value="Cancel" onClick='$(".alert").hide();' />
-				</form>
-			</fieldset>
-		</div>
-		<!-- -->
-	</div>
-	
-	<div class="not-loged-in-user">
-				<a style="text-decoration:none;">
-				<p id="login_button" class="butt">
-					Log In!
-				</p>
-				</a>
-				<a style="text-decoration:none;">
-				<p id="register_button" class="butt">
-					Register!
-				</p>
-				</a>
-	</div>
-			<br/>
 			
 			<div class="loged-in-user" >
 				<a style="text-decoration:none; width:49%">
@@ -328,24 +109,6 @@
 		</ol>
 	</div>	
 
-	<div class="alert">
-		<div class="overlay">
-		</div>
-		<div id="demo4_box" class="box message nifty" data-minwidth="75" data-minheight="50">
-			<div class="handle bar" id="alert_name">
-				<h2 class="handle bar">
-					Handle
-				</h2>
-			</div>
-			<div class="contents" id="alert_content">
-				<h1>
-					#demo2_box
-				<h1>
-			</div>
-				<div class="handle resize">
-				</div>
-			</div>
-		</div>
 	<script type="text/javascript">
 		shuffle = function(o){ //v1.0
 			for(var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
