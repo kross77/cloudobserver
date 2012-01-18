@@ -211,7 +211,7 @@ namespace http_utils
 	 * \return void 
 	 *
 	 */
-	void send_found_302( std::string redirect_lication, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response ); // This shall be turned into 303 for pure HTTP/1.1.
+	void send_found_302( const std::string & redirect_lication, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response ); // This shall be turned into 303 for pure HTTP/1.1.
 
 	/*!
 	 * \brief  send HTTP /1.1 error

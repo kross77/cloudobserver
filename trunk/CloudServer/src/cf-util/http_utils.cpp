@@ -356,12 +356,48 @@ void  http_utils::escape ( std::istream& in, std::ostream& out )
 		std::ostreambuf_iterator<char>(out));
 }
 
-void http_utils::send_found_302( std::string redirect_lication, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response )
+void http_utils::send_found_302( const std::string & redirect_lication, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response )
 {
-	response->status = 302;
+	/* if there was no Fire Fox and probably other dull browsers we would do this (Chrome, IE, Safari tested):
+	 *
+	 *\code
+		response->status = 302;
+		response->description = "Found";
+		response->headers.insert(std::pair<std::string, std::string>("Location", redirect_lication));
+		response->send(*socket);
+	 * \endcode
+	 *
+	 * but indeed there are.
+	 *
+	 * We could also create simple HTML redirection page - would work anywhere.
+	 * \code
+	std::ostringstream data_stream;
+	data_stream << "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"><html><head><script type=\"text/javascript\">location.replace(\"" 
+		<< redirect_lication << "\");</script><noscript><meta http-equiv=\"refresh\" content=\"0; url= "
+		<< redirect_lication << "\"></noscript></head><body><p>Please turn on JavaScript!</p><a href=\"" 
+		<< redirect_lication << "\"><h1>Content awaits you here.</h1></a></body></html>";
+	response->headers.insert(std::pair<std::string, std::string>("Cache-Control", "max-age=0"));
+	response->headers.insert(std::pair<std::string, std::string>("Pragma", "no-cache"));
+	http_utils::send(data_stream.str(), socket, response);
+	 * \endcode
+	 * 
+	 * so we decided to mix - html page and HTTP redirection
+	 */
+
 	response->description = "Found";
 	response->headers.insert(std::pair<std::string, std::string>("Location", redirect_lication));
-	response->send(*socket);
+	response->headers.insert(std::pair<std::string, std::string>("Content-Location", redirect_lication));
+	response->headers.insert(std::pair<std::string, std::string>("Refresh", std::string("0; url=" + redirect_lication)));
+	response->headers.insert(std::pair<std::string, std::string>("Cache-Control", "max-age=0"));
+	response->headers.insert(std::pair<std::string, std::string>("Pragma", "no-cache"));
+	std::ostringstream data_stream;
+	data_stream << "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"><html><head><script type=\"text/javascript\">location.replace(\"" 
+		<< redirect_lication << "\");</script><noscript><meta http-equiv=\"refresh\" content=\"0; url= "
+		<< redirect_lication << "\"></noscript></head><body><p>Please turn on JavaScript!</p><a href=\"" 
+		<< redirect_lication << "\"><h1>Content awaits you here.</h1></a></body></html>";
+
+	http_utils::send(302, data_stream.str(), socket, response);
+
 }
 
 void http_utils::send_error( const int & error_code, const std::string & description, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response )
@@ -373,7 +409,7 @@ void http_utils::send_error( const int & error_code, const std::string & descrip
 
 void http_utils::send( const std::string & data, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response )
 {
-	http_utils::send(404, data, socket, response);
+	http_utils::send(200, data, socket, response);
 }
 
 void http_utils::send( const int & code, const std::string & data, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response )
@@ -387,7 +423,7 @@ void http_utils::send( const int & code, const std::string & data, boost::shared
 boost::shared_ptr<http_response> http_utils::set_json_content_type( boost::shared_ptr<http_response> response )
 {
 	response->headers.insert(std::pair<std::string, std::string>("Content-Type", "application/json"));
-	response->headers.insert(std::pair<std::string, std::string>("Cache-Control", "no-cache"));
+	response->headers.insert(std::pair<std::string, std::string>("Cache-Control", "max-age=0"));
 	return response;
 }
 
@@ -395,11 +431,7 @@ void http_utils::send_json( std::pair<std::string, std::string> pair, boost::sha
 {
 	std::ostringstream data_stream;
 	data_stream << "\n{\n\t\"" << http_utils::escape(pair.first) << "\": \""	<< http_utils::escape(pair.second)  << "\"\n}";
-	std::string data = data_stream.str();
-	response->body = data;
-	response->body_size = response->body.length();
-	response->headers.insert(std::pair<std::string, std::string>("Content-Length", boost::lexical_cast<std::string>(response->body_size)));
 	http_utils::set_json_content_type(response);
-	response->send(*socket);
+	http_utils::send(data_stream.str(), socket, response);
 	return;
 }
