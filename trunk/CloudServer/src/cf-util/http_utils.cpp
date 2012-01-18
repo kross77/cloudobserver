@@ -424,6 +424,7 @@ boost::shared_ptr<http_response> http_utils::set_json_content_type( boost::share
 {
 	response->headers.insert(std::pair<std::string, std::string>("Content-Type", "application/json"));
 	response->headers.insert(std::pair<std::string, std::string>("Cache-Control", "max-age=0"));
+	response->headers.insert(std::pair<std::string, std::string>("Pragma", "no-cache"));
 	return response;
 }
 

@@ -22,7 +22,7 @@ users_files_service::users_files_service()
 	this->command_create_file =  "INSERT INTO files (encoded_url, file_name, user_name, is_public, type, size ) VALUES (:encoded_url, :file_name, :user_name, :is_public, :type, :size)";
 	this->command_update_file = " UPDATE files SET encoded_url=:new_encoded_url, file_name=:new_file_name, is_public=:is_public, modified=CURRENT_TIMESTAMP, type=:type, size=:size  WHERE encoded_url=:encoded_url";
 	this->command_delete_file = "DELETE FROM files WHERE encoded_url=:encoded_url";
-	this->command_find_file = "SELECT file_name, user_name, is_public, modified FROM files WHERE encoded_url=:encoded_url";
+	this->command_find_file = "SELECT file_name, user_name, is_public, modified, type FROM files WHERE encoded_url=:encoded_url";
 	this->command_find_all_user_files = "SELECT encoded_url, file_name, user_name, modified, type, size, is_public FROM files WHERE user_name=:user_name";
 	this->command_find_all_user_files_of_type = "SELECT encoded_url, file_name, user_name, modified, size, is_public FROM files WHERE user_name=:user_name AND type=:type";
 }
@@ -114,11 +114,18 @@ void users_files_service::service_call( boost::shared_ptr<boost::asio::ip::tcp::
 	}
 }
 
+bool users_files_service::send_file(std::string file_name, boost::filesystem::path path, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response )
+{
+	boost::shared_ptr<fs_file> f = fs_util->create_file(path);
+	response->headers.insert(std::pair<std::string, std::string>("Content-Disposition", std::string("attachment; filename=" + file_name)));
 
+	fs_util->send_uncachable_file(f, socket,request, response);
+	return true;
+}
 
 bool users_files_service::send_file( std::string href, std::string user_name, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response )
 {
-		href.erase(0,1);
+	href.erase(0,1);
 	sqlite3pp::transaction xct(*db, true);
 	{
 		sqlite3pp::query qry(*db, this->command_find_file.c_str());
@@ -126,20 +133,17 @@ bool users_files_service::send_file( std::string href, std::string user_name, bo
 		//file_name, user_name, is_public, modifie
 		for (sqlite3pp::query::iterator i = qry.begin(); i != qry.end(); ++i) {
 			bool is_public=false;
-			std::string  file_name, f_user_name, modified;
-			(*i).getter() >> file_name >> f_user_name >>  is_public >> modified;
+			std::string  file_name, f_user_name, modified, f_type;
+			(*i).getter() >> file_name >> f_user_name >>  is_public >> modified >> f_type;
 
-			if (is_public)
+			if (is_public || (f_user_name == user_name))
 			{
-				boost::shared_ptr<fs_file> f = fs_util->create_file(boost::filesystem::path(root_path / href));
-				fs_util->send_uncachable_file(f, socket,request, response);
-				return true;
-			}
-			else if (f_user_name == user_name)
-			{
-				boost::shared_ptr<fs_file> f = fs_util->create_file(boost::filesystem::path(root_path / href));
-				fs_util->send_uncachable_file(f, socket,request, response);
-				return true;
+				std::string type = "." + f_type;
+				if (boost::filesystem::extension(file_name) != type)
+				{
+					file_name = file_name + type;
+				}
+				return users_files_service::send_file(file_name, boost::filesystem::path(root_path / href), socket, request, response);
 			}
 			return false;
 		}
