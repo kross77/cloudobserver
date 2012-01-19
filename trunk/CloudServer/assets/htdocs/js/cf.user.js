@@ -18,7 +18,7 @@ $(document).ready(function() {
 	}
 	
 	$('#login_button').mouseup(function() {
-		showForm($("#tabs-login"), "Login  form", 350, 205);
+		showLogInForm();
 
 	});
 
