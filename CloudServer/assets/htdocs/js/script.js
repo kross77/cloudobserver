@@ -183,9 +183,7 @@ openWin = function(name, width, height)
 
 function update()
 {
-	$.get("users.json", function(json)
-	{
-		var obj = $.parseJSON( json );
+	$.getJSON("users.json", function(obj) {
 		var user_list_html = "";
 		for (var i = 0, len = obj.length; i < len; i++ )
 		{
