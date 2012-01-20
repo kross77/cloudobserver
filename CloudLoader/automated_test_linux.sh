@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 LOCAL_REV=0
 LOADER_URL="http://cloudobserver.googlecode.com/svn/trunk/CloudLoader/cloud_server_net_setup.sh"
 LOADER_REV=0
