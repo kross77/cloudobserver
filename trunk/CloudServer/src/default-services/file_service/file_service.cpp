@@ -16,8 +16,8 @@ file_service::file_service()
 	#else
 	desiredTimeFame = (long long)(10000.0f);
 	#endif
-	cach_size_limit = 500000;
-	cachable_file_size_limit = 200000;
+	cach_size_limit = 15000000;
+	cachable_file_size_limit = 2500000;
 
 }
 
@@ -43,9 +43,9 @@ void file_service::apply_config(boost::shared_ptr<boost::property_tree::ptree> c
 	this->show_directory_contents = config->get<bool>("show_directory_contents", this->show_directory_contents);
 }
 
-boost::shared_array<char> file_service::cach_file( boost::shared_ptr<fs_file> f )
+boost::shared_ptr<std::string> file_service::cach_file( boost::shared_ptr<fs_file> f )
 {
-	boost::shared_array<char> b = load_file_into_memory(f);
+	boost::shared_ptr<std::string> b = load_file_into_memory(f);
 	f->buffer = b;
 	f->is_cached = true;
 	return b;
@@ -185,9 +185,10 @@ void file_service::is_file( boost::filesystem::path p, fs_map &old_fs, std::set<
 	}
 }
 
-boost::shared_array<char> file_service::load_file_into_memory( boost::shared_ptr<fs_file> f )
+boost::shared_ptr<std::string> file_service::load_file_into_memory( boost::shared_ptr<fs_file> f )
 {
 	boost::shared_array<char> buffer( new char[f->size]);
+	
 	std::ifstream stream;
 	stream.open( f->path.string().c_str(), std::ios_base::binary );
 	while (stream)
@@ -195,13 +196,25 @@ boost::shared_array<char> file_service::load_file_into_memory( boost::shared_ptr
 		stream.read(buffer.get(), f->size);
 	}
 	stream.close();
-	return buffer;
+
+	std::stringstream temp;
+	std::stringstream body;
+	boost::iostreams::filtering_streambuf< boost::iostreams::input> in;
+
+	in.push( boost::iostreams::gzip_compressor());
+	temp.write(buffer.get(), f->size);
+	in.push(temp);
+	boost::iostreams::copy(in, body);
+	boost::shared_ptr<std::string> gzip_buffer(new std::string(body.str() )) ;
+
+
+	return gzip_buffer;
 }
 
 void file_service::process_request( std::string encoded_url,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response )
 {
 	boost::shared_ptr<fs_file>  f;
-	boost::shared_array<char> b;
+	boost::shared_ptr<std::string> b;
 	boost::uintmax_t size;
 
 	if (is_directory_call(encoded_url))
@@ -253,7 +266,7 @@ void file_service::process_request( std::string encoded_url,boost::shared_ptr<bo
 				b = f->buffer;
 			}
 
-			send_cached_file(size,b, socket, response);
+			send_cached_file(size,b, socket, response,request);
 			return;
 		}
 
@@ -298,7 +311,7 @@ void file_service::process_request( std::string encoded_url,boost::shared_ptr<bo
 						size = f->size;
 						b = f->buffer;
 					}
-					send_cached_file(size,b, socket, response);
+					send_cached_file(size,b, socket, response, request);
 					return;
 				}
 				else
@@ -314,7 +327,7 @@ void file_service::process_request( std::string encoded_url,boost::shared_ptr<bo
 						size = f->size;
 						current_cach_size = current_cach_size + size;
 					}
-					send_cached_file(size,b, socket, response);
+					send_cached_file(size,b, socket, response, request);
 					{
 						cached_files.put(encoded_url,f);
 					}
@@ -331,12 +344,26 @@ void file_service::process_request( std::string encoded_url,boost::shared_ptr<bo
 
 }
 
-
-
-void file_service::send_cached_file( boost::uintmax_t size, boost::shared_array<char> buffer, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response )
+void file_service::send_cached_file( boost::uintmax_t size, boost::shared_ptr<std::string> buffer, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response, boost::shared_ptr<http_request> request  )
 {
-	response->send(*socket);
-	boost::asio::write(*socket, boost::asio::buffer(buffer.get(), size));
+	if (std::string::npos != request->headers["Accept-Encoding"].find("gzip"))
+	{
+		http_utils::set_gzip_content_type(response);
+		//std::cout << "short one" << std::endl;
+		http_utils::send(*buffer, socket, response);
+	}
+	else
+	{
+		//std::cout << "decode catched file one" << std::endl;
+		std::stringstream temp_body(*buffer);
+		std::stringstream body;
+		boost::iostreams::filtering_streambuf< boost::iostreams::input> out;
+		out.push( boost::iostreams::gzip_decompressor());
+		out.push(temp_body);
+		boost::iostreams::copy(out, body);
+		http_utils::send(body.str(), socket, response);
+		
+	}
 }
 
 void file_service::send_directory_contents( std::set<std::string> list, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response )

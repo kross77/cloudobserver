@@ -12,8 +12,7 @@ void fs_utils::send_404( std::string encoded_url,boost::shared_ptr<boost::asio::
 	std::ostringstream body;
 	body << "Error 404! " << http_utils::url_decode(request->url) << " does not exist\n <br/> <a href='/'>" << "Dear " << http_utils::url_decode(get_user_name(request)) <<", please come again!</a>";
 
-	response->body = "<head></head><body><h1>" + body.str() + "</h1></body>";
-	response->send(*socket);
+	http_utils::send(404, std::string("<head></head><body><h1>" + body.str() + "</h1></body>"), socket, response);
 }
 
 std::string fs_utils::get_user_name( boost::shared_ptr<http_request> request )
@@ -28,9 +27,7 @@ std::string fs_utils::get_user_name( boost::shared_ptr<http_request> request )
 
 void fs_utils::send_not_modified_304( boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response )
 {
-	response->status = 304;
-	response->description = "Not Modified";
-	response->send(*socket);
+	http_utils::send_error(304, "Not Modified", socket, response);	
 }
 
 void fs_utils::save_string_into_file( std::string contents, std::string s_name, boost::filesystem::path users_path )
@@ -68,54 +65,12 @@ void fs_utils::send_uncachable_file( boost::shared_ptr<fs_file> f , boost::share
 		send_uncachable_file( f, socket, response);
 	}
 }
+
 void fs_utils::insert_file_headers( boost::shared_ptr<fs_file> f, boost::shared_ptr<boost::asio::ip::tcp::socket > socket, boost::shared_ptr<http_response> response )
 {
-	if (f->type_extension.length() > 1)
+	if (!(f->mime_type).empty())
 	{
-		if (boost::iequals(f->type_extension, ".html"))
-		{
-			response->headers.insert(std::pair<std::string, std::string>("Content-Type", "text/html"));
-		}
-		else if ( boost::iequals(f->type_extension, ".css"))
-		{
-			response->headers.insert(std::pair<std::string, std::string>("Content-Type", "text/css"));
-		}
-		else if (boost::iequals(f->type_extension, ".js"))
-		{
-			response->headers.insert(std::pair<std::string, std::string>("Content-Type", "text/javascript"));
-		}
-		else if (boost::iequals(f->type_extension, ".xml"))
-		{
-			response->headers.insert(std::pair<std::string, std::string>("Content-Type", "text/xml"));
-		}
-		else if (boost::iequals(f->type_extension, ".jpeg") || boost::iequals(f->type_extension, ".jpg"))
-		{
-			response->headers.insert(std::pair<std::string, std::string>("Content-Type", "image/jpeg"));
-		}
-		else if (boost::iequals(f->type_extension, ".png"))
-		{
-			response->headers.insert(std::pair<std::string, std::string>("Content-Type", "image/png"));
-		}
-		else if (boost::iequals(f->type_extension, ".gif"))
-		{
-			response->headers.insert(std::pair<std::string, std::string>("Content-Type", "image/gif"));
-		}
-		else if (boost::iequals(f->type_extension, ".svg"))
-		{
-			response->headers.insert(std::pair<std::string, std::string>("Content-Type", "image/svg+xml"));
-		}
-		else if (boost::iequals(f->type_extension, ".zip"))
-		{
-			response->headers.insert(std::pair<std::string, std::string>("Content-Type", "application/zip"));
-		}
-		else if (boost::iequals(f->type_extension, ".Gzip"))
-		{
-			response->headers.insert(std::pair<std::string, std::string>("Content-Type", "application/x-gzip"));
-		}
-		else if (boost::iequals(f->type_extension, ".pdf"))
-		{
-			response->headers.insert(std::pair<std::string, std::string>("Content-Type", "application/pdf"));
-		}
+		response->headers.insert(std::pair<std::string, std::string>("Content-Type", f->mime_type));
 	}
 
 	response->headers.insert(std::pair<std::string, std::string>("Last-Modified", f->modified));
@@ -134,6 +89,66 @@ boost::shared_ptr<fs_file> fs_utils::create_file( boost::filesystem::path p )
 		f->buffer.reset();
 	}
 	f->type_extension = boost::filesystem::extension(p);
+
+	if (f->type_extension.length() > 1)
+	{
+		if (boost::iequals(f->type_extension, ".html"))
+		{
+			f->type_extension = ".html";
+			f->mime_type = "text/html";
+		}
+		else if ( boost::iequals(f->type_extension, ".css"))
+		{
+			f->type_extension = ".css";
+			f->mime_type = "text/css";
+		}
+		else if (boost::iequals(f->type_extension, ".js"))
+		{
+			f->type_extension = ".js";
+			f->mime_type =  "text/javascript";
+		}
+		else if (boost::iequals(f->type_extension, ".xml"))
+		{
+			f->type_extension = ".xml";
+			f->mime_type = "text/xml";
+		}
+		else if (boost::iequals(f->type_extension, ".jpeg") || boost::iequals(f->type_extension, ".jpg"))
+		{
+			f->type_extension = ".jpeg";
+			f->mime_type = "image/jpeg";
+		}
+		else if (boost::iequals(f->type_extension, ".png"))
+		{
+			f->type_extension = ".png";
+			f->mime_type = "image/png";
+		}
+		else if (boost::iequals(f->type_extension, ".gif"))
+		{
+			f->type_extension = ".gif";
+			f->mime_type = "image/gif";
+		}
+		else if (boost::iequals(f->type_extension, ".svg"))
+		{
+			f->type_extension = ".svg";
+			f->mime_type =  "image/svg+xml";
+		}
+		else if (boost::iequals(f->type_extension, ".zip"))
+		{
+			f->type_extension = ".zip";
+			f->mime_type = "application/zip";
+		}
+		else if (boost::iequals(f->type_extension, ".gzip"))
+		{
+			f->type_extension = ".gzip";
+			f->mime_type = "application/x-gzip";
+		}
+		else if (boost::iequals(f->type_extension, ".pdf"))
+		{
+			f->type_extension = ".pdf";
+			f->mime_type =  "application/pdf";
+		}
+	}
+
 	f->size = boost::filesystem::file_size(p);
 	f->modified = boost::posix_time::to_iso_extended_string( boost::posix_time::from_time_t(last_write_time(p)) );
 	f->is_cachable = false;
