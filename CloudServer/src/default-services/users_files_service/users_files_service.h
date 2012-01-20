@@ -57,9 +57,8 @@ public:
 
 private:
 
-	void list_user_files(std::string user_name, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response);
-	void list_user_files_of_type( std::string user_name, std::string f_type, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response );
-
+	void list_user_files( std::string user_name, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response, boost::shared_ptr<http_request> request );
+	void list_user_files_of_type( std::string user_name, std::string f_type, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response, boost::shared_ptr<http_request> request );
 	void create_file_table_entry( std::string encoded_url, std::string file_name, std::string user_name, std::string f_type, int f_size, bool is_public );
 	void create_log_util( std::string lu_path );
 

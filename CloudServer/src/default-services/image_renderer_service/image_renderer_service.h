@@ -507,7 +507,7 @@ public:
 							else
 								encoded = mask_util.render_opencv(std::string("."+ desired_ext), opencv_countors, desired_w, desired_h);
 
-							http_utils::send(encoded, socket, response);
+							http_utils::send(encoded, socket, response, request);
 
 						}
 						else
@@ -550,7 +550,7 @@ public:
 
 						std::stringstream b2;
 						util::send_data(b2, buff);
-						http_utils::send(b2.str(), socket, response);
+						http_utils::send(b2.str(), socket, response, request);
 						return;
 					}
 					catch(...)

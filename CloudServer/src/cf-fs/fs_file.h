@@ -12,10 +12,11 @@ struct fs_file
 	boost::shared_mutex mutex_;
 	boost::filesystem::path path;
 	std::string type_extension;
+	std::string mime_type;
 	boost::uintmax_t size;
 	bool is_cachable;
 	bool is_cached;
-	boost::shared_array<char> buffer;
+	boost::shared_ptr<std::string> buffer;
 	std::string modified;
 };
 

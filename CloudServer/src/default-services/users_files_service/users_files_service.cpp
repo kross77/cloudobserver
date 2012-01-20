@@ -65,7 +65,7 @@ void users_files_service::service_call( boost::shared_ptr<boost::asio::ip::tcp::
 				fs_util->save_string_into_file(save_file.find("datafile")->second, encoded_url,  this->root_path);
 				this->create_file_table_entry(encoded_url, file_name, user_name, f_type, f_size, is_public);
 
-				http_utils::send_found_302(redirect_location, socket, response);
+				http_utils::send_found_302(redirect_location, socket, response, request);
 
 				return;
 			}
@@ -79,17 +79,17 @@ void users_files_service::service_call( boost::shared_ptr<boost::asio::ip::tcp::
 		{
 			if (boost::iequals(request->arguments["action"], "type"))
 			{
-				list_user_files_of_type(user_name, request->arguments["type"],  socket, response);
+				list_user_files_of_type(user_name, request->arguments["type"],  socket, response, request);
 				return;
 			}
 
-			list_user_files(user_name, socket, response);
+			list_user_files(user_name, socket, response, request);
 			return;
 		}
 
 		if(request->arguments["user_name"] == "true")
 		{
-			http_utils::send_json( std::pair<std::string, std::string>("user_name", user_name), socket, response);
+			http_utils::send_json( std::pair<std::string, std::string>("user_name", user_name), socket, response, request);
 			return;
 		}
 	}
@@ -97,7 +97,7 @@ void users_files_service::service_call( boost::shared_ptr<boost::asio::ip::tcp::
 	std::map<std::string, std::string>::iterator redirect_iterator= request->arguments.find("redirect_to");
 	if (redirect_iterator != request->arguments.end() )
 	{
-		http_utils::send_found_302(	http_utils::url_decode(redirect_iterator->second), socket, response);
+		http_utils::send_found_302(	http_utils::url_decode(redirect_iterator->second), socket, response, request);
 		return;
 	}
 	bool sent;
@@ -152,7 +152,7 @@ bool users_files_service::send_file( std::string href, std::string user_name, bo
 	return false;
 }
 
-void users_files_service::list_user_files( std::string user_name, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response )
+void users_files_service::list_user_files( std::string user_name, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response, boost::shared_ptr<http_request> request )
 {
 	std::ostringstream user_files_stream;
 	user_files_stream << "[";
@@ -182,16 +182,12 @@ void users_files_service::list_user_files( std::string user_name, boost::shared_
 	std::string files_ = user_files_stream.str();
 	if (files_.length() > 5)
 		files_ = files_.substr(0, files_.length() - 1);
-
-	response->body = files_.append("\n]");
-	response->body_size = response->body.length();
-	response->headers.insert(std::pair<std::string, std::string>("Content-Length", boost::lexical_cast<std::string>(response->body_size)));
 	http_utils::set_json_content_type(response);
-	response->send(*socket);
+	http_utils::send(files_.append("\n]"), socket, response, request);
 	return;
 }
 
-void users_files_service::list_user_files_of_type( std::string user_name,  std::string f_type, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response )
+void users_files_service::list_user_files_of_type( std::string user_name,  std::string f_type, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response, boost::shared_ptr<http_request> request )
 {
 	std::ostringstream user_files_stream;
 	user_files_stream << "[";
@@ -214,19 +210,16 @@ void users_files_service::list_user_files_of_type( std::string user_name,  std::
 				<< user_name << "\",\n\t\t\"modified\": \""
 				<< modified << "\",\n\t\t\"is_public\": "
 				<< is_public << ",\n\t\t\"size\": " 
-				<< f_size << "\n\t},";
+				<< f_size <<  ",\n\t\t\"type\": \"" 
+				<< f_type <<"\"\n\t},";
 		}
 
 	}
 	std::string files_ = user_files_stream.str();
 	if (files_.length() > 5)
 		files_ = files_.substr(0, files_.length() - 1);
-
-	response->body = files_.append("\n]");
-	response->body_size = response->body.length();
-	response->headers.insert(std::pair<std::string, std::string>("Content-Length", boost::lexical_cast<std::string>(response->body_size)));
 	http_utils::set_json_content_type(response);
-	response->send(*socket);
+	http_utils::send(files_.append("\n]"), socket, response);
 	return;
 }
 

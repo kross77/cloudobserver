@@ -20,6 +20,11 @@
 #include <boost/asio.hpp>
 #include <boost/foreach.hpp>
 
+#include <boost/iostreams/filtering_streambuf.hpp>
+#include <boost/iostreams/copy.hpp>
+#include <boost/iostreams/filter/gzip.hpp>
+#include <boost/iostreams/stream.hpp>
+
 // Cloud Forever
 #include <http.h>
 
@@ -121,6 +126,8 @@ namespace http_utils
 	 */
 	boost::shared_ptr<http_response> set_json_content_type(boost::shared_ptr<http_response> response);
 
+	boost::shared_ptr<http_response> set_gzip_content_type(boost::shared_ptr<http_response> response);
+
 	/*!
 	 * \brief turns map of <std::string, std::string> into string formated as POST request
 	 *
@@ -209,9 +216,11 @@ namespace http_utils
 	 * \param socket boost::shared_ptr<boost::asio::ip::tcp::socket> 
 	 * \param response boost::shared_ptr<http_response>
 	 * \return void 
+	 * 
+	 * \note sends gziped message when possible (when request allows to)
 	 *
 	 */
-	void send_found_302( const std::string & redirect_lication, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response ); // This shall be turned into 303 for pure HTTP/1.1.
+	void send_found_302( const std::string & redirect_lication, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response,  boost::shared_ptr<http_request> request ); // This shall be turned into 303 for pure HTTP/1.1.
 
 	/*!
 	 * \brief  send HTTP /1.1 error
@@ -257,6 +266,8 @@ namespace http_utils
 	 */
 	void send( const int & code, const std::string & data, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response );
 
+	void send( const int & code, const std::string & data, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response, boost::shared_ptr<http_request> request );
+	void send( const std::string & data, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response, boost::shared_ptr<http_request> request );
 	/*!
 	 * \brief Sends one std::pair as JSON formated message
 	 * 
@@ -274,8 +285,7 @@ namespace http_utils
 	 * \return void 
 	 *
 	 */
-	void send_json( std::pair<std::string, std::string> pair, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response );
-
+	void send_json( std::pair<std::string, std::string> pair, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response, boost::shared_ptr<http_request> request );
 
 	std::string parse_file_upload_body(std::string contents);
 

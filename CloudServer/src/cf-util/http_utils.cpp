@@ -356,7 +356,7 @@ void  http_utils::escape ( std::istream& in, std::ostream& out )
 		std::ostreambuf_iterator<char>(out));
 }
 
-void http_utils::send_found_302( const std::string & redirect_lication, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response )
+void http_utils::send_found_302( const std::string & redirect_lication, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response,  boost::shared_ptr<http_request> request  )
 {
 	/* if there was no Fire Fox and probably other dull browsers we would do this (Chrome, IE, Safari tested):
 	 *
@@ -396,7 +396,7 @@ void http_utils::send_found_302( const std::string & redirect_lication, boost::s
 		<< redirect_lication << "\"></noscript></head><body><p>Please turn on JavaScript!</p><a href=\"" 
 		<< redirect_lication << "\"><h1>Content awaits you here.</h1></a></body></html>";
 
-	http_utils::send(302, data_stream.str(), socket, response);
+	http_utils::send(302, data_stream.str(), socket, response, request);
 
 }
 
@@ -410,6 +410,35 @@ void http_utils::send_error( const int & error_code, const std::string & descrip
 void http_utils::send( const std::string & data, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response )
 {
 	http_utils::send(200, data, socket, response);
+}
+
+void http_utils::send( const std::string & data, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response,  boost::shared_ptr<http_request> request )
+{
+	http_utils::send(200, data, socket, response, request);
+}
+
+void http_utils::send( const int & code, const std::string & data, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response,  boost::shared_ptr<http_request> request )
+{
+	std::stringstream body;
+	bool encoded = false;
+	typedef std::map<std::string, std::string > map_t;
+	map_t::iterator it = response->headers.find("Content-Type");
+	if (it != response->headers.end())
+		if (!((it->second == "application/x-gzip") || (it->second == "application/zip") || (it->second == "application/x-tar")))
+			if (std::string::npos != request->headers["Accept-Encoding"].find("gzip"))
+			{
+				std::stringstream temp_body(data);
+				http_utils::set_gzip_content_type(response);
+				boost::iostreams::filtering_streambuf< boost::iostreams::input> in;
+				in.push( boost::iostreams::gzip_compressor());
+				in.push(temp_body);
+				boost::iostreams::copy(in, body);
+				encoded = true;
+				http_utils::send(body.str(), socket, response);
+			}
+		
+	if (!encoded)
+		http_utils::send(code, data, socket, response);
 }
 
 void http_utils::send( const int & code, const std::string & data, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response )
@@ -428,11 +457,17 @@ boost::shared_ptr<http_response> http_utils::set_json_content_type( boost::share
 	return response;
 }
 
-void http_utils::send_json( std::pair<std::string, std::string> pair, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response )
+void http_utils::send_json( std::pair<std::string, std::string> pair, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response, boost::shared_ptr<http_request> request )
 {
 	std::ostringstream data_stream;
 	data_stream << "\n{\n\t\"" << http_utils::escape(pair.first) << "\": \""	<< http_utils::escape(pair.second)  << "\"\n}";
 	http_utils::set_json_content_type(response);
-	http_utils::send(data_stream.str(), socket, response);
+	http_utils::send(data_stream.str(), socket, response, request);
 	return;
+}
+
+boost::shared_ptr<http_response> http_utils::set_gzip_content_type( boost::shared_ptr<http_response> response )
+{
+	response->headers.insert(std::pair<std::string, std::string>("Content-Encoding", "gzip"));
+	return response;
 }
