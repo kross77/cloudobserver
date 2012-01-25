@@ -9,12 +9,12 @@ project "UsersFilesService"
 
 	links { "boost-sqlite" }
 	includedirs { "3rdparty/boost-sqlite"}
-
-	links { "cf-http" }
-	includedirs { "3rdparty/cf-http" }
 	
 	links { "cf-util" }
 	includedirs { "src/cf-util"}
+	
+	links { "cf-http" }
+	includedirs { "3rdparty/cf-http" }
 	
 	links { "cf-fs" }
 	includedirs { "src/cf-fs"}
