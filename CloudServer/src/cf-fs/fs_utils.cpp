@@ -1,12 +1,5 @@
 #include "fs_utils.h"
 
-fs_utils::fs_utils()
-{
-	this->expiration_period = boost::posix_time::minutes(200);
-	this->max_age = "max-age=" + boost::lexical_cast<std::string>(this->expiration_period.total_seconds());
-
-}
-
 void fs_utils::send_404( std::string encoded_url,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response )
 {
 	std::ostringstream body;
@@ -76,7 +69,7 @@ void fs_utils::insert_file_headers( boost::shared_ptr<fs_file> f, boost::shared_
 	response->headers.insert(std::pair<std::string, std::string>("Last-Modified", f->modified));
 	response->headers.insert(std::pair<std::string, std::string>("Content-Length", boost::lexical_cast<std::string>(f->size)));
 	response->headers.insert(std::pair<std::string, std::string>("Cache-Control", max_age ));
-	response->headers.insert(std::pair<std::string, std::string>("Expires", boost::posix_time::to_iso_extended_string( boost::posix_time::second_clock::local_time() + this->expiration_period ) ));
+	response->headers.insert(std::pair<std::string, std::string>("Expires", boost::posix_time::to_iso_extended_string( boost::posix_time::second_clock::local_time() +  boost::posix_time::minutes(expiration_period) ) ));
 }
 
 boost::shared_ptr<fs_file> fs_utils::create_file( boost::filesystem::path p )
@@ -110,4 +103,14 @@ bool fs_utils::was_modified( boost::shared_ptr<fs_file> f, boost::shared_ptr<boo
 		}
 	}
 	return false;
+}
+
+void fs_utils::send_info( boost::shared_ptr<fs_file> f,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response )
+{
+	std::ostringstream body;
+	body << f->path.filename()
+		<< "<br/> size: " << f->size << " byte" << ((f->size > 1) ? "s" : "")
+		<< "<br/> modified: " << f->modified
+		<< "<br/><a href=\"" << http_utils::url_encode(request->url) << "\">download</a>";
+	http_utils::send( std::string("<head></head><body><h1>" + body.str() + "</h1></body>" ), socket, response, request);
 }

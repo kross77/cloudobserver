@@ -2,7 +2,6 @@
 
 file_service::file_service()
 {
-	fs_util = new fs_utils();
 	this->root_path = boost::filesystem::current_path().string();
 	this->show_directory_contents = false;
 
@@ -23,7 +22,7 @@ file_service::file_service()
 
 boost::shared_ptr<fs_file> file_service::create_file( boost::filesystem::path p )
 {
-	boost::shared_ptr<fs_file> f = fs_util->create_file(p);
+	 boost::shared_ptr<fs_file> f = fs_utils::create_file(p);
 	if (f->size <= cachable_file_size_limit)
 	{
 		f->is_cachable = true;
@@ -225,7 +224,7 @@ void file_service::process_request( std::string encoded_url,boost::shared_ptr<bo
 		}
 		catch (std::exception)
 		{
-			fs_util->send_404(encoded_url, socket, request, response);
+			fs_utils::send_404(encoded_url, socket, request, response);
 			return;
 		}
 	}
@@ -242,23 +241,15 @@ void file_service::process_request( std::string encoded_url,boost::shared_ptr<bo
 		if (f)
 		{
 
-			if(request->arguments["info"] == "true")
-			{
-				send_info(f, socket, request, response);
+
+			if(try_send_info(f, socket, request, response))
 				return;
-			}
+			
+			if(if_is_modified(f,socket,response,request))
+				return;
+			
 
-			std::map<std::string, std::string>::iterator it= request->headers.find("If-Modified-Since");
-			if (it != request->headers.end() )
-			{
-				if (f->modified == it->second)
-				{
-					fs_util->send_not_modified_304(socket, response);
-					return;
-				}
-			}
-
-			fs_util->insert_file_headers(f, socket, response);
+			fs_utils::insert_file_headers(f, socket, response);
 
 			{
 				boost::shared_lock<boost::shared_mutex> lock_r(f->mutex_);
@@ -277,29 +268,19 @@ void file_service::process_request( std::string encoded_url,boost::shared_ptr<bo
 		}
 		catch(std::exception)
 		{
-			fs_util->send_404(encoded_url, socket,request,response);
+			fs_utils::send_404(encoded_url, socket,request,response);
 			return;
 		}
 
 		if (f)
 		{
-			if(request->arguments["info"] == "true")
-			{
-				send_info(f, socket, request, response);
+			if(try_send_info(f, socket, request, response))
 				return;
-			}
 
-			std::map<std::string, std::string>::iterator it= request->headers.find("If-Modified-Since");
-			if (it != request->headers.end() )
-			{
-				if (f->modified == it->second)
-				{
-					fs_util->send_not_modified_304(socket, response);
-					return;
-				}
-			}
+			if(if_is_modified(f,socket,response,request))
+				return;
 
-			fs_util->insert_file_headers(f, socket, response);
+			fs_utils::insert_file_headers(f, socket, response);
 
 			if (f->is_cachable)
 			{
@@ -336,7 +317,7 @@ void file_service::process_request( std::string encoded_url,boost::shared_ptr<bo
 			}
 			else
 			{
-				fs_util->send_uncachable_file(f, socket, response);
+				fs_utils::send_uncachable_file(f, socket, response);
 				return;
 			}
 		}
@@ -398,19 +379,6 @@ void file_service::send_directory_contents( std::set<std::string> list, boost::s
 	response->send(*socket);
 }
 
-
-
-void file_service::send_info( boost::shared_ptr<fs_file> f,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response )
-{
-	std::ostringstream body;
-	body << f->path.filename()
-		<< "<br/> size: " << f->size << " byte" << ((f->size > 1) ? "s" : "")
-		<< "<br/> modified: " << f->modified
-		<< "<br/><a href=\"" << http_utils::url_encode(request->url) << "\">download</a>";
-	response->body = "<head></head><body><h1>" + body.str() + "</h1></body>";
-	response->send(*socket);
-}
-
 void file_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response)
 {
 	if (request->url == "/")
@@ -432,7 +400,7 @@ void file_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> 
 				std::map<std::string, std::string> save_file;
 				save_file = http_utils::parse_multipart_form_data(request->body);
 				std::string file_name =save_file.find("file_name")->second;
-				fs_util->save_string_into_file(save_file.find("datafile")->second, file_name,  this->root_path / "users");
+				fs_utils::save_string_into_file(save_file.find("datafile")->second, file_name,  this->root_path / "users");
 			}
 			catch(std::exception &e)
 			{
@@ -443,6 +411,35 @@ void file_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> 
 
 	process_request(request->url, socket, request, response);
 }
+
+bool file_service::if_is_modified(boost::shared_ptr<fs_file> f, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response, boost::shared_ptr<http_request> request)
+{
+	std::map<std::string, std::string>::iterator it= request->headers.find("If-Modified-Since");
+	if (it != request->headers.end() )
+	{
+		if (f->modified == it->second)
+		{
+			fs_utils::send_not_modified_304(socket, response);
+			return true;
+		}
+	}
+	return false;
+}
+
+bool file_service::try_send_info( boost::shared_ptr<fs_file> f,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response )
+{
+	std::map<std::string, std::string>::iterator it= request->arguments.find("info");
+	if (it != request->arguments.end() )
+	{
+		if ( std::string("true") == std::string(it->second))
+		{
+			fs_utils::send_info( f,socket,request,response );
+			return true;
+		}
+	}
+	return false;
+}
+
 
 BOOST_EXTENSION_TYPE_MAP_FUNCTION
 {

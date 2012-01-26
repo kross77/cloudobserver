@@ -10,10 +10,12 @@
 #include <general_utils.h>
 #include "fs_file.h"
 
-class fs_utils
+/*!
+ *  \addtogroup Utilities
+ *  @{
+ */
+namespace fs_utils
 {
-public:
-	fs_utils();
 
 	boost::shared_ptr<fs_file> create_file( boost::filesystem::path p );
 
@@ -49,11 +51,10 @@ public:
 	void send_404( std::string encoded_url,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response );
 	void send_not_modified_304( boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response );
 
-private:
-	std::string max_age;
-	boost::posix_time::time_duration expiration_period;
-
-
+	void send_info( boost::shared_ptr<fs_file> f,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response );
+	const std::string  max_age = "max-age=12000";
+	const int expiration_period = 200;
 };
+/*! @} */
 
 #endif //FS_UTIL_H
