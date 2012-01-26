@@ -2,8 +2,6 @@
 
 users_files_service::users_files_service()
 {
-	fs_util =  boost::shared_ptr<fs_utils>(new fs_utils());
-
 	this->root_path = boost::filesystem::current_path().string();
 
 	this->expiration_period = boost::posix_time::minutes(200);
@@ -41,7 +39,7 @@ void users_files_service::apply_config( boost::shared_ptr<boost::property_tree::
 
 void users_files_service::service_call( boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response )
 {
-	std::string user_name = http_utils::url_decode(fs_util->get_user_name(request));
+	std::string user_name = http_utils::url_decode(fs_utils::get_user_name(request));
 	if(user_name != "guest")
 	{
 		if(request->body.length() > 0)
@@ -62,7 +60,7 @@ void users_files_service::service_call( boost::shared_ptr<boost::asio::ip::tcp::
 				encoded_url = encoded_url + "." + this->default_ufs_extension;
 				encoded_url = http_utils::url_encode( encoded_url );
 				int f_size = save_file.find("datafile")->second.length();
-				fs_util->save_string_into_file(save_file.find("datafile")->second, encoded_url,  this->root_path);
+				fs_utils::save_string_into_file(save_file.find("datafile")->second, encoded_url,  this->root_path);
 				this->create_file_table_entry(encoded_url, file_name, user_name, f_type, f_size, is_public);
 
 				http_utils::send_found_302(redirect_location, socket, response, request);
@@ -105,21 +103,21 @@ void users_files_service::service_call( boost::shared_ptr<boost::asio::ip::tcp::
 		sent = send_file(request->url, user_name, socket, request, response);
 		if (!sent)
 		{
-			fs_util->send_404(request->url, socket, request, response);
+			fs_utils::send_404(request->url, socket, request, response);
 		}
 	}
 	catch(...)
 	{
-		fs_util->send_404(request->url, socket, request, response);
+		fs_utils::send_404(request->url, socket, request, response);
 	}
 }
 
 bool users_files_service::send_file(std::string file_name, boost::filesystem::path path, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response )
 {
-	boost::shared_ptr<fs_file> f = fs_util->create_file(path);
+	boost::shared_ptr<fs_file> f = fs_utils::create_file(path);
 	response->headers.insert(std::pair<std::string, std::string>("Content-Disposition", std::string("attachment; filename=" + file_name)));
 
-	fs_util->send_uncachable_file(f, socket,request, response);
+	fs_utils::send_uncachable_file(f, socket,request, response);
 	return true;
 }
 

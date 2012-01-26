@@ -54,7 +54,6 @@ private:
 	boost::filesystem::path root_path;
 	bool show_directory_contents;
 
-	fs_utils *fs_util;
 	boost::filesystem::path users_directory_path;
 
 	bool first_time;
@@ -89,9 +88,8 @@ private:
 	//void send_cached_file(boost::uintmax_t size, boost::shared_array<char> buffer, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response);
 	void send_cached_file( boost::uintmax_t size, boost::shared_ptr<std::string> buffer, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response, boost::shared_ptr<http_request> request );
 	void send_directory_contents(std::set<std::string> list,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response);
-
-	void send_info(boost::shared_ptr<fs_file> f,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response);
-
+	bool if_is_modified(boost::shared_ptr<fs_file> f, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response, boost::shared_ptr<http_request> request);
+	bool try_send_info( boost::shared_ptr<fs_file> f,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response );
 	CLOUD_SERVICE_AUXILIARIES;
 };
 
