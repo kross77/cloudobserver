@@ -27,9 +27,9 @@ OPENCV_SETUP_FILE_NAME=opencv_net_setup.sh
 
 OPENCV_DISTRO_SITE=surfnet.dl.sourceforge.net
 OPENCV_PROJECT_URL=project/opencvlibrary/opencv-unix
-OPENCV_NAME=OpenCV-2.3.1a
+OPENCV_NAME=OpenCV-2.3.1
 OPENCV_VERSION=2.3.1
-OPENCV_DISTRO_NAME="$OPENCV_NAME".tar.bz2
+OPENCV_DISTRO_NAME="$OPENCV_NAME"a.tar.bz2
 OPENCV_ROOT_DIR=opencv_libraries
 OPENCV_INSTALL_SUBDIR=install-dir
 OPENCV_COMPILE_SUBDIR=build-dir
@@ -90,9 +90,9 @@ echo_run ()
 
 extract() # 1=DISTRO_NAME 2=ROOT_DIR 3=NAME
 {
-	echo_run tar -xvjf ./$1 -C ./$2
-	#echo_run rm -rf $2
-	#echo_run mv $3 
+	echo_run tar -xjf $1
+	echo_run rm -rf $2
+	echo_run mv $3 $2
 }
 
 load() # 1=DISTRO_NAME 2=ROOT_DIR 3=NAME 4=VERSION 5=BOOST_DISTRO_SITE 6=INSTALL_SUBDIR 7=PROJECT_URL
@@ -159,10 +159,6 @@ fi
 load $OPENCV_DISTRO_NAME $OPENCV_ROOT_DIR $OPENCV_NAME $OPENCV_VERSION $OPENCV_DISTRO_SITE $OPENCV_INSTALL_SUBDIR $OPENCV_PROJECT_URL
 
 cd $OPENCV_ROOT_DIR
-if [ -d ./OpenCV-2.3.1 ]; then
- mv -f ./OpenCV-2.3.1/* `pwd`
- rm -rf OpenCV-2.3.1
-fi
 
 echo_run ../$CMAKE_PATH -DCMAKE_INSTALL_PREFIX=./$OPENCV_INSTALL_SUBDIR -DBUILD_SHARED_LIBS=ON -DBUILD_PYTHON_SUPPORT=OFF -DOPENCV_EXTRA_C_FLAGS=-fPIC -DOPENCV_BUILD_3RDPARTY_LIBS=TRUE
 make
