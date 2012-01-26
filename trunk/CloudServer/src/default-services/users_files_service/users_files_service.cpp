@@ -219,7 +219,7 @@ void users_files_service::list_user_files_of_type( std::string user_name,  std::
 	if (files_.length() > 5)
 		files_ = files_.substr(0, files_.length() - 1);
 	http_utils::set_json_content_type(response);
-	http_utils::send(files_.append("\n]"), socket, response);
+	http_utils::send(files_.append("\n]"), socket, response, request);
 	return;
 }
 

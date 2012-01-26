@@ -19,6 +19,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/asio.hpp>
 #include <boost/foreach.hpp>
+#include <boost/filesystem.hpp>
 
 #include <boost/iostreams/filtering_streambuf.hpp>
 #include <boost/iostreams/copy.hpp>
@@ -289,11 +290,15 @@ namespace http_utils
 
 	std::string parse_file_upload_body(std::string contents);
 
+	void get_extension_and_mime_type(std::string & file_extenstion, std::string & mime_type );
+
+	boost::shared_ptr<http_response> set_file_content_type( const std::string & file_name, boost::shared_ptr<http_response> response );
 	template<typename _OutputIterator>
 	inline void split(std::string str, std::string delim, _OutputIterator result);
 
 	template<typename InIter, typename OutIter>
 	OutIter copy_asciiz ( InIter begin, OutIter out );
+
 }
 /*! @} */
 
