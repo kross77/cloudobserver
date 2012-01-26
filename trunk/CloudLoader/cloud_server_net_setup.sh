@@ -25,6 +25,19 @@ OPENCV_ROOT_DIR=opencv_libraries
 OPENCV_INSTALL_SUBDIR=install-dir
 OPENCV_SETUP_FILE_NAME=opencv_net_setup.sh
 
+OPENCV_DISTRO_SITE=surfnet.dl.sourceforge.net
+OPENCV_PROJECT_URL=project/opencvlibrary/opencv-unix
+OPENCV_NAME=OpenCV-2.3.1a
+OPENCV_VERSION=2.3.1
+OPENCV_DISTRO_NAME="$OPENCV_NAME".tar.bz2
+OPENCV_ROOT_DIR=opencv_libraries
+OPENCV_INSTALL_SUBDIR=install-dir
+OPENCV_COMPILE_SUBDIR=build-dir
+
+CMAKE_SETUP_FILE_WEB_PATH=http://cloudobserver.googlecode.com/svn-history/r1597/trunk/CloudLoader/cmake_net_setup.sh
+CMAKE_PATH=./cmake/bin/cmake
+CMAKE_SETUP_FILE_NAME=cmake_net_setup.sh
+
 PREMAKE_SETUP_FILE_NAME=premake_net_setup.sh
 
 
@@ -72,6 +85,34 @@ echo_run ()
 	fi
 }
 
+extract() # 1=DISTRO_NAME 2=ROOT_DIR 3=NAME
+{
+	echo_run tar -xvjf ./$1 -C ./$2
+	#echo_run rm -rf $2
+	#echo_run mv $3 
+}
+
+load() # 1=DISTRO_NAME 2=ROOT_DIR 3=NAME 4=VERSION 5=BOOST_DISTRO_SITE 6=INSTALL_SUBDIR 7=PROJECT_URL
+{
+	if [ ! -e $1 ]; then
+		# get boost
+		echo_run ${CURL_CMD} http://$5/$7/$4/$1 -o $1
+	fi
+	  
+	if [ ! -d $2 ]; then
+		echo_run mkdir $2
+	fi
+	
+	# move the boost distro into place
+	if [ ! -d $2/$6/lib ]; then
+		extract  $1 $2 $3
+	else
+		if [ ! KEEP_OLD=="true" ]; then
+			extract $1 $2 $3
+		fi
+	fi
+}
+
 WD=`pwd`
 MACHINE=`uname`
 HERE=`dirname $0`
@@ -105,13 +146,26 @@ else
 	echo_run ${SVN_CMD} https://$CLOUD_DISTRO_SITE/svn/trunk/$CLOUD_COMPONENT_NAME/ $CLOUD_COMPONENT_NAME
 fi
 
-
-if [ ! -e $OPENCV_SETUP_FILE_NAME ]; then
-	echo_run wget http://cloudobserver.googlecode.com/svn/trunk/CloudLoader/$OPENCV_SETUP_FILE_NAME 
-	echo_run chmod u+x $OPENCV_SETUP_FILE_NAME 
+# OpenCV
+if [ ! -e $CMAKE_PATH ]; then
+	echo_run wget $CMAKE_SETUP_FILE_WEB_PATH
+	echo_run chmod u+x ./$CMAKE_SETUP_FILE_NAME
+	echo_run ./$CMAKE_SETUP_FILE_NAME
 fi
 
-echo_run ./$OPENCV_SETUP_FILE_NAME
+load $OPENCV_DISTRO_NAME $OPENCV_ROOT_DIR $OPENCV_NAME $OPENCV_VERSION $OPENCV_DISTRO_SITE $OPENCV_INSTALL_SUBDIR $OPENCV_PROJECT_URL
+
+cd $OPENCV_ROOT_DIR
+if [ -d ./OpenCV-2.3.1 ]; then
+ mv -f ./OpenCV-2.3.1/* `pwd`
+ rm -rf OpenCV-2.3.1
+fi
+
+echo_run ../$CMAKE_PATH -DCMAKE_INSTALL_PREFIX=./$OPENCV_INSTALL_SUBDIR -DBUILD_SHARED_LIBS=ON -DBUILD_PYTHON_SUPPORT=OFF -DOPENCV_EXTRA_C_FLAGS=-fPIC -DOPENCV_BUILD_3RDPARTY_LIBS=TRUE
+make
+make install
+
+cd ..
 
 if [ ! -e $BOOST_SETUP_FILE_NAME ]; then
 	echo_run wget http://cloudobserver.googlecode.com/svn/trunk/CloudLoader/$BOOST_SETUP_FILE_NAME
