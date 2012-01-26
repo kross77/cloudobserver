@@ -34,6 +34,9 @@ OPENCV_ROOT_DIR=opencv_libraries
 OPENCV_INSTALL_SUBDIR=install-dir
 OPENCV_COMPILE_SUBDIR=build-dir
 
+#-L protects against redirects
+CURL_CMD=curl\ -L
+
 CMAKE_SETUP_FILE_WEB_PATH=http://cloudobserver.googlecode.com/svn-history/r1597/trunk/CloudLoader/cmake_net_setup.sh
 CMAKE_PATH=./cmake/bin/cmake
 CMAKE_SETUP_FILE_NAME=cmake_net_setup.sh
