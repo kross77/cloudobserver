@@ -17,6 +17,25 @@ BOOST_ROOT_DIR=boost_libraries
 BOOST_INSTALL_SUBDIR=install-dir
 BOOST_SETUP_FILE_NAME=boost_net_setup.sh
 
+BOOST_DISTRO_SITE=surfnet.dl.sourceforge.net
+BOOST_PROJECT_URL=project/boost/boost
+BOOST_NAME=boost_1_47_0
+BOOST_VERSION=1.47.0
+BOOST_DISTRO_NAME="$BOOST_NAME".tar.gz
+BOOST_ROOT_DIR=boost_libraries
+BOOST_INSTALL_SUBDIR=install-dir
+BOOST_COMPILE_SUBDIR=build-dir
+
+ALTERNATIVE_ZLIB_FOLDER=opencv_libraries/3rdparty/zlib
+
+ZLIB_NAME=zlib-1.2.5
+ZLIB_PROJECT_URL=project/libpng/zlib
+ZLIB_VERSION=1.2.5
+ZLIB_DISTRO_NAME="$ZLIB_NAME".tar.gz
+ZLIB_ROOT_DIR=zlib_libraries
+ZLIB_INSTALL_SUBDIR=install-dir
+ZLIB_COMPILE_SUBDIR=build-dir
+
 OPENSSL_ROOT_DIR=openssl_libraries
 OPENSSL_INSTALL_SUBDIR=install-dir
 OPENSSL_SETUP_FILE_NAME=openssl_net_setup.sh
@@ -166,12 +185,22 @@ make install
 
 cd ..
 
-if [ ! -e $BOOST_SETUP_FILE_NAME ]; then
-	echo_run wget http://cloudobserver.googlecode.com/svn/trunk/CloudLoader/$BOOST_SETUP_FILE_NAME
-	echo_run chmod u+x $BOOST_SETUP_FILE_NAME
+# Boost
+if [ ! -d ./$ALTERNATIVE_ZLIB_FOLDER ]; then
+	load $ZLIB_DISTRO_NAME $ZLIB_ROOT_DIR $ZLIB_NAME $ZLIB_VERSION $BOOST_DISTRO_SITE $ZLIB_INSTALL_SUBDIR $ZLIB_PROJECT_URL
+else
+	ZLIB_ROOT_DIR="$ALTERNATIVE_ZLIB_FOLDER"
 fi
 
-echo_run ./$BOOST_SETUP_FILE_NAME $BOOST_ROOT_DIR $BOOST_INSTALL_SUBDIR
+load $BOOST_DISTRO_NAME $BOOST_ROOT_DIR $BOOST_NAME $BOOST_VERSION $BOOST_DISTRO_SITE $BOOST_INSTALL_SUBDIR $BOOST_PROJECT_URL
+
+cd $BOOST_ROOT_DIR
+
+echo_run ./bootstrap.sh
+
+echo_run ./b2 -j4 -d0 --with-thread --with-system --with-filesystem --with-program_options --with-regex --with-date_time --with-iostreams -sZLIB_SOURCE="$WD/$CLOUD_ROOT_DIR/$ZLIB_ROOT_DIR/" -sNO_BZIP2=1  link=shared --prefix=./$BOOST_INSTALL_SUBDIR release --builddir=./$BOOST_COMPILE_SUBDIR install
+
+cd ..
 
 if [ ! -e $OPENSSL_SETUP_FILE_NAME ]; then
 	echo_run wget http://cloudobserver.googlecode.com/svn/trunk/CloudLoader/$OPENSSL_SETUP_FILE_NAME
