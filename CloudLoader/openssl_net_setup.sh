@@ -58,7 +58,7 @@ extract_and_clean()
 	
 	cd $OPENSSL_ROOT_DIR
 
-	echo_run ./config no-shared 
+	echo_run ./config shared no-asm
 	echo_run make
 
 	if [ ! -d $OPENSSL_INSTALL_SUBDIR ]; then
