@@ -40,6 +40,13 @@ OPENSSL_ROOT_DIR=openssl_libraries
 OPENSSL_INSTALL_SUBDIR=install-dir
 OPENSSL_SETUP_FILE_NAME=openssl_net_setup.sh
 
+OPENSSL_DISTRO_SITE=www.openssl.org
+OPENSSL_NAME=openssl-1.0.0d
+OPENSSL_DISTRO_NAME="$OPENSSL_NAME".tar.gz
+OPENSSL_ROOT_DIR=openssl_libraries
+OPENSSL_INSTALL_SUBDIR=install-dir
+OPENSSL_COMPILE_SUBDIR=build-dir
+
 OPENCV_ROOT_DIR=opencv_libraries
 OPENCV_INSTALL_SUBDIR=install-dir
 OPENCV_SETUP_FILE_NAME=opencv_net_setup.sh
@@ -202,12 +209,39 @@ echo_run ./b2 -j4 -d0 --with-thread --with-system --with-filesystem --with-progr
 
 cd ..
 
-if [ ! -e $OPENSSL_SETUP_FILE_NAME ]; then
-	echo_run wget http://cloudobserver.googlecode.com/svn/trunk/CloudLoader/$OPENSSL_SETUP_FILE_NAME
-	echo_run chmod u+x $OPENSSL_SETUP_FILE_NAME
+# OpenSSL
+if [ ! -e $OPENSSL_DISTRO_NAME ]; then
+	# get boost
+	echo_run ${CURL_CMD} http://$OPENSSL_DISTRO_SITE/source/$OPENSSL_DISTRO_NAME -o $OPENSSL_DISTRO_NAME
+fi
+  
+if [ ! -d $OPENSSL_ROOT_DIR ]; then
+	echo_run mkdir $OPENSSL_ROOT_DIR
 fi
 
-echo_run ./$OPENSSL_SETUP_FILE_NAME $OPENSSL_ROOT_DIR $OPENSSL_INSTALL_SUBDIR
+# move the boost distro into place
+if [ ! -d $OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR/lib ]; then
+	echo_run tar -xzf $OPENSSL_DISTRO_NAME
+	echo_run rm -rf $OPENSSL_ROOT_DIR
+	echo_run mv $OPENSSL_NAME $OPENSSL_ROOT_DIR
+	
+	cd $OPENSSL_ROOT_DIR
+
+	echo_run ./config shared no-asm
+	echo_run make
+
+	if [ ! -d $OPENSSL_INSTALL_SUBDIR ]; then
+		echo_run mkdir $OPENSSL_INSTALL_SUBDIR
+		echo_run mkdir $OPENSSL_INSTALL_SUBDIR/lib
+		echo_run mkdir $OPENSSL_INSTALL_SUBDIR/include
+	fi
+
+	echo_run cp -rL ./include/* ./$OPENSSL_INSTALL_SUBDIR/include/
+	echo_run cp ./libcrypto.a ./$OPENSSL_INSTALL_SUBDIR/lib
+	echo_run cp ./libssl.a ./$OPENSSL_INSTALL_SUBDIR/lib
+	
+	cd ..
+fi
 
 if [ ! -e $PREMAKE_SETUP_FILE_NAME ]; then
 	echo_run wget http://cloudobserver.googlecode.com/svn/trunk/CloudLoader/$PREMAKE_SETUP_FILE_NAME
