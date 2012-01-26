@@ -90,7 +90,11 @@ echo_run ()
 
 extract() # 1=DISTRO_NAME 2=ROOT_DIR 3=NAME
 {
-	echo_run tar -xjf $1
+	if [ ${1##*.} == "bz2" ]; then
+		echo_run tar -xjf $1
+	else
+		echo_run tar -xzf $1
+	fi
 	echo_run rm -rf $2
 	echo_run mv $3 $2
 }
