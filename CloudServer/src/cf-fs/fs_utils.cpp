@@ -89,65 +89,7 @@ boost::shared_ptr<fs_file> fs_utils::create_file( boost::filesystem::path p )
 		f->buffer.reset();
 	}
 	f->type_extension = boost::filesystem::extension(p);
-
-	if (f->type_extension.length() > 1)
-	{
-		if (boost::iequals(f->type_extension, ".html"))
-		{
-			f->type_extension = ".html";
-			f->mime_type = "text/html";
-		}
-		else if ( boost::iequals(f->type_extension, ".css"))
-		{
-			f->type_extension = ".css";
-			f->mime_type = "text/css";
-		}
-		else if (boost::iequals(f->type_extension, ".js"))
-		{
-			f->type_extension = ".js";
-			f->mime_type =  "text/javascript";
-		}
-		else if (boost::iequals(f->type_extension, ".xml"))
-		{
-			f->type_extension = ".xml";
-			f->mime_type = "text/xml";
-		}
-		else if (boost::iequals(f->type_extension, ".jpeg") || boost::iequals(f->type_extension, ".jpg"))
-		{
-			f->type_extension = ".jpeg";
-			f->mime_type = "image/jpeg";
-		}
-		else if (boost::iequals(f->type_extension, ".png"))
-		{
-			f->type_extension = ".png";
-			f->mime_type = "image/png";
-		}
-		else if (boost::iequals(f->type_extension, ".gif"))
-		{
-			f->type_extension = ".gif";
-			f->mime_type = "image/gif";
-		}
-		else if (boost::iequals(f->type_extension, ".svg"))
-		{
-			f->type_extension = ".svg";
-			f->mime_type =  "image/svg+xml";
-		}
-		else if (boost::iequals(f->type_extension, ".zip"))
-		{
-			f->type_extension = ".zip";
-			f->mime_type = "application/zip";
-		}
-		else if (boost::iequals(f->type_extension, ".gzip"))
-		{
-			f->type_extension = ".gzip";
-			f->mime_type = "application/x-gzip";
-		}
-		else if (boost::iequals(f->type_extension, ".pdf"))
-		{
-			f->type_extension = ".pdf";
-			f->mime_type =  "application/pdf";
-		}
-	}
+	http_utils::get_extension_and_mime_type(f->type_extension, f->mime_type);
 
 	f->size = boost::filesystem::file_size(p);
 	f->modified = boost::posix_time::to_iso_extended_string( boost::posix_time::from_time_t(last_write_time(p)) );

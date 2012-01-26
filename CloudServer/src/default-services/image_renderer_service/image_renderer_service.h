@@ -550,6 +550,7 @@ public:
 
 						std::stringstream b2;
 						util::send_data(b2, buff);
+						http_utils::set_file_content_type(std::string("FILE." + desired_ext), response);
 						http_utils::send(b2.str(), socket, response, request);
 						return;
 					}

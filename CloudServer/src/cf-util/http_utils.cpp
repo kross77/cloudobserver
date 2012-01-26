@@ -441,12 +441,87 @@ void http_utils::send( const int & code, const std::string & data, boost::shared
 		http_utils::send(code, data, socket, response);
 }
 
+
+
+void http_utils::get_extension_and_mime_type(std::string & file_extenstion, std::string & mime_type )
+{
+	if (file_extenstion.length() > 1)
+	{
+		if (boost::iequals(file_extenstion, ".html"))
+		{
+			file_extenstion = ".html";
+			mime_type = "text/html";
+		}
+		else if ( boost::iequals(file_extenstion, ".css"))
+		{
+			file_extenstion = ".css";
+			mime_type = "text/css";
+		}
+		else if (boost::iequals(file_extenstion, ".js"))
+		{
+			file_extenstion = ".js";
+			mime_type =  "text/javascript";
+		}
+		else if (boost::iequals(file_extenstion, ".xml"))
+		{
+			file_extenstion = ".xml";
+			mime_type = "text/xml";
+		}
+		else if (boost::iequals(file_extenstion, ".jpeg") || boost::iequals(file_extenstion, ".jpg"))
+		{
+			file_extenstion = ".jpeg";
+			mime_type = "image/jpeg";
+		}
+		else if (boost::iequals(file_extenstion, ".png"))
+		{
+			file_extenstion = ".png";
+			mime_type = "image/png";
+		}
+		else if (boost::iequals(file_extenstion, ".gif"))
+		{
+			file_extenstion = ".gif";
+			mime_type = "image/gif";
+		}
+		else if (boost::iequals(file_extenstion, ".svg"))
+		{
+			file_extenstion = ".svg";
+			mime_type =  "image/svg+xml";
+		}
+		else if (boost::iequals(file_extenstion, ".zip"))
+		{
+			file_extenstion = ".zip";
+			mime_type = "application/zip";
+		}
+		else if (boost::iequals(file_extenstion, ".gzip"))
+		{
+			file_extenstion = ".gzip";
+			mime_type = "application/x-gzip";
+		}
+		else if (boost::iequals(file_extenstion, ".pdf"))
+		{
+			file_extenstion = ".pdf";
+			mime_type =  "application/pdf";
+		}
+	}
+}
+
+
+
 void http_utils::send( const int & code, const std::string & data, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response )
 {
 	response->status = code;
 	response->body = data;
 	response->headers["Content-Length"] = boost::lexical_cast<std::string>(response->body.length());
 	response->send(*socket);
+}
+
+boost::shared_ptr<http_response> http_utils::set_file_content_type( const std::string & file_name, boost::shared_ptr<http_response> response )
+{
+	std::string type_extension = boost::filesystem::extension(file_name);
+	std::string mime_type;
+	http_utils::get_extension_and_mime_type(type_extension, mime_type );
+	response->headers.insert(std::pair<std::string, std::string>("Content-Type", mime_type));
+	return response;
 }
 
 boost::shared_ptr<http_response> http_utils::set_json_content_type( boost::shared_ptr<http_response> response )

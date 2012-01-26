@@ -179,10 +179,10 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 
 void server::server_service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response)
 {
-	server_services_list(socket, response);
+	server_services_list(socket, response, request);
 }
 
-void server::server_services_list(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response)
+void server::server_services_list(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response, boost::shared_ptr<http_request> request )
 {
 
 	std::ostringstream user_files_stream;
@@ -208,12 +208,8 @@ void server::server_services_list(boost::shared_ptr<boost::asio::ip::tcp::socket
 	std::string files_ = user_files_stream.str();
 	if (files_.length() > 5)
 		files_ = files_.substr(0, files_.length() - 1);
-
-	response->body = files_.append("\n]");
-	response->body_size = response->body.length();
-	response->headers.insert(std::pair<std::string, std::string>("Content-Length", boost::lexical_cast<std::string>(response->body_size)));
 	http_utils::set_json_content_type(response);
-	response->send(*socket);
+	http_utils::send(files_.append("\n]"), socket, response, request);
 
 	return;
 }
