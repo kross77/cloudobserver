@@ -109,10 +109,6 @@ load() # 1=DISTRO_NAME 2=ROOT_DIR 3=NAME 4=VERSION 5=BOOST_DISTRO_SITE 6=INSTALL
 	# move the boost distro into place
 	if [ ! -d $2/$6/lib ]; then
 		extract  $1 $2 $3
-	else
-		if [ ! KEEP_OLD=="true" ]; then
-			extract $1 $2 $3
-		fi
 	fi
 }
 
