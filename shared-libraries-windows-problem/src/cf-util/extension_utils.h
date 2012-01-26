@@ -9,11 +9,13 @@
 #include <map>
 //Boost
 #include <boost/shared_ptr.hpp> // aka std::shared_ptr
+#include <boost/make_shared.hpp>
 //Boost.Extension
 #include <boost/extension/factory.hpp>
 #include <boost/extension/extension.hpp>
 #include <boost/extension/shared_library.hpp>
 #include <boost/extension/type_map.hpp>
+
 
 #ifdef WIN
 #include "Windows.h"
@@ -128,7 +130,7 @@ namespace extension_utils
 	 * \note Here we assume library is in path some library path known to app.
 	 *
 	 */
-	template <class BaseClass> std::pair< boost::shared_ptr<boost::extensions::shared_library>, boost::shared_ptr<BaseClass> > give_me_class(std::string library_name, std::string class_name_inside_lib);
+	template <class BaseClass> boost::shared_ptr<BaseClass> give_me_class(std::string library_name, std::string class_name_inside_lib);
 	void try_open_lib(boost::extensions::shared_library & lib, std::string & path);
 	void try_close_lib( std::string library_name );
 	std::string add_prefix_and_suffix(std::string &name);

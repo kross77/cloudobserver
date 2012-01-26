@@ -69,13 +69,13 @@ boost::shared_ptr<BaseClass> extension_utils::give_me_class(std::string library_
 }*/
 
 template <class BaseClass>
-std::pair< boost::shared_ptr<boost::extensions::shared_library>, boost::shared_ptr<BaseClass> > extension_utils::give_me_class(std::string library_name, std::string class_name_inside_lib)
+boost::shared_ptr<BaseClass> extension_utils::give_me_class(std::string library_name, std::string class_name_inside_lib)
 {
 	library_name = add_prefix_and_suffix(library_name);
 	boost::shared_ptr<boost::extensions::shared_library> library( new boost::extensions::shared_library(library_name));
 	try_open_lib(*library, library_name);
 	boost::shared_ptr<BaseClass> class_ptr = get_class<BaseClass>(*library, class_name_inside_lib);
-	return std::pair< boost::shared_ptr<boost::extensions::shared_library>, boost::shared_ptr<BaseClass> >(library, class_ptr);
+	return class_ptr;
 }
 
 template <class BaseClass>
