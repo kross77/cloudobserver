@@ -69,6 +69,12 @@ CMAKE_SETUP_FILE_NAME=cmake_net_setup.sh
 
 PREMAKE_SETUP_FILE_NAME=premake_net_setup.sh
 
+PREMAKE_DISTRO_SITE=surfnet.dl.sourceforge.net
+PREMAKE_NAME=premake-4.3-src
+PREMAKE_VERSION=4.3
+PREMAKE_DISTRO_NAME="$PREMAKE_NAME".zip
+PREMAKE_ROOT_DIR=premake
+
 
 echo 
 echo --CF autobuild team welcomes you!----------------------------------------------
@@ -243,12 +249,22 @@ if [ ! -d $OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR/lib ]; then
 	cd ..
 fi
 
-if [ ! -e $PREMAKE_SETUP_FILE_NAME ]; then
-	echo_run wget http://cloudobserver.googlecode.com/svn/trunk/CloudLoader/$PREMAKE_SETUP_FILE_NAME
-	echo_run chmod u+x $PREMAKE_SETUP_FILE_NAME
+# Premake
+if [ ! -e $PREMAKE_DISTRO_NAME ]; then
+	# get boost
+	echo_run ${CURL_CMD} http://$PREMAKE_DISTRO_SITE/project/premake/Premake/$PREMAKE_VERSION/$PREMAKE_DISTRO_NAME -o $PREMAKE_DISTRO_NAME
 fi
 
-echo_run ./$PREMAKE_SETUP_FILE_NAME 
+if [ ! -d premake-4.3/bin/release ]; then
+	# move the boost distro into place
+	echo_run unzip $PREMAKE_DISTRO_NAME
+	
+	cd ./premake-4.3/build/gmake.unix
+	
+	echo_run make config=release
+	
+	cd ../../..
+fi
 
 cd $CLOUD_COMPONENT_NAME
 
