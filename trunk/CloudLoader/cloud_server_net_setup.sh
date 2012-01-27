@@ -126,7 +126,6 @@ extract() # 1=DISTRO_NAME 2=ROOT_DIR 3=NAME
 load() # 1=DISTRO_NAME 2=ROOT_DIR 3=NAME 4=VERSION 5=BOOST_DISTRO_SITE 6=INSTALL_SUBDIR 7=PROJECT_URL
 {
 	if [ ! -e $1 ]; then
-		# get boost
 		echo_run ${CURL_CMD} http://$5/$7/$4/$1 -o $1
 	fi
 	  
@@ -134,7 +133,6 @@ load() # 1=DISTRO_NAME 2=ROOT_DIR 3=NAME 4=VERSION 5=BOOST_DISTRO_SITE 6=INSTALL
 		echo_run mkdir $2
 	fi
 	
-	# move the boost distro into place
 	if [ ! -d $2/$6/lib ]; then
 		extract  $1 $2 $3
 	fi
@@ -215,7 +213,6 @@ cd ..
 
 # OpenSSL
 if [ ! -e $OPENSSL_DISTRO_NAME ]; then
-	# get boost
 	echo_run ${CURL_CMD} http://$OPENSSL_DISTRO_SITE/source/$OPENSSL_DISTRO_NAME -o $OPENSSL_DISTRO_NAME
 fi
   
@@ -223,7 +220,6 @@ if [ ! -d $OPENSSL_ROOT_DIR ]; then
 	echo_run mkdir $OPENSSL_ROOT_DIR
 fi
 
-# move the boost distro into place
 if [ ! -d $OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR/lib ]; then
 	echo_run tar -xzf $OPENSSL_DISTRO_NAME
 	echo_run rm -rf $OPENSSL_ROOT_DIR
@@ -249,12 +245,10 @@ fi
 
 # Premake
 if [ ! -e $PREMAKE_DISTRO_NAME ]; then
-	# get boost
 	echo_run ${CURL_CMD} http://$PREMAKE_DISTRO_SITE/project/premake/Premake/$PREMAKE_VERSION/$PREMAKE_DISTRO_NAME -o $PREMAKE_DISTRO_NAME
 fi
 
 if [ ! -d premake-4.3/bin/release ]; then
-	# move the boost distro into place
 	echo_run unzip $PREMAKE_DISTRO_NAME
 	
 	cd ./premake-4.3/build/gmake.unix
