@@ -23,7 +23,7 @@ class my_plugin: public plugin
 		virtual boost::shared_ptr<std::string> pass_and_modify_data( boost::shared_ptr<std::string>  a)
 		{
 			std::cout << "incoming data: " << *a << std::endl;
-			return boost::shared_ptr<std::string>(new std::string( *a + " La la la "), boost::bind(&my_plugin::delete_ptr, this, _1));
+			return boost::shared_ptr<std::string>(new std::string( *a + " La la la "), boost::bind(&deleter_namespace::delete_ptr<std::string>, _1));
 		}
 
 		virtual void simple_call()
