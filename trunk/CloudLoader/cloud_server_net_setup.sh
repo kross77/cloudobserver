@@ -13,10 +13,6 @@ OS_NAME=linux # could be `macosx`
 SVN_OPT=export # could be `co` or `checkout`
 KEEP_OLD=no
 
-BOOST_ROOT_DIR=boost_libraries
-BOOST_INSTALL_SUBDIR=install-dir
-BOOST_SETUP_FILE_NAME=boost_net_setup.sh
-
 BOOST_DISTRO_SITE=surfnet.dl.sourceforge.net
 BOOST_PROJECT_URL=project/boost/boost
 BOOST_NAME=boost_1_47_0
@@ -36,20 +32,12 @@ ZLIB_ROOT_DIR=zlib_libraries
 ZLIB_INSTALL_SUBDIR=install-dir
 ZLIB_COMPILE_SUBDIR=build-dir
 
-OPENSSL_ROOT_DIR=openssl_libraries
-OPENSSL_INSTALL_SUBDIR=install-dir
-OPENSSL_SETUP_FILE_NAME=openssl_net_setup.sh
-
 OPENSSL_DISTRO_SITE=www.openssl.org
 OPENSSL_NAME=openssl-1.0.0d
 OPENSSL_DISTRO_NAME="$OPENSSL_NAME".tar.gz
 OPENSSL_ROOT_DIR=openssl_libraries
 OPENSSL_INSTALL_SUBDIR=install-dir
 OPENSSL_COMPILE_SUBDIR=build-dir
-
-OPENCV_ROOT_DIR=opencv_libraries
-OPENCV_INSTALL_SUBDIR=install-dir
-OPENCV_SETUP_FILE_NAME=opencv_net_setup.sh
 
 OPENCV_DISTRO_SITE=surfnet.dl.sourceforge.net
 OPENCV_PROJECT_URL=project/opencvlibrary/opencv-unix
@@ -63,10 +51,7 @@ OPENCV_COMPILE_SUBDIR=build-dir
 #-L protects against redirects
 CURL_CMD=curl\ -L
 
-CMAKE_SETUP_FILE_WEB_PATH=http://cloudobserver.googlecode.com/svn-history/r1597/trunk/CloudLoader/cmake_net_setup.sh
 CMAKE_PATH=./cmake/bin/cmake
-CMAKE_SETUP_FILE_NAME=cmake_net_setup.sh
-
 CMAKE_DISTRO_SITE=www.cmake.org
 CMAKE_PROJECT_URL=files
 CMAKE_NAME=cmake-2.8.6
@@ -75,8 +60,6 @@ CMAKE_DISTRO_NAME="$CMAKE_NAME".tar.gz
 CMAKE_ROOT_DIR=cmake
 CMAKE_INSTALL_SUBDIR=install-dir
 CMAKE_COMPILE_SUBDIR=build-dir
-
-PREMAKE_SETUP_FILE_NAME=premake_net_setup.sh
 
 PREMAKE_DISTRO_SITE=surfnet.dl.sourceforge.net
 PREMAKE_NAME=premake-4.3-src
