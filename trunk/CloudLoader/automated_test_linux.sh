@@ -1,6 +1,6 @@
 #!/bin/bash
 LOCAL_REV=0
-LOADER="cloud_server_net_setup.sh"
+LOADER="cloud-loader-linux.sh"
 LOADER_URL="http://cloudobserver.googlecode.com/svn/trunk/CloudLoader/$LOADER"
 LOADER_REV=0
 REMOTE_REPO="http://cloudobserver.googlecode.com/svn/"
