@@ -5,6 +5,17 @@
 #include <string>
 #include <boost/shared_ptr.hpp>
 
+namespace deleter_namespace
+{
+	template<class T>
+	void delete_ptr(T * ptr)
+	{
+		std::cout << "Deallocator function." << std::endl;
+		delete ptr;
+	};
+}
+
+
 class deleter
 {
 	public:

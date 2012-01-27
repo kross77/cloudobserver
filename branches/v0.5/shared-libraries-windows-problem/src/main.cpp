@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 
+#include <boost/bind.hpp>
 #include <boost/shared_ptr.hpp>
 //Extension includes
 #include <extension_utils.h>
@@ -48,7 +49,7 @@ int main()
 	std::cout << std::endl << "Modern memory management:" << std::endl;
 	std::cin.get();
 	{
-		boost::shared_ptr<std::string> a(new std::string("A b c d e f g"));
+		boost::shared_ptr<std::string> a(new std::string("A b c d e f g"),  boost::bind(&deleter_namespace::delete_ptr<std::string>, _1));
 		boost::shared_ptr<std::string> b = my_plugin->pass_and_modify_data(a);
 		std::cout << "modified data: " << *b << std::endl;
 	}
