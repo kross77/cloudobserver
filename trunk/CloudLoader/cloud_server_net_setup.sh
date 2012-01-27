@@ -13,6 +13,7 @@ OS_NAME=linux # could be `macosx`
 
 SVN_OPT=export # could be `co` or `checkout`
 KEEP_OLD=no
+REBUILD_LIBRARIES=no
 
 BOOST_DISTRO_SITE=surfnet.dl.sourceforge.net
 BOOST_PROJECT_URL=project/boost/boost
@@ -73,7 +74,7 @@ echo
 echo --CF autobuild team welcomes you!----------------------------------------------
 echo -------------------------------------------------------------------------------
 echo --This build API:--------------------------------------------------------------
-echo ./cloud_server_net_setup.sh KEEP_OLD
+echo ./cloud_server_net_setup.sh KEEP_OLD REBUILD_LIBRARIES
 echo -------------------------------------------------------------------------------
 echo Please be patient. Go get yourself a coup of coffee - auto build process can take a long time.
 echo -------------------------------------------------------------------------------
@@ -81,6 +82,10 @@ echo
 
 if [ "$1" != "" ]; then
 	KEEP_OLD="$1"
+fi
+
+if [ "$2" != "" ]; then
+	REBUILD_LIBRARIES="$2"
 fi
 
 echo_run ()
@@ -153,7 +158,7 @@ else
 fi
 
 # CMake
-if [ ! -d $CMAKE_ROOT_DIR ]; then
+if [ ! -d $CMAKE_ROOT_DIR -o "$REBUILD_LIBRARIES" = "yes" ]; then
 	load $CMAKE_DISTRO_NAME $CMAKE_ROOT_DIR $CMAKE_NAME $CMAKE_VERSION $CMAKE_DISTRO_SITE $CMAKE_INSTALL_SUBDIR $CMAKE_PROJECT_URL
 	cd $CMAKE_ROOT_DIR
 
@@ -164,7 +169,7 @@ if [ ! -d $CMAKE_ROOT_DIR ]; then
 fi
 
 # OpenCV
-if [ ! -d $OPENCV_ROOT_DIR ]; then
+if [ ! -d $OPENCV_ROOT_DIR -o "$REBUILD_LIBRARIES" = "yes" ]; then
 	load $OPENCV_DISTRO_NAME $OPENCV_ROOT_DIR $OPENCV_NAME $OPENCV_VERSION $OPENCV_DISTRO_SITE $OPENCV_INSTALL_SUBDIR $OPENCV_PROJECT_URL
 
 	cd $OPENCV_ROOT_DIR
@@ -178,7 +183,7 @@ if [ ! -d $OPENCV_ROOT_DIR ]; then
 fi
 
 # Boost
-if [ ! -d $BOOST_ROOT_DIR ]; then
+if [ ! -d $BOOST_ROOT_DIR -o "$REBUILD_LIBRARIES" = "yes" ]; then
 	if [ ! -d ./$ALTERNATIVE_ZLIB_FOLDER ]; then
 		load $ZLIB_DISTRO_NAME $ZLIB_ROOT_DIR $ZLIB_NAME $ZLIB_VERSION $BOOST_DISTRO_SITE $ZLIB_INSTALL_SUBDIR $ZLIB_PROJECT_URL
 	else
@@ -199,7 +204,7 @@ if [ ! -d $BOOST_ROOT_DIR ]; then
 fi
 
 # OpenSSL
-if [ ! -d $OPENSSL_ROOT_DIR ]; then
+if [ ! -d $OPENSSL_ROOT_DIR -o "$REBUILD_LIBRARIES" = "yes" ]; then
 	if [ ! -e $OPENSSL_DISTRO_NAME ]; then
 		echo_run ${CURL_CMD} http://$OPENSSL_DISTRO_SITE/source/$OPENSSL_DISTRO_NAME -o $OPENSSL_DISTRO_NAME
 	fi
@@ -223,7 +228,7 @@ if [ ! -d $OPENSSL_ROOT_DIR ]; then
 fi
 
 # Premake
-if [ ! -d premake-4.3 ]; then
+if [ ! -d premake-4.3 -o "$REBUILD_LIBRARIES" = "yes" ]; then
 	if [ ! -e $PREMAKE_DISTRO_NAME ]; then
 		echo_run ${CURL_CMD} http://$PREMAKE_DISTRO_SITE/project/premake/Premake/$PREMAKE_VERSION/$PREMAKE_DISTRO_NAME -o $PREMAKE_DISTRO_NAME
 	fi
