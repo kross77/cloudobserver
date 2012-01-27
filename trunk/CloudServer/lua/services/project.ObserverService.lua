@@ -4,10 +4,11 @@ project "ObserverService"
 	location ( "projects/" .. os.get() .. "-" .. action )
 	
 	cloud.project.init()
-	cloud.project.useBoost()
 
 	links { "cf-http" }
 	includedirs { "3rdparty/cf-http" }
+	
+	cloud.project.useBoost()
 	
 	files { "src/default-services/observer_service/**"}
 
