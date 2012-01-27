@@ -20,6 +20,17 @@ Here is how you can use it:
 	nohup ./automated_test_linux.sh >& /dev/null &
 }}}
 
+when you'll get tired of it just get scripts process ID:
+{{{
+	echo `ps -fe | grep -F 'automated_test_linux' | grep -v -F 'grep' | awk '{ print $2 }'`
+}}}
+and `kill` it, then find CloudServer's process ID:
+{{{
+	 echo `ps aux | grep -F 'CloudServer' | grep -v -F 'grep' | awk '{ print $2 }'`
+}}}
+and `kill` CloudServer.
+
+
 === Warning ===
 Scripts have problems with paths containing either non-ASCII characters or spaces. (you can use `pwd` command to find your current path) so we recommend first of all to try and run [http://code.google.com/p/cloudobserver/wiki/BuildingCloudServer Cloud Server network build/setup script] in the directory you want automated builds test script to work.
 
