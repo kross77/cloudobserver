@@ -86,26 +86,24 @@
 
     </head>
     <body>
-	<br/><br/><br/>
+	<div class="pseudo-no-js-heaser"><br/><br/><br/></div>	
 	
-	<div  class="files-box fun not-loged-in-user list" style=" text-align:center; position:fixed; top:0; min-width:500px;">	
-				
-				<h3 style="text-align:center;">
-					Live Streams
-				</h3>
-				
-      			<ul class="usersList">
-                </ul>
-			</div>
-			<br/>
-			<div class="loged-in-user" >
+	<div  class="files-box fun not-loged-in-user list" style=" text-align:center; position:fixed; top:0; min-width:500px;">			
+		<h3 class="live-streams-header" style="text-align:center;">
+			Live Streams
+		</h3>
+		
+		<ul class="usersList">
+        </ul>
+	</div>
+	<div class="loged-in-user" >
 				<a style="text-decoration:none; width:49%">
-					<h3  style=" position:absolute;  width:49%; right:0;">
+					<h3 id="live-streams-header"  style=" position:absolute;  width:49%; right:0;">
 					Live Streams
 					</h3> 
 				</a>
-			</div>
-			<div class="description-box loged-in-user">
+			
+			<div class="description-box">
 				<h3 class="fun">
 					Observer Service Welcomes You.
 				</h3>
@@ -196,15 +194,21 @@
 				$('.windows_link').attr("href", current_windows_client_url);
 				$('.mac_link').attr("href", current_mac_client_url);
 		    </script>	
-		</div>
-	</div>
 			<br/><br/>
-			<div id="tabs-fun" class="files-box fun loged-in-user">	
+			</div>
+
+			</div>
+			<div id="tabs-fun" class="files-box fun">	
       			<ul class="usersList">
                 </ul>
 			</div>
+			<script>
+			function tabs_fun_div_position_update_with_upload_button_height() {
+				$('.usersList').css("margin-top", "" + $('#live-streams-header').height() + "px" );
+			}
+			page_update.add(tabs_fun_div_position_update_with_upload_button_height)
+			</script>
+			</div>
 			<br/>
-		
-
     </body>
 </html>
