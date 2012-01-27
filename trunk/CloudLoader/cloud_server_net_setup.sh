@@ -67,6 +67,15 @@ CMAKE_SETUP_FILE_WEB_PATH=http://cloudobserver.googlecode.com/svn-history/r1597/
 CMAKE_PATH=./cmake/bin/cmake
 CMAKE_SETUP_FILE_NAME=cmake_net_setup.sh
 
+CMAKE_DISTRO_SITE=www.cmake.org
+CMAKE_PROJECT_URL=files
+CMAKE_NAME=cmake-2.8.6
+CMAKE_VERSION=v2.8
+CMAKE_DISTRO_NAME="$CMAKE_NAME".tar.gz
+CMAKE_ROOT_DIR=cmake
+CMAKE_INSTALL_SUBDIR=install-dir
+CMAKE_COMPILE_SUBDIR=build-dir
+
 PREMAKE_SETUP_FILE_NAME=premake_net_setup.sh
 
 PREMAKE_DISTRO_SITE=surfnet.dl.sourceforge.net
@@ -181,13 +190,19 @@ else
 	echo_run ${SVN_CMD} https://$CLOUD_DISTRO_SITE/svn/trunk/$CLOUD_COMPONENT_NAME/ $CLOUD_COMPONENT_NAME
 fi
 
-# OpenCV
+# CMake
 if [ ! -e $CMAKE_PATH ]; then
-	echo_run wget $CMAKE_SETUP_FILE_WEB_PATH
-	echo_run chmod u+x ./$CMAKE_SETUP_FILE_NAME
-	echo_run ./$CMAKE_SETUP_FILE_NAME
+	load $CMAKE_DISTRO_NAME $CMAKE_ROOT_DIR $CMAKE_NAME $CMAKE_VERSION $CMAKE_DISTRO_SITE $CMAKE_INSTALL_SUBDIR $CMAKE_PROJECT_URL
+	cd $CMAKE_ROOT_DIR
+
+	echo_run ./bootstrap --prefix=./$CMAKE_INSTALL_SUBDIR; 
+	echo_run make
+	echo_run make install
+	
+	cd ..
 fi
 
+# OpenCV
 load $OPENCV_DISTRO_NAME $OPENCV_ROOT_DIR $OPENCV_NAME $OPENCV_VERSION $OPENCV_DISTRO_SITE $OPENCV_INSTALL_SUBDIR $OPENCV_PROJECT_URL
 
 cd $OPENCV_ROOT_DIR
