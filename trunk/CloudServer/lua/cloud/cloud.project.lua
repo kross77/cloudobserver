@@ -104,16 +104,13 @@ function cloud.project.useCV()
 			"opencv_core",
 			"opencv_highgui"
 		}
-		if  _OPTIONS["OpenCVshared"] then else
-			links {
-				"libjasper",
-				"libjpeg",
-				"libpng",
-				"libtiff",
-				"zlib"
-			}
-
-		end
+		links {
+			"libjasper",
+			"libjpeg",
+			"libpng",
+			"libtiff",
+			"zlib"
+		}
 	end
 	
 	if os.get() == "macosx" then
@@ -125,18 +122,16 @@ function cloud.project.useCV()
 			"QuickTime.framework"
 		}
 		
-		if  _OPTIONS["OpenCVshared"] then else
-			links {
-				"libjasper",
-				"libjpeg",
-				"libpng",
-				"libtiff",
-				"zlib",
-				"AppKit.framework",
-				"CoreVideo.framework",
-				"QTKit.framework",
-			}
-		end
+		links {
+			"libjasper",
+			"libjpeg",
+			"libpng",
+			"libtiff",
+			"zlib",
+			"AppKit.framework",
+			"CoreVideo.framework",
+			"QTKit.framework",
+		}
 	end 
 end
 
