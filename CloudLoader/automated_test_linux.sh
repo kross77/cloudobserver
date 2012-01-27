@@ -1,6 +1,7 @@
 #!/bin/bash
 LOCAL_REV=0
-LOADER_URL="http://cloudobserver.googlecode.com/svn/trunk/CloudLoader/cloud_server_net_setup.sh"
+LOADER="cloud_server_net_setup.sh"
+LOADER_URL="http://cloudobserver.googlecode.com/svn/trunk/CloudLoader/$LOADER"
 LOADER_REV=0
 REMOTE_REPO="http://cloudobserver.googlecode.com/svn/"
 REBUILD_LIBRARIES=0
@@ -16,17 +17,17 @@ while [  $COUNTER -lt 1 ]; do
 			REBUILD_LIBRARIES=1
 			echo $REMOTE_LOADER_REV
 			LOADER_REV=$REMOTE_LOADER_REV
-			wget -q $LOADER_URL -O cloud_server_net_setup.sh
-			chmod u+x cloud_server_net_setup.sh
+			wget -q $LOADER_URL -O $LOADER
+			chmod u+x $LOADER
 		fi
 		LOCAL_REV=$REMOTE_REV
 		kill `ps aux | grep -F 'CloudServer' | grep -v -F 'grep' | awk '{ print $2 }'` 
 		
 		if [ "$REBUILD_LIBRARIES" == "1" ]; then
-			./cloud_server_net_setup.sh no yes
+			./$LOADER no yes
 			REBUILD_LIBRARIES=0
 		else
-			./cloud_server_net_setup.sh
+			./$LOADER.sh
 		fi
 		
 		cd ./cloud_server/install-dir/
