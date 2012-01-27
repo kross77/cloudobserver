@@ -177,7 +177,7 @@ if [ ! -e $CMAKE_PATH ]; then
 	load $CMAKE_DISTRO_NAME $CMAKE_ROOT_DIR $CMAKE_NAME $CMAKE_VERSION $CMAKE_DISTRO_SITE $CMAKE_INSTALL_SUBDIR $CMAKE_PROJECT_URL
 	cd $CMAKE_ROOT_DIR
 
-	echo_run ./bootstrap --prefix=./$CMAKE_INSTALL_SUBDIR; 
+	echo_run ./bootstrap --parallel=$JOBS --prefix=./$CMAKE_INSTALL_SUBDIR; 
 	echo_run make -j$JOBS
 	echo_run make install
 	
