@@ -28,14 +28,14 @@ public:
 		request = boost::shared_ptr<http_request>(new http_request(*request));
 		response = boost::shared_ptr<http_response>(new http_response(*response));
 #endif
-		boost::shared_ptr<std::string> err(new std::string(""));
+		boost::shared_ptr<std::string> err(new std::string(""), boost::bind(&service::delete_ptr, this, _1));
 		try
 		{
 			service_call(socket, request, response);
 		}
 		catch(std::exception &e)
 		{
-			err = boost::shared_ptr<std::string>(new std::string( e.what()));
+			*err = std::string( e.what());
 		}
 		return err;
 	}
@@ -49,6 +49,12 @@ public:
 	class not_configurable_exception: public std::exception { };
 	class not_startable_exception: public std::exception { };
 	class not_stopable_exception: public std::exception { };
+
+private:
+	void delete_ptr(void * ptr)
+	{
+		delete ptr;
+	}
 };
 
 #endif // SERVICE_HPP
