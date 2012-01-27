@@ -75,7 +75,7 @@ public:
 		}
 		boost::shared_ptr<http_response> response = boost::shared_ptr<http_response>(new http_response(hres));
 
-		boost::shared_ptr<std::string> err(new std::string(""), boost::bind(&service::delete_ptr, this, _1));
+		boost::shared_ptr<std::string> err(new std::string(""), boost::bind(&general_utils::delete_ptr<std::string>, _1));
 		try
 		{
 			service_call(socket, request, response);
@@ -96,12 +96,6 @@ public:
 	class not_configurable_exception: public std::exception { };
 	class not_startable_exception: public std::exception { };
 	class not_stopable_exception: public std::exception { };
-
-private:
-	void delete_ptr(void * ptr)
-	{
-		delete ptr;
-	}
 };
 
 #endif // SERVICE_HPP
