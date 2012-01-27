@@ -444,6 +444,6 @@ bool file_service::try_send_info( boost::shared_ptr<fs_file> f,boost::shared_ptr
 
 BOOST_EXTENSION_TYPE_MAP_FUNCTION
 {
-	std::map<std::string, boost::extensions::factory<service> > &factories(types.get());
+	std::map<std::string, boost::extensions::factory<base_service> > &factories(types.get());
 	factories["file_service"].set<file_service>();
 }

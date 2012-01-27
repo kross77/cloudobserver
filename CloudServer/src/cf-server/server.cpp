@@ -129,7 +129,7 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 				return;
 			}
 
-			boost::shared_ptr<service> requested_service = service_cont->service_ptr;
+			boost::shared_ptr<base_service> requested_service = service_cont->service_ptr;
 
 			util->tread_util->safe_insert<boost::thread::id, std::set<boost::thread::id> >(boost::this_thread::get_id(),service_cont->threads_ids);
 

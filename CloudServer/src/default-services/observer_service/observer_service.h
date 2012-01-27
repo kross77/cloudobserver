@@ -45,8 +45,6 @@ private:
 	bool dump_readers;
 
 	std::map<std::string, observer_writer*> writers;
-
-	CLOUD_SERVICE_AUXILIARIES;
 };
 
 #endif // OBSERVER_SERVICE_H

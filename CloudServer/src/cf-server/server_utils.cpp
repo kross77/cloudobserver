@@ -78,9 +78,9 @@ server_utils::~server_utils()
 	delete tread_util_local;
 }
 
-boost::shared_ptr<service> server_utils::create_service(std::string library_name, std::string class_name_inside_lib, boost::property_tree::ptree config)
+boost::shared_ptr<base_service> server_utils::create_service(std::string library_name, std::string class_name_inside_lib, boost::property_tree::ptree config)
 {
-	return extension_utils::give_me_class<service, boost::property_tree::ptree>(library_name, class_name_inside_lib, config);
+	return extension_utils::give_me_class<base_service, boost::property_tree::ptree>(library_name, class_name_inside_lib, config);
 }
 
 //Do not forget to change save_config if you change parse_config_services
@@ -172,14 +172,14 @@ std::map<std::string, boost::shared_ptr<server_utils::service_container> > serve
 		}
 
 		try{
-			boost::shared_ptr<service> one_service = extension_utils::give_me_class<service>(service_library_name, service_class_name);
+			boost::shared_ptr<base_service> one_service = extension_utils::give_me_class<base_service>(service_library_name, service_class_name);
 			try
 			{
 				boost::shared_ptr<boost::property_tree::ptree> service_custom_properties_tree(new boost::property_tree::ptree(one_description->service_custome_properties_tree));
 				one_service->apply_config(service_custom_properties_tree);
 				one_description->service_ptr = one_service;
 			}
-			catch (service::not_configurable_exception)
+			catch (base_service::not_configurable_exception)
 			{
 				*warning << "Service '" << service_name << " is not configurable." << log_util::endl;
 			}
@@ -333,7 +333,7 @@ boost::shared_ptr<server_utils::service_container> server_utils::get_service_des
 	return null;
 }
 
-boost::shared_ptr<service> server_utils::get_service_by_name(std::string name)
+boost::shared_ptr<base_service> server_utils::get_service_by_name(std::string name)
 {
 	typedef std::map<std::string, boost::shared_ptr<server_utils::service_container> > map_t;
 	map_t::iterator it = description.service_map.find(name);
@@ -345,7 +345,7 @@ boost::shared_ptr<service> server_utils::get_service_by_name(std::string name)
 	{
 		throw std::runtime_error("Service with such name was not found map not found!");
 	}
-	boost::shared_ptr<service> null;
+	boost::shared_ptr<base_service> null;
 	return null;
 }
 
@@ -436,7 +436,7 @@ void server_utils::add_to_services_list( boost::property_tree::ptree config )
 
 		try
 		{
-			one_description->service_ptr = extension_utils::give_me_class<service, boost::property_tree::ptree>(service_library_name, service_class_name, one_description->service_custome_properties_tree);
+			one_description->service_ptr = extension_utils::give_me_class<base_service, boost::property_tree::ptree>(service_library_name, service_class_name, one_description->service_custome_properties_tree);
 			description.service_map.insert(std::pair<std::string, boost::shared_ptr<server_utils::service_container> >(service_name, one_description));
 		}
 		catch(std::exception &e)

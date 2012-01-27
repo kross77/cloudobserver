@@ -576,9 +576,6 @@ public:
 
 private:
 	boost::shared_ptr<filter_utils::fill_utils>  fill_util;
-	CLOUD_SERVICE_AUXILIARIES;
-
-
 };
 
 #endif // IMAGE_RENDERER_SERVICE

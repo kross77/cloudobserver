@@ -47,7 +47,7 @@ public:
 	struct service_container
 	{
 		//A service must have
-		boost::shared_ptr<service> service_ptr;
+		boost::shared_ptr<base_service> service_ptr;
 		std::string library_name;
 		std::string class_name;
 		std::string root_file_system_directory;
@@ -100,7 +100,7 @@ public:
 
 	// Creates class that is inherited from service class\interface, we plan to send to each service server_description with out service_map but with this wary service ptree description
 	// Main point is for the service to get as much as possible information about its host server, its own configuration.
-	boost::shared_ptr<service> create_service(std::string library_name, std::string class_name_inside_lib, boost::property_tree::ptree config); 
+	boost::shared_ptr<base_service> create_service(std::string library_name, std::string class_name_inside_lib, boost::property_tree::ptree config); 
 
 	server_utils::server_description parse_config(boost::property_tree::ptree config); 
 	boost::property_tree::ptree save_config( server_utils::server_description server_configuration_description); 
@@ -111,7 +111,7 @@ public:
 
 	void add_to_services_list(boost::property_tree::ptree config);
 
-	boost::shared_ptr<service> get_service_by_name(std::string name);
+	boost::shared_ptr<base_service> get_service_by_name(std::string name);
 	boost::shared_ptr<server_utils::service_container> get_service_description_by_name(std::string name);
 
 	std::multiset<std::string> get_services_names();

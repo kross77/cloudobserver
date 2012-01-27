@@ -98,10 +98,6 @@ private:
 		static T pt;
 		return pt;
 	}
-
-	CLOUD_SERVICE_AUXILIARIES;
-
-
 };
 
 #endif // USERS_FILES_SERVICE_H
