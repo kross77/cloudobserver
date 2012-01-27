@@ -41,9 +41,13 @@ $(document).ready(function() {
 			var elemZIndex = $(this).css('z-index', '100');
 			var elemPos = $(this).offset();
 	
-			$(this).append('<div id="newer" class="new" style="position:absolute; left:' +( eventObj.pageX) + 'px; top:' + 0 + 'px; z-index:' + (elemZIndex + 10) + '">&nbsp;</div>');
+			var ran_unrounded=Math.random()*50000;
+		var ran_number = Math.floor(ran_unrounded);
+		var newer = "newer" +  ran_number;
+		var newer_id = "#" + newer;
+		$(this).append('<div id=\"'+newer+'\" class="new" style="position:absolute; left:' +( eventObj.pageX) + 'px; top:' + 0 + 'px; z-index:' + (elemZIndex + 10) + '">&nbsp;</div>');
 	//( elemPos.top  + (40%(eventObj.pageY))
-			$('#newer').grumble({
+			$(newer_id).grumble({
 				text: "  <a href='#' class='logout-but'><h3>Log me out</h3></a> <br/> <a href='#' ><h3>Cancel</h3></a>    ",
 				angle: (Math.random() * 50 + 130),
 				distance: 3,
@@ -63,9 +67,9 @@ $(document).ready(function() {
 					$('.border').removeClass("border");
 				},
 				onHide: function() {
-					$("#newer").empty();
-					$("#newer").detach();
-					$("#newer").remove();
+					$(".new").empty();
+					$(".new").detach();
+					$(".new").remove();
 				}
 			});
 	

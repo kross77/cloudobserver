@@ -30,10 +30,15 @@ $(document).ready(function() {
 		th =  $(this);
 		var elemZIndex = $(this).css('z-index', '100');
 		var elemPos = $(this).offset();
+		
+		var ran_unrounded=Math.random()*50000;
+		var ran_number = Math.floor(ran_unrounded);
+		var newer = "newer" +  ran_number;
+		var newer_id = "#" + newer;
+		
+		$(this).append('<div id=\"'+newer+'\" class="new" style="position:relative; '+ ' top:' + -15 + 'px; z-index:' + (elemZIndex + 10) + '">&nbsp;</div>');
 
-		$(this).append('<div id="newer" class="new" style="position:relative; '+ ' top:' + -15 + 'px; z-index:' + (elemZIndex + 10) + '">&nbsp;</div>');
-
-		$('#newer').grumble({
+		$(newer_id).grumble({
 			text: "  <a href='/" + this.id + "' target='_blank' class='logout-but'><h3>Download</h3></a> <br/> <a href='#' ><h3>Cancel</h3></a>    ",
 			angle: (Math.random() * 50 + 190),
 			distance: 3,
@@ -50,9 +55,9 @@ $(document).ready(function() {
 				$('.border2').removeClass("border2");
 			},
 			onHide: function() {
-				$("#newer").empty();
-				$("#newer").detach();
-				$("#newer").remove();
+				$(".new").empty();
+				$(".new").detach();
+				$(".new").remove();
 			}
 		});
 
