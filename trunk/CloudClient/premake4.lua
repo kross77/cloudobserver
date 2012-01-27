@@ -409,6 +409,7 @@ function cloud.project.useBoost()
 		links {
 			"boost_regex",
 			"boost_system",
+			"boost_serialization",
 			"boost_thread"
 		}
 	end
@@ -417,6 +418,7 @@ function cloud.project.useBoost()
 		links {
 			"boost_regex",
 			"boost_system",
+			"boost_serialization",
 			"boost_thread"
 		}	
 	end 
