@@ -1,6 +1,6 @@
 #!/bin/bash
 # requires svn, curl, gcc
-JX=-j`grep ^processor /proc/cpuinfo | wc -l`
+JOBS=`grep ^processor /proc/cpuinfo | wc -l`
 
 CLOUD_DISTRO_SITE=cloudobserver.googlecode.com
 CLOUD_COMPONENT_NAME=CloudServer
@@ -178,7 +178,7 @@ if [ ! -e $CMAKE_PATH ]; then
 	cd $CMAKE_ROOT_DIR
 
 	echo_run ./bootstrap --prefix=./$CMAKE_INSTALL_SUBDIR; 
-	echo_run make $JX
+	echo_run make -j$JOBS
 	echo_run make install
 	
 	cd ..
@@ -190,7 +190,7 @@ load $OPENCV_DISTRO_NAME $OPENCV_ROOT_DIR $OPENCV_NAME $OPENCV_VERSION $OPENCV_D
 cd $OPENCV_ROOT_DIR
 
 echo_run ../$CMAKE_PATH -DCMAKE_INSTALL_PREFIX=./$OPENCV_INSTALL_SUBDIR -DBUILD_SHARED_LIBS=ON -DBUILD_PYTHON_SUPPORT=OFF -DOPENCV_EXTRA_C_FLAGS=-fPIC -DOPENCV_BUILD_3RDPARTY_LIBS=TRUE
-make $JX
+make -j$JOBS
 make install
 
 cd ..
@@ -208,7 +208,7 @@ cd $BOOST_ROOT_DIR
 
 echo_run ./bootstrap.sh
 
-echo_run ./b2 $JX -d0 --with-thread --with-system --with-filesystem --with-serialization --with-program_options --with-regex --with-date_time --with-iostreams -sZLIB_SOURCE="$WD/$CLOUD_ROOT_DIR/$ZLIB_ROOT_DIR/" -sNO_BZIP2=1  link=shared --prefix=./$BOOST_INSTALL_SUBDIR release --builddir=./$BOOST_COMPILE_SUBDIR install
+echo_run ./b2 -j$JOBS -d0 --with-thread --with-system --with-filesystem --with-serialization --with-program_options --with-regex --with-date_time --with-iostreams -sZLIB_SOURCE="$WD/$CLOUD_ROOT_DIR/$ZLIB_ROOT_DIR/" -sNO_BZIP2=1  link=shared --prefix=./$BOOST_INSTALL_SUBDIR release --builddir=./$BOOST_COMPILE_SUBDIR install
 
 cd ..
 
@@ -229,7 +229,7 @@ if [ ! -d $OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR/lib ]; then
 	cd $OPENSSL_ROOT_DIR
 
 	echo_run ./config shared no-asm
-	echo_run make $JX
+	echo_run make -j$JOBS
 
 	if [ ! -d $OPENSSL_INSTALL_SUBDIR ]; then
 		echo_run mkdir $OPENSSL_INSTALL_SUBDIR
@@ -254,7 +254,7 @@ if [ ! -d premake-4.3/bin/release ]; then
 	
 	cd ./premake-4.3/build/gmake.unix
 	
-	echo_run make $JX config=release
+	echo_run make -j$JOBS config=release
 	
 	cd ../../..
 fi
@@ -270,7 +270,7 @@ echo_run ./$CLOUD_LOCAL_BUILDING_FILE_NAME
 
 cd projects/$OS_NAME-gmake
 
-echo_run make $JX config=release
+echo_run make -j$JOBS config=release
 
 #if [ ! -d ../../../$CLOUD_INSTALL_SUBDIR/lib_boost ]; then
 	echo_run rm -rf ../../../$CLOUD_INSTALL_SUBDIR/lib_boost
