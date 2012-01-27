@@ -246,9 +246,6 @@ echo_run make -j$JOBS config=release
 
 echo_run cp -r ./bin/release/* ../../../$CLOUD_INSTALL_SUBDIR/
 cd ../../../
-export LD_LIBRARY_PATH=./
-echo -------------------------------------------------------------------------------
-echo DO NOT FORGET TO CALL "export LD_LIBRARY_PATH=./"
 echo Done!
 
 exit 0
