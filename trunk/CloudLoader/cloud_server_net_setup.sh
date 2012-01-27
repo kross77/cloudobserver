@@ -248,15 +248,11 @@ echo_run rm -rf ../../../$CLOUD_INSTALL_SUBDIR/lib_boost
 echo_run mkdir ../../../$CLOUD_INSTALL_SUBDIR/lib_boost
 echo_run cp -r ../../../$BOOST_ROOT_DIR/$BOOST_INSTALL_SUBDIR/lib/* ../../../$CLOUD_INSTALL_SUBDIR/lib_boost/
 
-echo_run rm -rf ../../../$CLOUD_INSTALL_SUBDIR/lib_opencv
-echo_run mkdir ../../../$CLOUD_INSTALL_SUBDIR/lib_opencv
-echo_run cp -r ../../../$OPENCV_ROOT_DIR/$OPENCV_INSTALL_SUBDIR/lib/* ../../../$CLOUD_INSTALL_SUBDIR/lib_opencv/
-
 echo_run cp -r ./bin/release/* ../../../$CLOUD_INSTALL_SUBDIR/
 cd ../../../
-export LD_LIBRARY_PATH=./:./lib_boost/:./lib_opencv/
+export LD_LIBRARY_PATH=./:./lib_boost/
 echo -------------------------------------------------------------------------------
-echo DO NOT FORGET TO CALL "export LD_LIBRARY_PATH=./:./lib_boost/:./lib_opencv/"
+echo DO NOT FORGET TO CALL "export LD_LIBRARY_PATH=./:./lib_boost/"
 echo Done!
 
 exit 0
