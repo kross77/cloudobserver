@@ -238,8 +238,3 @@ boost::property_tree::ptree server::get_configuration()
 {
 	return util->save_config(util->description);
 }
-
-void server::delete_ptr( void * ptr )
-{
-	delete ptr;
-}
