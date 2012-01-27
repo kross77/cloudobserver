@@ -52,8 +52,8 @@ namespace fs_utils
 	void send_not_modified_304( boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response );
 
 	void send_info( boost::shared_ptr<fs_file> f,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response );
-	const std::string  max_age = "max-age=12000";
-	const int expiration_period = 200;
+	const std::string  max_age = "max-age=240";
+	const int expiration_period = 4;
 };
 /*! @} */
 
