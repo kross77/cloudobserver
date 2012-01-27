@@ -272,13 +272,15 @@ cd projects/$OS_NAME-gmake
 
 echo_run make $JX config=release
 
-if [ ! -d ../../../$CLOUD_INSTALL_SUBDIR/lib_boost ]; then
+#if [ ! -d ../../../$CLOUD_INSTALL_SUBDIR/lib_boost ]; then
+	echo run -rf ../../../$CLOUD_INSTALL_SUBDIR/lib_boost
 	echo_run mkdir ../../../$CLOUD_INSTALL_SUBDIR/lib_boost
 	echo_run cp -r ../../../$BOOST_ROOT_DIR/$BOOST_INSTALL_SUBDIR/lib/* ../../../$CLOUD_INSTALL_SUBDIR/lib_boost/
 	
+	echo run -rf ../../../$CLOUD_INSTALL_SUBDIR/lib_opencv
 	echo_run mkdir ../../../$CLOUD_INSTALL_SUBDIR/lib_opencv
 	echo_run cp -r ../../../$OPENCV_ROOT_DIR/$OPENCV_INSTALL_SUBDIR/lib/* ../../../$CLOUD_INSTALL_SUBDIR/lib_opencv/
-fi
+#fi
 
 echo_run cp -r ./bin/release/* ../../../$CLOUD_INSTALL_SUBDIR/
 cd ../../../
