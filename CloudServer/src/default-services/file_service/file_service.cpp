@@ -381,6 +381,7 @@ void file_service::send_directory_contents( std::set<std::string> list, boost::s
 
 void file_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response)
 {
+	//throw std::runtime_error("fuck you!");
 	if (request->url == "/")
 	{
 		try

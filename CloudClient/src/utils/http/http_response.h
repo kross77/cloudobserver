@@ -5,6 +5,10 @@
 #include <boost/asio.hpp>
 #include <boost/lexical_cast.hpp>
 
+#include <boost/serialization/serialization.hpp>
+#include <boost/serialization/map.hpp> 
+#include <boost/serialization/string.hpp>
+
 #include <map>
 #include <string>
 
@@ -25,7 +29,21 @@ public:
 	std::map<std::string, std::string> headers;
 	int body_size;
 	std::string body;
+
 private:
+	friend class boost::serialization::access;
+
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version_)
+	{
+		ar & body;
+		ar & body_size;
+		ar & headers;
+		ar & version;
+		ar & status;
+		ar & description;
+	}
+
 	enum http_response_parser_state { VERSION, STATUS, DESCRIPTION, HEADER_KEY, HEADER_VALUE, BODY, OK };
 };
 

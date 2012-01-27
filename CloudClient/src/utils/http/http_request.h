@@ -17,6 +17,9 @@
 #include <boost/thread.hpp>
 #include <boost/thread/future.hpp>
 
+#include <boost/serialization/serialization.hpp>
+#include <boost/serialization/map.hpp> 
+#include <boost/serialization/string.hpp>
 
 #include <exception>
 #include <map>
@@ -47,6 +50,20 @@ public:
 	class connection_exception: public std::exception { };
 	class policy_file_request_exception: public std::exception { };
 private:
+	friend class boost::serialization::access;
+
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version_)
+	{
+		ar & body;
+		ar & body_size;
+		ar & headers;
+		ar & arguments;
+		ar & version;
+		ar & url;
+		ar & method;
+	}
+
 	typedef enum { METHOD, URL, URL_PARAM, URL_VALUE, VERSION, HEADER_KEY, HEADER_VALUE, BODY, OK } http_request_parser_state;
 	void parse_buffer(char* buffer, http_request_parser_state &parser_state, std::string &key, std::string &value, int bytes_read);
 	bool timed_receive_base(boost::asio::ip::tcp::socket& socket, size_t& buffer_size, int& seconds_to_wait);
