@@ -73,7 +73,7 @@ echo
 echo --CF autobuild team welcomes you!----------------------------------------------
 echo -------------------------------------------------------------------------------
 echo --This build API:--------------------------------------------------------------
-echo ./cloud_server_net_setup.sh KEEP_OLD CLOUD_INSTALL_SUBDIR BOOST_INSTALL_SUBDIR BOOST_ROOT_DIR BOOST_SETUP_FILE_NAME PREMAKE_SETUP_FILE_NAME
+echo ./cloud_server_net_setup.sh KEEP_OLD
 echo -------------------------------------------------------------------------------
 echo Please be patient. Go get yourself a coup of coffee - auto build process can take a long time.
 echo -------------------------------------------------------------------------------
@@ -81,26 +81,6 @@ echo
 
 if [ "$1" != "" ]; then
 	KEEP_OLD="$1"
-fi
-
-if [ "$2" != "" ]; then
-	CLOUD_INSTALL_SUBDIR="$2"
-fi
-
-if [ "$3" != "" ]; then
-	BOOST_INSTALL_SUBDIR="$3"
-fi
-
-if [ "$4" != "" ]; then
-	BOOST_ROOT_DIR="$4"
-fi
-
-if [ "$5" != "" ]; then
-	BOOST_SETUP_FILE_NAME="$5"
-fi
-
-if [ "$6" != "" ]; then
-	PREMAKE_SETUP_FILE_NAME="$6"
 fi
 
 echo_run ()
