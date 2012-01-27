@@ -228,18 +228,8 @@ if [ ! -d $OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR/lib ]; then
 	
 	cd $OPENSSL_ROOT_DIR
 
-	echo_run ./config shared no-asm
-	echo_run make
-
-	if [ ! -d $OPENSSL_INSTALL_SUBDIR ]; then
-		echo_run mkdir $OPENSSL_INSTALL_SUBDIR
-		echo_run mkdir $OPENSSL_INSTALL_SUBDIR/lib
-		echo_run mkdir $OPENSSL_INSTALL_SUBDIR/include
-	fi
-
-	echo_run cp -rL ./include/* ./$OPENSSL_INSTALL_SUBDIR/include/
-	echo_run cp ./libcrypto.a ./$OPENSSL_INSTALL_SUBDIR/lib
-	echo_run cp ./libssl.a ./$OPENSSL_INSTALL_SUBDIR/lib
+	echo_run ./config shared no-asm --prefix="$WD/$CLOUD_ROOT_DIR/$OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR" --openssldir="$WD/$CLOUD_ROOT_DIR/$OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR/share"
+	echo_run make install
 	
 	cd ..
 fi
