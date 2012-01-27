@@ -303,4 +303,4 @@ namespace http_utils
 /*! @} */
 
 #include "http_utils_inl.h"
-#endif HTTP_UTILITIES_H
+#endif // HTTP_UTILITIES_H
