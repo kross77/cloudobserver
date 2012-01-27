@@ -237,14 +237,14 @@ function cloud.project.useopenSSL()
 	if os.get() == "linux" then
 		defines { "LIN" }
 		links {
-		"crypto"
+		":libcrypto.a"
 		}
 	end
 	
 	if os.get() == "macosx" then
 		defines { "MAC" }
 		links {
-		"crypto"
+		":libcrypto.a"
 		}
 	end 
 	
