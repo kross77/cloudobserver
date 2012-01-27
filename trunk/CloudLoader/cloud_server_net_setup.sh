@@ -1,6 +1,6 @@
 #!/bin/bash
 # requires svn, curl, gcc
-JX = -j`grep ^processor /proc/cpuinfo | wc -l`
+JX=-j`grep ^processor /proc/cpuinfo | wc -l`
 
 CLOUD_DISTRO_SITE=cloudobserver.googlecode.com
 CLOUD_COMPONENT_NAME=CloudServer
