@@ -33,6 +33,9 @@ project "CloudServer"
 	files { "src/main.cpp" }
 
 	excludes { "src/default-services/**" , "src/cf-util/**", "src/cf-server/**" }
+	
+	configuration "gmake"
+		linkoptions { "-Wl,-rpath,./" }
 
 	configuration "Debug"
 		defines { "DEBUG" }
