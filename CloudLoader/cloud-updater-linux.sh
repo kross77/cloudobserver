@@ -31,7 +31,6 @@ while [  $COUNTER -lt 1 ]; do
 		fi
 		
 		cd ./cloud_server/install-dir/
-		export LD_LIBRARY_PATH=./:./lib_boost:./lib_opencv
 		nohup ./CloudServer >& /dev/null &
 		cd ./htdocs/js/
 		echo  "\$(document).ready(function() {\$('#rol').after('. Revision "  $LOCAL_REV  "');});" >> cf.js
