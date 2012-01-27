@@ -5,6 +5,7 @@
 #include <sstream>
 #include <set>
 #include <map>
+#include <string>
 //Boost
 #include <boost/asio.hpp>
 #include <boost/thread.hpp>
@@ -12,6 +13,10 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
+
+#include <boost/serialization/serialization.hpp>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
 
 //Thread safe logging
 #include <log_util.h>
@@ -33,6 +38,7 @@ private:
 	void user_info(boost::asio::ip::tcp::socket &socket);
 	void server_services_list(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response, boost::shared_ptr<http_request> request);
 	void server_service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response);
+	void delete_ptr( void * ptr );
 	boost::thread *acceptor_thread;
 	user_control *uac;
 	boost::shared_ptr<thread_pool> threads_pool;

@@ -135,25 +135,34 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 
 			//*(util->info) << "ids size: " << service_cont->threads_ids.size() << log_util::endl;
 			boost::shared_ptr<std::string> err;
+			raw data;
+			data.socket = socket;
+
+			{
+				std::stringstream oa_ss_req;
+				boost::archive::text_oarchive  oa_request(oa_ss_req);
+				oa_request << *(request.get());
+				data.raw_request = boost::shared_ptr<std::string>(new std::string(oa_ss_req.str()),boost::bind(&server::delete_ptr, this, _1) );
+			}
+
+			{
+				std::stringstream oa_ss_res;
+				boost::archive::text_oarchive  oa_response(oa_ss_res);
+				oa_response << *(response.get());
+				data.raw_response = boost::shared_ptr<std::string>(new std::string(oa_ss_res.str()),boost::bind(&server::delete_ptr, this, _1) );
+			}
 			try
 			{
-				#ifdef WIN
-				{
-					err = boost::shared_ptr<std::string>(new std::string(* requested_service->make_service_call(socket, request, response)));
-				}
-				#else 
-				err = requested_service->make_service_call(socket, request, response);
-				#endif
+				err = requested_service->make_service_call(data);
 				if ((*err) != "")
 				{
-
 					std::ostringstream body;
 					body << "@"<< service_cont->class_name <<" error: " << (*err) << "\n <br/> <a href='/'>please come again!</a>";
 					response->body = "<head></head><body><h1>" + body.str() + "</h1></body>";
 					response->headers["Content-Length"] = boost::lexical_cast<std::string>(response->body.length());
 					response->send(*socket);
 		
-					*(util->error) << (*err)<< log_util::endl;
+					*(util->error) << (*err) << log_util::endl;
 				}
 				
 
@@ -228,4 +237,9 @@ void server::user_info(boost::asio::ip::tcp::socket &socket)
 boost::property_tree::ptree server::get_configuration()
 {
 	return util->save_config(util->description);
+}
+
+void server::delete_ptr( void * ptr )
+{
+	delete ptr;
 }
