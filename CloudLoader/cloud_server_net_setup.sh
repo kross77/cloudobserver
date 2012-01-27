@@ -159,6 +159,10 @@ fi
 
 # CMake
 if [ ! -d $CMAKE_ROOT_DIR -o "$REBUILD_LIBRARIES" = "yes" ]; then
+	if [ -d $CMAKE_ROOT_DIR ]; then
+		rm -rf $CMAKE_ROOT_DIR
+	fi
+	
 	load $CMAKE_DISTRO_NAME $CMAKE_ROOT_DIR $CMAKE_NAME $CMAKE_VERSION $CMAKE_DISTRO_SITE $CMAKE_INSTALL_SUBDIR $CMAKE_PROJECT_URL
 	cd $CMAKE_ROOT_DIR
 
@@ -170,6 +174,10 @@ fi
 
 # OpenCV
 if [ ! -d $OPENCV_ROOT_DIR -o "$REBUILD_LIBRARIES" = "yes" ]; then
+	if [ -d $OPENCV_ROOT_DIR ]; then
+		rm -rf $OPENCV_ROOT_DIR
+	fi
+	
 	load $OPENCV_DISTRO_NAME $OPENCV_ROOT_DIR $OPENCV_NAME $OPENCV_VERSION $OPENCV_DISTRO_SITE $OPENCV_INSTALL_SUBDIR $OPENCV_PROJECT_URL
 
 	cd $OPENCV_ROOT_DIR
@@ -184,6 +192,13 @@ fi
 
 # Boost
 if [ ! -d $BOOST_ROOT_DIR -o "$REBUILD_LIBRARIES" = "yes" ]; then
+	if [ -d $BOOST_ROOT_DIR ]; then
+		rm -rf $BOOST_ROOT_DIR
+	fi
+	if [ -d $ZLIB_ROOT_DIR ]; then
+		rm -rf $ZLIB_ROOT_DIR
+	fi
+	
 	if [ ! -d ./$ALTERNATIVE_ZLIB_FOLDER ]; then
 		load $ZLIB_DISTRO_NAME $ZLIB_ROOT_DIR $ZLIB_NAME $ZLIB_VERSION $BOOST_DISTRO_SITE $ZLIB_INSTALL_SUBDIR $ZLIB_PROJECT_URL
 	else
@@ -205,6 +220,10 @@ fi
 
 # OpenSSL
 if [ ! -d $OPENSSL_ROOT_DIR -o "$REBUILD_LIBRARIES" = "yes" ]; then
+	if [ -d $OPENSSL_ROOT_DIR ]; then
+		rm -rf $OPENSSL_ROOT_DIR
+	fi
+	
 	if [ ! -e $OPENSSL_DISTRO_NAME ]; then
 		echo_run ${CURL_CMD} http://$OPENSSL_DISTRO_SITE/source/$OPENSSL_DISTRO_NAME -o $OPENSSL_DISTRO_NAME
 	fi
@@ -229,6 +248,10 @@ fi
 
 # Premake
 if [ ! -d premake-4.3 -o "$REBUILD_LIBRARIES" = "yes" ]; then
+	if [ -d premake-4.3 ]; then
+		rm -rf premake-4.3
+	fi
+	
 	if [ ! -e $PREMAKE_DISTRO_NAME ]; then
 		echo_run ${CURL_CMD} http://$PREMAKE_DISTRO_SITE/project/premake/Premake/$PREMAKE_VERSION/$PREMAKE_DISTRO_NAME -o $PREMAKE_DISTRO_NAME
 	fi
