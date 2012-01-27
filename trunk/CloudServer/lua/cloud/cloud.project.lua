@@ -100,34 +100,34 @@ function cloud.project.useCV()
 	if os.get() == "linux" then
 		defines { "LIN" }
 		links {
-			"opencv_imgproc",
-			"opencv_core",
-			"opencv_highgui"
+			":libopencv_imgproc.a",
+			":libopencv_core.a",
+			":libopencv_highgui.a"
 		}
 		links {
-			"libjasper",
-			"libjpeg",
-			"libpng",
-			"libtiff",
-			"zlib"
+			":liblibjasper.a",
+			":liblibjpeg.a",
+			":liblibpng.a",
+			":liblibtiff.a",
+			":libzlib.a"
 		}
 	end
 	
 	if os.get() == "macosx" then
 		defines { "MAC" }
 		links {
-			"opencv_imgproc",
-			"opencv_core",
-			"opencv_highgui",
+			":libopencv_imgproc.a",
+			":libopencv_core.a",
+			":libopencv_highgui.a",
 			"QuickTime.framework"
 		}
 		
 		links {
-			"libjasper",
-			"libjpeg",
-			"libpng",
-			"libtiff",
-			"zlib",
+			":liblibjasper.a",
+			":liblibjpeg.a",
+			":liblibpng.a",
+			":liblibtiff.a",
+			":libzlib.a",
 			"AppKit.framework",
 			"CoreVideo.framework",
 			"QTKit.framework",
