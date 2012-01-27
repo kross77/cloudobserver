@@ -142,14 +142,14 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 				std::stringstream oa_ss_req;
 				boost::archive::text_oarchive  oa_request(oa_ss_req);
 				oa_request << *(request.get());
-				data.raw_request = boost::shared_ptr<std::string>(new std::string(oa_ss_req.str()),boost::bind(&server::delete_ptr, this, _1) );
+				data.raw_request = boost::shared_ptr<std::string>(new std::string(oa_ss_req.str()),boost::bind(&general_utils::delete_ptr<std::string>, _1) );
 			}
 
 			{
 				std::stringstream oa_ss_res;
 				boost::archive::text_oarchive  oa_response(oa_ss_res);
 				oa_response << *(response.get());
-				data.raw_response = boost::shared_ptr<std::string>(new std::string(oa_ss_res.str()),boost::bind(&server::delete_ptr, this, _1) );
+				data.raw_response = boost::shared_ptr<std::string>(new std::string(oa_ss_res.str()),boost::bind(&general_utils::delete_ptr<std::string>, _1) );
 			}
 			try
 			{
