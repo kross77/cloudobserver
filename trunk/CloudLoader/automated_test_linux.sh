@@ -3,6 +3,7 @@ LOCAL_REV=0
 LOADER_URL="http://cloudobserver.googlecode.com/svn/trunk/CloudLoader/cloud_server_net_setup.sh"
 LOADER_REV=0
 REMOTE_REPO="http://cloudobserver.googlecode.com/svn/"
+REBUILD_LIBRARIES=0
 CD=`pwd`
 COUNTER=0
 while [  $COUNTER -lt 1 ]; do
@@ -12,6 +13,7 @@ while [  $COUNTER -lt 1 ]; do
 		echo $REMOTE_REV
 		REMOTE_LOADER_REV=`svn info $LOADER_URL | grep '^Last Changed Rev:' | awk '{print $4}'`
 		if [[ $REMOTE_LOADER_REV != $LOADER_REV ]] ; then			
+			REBUILD_LIBRARIES=1
 			echo $REMOTE_LOADER_REV
 			LOADER_REV=$REMOTE_LOADER_REV
 			wget -q $LOADER_URL -O cloud_server_net_setup.sh
@@ -20,7 +22,13 @@ while [  $COUNTER -lt 1 ]; do
 		LOCAL_REV=$REMOTE_REV
 		kill `ps aux | grep -F 'CloudServer' | grep -v -F 'grep' | awk '{ print $2 }'` 
 		
-		./cloud_server_net_setup.sh
+		if [ "$REBUILD_LIBRARIES" == "1" ]; then
+			./cloud_server_net_setup.sh no yes
+			REBUILD_LIBRARIES=0
+		else
+			./cloud_server_net_setup.sh
+		fi
+		
 		cd ./cloud_server/install-dir/
 		export LD_LIBRARY_PATH=./:./lib_boost:./lib_opencv
 		nohup ./CloudServer >& /dev/null &
