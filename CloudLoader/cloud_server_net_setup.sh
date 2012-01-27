@@ -153,7 +153,7 @@ else
 fi
 
 # CMake
-if [ ! -e $CMAKE_PATH ]; then
+if [ ! -d $CMAKE_ROOT_DIR ]; then
 	load $CMAKE_DISTRO_NAME $CMAKE_ROOT_DIR $CMAKE_NAME $CMAKE_VERSION $CMAKE_DISTRO_SITE $CMAKE_INSTALL_SUBDIR $CMAKE_PROJECT_URL
 	cd $CMAKE_ROOT_DIR
 
@@ -164,71 +164,79 @@ if [ ! -e $CMAKE_PATH ]; then
 fi
 
 # OpenCV
-load $OPENCV_DISTRO_NAME $OPENCV_ROOT_DIR $OPENCV_NAME $OPENCV_VERSION $OPENCV_DISTRO_SITE $OPENCV_INSTALL_SUBDIR $OPENCV_PROJECT_URL
+if [ ! -d $OPENCV_ROOT_DIR ]; then
+	load $OPENCV_DISTRO_NAME $OPENCV_ROOT_DIR $OPENCV_NAME $OPENCV_VERSION $OPENCV_DISTRO_SITE $OPENCV_INSTALL_SUBDIR $OPENCV_PROJECT_URL
 
-cd $OPENCV_ROOT_DIR
+	cd $OPENCV_ROOT_DIR
 
-echo_run ../$CMAKE_PATH -DCMAKE_INSTALL_PREFIX=./$OPENCV_INSTALL_SUBDIR -DBUILD_SHARED_LIBS=OFF -DBUILD_PYTHON_SUPPORT=OFF -DOPENCV_EXTRA_C_FLAGS=-fPIC -DOPENCV_BUILD_3RDPARTY_LIBS=TRUE
-make -j$JOBS install
+	echo_run ../$CMAKE_PATH -DCMAKE_INSTALL_PREFIX=./$OPENCV_INSTALL_SUBDIR -DBUILD_SHARED_LIBS=OFF -DBUILD_PYTHON_SUPPORT=OFF -DOPENCV_EXTRA_C_FLAGS=-fPIC -DOPENCV_BUILD_3RDPARTY_LIBS=TRUE
+	make -j$JOBS install
 
-echo_run cp $OPENCV_INSTALL_SUBDIR/share/OpenCV/3rdparty/lib/* $OPENCV_INSTALL_SUBDIR/lib
+	echo_run cp $OPENCV_INSTALL_SUBDIR/share/OpenCV/3rdparty/lib/* $OPENCV_INSTALL_SUBDIR/lib
 
-cd ..
-
-# Boost
-if [ ! -d ./$ALTERNATIVE_ZLIB_FOLDER ]; then
-	load $ZLIB_DISTRO_NAME $ZLIB_ROOT_DIR $ZLIB_NAME $ZLIB_VERSION $BOOST_DISTRO_SITE $ZLIB_INSTALL_SUBDIR $ZLIB_PROJECT_URL
-else
-	ZLIB_ROOT_DIR="$ALTERNATIVE_ZLIB_FOLDER"
-fi
-
-load $BOOST_DISTRO_NAME $BOOST_ROOT_DIR $BOOST_NAME $BOOST_VERSION $BOOST_DISTRO_SITE $BOOST_INSTALL_SUBDIR $BOOST_PROJECT_URL
-
-cd $BOOST_ROOT_DIR
-
-if [ ! -f ./b2 ]; then
-	echo_run ./bootstrap.sh
-fi
-
-echo_run ./b2 -j$JOBS -d0 --with-thread --with-system --with-filesystem --with-serialization --with-program_options --with-regex --with-date_time --with-iostreams -sZLIB_SOURCE="$WD/$CLOUD_ROOT_DIR/$ZLIB_ROOT_DIR/" -sNO_BZIP2=1 cflags=-fPIC cxxflags=-fPIC link=static --prefix=./$BOOST_INSTALL_SUBDIR release --builddir=./$BOOST_COMPILE_SUBDIR install
-
-cd ..
-
-# OpenSSL
-if [ ! -e $OPENSSL_DISTRO_NAME ]; then
-	echo_run ${CURL_CMD} http://$OPENSSL_DISTRO_SITE/source/$OPENSSL_DISTRO_NAME -o $OPENSSL_DISTRO_NAME
-fi
-  
-if [ ! -d $OPENSSL_ROOT_DIR ]; then
-	echo_run mkdir $OPENSSL_ROOT_DIR
-fi
-
-if [ ! -d $OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR/lib ]; then
-	echo_run tar -xzf $OPENSSL_DISTRO_NAME
-	echo_run rm -rf $OPENSSL_ROOT_DIR
-	echo_run mv $OPENSSL_NAME $OPENSSL_ROOT_DIR
-	
-	cd $OPENSSL_ROOT_DIR
-
-	echo_run ./config shared no-asm --prefix="$WD/$CLOUD_ROOT_DIR/$OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR" --openssldir="$WD/$CLOUD_ROOT_DIR/$OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR/share"
-	echo_run make install
-	
 	cd ..
 fi
 
-# Premake
-if [ ! -e $PREMAKE_DISTRO_NAME ]; then
-	echo_run ${CURL_CMD} http://$PREMAKE_DISTRO_SITE/project/premake/Premake/$PREMAKE_VERSION/$PREMAKE_DISTRO_NAME -o $PREMAKE_DISTRO_NAME
+# Boost
+if [ ! -d $BOOST_ROOT_DIR ]; then
+	if [ ! -d ./$ALTERNATIVE_ZLIB_FOLDER ]; then
+		load $ZLIB_DISTRO_NAME $ZLIB_ROOT_DIR $ZLIB_NAME $ZLIB_VERSION $BOOST_DISTRO_SITE $ZLIB_INSTALL_SUBDIR $ZLIB_PROJECT_URL
+	else
+		ZLIB_ROOT_DIR="$ALTERNATIVE_ZLIB_FOLDER"
+	fi
+
+	load $BOOST_DISTRO_NAME $BOOST_ROOT_DIR $BOOST_NAME $BOOST_VERSION $BOOST_DISTRO_SITE $BOOST_INSTALL_SUBDIR $BOOST_PROJECT_URL
+
+	cd $BOOST_ROOT_DIR
+
+	if [ ! -f ./b2 ]; then
+		echo_run ./bootstrap.sh
+	fi
+
+	echo_run ./b2 -j$JOBS -d0 --with-thread --with-system --with-filesystem --with-serialization --with-program_options --with-regex --with-date_time --with-iostreams -sZLIB_SOURCE="$WD/$CLOUD_ROOT_DIR/$ZLIB_ROOT_DIR/" -sNO_BZIP2=1 cflags=-fPIC cxxflags=-fPIC link=static --prefix=./$BOOST_INSTALL_SUBDIR release --builddir=./$BOOST_COMPILE_SUBDIR install
+
+	cd ..
 fi
 
-if [ ! -d premake-4.3/bin/release ]; then
-	echo_run unzip $PREMAKE_DISTRO_NAME
+# OpenSSL
+if [ ! -d $OPENSSL_ROOT_DIR ]; then
+	if [ ! -e $OPENSSL_DISTRO_NAME ]; then
+		echo_run ${CURL_CMD} http://$OPENSSL_DISTRO_SITE/source/$OPENSSL_DISTRO_NAME -o $OPENSSL_DISTRO_NAME
+	fi
+	  
+	if [ ! -d $OPENSSL_ROOT_DIR ]; then
+		echo_run mkdir $OPENSSL_ROOT_DIR
+	fi
+
+	if [ ! -d $OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR/lib ]; then
+		echo_run tar -xzf $OPENSSL_DISTRO_NAME
+		echo_run rm -rf $OPENSSL_ROOT_DIR
+		echo_run mv $OPENSSL_NAME $OPENSSL_ROOT_DIR
 	
-	cd ./premake-4.3/build/gmake.unix
+		cd $OPENSSL_ROOT_DIR
+
+		echo_run ./config shared no-asm --prefix="$WD/$CLOUD_ROOT_DIR/$OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR" --openssldir="$WD/$CLOUD_ROOT_DIR/$OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR/share"
+		echo_run make install
 	
-	echo_run make -j$JOBS config=release
+		cd ..
+	fi
+fi
+
+# Premake
+if [ ! -d premake-4.3 ]; then
+	if [ ! -e $PREMAKE_DISTRO_NAME ]; then
+		echo_run ${CURL_CMD} http://$PREMAKE_DISTRO_SITE/project/premake/Premake/$PREMAKE_VERSION/$PREMAKE_DISTRO_NAME -o $PREMAKE_DISTRO_NAME
+	fi
+
+	if [ ! -d premake-4.3/bin/release ]; then
+		echo_run unzip $PREMAKE_DISTRO_NAME
 	
-	cd ../../..
+		cd ./premake-4.3/build/gmake.unix
+	
+		echo_run make -j$JOBS config=release
+	
+		cd ../../..
+	fi
 fi
 
 cd $CLOUD_COMPONENT_NAME
