@@ -229,7 +229,7 @@ if [ ! -d $OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR/lib ]; then
 	cd $OPENSSL_ROOT_DIR
 
 	echo_run ./config shared no-asm
-	echo_run make -j$JOBS
+	echo_run make
 
 	if [ ! -d $OPENSSL_INSTALL_SUBDIR ]; then
 		echo_run mkdir $OPENSSL_INSTALL_SUBDIR
