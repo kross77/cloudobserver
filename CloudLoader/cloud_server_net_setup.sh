@@ -178,8 +178,7 @@ if [ ! -e $CMAKE_PATH ]; then
 	cd $CMAKE_ROOT_DIR
 
 	echo_run ./bootstrap --parallel=$JOBS --prefix=./$CMAKE_INSTALL_SUBDIR; 
-	echo_run make -j$JOBS
-	echo_run make install
+	echo_run make -j$JOBS install
 	
 	cd ..
 fi
