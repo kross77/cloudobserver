@@ -4,7 +4,6 @@ project "UsersFilesService"
 	location ( "projects/" .. os.get() .. "-" .. action )
 	
 	cloud.project.init()
-	cloud.project.useopenSSL()
 
 	links { "boost-sqlite" }
 	includedirs { "3rdparty/boost-sqlite"}
@@ -19,6 +18,7 @@ project "UsersFilesService"
 	includedirs { "src/cf-fs"}
 	
 	cloud.project.useBoost()
+	cloud.project.useopenSSL()
 	
 	includedirs { "service-interface/" }
 	
