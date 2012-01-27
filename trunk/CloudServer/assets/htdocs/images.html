@@ -79,36 +79,33 @@
 		<!-- End of CF CSS-->
 </head>
 <body>
-	<br/><br/><br/>
-			
+	<div class="pseudo-no-js-heaser"><br/><br/><br/></div>
 			<div class="loged-in-user" >
 				<a style="text-decoration:none; width:49%">
 					<p id="upload_button" class="butt" style=" position:absolute;  width:49%; right:0;">
 					Upload A File Now! 
 					</p> 
 				</a>
-			</div>
-			<div class="description-box loged-in-user">
-				<h3 class="fun">
-					Image Renderer Service Welcomes You.
-				</h3>
-				<br/>
-				<p style="text-align:left;">
-					It shows you a gallery of images you uploaded with User File Service. This servise also allows us to transcode vector and rastr images of diffrent formats and perform resize operations. In future it will show you images in form of a map.
-				</p>
-			
-			</div>
-		</div>
-	</div>	
-	<br/><br/>
-	<div id="tabs-fun" class="files-box fun loged-in-user">
-		<ol id="marx-images">
-			<div data-template>
-				<a rel="example_group" href="{{href}}" title="{{title}}"><p>{{title}}</p></a>                         
-			</div>
-		</ol>
-	</div>	
+				
+				<div class="description-box">
+					<h3 class="fun">
+						Image Renderer Service Welcomes You.
+					</h3>
+					<br/>
+					<p style="text-align:left;">
+						It shows you a gallery of images you uploaded with User File Service. This servise also allows us to transcode vector and rastr images of diffrent formats and perform resize operations. In future it will show you images in form of a map.
+					</p>
+				
+				</div>
 
+				<div id="tabs-fun" class="files-box fun" style="margin-top:24px;">
+					<ol id="marx-images">
+						<div data-template>
+							<a rel="example_group" href="{{href}}" title="{{title}}"><p>{{title}}</p></a>                         
+						</div>
+					</ol>
+				</div>	
+			</div>
 	<script type="text/javascript">
 		shuffle = function(o){ //v1.0
 			for(var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);

@@ -3,7 +3,9 @@ $(document).ready(function() {
 
 	$('body').append("<div class='header'><div id='marx-user-name' > <div><a href='index.html' alt='Cloud Server Main Page'><p style='background: url(/logo-small.png); width:40px; height:40px;' class='logo'></p></a></div> <div data-template><a><p class='header-item' id='user_name' class='hidden-c' >{{user_name}}</p></a></div></div><div id='marx-services-list'><div data-template><a href='{{url}}'><p class='header-item'>{{name}}</p></a></div></div></div>");
 
-   var servicesList = Tempo.prepare('marx-services-list');
+   var servicesList = Tempo.prepare('marx-services-list').notify( function (event) {
+    if ( event.type === TempoEvent.Types.RENDER_COMPLETE) { page_update.run(); }
+	});
 			servicesList.starting();
 	
 	$.getJSON("server.json", function(data) {
@@ -23,7 +25,9 @@ $(document).ready(function() {
 	
 	user = readCookie('session-id');
 	if (user != null) {
-		var user_name = Tempo.prepare('marx-user-name');
+		var user_name = Tempo.prepare('marx-user-name').notify( function (event) {
+    if ( event.type === TempoEvent.Types.RENDER_COMPLETE) { page_update.run(); }
+	});
 		user_name.starting();
 		
 		$.getJSON("ufs.service?user_name=true", function(data) {

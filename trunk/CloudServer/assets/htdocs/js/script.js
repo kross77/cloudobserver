@@ -1,28 +1,3 @@
-function resizedw()
-{
-	if (html5support == 1) if (((document.body.clientWidth / document.body.clientHeight) < 6) && ((document.body.clientWidth / document.body.clientHeight) > (1 / 6)))
-	{
-		if (document.body.clientWidth > $("#" + 'info').width)
-		{
-			$("#" + 'container').width = document.body.clientWidth;
-		}
-		else
-		{
-			$("#" + 'container').width = $("#" + 'info').width;
-		}
-		if (document.body.clientHeight > $("#" + 'info').height)
-		{
-			$("#" + 'container').height = document.body.clientHeight;
-		}
-		else
-		{
-			$("#" + 'container').height = $("#" + 'info').height;
-		}
-		dinit();
-		render();
-	}
-}
-
 function getOffset(el)
 {
 	var _x = 0;
