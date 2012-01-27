@@ -4,7 +4,6 @@ project "ImageRendererService"
 	location ( "projects/" .. os.get() .. "-" .. action )
 	
 	cloud.project.init()
-	cloud.project.useBoost()
 	cloud.project.useCV()
 	cloud.project.useopenSSL()
 
@@ -19,6 +18,8 @@ project "ImageRendererService"
 	
 	links { "cf-fs" }
 	includedirs { "src/cf-fs"}
+	
+	cloud.project.useBoost()
 	
 	includedirs { "service-interface/" }
 	
