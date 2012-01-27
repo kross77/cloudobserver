@@ -244,15 +244,11 @@ cd projects/$OS_NAME-gmake
 
 echo_run make -j$JOBS config=release
 
-echo_run rm -rf ../../../$CLOUD_INSTALL_SUBDIR/lib_boost
-echo_run mkdir ../../../$CLOUD_INSTALL_SUBDIR/lib_boost
-echo_run cp -r ../../../$BOOST_ROOT_DIR/$BOOST_INSTALL_SUBDIR/lib/* ../../../$CLOUD_INSTALL_SUBDIR/lib_boost/
-
 echo_run cp -r ./bin/release/* ../../../$CLOUD_INSTALL_SUBDIR/
 cd ../../../
-export LD_LIBRARY_PATH=./:./lib_boost/
+export LD_LIBRARY_PATH=./
 echo -------------------------------------------------------------------------------
-echo DO NOT FORGET TO CALL "export LD_LIBRARY_PATH=./:./lib_boost/"
+echo DO NOT FORGET TO CALL "export LD_LIBRARY_PATH=./"
 echo Done!
 
 exit 0
