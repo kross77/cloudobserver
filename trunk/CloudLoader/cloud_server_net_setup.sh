@@ -1,5 +1,5 @@
 #!/bin/bash
-# requires svn, premake, curl, gcc
+# requires svn, curl, gcc
 
 CLOUD_DISTRO_SITE=cloudobserver.googlecode.com
 CLOUD_COMPONENT_NAME=CloudServer
