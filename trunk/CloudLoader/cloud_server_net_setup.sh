@@ -207,7 +207,7 @@ cd $BOOST_ROOT_DIR
 
 echo_run ./bootstrap.sh
 
-echo_run ./b2 -j4 -d0 --with-thread --with-system --with-filesystem --with-program_options --with-regex --with-date_time --with-iostreams -sZLIB_SOURCE="$WD/$CLOUD_ROOT_DIR/$ZLIB_ROOT_DIR/" -sNO_BZIP2=1  link=shared --prefix=./$BOOST_INSTALL_SUBDIR release --builddir=./$BOOST_COMPILE_SUBDIR install
+echo_run ./b2 -j4 -d0 --with-thread --with-system --with-filesystem --with-serialization --with-program_options --with-regex --with-date_time --with-iostreams -sZLIB_SOURCE="$WD/$CLOUD_ROOT_DIR/$ZLIB_ROOT_DIR/" -sNO_BZIP2=1  link=shared --prefix=./$BOOST_INSTALL_SUBDIR release --builddir=./$BOOST_COMPILE_SUBDIR install
 
 cd ..
 
