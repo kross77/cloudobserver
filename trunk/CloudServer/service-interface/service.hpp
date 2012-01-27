@@ -42,14 +42,23 @@ struct raw {
 };
 #endif // RAW_HPP
 
+class base_service
+{
+public:
+	virtual boost::shared_ptr<std::string> make_service_call(raw serialized_data) = 0;
 
-// A macro to be included in the declaration of every derived service.
-#define CLOUD_SERVICE_AUXILIARIES \
-	public: \
-	virtual boost::shared_ptr<std::string> make_service_call(raw serialized_data) { \
-	return service::make_service_call(serialized_data); }
+	virtual void service_call(boost::shared_ptr<boost::asio::ip::tcp::socket>, boost::shared_ptr<http_request>, boost::shared_ptr<http_response>) = 0;
+	virtual void apply_config(boost::shared_ptr<boost::property_tree::ptree>) { throw not_configurable_exception(); };
 
-class service
+	virtual void start() { throw not_startable_exception(); };
+	virtual void stop() { throw not_stopable_exception(); };
+
+	class not_configurable_exception: public std::exception { };
+	class not_startable_exception: public std::exception { };
+	class not_stopable_exception: public std::exception { };
+};
+
+class service : public base_service
 {
 public:
 	virtual boost::shared_ptr<std::string> make_service_call(raw serialized_data)
@@ -86,16 +95,6 @@ public:
 		}
 		return err;
 	}
-
-	virtual void service_call(boost::shared_ptr<boost::asio::ip::tcp::socket>, boost::shared_ptr<http_request>, boost::shared_ptr<http_response>) = 0;
-	virtual void apply_config(boost::shared_ptr<boost::property_tree::ptree>) { throw not_configurable_exception(); };
-
-	virtual void start() { throw not_startable_exception(); };
-	virtual void stop() { throw not_stopable_exception(); };
-
-	class not_configurable_exception: public std::exception { };
-	class not_startable_exception: public std::exception { };
-	class not_stopable_exception: public std::exception { };
 };
 
 #endif // SERVICE_HPP

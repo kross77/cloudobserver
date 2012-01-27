@@ -221,7 +221,7 @@ void service_commandor(std::string name)
 {
 	try
 	{
-		boost::shared_ptr<service> one_service = s->util->get_service_by_name(name);	
+		boost::shared_ptr<base_service> one_service = s->util->get_service_by_name(name);
 		//std::cout << "service options are: `get state`, `restart`, `stop`, `start`" << std::endl;
 		std::cout << "You can change service configuration. to get into service configuration menu enter `config`" << std::endl;
 		std::string var;

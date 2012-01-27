@@ -258,6 +258,6 @@ void users_files_service::create_files_table( std::string db_name )
 
 BOOST_EXTENSION_TYPE_MAP_FUNCTION
 {
-	std::map<std::string, boost::extensions::factory<service> > &factories(types.get());
+	std::map<std::string, boost::extensions::factory<base_service> > &factories(types.get());
 	factories["users_files_service"].set<users_files_service>();
 }

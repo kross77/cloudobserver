@@ -197,6 +197,6 @@ std::string observer_service::get_current_date_time()
 
 BOOST_EXTENSION_TYPE_MAP_FUNCTION
 {
-	std::map<std::string, boost::extensions::factory<service> > &factories(types.get());
+	std::map<std::string, boost::extensions::factory<base_service> > &factories(types.get());
 	factories["observer_service"].set<observer_service>();
 }
