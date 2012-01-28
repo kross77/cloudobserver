@@ -140,15 +140,15 @@ function cloud.project.useBoost()
 	if os.get() == "linux" then
 		defines { "LIN" }
 		links {
-			"boost_regex",
-			"boost_system",
-			"boost_thread",
-			"boost_date_time",
-			"boost_filesystem",
-			"boost_program_options",
-			"boost_iostreams",
-			"boost_serialization",
-			"boost_zlib"
+			":libboost_regex.a",
+			":libboost_system.a",
+			":libboost_thread.a",
+			":libboost_date_time.a",
+			":libboost_filesystem.a",
+			":libboost_program_options.a",
+			":libboost_iostreams.a",
+			":libboost_serialization.a",
+			":libboost_zlib.a"
 		}
 		
 		links {
@@ -159,15 +159,15 @@ function cloud.project.useBoost()
 	if os.get() == "macosx" then
 		defines { "MAC" }
 		links {
-			"boost_regex",
-			"boost_system",
-			"boost_thread",
-			"boost_filesystem",
-			"boost_program_options",
-			"boost_date_time",
-			"boost_iostreams",
-			"boost_serialization",
-			"boost_zlib"
+			":libboost_regex.a",
+			":libboost_system.a",
+			":libboost_thread.a",
+			":libboost_filesystem.a",
+			":libboost_program_options.a",
+			":libboost_date_time.a",
+			":libboost_iostreams.a",
+			":libboost_serialization.a",
+			":libboost_zlib.a"
 		}
 		
 		links {
