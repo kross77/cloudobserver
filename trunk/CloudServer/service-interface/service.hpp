@@ -5,6 +5,7 @@
 
 // Boost
 #include <boost/asio.hpp>
+#include <boost/bind.hpp>
 #include <boost/property_tree/ptree.hpp>
 
 #include <boost/serialization/serialization.hpp>
@@ -14,6 +15,7 @@
 
 // Cloud Forever
 #include <http.h>
+#include <pointer_utils.h>
 
 #ifndef SHARED_HPP
 #define SHARED_HPP
@@ -66,25 +68,13 @@ public:
 
 		boost::shared_ptr<boost::asio::ip::tcp::socket> socket = serialized_data.socket;
 
-		http_request hreq;
-		{
-			std::stringstream ia_ss_req;
-			ia_ss_req << *(serialized_data.raw_request.get());
-			boost::archive::text_iarchive ia_req(ia_ss_req);
-			ia_req >> hreq;
-		}
-		boost::shared_ptr<http_request> request = boost::shared_ptr<http_request>(new http_request(hreq));
+		boost::shared_ptr<http_request> request (new http_request());
+		request->deserialize(serialized_data.raw_request);
 
-		http_response hres;
-		{
-			std::stringstream ia_ss_res;
-			ia_ss_res << *(serialized_data.raw_response.get());
-			boost::archive::text_iarchive ia_res(ia_ss_res);
-			ia_res >> hres;
-		}
-		boost::shared_ptr<http_response> response = boost::shared_ptr<http_response>(new http_response(hres));
+		boost::shared_ptr<http_response> response (new http_response());
+		response->deserialize(serialized_data.raw_response);
 
-		boost::shared_ptr<std::string> err(new std::string(""), boost::bind(&general_utils::delete_ptr<std::string>, _1));
+		boost::shared_ptr<std::string> err(new std::string(""), boost::bind(&pointer_utils::delete_ptr<std::string>, _1));
 		try
 		{
 			service_call(socket, request, response);

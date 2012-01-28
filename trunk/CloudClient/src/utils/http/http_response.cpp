@@ -169,3 +169,19 @@ void http_response::send(boost::asio::ip::tcp::socket& socket)
 	response += "\r\n" + this->body;
 	socket.send(boost::asio::buffer(response.c_str(), response.length()));
 }
+
+boost::shared_ptr<std::string> http_response::serialize()
+{
+	std::stringstream oa_ss_res;
+	boost::archive::text_oarchive  oa_response(oa_ss_res);
+	oa_response << *this;
+	return boost::shared_ptr<std::string>(new std::string(oa_ss_res.str()), boost::bind(&pointer_utils::delete_ptr<std::string>, _1) );
+}
+
+void http_response::deserialize( boost::shared_ptr<std::string> response_string)
+{
+	std::stringstream ia_ss_res;
+	ia_ss_res << *response_string;
+	boost::archive::text_iarchive ia_res(ia_ss_res);
+	ia_res >> *this;
+}

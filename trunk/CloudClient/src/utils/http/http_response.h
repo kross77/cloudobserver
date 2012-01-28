@@ -4,13 +4,19 @@
 // Boost
 #include <boost/asio.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/bind.hpp>
 
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/map.hpp> 
 #include <boost/serialization/string.hpp>
 
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
+
 #include <map>
 #include <string>
+
+#include "pointer_utils.h"
 
 class http_response
 {
@@ -22,6 +28,8 @@ public:
 	void reset();
 	void receive(boost::asio::ip::tcp::socket& socket);
 	void send(boost::asio::ip::tcp::socket& socket);
+	boost::shared_ptr<std::string> serialize();
+	void deserialize( boost::shared_ptr<std::string> response_string);
 	
 	std::string version;
 	int status;
@@ -43,7 +51,6 @@ private:
 		ar & status;
 		ar & description;
 	}
-
 	enum http_response_parser_state { VERSION, STATUS, DESCRIPTION, HEADER_KEY, HEADER_VALUE, BODY, OK };
 };
 

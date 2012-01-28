@@ -19,6 +19,7 @@
 #include <boost/archive/text_iarchive.hpp>
 
 //Thread safe logging
+#include <pointer_utils.h>
 #include <log_util.h>
 #include <thread_pool.h>
 
