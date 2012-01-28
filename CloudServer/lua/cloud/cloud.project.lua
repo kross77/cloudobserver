@@ -88,38 +88,74 @@ function cloud.project.useCV()
 	
 	if os.get() == "linux" then
 		defines { "LIN" }
-		links {
-			":libopencv_imgproc.a",
-			":libopencv_core.a",
-			":libopencv_highgui.a"
-		}
-		links {
-			":liblibjasper.a",
-			":liblibjpeg.a",
-			":liblibpng.a",
-			":liblibtiff.a",
-			":libzlib.a"
-		}
+		configuration { "gmake" }
+			links {
+				":libopencv_imgproc.a",
+				":libopencv_core.a",
+				":libopencv_highgui.a"
+			}
+			links {
+				":liblibjasper.a",
+				":liblibjpeg.a",
+				":liblibpng.a",
+				":liblibtiff.a",
+				":libzlib.a"
+			}
+		configuration { }
+		
+		configuration { "not gmake" }
+			links {
+				"opencv_imgproc",
+				"opencv_core",
+				"opencv_highgui"
+			}
+			links {
+				"libjasper",
+				"libjpeg",
+				"libpng",
+				"libtiff",
+				"zlib"
+			}
+		configuration { }
 	end
 	
 	if os.get() == "macosx" then
 		defines { "MAC" }
-		links {
-			":libopencv_imgproc.a",
-			":libopencv_core.a",
-			":libopencv_highgui.a",
-			"QuickTime.framework"
-		}
+		configuration { "gmake" }
+			links {
+				":libopencv_imgproc.a",
+				":libopencv_core.a",
+				":libopencv_highgui.a"
+			}
+			links {
+				":liblibjasper.a",
+				":liblibjpeg.a",
+				":liblibpng.a",
+				":liblibtiff.a",
+				":libzlib.a"
+			}
+		configuration { }
+		
+		configuration { "not gmake" }
+			links {
+				"opencv_imgproc",
+				"opencv_core",
+				"opencv_highgui"
+			}
+			links {
+				"libjasper",
+				"libjpeg",
+				"libpng",
+				"libtiff",
+				"zlib"
+			}
+		configuration { }
 		
 		links {
-			":liblibjasper.a",
-			":liblibjpeg.a",
-			":liblibpng.a",
-			":liblibtiff.a",
-			":libzlib.a",
+			"QuickTime.framework",
 			"AppKit.framework",
 			"CoreVideo.framework",
-			"QTKit.framework",
+			"QTKit.framework"
 		}
 	end 
 end
@@ -139,17 +175,33 @@ function cloud.project.useBoost()
 	end	
 	if os.get() == "linux" then
 		defines { "LIN" }
-		links {
-			":libboost_regex.a",
-			":libboost_system.a",
-			":libboost_thread.a",
-			":libboost_date_time.a",
-			":libboost_filesystem.a",
-			":libboost_program_options.a",
-			":libboost_iostreams.a",
-			":libboost_serialization.a",
-			":libboost_zlib.a"
-		}
+		configuration { "gmake" }
+			links {
+				":libboost_regex.a",
+				":libboost_system.a",
+				":libboost_thread.a",
+				":libboost_date_time.a",
+				":libboost_filesystem.a",
+				":libboost_program_options.a",
+				":libboost_iostreams.a",
+				":libboost_serialization.a",
+				":libboost_zlib.a"
+			}
+		configuration { }
+		
+		configuration { "not gmake" }
+			links {
+				"boost_regex",
+				"boost_system",
+				"boost_thread",
+				"boost_date_time",
+				"boost_filesystem",
+				"boost_program_options",
+				"boost_iostreams",
+				"boost_serialization",
+				"boost_zlib"
+			}
+		configuration { }
 		
 		links {
 			"dl",
@@ -158,22 +210,38 @@ function cloud.project.useBoost()
 	end
 	if os.get() == "macosx" then
 		defines { "MAC" }
-		links {
-			":libboost_regex.a",
-			":libboost_system.a",
-			":libboost_thread.a",
-			":libboost_filesystem.a",
-			":libboost_program_options.a",
-			":libboost_date_time.a",
-			":libboost_iostreams.a",
-			":libboost_serialization.a",
-			":libboost_zlib.a"
-		}
+		configuration { "gmake" }
+			links {
+				":libboost_regex.a",
+				":libboost_system.a",
+				":libboost_thread.a",
+				":libboost_date_time.a",
+				":libboost_filesystem.a",
+				":libboost_program_options.a",
+				":libboost_iostreams.a",
+				":libboost_serialization.a",
+				":libboost_zlib.a"
+			}
+		configuration { }
+		
+		configuration { "not gmake" }
+			links {
+				"boost_regex",
+				"boost_system",
+				"boost_thread",
+				"boost_date_time",
+				"boost_filesystem",
+				"boost_program_options",
+				"boost_iostreams",
+				"boost_serialization",
+				"boost_zlib"
+			}
+		configuration { }
 		
 		links {
 			"dl",
 			"pthread"
-		}	
+		}
 	end 
 end
 
@@ -231,16 +299,32 @@ function cloud.project.useopenSSL()
 	
 	if os.get() == "linux" then
 		defines { "LIN" }
-		links {
-			":libcrypto.a"
-		}
+		configuration { "gmake" }
+			links {
+				":libcrypto.a"
+			}
+		configuration { }
+		
+		configuration { "not gmake" }
+			links {
+				"crypto"
+			}
+		configuration { }
 	end
 	
 	if os.get() == "macosx" then
 		defines { "MAC" }
-		links {
-			":libcrypto.a"
-		}
+		configuration { "gmake" }
+			links {
+				":libcrypto.a"
+			}
+		configuration { }
+		
+		configuration { "not gmake" }
+			links {
+				"crypto"
+			}
+		configuration { }
 	end 
 	
 end
