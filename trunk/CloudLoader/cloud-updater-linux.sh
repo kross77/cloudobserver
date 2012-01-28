@@ -8,7 +8,7 @@ REBUILD_LIBRARIES=0
 CD=`pwd`
 COUNTER=0
 
-export LC_MESSAGES=en_US
+export LC_MESSAGES=C
 
 while [  $COUNTER -lt 1 ]; do
 
