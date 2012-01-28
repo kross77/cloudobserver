@@ -148,7 +148,10 @@ function cloud.project.useBoost()
 		"boost_program_options",
 		"boost_iostreams",
 		"boost_serialization",
-		"boost_zlib",
+		"boost_zlib"
+		}
+		
+		links {
 		"dl",
 		"pthread"
 		}
@@ -164,7 +167,10 @@ function cloud.project.useBoost()
 		"boost_date_time",
 		"boost_iostreams",
 		"boost_serialization",
-		"boost_zlib",
+		"boost_zlib"
+		}
+		
+		links {
 		"dl",
 		"pthread"
 		}	
