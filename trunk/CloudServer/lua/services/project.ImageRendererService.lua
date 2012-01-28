@@ -4,22 +4,22 @@ project "ImageRendererService"
 	location ( "projects/" .. os.get() .. "-" .. action )
 	
 	cloud.project.init()
-	cloud.project.useCV()
-	cloud.project.useopenSSL()
 
-	links { "boost-sqlite" }
-	includedirs { "3rdparty/boost-sqlite"}
+	links { "cf-fs" }
+	includedirs { "src/cf-fs"}
 
-	links { "cf-http" }
-	includedirs { "3rdparty/cf-http" }
-	
 	links { "cf-util" }
 	includedirs { "src/cf-util"}
 	
-	links { "cf-fs" }
-	includedirs { "src/cf-fs"}
+	links { "cf-http" }
+	includedirs { "3rdparty/cf-http" }
 	
+	links { "boost-sqlite" }
+	includedirs { "3rdparty/boost-sqlite"}
+
 	cloud.project.useBoost()
+	cloud.project.useopenSSL()
+	cloud.project.useCV()
 	
 	includedirs { "service-interface/" }
 	
