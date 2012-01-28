@@ -30,7 +30,7 @@ while [  $COUNTER -lt 1 ]; do
 			./$LOADER no yes
 			REBUILD_LIBRARIES=0
 		else
-			./$LOADER.sh
+			./$LOADER
 		fi
 		
 		cd ./cloud_server/install-dir/
