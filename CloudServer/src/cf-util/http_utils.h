@@ -287,6 +287,8 @@ namespace http_utils
 	 *
 	 */
 	void send_json( std::pair<std::string, std::string> pair, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response, boost::shared_ptr<http_request> request );
+	
+	void send_json_error( std::string error, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response, boost::shared_ptr<http_request> request );
 
 	std::string parse_file_upload_body(std::string contents);
 
@@ -298,7 +300,6 @@ namespace http_utils
 
 	template<typename InIter, typename OutIter>
 	OutIter copy_asciiz ( InIter begin, OutIter out );
-
 }
 /*! @} */
 

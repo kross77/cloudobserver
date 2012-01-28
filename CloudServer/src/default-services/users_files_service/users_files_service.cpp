@@ -81,6 +81,9 @@ void users_files_service::service_call( boost::shared_ptr<boost::asio::ip::tcp::
 				return;
 			}
 
+			if(is_request_to_file_info(user_name, socket, request, response))
+				return;
+
 			list_user_files(user_name, socket, response, request);
 			return;
 		}
@@ -98,6 +101,10 @@ void users_files_service::service_call( boost::shared_ptr<boost::asio::ip::tcp::
 		http_utils::send_found_302(	http_utils::url_decode(redirect_iterator->second), socket, response, request);
 		return;
 	}
+
+	if(is_request_to_file_info(user_name, socket, request, response))
+		return;
+
 	bool sent;
 	try{
 		sent = send_file(request->url, user_name, socket, request, response);
@@ -110,6 +117,26 @@ void users_files_service::service_call( boost::shared_ptr<boost::asio::ip::tcp::
 	{
 		fs_utils::send_404(request->url, socket, request, response);
 	}
+}
+
+bool users_files_service::is_request_to_file_info(std::string user_name, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response )
+{
+	if (request->url == "/ufs.json")
+	{
+		if (boost::iequals(request->arguments["action"], "file_info"))
+		{
+			std::string url_requested =  request->arguments["url"];
+			if (url_requested != "")
+			{
+				if(send_file_info(url_requested, user_name, socket, request, response))
+					return true;
+
+				http_utils::send_json_error("this file is not available for you", socket, response, request);
+				return true;
+			}
+		}
+	}
+	return false;
 }
 
 bool users_files_service::send_file(std::string file_name, boost::filesystem::path path, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response )
@@ -146,6 +173,43 @@ bool users_files_service::send_file( std::string href, std::string user_name, bo
 			return false;
 		}
 
+	}
+	return false;
+}
+
+
+bool users_files_service::send_file_info( std::string href, std::string user_name, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response )
+{
+	sqlite3pp::transaction xct(*db, true);
+	{
+		sqlite3pp::query qry(*db, this->command_find_file.c_str());
+		qry.bind(":encoded_url", href);
+		//file_name, user_name, is_public, modifie
+		for (sqlite3pp::query::iterator i = qry.begin(); i != qry.end(); ++i) {
+			bool is_public=false;
+			std::string  file_name, f_user_name, modified, f_type;
+			(*i).getter() >> file_name >> f_user_name >>  is_public >> modified >> f_type;
+
+			if (is_public || (f_user_name == user_name))
+			{
+				std::ostringstream user_files_stream;
+
+				user_files_stream << "{\n\t\"href\": \""
+					<< href << "\",\n\t\"title\": \""
+					<< http_utils::escape(file_name) <<  "\",\n\t\"modified\": \""
+					<< modified << "\",\n\t\"type\": \""
+					<< f_type << "\",\n\t\"is_public\": "
+					<< is_public << "\n},";
+
+				std::string files_ = user_files_stream.str();
+				if (files_.length() > 5)
+					files_ = files_.substr(0, files_.length() - 1);
+				http_utils::set_json_content_type(response);
+				http_utils::send(files_, socket, response, request);
+				return true;
+			}
+			return false;
+		}
 	}
 	return false;
 }
