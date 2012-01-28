@@ -347,6 +347,10 @@ int main(int argc, char* argv[])
 	std::string input;
 	do
 	{
+		if (std::cin.eof())
+			while (true)
+				boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
+		
 		std::cout << "$ ";
 		std::getline(std::cin, input);
 
