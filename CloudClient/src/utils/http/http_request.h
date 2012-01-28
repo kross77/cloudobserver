@@ -21,10 +21,15 @@
 #include <boost/serialization/map.hpp> 
 #include <boost/serialization/string.hpp>
 
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
+
 #include <exception>
 #include <map>
 #include <string>
 #include <vector>
+
+#include "pointer_utils.h"
 
 class http_request
 {
@@ -32,12 +37,15 @@ public:
 	http_request();
 	http_request(boost::asio::ip::tcp::socket& socket);
 	~http_request();
+
 	void clear();
 	void reset();
 	void receive(boost::asio::ip::tcp::socket& socket);
 	bool timed_receive(boost::asio::ip::tcp::socket& socket, int& seconds_to_wait);
 	void send(boost::asio::ip::tcp::socket& socket);
 	boost::asio::ip::tcp::socket& send(std::string absolute_url, boost::asio::ip::tcp::socket& socket);
+	void deserialize( boost::shared_ptr<std::string> request_string);
+	boost::shared_ptr<std::string> serialize();
 
 	std::string method;
 	std::string url;
@@ -65,6 +73,7 @@ private:
 	}
 
 	typedef enum { METHOD, URL, URL_PARAM, URL_VALUE, VERSION, HEADER_KEY, HEADER_VALUE, BODY, OK } http_request_parser_state;
+
 	void parse_buffer(char* buffer, http_request_parser_state &parser_state, std::string &key, std::string &value, int bytes_read);
 	bool timed_receive_base(boost::asio::ip::tcp::socket& socket, size_t& buffer_size, int& seconds_to_wait);
 	int read_some( boost::asio::ip::tcp::socket *sock, char* buffer, size_t& buffer_size );
