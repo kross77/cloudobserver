@@ -7,6 +7,9 @@ REMOTE_REPO="http://cloudobserver.googlecode.com/svn/"
 REBUILD_LIBRARIES=0
 CD=`pwd`
 COUNTER=0
+
+export LC_MESSAGES=en_US
+
 while [  $COUNTER -lt 1 ]; do
 
 	REMOTE_REV=`svn info $REMOTE_REPO | grep '^Revision:' | awk '{print $2}'`
