@@ -535,7 +535,16 @@ boost::shared_ptr<http_response> http_utils::set_json_content_type( boost::share
 void http_utils::send_json( std::pair<std::string, std::string> pair, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response, boost::shared_ptr<http_request> request )
 {
 	std::ostringstream data_stream;
-	data_stream << "\n{\n\t\"" << http_utils::escape(pair.first) << "\": \""	<< http_utils::escape(pair.second)  << "\"\n}";
+	data_stream << "{\n\t\"" << http_utils::escape(pair.first) << "\": \""	<< http_utils::escape(pair.second)  << "\"\n}";
+	http_utils::set_json_content_type(response);
+	http_utils::send(data_stream.str(), socket, response, request);
+	return;
+}
+
+void http_utils::send_json_error( std::string error, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response, boost::shared_ptr<http_request> request )
+{
+	std::ostringstream data_stream;
+	data_stream << "{\n\t\"error\": \"" << http_utils::escape(error)  << "\"\n}";
 	http_utils::set_json_content_type(response);
 	http_utils::send(data_stream.str(), socket, response, request);
 	return;

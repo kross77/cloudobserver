@@ -66,6 +66,10 @@ private:
 
 	bool send_file( std::string href, std::string user_name, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response );
 	bool send_file(std::string file_name, boost::filesystem::path path, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response );
+	bool send_file_info( std::string href, std::string user_name, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response );
+	
+	bool is_request_to_file_info(std::string user_name, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response );
+
 	boost::filesystem::path root_path;
 	boost::shared_ptr<sqlite3pp::database> db;
 	bool is_db_set;
@@ -98,6 +102,7 @@ private:
 		static T pt;
 		return pt;
 	}
+
 };
 
 #endif // USERS_FILES_SERVICE_H
