@@ -89,17 +89,17 @@ function cloud.project.useCV()
 	if os.get() == "linux" then
 		defines { "LIN" }
 		configuration { "gmake" }
-			links {
-				":libopencv_imgproc.a",
-				":libopencv_core.a",
-				":libopencv_highgui.a"
+			linkoptions {
+				path.getabsolute(_OPTIONS["OpenCVLibsPath"]) .. "/libopencv_imgproc.a",
+				path.getabsolute(_OPTIONS["OpenCVLibsPath"]) .. "/libopencv_core.a",
+				path.getabsolute(_OPTIONS["OpenCVLibsPath"]) .. "/libopencv_highgui.a"
 			}
-			links {
-				":liblibjasper.a",
-				":liblibjpeg.a",
-				":liblibpng.a",
-				":liblibtiff.a",
-				":libzlib.a"
+			linkoptions {
+				path.getabsolute(_OPTIONS["OpenCVLibsPath"]) .. "/liblibjasper.a",
+				path.getabsolute(_OPTIONS["OpenCVLibsPath"]) .. "/liblibjpeg.a",
+				path.getabsolute(_OPTIONS["OpenCVLibsPath"]) .. "/liblibpng.a",
+				path.getabsolute(_OPTIONS["OpenCVLibsPath"]) .. "/liblibtiff.a",
+				path.getabsolute(_OPTIONS["OpenCVLibsPath"]) .. "/libzlib.a"
 			}
 		configuration { }
 		
@@ -122,17 +122,17 @@ function cloud.project.useCV()
 	if os.get() == "macosx" then
 		defines { "MAC" }
 		configuration { "gmake" }
-			links {
-				":libopencv_imgproc.a",
-				":libopencv_core.a",
-				":libopencv_highgui.a"
+			linkoptions {
+				path.getabsolute(_OPTIONS["OpenCVLibsPath"]) .. "/libopencv_imgproc.a",
+				path.getabsolute(_OPTIONS["OpenCVLibsPath"]) .. "/libopencv_core.a",
+				path.getabsolute(_OPTIONS["OpenCVLibsPath"]) .. "/libopencv_highgui.a"
 			}
-			links {
-				":liblibjasper.a",
-				":liblibjpeg.a",
-				":liblibpng.a",
-				":liblibtiff.a",
-				":libzlib.a"
+			linkoptions {
+				path.getabsolute(_OPTIONS["OpenCVLibsPath"]) .. "/liblibjasper.a",
+				path.getabsolute(_OPTIONS["OpenCVLibsPath"]) .. "/liblibjpeg.a",
+				path.getabsolute(_OPTIONS["OpenCVLibsPath"]) .. "/liblibpng.a",
+				path.getabsolute(_OPTIONS["OpenCVLibsPath"]) .. "/liblibtiff.a",
+				path.getabsolute(_OPTIONS["OpenCVLibsPath"]) .. "/libzlib.a"
 			}
 		configuration { }
 		
@@ -176,16 +176,16 @@ function cloud.project.useBoost()
 	if os.get() == "linux" then
 		defines { "LIN" }
 		configuration { "gmake" }
-			links {
-				":libboost_regex.a",
-				":libboost_system.a",
-				":libboost_thread.a",
-				":libboost_date_time.a",
-				":libboost_filesystem.a",
-				":libboost_program_options.a",
-				":libboost_iostreams.a",
-				":libboost_serialization.a",
-				":libboost_zlib.a"
+			linkoptions {
+				path.getabsolute(_OPTIONS["BoostLibsPath"]) .. "/libboost_regex.a",
+				path.getabsolute(_OPTIONS["BoostLibsPath"]) .. "/libboost_system.a",
+				path.getabsolute(_OPTIONS["BoostLibsPath"]) .. "/libboost_thread.a",
+				path.getabsolute(_OPTIONS["BoostLibsPath"]) .. "/libboost_date_time.a",
+				path.getabsolute(_OPTIONS["BoostLibsPath"]) .. "/libboost_filesystem.a",
+				path.getabsolute(_OPTIONS["BoostLibsPath"]) .. "/libboost_program_options.a",
+				path.getabsolute(_OPTIONS["BoostLibsPath"]) .. "/libboost_iostreams.a",
+				path.getabsolute(_OPTIONS["BoostLibsPath"]) .. "/libboost_serialization.a",
+				path.getabsolute(_OPTIONS["BoostLibsPath"]) .. "/libboost_zlib.a"
 			}
 		configuration { }
 		
@@ -211,16 +211,16 @@ function cloud.project.useBoost()
 	if os.get() == "macosx" then
 		defines { "MAC" }
 		configuration { "gmake" }
-			links {
-				":libboost_regex.a",
-				":libboost_system.a",
-				":libboost_thread.a",
-				":libboost_date_time.a",
-				":libboost_filesystem.a",
-				":libboost_program_options.a",
-				":libboost_iostreams.a",
-				":libboost_serialization.a",
-				":libboost_zlib.a"
+			linkoptions {
+				path.getabsolute(_OPTIONS["BoostLibsPath"]) .. "/libboost_regex.a",
+				path.getabsolute(_OPTIONS["BoostLibsPath"]) .. "/libboost_system.a",
+				path.getabsolute(_OPTIONS["BoostLibsPath"]) .. "/libboost_thread.a",
+				path.getabsolute(_OPTIONS["BoostLibsPath"]) .. "/libboost_date_time.a",
+				path.getabsolute(_OPTIONS["BoostLibsPath"]) .. "/libboost_filesystem.a",
+				path.getabsolute(_OPTIONS["BoostLibsPath"]) .. "/libboost_program_options.a",
+				path.getabsolute(_OPTIONS["BoostLibsPath"]) .. "/libboost_iostreams.a",
+				path.getabsolute(_OPTIONS["BoostLibsPath"]) .. "/libboost_serialization.a",
+				path.getabsolute(_OPTIONS["BoostLibsPath"]) .. "/libboost_zlib.a"
 			}
 		configuration { }
 		
@@ -300,8 +300,8 @@ function cloud.project.useopenSSL()
 	if os.get() == "linux" then
 		defines { "LIN" }
 		configuration { "gmake" }
-			links {
-				":libcrypto.a"
+			linkoptions {
+				path.getabsolute(_OPTIONS["OpenSSLLibsPath"]) .. "/libcrypto.a"
 			}
 		configuration { }
 		
@@ -315,8 +315,8 @@ function cloud.project.useopenSSL()
 	if os.get() == "macosx" then
 		defines { "MAC" }
 		configuration { "gmake" }
-			links {
-				":libcrypto.a"
+			linkoptions {
+				path.getabsolute(_OPTIONS["OpenSSLLibsPath"]) .. "/libcrypto.a"
 			}
 		configuration { }
 		
