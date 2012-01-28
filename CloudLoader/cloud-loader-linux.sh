@@ -182,6 +182,11 @@ if [ ! -d $OPENCV_ROOT_DIR -o "$REBUILD_LIBRARIES" = "yes" ]; then
 
 	cd $OPENCV_ROOT_DIR
 
+	# Adding the following option:
+	#   -DEXECUTABLE_OUTPUT_PATH=./$OPENCV_INSTALL_SUBDIR/bin
+	# to the CMake call leads to an error during the build
+	# with 'opencv_traincascade' executable not being created.
+	# It seems like a bug in OpenCV CMake script.
 	echo_run ../$CMAKE_PATH \
 		-DBUILD_DOCS=OFF \
 		-DBUILD_EXAMPLES=OFF \
@@ -203,7 +208,6 @@ if [ ! -d $OPENCV_ROOT_DIR -o "$REBUILD_LIBRARIES" = "yes" ]; then
 		-DENABLE_SSE41=OFF \
 		-DENABLE_SSE42=OFF \
 		-DENABLE_SSSE3=OFF \
-		-DEXECUTABLE_OUTPUT_PATH=./$OPENCV_INSTALL_SUBDIR/bin \
 		-DINSTALL_C_EXAMPLES=OFF \
 		-DINSTALL_PYTHON_EXAMPLES=OFF \
 		-DLIBRARY_OUTPUT_PATH=./$OPENCV_INSTALL_SUBDIR/lib \
