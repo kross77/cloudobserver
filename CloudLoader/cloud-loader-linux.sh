@@ -6,11 +6,12 @@ OPENCV_VERSION=2.3.1
 OPENSSL_VERSION=1.0.0d
 PREMAKE_VERSION=4.3
 
+WORKSPACE=cloud_server
+
 JOBS=`grep ^processor /proc/cpuinfo | wc -l`
 
 CLOUD_DISTRO_SITE=cloudobserver.googlecode.com
 CLOUD_COMPONENT_NAME=CloudServer
-CLOUD_ROOT_DIR=cloud_server
 CLOUD_INSTALL_SUBDIR=install-dir
 
 CLOUD_LOCAL_BUILDING_FILE_NAME=build.sh
@@ -118,11 +119,11 @@ SVN_CMD=svn\ $SVN_OPT
 
 cd $HERE
 
-if [ ! -d $CLOUD_ROOT_DIR ]; then
-	echo_run mkdir $CLOUD_ROOT_DIR
+if [ ! -d $WORKSPACE ]; then
+	echo_run mkdir $WORKSPACE
 fi
 
-cd $CLOUD_ROOT_DIR
+cd $WORKSPACE
 
 if [ ! -d $DOWNLOADS_DIR ]; then
 	echo_run mkdir $DOWNLOADS_DIR
@@ -233,7 +234,7 @@ if [ ! -d $BOOST_ROOT_DIR ]; then
 		echo_run ./bootstrap.sh
 	fi
 
-	echo_run ./b2 -j$JOBS -d0 --with-thread --with-system --with-filesystem --with-serialization --with-program_options --with-regex --with-date_time --with-iostreams -sZLIB_SOURCE="$WD/$CLOUD_ROOT_DIR/$ZLIB_ROOT_DIR/" -sNO_BZIP2=1 cflags=-fPIC cxxflags=-fPIC link=static --prefix=./$BOOST_INSTALL_SUBDIR release --builddir=./$BOOST_COMPILE_SUBDIR install
+	echo_run ./b2 -j$JOBS -d0 --with-thread --with-system --with-filesystem --with-serialization --with-program_options --with-regex --with-date_time --with-iostreams -sZLIB_SOURCE="$WD/$WORKSPACE/$ZLIB_ROOT_DIR/" -sNO_BZIP2=1 cflags=-fPIC cxxflags=-fPIC link=static --prefix=./$BOOST_INSTALL_SUBDIR release --builddir=./$BOOST_COMPILE_SUBDIR install
 
 	cd ..
 fi
@@ -244,7 +245,7 @@ if [ ! -d $OPENSSL_ROOT_DIR ]; then
 	
 	cd $OPENSSL_ROOT_DIR
 
-	echo_run ./config shared no-asm --prefix="$WD/$CLOUD_ROOT_DIR/$OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR" --openssldir="$WD/$CLOUD_ROOT_DIR/$OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR/share"
+	echo_run ./config shared no-asm --prefix="$WD/$WORKSPACE/$OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR" --openssldir="$WD/$WORKSPACE/$OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR/share"
 	echo_run make install
 
 	cd ..
