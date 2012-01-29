@@ -103,9 +103,10 @@ load() # 1=SRCFILE 2=COMPILE 3=SRCBASE 4=SRCSITE 5=SRCPATH
 	echo_run mv $3 $2
 }
 
-HERE=`dirname $0`
-
-cd $HERE
+# Move to the directory containing the script.
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do SOURCE="$(readlink "$SOURCE")"; done
+cd "$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
 mkdir -p $WORKSPACE
 cd $WORKSPACE
