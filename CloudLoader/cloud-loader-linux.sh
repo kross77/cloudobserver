@@ -14,7 +14,7 @@ CLOUD_DISTRO_SITE=cloudobserver.googlecode.com
 CLOUD_ROOT_DIR=CloudServer
 CLOUD_INSTALL_SUBDIR=install-dir
 
-CLOUD_LOCAL_BUILDING_FILE_NAME=build.sh
+CLOUD_PREMAKE=build.sh
 
 DOWNLOADS_DIR=downloads
 
@@ -266,12 +266,12 @@ fi
 
 cd $CLOUD_ROOT_DIR
 
-if [ ! -e $CLOUD_LOCAL_BUILDING_FILE_NAME ]; then
-	echo_run echo ../$PREMAKE_ROOT_DIR/bin/release/premake4 --os=$OS --BoostLibsPath=../$BOOST_ROOT_DIR/$BOOST_INSTALL_SUBDIR/lib  --OpenCVLibsPath=../$OPENCV_ROOT_DIR/$OPENCV_INSTALL_SUBDIR/lib --OpenSSLLibsPath=../$OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR/lib  --BoostIncludesPath=../$BOOST_ROOT_DIR/$BOOST_INSTALL_SUBDIR/include  --OpenCVIncludesPath=../$OPENCV_ROOT_DIR/$OPENCV_INSTALL_SUBDIR/include --OpenSSLIncludesPath=../$OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR/include --platform=x32 gmake > $CLOUD_LOCAL_BUILDING_FILE_NAME
-	echo_run chmod u+x ./$CLOUD_LOCAL_BUILDING_FILE_NAME
+if [ ! -e $CLOUD_PREMAKE ]; then
+	echo_run echo ../$PREMAKE_ROOT_DIR/bin/release/premake4 --os=$OS --BoostLibsPath=../$BOOST_ROOT_DIR/$BOOST_INSTALL_SUBDIR/lib  --OpenCVLibsPath=../$OPENCV_ROOT_DIR/$OPENCV_INSTALL_SUBDIR/lib --OpenSSLLibsPath=../$OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR/lib  --BoostIncludesPath=../$BOOST_ROOT_DIR/$BOOST_INSTALL_SUBDIR/include  --OpenCVIncludesPath=../$OPENCV_ROOT_DIR/$OPENCV_INSTALL_SUBDIR/include --OpenSSLIncludesPath=../$OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR/include --platform=x32 gmake > $CLOUD_PREMAKE
+	echo_run chmod u+x ./$CLOUD_PREMAKE
 fi
 
-echo_run ./$CLOUD_LOCAL_BUILDING_FILE_NAME
+echo_run ./$CLOUD_PREMAKE
 
 cd projects/$OS-gmake
 
