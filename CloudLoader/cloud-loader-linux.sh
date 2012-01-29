@@ -46,7 +46,7 @@ PREMAKE_SRCFILE="$PREMAKE_SRCBASE"-src.zip
 PREMAKE_SRCPATH=project/premake/Premake/$PREMAKE_VERSION
 PREMAKE_SRCSITE=surfnet.dl.sourceforge.net
 
-ZLIB_COMPILE=opencv_libraries/3rdparty/zlib
+ZLIB_COMPILE=$OPENCV_COMPILE/3rdparty/zlib
 
 WORKSPACE=cloud_server
 DOWNLOADS=downloads
