@@ -122,8 +122,19 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 
 }
 
-bool user_control::is_registered_user( std::string given_email, std::string pass_sha256 )
+bool user_control::is_registered_user( std::string & given_email, std::string & pass_sha256 )
 {
+	/* TODO: use Boost::Locale!!!
+	boost::locale::generator gen;
+	std::locale loc=gen(""); 
+	std::locale::global(loc); 
+	std::stringstream u_name;
+	u_name.imbue(loc);
+	u_name << boost::locale::to_lower(has_register->second);
+	has_register->second = u_name.str();
+	*/
+	boost::algorithm::to_lower(given_email);
+
 	std::string email="", pass="";
 	sqlite3pp::transaction xct(*db, true);
 	{
@@ -147,12 +158,23 @@ bool user_control::is_registered_user( std::string given_email, std::string pass
 
 }
 
-bool user_control::is_registered_user( std::string given_email )
+bool user_control::is_registered_user( std::string & given_email )
 {
 	if (given_email == "")
 	{
 		return false;
 	}
+	
+	/* TODO: use Boost::Locale!!!
+	boost::locale::generator gen;
+	std::locale loc=gen(""); 
+	std::locale::global(loc); 
+	std::stringstream u_name;
+	u_name.imbue(loc);
+	u_name << boost::locale::to_lower(has_register->second);
+	has_register->second = u_name.str();
+	*/
+	boost::algorithm::to_lower(given_email);
 
 	std::string email="", pass="";
 
