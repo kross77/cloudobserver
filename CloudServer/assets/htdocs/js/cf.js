@@ -1,7 +1,7 @@
 $.wait = function( callback, seconds){
    return window.setTimeout( callback, seconds * 1000 );
 }
-
+var user = null;
 function readCookie(name) {
 	var nameEQ = name + "=";
 	var ca = document.cookie.split(';');
