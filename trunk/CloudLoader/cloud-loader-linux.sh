@@ -29,7 +29,6 @@ BOOST_NAME=boost_${BOOST_VERSION//./_}
 BOOST_DISTRO_NAME="$BOOST_NAME".tar.bz2
 BOOST_ROOT_DIR=boost_libraries
 BOOST_INSTALL_SUBDIR=install-dir
-BOOST_COMPILE_SUBDIR=build-dir
 
 ZLIB_ROOT_DIR=opencv_libraries/3rdparty/zlib
 
@@ -39,7 +38,6 @@ OPENSSL_DISTRO_NAME="$OPENSSL_NAME".tar.gz
 OPENSSL_PROJECT_PATH=source
 OPENSSL_ROOT_DIR=openssl_libraries
 OPENSSL_INSTALL_SUBDIR=install-dir
-OPENSSL_COMPILE_SUBDIR=build-dir
 
 OPENCV_DISTRO_SITE=surfnet.dl.sourceforge.net
 OPENCV_PROJECT_PATH=project/opencvlibrary/opencv-unix/$OPENCV_VERSION
@@ -47,7 +45,6 @@ OPENCV_NAME=OpenCV-$OPENCV_VERSION
 OPENCV_DISTRO_NAME="$OPENCV_NAME"a.tar.bz2
 OPENCV_ROOT_DIR=opencv_libraries
 OPENCV_INSTALL_SUBDIR=install-dir
-OPENCV_COMPILE_SUBDIR=build-dir
 
 CMAKE_DISTRO_SITE=www.cmake.org
 CMAKE_PROJECT_PATH=files/v${CMAKE_VERSION%.*}
@@ -55,7 +52,6 @@ CMAKE_NAME=cmake-$CMAKE_VERSION
 CMAKE_DISTRO_NAME="$CMAKE_NAME".tar.gz
 CMAKE_ROOT_DIR=cmake
 CMAKE_INSTALL_SUBDIR=install-dir
-CMAKE_COMPILE_SUBDIR=build-dir
 
 PREMAKE_DISTRO_SITE=surfnet.dl.sourceforge.net
 PREMAKE_PROJECT_PATH=project/premake/Premake/$PREMAKE_VERSION
