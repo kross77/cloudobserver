@@ -42,9 +42,6 @@ OPENCV_ROOT_DIR=opencv_libraries
 OPENCV_INSTALL_SUBDIR=install-dir
 OPENCV_COMPILE_SUBDIR=build-dir
 
-#-L protects against redirects
-CURL_CMD=curl\ -L
-
 CMAKE_PATH=./cmake/bin/cmake
 CMAKE_DISTRO_SITE=www.cmake.org
 CMAKE_PROJECT_URL=files
@@ -93,7 +90,7 @@ echo_run ()
 load() # 1=DISTRO_NAME 2=ROOT_DIR 3=NAME 4=DISTRO_SITE 5=DISTRO_PATH
 {
 	if [ ! -e $1 ]; then
-		echo_run ${CURL_CMD} http://$4/$5/$1 -o $1
+		echo_run curl -L http://$4/$5/$1 -o $1
 	fi
 	
 	if [ ${1##*.} == "zip" ]; then
