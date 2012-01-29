@@ -5,21 +5,19 @@ project "cf-fs"
 	files { "src/cf-fs/**.h", "src/cf-fs/**.cpp" }
 	
 	cloud.project.init()
-	cloud.project.useopenSSL()
-	cloud.project.useBoost()
-	
-	links { "cf-http" }
-	includedirs { "3rdparty/cf-http"}
-	
+
 	links { "cf-util" }
 	includedirs { "src/cf-util"}
+	includedirs { "3rdparty/cf-http"}	
 	
 	configuration { "gmake" }
 		linkoptions {
-			"-lcf-http",
 			"-lcf-util"
 		}
 	configuration { }
+	
+	cloud.project.useBoost()
+	cloud.project.useopenSSL()	
 	
 	configuration "gmake"
 		buildoptions { "-fPIC" }

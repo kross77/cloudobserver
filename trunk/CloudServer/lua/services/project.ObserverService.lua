@@ -5,16 +5,18 @@ project "ObserverService"
 	
 	cloud.project.init()
 
-	links { "cf-http" }
+	links { "cf-util" }
+	includedirs { "src/cf-util"}
 	includedirs { "3rdparty/cf-http" }
 	
 	configuration { "gmake" }
 		linkoptions {
-			"-lcf-http"
+			"-lcf-util"
 		}
 	configuration { }
 	
 	cloud.project.useBoost()
+	cloud.project.useopenSSL()
 	
 	files { "src/default-services/observer_service/**"}
 
