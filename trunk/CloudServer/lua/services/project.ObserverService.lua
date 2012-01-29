@@ -8,6 +8,12 @@ project "ObserverService"
 	links { "cf-http" }
 	includedirs { "3rdparty/cf-http" }
 	
+	configuration { "gmake" }
+		linkoptions {
+			"-lcf-http"
+		}
+	configuration { }
+	
 	cloud.project.useBoost()
 	
 	files { "src/default-services/observer_service/**"}

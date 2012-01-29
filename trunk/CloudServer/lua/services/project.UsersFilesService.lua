@@ -17,6 +17,15 @@ project "UsersFilesService"
 	links { "cf-fs" }
 	includedirs { "src/cf-fs"}
 	
+	configuration { "gmake" }
+		linkoptions {
+			"-lboost-sqlite",
+			"-lcf-util",
+			"-lcf-http",
+			"-lcf-fs"
+		}
+	configuration { }
+	
 	cloud.project.useBoost()
 	cloud.project.useopenSSL()
 	

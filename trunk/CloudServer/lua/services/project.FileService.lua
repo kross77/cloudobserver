@@ -15,6 +15,14 @@ project "FileService"
 	links { "cf-fs" }
 	includedirs { "src/cf-fs"}
 	
+	configuration { "gmake" }
+		linkoptions {
+			"-lcf-http",
+			"-lcf-util",
+			"-lcf-fs"
+		}
+	configuration { }
+	
 	cloud.project.useBoost()
 	
 	includedirs { "service-interface/" }

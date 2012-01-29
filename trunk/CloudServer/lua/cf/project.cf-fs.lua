@@ -14,6 +14,13 @@ project "cf-fs"
 	links { "cf-util" }
 	includedirs { "src/cf-util"}
 	
+	configuration { "gmake" }
+		linkoptions {
+			"-lcf-http",
+			"-lcf-util"
+		}
+	configuration { }
+	
 	configuration "gmake"
 		buildoptions { "-fPIC" }
 	
