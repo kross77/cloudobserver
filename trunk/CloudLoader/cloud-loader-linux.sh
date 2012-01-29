@@ -212,9 +212,7 @@ if [ ! -d $BOOST_COMPILE ]; then
 
 	cd $BOOST_COMPILE
 
-	if [ ! -f ./b2 ]; then
-		echo_run ./bootstrap.sh
-	fi
+	echo_run ./bootstrap.sh
 
 	echo_run ./b2 -j$JOBS -d0 --with-thread --with-system --with-filesystem --with-serialization --with-program_options --with-regex --with-date_time --with-iostreams -sZLIB_SOURCE="$WD/$WORKSPACE/$ZLIB_COMPILE/" -sNO_BZIP2=1 cflags=-fPIC cxxflags=-fPIC link=static --prefix=./$BOOST_INSTALL release install
 
