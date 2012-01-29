@@ -1,5 +1,11 @@
 #!/bin/bash
 # requires svn, curl, gcc
+
+# Move to the directory containing the script.
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do SOURCE="$(readlink "$SOURCE")"; done
+cd "$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+
 WD=`pwd`
 
 BOOST_VERSION=1.47.0
@@ -102,11 +108,6 @@ load() # 1=SRCFILE 2=COMPILE 3=SRCBASE 4=SRCSITE 5=SRCPATH
 	fi
 	echo_run mv $3 $2
 }
-
-# Move to the directory containing the script.
-SOURCE="${BASH_SOURCE[0]}"
-while [ -h "$SOURCE" ]; do SOURCE="$(readlink "$SOURCE")"; done
-cd "$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
 mkdir -p $WORKSPACE
 cd $WORKSPACE
