@@ -104,9 +104,11 @@
 							$("#fancybox-title").hide();
 						});
 					},
-					error:          function(responseText){
-						alert("error:" + responseText);
-    				}
+					'onClosed' 		: function() {
+						window.location.hash = "";
+					}
+					
+    				
 				});
 		}
 		
@@ -141,8 +143,19 @@
 						jQuery(document).ready(function() {
 							    showBox(user_image, 0);
 						});
-						
-					}
+					}else{
+					user = readCookie('session-id');
+						if (user != null) {
+							$(document).ready(function() {
+								$(".loged-in-user-error").html('<div><p>You don\'t permission to view this image</p></div>');
+								$(".loged-in-user-error").center();
+							});
+						}else{
+							$(document).ready(function() {
+								$(".not-loged-in-user-error").html('<div><p>Currently you have not enough permissions to view this image. Please log in.</p></div>');
+							});
+						}
+				}
 				});
 			}
 		}
