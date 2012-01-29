@@ -96,7 +96,9 @@ load() # 1=DISTRO_NAME 2=ROOT_DIR 3=NAME 4=DISTRO_SITE 5=DISTRO_PATH
 		echo_run ${CURL_CMD} http://$4/$5/$1 -o $1
 	fi
 	
-	if [ ${1##*.} == "bz2" ]; then
+	if [ ${1##*.} == "zip" ]; then
+		echo_run unzip $1
+	elif [ ${1##*.} == "bz2" ]; then
 		echo_run tar -xjf $1
 	else
 		echo_run tar -xzf $1
