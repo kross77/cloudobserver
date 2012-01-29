@@ -10,8 +10,6 @@ project "ImageRendererService"
 
 	links { "cf-util" }
 	includedirs { "src/cf-util"}
-	
-	links { "cf-http" }
 	includedirs { "3rdparty/cf-http" }
 	
 	links { "boost-sqlite" }
@@ -21,7 +19,6 @@ project "ImageRendererService"
 		linkoptions {
 			"-lcf-fs",
 			"-lcf-util",
-			"-lcf-http",
 			"-lboost-sqlite"
 		}
 	configuration { }

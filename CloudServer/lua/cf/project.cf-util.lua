@@ -3,19 +3,14 @@ project "cf-util"
 	language "C++"
 	location ( "projects/" .. os.get() .. "-" .. action )
 	files { "src/cf-util/**.h", "src/cf-util/**.cpp" }
-	
+	files { "3rdparty/cf-http/**.h", "3rdparty/cf-http/**.cpp" }
+
 	cloud.project.init()
-	cloud.project.useopenSSL()
-	cloud.project.useBoost()
 	
-	links { "cf-http" }
 	includedirs { "3rdparty/cf-http"}
 	
-	configuration { "gmake" }
-		linkoptions {
-			"-lcf-http"
-		}
-	configuration { }
+	cloud.project.useBoost()
+	cloud.project.useopenSSL()
 	
 	configuration "gmake"
 		buildoptions { "-fPIC" }

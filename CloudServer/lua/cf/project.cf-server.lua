@@ -5,29 +5,27 @@ project "cf-server"
 	files { "src/cf-server/**.h", "src/cf-server/**.cpp" }
 	
 	cloud.project.init()
-	cloud.project.useopenSSL()
-	cloud.project.useBoost()
-
-	links { "boost-sqlite" }
-	includedirs { "3rdparty/boost-sqlite"}	
-	
-	links { "cf-http" }
-	includedirs { "3rdparty/cf-http"}
-	
-	links { "cf-util" }
-	includedirs { "src/cf-util"}
 	
 	links { "cf-fs" }
 	includedirs { "src/cf-fs"}
+
+	links { "cf-util" }
+	includedirs { "src/cf-util"}
+	includedirs { "3rdparty/cf-http"}
+		
+	links { "boost-sqlite" }
+	includedirs { "3rdparty/boost-sqlite"}	
 	
 	configuration { "gmake" }
 		linkoptions {
 			"-lboost-sqlite",
-			"-lcf-http",
 			"-lcf-util",
 			"-lcf-fs"
 		}
 	configuration { }
+	
+	cloud.project.useBoost()
+	cloud.project.useopenSSL()
 	
 	includedirs { "service-interface/" }
 	

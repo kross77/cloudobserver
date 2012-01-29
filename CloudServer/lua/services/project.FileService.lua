@@ -4,27 +4,25 @@ project "FileService"
 	location ( "projects/" .. os.get() .. "-" .. action )
 	
 	cloud.project.init()
-	cloud.project.useopenSSL()
 
-	links { "cf-http" }
-	includedirs { "3rdparty/cf-http" }
-	
-	links { "cf-util" }
-	includedirs { "src/cf-util"}
 	
 	links { "cf-fs" }
 	includedirs { "src/cf-fs"}
+		
+	links { "cf-util" }
+	includedirs { "src/cf-util"}
+	includedirs { "3rdparty/cf-http" }	
 	
 	configuration { "gmake" }
 		linkoptions {
-			"-lcf-http",
 			"-lcf-util",
 			"-lcf-fs"
 		}
 	configuration { }
 	
 	cloud.project.useBoost()
-	
+	cloud.project.useopenSSL()
+		
 	includedirs { "service-interface/" }
 	
 	files { "src/default-services/file_service/**"}

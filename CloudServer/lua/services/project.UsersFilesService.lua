@@ -5,23 +5,20 @@ project "UsersFilesService"
 	
 	cloud.project.init()
 
-	links { "boost-sqlite" }
-	includedirs { "3rdparty/boost-sqlite"}
+	links { "cf-fs" }
+	includedirs { "src/cf-fs"}	
 	
 	links { "cf-util" }
 	includedirs { "src/cf-util"}
-	
-	links { "cf-http" }
 	includedirs { "3rdparty/cf-http" }
 	
-	links { "cf-fs" }
-	includedirs { "src/cf-fs"}
+	links { "boost-sqlite" }
+	includedirs { "3rdparty/boost-sqlite"}
 	
 	configuration { "gmake" }
 		linkoptions {
 			"-lboost-sqlite",
 			"-lcf-util",
-			"-lcf-http",
 			"-lcf-fs"
 		}
 	configuration { }
