@@ -257,26 +257,14 @@ if [ ! -d $OPENSSL_ROOT_DIR -o "$REBUILD_LIBRARIES" = "yes" ]; then
 		rm -rf $OPENSSL_ROOT_DIR
 	fi
 	
-	if [ ! -e $OPENSSL_DISTRO_NAME ]; then
-		echo_run ${CURL_CMD} http://$OPENSSL_DISTRO_SITE/source/$OPENSSL_DISTRO_NAME -o $OPENSSL_DISTRO_NAME
-	fi
-	  
-	if [ ! -d $OPENSSL_ROOT_DIR ]; then
-		echo_run mkdir $OPENSSL_ROOT_DIR
-	fi
-
-	if [ ! -d $OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR/lib ]; then
-		echo_run tar -xzf $OPENSSL_DISTRO_NAME
-		echo_run rm -rf $OPENSSL_ROOT_DIR
-		echo_run mv $OPENSSL_NAME $OPENSSL_ROOT_DIR
+	load $OPENSSL_DISTRO_NAME $OPENSSL_ROOT_DIR $OPENSSL_NAME $OPENSSL_DISTRO_SITE source
 	
-		cd $OPENSSL_ROOT_DIR
+	cd $OPENSSL_ROOT_DIR
 
-		echo_run ./config shared no-asm --prefix="$WD/$CLOUD_ROOT_DIR/$OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR" --openssldir="$WD/$CLOUD_ROOT_DIR/$OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR/share"
-		echo_run make install
-	
-		cd ..
-	fi
+	echo_run ./config shared no-asm --prefix="$WD/$CLOUD_ROOT_DIR/$OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR" --openssldir="$WD/$CLOUD_ROOT_DIR/$OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR/share"
+	echo_run make install
+
+	cd ..
 fi
 
 # Premake
