@@ -33,7 +33,7 @@ OPENCV_VERSION=2.3.1
 OPENCV_COMPILE=opencv_libraries
 OPENCV_INSTALL=install-dir
 OPENCV_SRCBASE=OpenCV-$OPENCV_VERSION
-OPENCV_SRCFILE=$OPENCV_SRCBASEa.tar.bz2
+OPENCV_SRCFILE="$OPENCV_SRCBASE"a.tar.bz2 # note the 'a' character (it's 2.3.1a)
 OPENCV_SRCPATH=project/opencvlibrary/opencv-unix/$OPENCV_VERSION
 OPENCV_SRCSITE=surfnet.dl.sourceforge.net
 
