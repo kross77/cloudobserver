@@ -23,12 +23,12 @@ project "CloudServer"
 	
 	links { "cf-util" }
 	includedirs { "src/cf-util"}
-
-	cloud.project.useBoost()
-	cloud.project.useopenSSL()
 	
 	links { "cf-fs" }
 	includedirs { "src/cf-fs"}
+
+	cloud.project.useBoost()
+	cloud.project.useopenSSL()
 	
 	files { "src/main.cpp" }
 
