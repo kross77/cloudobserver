@@ -108,10 +108,7 @@ HERE=`dirname $0`
 
 cd $HERE
 
-if [ ! -d $WORKSPACE ]; then
-	echo_run mkdir $WORKSPACE
-fi
-
+mkdir -p $WORKSPACE
 cd $WORKSPACE
 
 if [ "$REBUILD_LIBRARIES" = "yes" ]; then
