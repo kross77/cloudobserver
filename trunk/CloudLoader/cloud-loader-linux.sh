@@ -58,7 +58,7 @@ PREMAKE_PROJECT_PATH=project/premake/Premake/$PREMAKE_VERSION
 PREMAKE_NAME=premake-$PREMAKE_VERSION
 PREMAKE_DISTRO_NAME="$PREMAKE_NAME"-src.zip
 PREMAKE_ROOT_DIR=premake
-
+PREMAKE_INSTALL_SUBDIR=install-dir
 
 echo 
 echo --CF autobuild team welcomes you!----------------------------------------------
@@ -250,7 +250,12 @@ if [ ! -d $PREMAKE_ROOT_DIR ]; then
 	
 	echo_run make -j$JOBS config=release
 	
-	cd ../../..
+	cd ../..
+	
+	mkdir -p ./$PREMAKE_INSTALL_SUBDIR/bin
+	cp bin/release/premake4 ./$PREMAKE_INSTALL_SUBDIR/bin
+	
+	cd ..
 fi
 
 # CloudServer
