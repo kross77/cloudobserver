@@ -194,6 +194,7 @@
 			
 		user = readCookie('session-id');
 		if (user != null) {
+			
 		   var is = Tempo.prepare('marx-images');
 			is.starting();
 			var joinedJSON = [];
@@ -210,7 +211,7 @@
 												joinedJSON = joinedJSON.concat(json_svg);
 												joinedJSON = shuffle(joinedJSON);
 												parseArrayForBox(joinedJSON, user_images);
-												//is.render(joinedJSON);
+												is.render(joinedJSON);
 
 											}); // SVG	
 									}); // jpeg
