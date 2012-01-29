@@ -6,6 +6,12 @@ SOURCE="${BASH_SOURCE[0]}"
 while [ -h "$SOURCE" ]; do SOURCE="$(readlink "$SOURCE")"; done
 cd "$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
+# Declare, create and move to the workspace directory.
+WORKSPACE=cloud_server
+mkdir -p $WORKSPACE
+cd $WORKSPACE
+
+# Remember the workspace directory path.
 WD=`pwd`
 
 BOOST_VERSION=1.47.0
@@ -55,7 +61,6 @@ PREMAKE_SRCSITE=surfnet.dl.sourceforge.net
 
 ZLIB_COMPILE=$OPENCV_COMPILE/3rdparty/zlib
 
-WORKSPACE=cloud_server
 DOWNLOADS=downloads
 
 OS=linux
@@ -108,9 +113,6 @@ load() # 1=SRCFILE 2=COMPILE 3=SRCBASE 4=SRCSITE 5=SRCPATH
 	fi
 	echo_run mv $3 $2
 }
-
-mkdir -p $WORKSPACE
-cd $WORKSPACE
 
 if [ "$REBUILD_LIBRARIES" = "yes" ]; then
 	rm -rf $CMAKE_COMPILE
@@ -215,7 +217,7 @@ if [ ! -d $BOOST_COMPILE ]; then
 
 	echo_run ./bootstrap.sh
 
-	echo_run ./b2 -j$JOBS -d0 --with-thread --with-system --with-filesystem --with-serialization --with-program_options --with-regex --with-date_time --with-iostreams -sZLIB_SOURCE="$WD/$WORKSPACE/$ZLIB_COMPILE/" -sNO_BZIP2=1 cflags=-fPIC cxxflags=-fPIC link=static --prefix=./$BOOST_INSTALL release install
+	echo_run ./b2 -j$JOBS -d0 --with-thread --with-system --with-filesystem --with-serialization --with-program_options --with-regex --with-date_time --with-iostreams -sZLIB_SOURCE="$WD/$ZLIB_COMPILE/" -sNO_BZIP2=1 cflags=-fPIC cxxflags=-fPIC link=static --prefix=./$BOOST_INSTALL release install
 
 	cd ..
 fi
@@ -226,7 +228,7 @@ if [ ! -d $OPENSSL_COMPILE ]; then
 	
 	cd $OPENSSL_COMPILE
 
-	echo_run ./config shared no-asm --prefix="$WD/$WORKSPACE/$OPENSSL_COMPILE/$OPENSSL_INSTALL" --openssldir="$WD/$WORKSPACE/$OPENSSL_COMPILE/$OPENSSL_INSTALL/share"
+	echo_run ./config shared no-asm --prefix="$WD/$OPENSSL_COMPILE/$OPENSSL_INSTALL" --openssldir="$WD/$OPENSSL_COMPILE/$OPENSSL_INSTALL/share"
 	echo_run make install
 
 	cd ..
