@@ -131,11 +131,6 @@ else
 	echo_run rm -rf $CLOUD_INSTALL_SUBDIR/config.xml 
 fi
 
-if [ "$KEEP_OLD" = "no" -o ! -d $CLOUD_COMPONENT_NAME ]; then
-	echo_run rm -rf $CLOUD_COMPONENT_NAME/
-	echo_run ${SVN_CMD} https://$CLOUD_DISTRO_SITE/svn/trunk/$CLOUD_COMPONENT_NAME/ $CLOUD_COMPONENT_NAME
-fi
-
 if [ "$REBUILD_LIBRARIES" = "yes" ]; then
 	rm -rf $CMAKE_ROOT_DIR
 	rm -rf $OPENCV_ROOT_DIR
@@ -267,6 +262,12 @@ if [ ! -d $PREMAKE_ROOT_DIR ]; then
 	echo_run make -j$JOBS config=release
 	
 	cd ../../..
+fi
+
+# CloudServer
+if [ "$KEEP_OLD" = "no" -o ! -d $CLOUD_COMPONENT_NAME ]; then
+	echo_run rm -rf $CLOUD_COMPONENT_NAME/
+	echo_run ${SVN_CMD} https://$CLOUD_DISTRO_SITE/svn/trunk/$CLOUD_COMPONENT_NAME/ $CLOUD_COMPONENT_NAME
 fi
 
 cd $CLOUD_COMPONENT_NAME
