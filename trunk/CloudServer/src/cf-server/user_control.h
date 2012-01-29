@@ -16,7 +16,7 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/date_time.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
-
+#include <boost/algorithm/string.hpp>    
 //SQLite
 #include <sqlite3pp.h>
 
@@ -49,8 +49,8 @@ private:
 
 
 	//User_control functions
-	bool is_registered_user(std::string email, std::string pass_sha256);
-	bool is_registered_user(std::string email);
+	bool is_registered_user(std::string & email, std::string & pass_sha256);
+	bool is_registered_user(std::string & email);
 	std::string is_signed_in_user(std::string session_id_sha256);
 
 	std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > check_recaptcha( boost::shared_ptr<boost::asio::ip::tcp::socket> socket, std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user);
