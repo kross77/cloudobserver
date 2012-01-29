@@ -38,6 +38,10 @@ function windowsBase(id)
 				left: event.offsetX
 			});
 		});
+		
+	$(window).bind('resize', function() {
+		$(id_demo_box).center();
+	});
 }
 
 function prepareWindow()
@@ -67,7 +71,6 @@ function showForm(sourceElement, PopupName, w, h) {
 	$("#demo_box").height(h);
 	$('#demo_box').center();
 	$(window).bind('resize', function() {
-		$(".alert").zindex('up');
 		$('#demo_box').center();
 	});
 }
@@ -101,7 +104,6 @@ function showStaticForm(id, w, h) {
 	$(id_demo_box).height(h);
 	$(id_demo_box).center();
 	$(window).bind('resize', function() {
-		$(class_alert).zindex('up');
 		$(id_demo_box).center();
 	});
 }
