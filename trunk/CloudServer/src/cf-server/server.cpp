@@ -134,26 +134,29 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 			util->tread_util->safe_insert<boost::thread::id, std::set<boost::thread::id> >(boost::this_thread::get_id(),service_cont->threads_ids);
 
 			//*(util->info) << "ids size: " << service_cont->threads_ids.size() << log_util::endl;
-			boost::shared_ptr<std::string> err;
-			raw data;
+			raw_out service_output;
+			raw_in data;
 			data.socket = socket;
-
+			shared shared_data;
+			
+			data.shared_data = shared_data.serialize();
+			
 			data.raw_request = request->serialize();
 
 			data.raw_response = response->serialize();
 			
 			try
 			{
-				err = requested_service->make_service_call(data);
-				if ((*err) != "")
+				service_output = requested_service->make_service_call(data);
+				if ((*(service_output.error_data)) != "")
 				{
 					std::ostringstream body;
-					body << "@"<< service_cont->class_name <<" error: " << (*err) << "\n <br/> <a href='/'>please come again!</a>";
+					body << "@"<< service_cont->class_name <<" error: " << (*(service_output.error_data)) << "\n <br/> <a href='/'>please come again!</a>";
 					response->body = "<head></head><body><h1>" + body.str() + "</h1></body>";
 					response->headers["Content-Length"] = boost::lexical_cast<std::string>(response->body.length());
 					response->send(*socket);
 		
-					*(util->error) << (*err) << log_util::endl;
+					*(util->error) << (*(service_output.error_data)) << log_util::endl;
 				}
 				
 
