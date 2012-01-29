@@ -136,12 +136,26 @@ else
 	echo_run ${SVN_CMD} https://$CLOUD_DISTRO_SITE/svn/trunk/$CLOUD_COMPONENT_NAME/ $CLOUD_COMPONENT_NAME
 fi
 
-# CMake
-if [ ! -d $CMAKE_ROOT_DIR -o "$REBUILD_LIBRARIES" = "yes" ]; then
+if [ "$REBUILD_LIBRARIES" = "yes" ]; then
 	if [ -d $CMAKE_ROOT_DIR ]; then
 		rm -rf $CMAKE_ROOT_DIR
 	fi
-	
+	if [ -d $OPENCV_ROOT_DIR ]; then
+		rm -rf $OPENCV_ROOT_DIR
+	fi
+	if [ -d $BOOST_ROOT_DIR ]; then
+		rm -rf $BOOST_ROOT_DIR
+	fi
+	if [ -d $OPENSSL_ROOT_DIR ]; then
+		rm -rf $OPENSSL_ROOT_DIR
+	fi
+	if [ -d $PREMAKE_ROOT_DIR ]; then
+		rm -rf $PREMAKE_ROOT_DIR
+	fi
+fi
+
+# CMake
+if [ ! -d $CMAKE_ROOT_DIR ]; then
 	load $CMAKE_DISTRO_NAME $CMAKE_ROOT_DIR $CMAKE_NAME $CMAKE_DISTRO_SITE $CMAKE_PROJECT_URL/$CMAKE_VERSION
 	cd $CMAKE_ROOT_DIR
 
@@ -152,11 +166,7 @@ if [ ! -d $CMAKE_ROOT_DIR -o "$REBUILD_LIBRARIES" = "yes" ]; then
 fi
 
 # OpenCV
-if [ ! -d $OPENCV_ROOT_DIR -o "$REBUILD_LIBRARIES" = "yes" ]; then
-	if [ -d $OPENCV_ROOT_DIR ]; then
-		rm -rf $OPENCV_ROOT_DIR
-	fi
-	
+if [ ! -d $OPENCV_ROOT_DIR ]; then
 	load $OPENCV_DISTRO_NAME $OPENCV_ROOT_DIR $OPENCV_NAME $OPENCV_DISTRO_SITE $OPENCV_PROJECT_URL/$OPENCV_VERSION
 
 	cd $OPENCV_ROOT_DIR
@@ -232,11 +242,7 @@ if [ ! -d $OPENCV_ROOT_DIR -o "$REBUILD_LIBRARIES" = "yes" ]; then
 fi
 
 # Boost
-if [ ! -d $BOOST_ROOT_DIR -o "$REBUILD_LIBRARIES" = "yes" ]; then
-	if [ -d $BOOST_ROOT_DIR ]; then
-		rm -rf $BOOST_ROOT_DIR
-	fi
-
+if [ ! -d $BOOST_ROOT_DIR ]; then
 	load $BOOST_DISTRO_NAME $BOOST_ROOT_DIR $BOOST_NAME $BOOST_DISTRO_SITE $BOOST_PROJECT_URL/$BOOST_VERSION
 
 	cd $BOOST_ROOT_DIR
@@ -251,11 +257,7 @@ if [ ! -d $BOOST_ROOT_DIR -o "$REBUILD_LIBRARIES" = "yes" ]; then
 fi
 
 # OpenSSL
-if [ ! -d $OPENSSL_ROOT_DIR -o "$REBUILD_LIBRARIES" = "yes" ]; then
-	if [ -d $OPENSSL_ROOT_DIR ]; then
-		rm -rf $OPENSSL_ROOT_DIR
-	fi
-	
+if [ ! -d $OPENSSL_ROOT_DIR ]; then
 	load $OPENSSL_DISTRO_NAME $OPENSSL_ROOT_DIR $OPENSSL_NAME $OPENSSL_DISTRO_SITE source
 	
 	cd $OPENSSL_ROOT_DIR
@@ -267,11 +269,7 @@ if [ ! -d $OPENSSL_ROOT_DIR -o "$REBUILD_LIBRARIES" = "yes" ]; then
 fi
 
 # Premake
-if [ ! -d $PREMAKE_ROOT_DIR -o "$REBUILD_LIBRARIES" = "yes" ]; then
-	if [ -d $PREMAKE_ROOT_DIR ]; then
-		rm -rf $PREMAKE_ROOT_DIR
-	fi
-	
+if [ ! -d $PREMAKE_ROOT_DIR ]; then
 	load $PREMAKE_DISTRO_NAME $PREMAKE_ROOT_DIR $PREMAKE_NAME $PREMAKE_DISTRO_SITE project/premake/Premake/$PREMAKE_VERSION
 	
 	cd $PREMAKE_ROOT_DIR/build/gmake.unix
