@@ -143,21 +143,11 @@ else
 fi
 
 if [ "$REBUILD_LIBRARIES" = "yes" ]; then
-	if [ -d $CMAKE_ROOT_DIR ]; then
-		rm -rf $CMAKE_ROOT_DIR
-	fi
-	if [ -d $OPENCV_ROOT_DIR ]; then
-		rm -rf $OPENCV_ROOT_DIR
-	fi
-	if [ -d $BOOST_ROOT_DIR ]; then
-		rm -rf $BOOST_ROOT_DIR
-	fi
-	if [ -d $OPENSSL_ROOT_DIR ]; then
-		rm -rf $OPENSSL_ROOT_DIR
-	fi
-	if [ -d $PREMAKE_ROOT_DIR ]; then
-		rm -rf $PREMAKE_ROOT_DIR
-	fi
+	rm -rf $CMAKE_ROOT_DIR
+	rm -rf $OPENCV_ROOT_DIR
+	rm -rf $BOOST_ROOT_DIR
+	rm -rf $OPENSSL_ROOT_DIR
+	rm -rf $PREMAKE_ROOT_DIR
 fi
 
 # CMake
