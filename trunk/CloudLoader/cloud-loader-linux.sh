@@ -260,7 +260,7 @@ fi
 # CloudServer
 if [ "$KEEP_OLD" = "no" -o ! -d $CLOUD_COMPONENT_NAME ]; then
 	echo_run rm -rf $CLOUD_COMPONENT_NAME/
-	echo_run svn export https://$CLOUD_DISTRO_SITE/svn/trunk/$CLOUD_COMPONENT_NAME/ $CLOUD_COMPONENT_NAME
+	echo_run svn checkout https://$CLOUD_DISTRO_SITE/svn/trunk/$CLOUD_COMPONENT_NAME/ $CLOUD_COMPONENT_NAME
 fi
 
 cd $CLOUD_COMPONENT_NAME
