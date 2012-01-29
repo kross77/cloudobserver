@@ -11,7 +11,7 @@ WORKSPACE=cloud_server
 JOBS=`grep ^processor /proc/cpuinfo | wc -l`
 
 CLOUD_DISTRO_SITE=cloudobserver.googlecode.com
-CLOUD_COMPONENT_NAME=CloudServer
+CLOUD_ROOT_DIR=CloudServer
 CLOUD_INSTALL_SUBDIR=install-dir
 
 CLOUD_LOCAL_BUILDING_FILE_NAME=build.sh
@@ -258,12 +258,12 @@ if [ ! -d $PREMAKE_ROOT_DIR ]; then
 fi
 
 # CloudServer
-if [ "$KEEP_OLD" = "no" -o ! -d $CLOUD_COMPONENT_NAME ]; then
-	echo_run rm -rf $CLOUD_COMPONENT_NAME/
-	echo_run svn checkout https://$CLOUD_DISTRO_SITE/svn/trunk/$CLOUD_COMPONENT_NAME/ $CLOUD_COMPONENT_NAME
+if [ "$KEEP_OLD" = "no" -o ! -d $CLOUD_ROOT_DIR ]; then
+	echo_run rm -rf $CLOUD_ROOT_DIR/
+	echo_run svn checkout https://$CLOUD_DISTRO_SITE/svn/trunk/$CLOUD_ROOT_DIR/ $CLOUD_ROOT_DIR
 fi
 
-cd $CLOUD_COMPONENT_NAME
+cd $CLOUD_ROOT_DIR
 
 if [ ! -e $CLOUD_LOCAL_BUILDING_FILE_NAME ]; then
 	echo_run echo ../$PREMAKE_ROOT_DIR/bin/release/premake4 --os=$OS_NAME --BoostLibsPath=../$BOOST_ROOT_DIR/$BOOST_INSTALL_SUBDIR/lib  --OpenCVLibsPath=../$OPENCV_ROOT_DIR/$OPENCV_INSTALL_SUBDIR/lib --OpenSSLLibsPath=../$OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR/lib  --BoostIncludesPath=../$BOOST_ROOT_DIR/$BOOST_INSTALL_SUBDIR/include  --OpenCVIncludesPath=../$OPENCV_ROOT_DIR/$OPENCV_INSTALL_SUBDIR/include --OpenSSLIncludesPath=../$OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR/include --platform=x32 gmake > $CLOUD_LOCAL_BUILDING_FILE_NAME
@@ -285,7 +285,7 @@ else
 	echo_run rm -rf $CLOUD_INSTALL_SUBDIR/htdocs
 	echo_run rm -rf $CLOUD_INSTALL_SUBDIR/config.xml 
 fi
-echo_run cp -r $CLOUD_COMPONENT_NAME/projects/$OS_NAME-gmake/bin/release/* $CLOUD_INSTALL_SUBDIR
+echo_run cp -r $CLOUD_ROOT_DIR/projects/$OS_NAME-gmake/bin/release/* $CLOUD_INSTALL_SUBDIR
 echo Done!
 
 exit 0
