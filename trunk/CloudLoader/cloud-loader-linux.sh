@@ -1,5 +1,11 @@
 #!/bin/bash
 # requires svn, curl, gcc
+BOOST_VERSION=1.47.0
+CMAKE_VERSION=2.8.6
+OPENCV_VERSION=2.3.1
+OPENSSL_VERSION=1.0.0d
+PREMAKE_VERSION=4.3
+
 JOBS=`grep ^processor /proc/cpuinfo | wc -l`
 
 CLOUD_DISTRO_SITE=cloudobserver.googlecode.com
@@ -20,7 +26,6 @@ REBUILD_LIBRARIES=no
 BOOST_DISTRO_SITE=surfnet.dl.sourceforge.net
 BOOST_PROJECT_PATH=project/boost/boost/1.47.0
 BOOST_NAME=boost_1_47_0
-BOOST_VERSION=1.47.0
 BOOST_DISTRO_NAME="$BOOST_NAME".tar.bz2
 BOOST_ROOT_DIR=boost_libraries
 BOOST_INSTALL_SUBDIR=install-dir
@@ -30,7 +35,6 @@ ZLIB_ROOT_DIR=opencv_libraries/3rdparty/zlib
 
 OPENSSL_DISTRO_SITE=www.openssl.org
 OPENSSL_NAME=openssl-1.0.0d
-OPENSSL_VERSION=1.0.0d
 OPENSSL_DISTRO_NAME="$OPENSSL_NAME".tar.gz
 OPENSSL_PROJECT_PATH=source
 OPENSSL_ROOT_DIR=openssl_libraries
@@ -40,7 +44,6 @@ OPENSSL_COMPILE_SUBDIR=build-dir
 OPENCV_DISTRO_SITE=surfnet.dl.sourceforge.net
 OPENCV_PROJECT_PATH=project/opencvlibrary/opencv-unix/2.3.1
 OPENCV_NAME=OpenCV-2.3.1
-OPENCV_VERSION=2.3.1
 OPENCV_DISTRO_NAME="$OPENCV_NAME"a.tar.bz2
 OPENCV_ROOT_DIR=opencv_libraries
 OPENCV_INSTALL_SUBDIR=install-dir
@@ -50,7 +53,6 @@ CMAKE_PATH=./cmake/bin/cmake
 CMAKE_DISTRO_SITE=www.cmake.org
 CMAKE_PROJECT_PATH=files/v2.8
 CMAKE_NAME=cmake-2.8.6
-CMAKE_VERSION=2.8.6
 CMAKE_DISTRO_NAME="$CMAKE_NAME".tar.gz
 CMAKE_ROOT_DIR=cmake
 CMAKE_INSTALL_SUBDIR=install-dir
@@ -59,7 +61,6 @@ CMAKE_COMPILE_SUBDIR=build-dir
 PREMAKE_DISTRO_SITE=surfnet.dl.sourceforge.net
 PREMAKE_PROJECT_PATH=project/premake/Premake/4.3
 PREMAKE_NAME=premake-4.3
-PREMAKE_VERSION=4.3
 PREMAKE_DISTRO_NAME="$PREMAKE_NAME"-src.zip
 PREMAKE_ROOT_DIR=premake
 
