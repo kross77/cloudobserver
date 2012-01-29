@@ -103,7 +103,6 @@ load() # 1=SRCFILE 2=COMPILE 3=SRCBASE 4=SRCSITE 5=SRCPATH
 }
 
 WD=`pwd`
-MACHINE=`uname`
 HERE=`dirname $0`
 
 cd $HERE
