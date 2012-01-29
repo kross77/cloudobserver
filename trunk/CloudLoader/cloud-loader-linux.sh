@@ -18,7 +18,7 @@ CLOUD_LOCAL_BUILDING_FILE_NAME=build.sh
 
 DOWNLOADS_DIR=downloads
 
-OS_NAME=linux # could be `macosx`
+OS=linux
 
 KEEP_OLD=no
 REBUILD_LIBRARIES=no
@@ -267,13 +267,13 @@ fi
 cd $CLOUD_ROOT_DIR
 
 if [ ! -e $CLOUD_LOCAL_BUILDING_FILE_NAME ]; then
-	echo_run echo ../$PREMAKE_ROOT_DIR/bin/release/premake4 --os=$OS_NAME --BoostLibsPath=../$BOOST_ROOT_DIR/$BOOST_INSTALL_SUBDIR/lib  --OpenCVLibsPath=../$OPENCV_ROOT_DIR/$OPENCV_INSTALL_SUBDIR/lib --OpenSSLLibsPath=../$OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR/lib  --BoostIncludesPath=../$BOOST_ROOT_DIR/$BOOST_INSTALL_SUBDIR/include  --OpenCVIncludesPath=../$OPENCV_ROOT_DIR/$OPENCV_INSTALL_SUBDIR/include --OpenSSLIncludesPath=../$OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR/include --platform=x32 gmake > $CLOUD_LOCAL_BUILDING_FILE_NAME
+	echo_run echo ../$PREMAKE_ROOT_DIR/bin/release/premake4 --os=$OS --BoostLibsPath=../$BOOST_ROOT_DIR/$BOOST_INSTALL_SUBDIR/lib  --OpenCVLibsPath=../$OPENCV_ROOT_DIR/$OPENCV_INSTALL_SUBDIR/lib --OpenSSLLibsPath=../$OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR/lib  --BoostIncludesPath=../$BOOST_ROOT_DIR/$BOOST_INSTALL_SUBDIR/include  --OpenCVIncludesPath=../$OPENCV_ROOT_DIR/$OPENCV_INSTALL_SUBDIR/include --OpenSSLIncludesPath=../$OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR/include --platform=x32 gmake > $CLOUD_LOCAL_BUILDING_FILE_NAME
 	echo_run chmod u+x ./$CLOUD_LOCAL_BUILDING_FILE_NAME
 fi
 
 echo_run ./$CLOUD_LOCAL_BUILDING_FILE_NAME
 
-cd projects/$OS_NAME-gmake
+cd projects/$OS-gmake
 
 echo_run make -j$JOBS config=release
 
@@ -286,7 +286,7 @@ else
 	echo_run rm -rf $CLOUD_INSTALL_SUBDIR/htdocs
 	echo_run rm -rf $CLOUD_INSTALL_SUBDIR/config.xml 
 fi
-echo_run cp -r $CLOUD_ROOT_DIR/projects/$OS_NAME-gmake/bin/release/* $CLOUD_INSTALL_SUBDIR
+echo_run cp -r $CLOUD_ROOT_DIR/projects/$OS-gmake/bin/release/* $CLOUD_INSTALL_SUBDIR
 echo Done!
 
 exit 0
