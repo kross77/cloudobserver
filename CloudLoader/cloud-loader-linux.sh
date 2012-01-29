@@ -87,6 +87,7 @@ echo_run ()
 
 load() # 1=SRCFILE 2=COMPILE 3=SRCBASE 4=SRCSITE 5=SRCPATH
 {
+	mkdir -p $DOWNLOADS
 	if [ ! -e $DOWNLOADS/$1 ]; then
 		echo_run curl -L http://$4/$5/$1 -o $DOWNLOADS/$1
 	fi
@@ -112,10 +113,6 @@ if [ ! -d $WORKSPACE ]; then
 fi
 
 cd $WORKSPACE
-
-if [ ! -d $DOWNLOADS ]; then
-	echo_run mkdir $DOWNLOADS
-fi
 
 if [ "$REBUILD_LIBRARIES" = "yes" ]; then
 	rm -rf $CMAKE_COMPILE
