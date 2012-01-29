@@ -50,7 +50,6 @@ OPENCV_ROOT_DIR=opencv_libraries
 OPENCV_INSTALL_SUBDIR=install-dir
 OPENCV_COMPILE_SUBDIR=build-dir
 
-CMAKE_PATH=./cmake/bin/cmake
 CMAKE_DISTRO_SITE=www.cmake.org
 CMAKE_PROJECT_PATH=files/v${CMAKE_VERSION%.*}
 CMAKE_NAME=cmake-$CMAKE_VERSION
@@ -159,7 +158,7 @@ if [ ! -d $OPENCV_ROOT_DIR ]; then
 	# to the CMake call leads to an error during the build
 	# with 'opencv_traincascade' executable not being created.
 	# It seems like a bug in OpenCV CMake script.
-	echo_run ../$CMAKE_PATH \
+	echo_run ../$CMAKE_ROOT_DIR/bin/cmake \
 		-DBUILD_DOCS=OFF \
 		-DBUILD_EXAMPLES=OFF \
 		-DBUILD_NEW_PYTHON_SUPPORT=OFF \
