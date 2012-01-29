@@ -120,35 +120,6 @@ bool config(std::string config_file_path)
 	return true;
 }
 
-bool save(std::string save_file_path)
-{
-	try
-	{
-		std::string ext = save_file_path.substr(save_file_path.find_last_of(".") + 1);
-		if((ext == "x") || (ext == "xml") || (ext  == "ccml"))
-		{
-			boost::property_tree::xml_writer_settings<char> w(' ', 4);
-			write_xml(save_file_path, s->get_configuration(), std::locale(), w);
-		}
-		else if((ext == "j") || (ext == "js") || (ext == "json"))
-		{
-			write_json(save_file_path, s->get_configuration());
-		}
-		else
-		{
-			std::cout << "Error: configuration file must have extension `.x`, `.xml`, `.ccml` for xml formated input files or `.j`, `.js`, `.json` for JSON formated files  " << std::endl;
-			return false;
-		}
-	}
-	catch(std::exception &e)
-	{
-		std::cout << "Error: saving error." << std::endl;
-		return false;
-	}
-	std::cout << "Current configuration saved to '" << save_file_path << "' file." << std::endl;
-	return true;
-}
-
 void print_services()
 {
 	BOOST_FOREACH(std::string const si, s->util->get_services_names())
@@ -401,9 +372,6 @@ int main(int argc, char* argv[])
 
 				if (file_path == "exit")
 					continue;
-
-				if(save(file_path))
-					break; 
 
 			} while (file_path != "exit");
 			continue;
