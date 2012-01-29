@@ -90,30 +90,18 @@ echo_run ()
 	fi
 }
 
-extract() # 1=DISTRO_NAME 2=ROOT_DIR 3=NAME
-{
-	if [ ${1##*.} == "bz2" ]; then
-		echo_run tar -xjf $1
-	else
-		echo_run tar -xzf $1
-	fi
-	echo_run rm -rf $2
-	echo_run mv $3 $2
-}
-
 load() # 1=DISTRO_NAME 2=ROOT_DIR 3=NAME 4=VERSION 5=BOOST_DISTRO_SITE 6=INSTALL_SUBDIR 7=PROJECT_URL
 {
 	if [ ! -e $1 ]; then
 		echo_run ${CURL_CMD} http://$5/$7/$4/$1 -o $1
 	fi
-	  
-	if [ ! -d $2 ]; then
-		echo_run mkdir $2
-	fi
 	
-	if [ ! -d $2/$6/lib ]; then
-		extract  $1 $2 $3
+	if [ ${1##*.} == "bz2" ]; then
+		echo_run tar -xjf $1
+	else
+		echo_run tar -xzf $1
 	fi
+	echo_run mv $3 $2
 }
 
 WD=`pwd`
