@@ -30,6 +30,7 @@ ZLIB_ROOT_DIR=opencv_libraries/3rdparty/zlib
 
 OPENSSL_DISTRO_SITE=www.openssl.org
 OPENSSL_NAME=openssl-1.0.0d
+OPENSSL_VERSION=1.0.0d
 OPENSSL_DISTRO_NAME="$OPENSSL_NAME".tar.gz
 OPENSSL_PROJECT_PATH=source
 OPENSSL_ROOT_DIR=openssl_libraries
@@ -49,6 +50,7 @@ CMAKE_PATH=./cmake/bin/cmake
 CMAKE_DISTRO_SITE=www.cmake.org
 CMAKE_PROJECT_PATH=files/v2.8
 CMAKE_NAME=cmake-2.8.6
+CMAKE_VERSION=2.8.6
 CMAKE_DISTRO_NAME="$CMAKE_NAME".tar.gz
 CMAKE_ROOT_DIR=cmake
 CMAKE_INSTALL_SUBDIR=install-dir
