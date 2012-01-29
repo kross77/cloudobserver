@@ -1,5 +1,6 @@
 #!/bin/bash
 # requires svn, curl, gcc
+WD=`pwd`
 
 BOOST_VERSION=1.47.0
 BOOST_COMPILE=boost_libraries
@@ -102,7 +103,6 @@ load() # 1=SRCFILE 2=COMPILE 3=SRCBASE 4=SRCSITE 5=SRCPATH
 	echo_run mv $3 $2
 }
 
-WD=`pwd`
 HERE=`dirname $0`
 
 cd $HERE
