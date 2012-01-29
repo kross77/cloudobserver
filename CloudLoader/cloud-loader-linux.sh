@@ -11,9 +11,9 @@ DOWNLOADS=downloads
 
 JOBS=`grep ^processor /proc/cpuinfo | wc -l`
 
-CLOUD_DISTRO_SITE=cloudobserver.googlecode.com
-CLOUD_ROOT_DIR=CloudServer
-CLOUD_INSTALL_SUBDIR=install-dir
+CLOUD_SRCSITE=cloudobserver.googlecode.com
+CLOUD_COMPILE=CloudServer
+CLOUD_INSTALL=install-dir
 
 CLOUD_PREMAKE=build.sh
 
@@ -22,42 +22,42 @@ OS=linux
 KEEP_OLD=no
 REBUILD_LIBRARIES=no
 
-BOOST_DISTRO_SITE=surfnet.dl.sourceforge.net
-BOOST_PROJECT_PATH=project/boost/boost/$BOOST_VERSION
-BOOST_NAME=boost_${BOOST_VERSION//./_}
-BOOST_DISTRO_NAME="$BOOST_NAME".tar.bz2
-BOOST_ROOT_DIR=boost_libraries
-BOOST_INSTALL_SUBDIR=install-dir
+BOOST_SRCSITE=surfnet.dl.sourceforge.net
+BOOST_SRCPATH=project/boost/boost/$BOOST_VERSION
+BOOST_SRCBASE=boost_${BOOST_VERSION//./_}
+BOOST_SRCFILE="$BOOST_SRCBASE".tar.bz2
+BOOST_COMPILE=boost_libraries
+BOOST_INSTALL=install-dir
 
-ZLIB_ROOT_DIR=opencv_libraries/3rdparty/zlib
+ZLIB_COMPILE=opencv_libraries/3rdparty/zlib
 
-OPENSSL_DISTRO_SITE=www.openssl.org
-OPENSSL_NAME=openssl-$OPENSSL_VERSION
-OPENSSL_DISTRO_NAME="$OPENSSL_NAME".tar.gz
-OPENSSL_PROJECT_PATH=source
-OPENSSL_ROOT_DIR=openssl_libraries
-OPENSSL_INSTALL_SUBDIR=install-dir
+OPENSSL_SRCSITE=www.openssl.org
+OPENSSL_SRCBASE=openssl-$OPENSSL_VERSION
+OPENSSL_SRCFILE="$OPENSSL_SRCBASE".tar.gz
+OPENSSL_SRCPATH=source
+OPENSSL_COMPILE=openssl_libraries
+OPENSSL_INSTALL=install-dir
 
-OPENCV_DISTRO_SITE=surfnet.dl.sourceforge.net
-OPENCV_PROJECT_PATH=project/opencvlibrary/opencv-unix/$OPENCV_VERSION
-OPENCV_NAME=OpenCV-$OPENCV_VERSION
-OPENCV_DISTRO_NAME="$OPENCV_NAME"a.tar.bz2
-OPENCV_ROOT_DIR=opencv_libraries
-OPENCV_INSTALL_SUBDIR=install-dir
+OPENCV_SRCSITE=surfnet.dl.sourceforge.net
+OPENCV_SRCPATH=project/opencvlibrary/opencv-unix/$OPENCV_VERSION
+OPENCV_SRCBASE=OpenCV-$OPENCV_VERSION
+OPENCV_SRCFILE="$OPENCV_SRCBASE"a.tar.bz2
+OPENCV_COMPILE=opencv_libraries
+OPENCV_INSTALL=install-dir
 
-CMAKE_DISTRO_SITE=www.cmake.org
-CMAKE_PROJECT_PATH=files/v${CMAKE_VERSION%.*}
-CMAKE_NAME=cmake-$CMAKE_VERSION
-CMAKE_DISTRO_NAME="$CMAKE_NAME".tar.gz
-CMAKE_ROOT_DIR=cmake
-CMAKE_INSTALL_SUBDIR=install-dir
+CMAKE_SRCSITE=www.cmake.org
+CMAKE_SRCPATH=files/v${CMAKE_VERSION%.*}
+CMAKE_SRCBASE=cmake-$CMAKE_VERSION
+CMAKE_SRCFILE="$CMAKE_SRCBASE".tar.gz
+CMAKE_COMPILE=cmake
+CMAKE_INSTALL=install-dir
 
-PREMAKE_DISTRO_SITE=surfnet.dl.sourceforge.net
-PREMAKE_PROJECT_PATH=project/premake/Premake/$PREMAKE_VERSION
-PREMAKE_NAME=premake-$PREMAKE_VERSION
-PREMAKE_DISTRO_NAME="$PREMAKE_NAME"-src.zip
-PREMAKE_ROOT_DIR=premake
-PREMAKE_INSTALL_SUBDIR=install-dir
+PREMAKE_SRCSITE=surfnet.dl.sourceforge.net
+PREMAKE_SRCPATH=project/premake/Premake/$PREMAKE_VERSION
+PREMAKE_SRCBASE=premake-$PREMAKE_VERSION
+PREMAKE_SRCFILE="$PREMAKE_SRCBASE"-src.zip
+PREMAKE_COMPILE=premake
+PREMAKE_INSTALL=install-dir
 
 echo 
 echo --CF autobuild team welcomes you!----------------------------------------------
@@ -87,7 +87,7 @@ echo_run ()
 	fi
 }
 
-load() # 1=DISTRO_NAME 2=ROOT_DIR 3=NAME 4=DISTRO_SITE 5=DISTRO_PATH
+load() # 1=SRCFILE 2=COMPILE 3=SRCBASE 4=SRCSITE 5=SRCPATH
 {
 	if [ ! -e $DOWNLOADS/$1 ]; then
 		echo_run curl -L http://$4/$5/$1 -o $DOWNLOADS/$1
@@ -120,36 +120,36 @@ if [ ! -d $DOWNLOADS ]; then
 fi
 
 if [ "$REBUILD_LIBRARIES" = "yes" ]; then
-	rm -rf $CMAKE_ROOT_DIR
-	rm -rf $OPENCV_ROOT_DIR
-	rm -rf $BOOST_ROOT_DIR
-	rm -rf $OPENSSL_ROOT_DIR
-	rm -rf $PREMAKE_ROOT_DIR
+	rm -rf $CMAKE_COMPILE
+	rm -rf $OPENCV_COMPILE
+	rm -rf $BOOST_COMPILE
+	rm -rf $OPENSSL_COMPILE
+	rm -rf $PREMAKE_COMPILE
 fi
 
 # CMake
-if [ ! -d $CMAKE_ROOT_DIR ]; then
-	load $CMAKE_DISTRO_NAME $CMAKE_ROOT_DIR $CMAKE_NAME $CMAKE_DISTRO_SITE $CMAKE_PROJECT_PATH
-	cd $CMAKE_ROOT_DIR
+if [ ! -d $CMAKE_COMPILE ]; then
+	load $CMAKE_SRCFILE $CMAKE_COMPILE $CMAKE_SRCBASE $CMAKE_SRCSITE $CMAKE_SRCPATH
+	cd $CMAKE_COMPILE
 
-	echo_run ./bootstrap --parallel=$JOBS --prefix=./$CMAKE_INSTALL_SUBDIR; 
+	echo_run ./bootstrap --parallel=$JOBS --prefix=./$CMAKE_INSTALL; 
 	echo_run make -j$JOBS install
 	
 	cd ..
 fi
 
 # OpenCV
-if [ ! -d $OPENCV_ROOT_DIR ]; then
-	load $OPENCV_DISTRO_NAME $OPENCV_ROOT_DIR $OPENCV_NAME $OPENCV_DISTRO_SITE $OPENCV_PROJECT_PATH
+if [ ! -d $OPENCV_COMPILE ]; then
+	load $OPENCV_SRCFILE $OPENCV_COMPILE $OPENCV_SRCBASE $OPENCV_SRCSITE $OPENCV_SRCPATH
 
-	cd $OPENCV_ROOT_DIR
+	cd $OPENCV_COMPILE
 
 	# Adding the following option:
-	#   -DEXECUTABLE_OUTPUT_PATH=./$OPENCV_INSTALL_SUBDIR/bin
+	#   -DEXECUTABLE_OUTPUT_PATH=./$OPENCV_INSTALL/bin
 	# to the CMake call leads to an error during the build
 	# with 'opencv_traincascade' executable not being created.
 	# It seems like a bug in OpenCV CMake script.
-	echo_run ../$CMAKE_ROOT_DIR/bin/cmake \
+	echo_run ../$CMAKE_COMPILE/bin/cmake \
 		-DBUILD_DOCS=OFF \
 		-DBUILD_EXAMPLES=OFF \
 		-DBUILD_NEW_PYTHON_SUPPORT=OFF \
@@ -160,7 +160,7 @@ if [ ! -d $OPENCV_ROOT_DIR ]; then
 		-DCMAKE_BACKWARDS_COMPATIBILITY=2.8.2 \
 		-DCMAKE_BUILD_TYPE=Release \
 		-DCMAKE_CONFIGURATION_TYPES=Release \
-		-DCMAKE_INSTALL_PREFIX=./$OPENCV_INSTALL_SUBDIR \
+		-DCMAKE_INSTALL_PREFIX=./$OPENCV_INSTALL \
 		-DCMAKE_VERBOSE=OFF \
 		-DENABLE_PROFILING=OFF \
 		-DENABLE_SOLUTION_FOLDERS=OFF \
@@ -172,7 +172,7 @@ if [ ! -d $OPENCV_ROOT_DIR ]; then
 		-DENABLE_SSSE3=OFF \
 		-DINSTALL_C_EXAMPLES=OFF \
 		-DINSTALL_PYTHON_EXAMPLES=OFF \
-		-DLIBRARY_OUTPUT_PATH=./$OPENCV_INSTALL_SUBDIR/lib \
+		-DLIBRARY_OUTPUT_PATH=./$OPENCV_INSTALL/lib \
 		-DOPENCV_BUILD_3RDPARTY_LIBS=TRUE \
 		-DOPENCV_CONFIG_FILE_INCLUDE_DIR=./ \
 		-DOPENCV_EXTRA_C_FLAGS=-fPIC \
@@ -209,64 +209,64 @@ if [ ! -d $OPENCV_ROOT_DIR ]; then
 		-DWITH_XINE=OFF
 	make -j$JOBS install
 
-	echo_run cp $OPENCV_INSTALL_SUBDIR/share/OpenCV/3rdparty/lib/* $OPENCV_INSTALL_SUBDIR/lib
+	echo_run cp $OPENCV_INSTALL/share/OpenCV/3rdparty/lib/* $OPENCV_INSTALL/lib
 
 	cd ..
 fi
 
 # Boost
-if [ ! -d $BOOST_ROOT_DIR ]; then
-	load $BOOST_DISTRO_NAME $BOOST_ROOT_DIR $BOOST_NAME $BOOST_DISTRO_SITE $BOOST_PROJECT_PATH
+if [ ! -d $BOOST_COMPILE ]; then
+	load $BOOST_SRCFILE $BOOST_COMPILE $BOOST_SRCBASE $BOOST_SRCSITE $BOOST_SRCPATH
 
-	cd $BOOST_ROOT_DIR
+	cd $BOOST_COMPILE
 
 	if [ ! -f ./b2 ]; then
 		echo_run ./bootstrap.sh
 	fi
 
-	echo_run ./b2 -j$JOBS -d0 --with-thread --with-system --with-filesystem --with-serialization --with-program_options --with-regex --with-date_time --with-iostreams -sZLIB_SOURCE="$WD/$WORKSPACE/$ZLIB_ROOT_DIR/" -sNO_BZIP2=1 cflags=-fPIC cxxflags=-fPIC link=static --prefix=./$BOOST_INSTALL_SUBDIR release install
+	echo_run ./b2 -j$JOBS -d0 --with-thread --with-system --with-filesystem --with-serialization --with-program_options --with-regex --with-date_time --with-iostreams -sZLIB_SOURCE="$WD/$WORKSPACE/$ZLIB_COMPILE/" -sNO_BZIP2=1 cflags=-fPIC cxxflags=-fPIC link=static --prefix=./$BOOST_INSTALL release install
 
 	cd ..
 fi
 
 # OpenSSL
-if [ ! -d $OPENSSL_ROOT_DIR ]; then
-	load $OPENSSL_DISTRO_NAME $OPENSSL_ROOT_DIR $OPENSSL_NAME $OPENSSL_DISTRO_SITE $OPENSSL_PROJECT_PATH
+if [ ! -d $OPENSSL_COMPILE ]; then
+	load $OPENSSL_SRCFILE $OPENSSL_COMPILE $OPENSSL_SRCBASE $OPENSSL_SRCSITE $OPENSSL_SRCPATH
 	
-	cd $OPENSSL_ROOT_DIR
+	cd $OPENSSL_COMPILE
 
-	echo_run ./config shared no-asm --prefix="$WD/$WORKSPACE/$OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR" --openssldir="$WD/$WORKSPACE/$OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR/share"
+	echo_run ./config shared no-asm --prefix="$WD/$WORKSPACE/$OPENSSL_COMPILE/$OPENSSL_INSTALL" --openssldir="$WD/$WORKSPACE/$OPENSSL_COMPILE/$OPENSSL_INSTALL/share"
 	echo_run make install
 
 	cd ..
 fi
 
 # Premake
-if [ ! -d $PREMAKE_ROOT_DIR ]; then
-	load $PREMAKE_DISTRO_NAME $PREMAKE_ROOT_DIR $PREMAKE_NAME $PREMAKE_DISTRO_SITE $PREMAKE_PROJECT_PATH
+if [ ! -d $PREMAKE_COMPILE ]; then
+	load $PREMAKE_SRCFILE $PREMAKE_COMPILE $PREMAKE_SRCBASE $PREMAKE_SRCSITE $PREMAKE_SRCPATH
 	
-	cd $PREMAKE_ROOT_DIR/build/gmake.unix
+	cd $PREMAKE_COMPILE/build/gmake.unix
 	
 	echo_run make -j$JOBS config=release
 	
 	cd ../..
 	
-	mkdir -p ./$PREMAKE_INSTALL_SUBDIR/bin
-	cp bin/release/premake4 ./$PREMAKE_INSTALL_SUBDIR/bin
+	mkdir -p ./$PREMAKE_INSTALL/bin
+	cp bin/release/premake4 ./$PREMAKE_INSTALL/bin
 	
 	cd ..
 fi
 
 # CloudServer
-if [ "$KEEP_OLD" = "no" -o ! -d $CLOUD_ROOT_DIR ]; then
-	echo_run rm -rf $CLOUD_ROOT_DIR/
-	echo_run svn checkout https://$CLOUD_DISTRO_SITE/svn/trunk/$CLOUD_ROOT_DIR/ $CLOUD_ROOT_DIR
+if [ "$KEEP_OLD" = "no" -o ! -d $CLOUD_COMPILE ]; then
+	echo_run rm -rf $CLOUD_COMPILE/
+	echo_run svn checkout https://$CLOUD_SRCSITE/svn/trunk/$CLOUD_COMPILE/ $CLOUD_COMPILE
 fi
 
-cd $CLOUD_ROOT_DIR
+cd $CLOUD_COMPILE
 
 if [ ! -e $CLOUD_PREMAKE ]; then
-	echo_run echo ../$PREMAKE_ROOT_DIR/bin/release/premake4 --os=$OS --BoostLibsPath=../$BOOST_ROOT_DIR/$BOOST_INSTALL_SUBDIR/lib  --OpenCVLibsPath=../$OPENCV_ROOT_DIR/$OPENCV_INSTALL_SUBDIR/lib --OpenSSLLibsPath=../$OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR/lib  --BoostIncludesPath=../$BOOST_ROOT_DIR/$BOOST_INSTALL_SUBDIR/include  --OpenCVIncludesPath=../$OPENCV_ROOT_DIR/$OPENCV_INSTALL_SUBDIR/include --OpenSSLIncludesPath=../$OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR/include --platform=x32 gmake > $CLOUD_PREMAKE
+	echo_run echo ../$PREMAKE_COMPILE/bin/release/premake4 --os=$OS --BoostLibsPath=../$BOOST_COMPILE/$BOOST_INSTALL/lib  --OpenCVLibsPath=../$OPENCV_COMPILE/$OPENCV_INSTALL/lib --OpenSSLLibsPath=../$OPENSSL_COMPILE/$OPENSSL_INSTALL/lib  --BoostIncludesPath=../$BOOST_COMPILE/$BOOST_INSTALL/include  --OpenCVIncludesPath=../$OPENCV_COMPILE/$OPENCV_INSTALL/include --OpenSSLIncludesPath=../$OPENSSL_COMPILE/$OPENSSL_INSTALL/include --platform=x32 gmake > $CLOUD_PREMAKE
 	echo_run chmod u+x ./$CLOUD_PREMAKE
 fi
 
@@ -279,13 +279,13 @@ echo_run make -j$JOBS config=release
 cd ../../..
 
 # Install
-if [ ! -d $CLOUD_INSTALL_SUBDIR ]; then
-	echo_run mkdir $CLOUD_INSTALL_SUBDIR
+if [ ! -d $CLOUD_INSTALL ]; then
+	echo_run mkdir $CLOUD_INSTALL
 else
-	echo_run rm -rf $CLOUD_INSTALL_SUBDIR/htdocs
-	echo_run rm -rf $CLOUD_INSTALL_SUBDIR/config.xml 
+	echo_run rm -rf $CLOUD_INSTALL/htdocs
+	echo_run rm -rf $CLOUD_INSTALL/config.xml 
 fi
-echo_run cp -r $CLOUD_ROOT_DIR/projects/$OS-gmake/bin/release/* $CLOUD_INSTALL_SUBDIR
+echo_run cp -r $CLOUD_COMPILE/projects/$OS-gmake/bin/release/* $CLOUD_INSTALL
 echo Done!
 
 exit 0
