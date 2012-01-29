@@ -53,6 +53,11 @@ function prepareWindow()
 	}
 }
 
+function hideDialog(dialog)
+{
+	dialog.hide();
+}
+
 function showAlert(w, h, name, body_text) {
 	prepareWindow();
 	$("#alert_name").html(name);
