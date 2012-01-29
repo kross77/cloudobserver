@@ -98,6 +98,7 @@
 						return '<span id="fancybox-title-over">Image ' + (currentIndex + 1) + ' / ' + currentArray.length + (title.length ? ' &nbsp; ' + title : '') + '</span>';
 					},
 					'onComplete'	:	function() {
+						window.location.hash = this.extra_href;
 						$("#fancybox-wrap").hover(function() {
 							$("#fancybox-title").show();
 						}, function() {
@@ -126,7 +127,7 @@
 				{
 					value.real_href =  page_url +  value.href;	
 				}
-				images.push({'href' : value.real_href, 'title'	: value.title });
+				images.push({'href' : value.real_href, 'title'	: value.title , extra_href : value.href });
 			});
 		}
 		
