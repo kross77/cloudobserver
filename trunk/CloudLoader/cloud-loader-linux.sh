@@ -20,7 +20,6 @@ DOWNLOADS_DIR=downloads
 
 OS_NAME=linux # could be `macosx`
 
-SVN_OPT=export # could be `co` or `checkout`
 KEEP_OLD=no
 REBUILD_LIBRARIES=no
 
@@ -112,9 +111,6 @@ load() # 1=DISTRO_NAME 2=ROOT_DIR 3=NAME 4=DISTRO_SITE 5=DISTRO_PATH
 WD=`pwd`
 MACHINE=`uname`
 HERE=`dirname $0`
-
-SVN_CMD=svn\ $SVN_OPT
-
 
 cd $HERE
 
@@ -264,7 +260,7 @@ fi
 # CloudServer
 if [ "$KEEP_OLD" = "no" -o ! -d $CLOUD_COMPONENT_NAME ]; then
 	echo_run rm -rf $CLOUD_COMPONENT_NAME/
-	echo_run ${SVN_CMD} https://$CLOUD_DISTRO_SITE/svn/trunk/$CLOUD_COMPONENT_NAME/ $CLOUD_COMPONENT_NAME
+	echo_run svn export https://$CLOUD_DISTRO_SITE/svn/trunk/$CLOUD_COMPONENT_NAME/ $CLOUD_COMPONENT_NAME
 fi
 
 cd $CLOUD_COMPONENT_NAME
