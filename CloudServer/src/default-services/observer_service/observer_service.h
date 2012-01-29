@@ -19,6 +19,7 @@
 
 // CF
 #include <http.h>
+#include <http_utils.h>
 
 #include "../../../service-interface/service.hpp"
 
