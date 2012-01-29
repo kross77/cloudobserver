@@ -280,6 +280,8 @@ cd projects/$OS_NAME-gmake
 
 echo_run make -j$JOBS config=release
 
+cd ../../..
+
 # Install
 if [ ! -d $CLOUD_INSTALL_SUBDIR ]; then
 	echo_run mkdir $CLOUD_INSTALL_SUBDIR
@@ -287,8 +289,7 @@ else
 	echo_run rm -rf $CLOUD_INSTALL_SUBDIR/htdocs
 	echo_run rm -rf $CLOUD_INSTALL_SUBDIR/config.xml 
 fi
-echo_run cp -r ./bin/release/* ../../../$CLOUD_INSTALL_SUBDIR/
-cd ../../../
+echo_run cp -r $CLOUD_COMPONENT_NAME/projects/$OS_NAME-gmake/bin/release/* $CLOUD_INSTALL_SUBDIR
 echo Done!
 
 exit 0
