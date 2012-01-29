@@ -131,13 +131,7 @@ else
 	echo_run rm -rf $CLOUD_INSTALL_SUBDIR/config.xml 
 fi
 
-if [ "$KEEP_OLD" = "yes" ]; then
-	if [ -d $CLOUD_COMPONENT_NAME ]; then
-		echo We will keep old Server code files
-	else
-		echo_run ${SVN_CMD} https://$CLOUD_DISTRO_SITE/svn/trunk/$CLOUD_COMPONENT_NAME/ $CLOUD_COMPONENT_NAME
-	fi
-else
+if [ "$KEEP_OLD" = "no" -o ! -d $CLOUD_COMPONENT_NAME ]; then
 	echo_run rm -rf $CLOUD_COMPONENT_NAME/
 	echo_run ${SVN_CMD} https://$CLOUD_DISTRO_SITE/svn/trunk/$CLOUD_COMPONENT_NAME/ $CLOUD_COMPONENT_NAME
 fi
