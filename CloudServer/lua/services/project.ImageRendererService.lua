@@ -16,6 +16,15 @@ project "ImageRendererService"
 	
 	links { "boost-sqlite" }
 	includedirs { "3rdparty/boost-sqlite"}
+	
+	configuration { "gmake" }
+		linkoptions {
+			"-lcf-fs",
+			"-lcf-util",
+			"-lcf-http",
+			"-lboost-sqlite"
+		}
+	configuration { }
 
 	cloud.project.useBoost()
 	cloud.project.useopenSSL()

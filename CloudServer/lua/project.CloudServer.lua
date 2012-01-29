@@ -26,6 +26,16 @@ project "CloudServer"
 	
 	links { "cf-fs" }
 	includedirs { "src/cf-fs"}
+	
+	configuration { "gmake" }
+		linkoptions {
+			"-lcf-server",
+			"-lboost-sqlite",
+			"-lcf-http",
+			"-lcf-util",
+			"-lcf-fs"
+		}
+	configuration { }
 
 	cloud.project.useBoost()
 	cloud.project.useopenSSL()

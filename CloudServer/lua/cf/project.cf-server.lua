@@ -20,6 +20,15 @@ project "cf-server"
 	links { "cf-fs" }
 	includedirs { "src/cf-fs"}
 	
+	configuration { "gmake" }
+		linkoptions {
+			"-lboost-sqlite",
+			"-lcf-http",
+			"-lcf-util",
+			"-lcf-fs"
+		}
+	configuration { }
+	
 	includedirs { "service-interface/" }
 	
 	configuration "gmake"

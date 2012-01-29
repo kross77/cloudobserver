@@ -11,6 +11,12 @@ project "cf-util"
 	links { "cf-http" }
 	includedirs { "3rdparty/cf-http"}
 	
+	configuration { "gmake" }
+		linkoptions {
+			"-lcf-http"
+		}
+	configuration { }
+	
 	configuration "gmake"
 		buildoptions { "-fPIC" }
 	
