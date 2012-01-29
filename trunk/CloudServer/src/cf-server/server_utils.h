@@ -103,7 +103,6 @@ public:
 	boost::shared_ptr<base_service> create_service(std::string library_name, std::string class_name_inside_lib, boost::property_tree::ptree config); 
 
 	server_utils::server_description parse_config(boost::property_tree::ptree config); 
-	boost::property_tree::ptree save_config( server_utils::server_description server_configuration_description); 
 
 	server_utils::request_data parse_request(http_request request); 
 

@@ -227,8 +227,3 @@ void server::user_info(boost::asio::ip::tcp::socket &socket)
 	*(util->info) << "User address: " << addr_string << log_util::endl;
 	*(util->info) << "User port: " << port << log_util::endl;
 }
-
-boost::property_tree::ptree server::get_configuration()
-{
-	return util->save_config(util->description);
-}
