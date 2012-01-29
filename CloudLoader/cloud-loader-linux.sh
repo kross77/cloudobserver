@@ -25,6 +25,8 @@ BOOST_SRCSITE=surfnet.dl.sourceforge.net
 CLOUD_COMPILE=CloudServer
 CLOUD_INSTALL=install-dir
 CLOUD_PREMAKE=build.sh
+CLOUD_SRCBASE=CloudServer
+CLOUD_SRCPATH=svn/trunk/$CLOUD_SRCBASE
 CLOUD_SRCSITE=cloudobserver.googlecode.com
 
 CMAKE_VERSION=2.8.6
@@ -253,7 +255,7 @@ fi
 # CloudServer
 if [ "$KEEP_OLD" = "no" -o ! -d $CLOUD_COMPILE ]; then
 	echo_run rm -rf $CLOUD_COMPILE/
-	echo_run svn checkout https://$CLOUD_SRCSITE/svn/trunk/$CLOUD_COMPILE/ $CLOUD_COMPILE
+	echo_run svn checkout https://$CLOUD_SRCSITE/$CLOUD_SRCPATH $CLOUD_COMPILE
 fi
 
 cd $CLOUD_COMPILE
