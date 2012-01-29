@@ -124,13 +124,6 @@ if [ ! -d $DOWNLOADS_DIR ]; then
 	echo_run mkdir $DOWNLOADS_DIR
 fi
 
-if [ ! -d $CLOUD_INSTALL_SUBDIR ]; then
-	echo_run mkdir $CLOUD_INSTALL_SUBDIR
-else
-	echo_run rm -rf $CLOUD_INSTALL_SUBDIR/htdocs
-	echo_run rm -rf $CLOUD_INSTALL_SUBDIR/config.xml 
-fi
-
 if [ "$REBUILD_LIBRARIES" = "yes" ]; then
 	rm -rf $CMAKE_ROOT_DIR
 	rm -rf $OPENCV_ROOT_DIR
@@ -283,6 +276,13 @@ cd projects/$OS_NAME-gmake
 
 echo_run make -j$JOBS config=release
 
+# Install
+if [ ! -d $CLOUD_INSTALL_SUBDIR ]; then
+	echo_run mkdir $CLOUD_INSTALL_SUBDIR
+else
+	echo_run rm -rf $CLOUD_INSTALL_SUBDIR/htdocs
+	echo_run rm -rf $CLOUD_INSTALL_SUBDIR/config.xml 
+fi
 echo_run cp -r ./bin/release/* ../../../$CLOUD_INSTALL_SUBDIR/
 cd ../../../
 echo Done!
