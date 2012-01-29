@@ -141,7 +141,7 @@ if [ ! -d $OPENCV_COMPILE ]; then
 	# to the CMake call leads to an error during the build
 	# with 'opencv_traincascade' executable not being created.
 	# It seems like a bug in OpenCV CMake script.
-	echo_run ../$CMAKE_COMPILE/bin/cmake \
+	echo_run ../$CMAKE_COMPILE/$CMAKE_INSTALL/bin/cmake \
 		-DBUILD_DOCS=OFF \
 		-DBUILD_EXAMPLES=OFF \
 		-DBUILD_NEW_PYTHON_SUPPORT=OFF \
@@ -256,7 +256,7 @@ fi
 cd $CLOUD_COMPILE
 
 if [ ! -e $CLOUD_PREMAKE ]; then
-	echo_run echo ../$PREMAKE_COMPILE/bin/release/premake4 --os=$OS --BoostLibsPath=../$BOOST_COMPILE/$BOOST_INSTALL/lib  --OpenCVLibsPath=../$OPENCV_COMPILE/$OPENCV_INSTALL/lib --OpenSSLLibsPath=../$OPENSSL_COMPILE/$OPENSSL_INSTALL/lib  --BoostIncludesPath=../$BOOST_COMPILE/$BOOST_INSTALL/include  --OpenCVIncludesPath=../$OPENCV_COMPILE/$OPENCV_INSTALL/include --OpenSSLIncludesPath=../$OPENSSL_COMPILE/$OPENSSL_INSTALL/include --platform=x32 gmake > $CLOUD_PREMAKE
+	echo_run echo ../$PREMAKE_COMPILE/$PREMAKE_INSTALL/bin/premake4 --os=$OS --BoostLibsPath=../$BOOST_COMPILE/$BOOST_INSTALL/lib  --OpenCVLibsPath=../$OPENCV_COMPILE/$OPENCV_INSTALL/lib --OpenSSLLibsPath=../$OPENSSL_COMPILE/$OPENSSL_INSTALL/lib  --BoostIncludesPath=../$BOOST_COMPILE/$BOOST_INSTALL/include  --OpenCVIncludesPath=../$OPENCV_COMPILE/$OPENCV_INSTALL/include --OpenSSLIncludesPath=../$OPENSSL_COMPILE/$OPENSSL_INSTALL/include --platform=x32 gmake > $CLOUD_PREMAKE
 	echo_run chmod u+x ./$CLOUD_PREMAKE
 fi
 
