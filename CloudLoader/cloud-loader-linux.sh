@@ -16,7 +16,7 @@ WD=`pwd`
 
 BOOST_VERSION=1.47.0
 BOOST_COMPILE=boost_libraries
-BOOST_INSTALL=install-dir
+BOOST_INSTALL=$BOOST_COMPILE/install-dir
 BOOST_SRCBASE=boost_${BOOST_VERSION//./_}
 BOOST_SRCFILE=$BOOST_SRCBASE.tar.bz2
 BOOST_SRCPATH=project/boost/boost/$BOOST_VERSION
@@ -29,7 +29,7 @@ CLOUD_SRCSITE=cloudobserver.googlecode.com
 
 CMAKE_VERSION=2.8.6
 CMAKE_COMPILE=cmake
-CMAKE_INSTALL=install-dir
+CMAKE_INSTALL=$CMAKE_COMPILE/install-dir
 CMAKE_SRCBASE=cmake-$CMAKE_VERSION
 CMAKE_SRCFILE=$CMAKE_SRCBASE.tar.gz
 CMAKE_SRCPATH=files/v${CMAKE_VERSION%.*}
@@ -37,7 +37,7 @@ CMAKE_SRCSITE=www.cmake.org
 
 OPENCV_VERSION=2.3.1
 OPENCV_COMPILE=opencv_libraries
-OPENCV_INSTALL=install-dir
+OPENCV_INSTALL=$OPENCV_COMPILE/install-dir
 OPENCV_SRCBASE=OpenCV-$OPENCV_VERSION
 OPENCV_SRCFILE="$OPENCV_SRCBASE"a.tar.bz2 # note the 'a' character (it's 2.3.1a)
 OPENCV_SRCPATH=project/opencvlibrary/opencv-unix/$OPENCV_VERSION
@@ -45,7 +45,7 @@ OPENCV_SRCSITE=surfnet.dl.sourceforge.net
 
 OPENSSL_VERSION=1.0.0d
 OPENSSL_COMPILE=openssl_libraries
-OPENSSL_INSTALL=install-dir
+OPENSSL_INSTALL=$OPENSSL_COMPILE/install-dir
 OPENSSL_SRCBASE=openssl-$OPENSSL_VERSION
 OPENSSL_SRCFILE=$OPENSSL_SRCBASE.tar.gz
 OPENSSL_SRCPATH=source
@@ -53,7 +53,7 @@ OPENSSL_SRCSITE=www.openssl.org
 
 PREMAKE_VERSION=4.3
 PREMAKE_COMPILE=premake
-PREMAKE_INSTALL=install-dir
+PREMAKE_INSTALL=$PREMAKE_COMPILE/install-dir
 PREMAKE_SRCBASE=premake-$PREMAKE_VERSION
 PREMAKE_SRCFILE=$PREMAKE_SRCBASE-src.zip
 PREMAKE_SRCPATH=project/premake/Premake/$PREMAKE_VERSION
@@ -127,7 +127,7 @@ if [ ! -d $CMAKE_COMPILE ]; then
 	load $CMAKE_SRCFILE $CMAKE_COMPILE $CMAKE_SRCBASE $CMAKE_SRCSITE $CMAKE_SRCPATH
 	cd $CMAKE_COMPILE
 
-	echo_run ./bootstrap --parallel=$JOBS --prefix=./$CMAKE_INSTALL; 
+	echo_run ./bootstrap --parallel=$JOBS --prefix=../$CMAKE_INSTALL; 
 	echo_run make -j$JOBS install
 	
 	cd ..
@@ -140,11 +140,11 @@ if [ ! -d $OPENCV_COMPILE ]; then
 	cd $OPENCV_COMPILE
 
 	# Adding the following option:
-	#   -DEXECUTABLE_OUTPUT_PATH=./$OPENCV_INSTALL/bin
+	#   -DEXECUTABLE_OUTPUT_PATH=../$OPENCV_INSTALL/bin
 	# to the CMake call leads to an error during the build
 	# with 'opencv_traincascade' executable not being created.
 	# It seems like a bug in OpenCV CMake script.
-	echo_run ../$CMAKE_COMPILE/$CMAKE_INSTALL/bin/cmake \
+	echo_run ../$CMAKE_INSTALL/bin/cmake \
 		-DBUILD_DOCS=OFF \
 		-DBUILD_EXAMPLES=OFF \
 		-DBUILD_NEW_PYTHON_SUPPORT=OFF \
@@ -155,7 +155,7 @@ if [ ! -d $OPENCV_COMPILE ]; then
 		-DCMAKE_BACKWARDS_COMPATIBILITY=2.8.2 \
 		-DCMAKE_BUILD_TYPE=Release \
 		-DCMAKE_CONFIGURATION_TYPES=Release \
-		-DCMAKE_INSTALL_PREFIX=./$OPENCV_INSTALL \
+		-DCMAKE_INSTALL_PREFIX=../$OPENCV_INSTALL \
 		-DCMAKE_VERBOSE=OFF \
 		-DENABLE_PROFILING=OFF \
 		-DENABLE_SOLUTION_FOLDERS=OFF \
@@ -167,7 +167,7 @@ if [ ! -d $OPENCV_COMPILE ]; then
 		-DENABLE_SSSE3=OFF \
 		-DINSTALL_C_EXAMPLES=OFF \
 		-DINSTALL_PYTHON_EXAMPLES=OFF \
-		-DLIBRARY_OUTPUT_PATH=./$OPENCV_INSTALL/lib \
+		-DLIBRARY_OUTPUT_PATH=../$OPENCV_INSTALL/lib \
 		-DOPENCV_BUILD_3RDPARTY_LIBS=TRUE \
 		-DOPENCV_CONFIG_FILE_INCLUDE_DIR=./ \
 		-DOPENCV_EXTRA_C_FLAGS=-fPIC \
@@ -204,7 +204,7 @@ if [ ! -d $OPENCV_COMPILE ]; then
 		-DWITH_XINE=OFF
 	make -j$JOBS install
 
-	echo_run cp $OPENCV_INSTALL/share/OpenCV/3rdparty/lib/* $OPENCV_INSTALL/lib
+	echo_run cp ../$OPENCV_INSTALL/share/OpenCV/3rdparty/lib/* ../$OPENCV_INSTALL/lib
 
 	cd ..
 fi
@@ -217,7 +217,7 @@ if [ ! -d $BOOST_COMPILE ]; then
 
 	echo_run ./bootstrap.sh
 
-	echo_run ./b2 -j$JOBS -d0 --with-thread --with-system --with-filesystem --with-serialization --with-program_options --with-regex --with-date_time --with-iostreams -sZLIB_SOURCE="$WD/$ZLIB_COMPILE/" -sNO_BZIP2=1 cflags=-fPIC cxxflags=-fPIC link=static --prefix=./$BOOST_INSTALL release install
+	echo_run ./b2 -j$JOBS -d0 --with-thread --with-system --with-filesystem --with-serialization --with-program_options --with-regex --with-date_time --with-iostreams -sZLIB_SOURCE="$WD/$ZLIB_COMPILE/" -sNO_BZIP2=1 cflags=-fPIC cxxflags=-fPIC link=static --prefix=../$BOOST_INSTALL release install
 
 	cd ..
 fi
@@ -228,7 +228,7 @@ if [ ! -d $OPENSSL_COMPILE ]; then
 	
 	cd $OPENSSL_COMPILE
 
-	echo_run ./config shared no-asm --prefix="$WD/$OPENSSL_COMPILE/$OPENSSL_INSTALL" --openssldir="$WD/$OPENSSL_COMPILE/$OPENSSL_INSTALL/share"
+	echo_run ./config shared no-asm --prefix="$WD/$OPENSSL_INSTALL" --openssldir="$WD/$OPENSSL_INSTALL/share"
 	echo_run make install
 
 	cd ..
@@ -244,8 +244,8 @@ if [ ! -d $PREMAKE_COMPILE ]; then
 	
 	cd ../..
 	
-	mkdir -p ./$PREMAKE_INSTALL/bin
-	cp bin/release/premake4 ./$PREMAKE_INSTALL/bin
+	mkdir -p ../$PREMAKE_INSTALL/bin
+	cp bin/release/premake4 ../$PREMAKE_INSTALL/bin
 	
 	cd ..
 fi
@@ -259,7 +259,7 @@ fi
 cd $CLOUD_COMPILE
 
 if [ ! -e $CLOUD_PREMAKE ]; then
-	echo_run echo ../$PREMAKE_COMPILE/$PREMAKE_INSTALL/bin/premake4 --os=$OS --BoostLibsPath=../$BOOST_COMPILE/$BOOST_INSTALL/lib  --OpenCVLibsPath=../$OPENCV_COMPILE/$OPENCV_INSTALL/lib --OpenSSLLibsPath=../$OPENSSL_COMPILE/$OPENSSL_INSTALL/lib  --BoostIncludesPath=../$BOOST_COMPILE/$BOOST_INSTALL/include  --OpenCVIncludesPath=../$OPENCV_COMPILE/$OPENCV_INSTALL/include --OpenSSLIncludesPath=../$OPENSSL_COMPILE/$OPENSSL_INSTALL/include --platform=x32 gmake > $CLOUD_PREMAKE
+	echo_run echo ../$PREMAKE_INSTALL/bin/premake4 --os=$OS --BoostLibsPath=../$BOOST_INSTALL/lib  --OpenCVLibsPath=../$OPENCV_INSTALL/lib --OpenSSLLibsPath=../$OPENSSL_INSTALL/lib  --BoostIncludesPath=../$BOOST_INSTALL/include  --OpenCVIncludesPath=../$OPENCV_INSTALL/include --OpenSSLIncludesPath=../$OPENSSL_INSTALL/include --platform=x32 gmake > $CLOUD_PREMAKE
 	echo_run chmod u+x ./$CLOUD_PREMAKE
 fi
 
