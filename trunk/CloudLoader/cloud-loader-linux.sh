@@ -270,19 +270,21 @@ if [ ! -d $OPENSSL_ROOT_DIR -o "$REBUILD_LIBRARIES" = "yes" ]; then
 fi
 
 # Premake
-if [ ! -d premake-4.3 -o "$REBUILD_LIBRARIES" = "yes" ]; then
-	if [ -d premake-4.3 ]; then
-		rm -rf premake-4.3
+if [ ! -d $PREMAKE_ROOT_DIR -o "$REBUILD_LIBRARIES" = "yes" ]; then
+	if [ -d $PREMAKE_ROOT_DIR ]; then
+		rm -rf $PREMAKE_ROOT_DIR
 	fi
 	
 	if [ ! -e $PREMAKE_DISTRO_NAME ]; then
 		echo_run ${CURL_CMD} http://$PREMAKE_DISTRO_SITE/project/premake/Premake/$PREMAKE_VERSION/$PREMAKE_DISTRO_NAME -o $PREMAKE_DISTRO_NAME
 	fi
 
-	if [ ! -d premake-4.3/bin/release ]; then
+	if [ ! -d $PREMAKE_ROOT_DIR/bin/release ]; then
 		echo_run unzip $PREMAKE_DISTRO_NAME
+		
+		mv $PREMAKE_NAME $PREMAKE_ROOT_DIR
 	
-		cd ./premake-4.3/build/gmake.unix
+		cd ./$PREMAKE_ROOT_DIR/build/gmake.unix
 	
 		echo_run make -j$JOBS config=release
 	
@@ -293,7 +295,7 @@ fi
 cd $CLOUD_COMPONENT_NAME
 
 if [ ! -e $CLOUD_LOCAL_BUILDING_FILE_NAME ]; then
-	echo_run echo ../premake-4.3/bin/release/premake4 --os=$OS_NAME --BoostLibsPath=../$BOOST_ROOT_DIR/$BOOST_INSTALL_SUBDIR/lib  --OpenCVLibsPath=../$OPENCV_ROOT_DIR/$OPENCV_INSTALL_SUBDIR/lib --OpenSSLLibsPath=../$OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR/lib  --BoostIncludesPath=../$BOOST_ROOT_DIR/$BOOST_INSTALL_SUBDIR/include  --OpenCVIncludesPath=../$OPENCV_ROOT_DIR/$OPENCV_INSTALL_SUBDIR/include --OpenSSLIncludesPath=../$OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR/include --platform=x32 gmake > $CLOUD_LOCAL_BUILDING_FILE_NAME
+	echo_run echo ../$PREMAKE_ROOT_DIR/bin/release/premake4 --os=$OS_NAME --BoostLibsPath=../$BOOST_ROOT_DIR/$BOOST_INSTALL_SUBDIR/lib  --OpenCVLibsPath=../$OPENCV_ROOT_DIR/$OPENCV_INSTALL_SUBDIR/lib --OpenSSLLibsPath=../$OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR/lib  --BoostIncludesPath=../$BOOST_ROOT_DIR/$BOOST_INSTALL_SUBDIR/include  --OpenCVIncludesPath=../$OPENCV_ROOT_DIR/$OPENCV_INSTALL_SUBDIR/include --OpenSSLIncludesPath=../$OPENSSL_ROOT_DIR/$OPENSSL_INSTALL_SUBDIR/include --platform=x32 gmake > $CLOUD_LOCAL_BUILDING_FILE_NAME
 	echo_run chmod u+x ./$CLOUD_LOCAL_BUILDING_FILE_NAME
 fi
 
