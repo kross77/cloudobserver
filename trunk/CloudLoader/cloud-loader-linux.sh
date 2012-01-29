@@ -275,21 +275,13 @@ if [ ! -d $PREMAKE_ROOT_DIR -o "$REBUILD_LIBRARIES" = "yes" ]; then
 		rm -rf $PREMAKE_ROOT_DIR
 	fi
 	
-	if [ ! -e $PREMAKE_DISTRO_NAME ]; then
-		echo_run ${CURL_CMD} http://$PREMAKE_DISTRO_SITE/project/premake/Premake/$PREMAKE_VERSION/$PREMAKE_DISTRO_NAME -o $PREMAKE_DISTRO_NAME
-	fi
-
-	if [ ! -d $PREMAKE_ROOT_DIR/bin/release ]; then
-		echo_run unzip $PREMAKE_DISTRO_NAME
-		
-		mv $PREMAKE_NAME $PREMAKE_ROOT_DIR
+	load $PREMAKE_DISTRO_NAME $PREMAKE_ROOT_DIR $PREMAKE_NAME $PREMAKE_DISTRO_SITE project/premake/Premake/$PREMAKE_VERSION
 	
-		cd ./$PREMAKE_ROOT_DIR/build/gmake.unix
+	cd $PREMAKE_ROOT_DIR/build/gmake.unix
 	
-		echo_run make -j$JOBS config=release
+	echo_run make -j$JOBS config=release
 	
-		cd ../../..
-	fi
+	cd ../../..
 fi
 
 cd $CLOUD_COMPONENT_NAME
