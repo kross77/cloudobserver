@@ -7,6 +7,7 @@ OPENSSL_VERSION=1.0.0d
 PREMAKE_VERSION=4.3
 
 WORKSPACE=cloud_server
+DOWNLOADS=downloads
 
 JOBS=`grep ^processor /proc/cpuinfo | wc -l`
 
@@ -15,8 +16,6 @@ CLOUD_ROOT_DIR=CloudServer
 CLOUD_INSTALL_SUBDIR=install-dir
 
 CLOUD_PREMAKE=build.sh
-
-DOWNLOADS_DIR=downloads
 
 OS=linux
 
@@ -90,16 +89,16 @@ echo_run ()
 
 load() # 1=DISTRO_NAME 2=ROOT_DIR 3=NAME 4=DISTRO_SITE 5=DISTRO_PATH
 {
-	if [ ! -e $DOWNLOADS_DIR/$1 ]; then
-		echo_run curl -L http://$4/$5/$1 -o $DOWNLOADS_DIR/$1
+	if [ ! -e $DOWNLOADS/$1 ]; then
+		echo_run curl -L http://$4/$5/$1 -o $DOWNLOADS/$1
 	fi
 	
 	if [ ${1##*.} == "zip" ]; then
-		echo_run unzip $DOWNLOADS_DIR/$1
+		echo_run unzip $DOWNLOADS/$1
 	elif [ ${1##*.} == "bz2" ]; then
-		echo_run tar -xjf $DOWNLOADS_DIR/$1
+		echo_run tar -xjf $DOWNLOADS/$1
 	else
-		echo_run tar -xzf $DOWNLOADS_DIR/$1
+		echo_run tar -xzf $DOWNLOADS/$1
 	fi
 	echo_run mv $3 $2
 }
@@ -116,8 +115,8 @@ fi
 
 cd $WORKSPACE
 
-if [ ! -d $DOWNLOADS_DIR ]; then
-	echo_run mkdir $DOWNLOADS_DIR
+if [ ! -d $DOWNLOADS ]; then
+	echo_run mkdir $DOWNLOADS
 fi
 
 if [ "$REBUILD_LIBRARIES" = "yes" ]; then
