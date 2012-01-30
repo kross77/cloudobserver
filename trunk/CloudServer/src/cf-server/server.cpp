@@ -2,16 +2,12 @@
 
 server::server(boost::property_tree::ptree config) 
 {
-	threads_pool = boost::shared_ptr<thread_pool>(new thread_pool(40));
-	request_max_time = 5;
-
 	uac = new user_control();
 	boost::property_tree::ptree pt;
 	uac->apply_config(pt);
 
 	util = new server_utils();
 	util->description = util->parse_config(config);
-	util->update_properties_manager();
 
 	this->acceptor_thread = new boost::thread(&server::acceptor_loop, this);
 
@@ -25,6 +21,13 @@ server::~server()
 }
 
 void server::acceptor_loop(){
+
+	// threads_pool has a destructor bug
+	threads_pool = boost::shared_ptr<thread_pool>(new thread_pool(40));
+	request_max_time = 5;
+	
+	//Move UAC into default services
+
 	boost::asio::io_service io_service;
 	int m_nPort = util->description.port;
 	boost::asio::ip::tcp::acceptor acceptor(io_service, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), m_nPort));
@@ -78,7 +81,7 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 			}
 			if (!alive)
 			{
-				return;
+				break;
 			}
 
 			*(util->info) << "request url: " << request->url << log_util::endl;
@@ -114,65 +117,72 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 			if (request->url == util->description.server_service_url)
 			{
 				server_service_call(socket, request, response);
-				return;
+				continue;
 			}
 
+
+			std::list<int>::iterator order_it;
 
 			boost::shared_ptr<server_utils::service_container> service_cont;
-			try
+
+			for (order_it=util->services_ids.begin(); order_it!=util->services_ids.end(); ++order_it)
 			{
-				service_cont = util->find_service(*request);
-			}
-			catch(std::exception &e)
-			{
-				*(util->error) << "Could not find service for request." << log_util::endl;
-				return;
-			}
+				service_call_input data;
+				boost::shared_ptr<shared> shared_data(new shared, boost::bind(&pointer_utils::delete_ptr<shared>, _1));
+				data.socket = socket;			
+				data.shared_data = shared_data->serialize();		
+				data.raw_request = request->serialize();
+				data.raw_response = response->serialize();
 
-			boost::shared_ptr<base_service> requested_service = service_cont->service_ptr;
+				service_cont = util->description.service_map[*order_it];
+				boost::shared_ptr<base_service> requested_service = service_cont->service_ptr;
 
-			util->tread_util->safe_insert<boost::thread::id, std::set<boost::thread::id> >(boost::this_thread::get_id(),service_cont->threads_ids);
+				service_check_input check_data;
+				check_data.raw_request = request->serialize();
+				check_data.shared_data = shared_data->serialize();
 
-			//*(util->info) << "ids size: " << service_cont->threads_ids.size() << log_util::endl;
-			raw_out service_output;
-			raw_in data;
-			data.socket = socket;
-			shared shared_data;
-			
-			data.shared_data = shared_data.serialize();
-			
-			data.raw_request = request->serialize();
-
-			data.raw_response = response->serialize();
-			
-			try
-			{
-				service_output = requested_service->make_service_call(data);
-				if ((*(service_output.error_data)) != "")
+				service_check_output check_data_out = requested_service->make_service_check(check_data);
+				if((*(check_data_out.call_me_as) == "executor") || *(check_data_out.call_me_as) == "assistant")
 				{
-					std::ostringstream body;
-					body << "@"<< service_cont->class_name <<" error: " << (*(service_output.error_data)) << "\n <br/> <a href='/'>please come again!</a>";
-					response->body = "<head></head><body><h1>" + body.str() + "</h1></body>";
-					response->headers["Content-Length"] = boost::lexical_cast<std::string>(response->body.length());
-					response->send(*socket);
-		
-					*(util->error) << (*(service_output.error_data)) << log_util::endl;
+					try
+					{
+						util->tread_util->safe_insert<boost::thread::id, std::set<boost::thread::id> >(boost::this_thread::get_id(),service_cont->threads_ids);
+						service_call_output service_output;
+						service_output = requested_service->make_service_call(data);
+						if ((*(service_output.error_data)) != "")
+						{
+							std::ostringstream body;
+							body << "@"<< service_cont->class_name <<" error: " << (*(service_output.error_data)) << "\n <br/> <a href='/'>please come again!</a>";
+							response->body = "<head></head><body><h1>" + body.str() + "</h1></body>";
+							response->headers["Content-Length"] = boost::lexical_cast<std::string>(response->body.length());
+							response->send(*socket);
+
+							*(util->error) << (*(service_output.error_data)) << log_util::endl;
+						}
+						request->deserialize(service_output.raw_request);
+						shared_data->deserialize(service_output.shared_data);
+
+						util->tread_util->safe_erase<boost::thread::id, std::set<boost::thread::id> >(boost::this_thread::get_id(), service_cont->threads_ids);
+					}
+					catch(std::exception &e)
+					{
+						*(util->error) << e.what() << log_util::endl; //"The parameter is incorrect" exception
+					}
+					//if (*(check_data_out.call_me_as) == "assistant")
+					//{
+					//	order_it=util->services_ids.begin();
+					//}
+					if (*(check_data_out.call_me_as) == "executor")
+					{
+						break;
+					}
+
 				}
-				
-
 			}
-			catch(std::exception &e)
-			{
-				*(util->error) << e.what() << log_util::endl; //"The parameter is incorrect" exception
-			}
-
-			util->tread_util->safe_erase<boost::thread::id, std::set<boost::thread::id> >(boost::this_thread::get_id(), service_cont->threads_ids);
-
 			*(util->info) << "request resolved." << log_util::endl;
 		}
 		while(!connection_close);
 	}
-
 	catch(std::exception &e)
 	{
 		*(util->error) << e.what() << log_util::endl; //"The parameter is incorrect" exception
@@ -190,22 +200,19 @@ void server::server_services_list(boost::shared_ptr<boost::asio::ip::tcp::socket
 
 	std::ostringstream user_files_stream;
 	user_files_stream << "[";
-
-	std::map<std::string, boost::shared_ptr<server_utils::service_container> >::iterator it;
-
-	for ( it=util->description.service_map.begin() ; it != util->description.service_map.end(); it++ )
+	typedef std::map<int, boost::shared_ptr<server_utils::service_container> >  int_map;
+	BOOST_FOREACH( int_map::value_type p, util->description.service_map )
 	{
-		boost::shared_lock<boost::shared_mutex> lock_r(it->second->edit_mutex_);
+		boost::shared_lock<boost::shared_mutex> lock_r(p.second->edit_mutex_);
 
-		if (boost::iequals(it->second->description_type , "public"))
+		if (boost::iequals(p.second->description_type , "public"))
 		{
 			user_files_stream << "\n\t{\n\t\t\"name\": \""
-				<< it->first << "\",\n\t\t\"description\": \""
-				<<  it->second->description_text << "\",\n\t\t\"url\": \""
-				<< it->second->description_default_url_path << "\",\n\t\t\"icon\": \""
-				<< it->second->description_icon_file_path << "\"\n\t},";
+				<< p.second->service_name << "\",\n\t\t\"description\": \""
+				<< p.second->description_text << "\",\n\t\t\"url\": \""
+				<< p.second->description_default_url_path << "\",\n\t\t\"icon\": \""
+				<< p.second->description_icon_file_path << "\"\n\t},";
 		}
-
 	}
 
 	std::string files_ = user_files_stream.str();

@@ -19,15 +19,10 @@
 #include <server.h>
 
 boost::program_options::options_description desc("Allowed options");
-server *s;
+boost::shared_ptr<server> s;
 boost::property_tree::ptree server_config;
 bool server_started = false, server_config_was_set = false;
 std::string default_configuration_file_name = "config.xml";
-
-void cleanup()
-{
-	delete s;
-}
 
 void print_info()
 {
@@ -43,7 +38,6 @@ void print_help()
 		<< "Type 'program_options_help'  to see program start up arguments." << std::endl
 		<< "Type 'config'                to enter path for configuration file." << std::endl
 		<< "Type 'service'               to enter service configuration menu." << std::endl
-		<< "Type 'save'                  to save current configuration into file." << std::endl
 		<< "Type 'start'                 to start this server." << std::endl
 		<< "Type 'exit'                  to stop this server and leave this the application." << std::endl;
 }
@@ -100,14 +94,12 @@ bool config(std::string config_file_path)
 	{
 		if(!server_started)
 		{
-			s = new server(server_config);
-			atexit(cleanup);
+			s = boost::shared_ptr<server>(new server(server_config));
 			server_started = true;
 		}
 		else
 		{
-			s->util->add_to_services_list(server_config);
-			std::cout << "Configuration updated." << std::endl;
+			std::cout << "Server already started" << std::endl;
 		}
 	}
 	catch (std::exception &e)
@@ -138,11 +130,10 @@ void start(boost::property_tree::ptree server_config)
 			{
 				std::cout << "Starting server with empty configuration." <<  std::endl;
 				boost::property_tree::ptree server_config;
-				s = new server(server_config);
-				atexit(cleanup);
+				s = boost::shared_ptr<server>(new server(server_config));
 			}
 		}
-		catch(std::exception &e)
+		catch(...)
 		{
 			std::cout << "Server initialization failed miserably." << std::endl;
 			return;

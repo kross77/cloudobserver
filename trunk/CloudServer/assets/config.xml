@@ -2,59 +2,9 @@
 <config>
 	<!-- Prot on which server will be started -->
 	<port>4773</port>
-	
-	<!-- Description of how valuable request properties are -->
-	<properties_manager>
-		<arguments_price>100</arguments_price>
-		<url_extensions_price>100</url_extensions_price>
-		<url_price>1000</url_price>
-	</properties_manager>
 
 	<!-- List of services to be started on server -->
 	<services>
-
-		<service>
-			<name>File Service</name>
-			<class_name>file_service</class_name>
-			<library_name>FileService</library_name>
-			<description>
-				<type>private</type>
-				<text>Fast and simple service for files returning. Responds to underlying file system changes</text>
-			</description>
-			<settings>
-				<root_file_system_directory>htdocs</root_file_system_directory>
-				<show_directory_contents>true</show_directory_contents>
-			</settings>
-			<properties>
-				<default_price>50</default_price>
-			</properties>
-		</service>
-
-		<service>
-			<name>Users Files Service</name>
-			<class_name>users_files_service</class_name>
-			<library_name>UsersFilesService</library_name>
-			<settings>
-				<users_files_directory>ufs</users_files_directory>
-				<extension>user.file</extension>
-				<log_util_file>ufs_log.txt</log_util_file>
-				<database>ufs.db</database>
-			</settings>
-			<description>
-				<type>public</type>
-				<text>Service for user personal and publicly avaliable files storing and managing.</text>
-				<default_url>ufs.html</default_url>
-			</description>
-			<properties>
-				<url>
-					<equals>/ufs.service</equals>
-					<equals>/ufs.json</equals>
-				</url>
-				<url_extensions>
-                    <extension>file</extension>
-	            </url_extensions>
-			</properties>
-		</service>
 		
 		<service>
 			<name>Image Renderer Service</name>
@@ -65,11 +15,7 @@
 				<text>Service for images rendering, transcoding, mapping.</text>
 				<default_url>images.html</default_url>
 			</description>
-			<properties>
-				<url>
-					<equals>/image_renderer.service</equals>
-				</url>
-			</properties>
+			<call>1</call>
 		</service>
 
 		<service>
@@ -89,15 +35,41 @@
 				<text>Demo service for public video conferencing, it does not require user account and its free!</text>
 				<default_url>observer.html</default_url>
 			</description>
-			<properties>
-				<url>
-					<equals>/users.json</equals>
-				</url>
-				<arguments>
-					<action>write</action>
-					<action>read</action>
-				</arguments>
-			</properties>
+			<call>2</call>
 		</service>
+		
+		<service>
+			<name>Users Files Service</name>
+			<class_name>users_files_service</class_name>
+			<library_name>UsersFilesService</library_name>
+			<settings>
+				<users_files_directory>ufs</users_files_directory>
+				<extension>user.file</extension>
+				<log_util_file>ufs_log.txt</log_util_file>
+				<database>ufs.db</database>
+			</settings>
+			<description>
+				<type>public</type>
+				<text>Service for user personal and publicly avaliable files storing and managing.</text>
+				<default_url>ufs.html</default_url>
+			</description>
+			<call>3</call>	
+		</service>
+
+		<service>
+			<name>File Service</name>
+			<class_name>file_service</class_name>
+			<library_name>FileService</library_name>
+			<description>
+				<type>private</type>
+				<text>Fast and simple service for files returning. Responds to underlying file system changes</text>
+			</description>
+			<settings>
+				<root_file_system_directory>htdocs</root_file_system_directory>
+				<show_directory_contents>true</show_directory_contents>
+			</settings>		
+			<call>4</call>
+		</service>
+		
 	</services>
 </config>

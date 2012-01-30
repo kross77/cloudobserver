@@ -441,6 +441,10 @@ bool file_service::try_send_info( boost::shared_ptr<fs_file> f,boost::shared_ptr
 	return false;
 }
 
+std::string file_service::service_check( boost::shared_ptr<http_request>, boost::shared_ptr<shared> )
+{
+	return "executor";
+}
 
 BOOST_EXTENSION_TYPE_MAP_FUNCTION
 {
