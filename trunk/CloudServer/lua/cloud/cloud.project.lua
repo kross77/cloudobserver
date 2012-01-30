@@ -329,18 +329,6 @@ function cloud.project.useopenSSL()
 	
 end
 
-function cloud.project.createDumpsFolder()
-	if not os.isdir("projects/" .. os.get() .. "-" .. action .. "/bin/debug" ) then
-		os.mkdir("projects/" .. os.get() .. "-" .. action .. "/bin/debug")
-	end
-	if not os.isdir("projects/" .. os.get() .. "-" .. action .."/bin/release" ) then
-		os.mkdir("projects/" .. os.get() .. "-" .. action .. "/bin/release")
-	end
-	os.mkdir("projects/" .. os.get() .. "-" .. action .. "/dumps")
-	os.mkdir("projects/" .. os.get() .. "-" .. action .. "/bin/debug/dumps")
-	os.mkdir("projects/" .. os.get() .. "-" .. action .. "/bin/release/dumps")
-end
-
 function cloud.project.copyAssets()
 	if not os.isdir("projects/" .. os.get() .. "-" .. action .. "/bin/debug/htdocs" ) then
 		os.mkdir("projects/" .. os.get() .. "-" .. action .. "/bin/debug/htdocs")
