@@ -103,7 +103,11 @@ void observer_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::sock
 				"\".</BODY></HTML>\n";
 
 			if (this->dump_writers)
+			{
+				if (!boost::filesystem::exists(this->dumps_location))
+					boost::filesystem::create_directory(this->dumps_location);
 				dump = new std::ofstream((this->dumps_location.string() + '/' + get_current_date_time() + '-' + nickname + "-writer.flv").c_str(), std::ofstream::binary);
+			}
 		}
 		break;
 	case READER_CLIENT:
@@ -125,7 +129,11 @@ void observer_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::sock
 			response->headers.insert(std::pair<std::string, std::string>("Cache-Control", "no-cache"));
 
 			if (this->dump_readers)
+			{
+				if (!boost::filesystem::exists(this->dumps_location))
+					boost::filesystem::create_directory(this->dumps_location);
 				dump = new std::ofstream((this->dumps_location.string() + '/' + get_current_date_time() + '-' + nickname + "-reader.flv").c_str(), std::ofstream::binary);
+			}
 		}
 		break;
 	}
