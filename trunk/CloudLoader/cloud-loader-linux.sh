@@ -113,6 +113,8 @@ load() # 1=SRCFILE 2=COMPILE 3=SRCBASE 4=SRCSITE 5=SRCPATH
 	else
 		echo_run tar -xzf $DOWNLOADS/$1
 	fi
+	
+	rm -rf $2
 	echo_run mv $3 $2
 }
 
