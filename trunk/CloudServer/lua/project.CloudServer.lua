@@ -5,9 +5,8 @@ project "CloudServer"
 	
 	cloud.project.init()
 	
-	cloud.project.copyConfig()
+	cloud.project.copyAssets()
 	cloud.project.createDumpsFolder()
-	cloud.project.copyHtdocsFolder()
 	
 	includedirs { "service-interface/" }
 

@@ -329,18 +329,6 @@ function cloud.project.useopenSSL()
 	
 end
 
-function cloud.project.copyConfig()
-	if not os.isdir("projects/" .. os.get() .. "-" .. action .. "/bin/debug" ) then
-		os.mkdir("projects/" .. os.get() .. "-" .. action .. "/bin/debug")
-	end
-	if not os.isdir("projects/" .. os.get() .. "-" .. action .."/bin/release" ) then
-		os.mkdir("projects/" .. os.get() .. "-" .. action .. "/bin/release")
-	end
-	os.copyfile("assets/config.xml" , "projects/" .. os.get() .. "-" .. action .. "/config.xml" )
-	os.copyfile("assets/config.xml" , "projects/" .. os.get() .. "-" .. action .. "/bin/debug/config.xml" )
-	os.copyfile("assets/config.xml" , "projects/" .. os.get() .. "-" .. action .. "/bin/release/config.xml" )
-end
-
 function cloud.project.createDumpsFolder()
 	if not os.isdir("projects/" .. os.get() .. "-" .. action .. "/bin/debug" ) then
 		os.mkdir("projects/" .. os.get() .. "-" .. action .. "/bin/debug")
@@ -353,14 +341,14 @@ function cloud.project.createDumpsFolder()
 	os.mkdir("projects/" .. os.get() .. "-" .. action .. "/bin/release/dumps")
 end
 
-function cloud.project.copyHtdocsFolder()
+function cloud.project.copyAssets()
 	if not os.isdir("projects/" .. os.get() .. "-" .. action .. "/bin/debug/htdocs" ) then
 		os.mkdir("projects/" .. os.get() .. "-" .. action .. "/bin/debug/htdocs")
 	end
 	if not os.isdir("projects/" .. os.get() .. "-" .. action .."/bin/release/htdocs" ) then
 		os.mkdir("projects/" .. os.get() .. "-" .. action .. "/bin/release/htdocs")
 	end
-	os.copydir("assets/htdocs",  "projects/" .. os.get() .. "-" .. action .. "/bin/debug/htdocs")
-	os.copydir("assets/htdocs",  "projects/" .. os.get() .. "-" .. action .. "/bin/release/htdocs")
-	os.copydir("assets/htdocs",  "projects/" .. os.get() .. "-" .. action .. "/htdocs")
+	os.copydir("assets",  "projects/" .. os.get() .. "-" .. action .. "/bin/debug")
+	os.copydir("assets",  "projects/" .. os.get() .. "-" .. action .. "/bin/release")
+	os.copydir("assets",  "projects/" .. os.get() .. "-" .. action)
 end
