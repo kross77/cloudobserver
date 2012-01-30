@@ -39,6 +39,7 @@ class users_files_service: public service
 { 
 public:
 	users_files_service();
+	virtual std::string service_check(boost::shared_ptr<http_request> request, boost::shared_ptr<shared> shared_data);
 
 	//UFS POST API:
 	//	required:

@@ -402,3 +402,13 @@ image_renderer_service::image_renderer_service()
 {
 	fill_util = boost::shared_ptr<filter_utils::fill_utils>(new filter_utils::fill_utils());
 }
+
+std::string image_renderer_service::service_check( boost::shared_ptr<http_request> request, boost::shared_ptr<shared> shared_data )
+{
+	std::string url= request->url;
+	if (url == "/image_renderer.service")
+	{
+		return "executor";
+	}
+	return "not for me";
+}

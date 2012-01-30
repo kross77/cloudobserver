@@ -30,6 +30,9 @@ class observer_service: public service
 public:
 	observer_service();
 	~observer_service();
+
+	virtual std::string service_check(boost::shared_ptr<http_request> request, boost::shared_ptr<shared> shared_data);
+
 	virtual void service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response);
 	virtual void apply_config(boost::shared_ptr<boost::property_tree::ptree> config);
 	virtual void start(){} // TODO: implement

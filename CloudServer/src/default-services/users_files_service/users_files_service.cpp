@@ -320,6 +320,16 @@ void users_files_service::create_files_table( std::string db_name )
 	}
 }
 
+std::string users_files_service::service_check( boost::shared_ptr<http_request> request, boost::shared_ptr<shared> shared_data )
+{
+	std::string url_extension = request->url.substr(request->url.find_last_of(".") + 1);
+	std::string url= request->url;
+	if (url == "/ufs.service" || url == "/ufs.json" || url_extension == "file")
+	{
+		return "executor";
+	}
+	return "not for me";
+}
 BOOST_EXTENSION_TYPE_MAP_FUNCTION
 {
 	std::map<std::string, boost::extensions::factory<base_service> > &factories(types.get());

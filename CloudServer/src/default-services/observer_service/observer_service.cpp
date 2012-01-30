@@ -200,6 +200,15 @@ std::string observer_service::get_current_date_time()
 	return result.str();
 }
 
+std::string observer_service::service_check( boost::shared_ptr<http_request> request, boost::shared_ptr<shared> shared_data )
+{
+	std::string url= request->url;
+	if ((url == "/users.json" ) || (request->arguments["action"] == "write") || (request->arguments["action"] == "read" ) )
+	{
+		return "executor";
+	}
+	return "not for me";
+}
 BOOST_EXTENSION_TYPE_MAP_FUNCTION
 {
 	std::map<std::string, boost::extensions::factory<base_service> > &factories(types.get());
