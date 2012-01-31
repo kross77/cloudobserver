@@ -12,13 +12,9 @@ project "cf-server"
 	links { "cf-util" }
 	includedirs { "src/cf-util"}
 	includedirs { "3rdparty/cf-http"}
-		
-	links { "boost-sqlite" }
-	includedirs { "3rdparty/boost-sqlite"}	
 	
 	configuration { "gmake" }
 		linkoptions {
-			"-lboost-sqlite",
 			"-lcf-util",
 			"-lcf-fs"
 		}

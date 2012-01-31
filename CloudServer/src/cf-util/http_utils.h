@@ -71,18 +71,6 @@ namespace http_utils
 	std::string url_decode(std::string data);
 
 	/*!
-	 * \brief  Parses cookie string into map of pairs - `cookie name` : `cookie value`
-	 *
-	 * \n FullName:  http_utils::parse_cookie
-	 * \n Access:    public  
-	 *
-	 * \param cookie_data std::string 
-	 * \return std::map<std::string, std::string> map cookie name <-> cookie value
-	 *
-	 */
-	std::map<std::string, std::string> parse_cookie(std::string cookie_data);
-
-	/*!
 	 * \brief Parses form request body string with enctype: `multipart/form-data` 
 	 * Parses form request body string with enctype: `multipart/form-data` 
 	 * into map of pairs - `Content-Disposition field name` : `field data`  
@@ -295,6 +283,9 @@ namespace http_utils
 	void get_extension_and_mime_type(std::string & file_extenstion, std::string & mime_type );
 
 	boost::shared_ptr<http_response> set_file_content_type( const std::string & file_name, boost::shared_ptr<http_response> response );
+
+	bool try_to_redirect(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request , boost::shared_ptr<http_response> response );
+
 	template<typename _OutputIterator>
 	inline void split(std::string str, std::string delim, _OutputIterator result);
 

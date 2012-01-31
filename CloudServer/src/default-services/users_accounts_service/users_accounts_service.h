@@ -17,35 +17,44 @@
 #include <boost/date_time.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/algorithm/string.hpp>    
+
+// Boost Extension
+#include <boost/extension/extension.hpp>
+#include <boost/extension/factory.hpp>
+#include <boost/extension/type_map.hpp>
+
 //SQLite
 #include <sqlite3pp.h>
 
 // Cloud Forever
 #include <http.h>
+#include <service.hpp>
 
 #include <threading_utils.h>
 #include <general_utils.h>
 #include <http_utils.h>
 #include <log_util.h>
 
-class user_control
+class users_accounts_service : public service
 {
 public:
-	user_control();
-	~user_control();
+	users_accounts_service();
+	~users_accounts_service();
 
-	void apply_config(boost::property_tree::ptree config);
+	virtual void apply_config(boost::shared_ptr<boost::property_tree::ptree> config);
+	virtual void service_call(boost::shared_ptr<boost::asio::ip::tcp::socket>, boost::shared_ptr<http_request>, boost::shared_ptr<http_response>);
+	virtual std::string service_check( boost::shared_ptr<http_request> request, boost::shared_ptr<shared> shared_data );
 
+	virtual void start(){}
+	virtual void stop(){}
 	//This method shall be called for requests filtering
-	std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > service_call( boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> user_request , boost::shared_ptr<http_response> service_response);
 private:
-
 	//Case response functions
-	std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > register_user(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user);
-	std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > update_user(std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user);
-	std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > log_in(std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user);
-	std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > log_out(std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user);
-	std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > guest_user(std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user);
+	void register_user(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> user_request , boost::shared_ptr<http_response>  user_response);
+	void update_user(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> user_request , boost::shared_ptr<http_response>  user_response);
+	void log_in(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> user_request , boost::shared_ptr<http_response>  user_response);
+	void log_out(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> user_request , boost::shared_ptr<http_response>  user_response);
+	void guest_user(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> user_request , boost::shared_ptr<http_response>  user_response);
 
 
 	//User_control functions
@@ -53,7 +62,7 @@ private:
 	bool is_registered_user(std::string & email);
 	std::string is_signed_in_user(std::string session_id_sha256);
 
-	std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > check_recaptcha( boost::shared_ptr<boost::asio::ip::tcp::socket> socket, std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user);
+	void check_recaptcha( boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> user_request , boost::shared_ptr<http_response>  user_response);
 
 	void start_work_with_db(std::string db_name);
 	void start_work_with_lu( std::string lu_path );

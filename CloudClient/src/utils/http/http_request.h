@@ -52,6 +52,7 @@ public:
 	std::string version;
 	std::map<std::string, std::string> arguments;
 	std::map<std::string, std::string> headers;
+	std::map<std::string, std::string> cookies;
 	int body_size;
 	std::string body;
 
@@ -67,6 +68,7 @@ private:
 		ar & body_size;
 		ar & headers;
 		ar & arguments;
+		ar & cookies;
 		ar & version;
 		ar & url;
 		ar & method;
@@ -77,6 +79,18 @@ private:
 	void parse_buffer(char* buffer, http_request_parser_state &parser_state, std::string &key, std::string &value, int bytes_read);
 	bool timed_receive_base(boost::asio::ip::tcp::socket& socket, size_t& buffer_size, int& seconds_to_wait);
 	int read_some( boost::asio::ip::tcp::socket *sock, char* buffer, size_t& buffer_size );
+
+	/*!
+	 * \brief  Parses cookie string into map of pairs - `cookie name` : `cookie value`
+	 *
+	 * \n FullName:  http_utils::parse_cookie
+	 * \n Access:    public  
+	 *
+	 * \param cookie_data std::string 
+	 * \return std::map<std::string, std::string> map cookie name <-> cookie value
+	 *
+	 */
+	std::map<std::string, std::string> parse_cookie(std::string cookie_data);
 	
 	template <class task_return_t>
 	void run_item(  boost::shared_ptr<boost::packaged_task<task_return_t> > pt)
