@@ -116,7 +116,6 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 				data.socket = socket;			
 				data.shared_data = shared_data->serialize();		
 				data.raw_request = request->serialize();
-				data.raw_response = response->serialize();
 
 				service_cont = util->description.service_map[*order_it];
 				boost::shared_ptr<base_service> requested_service = service_cont->service_ptr;

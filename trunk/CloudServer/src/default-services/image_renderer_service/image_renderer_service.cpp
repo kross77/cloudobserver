@@ -281,10 +281,12 @@ filter_utils::mask_utils::mask_utils( boost::shared_ptr<filter_utils::fill_utils
 	fill_util = your_fill_utils;
 }
 
-void image_renderer_service::service_call( boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response )
+void image_renderer_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request,  boost::shared_ptr<shared> shared_data)
 {
 	typedef std::map<std::string, std::string> map_ss;
 	typedef std::pair<std::string, std::string> pair_ss;
+
+	boost::shared_ptr<http_response> response(new http_response(), boost::bind(&pointer_utils::delete_ptr<http_response>, _1));
 
 	map_ss::iterator it = request->arguments.find("action");
 

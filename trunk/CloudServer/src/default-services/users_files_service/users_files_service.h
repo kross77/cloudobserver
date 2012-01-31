@@ -49,7 +49,7 @@ public:
 	//		datafile : data (as string)
 	//	use:
 	//		users files upload.
-	virtual void service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response);
+	virtual void service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request,  boost::shared_ptr<shared> shared_data);
 
 	virtual void apply_config(boost::shared_ptr<boost::property_tree::ptree> config);
 

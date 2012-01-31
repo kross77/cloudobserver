@@ -37,8 +37,10 @@ void users_files_service::apply_config( boost::shared_ptr<boost::property_tree::
 	create_files_table(this->default_db_name);
 }
 
-void users_files_service::service_call( boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response )
+void users_files_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request,  boost::shared_ptr<shared> shared_data)
 {
+	boost::shared_ptr<http_response> response(new http_response(), boost::bind(&pointer_utils::delete_ptr<http_response>, _1));
+
 	std::string user_name = http_utils::url_decode(fs_utils::get_user_name(request));
 	if(user_name != "guest")
 	{
