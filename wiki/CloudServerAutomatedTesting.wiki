@@ -11,18 +11,18 @@ Cloud Server the core component in our infrastructure. Once we got bored with re
 == With out administration privileges == 
 
 === Linux way ===
-For Linux distributions you could use our [http://cloudobserver.googlecode.com/svn/trunk/CloudLoader/automated_test_linux.sh Automated Cloud Server Testing build/setup script].
+For Linux distributions you could use our [http://cloudobserver.googlecode.com/svn/trunk/CloudLoader/cloud-updater-linux.sh Automated Cloud Server Testing build/setup script].
 
 Here is how you can use it: 
 {{{
-	wget http://cloudobserver.googlecode.com/svn/trunk/CloudLoader/automated_test_linux.sh
-	chmod u+x automated_test_linux.sh
-	nohup ./automated_test_linux.sh >& /dev/null &
+	wget http://cloudobserver.googlecode.com/svn/trunk/CloudLoader/cloud-updater-linux.sh 
+	chmod u+x cloud-updater-linux.sh 
+	nohup ./cloud-updater-linux.sh  >& /dev/null &
 }}}
 
 when you'll get tired of it just get scripts process ID:
 {{{
-	echo `ps -fe | grep -F 'automated_test_linux' | grep -v -F 'grep' | awk '{ print $2 }'`
+	echo `ps -fe | grep -F 'cloud-updater-linux' | grep -v -F 'grep' | awk '{ print $2 }'`
 }}}
 and `kill` it, then find CloudServer's process ID:
 {{{

@@ -11,13 +11,13 @@ Cloud Server is one of the core components in our infrastructure. Here we show h
 == With out administration privileges == 
 
 === Automated ways ===
-For Unix distributions (Mac OS X or Linux) you could use our [http://cloudobserver.googlecode.com/svn/trunk/CloudLoader/cloud_server_net_setup.sh Cloud Server network build/setup script].
+For Unix distributions (Mac OS X or Linux) you could use our [http://cloudobserver.googlecode.com/svn/trunk/CloudLoader/cloud-loader-linux.sh Cloud Server network build/setup script].
 
 Here is how you can use it: 
 {{{
-	wget http://cloudobserver.googlecode.com/svn/trunk/CloudLoader/cloud_server_net_setup.sh
-	chmod u+x cloud_server_net_setup.sh
-	./cloud_server_net_setup.sh
+	wget http://cloudobserver.googlecode.com/svn/trunk/CloudLoader/cloud-loader-linux.sh
+	chmod u+x cloud-loader-linux.sh
+	./cloud-loader-linux.sh
 }}}
 
 === Warning ===
