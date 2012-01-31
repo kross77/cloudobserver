@@ -5,6 +5,8 @@
 
 // Boost
 #include <boost/asio.hpp>
+#include <boost/thread.hpp>
+#include <boost/thread/locks.hpp>
 #include <boost/bind.hpp>
 #include <boost/property_tree/ptree.hpp>
 
@@ -23,7 +25,32 @@
 class shared
 {
 public:
-	std::map<std::string, std::string> data;
+	// you can values post only once
+	bool post(const std::string & key, const std::string & val)
+	{
+		std::map<std::string, std::string>::iterator it;
+		boost::mutex::scoped_lock lock(mut_);
+		it = data.find(key);
+		if (it != data.end())
+		{
+			return false;
+		}
+		data[key] = val;
+		return true;
+	}
+
+	// get safely any time
+	std::string get(const std::string & key)
+	{
+		std::map<std::string, std::string>::iterator it;
+		boost::mutex::scoped_lock lock(mut_);
+		it = data.find(key);
+		if (it != data.end())
+		{
+			return it->second;
+		}
+		return "";
+	}
 
 	boost::shared_ptr<std::string> serialize()
 	{
@@ -42,6 +69,9 @@ public:
 	}
 
 private:
+	std::map<std::string, std::string> data;
+	mutable boost::mutex mut_;
+
 	friend class boost::serialization::access;
 
 	template<class Archive>
