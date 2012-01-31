@@ -5,10 +5,25 @@ LOADER_URL="http://cloudobserver.googlecode.com/svn/trunk/CloudLoader/$LOADER"
 LOADER_REV=0
 REMOTE_REPO="http://cloudobserver.googlecode.com/svn/"
 REBUILD_LIBRARIES=0
+RUN_DIR="./cloud_server/run_dir/"
+CF_SERVER_INSTALL_DIR="./cloud_server/install-dir/"
 CD=`pwd`
 COUNTER=0
 
 export LC_MESSAGES=C
+
+kill `ps aux | grep -F 'CloudServer' | grep -v -F 'grep' | awk '{ print $2 }'` 
+
+if [ ! -d "$RUN_DIR" ]; then
+	mkdir $RUN_DIR
+fi
+
+if [ -d "$CF_SERVER_INSTALL_DIR" ]; then
+	cp -r $CF_SERVER_INSTALL_DIR* $RUN_DIR
+	cd $RUN_DIR
+	nohup ./CloudServer >& /dev/null &
+	cd $CD
+fi
 
 while [  $COUNTER -lt 1 ]; do
 
@@ -24,7 +39,6 @@ while [  $COUNTER -lt 1 ]; do
 			chmod u+x $LOADER
 		fi
 		LOCAL_REV=$REMOTE_REV
-		kill `ps aux | grep -F 'CloudServer' | grep -v -F 'grep' | awk '{ print $2 }'` 
 		
 		if [ "$REBUILD_LIBRARIES" == "1" ]; then
 			./$LOADER no yes
@@ -33,12 +47,16 @@ while [  $COUNTER -lt 1 ]; do
 			./$LOADER
 		fi
 		
-		cd ./cloud_server/install-dir/
+		cd $CD
+		
+		kill `ps aux | grep -F 'CloudServer' | grep -v -F 'grep' | awk '{ print $2 }'` 
+		cp -r $CF_SERVER_INSTALL_DIR* $RUN_DIR
+		cd $RUN_DIR
 		nohup ./CloudServer >& /dev/null &
 		cd ./htdocs/js/
 		echo  "\$(document).ready(function() {\$('#rol').after('. Revision "  $LOCAL_REV  "');});" >> cf.js
 		cd $CD
 		
 	fi
-	sleep  300
+	sleep  250
 done
