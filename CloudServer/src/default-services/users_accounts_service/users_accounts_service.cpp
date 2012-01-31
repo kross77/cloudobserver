@@ -50,13 +50,14 @@ std::string users_accounts_service::is_signed_in_user( std::string session_id_sh
 	return threading_util->safe_search_in_map< std::string, std::string, std::map<std::string, std::string>::iterator >(session_id_sha256, sessions_map);
 }
 
-void users_accounts_service::service_call( boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> user_request , boost::shared_ptr<http_response> service_response )
+void users_accounts_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> user_request,  boost::shared_ptr<shared> shared_data)
 {
 	typedef std::map<std::string, std::string> map_ss;
 
 	map_ss::iterator arguments_end = user_request->arguments.end();
 	map_ss::iterator headers_end = user_request->headers.end();
 
+	boost::shared_ptr<http_response> service_response(new http_response(), boost::bind(&pointer_utils::delete_ptr<http_response>, _1));
 
 	map_ss::iterator has_email = user_request->headers.find(tag_header_email);
 

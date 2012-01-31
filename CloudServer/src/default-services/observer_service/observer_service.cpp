@@ -14,8 +14,10 @@ observer_service::~observer_service()
 		delete i->second;
 }
 
-void observer_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response)
+void observer_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request,  boost::shared_ptr<shared> shared_data)
 {
+	boost::shared_ptr<http_response> response(new http_response(), boost::bind(&pointer_utils::delete_ptr<http_response>, _1));
+
 	if (request->url == "/users.json")
 	{
 		std::ostringstream users_stream;
