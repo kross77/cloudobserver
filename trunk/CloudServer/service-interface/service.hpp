@@ -115,10 +115,12 @@ struct service_check_input {
 
 struct service_check_output {
 	service_check_output() : call_me_as(new std::string(""), boost::bind(&pointer_utils::delete_ptr<std::string>, _1)),
-		error_data(new std::string(""), boost::bind(&pointer_utils::delete_ptr<std::string>, _1))
+		error_data(new std::string(""), boost::bind(&pointer_utils::delete_ptr<std::string>, _1)),
+		shared_data(new std::string(""), boost::bind(&pointer_utils::delete_ptr<std::string>, _1))
 	{}
 	boost::shared_ptr<std::string> call_me_as;
 	boost::shared_ptr<std::string> error_data;
+	boost::shared_ptr<std::string> shared_data;
 };
 
 #endif // RAW_HPP
@@ -170,6 +172,7 @@ public:
 		}
 		service_check_output out;
 		out.call_me_as = check_result;
+		out.shared_data = shared_data->serialize();
 		return out;
 	}
 

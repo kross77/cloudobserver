@@ -111,6 +111,7 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 				{
 					try
 					{
+						shared_data->deserialize(check_data_out.shared_data);
 						util->tread_util->safe_insert<boost::thread::id, std::set<boost::thread::id> >(boost::this_thread::get_id(),service_cont->threads_ids);
 						service_call_output service_output;
 						service_output = requested_service->make_service_call(data);
@@ -133,10 +134,10 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 					{
 						*(util->error) << e.what() << log_util::endl; //"The parameter is incorrect" exception
 					}
-					//if (*(check_data_out.call_me_as) == "assistant")
-					//{
-					//	order_it=util->services_ids.begin();
-					//}
+					if (*(check_data_out.call_me_as) == "assistant")
+					{
+						order_it=util->services_ids.begin();
+					}
 					if (*(check_data_out.call_me_as) == "executor")
 					{
 						break;
