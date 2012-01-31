@@ -387,6 +387,8 @@ void http_utils::send( const std::string & data, boost::shared_ptr<boost::asio::
 
 void http_utils::send( const int & code, const std::string & data, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response,  boost::shared_ptr<http_request> request )
 {
+	http_utils::set_connection_type(request, response);
+
 	std::stringstream body;
 	bool encoded = false;
 	typedef std::map<std::string, std::string > map_t;
@@ -477,6 +479,7 @@ void http_utils::get_extension_and_mime_type(std::string & file_extenstion, std:
 
 void http_utils::send( const int & code, const std::string & data, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response )
 {
+	http_utils::set_server_name_and_date(response);
 	response->status = code;
 	response->body = data;
 	response->headers["Content-Length"] = boost::lexical_cast<std::string>(response->body.length());
@@ -534,3 +537,26 @@ boost::shared_ptr<http_response> http_utils::set_gzip_content_type( boost::share
 	response->headers.insert(std::pair<std::string, std::string>("Content-Encoding", "gzip"));
 	return response;
 }
+
+	boost::shared_ptr<http_response> http_utils::set_server_name_and_date(boost::shared_ptr<http_response> response)
+	{
+		//std::ostringstream formatter;
+		//formatter.imbue(std::locale(std::cout.getloc(), new boost::posix_time::time_facet("%a, %d %b %Y %H:%M:%S GMT")));
+		//formatter << boost::posix_time::second_clock::local_time();
+		response->headers.insert(std::pair<std::string, std::string>("Date",  boost::posix_time::to_iso_extended_string(  boost::posix_time::second_clock::universal_time() )));//formatter.str()));
+		response->headers.insert(std::pair<std::string, std::string>("Server", "Cloud Server v0.5"));
+		return response;
+	}
+
+	boost::shared_ptr<http_response> http_utils::set_connection_type(boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response)
+	{
+		if (boost::iequals(request->headers["Connection"], "Keep-Alive"))
+		{
+			response->headers.insert(std::pair<std::string, std::string>("Connection", "Keep-Alive"));
+		}
+		else
+		{
+			response->headers.insert(std::pair<std::string, std::string>("Connection", "Close"));
+		}
+		return response;
+	}

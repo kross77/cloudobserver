@@ -117,6 +117,10 @@ namespace http_utils
 
 	boost::shared_ptr<http_response> set_gzip_content_type(boost::shared_ptr<http_response> response);
 
+	boost::shared_ptr<http_response> set_server_name_and_date(boost::shared_ptr<http_response> response);
+
+	boost::shared_ptr<http_response> set_connection_type(boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response);
+
 	/*!
 	 * \brief turns map of <std::string, std::string> into string formated as POST request
 	 *

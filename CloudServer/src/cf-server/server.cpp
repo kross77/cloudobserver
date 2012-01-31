@@ -51,7 +51,7 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 {
 	try
 	{
-		bool connection_close = true;
+		bool connection_close = false;
 		bool alive = false;
 
 		do
@@ -82,31 +82,13 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 			*(util->info) << "request url: " << request->url << log_util::endl;
 
 			boost::shared_ptr<http_response> response = boost::make_shared<http_response>();
-			std::ostringstream formatter;
-			//formatter.imbue(std::locale(std::cout.getloc(), new boost::posix_time::time_facet("%a, %d %b %Y %H:%M:%S GMT")));
-			//formatter << boost::posix_time::second_clock::local_time();
-			response->headers.insert(std::pair<std::string, std::string>("Date",  boost::posix_time::to_iso_extended_string(  boost::posix_time::second_clock::universal_time() )));//formatter.str()));
-			response->headers.insert(std::pair<std::string, std::string>("Server", "Cloud Server v0.5"));
-
-			if (boost::iequals(request->headers["Connection"], "Keep-Alive"))
-			{
-				connection_close = false;
-				response->headers.insert(std::pair<std::string, std::string>("Connection", "Keep-Alive"));
-			}
-			else
-			{
-				response->headers.insert(std::pair<std::string, std::string>("Connection", "Close"));
-			}
-
 			if (request->url == util->description.server_service_url)
 			{
 				server_service_call(socket, request, response);
 				continue;
 			}
 
-
 			std::list<int>::iterator order_it;
-
 			boost::shared_ptr<server_utils::service_container> service_cont;
 
 			for (order_it=util->services_ids.begin(); order_it!=util->services_ids.end(); ++order_it)
