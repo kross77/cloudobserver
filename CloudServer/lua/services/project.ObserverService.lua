@@ -19,6 +19,7 @@ project "ObserverService"
 	cloud.project.useopenSSL()
 	
 	files { "src/default-services/observer_service/**"}
+	includedirs { "service-interface/" }
 
 	configuration "Debug"
 		defines { "DEBUG" }
