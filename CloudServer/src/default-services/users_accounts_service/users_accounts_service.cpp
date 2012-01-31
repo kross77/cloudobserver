@@ -198,7 +198,8 @@ bool users_accounts_service::is_registered_user( std::string & given_email )
 void users_accounts_service::guest_user( boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> user_request , boost::shared_ptr<http_response>  user_response)
 {
 	user_request->headers.insert(std::pair<std::string, std::string>(tag_header_email, tag_guest_name));
-	http_utils::try_to_redirect(socket, user_request, user_response);
+	if(! http_utils::try_to_redirect(socket, user_request, user_response))
+		http_utils::send_found_302(	user_request->url, socket, user_response, user_request);
 }
 
 void users_accounts_service::log_in(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> user_request , boost::shared_ptr<http_response>  user_response )
