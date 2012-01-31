@@ -20,11 +20,11 @@
 
 //Thread safe logging
 #include <pointer_utils.h>
+#include <http_utils.h>
 #include <log_util.h>
 #include <thread_pool.h>
 
 #include "server_utils.h"
-#include "user_control.h"
 
 class server
 {
@@ -39,7 +39,6 @@ private:
 	void server_services_list(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response, boost::shared_ptr<http_request> request);
 	void server_service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response);
 	boost::thread *acceptor_thread;
-	user_control *uac;
 	boost::shared_ptr<thread_pool> threads_pool;
 	int request_max_time;
 };

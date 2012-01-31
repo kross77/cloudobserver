@@ -244,6 +244,13 @@ void http_request::parse_buffer(char* buffer, http_request_parser_state &parser_
 			break;
 		}
 	} while (position < buffer + bytes_read);
+
+	typedef std::map<std::string, std::string> map_ss;
+	map_ss::iterator has_cookie = this->headers.find("Cookie");
+
+	if (has_cookie != this->headers.end()){
+		cookies = parse_cookie(has_cookie->second);
+	}
 }
 
 
@@ -357,4 +364,35 @@ void http_request::deserialize( boost::shared_ptr<std::string> request_string)
 	ia_ss_req << *request_string;
 	boost::archive::text_iarchive ia_req(ia_ss_req);
 	ia_req >> *this;	 
+}
+
+std::map<std::string, std::string> http_request::parse_cookie( std::string cookie_data )
+{
+	std::map<std::string, std::string> parsed_cookie;
+	std::string token, token2;
+	std::istringstream iss(cookie_data);
+	while ( getline(iss, token, ' ') )
+	{
+		std::string name, val;
+		std::istringstream iss2(token);
+		int num = 0 ;
+		while ( getline(iss2, token2, '=') )
+		{
+			if ( num == 0)
+			{
+				name = token2;
+				num++;
+			}
+			else
+			{
+				val = token2;
+				std::string::iterator it = val.end() - 1;
+				if (*it == ';')
+					val.erase(it);
+
+			}
+		}
+		parsed_cookie.insert(std::pair<std::string, std::string>(name, val));
+	}
+	return parsed_cookie;
 }

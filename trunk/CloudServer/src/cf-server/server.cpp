@@ -2,10 +2,6 @@
 
 server::server(boost::property_tree::ptree config) 
 {
-	uac = new user_control();
-	boost::property_tree::ptree pt;
-	uac->apply_config(pt);
-
 	util = new server_utils();
 	util->description = util->parse_config(config);
 
@@ -17,7 +13,6 @@ server::server(boost::property_tree::ptree config)
 server::~server()
 {
 	delete util;
-	delete uac;
 }
 
 void server::acceptor_loop(){
@@ -101,17 +96,6 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 			else
 			{
 				response->headers.insert(std::pair<std::string, std::string>("Connection", "Close"));
-			}
-
-			try
-			{
-				std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > login = uac->service_call(socket, request, response);
-				request = login.first;
-				response = login.second;
-			}
-			catch (std::exception &e)
-			{
-				*(util->error) << e.what() << log_util::endl;
 			}
 
 			if (request->url == util->description.server_service_url)

@@ -1,37 +1,5 @@
 #include "http_utils.h"
 
-std::map<std::string, std::string> http_utils::parse_cookie( std::string cookie_data )
-{
-	std::map<std::string, std::string> parsed_cookie;
-	std::string token, token2;
-	std::istringstream iss(cookie_data);
-	while ( getline(iss, token, ' ') )
-	{
-		std::string name, val;
-		std::istringstream iss2(token);
-		int num = 0 ;
-		while ( getline(iss2, token2, '=') )
-		{
-			if ( num == 0)
-			{
-				name = token2;
-				num++;
-			}
-			else
-			{
-				val = token2;
-				std::string::iterator it = val.end() - 1;
-				if (*it == ';')
-					val.erase(it);
-
-			}
-		}
-		parsed_cookie.insert(std::pair<std::string, std::string>(name, val));
-	}
-	return parsed_cookie;
-
-}
-
 boost::shared_ptr<http_response> http_utils::save_cookie( std::string cookie_data, boost::shared_ptr<http_response> response )
 {
 	typedef std::pair<std::string, std::string> pair_ss;
@@ -548,6 +516,17 @@ void http_utils::send_json_error( std::string error, boost::shared_ptr<boost::as
 	http_utils::set_json_content_type(response);
 	http_utils::send(data_stream.str(), socket, response, request);
 	return;
+}
+
+bool http_utils::try_to_redirect(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request , boost::shared_ptr<http_response> response )
+{
+	std::map<std::string, std::string>::iterator redirect_iterator= request->arguments.find("redirect_to");
+	if (redirect_iterator != request->arguments.end() )
+	{
+		http_utils::send_found_302(	http_utils::url_decode(redirect_iterator->second), socket, response, request);
+		return true;
+	}
+	return false;
 }
 
 boost::shared_ptr<http_response> http_utils::set_gzip_content_type( boost::shared_ptr<http_response> response )

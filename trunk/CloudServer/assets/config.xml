@@ -7,6 +7,28 @@
 	<services>
 		
 		<service>
+			<name>Users Accounts Service</name>
+			<class_name>users_accounts_service</class_name>
+			<library_name>UsersAccountsService</library_name>
+			<settings>
+				<log_util_file>log.txt</log_util_file>
+				<database>server.db</database>
+				<use_recapcha>true</use_recapcha>
+				<recapcha_server_key>6LdRhsYSAAAAACWFAY14BsbhEe0HzOMayMMfAYdj</recapcha_server_key>
+				<recapcha_server_url>http://www.google.com/recaptcha/api/verify</recapcha_server_url>	
+			</settings>
+			<description>
+				<type>private</type>
+				<text>Service for user registration.</text>
+				<!--
+				<type>public</type>
+				<default_url>uac.html</default_url>
+				-->
+			</description>
+			<call>0</call>
+		</service>
+		
+		<service>
 			<name>Image Renderer Service</name>
 			<class_name>image_renderer_service</class_name>
 			<library_name>ImageRendererService</library_name>

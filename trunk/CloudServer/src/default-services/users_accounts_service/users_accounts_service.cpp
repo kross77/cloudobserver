@@ -1,6 +1,6 @@
-#include "user_control.h"
+#include "users_accounts_service.h"
 
-user_control::user_control()
+users_accounts_service::users_accounts_service()
 {
 	threading_util = new threading_utils();
 
@@ -39,19 +39,18 @@ user_control::user_control()
 
 }
 
-user_control::~user_control()
+users_accounts_service::~users_accounts_service()
 {
 	delete threading_util;
 	delete lu;
 }
 
-
-std::string user_control::is_signed_in_user( std::string session_id_sha256 )
+std::string users_accounts_service::is_signed_in_user( std::string session_id_sha256 )
 {
 	return threading_util->safe_search_in_map< std::string, std::string, std::map<std::string, std::string>::iterator >(session_id_sha256, sessions_map);
 }
 
-std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user_control::service_call( boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> user_request , boost::shared_ptr<http_response> service_response )
+void users_accounts_service::service_call( boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> user_request , boost::shared_ptr<http_response> service_response )
 {
 	typedef std::map<std::string, std::string> map_ss;
 
@@ -70,59 +69,56 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 
 	if (has_logout != arguments_end)
 	{
-		return log_out(std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> >(user_request, service_response));
+		return log_out(socket, user_request, service_response);
 	}
 
-	map_ss::iterator has_cookie = user_request->headers.find(tag_cookie);
-	 
-	if (has_cookie != headers_end){
-		std::map<std::string, std::string> parsed_cookie = http_utils::parse_cookie(has_cookie->second);
-
-		try
+	try
+	{
+		std::map<std::string, std::string>::iterator it =  user_request->cookies.find(tag_cookie_name);
+		if (it != user_request->cookies.end())
 		{
-			std::map<std::string, std::string>::iterator it =  parsed_cookie.find(tag_cookie_name);
-			if (it != parsed_cookie.end())
+			std::string session_id = it->second; 
+			std::string user_name  = is_signed_in_user(session_id);
+			if (user_name.empty())
 			{
-				std::string session_id = it->second; 
-				std::string user_name  = is_signed_in_user(session_id);
-				if (user_name.empty())
-				{
-					user_request->arguments.insert(std::pair<std::string, std::string>(tag_logout, "true"));
-					return log_out(std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> >(user_request, service_response));
-				}
-				map_ss::iterator has_update = user_request->arguments.find(tag_update);
-				user_request->headers.insert(std::pair<std::string, std::string>(tag_header_email, user_name));
-				if ( has_update != arguments_end)
-				{
-					return update_user(std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> >(user_request, service_response));
-				}
-				return std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> >(user_request, service_response);
+				user_request->arguments.insert(std::pair<std::string, std::string>(tag_logout, "true"));
+				return log_out(socket, user_request, service_response);
 			}
-		}
-		catch(std::exception &e)
-		{
-			user_request->arguments.insert(std::pair<std::string, std::string>(tag_logout, "true"));
-			return log_out(std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> >(user_request, service_response));
+			map_ss::iterator has_update = user_request->arguments.find(tag_update);
+			user_request->headers.insert(std::pair<std::string, std::string>(tag_header_email, user_name));
+			if ( has_update != arguments_end)
+			{
+				return update_user(socket, user_request, service_response);
+			}
+				
+			return;
 		}
 	}
+	catch(std::exception &e)
+	{
+		user_request->arguments.insert(std::pair<std::string, std::string>(tag_logout, "true"));
+		return log_out(socket, user_request, service_response);
+
+	}
+	
 
 	std::string service_action = user_request->arguments[tag_user_control];
 
 	if ( service_action == tag_login)
 	{
-		return log_in(std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> >(user_request, service_response));		
+		return log_in(socket, user_request, service_response);		
 	}
 
 	if( service_action == tag_register)
 	{
-		return register_user(socket, std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> >(user_request, service_response));
+		return register_user(socket, user_request, service_response);
 	}
 
-	return guest_user(std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> >(user_request, service_response));
+	return guest_user(socket, user_request, service_response);
 
 }
 
-bool user_control::is_registered_user( std::string & given_email, std::string & pass_sha256 )
+bool users_accounts_service::is_registered_user( std::string & given_email, std::string & pass_sha256 )
 {
 	/* TODO: use Boost::Locale!!!
 	boost::locale::generator gen;
@@ -158,7 +154,7 @@ bool user_control::is_registered_user( std::string & given_email, std::string & 
 
 }
 
-bool user_control::is_registered_user( std::string & given_email )
+bool users_accounts_service::is_registered_user( std::string & given_email )
 {
 	if (given_email == "")
 	{
@@ -198,20 +194,20 @@ bool user_control::is_registered_user( std::string & given_email )
 	return false;
 }
 
-std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user_control::guest_user( std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user )
+void users_accounts_service::guest_user( boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> user_request , boost::shared_ptr<http_response>  user_response)
 {
-	user.first->headers.insert(std::pair<std::string, std::string>(tag_header_email, tag_guest_name));
-	return user;
+	user_request->headers.insert(std::pair<std::string, std::string>(tag_header_email, tag_guest_name));
+	http_utils::try_to_redirect(socket, user_request, user_response);
 }
 
-std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user_control::log_in( std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user )
+void users_accounts_service::log_in(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> user_request , boost::shared_ptr<http_response>  user_response )
 {
 	typedef std::map<std::string, std::string> map_ss;
 	typedef std::pair<std::string, std::string> pair_ss;
 
-	map_ss::iterator arguments_end = user.first->arguments.end();
-	map_ss::iterator has_login =  user.first->arguments.find(tag_login);
-	map_ss::iterator has_pass =  user.first->arguments.find(tag_pass_sha256);
+	map_ss::iterator arguments_end = user_request->arguments.end();
+	map_ss::iterator has_login =  user_request->arguments.find(tag_login);
+	map_ss::iterator has_pass =  user_request->arguments.find(tag_pass_sha256);
 
 	if (has_pass != arguments_end)
 	{
@@ -230,66 +226,65 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 			std::string cookie = tag_cookie_name;
 			cookie += "=";
 			cookie += session_id;
-			http_utils::save_cookie(cookie, user.second);
+			http_utils::save_cookie(cookie, user_response);
 
-			user.first->arguments.erase(has_login);
-			user.first->arguments.erase(has_pass);
-			return user;
+			user_request->arguments.erase(has_login);
+			user_request->arguments.erase(has_pass);
 		}
 		else
 		{
-			this->guest_user(user);
+			this->guest_user(socket, user_request, user_response);
 			throw std::runtime_error("Unregistred user!");
 		}
 	}
 	else
 	{
-		this->guest_user(user);
+		this->guest_user(socket, user_request, user_response);
 		throw std::runtime_error("No password found!");
 	}
+	http_utils::try_to_redirect(socket, user_request, user_response);
 }
 
-std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user_control::log_out( std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user )
+void users_accounts_service::log_out(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> user_request , boost::shared_ptr<http_response>  user_response )
 {
 	typedef std::map<std::string, std::string> map_ss;
 	typedef std::pair<std::string, std::string> pair_ss;
 
-	map_ss::iterator headers_end = user.first->headers.end();
-	map_ss::iterator has_cookie = user.first->headers.find(tag_cookie);
-
-	if (has_cookie != headers_end){
-		std::map<std::string, std::string> parsed_cookie = http_utils::parse_cookie(has_cookie->second);
-
-		try
+	try
+	{
+		std::map<std::string, std::string>::iterator it =  user_request->cookies.find(tag_cookie_name);
+		if (it !=  user_request->cookies.end())
 		{
-			std::map<std::string, std::string>::iterator it =  parsed_cookie.find(tag_cookie_name);
-			if (it != parsed_cookie.end())
-			{
-				std::string session_id = it->second;
-				threading_util->safe_erase_in_map< std::string, std::map<std::string, std::string> >(session_id, sessions_map);
-			}
+			std::string session_id = it->second;
+			threading_util->safe_erase_in_map< std::string, std::map<std::string, std::string> >(session_id, sessions_map);
 		}
-		catch(std::exception &e)
-		{}
 	}
-
+	catch(std::exception &e)
+	{}
+	
 	std::string tag_expired_date = "Expires=Wed, 09 Jun 2001 10:18:14 GMT";
 	std::string cookie = tag_cookie_name + "=" + "0" + "; " + tag_expired_date;
 
-	http_utils::save_cookie(cookie, user.second);
+	http_utils::save_cookie(cookie, user_response);
 
-	user.first->arguments.erase(user.first->arguments.find(tag_logout));
-	return guest_user(user);
+	try
+	{
+		user_request->arguments.erase(user_request->arguments.find(tag_logout));
+	}
+	catch(std::exception &e)
+	{}
+
+	guest_user(socket, user_request, user_response);
 }
 
-std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user_control::register_user( boost::shared_ptr<boost::asio::ip::tcp::socket> socket, std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user )
+void users_accounts_service::register_user( boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> user_request , boost::shared_ptr<http_response>  user_response )
 {
 	typedef std::map<std::string, std::string> map_ss;
 	typedef std::pair<std::string, std::string> pair_ss;
 
-	map_ss::iterator arguments_end = user.first->arguments.end();
-	map_ss::iterator has_register =  user.first->arguments.find(tag_register);
-	map_ss::iterator has_pass =  user.first->arguments.find(tag_pass_sha256);
+	map_ss::iterator arguments_end = user_request->arguments.end();
+	map_ss::iterator has_register =  user_request->arguments.find(tag_register);
+	map_ss::iterator has_pass =  user_request->arguments.find(tag_pass_sha256);
 
 	if (has_pass != arguments_end)
 	{
@@ -308,13 +303,13 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 			if (use_recapcha)
 			{
 				try{
-					user = this->check_recaptcha( socket, user );
+					this->check_recaptcha( socket, user_request, user_response );
 				}
 				catch(std::exception &e)
 				{
-					user.first->arguments.erase(has_register);
-					user.first->arguments.erase(has_pass);
-					return this->guest_user(user);
+					user_request->arguments.erase(has_register);
+					user_request->arguments.erase(has_pass);
+					return this->guest_user(socket, user_request, user_response);
 				}
 			}
 
@@ -327,73 +322,73 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 			std::cout << cmd.execute() << std::endl;
 			xct.commit();
 
-			user.first->arguments.insert(std::pair<std::string, std::string>(tag_login, has_register->second));
-			user.first->arguments.erase(has_register);
-			return this->log_in(user);
+			user_request->arguments.insert(std::pair<std::string, std::string>(tag_login, has_register->second));
+			user_request->arguments.erase(has_register);
+			return this->log_in(socket, user_request, user_response);
 		}
 		else
 		{
-			this->guest_user(user);
+			this->guest_user(socket, user_request, user_response);
 			throw std::runtime_error("User already exists!");
 		}
 	}
 	else
 	{
-		this->guest_user(user);
+		this->guest_user(socket, user_request, user_response);
 		throw std::runtime_error("No password provided!");
 	}
 }
 
-std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user_control::update_user( std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user )
+void users_accounts_service::update_user(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> user_request , boost::shared_ptr<http_response>  user_response )
 {
 	typedef std::map<std::string, std::string> map_ss;
 	typedef std::pair<std::string, std::string> pair_ss;
 
-	map_ss::iterator arguments_end = user.first->arguments.end();
-	map_ss::iterator has_pass =  user.first->arguments.find(tag_pass_sha256);
+	map_ss::iterator arguments_end = user_request->arguments.end();
+	map_ss::iterator has_pass =  user_request->arguments.find(tag_pass_sha256);
 
-	std::string user_name = user.first->headers.find(tag_header_email)->second;
+	std::string user_name = user_request->headers.find(tag_header_email)->second;
 
 	if(has_pass != arguments_end)
 	{
 		if(this->is_registered_user(user_name, has_pass->second))
 		{
 			sqlite3pp::transaction xct(*db);
-			std::string command_string = "UPDATE users SET pass='"+ user.first->arguments.find(tag_update)->second + "' WHERE email='" + user_name + "')";
+			std::string command_string = "UPDATE users SET pass='"+ user_request->arguments.find(tag_update)->second + "' WHERE email='" + user_name + "')";
 			sqlite3pp::command cmd(*db, command_string.c_str());
 			std::cout << cmd.execute() << std::endl;
 			xct.commit();
 
-			user.first->arguments.erase(user.first->arguments.find(tag_update));
-			user.first->arguments.erase(has_pass);
-			return user;
+			user_request->arguments.erase(user_request->arguments.find(tag_update));
+			user_request->arguments.erase(has_pass);
 		}
 		else
 		{
-			this->guest_user(user);
+			this->guest_user(socket, user_request, user_response);
 			throw std::runtime_error("Not registered user!");
 		}
 	}
 	else
 	{
-		this->guest_user(user);
+		this->guest_user(socket, user_request, user_response);
 		throw std::runtime_error("No original password provided!");
 	}
+	http_utils::try_to_redirect(socket, user_request, user_response);
 
 }
 
-void user_control::apply_config( boost::property_tree::ptree config )
+void users_accounts_service::apply_config( boost::shared_ptr<boost::property_tree::ptree> config )
 {
-	this->default_lu_path = config.get<std::string>("log_util_file", this->default_lu_path);
-	this->default_db_name = config.get<std::string>("database", this->default_db_name);
-	this->use_recapcha = config.get<bool>("use_recapcha", this->use_recapcha);
-	this->recapcha_server_key = config.get<std::string>("recapcha_server_key", this->recapcha_server_key);
-	this->recapcha_server_url = config.get<std::string>("recapcha_server_url", this->recapcha_server_url);
+	this->default_lu_path = config->get<std::string>("log_util_file", this->default_lu_path);
+	this->default_db_name = config->get<std::string>("database", this->default_db_name);
+	this->use_recapcha = config->get<bool>("use_recapcha", this->use_recapcha);
+	this->recapcha_server_key = config->get<std::string>("recapcha_server_key", this->recapcha_server_key);
+	this->recapcha_server_url = config->get<std::string>("recapcha_server_url", this->recapcha_server_url);
 	start_work_with_lu( this->default_lu_path);
 	start_work_with_db(this->default_db_name);
 }
 
-void user_control::start_work_with_lu( std::string lu_path )
+void users_accounts_service::start_work_with_lu( std::string lu_path )
 {
 	if (!is_lu_set)
 	{
@@ -403,7 +398,7 @@ void user_control::start_work_with_lu( std::string lu_path )
 
 }
 
-void user_control::start_work_with_db( std::string db_name )
+void users_accounts_service::start_work_with_db( std::string db_name )
 {
 	if (!is_db_set) // TODO: find out how to detach from one db and connect to another.
 	{
@@ -413,20 +408,20 @@ void user_control::start_work_with_db( std::string db_name )
 	}
 }
 
-std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user_control::check_recaptcha(  boost::shared_ptr<boost::asio::ip::tcp::socket> socket, std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > user )
+void users_accounts_service::check_recaptcha(  boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> user_request , boost::shared_ptr<http_response>  user_response)
 {
 	typedef std::map<std::string, std::string> map_ss;
 	typedef std::pair<std::string, std::string> pair_ss;
 
-	map_ss::iterator arguments_end = user.first->arguments.end();
+	map_ss::iterator arguments_end = user_request->arguments.end();
 
-	map_ss::iterator has_recaptcha_challenge_field = user.first->arguments.find(tag_recaptcha_challenge_field);
+	map_ss::iterator has_recaptcha_challenge_field = user_request->arguments.find(tag_recaptcha_challenge_field);
 	if (has_recaptcha_challenge_field == arguments_end)
 	{
 		throw std::runtime_error("no recaptcha challenge id field!");
 	}
 
-	map_ss::iterator has_recaptcha_response_field = user.first->arguments.find(tag_recaptcha_response_field);
+	map_ss::iterator has_recaptcha_response_field = user_request->arguments.find(tag_recaptcha_response_field);
 	if (has_recaptcha_response_field == arguments_end)
 	{
 		throw std::runtime_error("no recaptcha response field!");
@@ -473,9 +468,8 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 
 	if (response.body.find("success") != std::string::npos)
 	{
-		user.first->arguments.erase(has_recaptcha_response_field);
-		user.first->arguments.erase(has_recaptcha_challenge_field);
-		return user;
+		user_request->arguments.erase(has_recaptcha_response_field);
+		user_request->arguments.erase(has_recaptcha_challenge_field);
 	}
 
 	if( response.body.find(cap_err_invalid_site_private_key) != std::string::npos)
@@ -490,6 +484,30 @@ std::pair<boost::shared_ptr<http_request>, boost::shared_ptr<http_response> > us
 	{
 		throw std::runtime_error("The CAPTCHA solution was incorrect.");
 	}
+}
 
+std::string users_accounts_service::service_check( boost::shared_ptr<http_request> request, boost::shared_ptr<shared> shared_data )
+{
+	typedef std::map<std::string, std::string> map_ss;
+	map_ss::iterator it;
 
+	it = request->cookies.find(tag_cookie_name);
+	if (it != request->cookies.end())
+	{
+		return "assistant";
+	}
+
+	std::string url= request->url;
+	if (url == "/uac.service" )
+	{
+		return "executor";
+	}
+
+	return "not for me";
+}
+
+BOOST_EXTENSION_TYPE_MAP_FUNCTION
+{
+	std::map<std::string, boost::extensions::factory<base_service> > &factories(types.get());
+	factories["users_accounts_service"].set<users_accounts_service>();
 }
