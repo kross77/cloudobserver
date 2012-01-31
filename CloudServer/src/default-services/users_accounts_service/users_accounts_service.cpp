@@ -91,7 +91,6 @@ void users_accounts_service::service_call(boost::shared_ptr<boost::asio::ip::tcp
 			{
 				return update_user(socket, user_request, service_response);
 			}
-				
 			return;
 		}
 	}
@@ -99,7 +98,6 @@ void users_accounts_service::service_call(boost::shared_ptr<boost::asio::ip::tcp
 	{
 		user_request->arguments.insert(std::pair<std::string, std::string>(tag_logout, "true"));
 		return log_out(socket, user_request, service_response);
-
 	}
 	
 
@@ -496,6 +494,12 @@ std::string users_accounts_service::service_check( boost::shared_ptr<http_reques
 	it = request->cookies.find(tag_cookie_name);
 	if (it != request->cookies.end())
 	{
+		std::string user_name =  is_signed_in_user(it->second);
+		shared_data->post("user_name", user_name);
+		if (user_name.empty())
+		{
+			return "executor";
+		}
 		return "assistant";
 	}
 
