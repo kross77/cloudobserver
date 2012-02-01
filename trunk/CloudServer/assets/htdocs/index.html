@@ -1,15 +1,29 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="en">
-    <head>
-        <title>Services Selection Menu</title>
-         <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+<html>
+
+	<head>
+		<title>Cloud Server Services Selection Menu</title>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-        <meta name="description" content="Services List" />
-        <meta name="keywords" content="art, navigation, C++, services, web, web-services, exibition" />
-        <meta name="author" content="CF2011" />
+		<meta name="description" content="Services List" />
+		<meta name="keywords" content="art, navigation, C++, services, web, web-services, exibition" />
+		<meta name="author" content="CF2011" />
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 		<!-- End Of Info-->
+		
+		<!-- CF CSS -->
+		<!--[if gte IE 9]>
+				<style type="text/css">
+					.gradient {
+						filter: none;
+					}
+				</style>
+		<![endif]-->
+		<link rel="stylesheet" href="css/cf.css">
+		<link rel="stylesheet" href="css/cf.index.application.css">
+		<!-- End of CF CSS-->  
 		
 		<!-- Public JS-->
 		<script type="text/javascript" src="js/jquery-1.7.1.min.js">								
@@ -23,36 +37,24 @@
 		<script type='text/javascript' src="js/cf.js"></script>
 		
 		<!-- End Of CF JS-->
-		
-		<!-- CF CSS -->
-		<!--[if gte IE 9]>
-			  <style type="text/css">
-				.gradient {
-					filter: none;
-				}
-			  </style>
-		<![endif]-->
-		<link rel="stylesheet" href="css/cf.css">
-		<link rel="stylesheet" href="css/cf.index.application.css">
-		<!-- End of CF CSS-->  
-    </head>
-    <body>
-        <div class="container">
-            <div>
-                <h1 class="head"><a href="#"><p>Cloud Server<span>Exhibition of Public Services &amp; Their Interaction</span></p></a></h1>
-            </div>
-            <div>
-	        	<ol id="marx-brothers3">
+	</head>
+	<body>
+		<div class="container">
+			<div>
+				<h1 class="head"><a href="#"><p>Cloud Server<span>Exhibition of Public Services &amp; Their Interaction</span></p></a></h1>
+			</div>
+			<div>
+				<ol id="marx-brothers3">
 					<div data-template>
 						<ul class="ca-menu">
 						<li>
 							<a href="{{url}}">
 								<!--<span class="ca-icon"><p>{{icon}}</p></span> -->
 								<div class="ca-content">
-	                        		<h2 class="ca-main">{{name}}</h2>
-	                        		<h3 class="ca-sub">{{description}}</h3>
-	                    		</div>
-	                    		</a>
+									<h2 class="ca-main">{{name}}</h2>
+									<h3 class="ca-sub">{{description}}</h3>
+								</div>
+								</a>
 						</li>
 						</ul>
 					</div>
@@ -60,21 +62,21 @@
 						Sorry, JavaScript required!
 					</li>
 				</ol>
-           </div>
-           <div>
-           	      
-           </div>
-        </div>
+		   </div>
+		   <div>
+				  
+		   </div>
+		</div>
 
-        <script type="text/javascript">
+		<script type="text/javascript">
 			$(document).ready(function() {
 			   var services = Tempo.prepare('marx-brothers3');
-	                    services.starting();
+						services.starting();
 	
 				$.getJSON("server.json", function(data) {
-				    services.render(data);
+					services.render(data);
 				});
 			});
 		</script>
-    </body>
+	</body>
 </html>
