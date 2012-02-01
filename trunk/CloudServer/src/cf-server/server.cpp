@@ -2,17 +2,35 @@
 
 server::server(boost::property_tree::ptree config) 
 {
-	util = new server_utils();
-	util->description = util->parse_config(config);
+	#ifdef DEBUG
+		error = new log_util(512, true, true, "log.txt");
+		warning = new log_util(512 * 8, true, true, "log.txt");
+		info = new log_util(512 * 32, true, true, "log.txt");
+	#else
+		error = new log_util(1024, true, true, "log.txt");
+		warning = new log_util(1024 * 8, false, true, "log.txt");
+		info = new log_util(1024 * 32, false, false, "log.txt");
+	#endif
+	error->use_prefix("error: ");
+	error->use_time();
+
+	warning->use_prefix("warning: ");
+	warning->use_time();
+
+	tread_util = new threading_utils();
+	this->description.server_root_path = boost::filesystem::current_path();
+
+
+	description = server_utils::parse_config(config, info, warning, error);
 
 	this->acceptor_thread = new boost::thread(&server::acceptor_loop, this);
 
-	*(util->info) << "server created on port: " << util->description.port << log_util::endl;
+	*(info) << "server created on port: " << description.port << log_util::endl;
 }
 
 server::~server()
 {
-	delete util;
+	delete tread_util;
 }
 
 void server::acceptor_loop(){
@@ -24,9 +42,9 @@ void server::acceptor_loop(){
 	//Move UAC into default services
 
 	boost::asio::io_service io_service;
-	int m_nPort = util->description.port;
+	int m_nPort = description.port;
 	boost::asio::ip::tcp::acceptor acceptor(io_service, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), m_nPort));
-	*(util->info) << "Waiting for connection..." << std::endl << log_util::endl;
+	*(info) << "Waiting for connection..." << std::endl << log_util::endl;
 	while(true)
 	{
 		try
@@ -34,14 +52,14 @@ void server::acceptor_loop(){
 			boost::shared_ptr<boost::asio::ip::tcp::socket> socket =
 				boost::make_shared<boost::asio::ip::tcp::socket>(boost::ref(io_service));			
 			acceptor.accept(*socket);
-			*(util->info) << "connection accepted." << log_util::endl;
+			*(info) << "connection accepted." << log_util::endl;
 			user_info(*socket);
 			boost::shared_ptr< boost::packaged_task<void> > task( new boost::packaged_task<void>( boost::bind(&server::request_response_loop, this, socket)));
 			threads_pool->post(task);
 		}
 		catch(std::exception &e)
 		{
-			*(util->error) << e.what() << log_util::endl; //"The parameter is incorrect" exception
+			*(error) << e.what() << log_util::endl; //"The parameter is incorrect" exception
 		}
 	}
 }
@@ -63,7 +81,7 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 			}
 			catch (http_request::policy_file_request_exception)
 			{
-				*(util->info) << "Sending the 'crossdomain.xml' file." << log_util::endl;
+				*(info) << "Sending the 'crossdomain.xml' file." << log_util::endl;
 				std::string policy_file =
 					"<?xml version=\"1.0\"?>\n"
 					"<!DOCTYPE cross-domain-policy SYSTEM \"http://www.macromedia.com/xml/dtds/cross-domain-policy.dtd\">\n"
@@ -79,13 +97,13 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 				break;
 			}
 
-			*(util->info) << "request url: " << request->url << log_util::endl;
+			*(info) << "request url: " << request->url << log_util::endl;
 
 			boost::shared_ptr<shared> shared_data(new shared, boost::bind(&pointer_utils::delete_ptr<shared>, _1));
 			shared_data->post("http_request", request->serialize_base(), true);
 
 			boost::shared_ptr<http_response> response = boost::make_shared<http_response>();
-			if (request->url == util->description.server_service_url)
+			if (request->url == description.server_service_url)
 			{
 				server_service_call(socket, request, response);
 				continue;
@@ -94,9 +112,9 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 			std::list<int>::iterator order_it;
 			boost::shared_ptr<server_utils::service_container> service_cont;
 
-			for (order_it=util->services_ids.begin(); order_it!=util->services_ids.end(); ++order_it)
+			for (order_it=description.services_ids.begin(); order_it!=description.services_ids.end(); ++order_it)
 			{
-				service_cont = util->description.service_map[*order_it];
+				service_cont = description.service_map[*order_it];
 				boost::shared_ptr<base_service> requested_service = service_cont->service_ptr;
 
 				service_check_input check_data;
@@ -111,7 +129,7 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 						service_call_input data;
 						data.socket = socket;			
 						data.shared_data = shared_data->serialize();
-						util->tread_util->safe_insert<boost::thread::id, std::set<boost::thread::id> >(boost::this_thread::get_id(),service_cont->threads_ids);
+						tread_util->safe_insert<boost::thread::id, std::set<boost::thread::id> >(boost::this_thread::get_id(),service_cont->threads_ids);
 						service_call_output service_output;
 						service_output = requested_service->make_service_call(data);
 						if ((*(service_output.error_data)) != "")
@@ -122,18 +140,18 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 							response->headers["Content-Length"] = boost::lexical_cast<std::string>(response->body.length());
 							response->send(*socket);
 
-							*(util->error) << (*(service_output.error_data)) << log_util::endl;
+							*(error) << (*(service_output.error_data)) << log_util::endl;
 						}
 						shared_data->deserialize(service_output.shared_data);
-						util->tread_util->safe_erase<boost::thread::id, std::set<boost::thread::id> >(boost::this_thread::get_id(), service_cont->threads_ids);
+						tread_util->safe_erase<boost::thread::id, std::set<boost::thread::id> >(boost::this_thread::get_id(), service_cont->threads_ids);
 					}
 					catch(std::exception &e)
 					{
-						*(util->error) << e.what() << log_util::endl; //"The parameter is incorrect" exception
+						*(error) << e.what() << log_util::endl; //"The parameter is incorrect" exception
 					}
 					if (*(check_data_out.call_me_as) == "assistant")
 					{
-						order_it=util->services_ids.begin();
+						order_it=description.services_ids.begin();
 					}
 					if (*(check_data_out.call_me_as) == "executor")
 					{
@@ -142,15 +160,15 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 
 				}
 			}
-			*(util->info) << "request resolved." << log_util::endl;
+			*(info) << "request resolved." << log_util::endl;
 		}
 		while(!connection_close);
 	}
 	catch(std::exception &e)
 	{
-		*(util->error) << e.what() << log_util::endl; //"The parameter is incorrect" exception
+		*(error) << e.what() << log_util::endl; //"The parameter is incorrect" exception
 	}
-	*(util->info) << "connection closed, socket disconnected" <<  log_util::endl;
+	*(info) << "connection closed, socket disconnected" <<  log_util::endl;
 }
 
 void server::server_service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response)
@@ -164,7 +182,7 @@ void server::server_services_list(boost::shared_ptr<boost::asio::ip::tcp::socket
 	std::ostringstream user_files_stream;
 	user_files_stream << "[";
 	typedef std::map<int, boost::shared_ptr<server_utils::service_container> >  int_map;
-	BOOST_FOREACH( int_map::value_type p, util->description.service_map )
+	BOOST_FOREACH( int_map::value_type p, description.service_map )
 	{
 		boost::shared_lock<boost::shared_mutex> lock_r(p.second->edit_mutex_);
 
@@ -194,6 +212,6 @@ void server::user_info(boost::asio::ip::tcp::socket &socket)
 	std::string addr_string = addr.to_string();
 	unsigned short port = remote_endpoint.port();
 
-	*(util->info) << "User address: " << addr_string << log_util::endl;
-	*(util->info) << "User port: " << port << log_util::endl;
+	*(info) << "User address: " << addr_string << log_util::endl;
+	*(info) << "User port: " << port << log_util::endl;
 }

@@ -1,66 +1,12 @@
 #include "server_utils.h"
 
-server_utils::server_utils()
-{
-	#ifdef DEBUG
-	error = new log_util(512, true, true, "log.txt");
-	warning = new log_util(512 * 8, true, true, "log.txt");
-	info = new log_util(512 * 32, false, true, "log.txt");
-	#else
-	error = new log_util(1024, true, true, "log.txt");
-	warning = new log_util(1024 * 8, false, true, "log.txt");
-	info = new log_util(1024 * 32, false, false, "log.txt");
-	#endif
-	error->use_prefix("error: ");
-	error->use_time();
-
-	warning->use_prefix("warning: ");
-	warning->use_time();
-
-	tread_util = new threading_utils();
-	tread_util_local = new threading_utils();
-	this->description.server_root_path = boost::filesystem::current_path();
-
-	//grammar
-	tag_service = "service";
-	tag_library_name = "library_name";
-	tag_service_name = "name";
-	tag_class_name = "class_name";
-	tag_url = "url";
-	tag_settings = "settings";
-
-	tag_description = "description";
-	tag_description_type = "type" ;
-	tag_description_text = "text";
-	tag_description_icon = "icon";
-	tag_description_default_url = "default_url";
-
-	tag_default_description_type = "private";
-	tag_default_description_text = "description text";
-	tag_default_description_icon = "default_service_icon.png";
-	tag_default_description_url = "../";
-
-	tag_configuration = "config";
-	tag_path_configuration_services = tag_configuration + "." + "services";
-	tag_path_configuration_server_root_path = tag_configuration + "." + "server_root_path";
-	tag_path_configuration_port = tag_configuration + "." + "port";
-	tag_path_configuration_server_service_url = tag_configuration + "." + "server_service_url";
-	tag_path_configuration_database = tag_configuration + "." + "database";
-}
-
-server_utils::~server_utils()
-{
-	delete tread_util;
-	delete tread_util_local;
-}
-
 boost::shared_ptr<base_service> server_utils::create_service(std::string library_name, std::string class_name_inside_lib, boost::property_tree::ptree config)
 {
 	return extension_utils::give_me_class<base_service, boost::property_tree::ptree>(library_name, class_name_inside_lib, config);
 }
 
 //Do not forget to change save_config if you change parse_config_services
-std::map<int, boost::shared_ptr<server_utils::service_container> > server_utils::parse_config_services( boost::property_tree::ptree config )
+std::map<int, boost::shared_ptr<server_utils::service_container> > server_utils::parse_config_services( std::list<int> & services_ids, boost::property_tree::ptree config , log_util * info, log_util * warning, log_util * error)
 {
 	typedef std::map<int, boost::shared_ptr<server_utils::service_container> >  int_map;
 	int_map services_map;
@@ -149,7 +95,7 @@ std::map<int, boost::shared_ptr<server_utils::service_container> > server_utils:
 	return services_map;
 }
 
-server_utils::server_description server_utils::parse_config( boost::property_tree::ptree config )
+server_utils::server_description server_utils::parse_config( boost::property_tree::ptree config, log_util * info, log_util * warning, log_util * error  )
 {
 	server_utils::server_description server_descr;
 	*info << std::endl << "Server description: " << log_util::endl;
@@ -167,12 +113,12 @@ server_utils::server_description server_utils::parse_config( boost::property_tre
 	*info << "Server database: " << server_descr.database_name << log_util::endl;
 
 	*info << std::endl << "Server services: " << log_util::endl;
-	server_descr.service_map = server_utils::parse_config_services( config );
+	server_descr.service_map = server_utils::parse_config_services( server_descr.services_ids, config, info, warning, error );
 
 	return server_descr;
 }
 
-std::multiset<std::string> server_utils::get_services_names()
+std::multiset<std::string> server_utils::get_services_names(server_utils::server_description description)
 {
 	std::multiset<std::string> service_names;
 	typedef std::map<int, boost::shared_ptr<server_utils::service_container> >  int_map;
@@ -183,7 +129,7 @@ std::multiset<std::string> server_utils::get_services_names()
 	return service_names;
 }
 
-boost::shared_ptr<server_utils::service_container> server_utils::get_service_description_by_name(std::string name)
+boost::shared_ptr<server_utils::service_container> server_utils::get_service_description_by_name(std::string name, server_utils::server_description description)
 {
 	typedef std::map<int, boost::shared_ptr<server_utils::service_container> >  int_map;
 	BOOST_FOREACH( int_map::value_type p, description.service_map )
@@ -195,7 +141,7 @@ boost::shared_ptr<server_utils::service_container> server_utils::get_service_des
 	throw std::runtime_error("Service with such name was not found map not found!");
 }
 
-boost::shared_ptr<base_service> server_utils::get_service_by_name(std::string name)
+boost::shared_ptr<base_service> server_utils::get_service_by_name(std::string name, server_utils::server_description description)
 {
 	typedef std::map<int, boost::shared_ptr<server_utils::service_container> >  int_map;
 	BOOST_FOREACH( int_map::value_type p, description.service_map )
@@ -207,7 +153,7 @@ boost::shared_ptr<base_service> server_utils::get_service_by_name(std::string na
 	throw std::runtime_error("Service with such name was not found map not found!");
 }
 
-std::multiset<std::string> server_utils::get_services_class_names()
+std::multiset<std::string> server_utils::get_services_class_names(server_utils::server_description description)
 {
 	std::multiset<std::string> class_names;
 	typedef std::map<int, boost::shared_ptr<server_utils::service_container> >  int_map;
@@ -218,7 +164,7 @@ std::multiset<std::string> server_utils::get_services_class_names()
 	return class_names;
 }
 
-std::multiset<std::string> server_utils::get_services_libraries_names()
+std::multiset<std::string> server_utils::get_services_libraries_names(server_utils::server_description description)
 {
 	std::multiset<std::string> libraries_names;
 	typedef std::map<int, boost::shared_ptr<server_utils::service_container> >  int_map;
