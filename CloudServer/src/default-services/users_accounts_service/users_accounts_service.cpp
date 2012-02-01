@@ -83,6 +83,11 @@ void users_accounts_service::service_call(boost::shared_ptr<boost::asio::ip::tcp
 				user_request->arguments.insert(std::pair<std::string, std::string>(tag_logout, "true"));
 				return log_out(socket, user_request, service_response);
 			}
+			std::map<std::string, std::string>::iterator it =  user_request->cookies.find(tag_cookie_name);	
+			if (it != user_request->cookies.end())
+				user_request->cookies.erase(it);
+
+
 			map_ss::iterator has_update = user_request->arguments.find(tag_update);
 			if ( has_update != arguments_end)
 			{
