@@ -17,9 +17,21 @@
 		<!-- End Of Info-->
 		
 		<!-- Public CSS-->
-		<link rel="stylesheet" href="css/grumble.min.css?v=1">
+		<link rel="stylesheet" href="css/grumble.min.css">
 		<link rel="stylesheet" type="text/css" href="js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
 		<!-- End Of CSS-->
+				
+		<!-- CF CSS -->
+		<!--[if gte IE 9]>
+			  <style type="text/css">
+				.gradient {
+					filter: none;
+				}
+			  </style>
+		<![endif]-->
+		<link rel="stylesheet" href="css/cf.css">
+		<link rel="stylesheet" href="css/cf.head.panel.css">
+		<!-- End of CF CSS-->
 		
 		<!-- Public JS-->
 		<script type="text/javascript" src="js/jquery-1.7.1.min.js">								
@@ -43,7 +55,7 @@
 		<script type='text/javascript' src="js/jquery.event.drag-1.5.min.js">
 		</script>
 
-		<script src="js/jquery.grumble.min.js?v=1">
+		<script src="js/jquery.grumble.min.js">
 		</script>
 		
 		<script type="text/javascript" src="js/fancybox/jquery.mousewheel-3.0.6.pack.js"></script>
@@ -66,18 +78,6 @@
 		
 		<!-- End Of CF JS-->
 		
-		<!-- CF CSS -->
-		<!--[if gte IE 9]>
-			  <style type="text/css">
-				.gradient {
-					filter: none;
-				}
-			  </style>
-		<![endif]-->
-		<link rel="stylesheet" href="css/cf.css">
-		<link rel="stylesheet" href="css/cf.head.panel.css">
-		<!-- End of CF CSS-->
-		
 	<script>
 		
 		var page_url = "http://" + location.host + "/";
@@ -85,10 +85,10 @@
 		function showBox(images, ind)
 		{
 				$.fancybox(images
-			    	, 
-			    	{
-			    	'index'				: ind ,
-			    	'cyclic'			: 'true',
+					, 
+					{
+					'index'				: ind ,
+					'cyclic'			: 'true',
 					'transitionIn'		: 'fade',
 					'transitionOut'		: 'fade',
 					'titlePosition' 	: 'over',
@@ -112,7 +112,7 @@
 						
 					}
 					
-    				
+					
 				});
 		}
 		
@@ -145,7 +145,7 @@
 						var user_image = [];
 						parseArrayForBox(JSON, user_image);
 						jQuery(document).ready(function() {
-							    showBox(user_image, 0);
+								showBox(user_image, 0);
 						});
 					}else{
 					user = readCookie('session-id');
@@ -240,10 +240,10 @@
 				var temp_h =   $( e.target ).closest("a").attr('real_href');
 				var ind = 0;
 				$.each(user_images, function(index, value) {
-				    if(value.href === temp_h ) {
-				       ind = index;
-				        return false;
-				    }
+					if(value.href === temp_h ) {
+					   ind = index;
+						return false;
+					}
 				});
 				showBox(user_images, ind);
 			});
