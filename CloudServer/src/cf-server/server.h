@@ -32,7 +32,7 @@ public:
 	server(boost::property_tree::ptree config);
 	~server();
 	void acceptor_loop();
-	server_utils *util;
+	server_utils::server_description description;
 private:
 	void request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socket> socket); //Each request received by server will be sent to a new thread and processed by request_response_loop
 	void user_info(boost::asio::ip::tcp::socket &socket);
@@ -41,6 +41,9 @@ private:
 	boost::thread *acceptor_thread;
 	boost::shared_ptr<thread_pool> threads_pool;
 	int request_max_time;
+
+	threading_utils *tread_util; 
+	log_util *warning, *info, *error;
 };
 
 #endif //SERVER_H

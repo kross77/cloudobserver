@@ -36,14 +36,8 @@
 //Thread safe logging
 #include <log_util.h>
 
-class server_utils
+namespace server_utils
 {
-public:
-
-	server_utils();
-
-	~server_utils();
-
 	//Each service provides us with rules
 	struct service_container
 	{
@@ -84,55 +78,48 @@ public:
 
 		//We keep all services and their rules inside of a map
 		std::map<int, boost::shared_ptr<server_utils::service_container> > service_map;
+
+		std::list<int> services_ids;
 	};
 
+	server_utils::server_description parse_config(boost::property_tree::ptree config, log_util * info, log_util * warning, log_util * error); 
+	std::map<int, boost::shared_ptr<server_utils::service_container> > parse_config_services(std::list<int> & services_ids, boost::property_tree::ptree config , log_util * info, log_util * warning, log_util * error );	
 	// Creates class that is inherited from service class\interface, we plan to send to each service server_description with out service_map but with this wary service ptree description
 	// Main point is for the service to get as much as possible information about its host server, its own configuration.
 	boost::shared_ptr<base_service> create_service(std::string library_name, std::string class_name_inside_lib, boost::property_tree::ptree config); 
 
-	server_utils::server_description parse_config(boost::property_tree::ptree config); 
+	std::multiset<std::string> get_services_names(server_utils::server_description description);
+	std::multiset<std::string> get_services_class_names(server_utils::server_description description);
+	std::multiset<std::string> get_services_libraries_names(server_utils::server_description description);
 
-	boost::shared_ptr<base_service> get_service_by_name(std::string name);
-	boost::shared_ptr<server_utils::service_container> get_service_description_by_name(std::string name);
+	boost::shared_ptr<base_service> get_service_by_name(std::string name, server_utils::server_description description);
+	boost::shared_ptr<server_utils::service_container> get_service_description_by_name(std::string name, server_utils::server_description description);
 
-	std::multiset<std::string> get_services_names();
-	std::multiset<std::string> get_services_class_names();
-	std::multiset<std::string> get_services_libraries_names();
+	//grammar
+	const std::string tag_service = "service";
+	const std::string tag_library_name = "library_name";
+	const std::string tag_service_name = "name";
+	const std::string tag_class_name = "class_name";
+	const std::string tag_url = "url";
+	const std::string tag_settings = "settings";
 
-	threading_utils *tread_util; 
-	server_description description;
-	log_util *warning, *info, *error;
-	std::list<int> services_ids;
-private:
+	const std::string tag_description = "description";
+	const std::string tag_description_type = "type" ;
+	const std::string tag_description_text = "text";
+	const std::string tag_description_icon = "icon";
+	const std::string tag_description_default_url = "default_url";
 
-	std::map<int, boost::shared_ptr<server_utils::service_container> > parse_config_services( boost::property_tree::ptree config );
-	// For services creation from shared libraries
-	threading_utils *tread_util_local; 
-	std::stringstream log;
+	const std::string tag_default_description_type = "private";
+	const std::string tag_default_description_text = "description text";
+	const std::string tag_default_description_icon = "default_service_icon.png";
+	const std::string tag_default_description_url = "../";
 
-	std::string tag_service;
-	std::string tag_library_name;
-	std::string tag_service_name;
-	std::string tag_class_name;
-	std::string tag_url;
-	std::string tag_settings;
-	std::string tag_configuration;
-	std::string tag_path_configuration_services;
-	std::string tag_path_configuration_server_root_path;
-	std::string tag_path_configuration_port;
-	std::string tag_path_configuration_server_service_url;
-	std::string tag_path_configuration_database;
-	std::string tag_path_configuration_properties_manager;
-
-	std::string tag_description;
-	std::string tag_description_type;
-	std::string tag_description_text;
-	std::string tag_description_icon;
-	std::string tag_description_default_url;
-	std::string tag_default_description_type;
-	std::string tag_default_description_text;
-	std::string tag_default_description_icon;
-	std::string tag_default_description_url;
+	const std::string tag_configuration = "config";
+	const std::string tag_path_configuration_services = "config.services";
+	const std::string tag_path_configuration_server_root_path = "config.server_root_path";
+	const std::string tag_path_configuration_port = "config.port";
+	const std::string tag_path_configuration_server_service_url = "config.server_service_url";
+	const std::string tag_path_configuration_database = "config.database";
 
 	template<class T>
 	inline T &empty_class()
@@ -140,7 +127,6 @@ private:
 		static T pt;
 		return pt;
 	}
-
 };
 
 #endif // SERVER_UTILITIES_H

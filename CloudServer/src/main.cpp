@@ -114,7 +114,7 @@ bool config(std::string config_file_path)
 
 void print_services()
 {
-	BOOST_FOREACH(std::string const si, s->util->get_services_names())
+	BOOST_FOREACH(std::string const si, server_utils::get_services_names(s->description))
 	{
 		std::cout << si << std::endl;
 	}
@@ -183,7 +183,7 @@ void service_commandor(std::string name)
 {
 	try
 	{
-		boost::shared_ptr<base_service> one_service = s->util->get_service_by_name(name);
+		boost::shared_ptr<base_service> one_service = server_utils::get_service_by_name(name, s->description);
 		//std::cout << "service options are: `get state`, `restart`, `stop`, `start`" << std::endl;
 		std::cout << "You can change service configuration. to get into service configuration menu enter `config`" << std::endl;
 		std::string var;
@@ -193,27 +193,27 @@ void service_commandor(std::string name)
 
 			if (var == "stop")
 			{
-				//s->util->stop_service_by_name() //TODO: implement set of turned off services.descriptions
+				//server_utils::stop_service_by_name() //TODO: implement set of turned off services.descriptions
 				continue;
 			}
 
 			if (var == "start")
 			{
-				//s->util->start_service_by_name() //TODO: search thru turned off services.descriptions than thru turned on
+				//server_utils::start_service_by_name() //TODO: search thru turned off services.descriptions than thru turned on
 				continue;
 			}
 
 
 			if (var == "restart")
 			{
-				//s->util->stop_service_by_name() //TODO: implement set of turned off services.descriptions
-				//s->util->start_service_by_name() //TODO: search thru turned off services.descriptions than thru turned on
+				//server_utils::stop_service_by_name() //TODO: implement set of turned off services.descriptions
+				//server_utils::start_service_by_name() //TODO: search thru turned off services.descriptions than thru turned on
 				continue;
 			}
 
 			if (var == "get state")
 			{
-				//s->util->get_service_state_by_name() //TODO: search thru turned off services.descriptions than thru turned on
+				//server_utils::get_service_state_by_name() //TODO: search thru turned off services.descriptions than thru turned on
 				continue;
 			}
 
