@@ -35,7 +35,7 @@
 #include <http_utils.h>
 #include <log_util.h>
 
-class users_accounts_service : public service
+class users_accounts_service : public http_service
 {
 public:
 	users_accounts_service();

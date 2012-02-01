@@ -352,16 +352,26 @@ boost::asio::ip::tcp::socket& http_request::send(std::string absolute_url, boost
 
 boost::shared_ptr<std::string> http_request::serialize()
 {
-	std::stringstream oa_ss_req;
-	boost::archive::text_oarchive  oa_request(oa_ss_req);
-	oa_request << *this;
-	return boost::shared_ptr<std::string>(new std::string(oa_ss_req.str()),boost::bind(&pointer_utils::delete_ptr<std::string>, _1) );
+	return boost::shared_ptr<std::string>(new std::string(serialize_base()),boost::bind(&pointer_utils::delete_ptr<std::string>, _1) );
 }
 
 void http_request::deserialize( boost::shared_ptr<std::string> request_string)
 {
+	deserialize_base(*request_string); 
+}
+
+std::string http_request::serialize_base()
+{
+	std::stringstream oa_ss_req;
+	boost::archive::text_oarchive  oa_request(oa_ss_req);
+	oa_request << *this;
+	return oa_ss_req.str();
+}
+
+void http_request::deserialize_base( std::string request_string)
+{
 	std::stringstream ia_ss_req;
-	ia_ss_req << *request_string;
+	ia_ss_req << request_string;
 	boost::archive::text_iarchive ia_req(ia_ss_req);
 	ia_req >> *this;	 
 }

@@ -81,6 +81,9 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 
 			*(util->info) << "request url: " << request->url << log_util::endl;
 
+			boost::shared_ptr<shared> shared_data(new shared, boost::bind(&pointer_utils::delete_ptr<shared>, _1));
+			shared_data->post("http_request", request->serialize_base(), true);
+
 			boost::shared_ptr<http_response> response = boost::make_shared<http_response>();
 			if (request->url == util->description.server_service_url)
 			{
@@ -94,16 +97,13 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 			for (order_it=util->services_ids.begin(); order_it!=util->services_ids.end(); ++order_it)
 			{
 				service_call_input data;
-				boost::shared_ptr<shared> shared_data(new shared, boost::bind(&pointer_utils::delete_ptr<shared>, _1));
 				data.socket = socket;			
-				data.shared_data = shared_data->serialize();		
-				data.raw_request = request->serialize();
+				data.shared_data = shared_data->serialize();
 
 				service_cont = util->description.service_map[*order_it];
 				boost::shared_ptr<base_service> requested_service = service_cont->service_ptr;
 
 				service_check_input check_data;
-				check_data.raw_request = request->serialize();
 				check_data.shared_data = shared_data->serialize();
 
 				service_check_output check_data_out = requested_service->make_service_check(check_data);
@@ -125,9 +125,7 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 
 							*(util->error) << (*(service_output.error_data)) << log_util::endl;
 						}
-						request->deserialize(service_output.raw_request);
 						shared_data->deserialize(service_output.shared_data);
-
 						util->tread_util->safe_erase<boost::thread::id, std::set<boost::thread::id> >(boost::this_thread::get_id(), service_cont->threads_ids);
 					}
 					catch(std::exception &e)

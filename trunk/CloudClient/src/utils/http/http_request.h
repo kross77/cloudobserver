@@ -46,6 +46,8 @@ public:
 	boost::asio::ip::tcp::socket& send(std::string absolute_url, boost::asio::ip::tcp::socket& socket);
 	void deserialize( boost::shared_ptr<std::string> request_string);
 	boost::shared_ptr<std::string> serialize();
+	std::string serialize_base();
+	void deserialize_base( std::string request_string);
 
 	std::string method;
 	std::string url;

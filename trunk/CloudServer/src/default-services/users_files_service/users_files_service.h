@@ -35,7 +35,7 @@
 #include <service.hpp>
 
 
-class users_files_service: public service
+class users_files_service: public http_service
 { 
 public:
 	users_files_service();
