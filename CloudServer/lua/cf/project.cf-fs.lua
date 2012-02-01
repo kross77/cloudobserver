@@ -3,12 +3,13 @@ project "cf-fs"
 	language "C++"
 	location ( "projects/" .. os.get() .. "-" .. action )
 	files { "src/cf-fs/**.h", "src/cf-fs/**.cpp" }
-	
+
 	cloud.project.init()
 
 	links { "cf-util" }
 	includedirs { "src/cf-util"}
 	includedirs { "3rdparty/cf-http"}	
+	includedirs { "service-interface/" }	
 	
 	configuration { "gmake" }
 		linkoptions {

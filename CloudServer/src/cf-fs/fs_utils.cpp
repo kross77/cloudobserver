@@ -1,21 +1,16 @@
 #include "fs_utils.h"
 
-void fs_utils::send_404( std::string encoded_url,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response )
+void fs_utils::send_404( std::string encoded_url,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response, boost::shared_ptr<shared> shared_data )
 {
 	std::ostringstream body;
-	body << "Error 404! " << http_utils::url_decode(request->url) << " does not exist\n <br/> <a href='/'>" << "Dear " << http_utils::url_decode(get_user_name(request)) <<", please come again!</a>";
+	body << "Error 404! " << http_utils::url_decode(request->url) << " does not exist\n <br/> <a href='/'>" << "Dear " << get_user_name(shared_data) <<", please come again!</a>";
 
-	http_utils::send(404, std::string("<head></head><body><h1>" + body.str() + "</h1></body>"), socket, response);
+	http_utils::send(404, std::string("<head></head><body><h1>" + body.str() + "</h1></body>"), socket, response, request);
 }
 
-std::string fs_utils::get_user_name( boost::shared_ptr<http_request> request )
+std::string fs_utils::get_user_name( boost::shared_ptr<shared> shared_data )
 {
-	std::string response = "";
-	std::map<std::string, std::string>::iterator it = request->headers.find("email");
-	if (it != request->headers.end())
-		response = it->second;
-
-	return response;
+	return shared_data->get("user_name");
 }
 
 void fs_utils::send_not_modified_304( boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response )
