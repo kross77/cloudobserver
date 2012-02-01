@@ -50,8 +50,6 @@ public:
 	virtual void start(){}
 	virtual void stop(){}
 private:
-	std::string get_user_name(boost::shared_ptr<http_request> request);
-
 	boost::filesystem::path root_path;
 	bool show_directory_contents;
 
@@ -84,8 +82,7 @@ private:
 	void is_file(boost::filesystem::path p, fs_map &old_fs, std::set<std::string> &new_fs);
 
 	boost::shared_ptr<std::string> load_file_into_memory(boost::shared_ptr<fs_file> f);
-	void process_request(std::string encoded_url,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response);
-
+	void process_request( std::string encoded_url,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response, boost::shared_ptr<shared> shared_data );
 	//void send_cached_file(boost::uintmax_t size, boost::shared_array<char> buffer, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response);
 	void send_cached_file( boost::uintmax_t size, boost::shared_ptr<std::string> buffer, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response, boost::shared_ptr<http_request> request );
 	void send_directory_contents(std::set<std::string> list,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response);

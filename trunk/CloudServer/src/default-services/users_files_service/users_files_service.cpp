@@ -41,7 +41,7 @@ void users_files_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::s
 {
 	boost::shared_ptr<http_response> response(new http_response(), boost::bind(&pointer_utils::delete_ptr<http_response>, _1));
 
-	std::string user_name = http_utils::url_decode(fs_utils::get_user_name(request));
+	std::string user_name = fs_utils::get_user_name(shared_data);
 	if(user_name != "guest")
 	{
 		if(request->body.length() > 0)
@@ -112,12 +112,12 @@ void users_files_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::s
 		sent = send_file(request->url, user_name, socket, request, response);
 		if (!sent)
 		{
-			fs_utils::send_404(request->url, socket, request, response);
+			fs_utils::send_404(request->url, socket, request, response, shared_data);
 		}
 	}
 	catch(...)
 	{
-		fs_utils::send_404(request->url, socket, request, response);
+		fs_utils::send_404(request->url, socket, request, response, shared_data);
 	}
 }
 

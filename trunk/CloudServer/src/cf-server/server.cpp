@@ -96,10 +96,6 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 
 			for (order_it=util->services_ids.begin(); order_it!=util->services_ids.end(); ++order_it)
 			{
-				service_call_input data;
-				data.socket = socket;			
-				data.shared_data = shared_data->serialize();
-
 				service_cont = util->description.service_map[*order_it];
 				boost::shared_ptr<base_service> requested_service = service_cont->service_ptr;
 
@@ -112,6 +108,9 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 					try
 					{
 						shared_data->deserialize(check_data_out.shared_data);
+						service_call_input data;
+						data.socket = socket;			
+						data.shared_data = shared_data->serialize();
 						util->tread_util->safe_insert<boost::thread::id, std::set<boost::thread::id> >(boost::this_thread::get_id(),service_cont->threads_ids);
 						service_call_output service_output;
 						service_output = requested_service->make_service_call(data);

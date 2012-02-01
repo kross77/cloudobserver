@@ -75,21 +75,18 @@ void users_accounts_service::service_call(boost::shared_ptr<boost::asio::ip::tcp
 
 	try
 	{
-		std::map<std::string, std::string>::iterator it =  user_request->cookies.find(tag_cookie_name);
-		if (it != user_request->cookies.end())
+		if ((shared_data->get("UAC service call")).empty())
 		{
-			std::string session_id = it->second; 
-			std::string user_name  = is_signed_in_user(session_id);
+			std::string user_name  = shared_data->get("user_name");
 			if (user_name.empty())
 			{
 				user_request->arguments.insert(std::pair<std::string, std::string>(tag_logout, "true"));
 				return log_out(socket, user_request, service_response);
 			}
 			map_ss::iterator has_update = user_request->arguments.find(tag_update);
-			user_request->headers.insert(std::pair<std::string, std::string>(tag_header_email, user_name));
 			if ( has_update != arguments_end)
 			{
-				return update_user(socket, user_request, service_response);
+				return update_user(socket, user_request, service_response, shared_data);
 			}
 			return;
 		}
@@ -195,7 +192,6 @@ bool users_accounts_service::is_registered_user( std::string & given_email )
 
 void users_accounts_service::guest_user( boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> user_request , boost::shared_ptr<http_response>  user_response)
 {
-	user_request->headers.insert(std::pair<std::string, std::string>(tag_header_email, tag_guest_name));
 	if(! http_utils::try_to_redirect(socket, user_request, user_response))
 		http_utils::send_found_302(	user_request->url, socket, user_response, user_request);
 }
@@ -339,7 +335,7 @@ void users_accounts_service::register_user( boost::shared_ptr<boost::asio::ip::t
 	}
 }
 
-void users_accounts_service::update_user(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> user_request , boost::shared_ptr<http_response>  user_response )
+void users_accounts_service::update_user(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> user_request , boost::shared_ptr<http_response>  user_response, boost::shared_ptr<shared> shared_data )
 {
 	typedef std::map<std::string, std::string> map_ss;
 	typedef std::pair<std::string, std::string> pair_ss;
@@ -347,7 +343,7 @@ void users_accounts_service::update_user(boost::shared_ptr<boost::asio::ip::tcp:
 	map_ss::iterator arguments_end = user_request->arguments.end();
 	map_ss::iterator has_pass =  user_request->arguments.find(tag_pass_sha256);
 
-	std::string user_name = user_request->headers.find(tag_header_email)->second;
+	std::string user_name = shared_data->get("user_name");
 
 	if(has_pass != arguments_end)
 	{
@@ -495,17 +491,18 @@ std::string users_accounts_service::service_check( boost::shared_ptr<http_reques
 	if (it != request->cookies.end())
 	{
 		std::string user_name =  is_signed_in_user(it->second);
-		shared_data->post("user_name", user_name);
 		if (user_name.empty())
 		{
 			return "executor";
 		}
+		shared_data->post("user_name", http_utils::url_decode(user_name));
 		return "assistant";
 	}
 
 	std::string url= request->url;
 	if (url == "/uac.service" )
 	{
+		shared_data->post("UAC service call", "true");
 		return "executor";
 	}
 

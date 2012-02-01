@@ -97,16 +97,6 @@ void file_service::files_walker()
 	}
 }
 
-std::string file_service::get_user_name( boost::shared_ptr<http_request> request )
-{
-	std::string response = "";
-	std::map<std::string, std::string>::iterator it = request->headers.find("email");
-	if (it != request->headers.end())
-		response = it->second;
-
-	return response;
-}
-
 
 
 void file_service::is_dir( boost::filesystem::path dir, fs_map &old_fs, std::set<std::string> &new_fs )
@@ -210,7 +200,7 @@ boost::shared_ptr<std::string> file_service::load_file_into_memory( boost::share
 	return gzip_buffer;
 }
 
-void file_service::process_request( std::string encoded_url,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response )
+void file_service::process_request( std::string encoded_url,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response, boost::shared_ptr<shared> shared_data )
 {
 	boost::shared_ptr<fs_file>  f;
 	boost::shared_ptr<std::string> b;
@@ -224,7 +214,7 @@ void file_service::process_request( std::string encoded_url,boost::shared_ptr<bo
 		}
 		catch (std::exception)
 		{
-			fs_utils::send_404(encoded_url, socket, request, response);
+			fs_utils::send_404(encoded_url, socket, request, response, shared_data);
 			return;
 		}
 	}
@@ -268,7 +258,7 @@ void file_service::process_request( std::string encoded_url,boost::shared_ptr<bo
 		}
 		catch(std::exception)
 		{
-			fs_utils::send_404(encoded_url, socket,request,response);
+			fs_utils::send_404(encoded_url, socket,request,response,shared_data);
 			return;
 		}
 
@@ -383,17 +373,20 @@ void file_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> 
 {
 	boost::shared_ptr<http_response> response(new http_response(), boost::bind(&pointer_utils::delete_ptr<http_response>, _1));
 
-	if (request->url == "/")
+	try
 	{
-		try
+		size_t pos = request->url.find_last_of("/");
+		if(pos != std::string::npos)
 		{
-			fs.find("/index.html");
-			request->url = "/index.html";
+			std::string new_path = request->url;
+			new_path += "index.html";
+			fs.find(new_path);	
+			request->url = new_path;
 		}
-		catch(std::exception){}
 	}
+	catch(std::exception){}
 
-	if(http_utils::url_decode(this->get_user_name(request)) != "guest")
+	if(!(fs_utils::get_user_name(shared_data)).empty())
 	{
 		if(request->body.length() > 0)
 		{
@@ -411,7 +404,7 @@ void file_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> 
 		}
 	}
 
-	process_request(request->url, socket, request, response);
+	process_request(request->url, socket, request, response, shared_data);
 }
 
 bool file_service::if_is_modified(boost::shared_ptr<fs_file> f, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response, boost::shared_ptr<http_request> request)
