@@ -25,7 +25,7 @@
 
 #include "observer_writer.h"
 
-class observer_service: public service
+class observer_service: public http_service
 {
 public:
 	observer_service();

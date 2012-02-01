@@ -40,7 +40,7 @@
 #include <fs_utils.h>
 
 
-class file_service: public service
+class file_service: public http_service
 {
 public:
 	file_service();

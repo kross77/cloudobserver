@@ -191,7 +191,7 @@ namespace filter_utils
 #endif //MASK_UTILS_H
 }
 
-class image_renderer_service: public service
+class image_renderer_service: public http_service
 { 
 public:
 	image_renderer_service();
