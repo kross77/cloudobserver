@@ -250,6 +250,7 @@ void http_request::parse_buffer(char* buffer, http_request_parser_state &parser_
 
 	if (has_cookie != this->headers.end()){
 		cookies = parse_cookie(has_cookie->second);
+		this->headers.erase(has_cookie);
 	}
 }
 
