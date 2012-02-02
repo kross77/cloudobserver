@@ -8,8 +8,6 @@
 #include <boost/property_tree/ptree.hpp>
 
 // Cloud Forever
-#include <http.h>
-#include <pointer_utils.h>
 #include <raw_data.hpp>
 
 class base_service

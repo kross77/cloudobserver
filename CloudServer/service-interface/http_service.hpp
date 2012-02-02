@@ -6,6 +6,9 @@
 #include <boost/bind.hpp>
 #include <boost/shared_ptr.hpp>
 
+// Cloud Forever
+#include <http.h>
+#include <pointer_utils.h>
 #include <base_service.hpp>
 
 class http_service : public base_service
