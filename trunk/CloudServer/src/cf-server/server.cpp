@@ -3,14 +3,15 @@
 server::server(boost::property_tree::ptree config) 
 {
 	#ifdef DEBUG
-		error = new log_util(512, true, true, "log.txt");
-		warning = new log_util(512 * 8, true, true, "log.txt");
-		info = new log_util(512 * 32, true, true, "log.txt");
+		warning = new log_util(1, true, true, "log.txt");
+		info = new log_util(1, true, true, "log.txt");
 	#else
-		error = new log_util(1024, true, true, "log.txt");
-		warning = new log_util(1024 * 8, false, true, "log.txt");
-		info = new log_util(1024 * 32, false, false, "log.txt");
+		warning = new log_util(1024, false, true, "log.txt");
+		info = new log_util(1024, false, false, "log.txt");
 	#endif
+	error = new log_util(1, true, true, "log.txt");
+	start_up_info = new log_util(1, true, true, "log.txt");
+
 	error->use_prefix("error: ");
 	error->use_time();
 
@@ -21,7 +22,7 @@ server::server(boost::property_tree::ptree config)
 	this->description.server_root_path = boost::filesystem::current_path();
 
 
-	description = server_utils::parse_config(config, info, warning, error);
+	description = server_utils::parse_config(config, start_up_info, start_up_info, start_up_info);
 
 	this->acceptor_thread = new boost::thread(&server::acceptor_loop, this);
 
@@ -31,6 +32,10 @@ server::server(boost::property_tree::ptree config)
 server::~server()
 {
 	delete tread_util;
+	delete error;
+	delete warning;
+	delete info;
+	delete start_up_info;
 }
 
 void server::acceptor_loop(){

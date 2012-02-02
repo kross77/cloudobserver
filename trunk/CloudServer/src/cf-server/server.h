@@ -43,7 +43,7 @@ private:
 	int request_max_time;
 
 	threading_utils *tread_util; 
-	log_util *warning, *info, *error;
+	log_util *warning, *info, *error, *start_up_info;
 };
 
 #endif //SERVER_H
