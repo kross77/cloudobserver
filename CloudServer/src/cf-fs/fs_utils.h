@@ -8,7 +8,7 @@
 
 #include <http_utils.h>
 #include <general_utils.h>
-#include <service.hpp>
+#include <http_service.hpp>
 #include "fs_file.h"
 
 /*!

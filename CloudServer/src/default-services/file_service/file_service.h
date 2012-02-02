@@ -32,7 +32,7 @@
 #include <general_utils.h>
 #include <http_utils.h>
 
-#include <service.hpp>
+#include <http_service.hpp>
 
 #include <fs_file.h>
 #include <fs_map.h>

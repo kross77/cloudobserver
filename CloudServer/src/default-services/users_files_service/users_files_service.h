@@ -32,7 +32,7 @@
 #include <fs_file.h>
 #include <fs_utils.h>
 
-#include <service.hpp>
+#include <http_service.hpp>
 
 
 class users_files_service: public http_service
