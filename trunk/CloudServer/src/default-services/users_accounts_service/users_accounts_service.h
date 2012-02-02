@@ -28,7 +28,7 @@
 
 // Cloud Forever
 #include <http.h>
-#include <service.hpp>
+#include <http_service.hpp>
 
 #include <threading_utils.h>
 #include <general_utils.h>

@@ -21,7 +21,7 @@
 #include <http.h>
 #include <http_utils.h>
 
-#include <service.hpp>
+#include <http_service.hpp>
 
 #include "observer_writer.h"
 

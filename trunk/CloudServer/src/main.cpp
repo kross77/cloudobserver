@@ -13,7 +13,7 @@
 #include <boost/program_options.hpp>
 
 //cf service interface
-#include <service.hpp>
+#include <http_service.hpp>
 
 //cf-server
 #include <server.h>

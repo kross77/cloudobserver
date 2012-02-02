@@ -26,7 +26,7 @@
 #include <boost/property_tree/json_parser.hpp>
 
 //General Service header Class\Interface
-#include <service.hpp>
+#include <empty_service.hpp>
 
 //Extension includes
 #include <extension_utils.h>
