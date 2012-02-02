@@ -46,8 +46,8 @@ $(document).ready(function() {
 			hideAfter: false,
 			//type : 'alt-',
 			hasHideButton: false,
+			hideOnClick : true,
 			// just shows the button
-			buttonHideText: 'Pop!',
 			onShow: function() {
 				th.addClass("border2");
 			},
