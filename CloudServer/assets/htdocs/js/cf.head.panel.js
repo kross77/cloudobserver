@@ -62,8 +62,8 @@ $(document).ready(function() {
 				hideAfter: false,
 				//type : 'alt-',
 				hasHideButton: false,
+				hideOnClick : true,
 				// just shows the button
-				buttonHideText: 'Pop!',
 				onShow: function() {	
 					$('.logout-but').mouseup(function() {
 						showForm($('#tabs-logout'), 'Logout form',350, 120);
