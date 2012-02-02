@@ -61,7 +61,7 @@ $(document).ready(function() {
 				showAfter: 15,
 				hideAfter: false,
 				//type : 'alt-',
-				hasHideButton: true,
+				hasHideButton: false,
 				// just shows the button
 				buttonHideText: 'Pop!',
 				onShow: function() {	
