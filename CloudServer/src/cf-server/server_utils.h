@@ -31,6 +31,9 @@
 //Extension includes
 #include <extension_utils.h>
 
+//pointer utilities
+#include <pointer_utils.h>
+
 //containers thread safe operations
 #include <threading_utils.h>
 //Thread safe logging

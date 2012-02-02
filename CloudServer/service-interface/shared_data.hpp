@@ -13,6 +13,8 @@
 #include <boost/serialization/map.hpp> 
 #include <boost/serialization/string.hpp>
 
+#include <base_service_utils.hpp>
+
 class shared
 {
 public:
@@ -75,7 +77,7 @@ public:
 		std::stringstream oa_ss_data;
 		boost::archive::text_oarchive  oa_data(oa_ss_data);
 		oa_data << *this;
-		return boost::shared_ptr<std::string>(new std::string(oa_ss_data.str()),boost::bind(&pointer_utils::delete_ptr<std::string>, _1) );
+		return boost::shared_ptr<std::string>(new std::string(oa_ss_data.str()),boost::bind(&base_service_utils::delete_ptr<std::string>, _1) );
 	}
 
 	void deserialize( boost::shared_ptr<std::string> request_string)
