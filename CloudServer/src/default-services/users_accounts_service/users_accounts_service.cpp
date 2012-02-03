@@ -131,6 +131,8 @@ bool users_accounts_service::is_registered_user( std::string & given_email, std:
 	has_register->second = u_name.str();
 	*/
 	boost::algorithm::to_lower(given_email);
+	given_email = http_utils::url_decode(given_email);
+	given_email = http_utils::url_encode(given_email);
 
 	std::string email="", pass="";
 	sqlite3pp::transaction xct(*db, true);
@@ -172,6 +174,8 @@ bool users_accounts_service::is_registered_user( std::string & given_email )
 	has_register->second = u_name.str();
 	*/
 	boost::algorithm::to_lower(given_email);
+	given_email = http_utils::url_decode(given_email);
+	given_email = http_utils::url_encode(given_email);
 
 	std::string email="", pass="";
 
@@ -298,7 +302,8 @@ void users_accounts_service::register_user( boost::shared_ptr<boost::asio::ip::t
 		{
 			throw std::runtime_error("Bad User Name!");
 		}
-
+		has_register->second = http_utils::url_decode(has_register->second);
+		has_register->second = http_utils::url_encode(has_register->second);
 		if (!is_registered_user(has_register->second))
 		{
 			if (use_recapcha)
