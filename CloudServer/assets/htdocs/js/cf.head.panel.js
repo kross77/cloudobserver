@@ -56,7 +56,7 @@ $(document).ready(function() {
 	//( elemPos.top  + (40%(eventObj.pageY))
 			$(newer_id).grumble({
 				text: "  <a href='#' class='logout-but'><h3>Log me out</h3></a> <br/> <a href='#' ><h3>Cancel</h3></a>    ",
-				angle: (Math.random() * 50 + 170),
+				angle: (Math.random() * 30 + 190),
 				distance: 3,
 				showAfter: 15,
 				hideAfter: false,
