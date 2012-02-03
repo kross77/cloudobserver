@@ -13,6 +13,21 @@ function readCookie(name) {
 	return null;
 }
 
+// if error ,run it again.
+function onerror(url, func){
+	setTimeout(function(){getFromServer(url, func);},500);
+}
+
+function getJSONFromServer(url, func){
+  $.getJSON(url, function(data) {
+		  // Verify your data, if it's not you want run error function 
+		  if(!data){ onerror(url, func); return; }
+		  func(data);
+  }).error(function() { onerror(url, func); });
+}
+
+
+
 (function($) {
 	$.fn.extend({
 		center: function() {
@@ -31,20 +46,20 @@ function readCookie(name) {
 })(jQuery);
 
 var page_update = page_update || {};
-    page_update.functions = [];
-    page_update.add = function(fn){
-                  page_update.functions.push(fn);
-                };
-    page_update.remove = function(fn){
-                     page_update.functions.splice(page_update.functions.indexOf(fn), 1);
-                   };
-    page_update.run = function(){
-                  page_update.functions.forEach(function(cb){ 
-                    if (typeof cb == "function") {
-                      cb.call(); 
-                    }
-                  });
-                };
+	page_update.functions = [];
+	page_update.add = function(fn){
+				  page_update.functions.push(fn);
+				};
+	page_update.remove = function(fn){
+					 page_update.functions.splice(page_update.functions.indexOf(fn), 1);
+				   };
+	page_update.run = function(){
+				  page_update.functions.forEach(function(cb){ 
+					if (typeof cb == "function") {
+					  cb.call(); 
+					}
+				  });
+				};
 
 $(document).ready(function() {
 	$('body').append("<div id=\"cf-footer\" style='position:fixed;min-height:20px;height:auto !important;height:20px;background-color:#3f3b8d;background-color:rgba(0,0,0,0.6);bottom:0; width:100%'><p id=\"cf-footer-paragraph\" style='font-size: 8pt'> Copyright &copy; 2012 <a id='rol' href='#cloudobserver' onclick=\"{	newwindow=window.open(\'http://code.google.com/p/cloudobserver/\',\'CloudObserver\',\'height=750,width=900\');	if (window.focus) {newwindow.focus()}}\">Cloud Forever</a>. Some rights reserved. </p><div>");
