@@ -11,14 +11,14 @@ $(document).ready(function() {
 	$('body').append("<div class='header'><table style='padding:0px; margin: 0px 0px 0px 0px; width:100%' cellpadding='0' cellspacing='0'><tr><td id='plogo'  style='width:40px; height:40px;'><div><a href='index.html' alt='Cloud Server Main Page'><p style='background: url(/logo-small.png); width:40px; height:40px;' class='logo'></p></a></div></td><td><div id='marx-services-list'><div data-template><a href='{{url}}'><p class='header-item' style='min-width:100px;'>{{name}}</p></a></div></div></td><td style='white-space:nowrap;text-align:right;'> <div id='marx-user-name' ><div data-template><a><p class='header-item' id='user_name' class='hidden-c' >{{user_name}}</p></a></div></div></td></tr></table></div>");
 
    var servicesList = Tempo.prepare('marx-services-list').notify( function (event) {
-    if ( event.type === TempoEvent.Types.RENDER_COMPLETE) { page_update.run(); }
+	if ( event.type === TempoEvent.Types.RENDER_COMPLETE) { page_update.run(); }
 	});
 			servicesList.starting();
 	
-	$.getJSON("server.json", function(data) {
-		    servicesList.render(data);
-	});
-
+	getJSONFromServer("server.json", function(data){
+		servicesList.render(data);
+		});
+	
 	$('.header-item, .logo').live('mousedown', function(){
 		$(this).addClass("hilight");
 	}).live('mouseup', function(){
@@ -33,12 +33,12 @@ $(document).ready(function() {
 	user = readCookie('session-id');
 	if (user != null) {
 		var user_name = Tempo.prepare('marx-user-name').notify( function (event) {
-    if ( event.type === TempoEvent.Types.RENDER_COMPLETE) { page_update.run(); }
+	if ( event.type === TempoEvent.Types.RENDER_COMPLETE) { page_update.run(); }
 	});
 		user_name.starting();
 		
-		$.getJSON("ufs.service?user_name=true", function(data) {
-		    user_name.render(data);
+		getJSONFromServer("ufs.service?user_name=true", function(data){
+			user_name.render(data);
 		});
 		
 		$("#marx-user-name").show();
