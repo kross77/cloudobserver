@@ -68,21 +68,21 @@ DOWNLOADS=downloads
 OS=linux
 JOBS=`grep ^processor /proc/cpuinfo | wc -l`
 
-KEEP_OLD=no
+CHECKOUT_SOURCE=no
 REBUILD_LIBRARIES=no
 
 echo 
 echo --CF autobuild team welcomes you!----------------------------------------------
 echo -------------------------------------------------------------------------------
 echo --This build API:--------------------------------------------------------------
-echo ./cloud_server_net_setup.sh KEEP_OLD REBUILD_LIBRARIES
+echo ./cloud_server_net_setup.sh CHECKOUT_SOURCE REBUILD_LIBRARIES
 echo -------------------------------------------------------------------------------
 echo Please be patient. Go get yourself a coup of coffee - auto build process can take a long time.
 echo -------------------------------------------------------------------------------
 echo
 
 if [ "$1" != "" ]; then
-	KEEP_OLD="$1"
+	CHECKOUT_SOURCE="$1"
 fi
 
 if [ "$2" != "" ]; then
@@ -255,7 +255,7 @@ if [ ! -d "$PREMAKE_INSTALL" ]; then
 fi
 
 # CloudServer
-if [ "$KEEP_OLD" = "no" -o ! -d "$CLOUD_COMPILE" ]; then
+if [ "$CHECKOUT_SOURCE" = "yes" -o ! -d "$CLOUD_COMPILE" ]; then
 	echo_run rm -rf "$CLOUD_COMPILE"/
 	echo_run svn checkout https://$CLOUD_SRCSITE/$CLOUD_SRCPATH "$CLOUD_COMPILE"
 fi
