@@ -63,9 +63,9 @@ PREMAKE_SRCSITE=surfnet.dl.sourceforge.net
 
 ZLIB_COMPILE="$OPENCV_COMPILE"/3rdparty/zlib
 
-CHECKOUT_SOURCE=no
-REBUILD_LIBRARIES=no
-VERBOSE=no
+CHECKOUT_SOURCE=false
+REBUILD_LIBRARIES=false
+VERBOSE=false
 
 DOWNLOADS=downloads
 OS=linux
@@ -75,7 +75,7 @@ for i in $*
 do
 	case $i in
 		--checkout-source	)
-			CHECKOUT_SOURCE=yes
+			CHECKOUT_SOURCE=true
 			;;
 		--help				)
 			echo "Usage: cloud-loader-linux.sh [options]"
@@ -87,10 +87,10 @@ do
 			exit 0
 			;;
 		--rebuild-libraries	)
-			REBUILD_LIBRARIES=yes
+			REBUILD_LIBRARIES=true
 			;;
 		--verbose			)
-			VERBOSE=yes
+			VERBOSE=true
 			;;
 	esac
 done
@@ -98,7 +98,7 @@ done
 # Print the command and run it. Exit the script on failure.
 run()
 {
-	if [ "$VERBOSE" = "yes" ]; then
+	if $VERBOSE; then
 		echo "$@"
 	fi
 	"$@"
@@ -140,7 +140,7 @@ prepare() # 1=SRCFILE 2=COMPILE 3=SRCBASE 4=SRCSITE 5=SRCPATH
 	run mv $3 $2
 }
 
-if [ "$REBUILD_LIBRARIES" = "yes" ]; then
+if $REBUILD_LIBRARIES; then
 	rm -rf "$CMAKE_INSTALL"
 	rm -rf "$OPENCV_INSTALL"
 	rm -rf "$BOOST_INSTALL"
@@ -277,7 +277,7 @@ if [ ! -d "$PREMAKE_INSTALL" ]; then
 fi
 
 # CloudServer
-if [ "$CHECKOUT_SOURCE" = "yes" -o ! -d "$CLOUD_COMPILE" ]; then
+if $CHECKOUT_SOURCE || [ ! -d "$CLOUD_COMPILE" ]; then
 	run rm -rf "$CLOUD_COMPILE"/
 	run svn checkout https://$CLOUD_SRCSITE/$CLOUD_SRCPATH "$CLOUD_COMPILE"
 fi
