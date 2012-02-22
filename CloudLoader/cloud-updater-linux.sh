@@ -41,10 +41,10 @@ while [  $COUNTER -lt 1 ]; do
 		LOCAL_REV=$REMOTE_REV
 		
 		if [ "$REBUILD_LIBRARIES" == "1" ]; then
-			./$LOADER yes yes
+			./$LOADER --checkout-source --rebuild-libraries
 			REBUILD_LIBRARIES=0
 		else
-			./$LOADER yes
+			./$LOADER --checkout-source
 		fi
 		
 		cd $CD

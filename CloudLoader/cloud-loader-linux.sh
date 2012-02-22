@@ -75,19 +75,23 @@ echo
 echo --CF autobuild team welcomes you!----------------------------------------------
 echo -------------------------------------------------------------------------------
 echo --This build API:--------------------------------------------------------------
-echo ./cloud_server_net_setup.sh CHECKOUT_SOURCE REBUILD_LIBRARIES
+echo ./cloud_server_net_setup.sh [--checkout-source] [--rebuild-libraries]
 echo -------------------------------------------------------------------------------
 echo Please be patient. Go get yourself a coup of coffee - auto build process can take a long time.
 echo -------------------------------------------------------------------------------
 echo
 
-if [ "$1" != "" ]; then
-	CHECKOUT_SOURCE="$1"
-fi
-
-if [ "$2" != "" ]; then
-	REBUILD_LIBRARIES="$2"
-fi
+for i in $*
+do
+	case $i in
+		--checkout-source	)
+			CHECKOUT_SOURCE=yes
+			;;
+		--rebuild-libraries	)
+			REBUILD_LIBRARIES=yes
+			;;
+	esac
+done
 
 echo_run ()
 {
