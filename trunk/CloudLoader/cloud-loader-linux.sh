@@ -48,12 +48,12 @@ prepare() # 1=SRCFILE 2=COMPILE 3=SRCBASE 4=SRCSITE 5=SRCPATH
 # Move to the directory containing the script.
 SOURCE="${BASH_SOURCE[0]}"
 while [ -h "$SOURCE" ]; do SOURCE="$(readlink "$SOURCE")"; done
-cd "$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+run cd "$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
 # Declare, create and move to the workspace directory.
 WORKSPACE=cloud_server
-mkdir -p $WORKSPACE
-cd $WORKSPACE
+run mkdir -p $WORKSPACE
+run cd $WORKSPACE
 
 # Remember the workspace directory path.
 WD=`pwd`
@@ -151,26 +151,26 @@ done
 
 # Delete existing libraries and utilities if they should be rebuilt.
 if $REBUILD_LIBRARIES; then
-	rm -rf "$CMAKE_INSTALL"
-	rm -rf "$OPENCV_INSTALL"
-	rm -rf "$BOOST_INSTALL"
-	rm -rf "$OPENSSL_INSTALL"
-	rm -rf "$PREMAKE_INSTALL"
+	run rm -rf "$CMAKE_INSTALL"
+	run rm -rf "$OPENCV_INSTALL"
+	run rm -rf "$BOOST_INSTALL"
+	run rm -rf "$OPENSSL_INSTALL"
+	run rm -rf "$PREMAKE_INSTALL"
 fi
 
 # Build CMake utility if necessary.
 if [ ! -d "$CMAKE_INSTALL" ]; then
 	prepare $CMAKE_SRCFILE "$CMAKE_COMPILE" $CMAKE_SRCBASE $CMAKE_SRCSITE $CMAKE_SRCPATH
-	cd "$CMAKE_COMPILE"
+	run cd "$CMAKE_COMPILE"
 	run ./bootstrap --parallel=$JOBS --prefix="$CMAKE_INSTALL"
 	run make -j$JOBS install
-	cd $WD
+	run cd $WD
 fi
 
 # Build OpenCV libraries if necessary.
 if [ ! -d "$OPENCV_INSTALL" ]; then
 	prepare $OPENCV_SRCFILE "$OPENCV_COMPILE" $OPENCV_SRCBASE $OPENCV_SRCSITE $OPENCV_SRCPATH
-	cd "$OPENCV_COMPILE"
+	run cd "$OPENCV_COMPILE"
 	# Adding the following option:
 	#   -DEXECUTABLE_OUTPUT_PATH="$OPENCV_INSTALL"/bin
 	# to the CMake call leads to an error during the build
@@ -234,38 +234,38 @@ if [ ! -d "$OPENCV_INSTALL" ]; then
 		-DWITH_V4L=OFF \
 		-DWITH_XIMEA=OFF \
 		-DWITH_XINE=OFF
-	make -j$JOBS install
+	run make -j$JOBS install
 	run cp "$OPENCV_INSTALL"/share/OpenCV/3rdparty/lib/* "$OPENCV_INSTALL"/lib
-	cd $WD
+	run cd $WD
 fi
 
 # Build Boost libraries if necessary.
 if [ ! -d "$BOOST_INSTALL" ]; then
 	prepare $BOOST_SRCFILE "$BOOST_COMPILE" $BOOST_SRCBASE $BOOST_SRCSITE $BOOST_SRCPATH
-	cd "$BOOST_COMPILE"
+	run cd "$BOOST_COMPILE"
 	run ./bootstrap.sh
 	run ./b2 -j$JOBS -d0 --with-thread --with-system --with-filesystem --with-serialization --with-program_options --with-regex --with-date_time --with-iostreams -sZLIB_SOURCE="$ZLIB_COMPILE" -sNO_BZIP2=1 cflags=-fPIC cxxflags=-fPIC link=static --prefix="$BOOST_INSTALL" release install
-	cd $WD
+	run cd $WD
 fi
 
 # Build OpenSSL libraries if necessary.
 if [ ! -d "$OPENSSL_INSTALL" ]; then
 	prepare $OPENSSL_SRCFILE "$OPENSSL_COMPILE" $OPENSSL_SRCBASE $OPENSSL_SRCSITE $OPENSSL_SRCPATH
-	cd "$OPENSSL_COMPILE"
+	run cd "$OPENSSL_COMPILE"
 	run ./config shared no-asm --prefix="$OPENSSL_INSTALL" --openssldir="$OPENSSL_INSTALL"/share
 	run make install
-	cd $WD
+	run cd $WD
 fi
 
 # Build Premake utility if necessary.
 if [ ! -d "$PREMAKE_INSTALL" ]; then
 	prepare $PREMAKE_SRCFILE "$PREMAKE_COMPILE" $PREMAKE_SRCBASE $PREMAKE_SRCSITE $PREMAKE_SRCPATH
-	cd "$PREMAKE_COMPILE"/build/gmake.unix
+	run cd "$PREMAKE_COMPILE"/build/gmake.unix
 	run make -j$JOBS config=release
-	cd ../..
-	mkdir -p "$PREMAKE_INSTALL"/bin
-	cp bin/release/premake4 "$PREMAKE_INSTALL"/bin
-	cd $WD
+	run cd ../..
+	run mkdir -p "$PREMAKE_INSTALL"/bin
+	run cp bin/release/premake4 "$PREMAKE_INSTALL"/bin
+	run cd $WD
 fi
 
 # Checkout Cloud Server application source code if necessary.
@@ -275,15 +275,15 @@ if $CHECKOUT_SOURCE || [ ! -d "$CLOUD_COMPILE" ]; then
 fi
 
 # Build Cloud Server application.
-cd "$CLOUD_COMPILE"
+run cd "$CLOUD_COMPILE"
 if [ ! -e $CLOUD_PREMAKE ]; then
 	run echo "$PREMAKE_INSTALL"/bin/premake4 --os=$OS --BoostLibsPath="$BOOST_INSTALL"/lib  --OpenCVLibsPath="$OPENCV_INSTALL"/lib --OpenSSLLibsPath="$OPENSSL_INSTALL"/lib  --BoostIncludesPath="$BOOST_INSTALL"/include  --OpenCVIncludesPath="$OPENCV_INSTALL"/include --OpenSSLIncludesPath="$OPENSSL_INSTALL"/include --platform=x32 gmake > $CLOUD_PREMAKE
 	run chmod u+x ./$CLOUD_PREMAKE
 fi
 run ./$CLOUD_PREMAKE
-cd projects/$OS-gmake
+run cd projects/$OS-gmake
 run make -j$JOBS config=release
-cd $WD
+run cd $WD
 
 # Install Cloud Server application.
 if [ ! -d "$CLOUD_INSTALL" ]; then
