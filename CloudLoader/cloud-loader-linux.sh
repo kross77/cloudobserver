@@ -116,13 +116,21 @@ prepare() # 1=SRCFILE 2=COMPILE 3=SRCBASE 4=SRCSITE 5=SRCPATH
 		run curl -L http://$4/$5/$1 -o $DOWNLOADS/$1
 	fi
 	
-	if [ ${1##*.} == "zip" ]; then
-		run unzip $DOWNLOADS/$1
-	elif [ ${1##*.} == "bz2" ]; then
-		run tar -xjf $DOWNLOADS/$1
-	else
-		run tar -xzf $DOWNLOADS/$1
-	fi
+	case ${1##*.} in
+		bz2	)
+			run tar -xjf $DOWNLOADS/$1
+			;;
+		gz	)
+			run tar -xzf $DOWNLOADS/$1
+			;;
+		zip	)
+			run unzip $DOWNLOADS/$1
+			;;
+		*	)
+			echo "Error: unknown archive type."
+			exit 1;
+			;;
+	esac
 	
 	run rm -rf $2
 	run mv $3 $2
