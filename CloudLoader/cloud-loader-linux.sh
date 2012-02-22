@@ -109,9 +109,14 @@ run()
 	fi
 }
 
+# Prepare the library or utility by extracting its source to compile directory.
+# Download the source archive if necessary.
 prepare() # 1=SRCFILE 2=COMPILE 3=SRCBASE 4=SRCSITE 5=SRCPATH
 {
-	run mkdir -p $DOWNLOADS
+	if [ ! -d $DOWNLOADS ]; then
+		run mkdir -p $DOWNLOADS
+	fi
+	
 	if [ ! -e $DOWNLOADS/$1 ]; then
 		run curl -L http://$4/$5/$1 -o $DOWNLOADS/$1
 	fi
