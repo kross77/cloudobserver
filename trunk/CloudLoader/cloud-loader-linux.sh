@@ -14,6 +14,7 @@ cd $WORKSPACE
 # Remember the workspace directory path.
 WD=`pwd`
 
+# Declare variables related to Boost libraries.
 BOOST_VERSION=1.47.0
 BOOST_COMPILE="$WD"/boost-src
 BOOST_INSTALL="$WD"/boost
@@ -22,6 +23,7 @@ BOOST_SRCFILE=$BOOST_SRCBASE.tar.bz2
 BOOST_SRCPATH=project/boost/boost/$BOOST_VERSION
 BOOST_SRCSITE=surfnet.dl.sourceforge.net
 
+# Declare variables related to Cloud Server application.
 CLOUD_COMPILE="$WD"/cloudserver-src
 CLOUD_INSTALL="$WD"/install-dir
 CLOUD_PREMAKE=build.sh
@@ -29,6 +31,7 @@ CLOUD_SRCBASE=CloudServer
 CLOUD_SRCPATH=svn/trunk/$CLOUD_SRCBASE
 CLOUD_SRCSITE=cloudobserver.googlecode.com
 
+# Declare variables related to CMake utility.
 CMAKE_VERSION=2.8.6
 CMAKE_COMPILE="$WD"/cmake-src
 CMAKE_INSTALL="$WD"/cmake
@@ -37,6 +40,7 @@ CMAKE_SRCFILE=$CMAKE_SRCBASE.tar.gz
 CMAKE_SRCPATH=files/v${CMAKE_VERSION%.*}
 CMAKE_SRCSITE=www.cmake.org
 
+# Declare variables related to OpenCV libraries.
 OPENCV_VERSION=2.3.1
 OPENCV_COMPILE="$WD"/opencv-src
 OPENCV_INSTALL="$WD"/opencv
@@ -45,6 +49,7 @@ OPENCV_SRCFILE="$OPENCV_SRCBASE"a.tar.bz2 # note the 'a' character (it's 2.3.1a)
 OPENCV_SRCPATH=project/opencvlibrary/opencv-unix/$OPENCV_VERSION
 OPENCV_SRCSITE=surfnet.dl.sourceforge.net
 
+# Declare variables related to OpenSSL libraries.
 OPENSSL_VERSION=1.0.0d
 OPENSSL_COMPILE="$WD"/openssl-src
 OPENSSL_INSTALL="$WD"/openssl
@@ -53,6 +58,7 @@ OPENSSL_SRCFILE=$OPENSSL_SRCBASE.tar.gz
 OPENSSL_SRCPATH=source
 OPENSSL_SRCSITE=www.openssl.org
 
+# Declare variables related to Premake utility.
 PREMAKE_VERSION=4.3
 PREMAKE_COMPILE="$WD"/premake-src
 PREMAKE_INSTALL="$WD"/premake
@@ -61,16 +67,20 @@ PREMAKE_SRCFILE=$PREMAKE_SRCBASE-src.zip
 PREMAKE_SRCPATH=project/premake/Premake/$PREMAKE_VERSION
 PREMAKE_SRCSITE=surfnet.dl.sourceforge.net
 
+# Declare variables related to zlib library.
 ZLIB_COMPILE="$OPENCV_COMPILE"/3rdparty/zlib
 
+# Declare option variables.
 CHECKOUT_SOURCE=false
 REBUILD_LIBRARIES=false
 VERBOSE=false
 
+# Declare other variables.
 DOWNLOADS=downloads
 OS=linux
 JOBS=`grep ^processor /proc/cpuinfo | wc -l`
 
+# Parse command line arguments.
 for i in $*
 do
 	case $i in
