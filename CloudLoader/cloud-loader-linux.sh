@@ -141,7 +141,7 @@ prepare() # 1=SRCFILE 2=COMPILE 3=SRCBASE 4=SRCSITE 5=SRCPATH
 			;;
 		*   )
 			echo "Error: unknown archive type."
-			exit 1;
+			exit 1
 			;;
 	esac
 	
@@ -162,7 +162,7 @@ fi
 if [ ! -d "$CMAKE_INSTALL" ]; then
 	prepare $CMAKE_SRCFILE "$CMAKE_COMPILE" $CMAKE_SRCBASE $CMAKE_SRCSITE $CMAKE_SRCPATH
 	cd "$CMAKE_COMPILE"
-	run ./bootstrap --parallel=$JOBS --prefix="$CMAKE_INSTALL"; 
+	run ./bootstrap --parallel=$JOBS --prefix="$CMAKE_INSTALL"
 	run make -j$JOBS install
 	cd ..
 fi
@@ -270,13 +270,12 @@ fi
 
 # Checkout Cloud Server application source code if necessary.
 if $CHECKOUT_SOURCE || [ ! -d "$CLOUD_COMPILE" ]; then
-	run rm -rf "$CLOUD_COMPILE"/
+	run rm -rf "$CLOUD_COMPILE"
 	run svn checkout https://$CLOUD_SRCSITE/$CLOUD_SRCPATH "$CLOUD_COMPILE"
 fi
 
 # Build Cloud Server application.
 cd "$CLOUD_COMPILE"
-
 if [ ! -e $CLOUD_PREMAKE ]; then
 	run echo "$PREMAKE_INSTALL"/bin/premake4 --os=$OS --BoostLibsPath="$BOOST_INSTALL"/lib  --OpenCVLibsPath="$OPENCV_INSTALL"/lib --OpenSSLLibsPath="$OPENSSL_INSTALL"/lib  --BoostIncludesPath="$BOOST_INSTALL"/include  --OpenCVIncludesPath="$OPENCV_INSTALL"/include --OpenSSLIncludesPath="$OPENSSL_INSTALL"/include --platform=x32 gmake > $CLOUD_PREMAKE
 	run chmod u+x ./$CLOUD_PREMAKE
@@ -291,7 +290,7 @@ if [ ! -d "$CLOUD_INSTALL" ]; then
 	run mkdir "$CLOUD_INSTALL"
 else
 	run rm -rf "$CLOUD_INSTALL"/htdocs
-	run rm -rf "$CLOUD_INSTALL"/config.xml 
+	run rm -rf "$CLOUD_INSTALL"/config.xml
 fi
 run cp -r "$CLOUD_COMPILE"/projects/$OS-gmake/bin/release/* "$CLOUD_INSTALL"
 
