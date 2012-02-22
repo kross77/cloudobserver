@@ -97,7 +97,7 @@ do
 done
 
 # Print the command and run it. Exit the script on failure.
-echo_run()
+run()
 {
 	if [ "$VERBOSE" = "yes" ]; then
 		echo "$@"
@@ -113,19 +113,19 @@ load() # 1=SRCFILE 2=COMPILE 3=SRCBASE 4=SRCSITE 5=SRCPATH
 {
 	mkdir -p $DOWNLOADS
 	if [ ! -e $DOWNLOADS/$1 ]; then
-		echo_run curl -L http://$4/$5/$1 -o $DOWNLOADS/$1
+		run curl -L http://$4/$5/$1 -o $DOWNLOADS/$1
 	fi
 	
 	if [ ${1##*.} == "zip" ]; then
-		echo_run unzip $DOWNLOADS/$1
+		run unzip $DOWNLOADS/$1
 	elif [ ${1##*.} == "bz2" ]; then
-		echo_run tar -xjf $DOWNLOADS/$1
+		run tar -xjf $DOWNLOADS/$1
 	else
-		echo_run tar -xzf $DOWNLOADS/$1
+		run tar -xzf $DOWNLOADS/$1
 	fi
 	
 	rm -rf $2
-	echo_run mv $3 $2
+	run mv $3 $2
 }
 
 if [ "$REBUILD_LIBRARIES" = "yes" ]; then
@@ -141,8 +141,8 @@ if [ ! -d "$CMAKE_INSTALL" ]; then
 	load $CMAKE_SRCFILE "$CMAKE_COMPILE" $CMAKE_SRCBASE $CMAKE_SRCSITE $CMAKE_SRCPATH
 	cd "$CMAKE_COMPILE"
 
-	echo_run ./bootstrap --parallel=$JOBS --prefix="$CMAKE_INSTALL"; 
-	echo_run make -j$JOBS install
+	run ./bootstrap --parallel=$JOBS --prefix="$CMAKE_INSTALL"; 
+	run make -j$JOBS install
 	
 	cd ..
 fi
@@ -158,7 +158,7 @@ if [ ! -d "$OPENCV_INSTALL" ]; then
 	# to the CMake call leads to an error during the build
 	# with 'opencv_traincascade' executable not being created.
 	# It seems like a bug in OpenCV CMake script.
-	echo_run "$CMAKE_INSTALL"/bin/cmake \
+	run "$CMAKE_INSTALL"/bin/cmake \
 		-DBUILD_DOCS=OFF \
 		-DBUILD_EXAMPLES=OFF \
 		-DBUILD_NEW_PYTHON_SUPPORT=OFF \
@@ -218,7 +218,7 @@ if [ ! -d "$OPENCV_INSTALL" ]; then
 		-DWITH_XINE=OFF
 	make -j$JOBS install
 
-	echo_run cp "$OPENCV_INSTALL"/share/OpenCV/3rdparty/lib/* "$OPENCV_INSTALL"/lib
+	run cp "$OPENCV_INSTALL"/share/OpenCV/3rdparty/lib/* "$OPENCV_INSTALL"/lib
 
 	cd ..
 fi
@@ -229,9 +229,9 @@ if [ ! -d "$BOOST_INSTALL" ]; then
 
 	cd "$BOOST_COMPILE"
 
-	echo_run ./bootstrap.sh
+	run ./bootstrap.sh
 
-	echo_run ./b2 -j$JOBS -d0 --with-thread --with-system --with-filesystem --with-serialization --with-program_options --with-regex --with-date_time --with-iostreams -sZLIB_SOURCE="$ZLIB_COMPILE" -sNO_BZIP2=1 cflags=-fPIC cxxflags=-fPIC link=static --prefix="$BOOST_INSTALL" release install
+	run ./b2 -j$JOBS -d0 --with-thread --with-system --with-filesystem --with-serialization --with-program_options --with-regex --with-date_time --with-iostreams -sZLIB_SOURCE="$ZLIB_COMPILE" -sNO_BZIP2=1 cflags=-fPIC cxxflags=-fPIC link=static --prefix="$BOOST_INSTALL" release install
 
 	cd ..
 fi
@@ -242,8 +242,8 @@ if [ ! -d "$OPENSSL_INSTALL" ]; then
 	
 	cd "$OPENSSL_COMPILE"
 
-	echo_run ./config shared no-asm --prefix="$OPENSSL_INSTALL" --openssldir="$OPENSSL_INSTALL"/share
-	echo_run make install
+	run ./config shared no-asm --prefix="$OPENSSL_INSTALL" --openssldir="$OPENSSL_INSTALL"/share
+	run make install
 
 	cd ..
 fi
@@ -254,7 +254,7 @@ if [ ! -d "$PREMAKE_INSTALL" ]; then
 	
 	cd "$PREMAKE_COMPILE"/build/gmake.unix
 	
-	echo_run make -j$JOBS config=release
+	run make -j$JOBS config=release
 	
 	cd ../..
 	
@@ -266,33 +266,33 @@ fi
 
 # CloudServer
 if [ "$CHECKOUT_SOURCE" = "yes" -o ! -d "$CLOUD_COMPILE" ]; then
-	echo_run rm -rf "$CLOUD_COMPILE"/
-	echo_run svn checkout https://$CLOUD_SRCSITE/$CLOUD_SRCPATH "$CLOUD_COMPILE"
+	run rm -rf "$CLOUD_COMPILE"/
+	run svn checkout https://$CLOUD_SRCSITE/$CLOUD_SRCPATH "$CLOUD_COMPILE"
 fi
 
 cd "$CLOUD_COMPILE"
 
 if [ ! -e $CLOUD_PREMAKE ]; then
-	echo_run echo "$PREMAKE_INSTALL"/bin/premake4 --os=$OS --BoostLibsPath="$BOOST_INSTALL"/lib  --OpenCVLibsPath="$OPENCV_INSTALL"/lib --OpenSSLLibsPath="$OPENSSL_INSTALL"/lib  --BoostIncludesPath="$BOOST_INSTALL"/include  --OpenCVIncludesPath="$OPENCV_INSTALL"/include --OpenSSLIncludesPath="$OPENSSL_INSTALL"/include --platform=x32 gmake > $CLOUD_PREMAKE
-	echo_run chmod u+x ./$CLOUD_PREMAKE
+	run echo "$PREMAKE_INSTALL"/bin/premake4 --os=$OS --BoostLibsPath="$BOOST_INSTALL"/lib  --OpenCVLibsPath="$OPENCV_INSTALL"/lib --OpenSSLLibsPath="$OPENSSL_INSTALL"/lib  --BoostIncludesPath="$BOOST_INSTALL"/include  --OpenCVIncludesPath="$OPENCV_INSTALL"/include --OpenSSLIncludesPath="$OPENSSL_INSTALL"/include --platform=x32 gmake > $CLOUD_PREMAKE
+	run chmod u+x ./$CLOUD_PREMAKE
 fi
 
-echo_run ./$CLOUD_PREMAKE
+run ./$CLOUD_PREMAKE
 
 cd projects/$OS-gmake
 
-echo_run make -j$JOBS config=release
+run make -j$JOBS config=release
 
 cd ../../..
 
 # Install
 if [ ! -d "$CLOUD_INSTALL" ]; then
-	echo_run mkdir "$CLOUD_INSTALL"
+	run mkdir "$CLOUD_INSTALL"
 else
-	echo_run rm -rf "$CLOUD_INSTALL"/htdocs
-	echo_run rm -rf "$CLOUD_INSTALL"/config.xml 
+	run rm -rf "$CLOUD_INSTALL"/htdocs
+	run rm -rf "$CLOUD_INSTALL"/config.xml 
 fi
-echo_run cp -r "$CLOUD_COMPILE"/projects/$OS-gmake/bin/release/* "$CLOUD_INSTALL"
+run cp -r "$CLOUD_COMPILE"/projects/$OS-gmake/bin/release/* "$CLOUD_INSTALL"
 echo Done!
 
 exit 0
