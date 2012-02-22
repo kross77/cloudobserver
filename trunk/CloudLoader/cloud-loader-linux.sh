@@ -83,10 +83,10 @@ JOBS=`grep ^processor /proc/cpuinfo | wc -l`
 for i in $*
 do
 	case $i in
-		--checkout-source	)
+		--checkout-source   )
 			CHECKOUT_SOURCE=true
 			;;
-		--help				)
+		--help              )
 			echo "Usage: cloud-loader-linux.sh [options]"
 			echo "Options:"
 			echo "  --checkout-source     Checkout latest source from version control system"
@@ -95,10 +95,10 @@ do
 			echo "  --verbose             Echo all executed commands"
 			exit 0
 			;;
-		--rebuild-libraries	)
+		--rebuild-libraries )
 			REBUILD_LIBRARIES=true
 			;;
-		--verbose			)
+		--verbose           )
 			VERBOSE=true
 			;;
 	esac
@@ -130,16 +130,16 @@ prepare() # 1=SRCFILE 2=COMPILE 3=SRCBASE 4=SRCSITE 5=SRCPATH
 	fi
 	
 	case ${1##*.} in
-		bz2	)
+		bz2 )
 			run tar -xjf $DOWNLOADS/$1
 			;;
-		gz	)
+		gz  )
 			run tar -xzf $DOWNLOADS/$1
 			;;
-		zip	)
+		zip )
 			run unzip $DOWNLOADS/$1
 			;;
-		*	)
+		*   )
 			echo "Error: unknown archive type."
 			exit 1;
 			;;
