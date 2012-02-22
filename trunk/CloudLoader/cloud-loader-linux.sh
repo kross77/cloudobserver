@@ -63,14 +63,13 @@ PREMAKE_SRCSITE=surfnet.dl.sourceforge.net
 
 ZLIB_COMPILE="$OPENCV_COMPILE"/3rdparty/zlib
 
-DOWNLOADS=downloads
-
-OS=linux
-JOBS=`grep ^processor /proc/cpuinfo | wc -l`
-
 CHECKOUT_SOURCE=no
 REBUILD_LIBRARIES=no
 VERBOSE=no
+
+DOWNLOADS=downloads
+OS=linux
+JOBS=`grep ^processor /proc/cpuinfo | wc -l`
 
 for i in $*
 do
