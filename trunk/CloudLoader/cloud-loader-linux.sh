@@ -111,7 +111,7 @@ run()
 
 prepare() # 1=SRCFILE 2=COMPILE 3=SRCBASE 4=SRCSITE 5=SRCPATH
 {
-	mkdir -p $DOWNLOADS
+	run mkdir -p $DOWNLOADS
 	if [ ! -e $DOWNLOADS/$1 ]; then
 		run curl -L http://$4/$5/$1 -o $DOWNLOADS/$1
 	fi
@@ -124,7 +124,7 @@ prepare() # 1=SRCFILE 2=COMPILE 3=SRCBASE 4=SRCSITE 5=SRCPATH
 		run tar -xzf $DOWNLOADS/$1
 	fi
 	
-	rm -rf $2
+	run rm -rf $2
 	run mv $3 $2
 }
 
