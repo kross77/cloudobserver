@@ -295,6 +295,5 @@ else
 	run rm -rf "$CLOUD_INSTALL"/config.xml 
 fi
 run cp -r "$CLOUD_COMPILE"/projects/$OS-gmake/bin/release/* "$CLOUD_INSTALL"
-echo Done!
 
 exit 0
