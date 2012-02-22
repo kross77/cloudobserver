@@ -70,6 +70,7 @@ JOBS=`grep ^processor /proc/cpuinfo | wc -l`
 
 CHECKOUT_SOURCE=no
 REBUILD_LIBRARIES=no
+VERBOSE=no
 
 for i in $*
 do
@@ -83,10 +84,14 @@ do
 			echo "  --checkout-source     Checkout latest source from version control system"
 			echo "  --help                Display this information"
 			echo "  --rebuild-libraries   Rebuild all libraries and utilities"
+			echo "  --verbose             Echo all executed commands"
 			exit 0
 			;;
 		--rebuild-libraries	)
 			REBUILD_LIBRARIES=yes
+			;;
+		--verbose			)
+			VERBOSE=yes
 			;;
 	esac
 done
@@ -94,7 +99,9 @@ done
 # Print the command and run it. Exit the script on failure.
 echo_run()
 {
-	echo "$@"
+	if [ "$VERBOSE" = "yes" ]; then
+		echo "$@"
+	fi
 	"$@"
 	result=$?
 	if [ $result -ne 0 ]; then
