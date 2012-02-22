@@ -91,13 +91,14 @@ do
 	esac
 done
 
-echo_run ()
+# Print the command and run it. Exit the script on failure.
+echo_run()
 {
 	echo "$@"
 	"$@"
-	r=$?
-	if test $r -ne 0 ; then
-		exit $r
+	result=$?
+	if [ $result -ne 0 ]; then
+		exit $result
 	fi
 }
 
