@@ -150,6 +150,7 @@ prepare() # 1=SRCFILE 2=COMPILE 3=SRCBASE 4=SRCSITE 5=SRCPATH
 	run mv $3 $2
 }
 
+# Delete existing libraries and utilities if they should be rebuilt.
 if $REBUILD_LIBRARIES; then
 	rm -rf "$CMAKE_INSTALL"
 	rm -rf "$OPENCV_INSTALL"
@@ -158,7 +159,7 @@ if $REBUILD_LIBRARIES; then
 	rm -rf "$PREMAKE_INSTALL"
 fi
 
-# CMake
+# Build CMake utility if necessary.
 if [ ! -d "$CMAKE_INSTALL" ]; then
 	prepare $CMAKE_SRCFILE "$CMAKE_COMPILE" $CMAKE_SRCBASE $CMAKE_SRCSITE $CMAKE_SRCPATH
 	cd "$CMAKE_COMPILE"
@@ -169,7 +170,7 @@ if [ ! -d "$CMAKE_INSTALL" ]; then
 	cd ..
 fi
 
-# OpenCV
+# Build OpenCV libraries if necessary.
 if [ ! -d "$OPENCV_INSTALL" ]; then
 	prepare $OPENCV_SRCFILE "$OPENCV_COMPILE" $OPENCV_SRCBASE $OPENCV_SRCSITE $OPENCV_SRCPATH
 
@@ -245,7 +246,7 @@ if [ ! -d "$OPENCV_INSTALL" ]; then
 	cd ..
 fi
 
-# Boost
+# Build Boost libraries if necessary.
 if [ ! -d "$BOOST_INSTALL" ]; then
 	prepare $BOOST_SRCFILE "$BOOST_COMPILE" $BOOST_SRCBASE $BOOST_SRCSITE $BOOST_SRCPATH
 
@@ -258,7 +259,7 @@ if [ ! -d "$BOOST_INSTALL" ]; then
 	cd ..
 fi
 
-# OpenSSL
+# Build OpenSSL libraries if necessary.
 if [ ! -d "$OPENSSL_INSTALL" ]; then
 	prepare $OPENSSL_SRCFILE "$OPENSSL_COMPILE" $OPENSSL_SRCBASE $OPENSSL_SRCSITE $OPENSSL_SRCPATH
 	
@@ -270,7 +271,7 @@ if [ ! -d "$OPENSSL_INSTALL" ]; then
 	cd ..
 fi
 
-# Premake
+# Build Premake utility if necessary.
 if [ ! -d "$PREMAKE_INSTALL" ]; then
 	prepare $PREMAKE_SRCFILE "$PREMAKE_COMPILE" $PREMAKE_SRCBASE $PREMAKE_SRCSITE $PREMAKE_SRCPATH
 	
@@ -286,12 +287,13 @@ if [ ! -d "$PREMAKE_INSTALL" ]; then
 	cd ..
 fi
 
-# CloudServer
+# Checkout Cloud Server application source code if necessary.
 if $CHECKOUT_SOURCE || [ ! -d "$CLOUD_COMPILE" ]; then
 	run rm -rf "$CLOUD_COMPILE"/
 	run svn checkout https://$CLOUD_SRCSITE/$CLOUD_SRCPATH "$CLOUD_COMPILE"
 fi
 
+# Build Cloud Server application.
 cd "$CLOUD_COMPILE"
 
 if [ ! -e $CLOUD_PREMAKE ]; then
@@ -307,7 +309,7 @@ run make -j$JOBS config=release
 
 cd ../../..
 
-# Install
+# Install Cloud Server application.
 if [ ! -d "$CLOUD_INSTALL" ]; then
 	run mkdir "$CLOUD_INSTALL"
 else
