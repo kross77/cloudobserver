@@ -71,21 +71,19 @@ JOBS=`grep ^processor /proc/cpuinfo | wc -l`
 CHECKOUT_SOURCE=no
 REBUILD_LIBRARIES=no
 
-echo 
-echo --CF autobuild team welcomes you!----------------------------------------------
-echo -------------------------------------------------------------------------------
-echo --This build API:--------------------------------------------------------------
-echo ./cloud_server_net_setup.sh [--checkout-source] [--rebuild-libraries]
-echo -------------------------------------------------------------------------------
-echo Please be patient. Go get yourself a coup of coffee - auto build process can take a long time.
-echo -------------------------------------------------------------------------------
-echo
-
 for i in $*
 do
 	case $i in
 		--checkout-source	)
 			CHECKOUT_SOURCE=yes
+			;;
+		--help				)
+			echo "Usage: cloud-loader-linux.sh [options]"
+			echo "Options:"
+			echo "  --checkout-source     Checkout latest source from version control system"
+			echo "  --help                Display this information"
+			echo "  --rebuild-libraries   Rebuild all libraries and utilities"
+			exit 0
 			;;
 		--rebuild-libraries	)
 			REBUILD_LIBRARIES=yes
