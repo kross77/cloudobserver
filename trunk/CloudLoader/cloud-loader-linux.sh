@@ -1,5 +1,4 @@
 #!/bin/bash
-# requires svn, curl, gcc
 
 # Move to the directory containing the script.
 SOURCE="${BASH_SOURCE[0]}"
