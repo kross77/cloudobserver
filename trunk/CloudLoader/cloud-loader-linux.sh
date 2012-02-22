@@ -1,5 +1,50 @@
 #!/bin/bash
 
+# Print the command and run it. Exit the script on failure.
+run()
+{
+	if $VERBOSE; then
+		echo "$@"
+	fi
+	"$@"
+	result=$?
+	if [ $result -ne 0 ]; then
+		exit $result
+	fi
+}
+
+# Prepare the library or utility by extracting its source to compile directory.
+# Download the source archive if necessary.
+prepare() # 1=SRCFILE 2=COMPILE 3=SRCBASE 4=SRCSITE 5=SRCPATH
+{
+	if [ ! -d $DOWNLOADS ]; then
+		run mkdir -p $DOWNLOADS
+	fi
+	
+	if [ ! -e $DOWNLOADS/$1 ]; then
+		run curl -L http://$4/$5/$1 -o $DOWNLOADS/$1
+	fi
+	
+	case ${1##*.} in
+		bz2 )
+			run tar -xjf $DOWNLOADS/$1
+			;;
+		gz  )
+			run tar -xzf $DOWNLOADS/$1
+			;;
+		zip )
+			run unzip $DOWNLOADS/$1
+			;;
+		*   )
+			echo "Error: unknown archive type."
+			exit 1
+			;;
+	esac
+	
+	run rm -rf $2
+	run mv $3 $2
+}
+
 # Move to the directory containing the script.
 SOURCE="${BASH_SOURCE[0]}"
 while [ -h "$SOURCE" ]; do SOURCE="$(readlink "$SOURCE")"; done
@@ -103,51 +148,6 @@ do
 			;;
 	esac
 done
-
-# Print the command and run it. Exit the script on failure.
-run()
-{
-	if $VERBOSE; then
-		echo "$@"
-	fi
-	"$@"
-	result=$?
-	if [ $result -ne 0 ]; then
-		exit $result
-	fi
-}
-
-# Prepare the library or utility by extracting its source to compile directory.
-# Download the source archive if necessary.
-prepare() # 1=SRCFILE 2=COMPILE 3=SRCBASE 4=SRCSITE 5=SRCPATH
-{
-	if [ ! -d $DOWNLOADS ]; then
-		run mkdir -p $DOWNLOADS
-	fi
-	
-	if [ ! -e $DOWNLOADS/$1 ]; then
-		run curl -L http://$4/$5/$1 -o $DOWNLOADS/$1
-	fi
-	
-	case ${1##*.} in
-		bz2 )
-			run tar -xjf $DOWNLOADS/$1
-			;;
-		gz  )
-			run tar -xzf $DOWNLOADS/$1
-			;;
-		zip )
-			run unzip $DOWNLOADS/$1
-			;;
-		*   )
-			echo "Error: unknown archive type."
-			exit 1
-			;;
-	esac
-	
-	run rm -rf $2
-	run mv $3 $2
-}
 
 # Delete existing libraries and utilities if they should be rebuilt.
 if $REBUILD_LIBRARIES; then
