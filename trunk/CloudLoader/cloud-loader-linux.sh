@@ -297,3 +297,4 @@ fi
 run cp -r "$CLOUD_COMPILE"/projects/$OS-gmake/bin/release/* "$CLOUD_INSTALL"
 
 exit 0
+
