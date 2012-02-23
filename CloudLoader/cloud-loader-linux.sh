@@ -154,6 +154,7 @@ CLOUD_SRCSITE=cloudobserver.googlecode.com
 DOWNLOADS=downloads
 OS=linux
 JOBS=`grep ^processor /proc/cpuinfo | wc -l`
+REVISION='$Revision$'
 
 # Delete existing libraries and utilities if they should be rebuilt.
 if $REBUILD_LIBRARIES; then
