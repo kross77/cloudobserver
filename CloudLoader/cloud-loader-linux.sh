@@ -58,7 +58,7 @@ do
 			CHECKOUT_SOURCE=true
 			;;
 		--help              )
-			echo "Usage: cloud-loader-linux.sh [options]"
+			echo "Usage: `basename $0` [options]"
 			echo "Options:"
 			echo "  --checkout-source     Checkout latest source from version control system"
 			echo "  --help                Display this information"
