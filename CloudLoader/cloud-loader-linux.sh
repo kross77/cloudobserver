@@ -15,6 +15,21 @@ Options:"
 EOF
 }
 
+# Perform a check for a new version of this script.
+checkForUpdates()
+{
+	echo "Checking for updates..."
+	echo "Current version: $LOADER_VERSION.$REVISION"
+	
+	export LC_MESSAGES=C
+	LOADER_URL=http://$LOADER_SRCSITE$LOADER_SRCPATH/$LOADER_SRCFILE
+	LATEST_REVISION=$(svn info $LOADER_URL | grep '^Last Changed Rev:')
+	LATEST_REVISION=${LATEST_REVISION#'Last Changed Rev: '}
+	export -n LC_MESSAGES
+	
+	echo "Latest version: $LOADER_VERSION.$LATEST_REVISION"
+}
+
 # Print the command and run it. Exit the script on failure.
 run()
 {
@@ -81,14 +96,7 @@ for i in $*
 do
 	case $i in
 		--check-for-updates )
-			echo "Checking for updates..."
-			echo "Current version: $LOADER_VERSION.$REVISION"
-			export LC_MESSAGES=C
-			LOADER_URL=http://$LOADER_SRCSITE$LOADER_SRCPATH/$LOADER_SRCFILE
-			LATEST_REVISION=$(svn info $LOADER_URL | grep '^Last Changed Rev:')
-			LATEST_REVISION=${LATEST_REVISION#'Last Changed Rev: '}
-			export -n LC_MESSAGES
-			echo "Latest version: $LOADER_VERSION.$LATEST_REVISION"
+			checkForUpdates
 			if [ $LATEST_REVISION -gt $REVISION ]; then
 				echo "The new version of this script is available."
 			else
