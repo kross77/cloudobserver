@@ -59,6 +59,12 @@ prepare() # 1=SRCFILE 2=COMPILE 3=SRCBASE 4=SRCSITE 5=SRCPATH
 	run mv $3 $2
 }
 
+# Declare variables related to this loader script.
+LOADER_VERSION=0.5.0
+LOADER_SRCFILE=cloud-loader-linux.sh
+LOADER_SRCPATH=/svn/trunk/CloudLoader
+LOADER_SRCSITE=cloudobserver.googlecode.com
+
 # Remember the revision of the script.
 REVISION='$Revision$'
 REVISION=${REVISION#'$Revision: '}
@@ -87,7 +93,7 @@ do
 			VERBOSE=true
 			;;
 		--version           )
-			echo "Cloud Loader 0.5.0.$REVISION"
+			echo "Cloud Loader $LOADER_VERSION.$REVISION"
 			echo "Copyright (C) 2012 Cloud Forever. All rights reserved."
 			exit 0
 			;;
