@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Display usage informations.
+# Display usage information.
 usage()
 {
 	cat << EOF
