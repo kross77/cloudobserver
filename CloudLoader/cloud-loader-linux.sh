@@ -1,5 +1,19 @@
 #!/bin/bash
 
+# Display usage informations.
+usage()
+{
+	cat << EOF
+Usage: `basename $0` [options]"
+Options:"
+  --checkout-source     Checkout latest source from version control system
+  --help                Display this information
+  --rebuild-libraries   Rebuild all libraries and utilities
+  --verbose             Echo all executed commands
+  --version             Display version information
+EOF
+}
+
 # Print the command and run it. Exit the script on failure.
 run()
 {
@@ -63,13 +77,7 @@ do
 			CHECKOUT_SOURCE=true
 			;;
 		--help              )
-			echo "Usage: `basename $0` [options]"
-			echo "Options:"
-			echo "  --checkout-source     Checkout latest source from version control system"
-			echo "  --help                Display this information"
-			echo "  --rebuild-libraries   Rebuild all libraries and utilities"
-			echo "  --verbose             Echo all executed commands"
-			echo "  --version             Display version information"
+			usage
 			exit 0
 			;;
 		--rebuild-libraries )
