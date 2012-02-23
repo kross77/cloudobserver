@@ -45,6 +45,36 @@ prepare() # 1=SRCFILE 2=COMPILE 3=SRCBASE 4=SRCSITE 5=SRCPATH
 	run mv $3 $2
 }
 
+# Declare option variables.
+CHECKOUT_SOURCE=false
+REBUILD_LIBRARIES=false
+VERBOSE=false
+
+# Parse command line arguments.
+for i in $*
+do
+	case $i in
+		--checkout-source   )
+			CHECKOUT_SOURCE=true
+			;;
+		--help              )
+			echo "Usage: cloud-loader-linux.sh [options]"
+			echo "Options:"
+			echo "  --checkout-source     Checkout latest source from version control system"
+			echo "  --help                Display this information"
+			echo "  --rebuild-libraries   Rebuild all libraries and utilities"
+			echo "  --verbose             Echo all executed commands"
+			exit 0
+			;;
+		--rebuild-libraries )
+			REBUILD_LIBRARIES=true
+			;;
+		--verbose           )
+			VERBOSE=true
+			;;
+	esac
+done
+
 # Move to the directory containing the script.
 SOURCE="${BASH_SOURCE[0]}"
 while [ -h "$SOURCE" ]; do SOURCE="$(readlink "$SOURCE")"; done
@@ -120,40 +150,10 @@ ZLIB_SRCFILE=$ZLIB_SRCBASE.tar.bz2
 ZLIB_SRCPATH=/projects/libpng/files/zlib/$ZLIB_VERSION
 ZLIB_SRCSITE=sourceforge.net
 
-# Declare option variables.
-CHECKOUT_SOURCE=false
-REBUILD_LIBRARIES=false
-VERBOSE=false
-
 # Declare other variables.
 DOWNLOADS=downloads
 OS=linux
 JOBS=`grep ^processor /proc/cpuinfo | wc -l`
-
-# Parse command line arguments.
-for i in $*
-do
-	case $i in
-		--checkout-source   )
-			CHECKOUT_SOURCE=true
-			;;
-		--help              )
-			echo "Usage: cloud-loader-linux.sh [options]"
-			echo "Options:"
-			echo "  --checkout-source     Checkout latest source from version control system"
-			echo "  --help                Display this information"
-			echo "  --rebuild-libraries   Rebuild all libraries and utilities"
-			echo "  --verbose             Echo all executed commands"
-			exit 0
-			;;
-		--rebuild-libraries )
-			REBUILD_LIBRARIES=true
-			;;
-		--verbose           )
-			VERBOSE=true
-			;;
-	esac
-done
 
 # Delete existing libraries and utilities if they should be rebuilt.
 if $REBUILD_LIBRARIES; then
