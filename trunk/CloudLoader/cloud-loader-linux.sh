@@ -69,6 +69,7 @@ do
 			echo "  --help                Display this information"
 			echo "  --rebuild-libraries   Rebuild all libraries and utilities"
 			echo "  --verbose             Echo all executed commands"
+			echo "  --version             Display version information"
 			exit 0
 			;;
 		--rebuild-libraries )
@@ -76,6 +77,11 @@ do
 			;;
 		--verbose           )
 			VERBOSE=true
+			;;
+		--version           )
+			echo "Cloud Loader 0.5.0.$REVISION"
+			echo "Copyright (C) 2012 Cloud Forever. All rights reserved."
+			exit 0
 			;;
 	esac
 done
