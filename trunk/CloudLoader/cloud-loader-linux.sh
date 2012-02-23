@@ -4,7 +4,7 @@
 usage()
 {
 	cat << EOF
-Usage: `basename $0` [options]"
+Usage: $(basename $0) [options]"
 Options:"
   --checkout-source     Checkout latest source from version control system
   --help                Display this information
@@ -105,7 +105,7 @@ run mkdir -p $WORKSPACE
 run cd $WORKSPACE
 
 # Remember the workspace directory path.
-WD=`pwd`
+WD=$(pwd)
 
 # Declare variables related to CMake utility.
 CMAKE_VERSION=2.8.6
@@ -172,7 +172,7 @@ CLOUD_SRCSITE=cloudobserver.googlecode.com
 # Declare other variables.
 DOWNLOADS=downloads
 OS=linux
-JOBS=`grep ^processor /proc/cpuinfo | wc -l`
+JOBS=$(grep ^processor /proc/cpuinfo | wc -l)
 
 # Delete existing libraries and utilities if they should be rebuilt.
 if $REBUILD_LIBRARIES; then
@@ -221,7 +221,7 @@ if [ ! -d "$OPENCV_INSTALL" ]; then
 	prepare $OPENCV_SRCFILE "$OPENCV_COMPILE" $OPENCV_SRCBASE $OPENCV_SRCSITE $OPENCV_SRCPATH
 	prepare $ZLIB_SRCFILE "$OPENCV_ZLIBSRC" $ZLIB_SRCBASE $ZLIB_SRCSITE $ZLIB_SRCPATH
 	run cd "$OPENCV_COMPILE"
-	run cp `echo "$OPENCV_ZLIBSRC"/*.[ch]` ./3rdparty/zlib
+	run cp $(echo "$OPENCV_ZLIBSRC"/*.[ch]) ./3rdparty/zlib
 	# Adding the following option:
 	#   -DEXECUTABLE_OUTPUT_PATH="$OPENCV_INSTALL"/bin
 	# to the CMake call leads to an error during the build
