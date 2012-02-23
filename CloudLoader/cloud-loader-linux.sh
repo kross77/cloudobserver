@@ -117,8 +117,8 @@ PREMAKE_SRCSITE=surfnet.dl.sourceforge.net
 ZLIB_VERSION=1.2.6
 ZLIB_SRCBASE=zlib-$ZLIB_VERSION
 ZLIB_SRCFILE=$ZLIB_SRCBASE.tar.bz2
-ZLIB_SRCPATH=/
-ZLIB_SRCSITE=zlib.net
+ZLIB_SRCPATH=/project/libpng/zlib/$ZLIB_VERSION
+ZLIB_SRCSITE=surfnet.dl.sourceforge.net
 
 # Declare option variables.
 CHECKOUT_SOURCE=false
