@@ -64,8 +64,8 @@ BOOST_COMPILE="$WD"/boost-src
 BOOST_INSTALL="$WD"/boost
 BOOST_SRCBASE=boost_${BOOST_VERSION//./_}
 BOOST_SRCFILE=$BOOST_SRCBASE.tar.bz2
-BOOST_SRCPATH=/project/boost/boost/$BOOST_VERSION
-BOOST_SRCSITE=surfnet.dl.sourceforge.net
+BOOST_SRCPATH=/projects/boost/files/boost/$BOOST_VERSION
+BOOST_SRCSITE=sourceforge.net
 BOOST_ZLIBSRC="$BOOST_COMPILE"/zlib-src
 
 # Declare variables related to Cloud Server application.
@@ -91,8 +91,8 @@ OPENCV_COMPILE="$WD"/opencv-src
 OPENCV_INSTALL="$WD"/opencv
 OPENCV_SRCBASE=OpenCV-$OPENCV_VERSION
 OPENCV_SRCFILE="$OPENCV_SRCBASE"a.tar.bz2 # note the 'a' character (it's 2.3.1a)
-OPENCV_SRCPATH=/project/opencvlibrary/opencv-unix/$OPENCV_VERSION
-OPENCV_SRCSITE=surfnet.dl.sourceforge.net
+OPENCV_SRCPATH=/projects/opencvlibrary/files/opencv-unix/$OPENCV_VERSION
+OPENCV_SRCSITE=sourceforge.net
 OPENCV_ZLIBSRC="$OPENCV_COMPILE"/zlib-src
 
 # Declare variables related to OpenSSL libraries.
@@ -110,15 +110,15 @@ PREMAKE_COMPILE="$WD"/premake-src
 PREMAKE_INSTALL="$WD"/premake
 PREMAKE_SRCBASE=premake-$PREMAKE_VERSION
 PREMAKE_SRCFILE=$PREMAKE_SRCBASE-src.zip
-PREMAKE_SRCPATH=/project/premake/Premake/$PREMAKE_VERSION
-PREMAKE_SRCSITE=surfnet.dl.sourceforge.net
+PREMAKE_SRCPATH=/projects/premake/files/Premake/$PREMAKE_VERSION
+PREMAKE_SRCSITE=sourceforge.net
 
 # Declare variables related to zlib library.
 ZLIB_VERSION=1.2.6
 ZLIB_SRCBASE=zlib-$ZLIB_VERSION
 ZLIB_SRCFILE=$ZLIB_SRCBASE.tar.bz2
-ZLIB_SRCPATH=/project/libpng/zlib/$ZLIB_VERSION
-ZLIB_SRCSITE=surfnet.dl.sourceforge.net
+ZLIB_SRCPATH=/projects/libpng/files/zlib/$ZLIB_VERSION
+ZLIB_SRCSITE=sourceforge.net
 
 # Declare option variables.
 CHECKOUT_SOURCE=false
