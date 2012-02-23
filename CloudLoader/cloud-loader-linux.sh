@@ -171,6 +171,7 @@ if [ ! -d "$CMAKE_INSTALL" ]; then
 	run ./bootstrap --parallel=$JOBS --prefix="$CMAKE_INSTALL"
 	run make -j$JOBS install
 	run cd $WD
+	run rm -rf "$CMAKE_COMPILE"
 fi
 
 # Build Premake utility if necessary.
@@ -182,6 +183,7 @@ if [ ! -d "$PREMAKE_INSTALL" ]; then
 	run mkdir -p "$PREMAKE_INSTALL"/bin
 	run cp bin/release/premake4 "$PREMAKE_INSTALL"/bin
 	run cd $WD
+	run rm -rf "$PREMAKE_COMPILE"
 fi
 
 # Build Boost libraries if necessary.
@@ -192,6 +194,7 @@ if [ ! -d "$BOOST_INSTALL" ]; then
 	run ./bootstrap.sh
 	run ./b2 -j$JOBS -d0 --with-thread --with-system --with-filesystem --with-serialization --with-program_options --with-regex --with-date_time --with-iostreams -sZLIB_SOURCE="$BOOST_ZLIBSRC" -sNO_BZIP2=1 cflags=-fPIC cxxflags=-fPIC link=static --prefix="$BOOST_INSTALL" release install
 	run cd $WD
+	run rm -rf "$BOOST_COMPILE"
 fi
 
 # Build OpenCV libraries if necessary.
@@ -266,6 +269,7 @@ if [ ! -d "$OPENCV_INSTALL" ]; then
 	run make -j$JOBS install
 	run cp "$OPENCV_INSTALL"/share/OpenCV/3rdparty/lib/* "$OPENCV_INSTALL"/lib
 	run cd $WD
+	run rm -rf "$OPENCV_COMPILE"
 fi
 
 # Build OpenSSL libraries if necessary.
@@ -275,6 +279,7 @@ if [ ! -d "$OPENSSL_INSTALL" ]; then
 	run ./config shared no-asm --prefix="$OPENSSL_INSTALL" --openssldir="$OPENSSL_INSTALL"/share
 	run make install
 	run cd $WD
+	run rm -rf "$OPENSSL_COMPILE"
 fi
 
 # Checkout Cloud Server application source code if necessary.
@@ -302,6 +307,7 @@ else
 	run rm -rf "$CLOUD_INSTALL"/config.xml
 fi
 run cp -r "$CLOUD_COMPILE"/projects/$OS-gmake/bin/release/* "$CLOUD_INSTALL"
+run rm -rf "$CLOUD_COMPILE"
 
 exit 0
 
