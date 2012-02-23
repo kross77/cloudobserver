@@ -45,6 +45,9 @@ prepare() # 1=SRCFILE 2=COMPILE 3=SRCBASE 4=SRCSITE 5=SRCPATH
 	run mv $3 $2
 }
 
+# Remember the revision of the script.
+REVISION='$Revision$'
+
 # Declare option variables.
 CHECKOUT_SOURCE=false
 REBUILD_LIBRARIES=false
@@ -154,7 +157,6 @@ CLOUD_SRCSITE=cloudobserver.googlecode.com
 DOWNLOADS=downloads
 OS=linux
 JOBS=`grep ^processor /proc/cpuinfo | wc -l`
-REVISION='$Revision$'
 
 # Delete existing libraries and utilities if they should be rebuilt.
 if $REBUILD_LIBRARIES; then
