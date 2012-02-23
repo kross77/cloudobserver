@@ -22,7 +22,7 @@ prepare() # 1=SRCFILE 2=COMPILE 3=SRCBASE 4=SRCSITE 5=SRCPATH
 	fi
 	
 	if [ ! -e $DOWNLOADS/$1 ]; then
-		run curl -L http://$4$5$1 -o $DOWNLOADS/$1
+		run curl -L http://$4$5/$1 -o $DOWNLOADS/$1
 	fi
 	
 	case ${1##*.} in
@@ -64,7 +64,7 @@ BOOST_COMPILE="$WD"/boost-src
 BOOST_INSTALL="$WD"/boost
 BOOST_SRCBASE=boost_${BOOST_VERSION//./_}
 BOOST_SRCFILE=$BOOST_SRCBASE.tar.bz2
-BOOST_SRCPATH=/project/boost/boost/$BOOST_VERSION/
+BOOST_SRCPATH=/project/boost/boost/$BOOST_VERSION
 BOOST_SRCSITE=surfnet.dl.sourceforge.net
 BOOST_ZLIBSRC="$BOOST_COMPILE"/zlib-src
 
@@ -73,7 +73,7 @@ CLOUD_COMPILE="$WD"/cloudserver-src
 CLOUD_INSTALL="$WD"/install-dir
 CLOUD_PREMAKE=build.sh
 CLOUD_SRCBASE=CloudServer
-CLOUD_SRCPATH=/svn/trunk/$CLOUD_SRCBASE/
+CLOUD_SRCPATH=/svn/trunk/$CLOUD_SRCBASE
 CLOUD_SRCSITE=cloudobserver.googlecode.com
 
 # Declare variables related to CMake utility.
@@ -82,7 +82,7 @@ CMAKE_COMPILE="$WD"/cmake-src
 CMAKE_INSTALL="$WD"/cmake
 CMAKE_SRCBASE=cmake-$CMAKE_VERSION
 CMAKE_SRCFILE=$CMAKE_SRCBASE.tar.gz
-CMAKE_SRCPATH=/files/v${CMAKE_VERSION%.*}/
+CMAKE_SRCPATH=/files/v${CMAKE_VERSION%.*}
 CMAKE_SRCSITE=www.cmake.org
 
 # Declare variables related to OpenCV libraries.
@@ -91,7 +91,7 @@ OPENCV_COMPILE="$WD"/opencv-src
 OPENCV_INSTALL="$WD"/opencv
 OPENCV_SRCBASE=OpenCV-$OPENCV_VERSION
 OPENCV_SRCFILE="$OPENCV_SRCBASE"a.tar.bz2 # note the 'a' character (it's 2.3.1a)
-OPENCV_SRCPATH=/project/opencvlibrary/opencv-unix/$OPENCV_VERSION/
+OPENCV_SRCPATH=/project/opencvlibrary/opencv-unix/$OPENCV_VERSION
 OPENCV_SRCSITE=surfnet.dl.sourceforge.net
 OPENCV_ZLIBSRC="$OPENCV_COMPILE"/zlib-src
 
@@ -101,7 +101,7 @@ OPENSSL_COMPILE="$WD"/openssl-src
 OPENSSL_INSTALL="$WD"/openssl
 OPENSSL_SRCBASE=openssl-$OPENSSL_VERSION
 OPENSSL_SRCFILE=$OPENSSL_SRCBASE.tar.gz
-OPENSSL_SRCPATH=/source/
+OPENSSL_SRCPATH=/source
 OPENSSL_SRCSITE=www.openssl.org
 
 # Declare variables related to Premake utility.
@@ -110,7 +110,7 @@ PREMAKE_COMPILE="$WD"/premake-src
 PREMAKE_INSTALL="$WD"/premake
 PREMAKE_SRCBASE=premake-$PREMAKE_VERSION
 PREMAKE_SRCFILE=$PREMAKE_SRCBASE-src.zip
-PREMAKE_SRCPATH=/project/premake/Premake/$PREMAKE_VERSION/
+PREMAKE_SRCPATH=/project/premake/Premake/$PREMAKE_VERSION
 PREMAKE_SRCSITE=surfnet.dl.sourceforge.net
 
 # Declare variables related to zlib library.
