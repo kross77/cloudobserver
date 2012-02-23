@@ -173,6 +173,27 @@ if [ ! -d "$CMAKE_INSTALL" ]; then
 	run cd $WD
 fi
 
+# Build Premake utility if necessary.
+if [ ! -d "$PREMAKE_INSTALL" ]; then
+	prepare $PREMAKE_SRCFILE "$PREMAKE_COMPILE" $PREMAKE_SRCBASE $PREMAKE_SRCSITE $PREMAKE_SRCPATH
+	run cd "$PREMAKE_COMPILE"/build/gmake.unix
+	run make -j$JOBS config=release
+	run cd ../..
+	run mkdir -p "$PREMAKE_INSTALL"/bin
+	run cp bin/release/premake4 "$PREMAKE_INSTALL"/bin
+	run cd $WD
+fi
+
+# Build Boost libraries if necessary.
+if [ ! -d "$BOOST_INSTALL" ]; then
+	prepare $BOOST_SRCFILE "$BOOST_COMPILE" $BOOST_SRCBASE $BOOST_SRCSITE $BOOST_SRCPATH
+	prepare $ZLIB_SRCFILE "$BOOST_ZLIBSRC" $ZLIB_SRCBASE $ZLIB_SRCSITE $ZLIB_SRCPATH
+	run cd "$BOOST_COMPILE"
+	run ./bootstrap.sh
+	run ./b2 -j$JOBS -d0 --with-thread --with-system --with-filesystem --with-serialization --with-program_options --with-regex --with-date_time --with-iostreams -sZLIB_SOURCE="$BOOST_ZLIBSRC" -sNO_BZIP2=1 cflags=-fPIC cxxflags=-fPIC link=static --prefix="$BOOST_INSTALL" release install
+	run cd $WD
+fi
+
 # Build OpenCV libraries if necessary.
 if [ ! -d "$OPENCV_INSTALL" ]; then
 	prepare $OPENCV_SRCFILE "$OPENCV_COMPILE" $OPENCV_SRCBASE $OPENCV_SRCSITE $OPENCV_SRCPATH
@@ -247,33 +268,12 @@ if [ ! -d "$OPENCV_INSTALL" ]; then
 	run cd $WD
 fi
 
-# Build Boost libraries if necessary.
-if [ ! -d "$BOOST_INSTALL" ]; then
-	prepare $BOOST_SRCFILE "$BOOST_COMPILE" $BOOST_SRCBASE $BOOST_SRCSITE $BOOST_SRCPATH
-	prepare $ZLIB_SRCFILE "$BOOST_ZLIBSRC" $ZLIB_SRCBASE $ZLIB_SRCSITE $ZLIB_SRCPATH
-	run cd "$BOOST_COMPILE"
-	run ./bootstrap.sh
-	run ./b2 -j$JOBS -d0 --with-thread --with-system --with-filesystem --with-serialization --with-program_options --with-regex --with-date_time --with-iostreams -sZLIB_SOURCE="$BOOST_ZLIBSRC" -sNO_BZIP2=1 cflags=-fPIC cxxflags=-fPIC link=static --prefix="$BOOST_INSTALL" release install
-	run cd $WD
-fi
-
 # Build OpenSSL libraries if necessary.
 if [ ! -d "$OPENSSL_INSTALL" ]; then
 	prepare $OPENSSL_SRCFILE "$OPENSSL_COMPILE" $OPENSSL_SRCBASE $OPENSSL_SRCSITE $OPENSSL_SRCPATH
 	run cd "$OPENSSL_COMPILE"
 	run ./config shared no-asm --prefix="$OPENSSL_INSTALL" --openssldir="$OPENSSL_INSTALL"/share
 	run make install
-	run cd $WD
-fi
-
-# Build Premake utility if necessary.
-if [ ! -d "$PREMAKE_INSTALL" ]; then
-	prepare $PREMAKE_SRCFILE "$PREMAKE_COMPILE" $PREMAKE_SRCBASE $PREMAKE_SRCSITE $PREMAKE_SRCPATH
-	run cd "$PREMAKE_COMPILE"/build/gmake.unix
-	run make -j$JOBS config=release
-	run cd ../..
-	run mkdir -p "$PREMAKE_INSTALL"/bin
-	run cp bin/release/premake4 "$PREMAKE_INSTALL"/bin
 	run cd $WD
 fi
 
