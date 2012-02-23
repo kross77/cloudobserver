@@ -88,6 +88,24 @@ run cd $WORKSPACE
 # Remember the workspace directory path.
 WD=`pwd`
 
+# Declare variables related to CMake utility.
+CMAKE_VERSION=2.8.6
+CMAKE_COMPILE="$WD"/cmake-src
+CMAKE_INSTALL="$WD"/cmake
+CMAKE_SRCBASE=cmake-$CMAKE_VERSION
+CMAKE_SRCFILE=$CMAKE_SRCBASE.tar.gz
+CMAKE_SRCPATH=/files/v${CMAKE_VERSION%.*}
+CMAKE_SRCSITE=www.cmake.org
+
+# Declare variables related to Premake utility.
+PREMAKE_VERSION=4.3
+PREMAKE_COMPILE="$WD"/premake-src
+PREMAKE_INSTALL="$WD"/premake
+PREMAKE_SRCBASE=premake-$PREMAKE_VERSION
+PREMAKE_SRCFILE=$PREMAKE_SRCBASE-src.zip
+PREMAKE_SRCPATH=/projects/premake/files/Premake/$PREMAKE_VERSION
+PREMAKE_SRCSITE=sourceforge.net
+
 # Declare variables related to Boost libraries.
 BOOST_VERSION=1.47.0
 BOOST_COMPILE="$WD"/boost-src
@@ -97,23 +115,6 @@ BOOST_SRCFILE=$BOOST_SRCBASE.tar.bz2
 BOOST_SRCPATH=/projects/boost/files/boost/$BOOST_VERSION
 BOOST_SRCSITE=sourceforge.net
 BOOST_ZLIBSRC="$BOOST_COMPILE"/zlib-src
-
-# Declare variables related to Cloud Server application.
-CLOUD_COMPILE="$WD"/cloudserver-src
-CLOUD_INSTALL="$WD"/install-dir
-CLOUD_PREMAKE=build.sh
-CLOUD_SRCBASE=CloudServer
-CLOUD_SRCPATH=/svn/trunk/$CLOUD_SRCBASE
-CLOUD_SRCSITE=cloudobserver.googlecode.com
-
-# Declare variables related to CMake utility.
-CMAKE_VERSION=2.8.6
-CMAKE_COMPILE="$WD"/cmake-src
-CMAKE_INSTALL="$WD"/cmake
-CMAKE_SRCBASE=cmake-$CMAKE_VERSION
-CMAKE_SRCFILE=$CMAKE_SRCBASE.tar.gz
-CMAKE_SRCPATH=/files/v${CMAKE_VERSION%.*}
-CMAKE_SRCSITE=www.cmake.org
 
 # Declare variables related to OpenCV libraries.
 OPENCV_VERSION=2.3.1
@@ -134,21 +135,20 @@ OPENSSL_SRCFILE=$OPENSSL_SRCBASE.tar.gz
 OPENSSL_SRCPATH=/source
 OPENSSL_SRCSITE=www.openssl.org
 
-# Declare variables related to Premake utility.
-PREMAKE_VERSION=4.3
-PREMAKE_COMPILE="$WD"/premake-src
-PREMAKE_INSTALL="$WD"/premake
-PREMAKE_SRCBASE=premake-$PREMAKE_VERSION
-PREMAKE_SRCFILE=$PREMAKE_SRCBASE-src.zip
-PREMAKE_SRCPATH=/projects/premake/files/Premake/$PREMAKE_VERSION
-PREMAKE_SRCSITE=sourceforge.net
-
 # Declare variables related to zlib library.
 ZLIB_VERSION=1.2.6
 ZLIB_SRCBASE=zlib-$ZLIB_VERSION
 ZLIB_SRCFILE=$ZLIB_SRCBASE.tar.bz2
 ZLIB_SRCPATH=/projects/libpng/files/zlib/$ZLIB_VERSION
 ZLIB_SRCSITE=sourceforge.net
+
+# Declare variables related to Cloud Server application.
+CLOUD_COMPILE="$WD"/cloudserver-src
+CLOUD_INSTALL="$WD"/install-dir
+CLOUD_PREMAKE=build.sh
+CLOUD_SRCBASE=CloudServer
+CLOUD_SRCPATH=/svn/trunk/$CLOUD_SRCBASE
+CLOUD_SRCSITE=cloudobserver.googlecode.com
 
 # Declare other variables.
 DOWNLOADS=downloads
