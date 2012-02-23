@@ -61,8 +61,8 @@ prepare() # 1=SRCFILE 2=COMPILE 3=SRCBASE 4=SRCSITE 5=SRCPATH
 
 # Remember the revision of the script.
 REVISION='$Revision$'
-REVISION=${REVISION#\$Revision: }
-REVISION=${REVISION% \$}
+REVISION=${REVISION#'$Revision: '}
+REVISION=${REVISION%' $'}
 
 # Declare option variables.
 CHECKOUT_SOURCE=false
