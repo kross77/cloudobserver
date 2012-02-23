@@ -6,6 +6,7 @@ usage()
 	cat << EOF
 Usage: $(basename $0) [options]"
 Options:"
+  --check-for-updates   Check if a new version of this script is available
   --checkout-source     Checkout latest source from version control system
   --help                Display this information
   --rebuild-libraries   Rebuild all libraries and utilities
@@ -79,6 +80,22 @@ VERBOSE=false
 for i in $*
 do
 	case $i in
+		--check-for-updates )
+			echo "Checking for updates..."
+			echo "Current version: $LOADER_VERSION.$REVISION"
+			export LC_MESSAGES=C
+			LOADER_URL=http://$LOADER_SRCSITE$LOADER_SRCPATH/$LOADER_SRCFILE
+			LATEST_REVISION=$(svn info $LOADER_URL | grep '^Last Changed Rev:')
+			LATEST_REVISION=${LATEST_REVISION#'Last Changed Rev: '}
+			export -n LC_MESSAGES
+			echo "Latest version: $LOADER_VERSION.$LATEST_REVISION"
+			if [ $LATEST_REVISION -gt $REVISION ]; then
+				echo "The new version of this script is available."
+			else
+				echo "You are using the most recent version of this script."
+			fi
+			exit 0
+			;;
 		--checkout-source   )
 			CHECKOUT_SOURCE=true
 			;;
