@@ -66,6 +66,7 @@ BOOST_SRCBASE=boost_${BOOST_VERSION//./_}
 BOOST_SRCFILE=$BOOST_SRCBASE.tar.bz2
 BOOST_SRCPATH=/project/boost/boost/$BOOST_VERSION/
 BOOST_SRCSITE=surfnet.dl.sourceforge.net
+BOOST_ZLIBSRC="$BOOST_COMPILE"/zlib-src
 
 # Declare variables related to Cloud Server application.
 CLOUD_COMPILE="$WD"/cloudserver-src
@@ -92,6 +93,7 @@ OPENCV_SRCBASE=OpenCV-$OPENCV_VERSION
 OPENCV_SRCFILE="$OPENCV_SRCBASE"a.tar.bz2 # note the 'a' character (it's 2.3.1a)
 OPENCV_SRCPATH=/project/opencvlibrary/opencv-unix/$OPENCV_VERSION/
 OPENCV_SRCSITE=surfnet.dl.sourceforge.net
+OPENCV_ZLIBSRC="$OPENCV_COMPILE"/zlib-src
 
 # Declare variables related to OpenSSL libraries.
 OPENSSL_VERSION=1.0.0d
@@ -112,7 +114,11 @@ PREMAKE_SRCPATH=/project/premake/Premake/$PREMAKE_VERSION/
 PREMAKE_SRCSITE=surfnet.dl.sourceforge.net
 
 # Declare variables related to zlib library.
-ZLIB_COMPILE="$OPENCV_COMPILE"/3rdparty/zlib
+ZLIB_VERSION=1.2.6
+ZLIB_SRCBASE=zlib-$ZLIB_VERSION
+ZLIB_SRCFILE=$ZLIB_SRCBASE.tar.bz2
+ZLIB_SRCPATH=/
+ZLIB_SRCSITE=zlib.net
 
 # Declare option variables.
 CHECKOUT_SOURCE=false
@@ -170,7 +176,9 @@ fi
 # Build OpenCV libraries if necessary.
 if [ ! -d "$OPENCV_INSTALL" ]; then
 	prepare $OPENCV_SRCFILE "$OPENCV_COMPILE" $OPENCV_SRCBASE $OPENCV_SRCSITE $OPENCV_SRCPATH
+	prepare $ZLIB_SRCFILE "$OPENCV_ZLIBSRC" $ZLIB_SRCBASE $ZLIB_SRCSITE $ZLIB_SRCPATH
 	run cd "$OPENCV_COMPILE"
+	run cp `echo "$OPENCV_ZLIBSRC"/*.[ch]` ./3rdparty/zlib
 	# Adding the following option:
 	#   -DEXECUTABLE_OUTPUT_PATH="$OPENCV_INSTALL"/bin
 	# to the CMake call leads to an error during the build
@@ -242,9 +250,10 @@ fi
 # Build Boost libraries if necessary.
 if [ ! -d "$BOOST_INSTALL" ]; then
 	prepare $BOOST_SRCFILE "$BOOST_COMPILE" $BOOST_SRCBASE $BOOST_SRCSITE $BOOST_SRCPATH
+	prepare $ZLIB_SRCFILE "$BOOST_ZLIBSRC" $ZLIB_SRCBASE $ZLIB_SRCSITE $ZLIB_SRCPATH
 	run cd "$BOOST_COMPILE"
 	run ./bootstrap.sh
-	run ./b2 -j$JOBS -d0 --with-thread --with-system --with-filesystem --with-serialization --with-program_options --with-regex --with-date_time --with-iostreams -sZLIB_SOURCE="$ZLIB_COMPILE" -sNO_BZIP2=1 cflags=-fPIC cxxflags=-fPIC link=static --prefix="$BOOST_INSTALL" release install
+	run ./b2 -j$JOBS -d0 --with-thread --with-system --with-filesystem --with-serialization --with-program_options --with-regex --with-date_time --with-iostreams -sZLIB_SOURCE="$BOOST_ZLIBSRC" -sNO_BZIP2=1 cflags=-fPIC cxxflags=-fPIC link=static --prefix="$BOOST_INSTALL" release install
 	run cd $WD
 fi
 
