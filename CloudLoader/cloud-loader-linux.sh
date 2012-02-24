@@ -83,6 +83,11 @@ LOADER_SRCSITE=cloudobserver.googlecode.com
 
 # Remember the revision of the script.
 REVISION='$Revision$'
+if [ "$REVISION" != "\$Revision\$" ]; then
+	REVISION_DEFINED=true
+else
+	REVISION_DEFINED=false
+fi
 REVISION=${REVISION#'$Revision: '}
 REVISION=${REVISION%' $'}
 
@@ -118,7 +123,11 @@ do
 			VERBOSE=true
 			;;
 		--version           )
-			echo "Cloud Loader $LOADER_VERSION.$REVISION"
+			if $REVISION_DEFINED; then
+				echo "Cloud Loader $LOADER_VERSION.$REVISION"
+			else
+				echo "Cloud Loader $LOADER_VERSION [unknown revision]"
+			fi
 			echo "Copyright (C) 2012 Cloud Forever. All rights reserved."
 			exit 0
 			;;
