@@ -47,7 +47,7 @@ selfUpdate()
 	echo -n "[1/7] Downloading the latest version..."
 	svn export $LOADER_URL $SELF.new >& /dev/null
 	if [ $? -ne 0 ]; then
-		echo "                                   [FAIL]"
+		echo "                                 [FAILED]"
 		return 1
 	fi
 	echo "                                     [OK]"
@@ -55,7 +55,7 @@ selfUpdate()
 	echo -n "[2/7] Reading file modes..."
 	OCTAL_MODE=$(stat -c '%a' $SELF)
 	if [ $? -ne 0 ]; then
-		echo "                                               [FAIL]"
+		echo "                                             [FAILED]"
 		return 1
 	fi
 	echo "                                                 [OK]"
@@ -63,7 +63,7 @@ selfUpdate()
 	echo -n "[3/7] Copying file modes..."
 	chmod $OCTAL_MODE $SELF.new
 	if [ $? -ne 0 ]; then
-		echo "                                               [FAIL]"
+		echo "                                             [FAILED]"
 		return 1
 	fi
 	echo "                                                 [OK]"
@@ -76,7 +76,7 @@ echo "                                              [OK]"
 echo -n "[6/7] Replacing old version with the new one..."
 mv $SELF.new $SELF
 if [ $? -ne 0 ]; then
-	echo "                           [FAIL]"
+	echo "                         [FAILED]"
 	echo "Update failed."
 	exit 1
 fi
@@ -85,7 +85,7 @@ echo "                             [OK]"
 echo -n "[7/7] Deleting update script..."
 rm \$0
 if [ $? -ne 0 ]; then
-	echo "                                           [FAIL]"
+	echo "                                         [FAILED]"
 	echo "Update failed."
 	exit 1
 fi
@@ -95,7 +95,7 @@ echo "Update succeeded."
 exit 0
 EOF
 	if [ $? -ne 0 ]; then
-		echo "                                         [FAIL]"
+		echo "                                       [FAILED]"
 		return 1
 	fi
 	echo "                                           [OK]"
@@ -103,7 +103,7 @@ EOF
 	echo -n "[5/7] Running update script..."
 	exec /bin/bash $UPDATER
 	if [ $? -ne 0 ]; then
-		echo "                                            [FAIL]"
+		echo "                                          [FAILED]"
 	fi
 	
 	return 0
