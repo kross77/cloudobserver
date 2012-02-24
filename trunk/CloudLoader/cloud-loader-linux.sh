@@ -158,12 +158,13 @@ LOADER_SRCSITE=cloudobserver.googlecode.com
 # Remember the revision of the script.
 REVISION='$Revision$'
 if [ "$REVISION" != "\$Revision\$" ]; then
+	REVISION=${REVISION#'$Revision: '}
+	REVISION=${REVISION%' $'}
 	REVISION_DEFINED=true
 else
+	REVISION=0
 	REVISION_DEFINED=false
 fi
-REVISION=${REVISION#'$Revision: '}
-REVISION=${REVISION%' $'}
 
 # Declare option variables.
 CHECKOUT_SOURCE=false
