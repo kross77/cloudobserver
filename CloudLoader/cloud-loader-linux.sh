@@ -226,6 +226,11 @@ do
 			echo "Copyright (C) 2012 Cloud Forever. All rights reserved."
 			exit 0
 			;;
+		*                   )
+			echo "Unknown option: '$i'"
+			echo "Type '$0 --help' to display usage information."
+			exit 1
+			;;
 	esac
 done
 
