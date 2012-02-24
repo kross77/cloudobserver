@@ -245,7 +245,7 @@ do
 		--check-for-updates )
 			checkForUpdates
 			if [ $LATEST_REVISION -gt $REVISION ]; then
-				echo "${RED}The new version of this script is available.${NORMAL}"
+				echo "${RED}New version of this script is available.${NORMAL}"
 				echo "${CYAN}Type '$0 --self-update' to update it.${NORMAL}"
 			else
 				echo "${GREEN}You are using the most recent version of this script.${NORMAL}"
