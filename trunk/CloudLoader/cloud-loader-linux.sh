@@ -20,7 +20,12 @@ EOF
 checkForUpdates()
 {
 	echo "Checking for updates..."
-	echo "Current version: $LOADER_VERSION.$REVISION"
+	echo -n "Current version: $LOADER_VERSION"
+	if $REVISION_DEFINED; then
+		echo ".$REVISION"
+	else
+		echo " [unknown revision]"
+	fi
 	
 	export LC_MESSAGES=C
 	LOADER_URL=http://$LOADER_SRCSITE$LOADER_SRCPATH/$LOADER_SRCFILE
