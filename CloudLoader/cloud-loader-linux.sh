@@ -184,6 +184,7 @@ do
 			checkForUpdates
 			if [ $LATEST_REVISION -gt $REVISION ]; then
 				echo "The new version of this script is available."
+				echo "Type '$0 --self-update' to update it."
 			else
 				echo "You are using the most recent version of this script."
 			fi
