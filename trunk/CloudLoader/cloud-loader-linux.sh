@@ -22,7 +22,7 @@ checkForUpdates()
 	echo "Checking for updates..."
 	echo -n "Current version: $LOADER_VERSION"
 	if $REVISION_DEFINED; then
-		echo ".$REVISION"
+		echo "-$REVISION"
 	else
 		echo " [unknown revision]"
 	fi
@@ -33,7 +33,7 @@ checkForUpdates()
 	LATEST_REVISION=${LATEST_REVISION#'Last Changed Rev: '}
 	export -n LC_MESSAGES
 	
-	echo "Latest version: $LOADER_VERSION.$LATEST_REVISION"
+	echo "Latest version: $LOADER_VERSION-$LATEST_REVISION"
 }
 
 # Update the script to the latest available version.
@@ -218,7 +218,7 @@ do
 		--version           )
 			echo -n "Cloud Loader $LOADER_VERSION"
 			if $REVISION_DEFINED; then
-				echo ".$REVISION"
+				echo "-$REVISION"
 			else
 				echo " [unknown revision]"
 			fi
