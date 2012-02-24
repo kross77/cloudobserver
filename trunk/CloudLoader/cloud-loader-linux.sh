@@ -10,6 +10,7 @@ Options:"
   --checkout-source     Checkout latest source from version control system
   --help                Display this information
   --rebuild-libraries   Rebuild all libraries and utilities
+  --self-update         Update this script to the latest available version
   --verbose             Echo all executed commands
   --version             Display version information
 EOF
@@ -28,6 +29,79 @@ checkForUpdates()
 	export -n LC_MESSAGES
 	
 	echo "Latest version: $LOADER_VERSION.$LATEST_REVISION"
+}
+
+# Update the script to the latest available version.
+selfUpdate()
+{
+	echo "Updating the script..."
+	
+	SELF=$(basename "$0")
+	UPDATER=cloud-updater-linux.sh
+	
+	echo -n "[1/7] Downloading the latest version..."
+	svn export $LOADER_URL $SELF.new >& /dev/null
+	if [ $? -ne 0 ]; then
+		echo "                                   [FAIL]"
+		return 1
+	fi
+	echo "                                     [OK]"
+	
+	echo -n "[2/7] Reading file modes..."
+	OCTAL_MODE=$(stat -c '%a' $SELF)
+	if [ $? -ne 0 ]; then
+		echo "                                               [FAIL]"
+		return 1
+	fi
+	echo "                                                 [OK]"
+	
+	echo -n "[3/7] Copying file modes..."
+	chmod $OCTAL_MODE $SELF.new
+	if [ $? -ne 0 ]; then
+		echo "                                               [FAIL]"
+		return 1
+	fi
+	echo "                                                 [OK]"
+	
+	echo -n "[4/7] Generating update script..."
+	cat > $UPDATER << EOF
+#!/bin/bash
+echo "                                              [OK]"
+
+echo -n "[6/7] Replacing old version with the new one..."
+mv $SELF.new $SELF
+if [ $? -ne 0 ]; then
+	echo "                           [FAIL]"
+	echo "Update failed."
+	exit 1
+fi
+echo "                             [OK]"
+
+echo -n "[7/7] Deleting update script..."
+rm \$0
+if [ $? -ne 0 ]; then
+	echo "                                           [FAIL]"
+	echo "Update failed."
+	exit 1
+fi
+echo "                                             [OK]"
+
+echo "Update succeeded."
+exit 0
+EOF
+	if [ $? -ne 0 ]; then
+		echo "                                         [FAIL]"
+		return 1
+	fi
+	echo "                                           [OK]"
+	
+	echo -n "[5/7] Running update script..."
+	exec /bin/bash $UPDATER
+	if [ $? -ne 0 ]; then
+		echo "                                            [FAIL]"
+	fi
+	
+	return 0
 }
 
 # Print the command and run it. Exit the script on failure.
@@ -118,6 +192,19 @@ do
 			;;
 		--rebuild-libraries )
 			REBUILD_LIBRARIES=true
+			;;
+		--self-update       )
+			checkForUpdates
+			if [ $LATEST_REVISION -eq $REVISION ]; then
+				echo "You already use the most recent version of this script."
+				exit 0
+			fi
+			selfUpdate
+			if [ $? -ne 0 ]; then
+				echo "Update failed."
+				exit 1
+			fi
+			exit 0
 			;;
 		--verbose           )
 			VERBOSE=true
