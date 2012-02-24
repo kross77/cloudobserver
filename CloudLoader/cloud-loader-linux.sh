@@ -45,13 +45,14 @@ stageFailed()
 # Perform a check for a new version of this script.
 checkForUpdates()
 {
-	echo "Checking for updates..."
-	echo -n "Current version: $LOADER_VERSION"
+	echo "${CYAN}Checking for updates...${NORMAL}"
+	echo -n "${YELLOW}Current version: ${BLUE}${BOLD}$LOADER_VERSION"
 	if $REVISION_DEFINED; then
-		echo "-$REVISION"
+		echo -n "-$REVISION"
 	else
-		echo " [unknown revision]"
+		echo -n " [unknown revision]"
 	fi
+	echo "${NORMAL}"
 	
 	export LC_MESSAGES=C
 	LOADER_URL=http://$LOADER_SRCSITE$LOADER_SRCPATH/$LOADER_SRCFILE
@@ -59,7 +60,7 @@ checkForUpdates()
 	LATEST_REVISION=${LATEST_REVISION#'Last Changed Rev: '}
 	export -n LC_MESSAGES
 	
-	echo "Latest version: $LOADER_VERSION-$LATEST_REVISION"
+	echo "${YELLOW}Latest version: ${BLUE}${BOLD}$LOADER_VERSION-$LATEST_REVISION${NORMAL}"
 }
 
 # Update the script to the latest available version.
@@ -244,10 +245,10 @@ do
 		--check-for-updates )
 			checkForUpdates
 			if [ $LATEST_REVISION -gt $REVISION ]; then
-				echo "The new version of this script is available."
-				echo "Type '$0 --self-update' to update it."
+				echo "${RED}The new version of this script is available.${NORMAL}"
+				echo "${CYAN}Type '$0 --self-update' to update it.${NORMAL}"
 			else
-				echo "You are using the most recent version of this script."
+				echo "${GREEN}You are using the most recent version of this script.${NORMAL}"
 			fi
 			exit 0
 			;;
