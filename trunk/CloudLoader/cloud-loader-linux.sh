@@ -16,6 +16,30 @@ Options:"
 EOF
 }
 
+setNumberOfStages() # 1 - number of stages
+{
+	STAGES=$1
+	STAGE=0
+}
+
+nextStage() # 1 - stage message
+{
+	STAGE=$[STAGE+1]
+	STAGE_MSG="[$STAGE/$STAGES] $1..."
+	let STAGE_COL=$(tput cols)-${#STAGE_MSG}
+	echo -n "$STAGE_MSG"
+}
+
+stageOK()
+{
+	printf "%${STAGE_COL}s" "[OK]"
+}
+
+stageFailed()
+{
+	printf "%${STAGE_COL}s" "[FAILED]"
+}
+
 # Perform a check for a new version of this script.
 checkForUpdates()
 {
@@ -44,66 +68,87 @@ selfUpdate()
 	SELF=$(basename "$0")
 	UPDATER=cloud-updater-linux.sh
 	
-	echo -n "[1/7] Downloading the latest version..."
+	setNumberOfStages 7
+	nextStage "Downloading the latest version"
 	svn export $LOADER_URL $SELF.new >& /dev/null
 	if [ $? -ne 0 ]; then
-		echo "                                 [FAILED]"
+		stageFailed
 		return 1
 	fi
-	echo "                                     [OK]"
+	stageOK
 	
-	echo -n "[2/7] Reading file modes..."
+	nextStage "Reading file modes"
 	OCTAL_MODE=$(stat -c '%a' $SELF)
 	if [ $? -ne 0 ]; then
-		echo "                                             [FAILED]"
+		stageFailed
 		return 1
 	fi
-	echo "                                                 [OK]"
+	stageOK
 	
-	echo -n "[3/7] Copying file modes..."
+	nextStage "Copying file modes"
 	chmod $OCTAL_MODE $SELF.new
 	if [ $? -ne 0 ]; then
-		echo "                                             [FAILED]"
+		stageFailed
 		return 1
 	fi
-	echo "                                                 [OK]"
+	stageOK
 	
-	echo -n "[4/7] Generating update script..."
+	nextStage "Generating update script"
 	cat > $UPDATER << EOF
 #!/bin/bash
-echo "                                              [OK]"
 
-echo -n "[6/7] Replacing old version with the new one..."
+nextStage() # 1 - stage message
+{
+	STAGE=\$[STAGE+1]
+	STAGE_MSG="[\$STAGE/\$STAGES] \$1..."
+	let STAGE_COL=\$(tput cols)-\${#STAGE_MSG}
+	echo -n "\$STAGE_MSG"
+}
+
+stageOK()
+{
+	printf "%\${STAGE_COL}s" "[OK]"
+}
+
+stageFailed()
+{
+	printf "%\${STAGE_COL}s" "[FAILED]"
+}
+
+stageOK
+
+nextStage "Replacing old version with the new one"
 mv $SELF.new $SELF
 if [ $? -ne 0 ]; then
-	echo "                         [FAILED]"
+	stageFailed
 	echo "Update failed."
 	exit 1
 fi
-echo "                             [OK]"
+stageOK
 
-echo -n "[7/7] Deleting update script..."
+nextStage "Deleting update script"
 rm \$0
 if [ $? -ne 0 ]; then
-	echo "                                         [FAILED]"
+	stageFailed
 	echo "Update failed."
 	exit 1
 fi
-echo "                                             [OK]"
+stageOK
 
 echo "Update succeeded."
 exit 0
 EOF
 	if [ $? -ne 0 ]; then
-		echo "                                       [FAILED]"
+		stageFailed
 		return 1
 	fi
-	echo "                                           [OK]"
+	stageOK
 	
-	echo -n "[5/7] Running update script..."
+	nextStage "Running update script"
+	export STAGE STAGE_COL STAGES
 	exec /bin/bash $UPDATER
 	if [ $? -ne 0 ]; then
-		echo "                                          [FAILED]"
+		stageFailed
 	fi
 	
 	return 0
