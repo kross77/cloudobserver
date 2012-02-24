@@ -24,11 +24,6 @@ setNumberOfStages() # 1 - number of stages
 
 nextStage() # 1 - stage message
 {
-	YELLOW=$(tput setaf 3)
-	BLUE=$(tput setaf 4)
-	BOLD=$(tput bold)
-	NORMAL=$(tput sgr0)
-	
 	STAGE=$[STAGE+1]
 	STAGE_MSG="$YELLOW[$STAGE/$STAGES] $BLUE$BOLD$1...$NORMAL"
 	let STAGE_COL=$(tput cols)-${#STAGE_MSG}+${#YELLOW}+${#BLUE}+${#BOLD}+${#NORMAL}
@@ -37,18 +32,12 @@ nextStage() # 1 - stage message
 
 stageOK()
 {
-	GREEN=$(tput setaf 2)
-	NORMAL=$(tput sgr0)
-	
 	let STAGE_COL=$STAGE_COL+${#GREEN}+${#NORMAL}
 	printf "%${STAGE_COL}s\n" "$GREEN[OK]$NORMAL"
 }
 
 stageFailed()
 {
-	RED=$(tput setaf 1)
-	NORMAL=$(tput sgr0)
-	
 	let STAGE_COL=$STAGE_COL+${#RED}+${#NORMAL}
 	printf "%${STAGE_COL}s\n" "$RED[FAILED]$NORMAL"
 }
@@ -112,11 +101,6 @@ selfUpdate()
 
 nextStage() # 1 - stage message
 {
-	YELLOW=\$(tput setaf 3)
-	BLUE=\$(tput setaf 4)
-	BOLD=\$(tput bold)
-	NORMAL=\$(tput sgr0)
-	
 	STAGE=\$[STAGE+1]
 	STAGE_MSG="\$YELLOW[\$STAGE/\$STAGES] \$BLUE\$BOLD\$1...\$NORMAL"
 	let STAGE_COL=\$(tput cols)-\${#STAGE_MSG}+\${#YELLOW}+\${#BLUE}+\${#BOLD}+\${#NORMAL}
@@ -125,18 +109,12 @@ nextStage() # 1 - stage message
 
 stageOK()
 {
-	GREEN=\$(tput setaf 2)
-	NORMAL=\$(tput sgr0)
-	
 	let STAGE_COL=\$STAGE_COL+\${#GREEN}+\${#NORMAL}
 	printf "%\${STAGE_COL}s\n" "\$GREEN[OK]\$NORMAL"
 }
 
 stageFailed()
 {
-	RED=\$(tput setaf 1)
-	NORMAL=\$(tput sgr0)
-	
 	let STAGE_COL=\$STAGE_COL+\${#RED}+\${#NORMAL}
 	printf "%\${STAGE_COL}s\n" "\$RED[FAILED]\$NORMAL"
 }
@@ -241,6 +219,18 @@ else
 	REVISION=0
 	REVISION_DEFINED=false
 fi
+
+# Declare style variables.
+export NORMAL=$(tput sgr0)
+export BOLD=$(tput bold)
+export BLACK=$(tput setaf 0)
+export RED=$(tput setaf 1)
+export GREEN=$(tput setaf 2)
+export YELLOW=$(tput setaf 3)
+export BLUE=$(tput setaf 4)
+export MAGENTA=$(tput setaf 5)
+export CYAN=$(tput setaf 6)
+export WHITE=$(tput setaf 7)
 
 # Declare option variables.
 CHECKOUT_SOURCE=false
