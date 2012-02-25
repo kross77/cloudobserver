@@ -4,15 +4,15 @@
 usage()
 {
 	cat << EOF
-Usage: $(basename $0) [options]"
-Options:"
-  --check-for-updates   Check if a new version of this script is available
-  --checkout-source     Checkout latest source from version control system
-  --help                Display this information
-  --rebuild-libraries   Rebuild all libraries and utilities
-  --self-update         Update this script to the latest available version
-  --verbose             Echo all executed commands
-  --version             Display version information
+${CYAN}Usage: $(basename $0) [options]${NORMAL}
+${MAGENTA}Options:${NORMAL}
+  ${YELLOW}--check-for-updates   ${BLUE}${BOLD}Check if a new version of this script is available${NORMAL}
+  ${YELLOW}--checkout-source     ${BLUE}${BOLD}Checkout latest source from version control system${NORMAL}
+  ${YELLOW}--help                ${BLUE}${BOLD}Display this information${NORMAL}
+  ${YELLOW}--rebuild-libraries   ${BLUE}${BOLD}Rebuild all libraries and utilities${NORMAL}
+  ${YELLOW}--self-update         ${BLUE}${BOLD}Update this script to the latest available version${NORMAL}
+  ${YELLOW}--verbose             ${BLUE}${BOLD}Echo all executed commands${NORMAL}
+  ${YELLOW}--version             ${BLUE}${BOLD}Display version information${NORMAL}
 EOF
 }
 
