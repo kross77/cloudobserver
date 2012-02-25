@@ -26,7 +26,8 @@
 				}
 			</style>
 		<![endif]-->
-		<link rel="stylesheet" href="css/cf.css">
+		<link rel="stylesheet" href="css/grid.css">
+		<link rel="stylesheet" href="css/cf.css"> 
 		<link rel="stylesheet" href="css/cf.head.panel.css">
 		<!-- End of CF CSS-->
 		
@@ -54,6 +55,9 @@
 
 		<script src="js/jquery.grumble.min.js">
 		</script>
+		
+		<script type="text/javascript" src="js/respond.min.js">								
+		</script>
 		<!-- End Of Public JS-->
 		
 		<!-- CF JS -->
@@ -75,43 +79,45 @@
 </head>
 <body>
 	<div class="pseudo-no-js-heaser"><br/><br/><br/></div>	
-			<div class="loged-in-user" >
-				<a style="text-decoration:none; width:49%">
-					<p id="upload_button" class="butt" style=" position:absolute;  width:49%; right:0;">
-					Upload A File Now! 
-					</p> 
-				</a>
-			
-			<div class="description-box">
-				<h3 class="fun">
-					User Files Service Welcomes You.
-				</h3>
-				<br/>
-				<p style="text-align:left;">
-					It provides you with ability to upload files to the Cloud server. Files can be public or private. Private files are not available to anyone other than you to download, while references to public files can be shared with anyone.
-				</p>
-			
+			<div class="loged-in-user" style="width:100%">
+			<div class="g2">
+				<div class="description-box">
+					<h3 class="fun">
+						User Files Service Welcomes You.
+					</h3>
+					<br/>
+					<p style="text-align:left;">
+						It provides you with ability to upload files to the Cloud server. Files can be public or private. Private files are not available to anyone other than you to download, while references to public files can be shared with anyone.
+					</p>
+				
+				</div>
 			</div>
-			
-			<div id="tabs-fun" class="files-box fun">
-					
-				<ol id="marx-brothers">
-					<div data-template>
-						<ul class="lst">
-						<li class="uf file-{{is_public}}">
-							<a style="text-decoration:none;">
-								<p id="{{href}}" class="butt2" style="color:white;  vertical-align: middle; text-align: center;">
-									{{title}} | {{modified}} | {{type}} | {{size}} | {{_tempo.index}}
-								</p>
-							</a>
+			<div class="g1" >
+				<div style="margin: 5px">
+					<a style="text-decoration:none;">
+						<p id="upload_button" class="butt" >
+						Upload A File Now! 
+						</p> 
+					</a>
+				</div>
+				<div id="tabs-fun" class="files-box fun">		
+					<ol id="marx-brothers">
+						<div data-template>
+							<ul class="lst">
+							<li class="uf file-{{is_public}}">
+								<a style="text-decoration:none;">
+									<p id="{{href}}" class="butt2" style="color:white;  vertical-align: middle; text-align: center;">
+										{{title}} | {{modified}} | {{type}} | {{size}} | {{_tempo.index}}
+									</p>
+								</a>
+							</li>
+							</ul>
+						</div>
+						<li data-template-fallback>
+							Sorry, JavaScript required!
 						</li>
-						</ul>
-					</div>
-					<li data-template-fallback>
-						Sorry, JavaScript required!
-					</li>
-				</ol>
-			</div>
+					</ol>
+				</div>
 			</div>
 			<br/>
 	</body>

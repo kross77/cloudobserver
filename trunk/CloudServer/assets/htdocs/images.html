@@ -29,6 +29,7 @@
 				}
 			  </style>
 		<![endif]-->
+		<link rel="stylesheet" href="css/grid.css">
 		<link rel="stylesheet" href="css/cf.css">
 		<link rel="stylesheet" href="css/cf.head.panel.css">
 		<!-- End of CF CSS-->
@@ -60,6 +61,9 @@
 		
 		<script type="text/javascript" src="js/fancybox/jquery.mousewheel-3.0.6.pack.js"></script>
 		<script type="text/javascript" src="js/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+		
+		<script type="text/javascript" src="js/respond.min.js">								
+		</script>
 	
 		<!-- End Of Public JS-->
 		
@@ -169,36 +173,40 @@
 <body>
 	<div class="pseudo-no-js-heaser"><br/><br/><br/></div>
 			<div class="loged-in-user" >
-				<a style="text-decoration:none; width:49%">
-					<p id="upload_button" class="butt" style=" position:absolute;  width:49%; right:0;">
-					Upload A File Now! 
-					</p> 
-				</a>
-				
-				<div class="description-box">
-					<h3 class="fun">
-						Image Renderer Service Welcomes You.
-					</h3>
-					<br/>
-					<p style="text-align:left;">
-						It shows you a gallery of images you uploaded with User File Service. This servise also allows us to transcode vector and rastr images of diffrent formats and perform resize operations. In future it will show you images in form of a map.
-					</p>
-				
+				<div class="g2">		
+					<div class="description-box">
+						<h3 class="fun">
+							Image Renderer Service Welcomes You.
+						</h3>
+						<br/>
+						<p style="text-align:left;">
+							It shows you a gallery of images you uploaded with User File Service. This servise also allows us to transcode vector and rastr images of diffrent formats and perform resize operations. In future it will show you images in form of a map.
+						</p>
+					
+					</div>
 				</div>
-
-				<div id="tabs-fun" class="files-box fun" style="margin-top:24px;">
-					<ol id="marx-images">
-						<div data-template>
-							<a rel="example_group" class="image_service_url"  href="#{{href}}" real_href="{{real_href}}" title="{{title}}"><p class="image_service_file_name">{{title}}</p></a>                         
-						</div>
-					</ol>
-					<script>
-							//$(".image_service_file_name").live('mouseup', function(eventObj){
-							//		var sFromUrl = $(this).parent('.image_service_url').attr('href').match(/from_url=[^&]*/)[0];
-							//		var sBasename = sFromUrl.match(/[^\/]*$/)[0];
-							//	window.location.hash = sBasename;
-							//});
-					</script>
+				<div class="g1">
+					<div>
+						<a style="text-decoration:none;">
+							<p id="upload_button" class="butt">
+							Upload A File Now! 
+							</p> 
+						</a>
+					</div>
+					<div id="tabs-fun" class="files-box fun" style="margin-top:24px;">
+						<ol id="marx-images">
+							<div data-template>
+								<a rel="example_group" class="image_service_url"  href="#{{href}}" real_href="{{real_href}}" title="{{title}}"><p class="image_service_file_name">{{title}}</p></a>                         
+							</div>
+						</ol>
+						<script>
+								//$(".image_service_file_name").live('mouseup', function(eventObj){
+								//		var sFromUrl = $(this).parent('.image_service_url').attr('href').match(/from_url=[^&]*/)[0];
+								//		var sBasename = sFromUrl.match(/[^\/]*$/)[0];
+								//	window.location.hash = sBasename;
+								//});
+						</script>
+					</div>
 				</div>	
 			</div>
 	<script type="text/javascript">

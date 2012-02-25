@@ -61,6 +61,11 @@ var page_update = page_update || {};
 				  });
 				};
 
+function updateBodyWidth()
+{
+	$('body').css("width", "" + ($('html').width() ) + "px" );
+}
+
 $(document).ready(function() {
 	$('body').append("<div id=\"cf-footer\" style='position:fixed;min-height:20px;height:auto !important;height:20px;background-color:#3f3b8d;background-color:rgba(0,0,0,0.6);bottom:0; width:100%'><p id=\"cf-footer-paragraph\" style='font-size: 8pt'> Copyright &copy; 2012 <a id='rol' href='#cloudobserver' onclick=\"{	newwindow=window.open(\'http://code.google.com/p/cloudobserver/\',\'CloudObserver\',\'height=750,width=900\');	if (window.focus) {newwindow.focus()}}\">Cloud Forever</a>. Some rights reserved. </p><div>");
 
@@ -74,7 +79,9 @@ $(document).ready(function() {
 		$(this).removeClass("border2");
 		$(this).removeClass("hilight2");
 	});
-
+	
+	page_update.add(updateBodyWidth);
+	
 	var _gaq = _gaq || [];
 	_gaq.push(['_setAccount', 'UA-21524436-1']);
 	_gaq.push(['_setDomainName', 'none']);
@@ -98,6 +105,7 @@ $(document).ready(function() {
 	window.location.toString() // Action
 	]);
 	
+
 	$(window).bind('resize', function() {
 		$('html', 'body').css("background-size", "cover");
 		 page_update.run();
