@@ -281,13 +281,14 @@ do
 			VERBOSE=true
 			;;
 		--version           )
-			echo -n "Cloud Loader $LOADER_VERSION"
+			echo -n "${CYAN}Cloud Loader $LOADER_VERSION"
 			if $REVISION_DEFINED; then
-				echo "-$REVISION"
+				echo -n "-$REVISION"
 			else
-				echo " [unknown revision]"
+				echo -n " [unknown revision]"
 			fi
-			echo "Copyright (C) 2012 Cloud Forever. All rights reserved."
+			echo "${NORMAL}"
+			echo "${CYAN}Copyright (C) 2012 Cloud Forever. All rights reserved.${NORMAL}"
 			exit 0
 			;;
 		*                   )
