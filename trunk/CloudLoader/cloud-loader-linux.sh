@@ -66,7 +66,7 @@ checkForUpdates()
 # Update the script to the latest available version.
 selfUpdate()
 {
-	echo "Updating the script..."
+	echo "${CYAN}Updating the script...${NORMAL}"
 	
 	SELF=$(basename "$0")
 	UPDATER=cloud-updater-linux.sh
@@ -126,7 +126,7 @@ nextStage "Replacing old version with the new one"
 mv $SELF.new $SELF
 if [ $? -ne 0 ]; then
 	stageFailed
-	echo "Update failed."
+	echo "${RED}Update failed.${NORMAL}"
 	exit 1
 fi
 stageOK
@@ -135,12 +135,12 @@ nextStage "Deleting update script"
 rm \$0
 if [ $? -ne 0 ]; then
 	stageFailed
-	echo "Update failed."
+	echo "${RED}Update failed.${NORMAL}"
 	exit 1
 fi
 stageOK
 
-echo "Update succeeded."
+echo "${GREEN}Update succeeded.${NORMAL}"
 exit 0
 EOF
 	if [ $? -ne 0 ]; then
@@ -267,12 +267,12 @@ do
 		--self-update       )
 			checkForUpdates
 			if [ $LATEST_REVISION -eq $REVISION ]; then
-				echo "You already use the most recent version of this script."
+				echo "${GREEN}You already use the most recent version of this script.${NORMAL}"
 				exit 0
 			fi
 			selfUpdate
 			if [ $? -ne 0 ]; then
-				echo "Update failed."
+				echo "${RED}Update failed.${NORMAL}"
 				exit 1
 			fi
 			exit 0
