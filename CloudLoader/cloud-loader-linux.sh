@@ -292,8 +292,8 @@ do
 			exit 0
 			;;
 		*                   )
-			echo "Unknown option: '$i'"
-			echo "Type '$0 --help' to display usage information."
+			echo "${RED}Unknown option: '$i'${NORMAL}"
+			echo "${CYAN}Type '$0 --help' to display usage information.${NORMAL}"
 			exit 1
 			;;
 	esac
