@@ -164,8 +164,10 @@ run()
 {
 	if $VERBOSE; then
 		echo "$@"
+		"$@"
+	else
+		"$@" >& /dev/null
 	fi
-	"$@"
 	result=$?
 	if [ $result -ne 0 ]; then
 		exit $result
