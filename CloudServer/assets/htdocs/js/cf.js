@@ -54,10 +54,10 @@ var page_update = page_update || {};
 					 page_update.functions.splice(page_update.functions.indexOf(fn), 1);
 				   };
 	page_update.run = function(){
-				  page_update.functions.forEach(function(cb){ 
-					if (typeof cb == "function") {
-					  cb.call(); 
-					}
+				 $.each(page_update.functions, function(index, val){ 
+					if (typeof val == "function") {
+					  val.call(); 
+				}
 				  });
 				};
 
