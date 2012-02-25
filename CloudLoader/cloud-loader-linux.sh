@@ -378,27 +378,35 @@ DOWNLOADS=downloads
 OS=linux
 JOBS=$(grep ^processor /proc/cpuinfo | wc -l)
 
+# The number of stages is unknown.
+setNumberOfStages ?
+
 # Delete existing libraries and utilities if they should be rebuilt.
 if $REBUILD_LIBRARIES; then
+	nextStage "Deleting existing libraries and utilities"
 	run rm -rf "$CMAKE_INSTALL"
 	run rm -rf "$OPENCV_INSTALL"
 	run rm -rf "$BOOST_INSTALL"
 	run rm -rf "$OPENSSL_INSTALL"
 	run rm -rf "$PREMAKE_INSTALL"
+	stageOK
 fi
 
 # Build CMake utility if necessary.
 if [ ! -d "$CMAKE_INSTALL" ]; then
+	nextStage "Building CMake utility"
 	prepare $CMAKE_SRCFILE "$CMAKE_COMPILE" $CMAKE_SRCBASE $CMAKE_SRCSITE $CMAKE_SRCPATH
 	run cd "$CMAKE_COMPILE"
 	run ./bootstrap --parallel=$JOBS --prefix="$CMAKE_INSTALL"
 	run make -j$JOBS install
 	run cd $WD
 	run rm -rf "$CMAKE_COMPILE"
+	stageOK
 fi
 
 # Build Premake utility if necessary.
 if [ ! -d "$PREMAKE_INSTALL" ]; then
+	nextStage "Building Premake utility"
 	prepare $PREMAKE_SRCFILE "$PREMAKE_COMPILE" $PREMAKE_SRCBASE $PREMAKE_SRCSITE $PREMAKE_SRCPATH
 	run cd "$PREMAKE_COMPILE"/build/gmake.unix
 	run make -j$JOBS config=release
@@ -407,10 +415,12 @@ if [ ! -d "$PREMAKE_INSTALL" ]; then
 	run cp bin/release/premake4 "$PREMAKE_INSTALL"/bin
 	run cd $WD
 	run rm -rf "$PREMAKE_COMPILE"
+	stageOK
 fi
 
 # Build Boost libraries if necessary.
 if [ ! -d "$BOOST_INSTALL" ]; then
+	nextStage "Building Boost libraries"
 	prepare $BOOST_SRCFILE "$BOOST_COMPILE" $BOOST_SRCBASE $BOOST_SRCSITE $BOOST_SRCPATH
 	prepare $ZLIB_SRCFILE "$BOOST_ZLIBSRC" $ZLIB_SRCBASE $ZLIB_SRCSITE $ZLIB_SRCPATH
 	run cd "$BOOST_COMPILE"
@@ -418,10 +428,12 @@ if [ ! -d "$BOOST_INSTALL" ]; then
 	run ./b2 -j$JOBS -d0 --with-thread --with-system --with-filesystem --with-serialization --with-program_options --with-regex --with-date_time --with-iostreams -sZLIB_SOURCE="$BOOST_ZLIBSRC" -sNO_BZIP2=1 cflags=-fPIC cxxflags=-fPIC link=static --prefix="$BOOST_INSTALL" release install
 	run cd $WD
 	run rm -rf "$BOOST_COMPILE"
+	stageOK
 fi
 
 # Build OpenCV libraries if necessary.
 if [ ! -d "$OPENCV_INSTALL" ]; then
+	nextStage "Building OpenCV libraries"
 	prepare $OPENCV_SRCFILE "$OPENCV_COMPILE" $OPENCV_SRCBASE $OPENCV_SRCSITE $OPENCV_SRCPATH
 	prepare $ZLIB_SRCFILE "$OPENCV_ZLIBSRC" $ZLIB_SRCBASE $ZLIB_SRCSITE $ZLIB_SRCPATH
 	run cd "$OPENCV_COMPILE"
@@ -493,25 +505,31 @@ if [ ! -d "$OPENCV_INSTALL" ]; then
 	run cp "$OPENCV_INSTALL"/share/OpenCV/3rdparty/lib/* "$OPENCV_INSTALL"/lib
 	run cd $WD
 	run rm -rf "$OPENCV_COMPILE"
+	stageOK
 fi
 
 # Build OpenSSL libraries if necessary.
 if [ ! -d "$OPENSSL_INSTALL" ]; then
+	nextStage "Building OpenSSL libraries"
 	prepare $OPENSSL_SRCFILE "$OPENSSL_COMPILE" $OPENSSL_SRCBASE $OPENSSL_SRCSITE $OPENSSL_SRCPATH
 	run cd "$OPENSSL_COMPILE"
 	run ./config shared no-asm --prefix="$OPENSSL_INSTALL" --openssldir="$OPENSSL_INSTALL"/share
 	run make install
 	run cd $WD
 	run rm -rf "$OPENSSL_COMPILE"
+	stageOK
 fi
 
 # Checkout Cloud Server application source code if necessary.
 if $CHECKOUT_SOURCE || [ ! -d "$CLOUD_COMPILE" ]; then
+	nextStage "Checking out Cloud Server application source code"
 	run rm -rf "$CLOUD_COMPILE"
 	run svn checkout https://$CLOUD_SRCSITE$CLOUD_SRCPATH "$CLOUD_COMPILE"
+	stageOK
 fi
 
 # Build Cloud Server application.
+nextStage "Building Cloud Server application"
 run cd "$CLOUD_COMPILE"
 if [ ! -e $CLOUD_PREMAKE ]; then
 	cat > $CLOUD_PREMAKE << EOF
@@ -523,8 +541,10 @@ run ./$CLOUD_PREMAKE
 run cd projects/$OS-gmake
 run make -j$JOBS config=release
 run cd $WD
+stageOK
 
 # Install Cloud Server application.
+nextStage "Installing Cloud Server application"
 if [ ! -d "$CLOUD_INSTALL" ]; then
 	run mkdir "$CLOUD_INSTALL"
 else
@@ -533,6 +553,7 @@ else
 fi
 run cp -r "$CLOUD_COMPILE"/projects/$OS-gmake/bin/release/* "$CLOUD_INSTALL"
 run rm -rf "$CLOUD_COMPILE"
+stageOK
 
 exit 0
 
