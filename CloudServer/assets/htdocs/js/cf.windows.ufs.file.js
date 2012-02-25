@@ -3,9 +3,6 @@ function showUpdate(fileEU, name) {
 	$("#tabs-ufs-update-file_name").html(name);
 	showForm($("#tabs-ufs-update"), "Files update form", 350, 295);
 }
-function tabs_fun_div_position_update_with_upload_button_height() {
-$('#tabs-fun').css("margin-top", "" + $('#upload_button').height() + "px" );
-}
 
 function showEdit(ue, name) {
 	showUpdate("eu", "name");
@@ -34,6 +31,4 @@ if(url_path[0] != "/"){
 	$('#upload_button').mouseup(function() {
 		showForm($("#tabs-ufs"), "Files upload form", 350, 295);
 	});
-	
-	page_update.add(tabs_fun_div_position_update_with_upload_button_height);
 });

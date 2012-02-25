@@ -1,5 +1,6 @@
 function loged_in_user_div_position_update(){
 	$('.loged-in-user').css("margin-top", "" + ($('.header').height() + 3) + "px" );
+	$('.loged-in-user').css("width", "" + ($('html').width() -1 ) + "px" );
 }
 
 $(document).ready(function() {
@@ -10,6 +11,8 @@ $(document).ready(function() {
 		
 		$('.loged-in-user').show();
 		$('.not-loged-in-user').remove();
+		//$('.loged-in-user').center();
+		//page_update.add($('.loged-in-user').center());	
 		} else {
 		$('.not-loged-in-user').removeClass("hidden-c");
 
