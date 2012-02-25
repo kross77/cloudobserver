@@ -25,7 +25,7 @@ setNumberOfStages() # 1 - number of stages
 nextStage() # 1 - stage message
 {
 	STAGE=$[STAGE+1]
-	STAGE_MSG="$YELLOW[$STAGE/$STAGES] $BLUE$BOLD$1...$NORMAL"
+	STAGE_MSG="${YELLOW}[$STAGE/$STAGES] ${BLUE}${BOLD}$1...${NORMAL}"
 	let STAGE_COL=$(tput cols)-${#STAGE_MSG}+${#YELLOW}+${#BLUE}+${#BOLD}+${#NORMAL}
 	echo -n "$STAGE_MSG"
 }
@@ -33,13 +33,13 @@ nextStage() # 1 - stage message
 stageOK()
 {
 	let STAGE_COL=$STAGE_COL+${#GREEN}+${#NORMAL}
-	printf "%${STAGE_COL}s\n" "$GREEN[OK]$NORMAL"
+	printf "%${STAGE_COL}s\n" "${GREEN}[OK]${NORMAL}"
 }
 
 stageFailed()
 {
 	let STAGE_COL=$STAGE_COL+${#RED}+${#NORMAL}
-	printf "%${STAGE_COL}s\n" "$RED[FAILED]$NORMAL"
+	printf "%${STAGE_COL}s\n" "${RED}[FAILED]${NORMAL}"
 }
 
 # Perform a check for a new version of this script.
@@ -103,7 +103,7 @@ selfUpdate()
 nextStage() # 1 - stage message
 {
 	STAGE=\$[STAGE+1]
-	STAGE_MSG="\$YELLOW[\$STAGE/\$STAGES] \$BLUE\$BOLD\$1...\$NORMAL"
+	STAGE_MSG="\${YELLOW}[\$STAGE/\$STAGES] \${BLUE}\${BOLD}\$1...\${NORMAL}"
 	let STAGE_COL=\$(tput cols)-\${#STAGE_MSG}+\${#YELLOW}+\${#BLUE}+\${#BOLD}+\${#NORMAL}
 	echo -n "\$STAGE_MSG"
 }
@@ -111,13 +111,13 @@ nextStage() # 1 - stage message
 stageOK()
 {
 	let STAGE_COL=\$STAGE_COL+\${#GREEN}+\${#NORMAL}
-	printf "%\${STAGE_COL}s\n" "\$GREEN[OK]\$NORMAL"
+	printf "%\${STAGE_COL}s\n" "\${GREEN}[OK]\${NORMAL}"
 }
 
 stageFailed()
 {
 	let STAGE_COL=\$STAGE_COL+\${#RED}+\${#NORMAL}
-	printf "%\${STAGE_COL}s\n" "\$RED[FAILED]\$NORMAL"
+	printf "%\${STAGE_COL}s\n" "\${RED}[FAILED]\${NORMAL}"
 }
 
 stageOK
