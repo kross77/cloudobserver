@@ -53,7 +53,6 @@ fieldset {
 	font-family:Consolas,"Lucida Console",monospace;
 }
 .grumble-button {
-	font-size:11px;
 }
 a {
 	color:#FFF;
@@ -126,7 +125,7 @@ div.alert,div.hidden-c {
 	background-position:-80px -228px;
 	background-repeat:no-repeat;
 }
-h2 {
+h2, h3 {
 	font-size:120%;
 }
 .nifty {
@@ -219,22 +218,17 @@ width:150px;
 min-height:20px;
 height:auto !important;
 height:20px;
-font-size:12px;
-font-family:Consolas,"Lucida Console",monospace;
+font-size:75%;
 }
 .butt2 {
 display:inline-block;
-font-size:12px;
-font-family:Consolas,"Lucida Console",monospace;
+font-size:75%;
 color:black;
 vertical-align:middle;
 text-align:center;
 min-height:30px;
 height:auto !important;
 height:30px;
-}
-.not-loged-in-user {
-width: 50%;
 }
 .not-loged-in-user {
 width: 50%;
