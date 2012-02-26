@@ -25,13 +25,13 @@ a {
 .ca-menu {
 	padding:0;
 	margin:20px auto;
-	width:500px;
+	width:90%;
 }
 .ca-menu li {
-	width:500px;
-	height:100px;
+	width:100%;
+	//height:130px;
 	overflow:hidden;
-	display:block;
+	display:inline-block;
 	background:#87CEFA;
 	background:rgba(255,255,255,0.2);
 	-webkit-box-shadow:1px 1px 2px rgba(0,0,0,0.2);
@@ -58,14 +58,14 @@ a {
 	position:relative;
 }
 .ca-content {
-	position:absolute;
+	margin:15px;
 	left:15px;
-	width:370px;
-	height:69px;
+	//width:370px;
+	//height:69px;
 	top:20px;
 }
 .ca-main {
-	font-size:20px;
+	font-size:145%;
 	-webkit-transition:all 300ms linear;
 	-moz-transition:all 300ms linear;
 	-o-transition:all 300ms linear;
@@ -73,7 +73,7 @@ a {
 	transition:all 300ms linear;
 }
 .ca-sub {
-	font-size:12px;
+	font-size:100%;
 	color:#555;
 	-webkit-transition:all 300ms linear;
 	-moz-transition:all 300ms linear;
@@ -89,10 +89,10 @@ a {
 	background:rgba(0,0,0,0.5)
 }
 .ca-menu li:hover .ca-main {
-	color:#fff004;
-	font-size:14px;
+	color:#fff001;
+	//font-size:144%;
 }
 .ca-menu li:hover .ca-sub {
 	color:#fff;
-	font-size: 16px;
+	//font-size: 101%;
 }
