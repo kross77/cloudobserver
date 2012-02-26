@@ -17,7 +17,7 @@ body { -webkit-font-smoothing:antialiased; font-smoothing:antialiased; text-rend
 /* DEFAULT FONT SETTINGS */
 /* 16px base font size with 150% (24px) friendly, unitless line height and margin for vertical rhythm */
 /* Font-size percentage is based on 16px browser default size */
-/*a {font: 100%/1.5 Georgia,Palatino,"Palatino Linotype",Times,"Times New Roman",Arial, Helvetica, sans-serif; *font-size: 1em;}*/ /* IE7 and older can't resize px based text */
+body, button, input, select, textarea, p, a {font: 100%/1.5; *font-size: 1em;}/* IE7 and older can't resize px based text */
 p, blockquote, q, pre, address, hr, code, samp, dl, ol, ul, form, table, fieldset, menu, img {margin: 0 0 1.5em; padding: 0}
 
 /* TYPOGRAPHY */
