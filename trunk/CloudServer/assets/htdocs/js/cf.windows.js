@@ -12,7 +12,7 @@ function windowsBase(id)
 		var id_demo_box = '#' + demo_box;
 		
 		$(class_alert).remove();
-		var html_alert_text = "<div class=\"" + alert + "\" style=\"display: none;\"><div class=\"overlay\"></div><div id=\""+ demo_box +"\" class=\"box message nifty\" data-minwidth=\"75\" data-minheight=\"50\"><div class=\"handle bar\" id=\""+ alert +"_name\"><h2 class=\"handle bar\">Handle</h2></div><div class=\"contents\" id=\"" + alert + "_content\"><h1>demo box</h1></div><div class=\"handle resize\"></div></div></div></div></div>";
+		var html_alert_text = "<div class=\"" + alert + "\" style=\"display: none;\"><div class=\"overlay\"></div><div id=\""+ demo_box +"\" class=\"box message nifty\" data-minwidth=\"75\" data-minheight=\"50\"><div class=\"handle bar\" id=\""+ alert +"_name\"><h2 class=\"handle bar\">Handle</h2></div><div class=\"contents\" id=\"" + alert + "_content\"><h1>demo box</h1></div><div class=\"handle resize\" style=\"position: absolute;\"></div></div></div></div></div>";
 		$('body').append(html_alert_text);
 	
 		$(".resize").bind('dragstart', function(event) {
