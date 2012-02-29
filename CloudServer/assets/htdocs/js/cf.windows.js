@@ -61,10 +61,14 @@ function hideDialog(dialog)
 function showAlert(w, h, name, body_text) {
 	prepareWindow();
 	$("#alert_name").html(name);
-	$("#alert_content").html(body_text);
-	$(".box").width = w;
-	$(".box").height = h;
+	$("#alert_content").html(body_text + '<br/>' + '<input type=\"button\" class=\"eButton\" value=\"OK\" onClick=$(\".alert\").hide() />');
 	$(".alert").show();
+	$("#demo_box").width(w);
+	$("#demo_box").height(h);
+	$('#demo_box').center();
+	$(window).bind('resize', function() {
+		$('#demo_box').center();
+	});
 }
 
 function showForm(sourceElement, PopupName, w, h) {
