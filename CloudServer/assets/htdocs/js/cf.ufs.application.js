@@ -9,38 +9,41 @@ $(document).ready(function() {
 	if (user != null) {	
 			$('.loged-in-user').show();
 			$('.not-loged-in-user').remove();
-			   var fs = Tempo.prepare('marx-brothers');
+			   var fs = Tempo.prepare('marx-brothers')
+			   .notify( function (event) {
+    if (event.type === TempoEvent.Types.RENDER_COMPLETE) {
+        $( "#marx-brothers" ).selectable({
+        	start: function(e, ui) { files_menu.hide(); },
+			stop:  function(e, ui) {
+				var selected_array = []
+				$( "div.ui-selected > li > a > p", this ).each(function() {
+				var element = this; //$(this) .closest('a > p');
+				selected_array = selected_array.concat( element );
+
+				});
+				if(selected_array.length == 1)
+				{
+					file_title = selected_array[0].title;
+					file_id = selected_array[0].id;
+					files_menu.moveTo(e.pageX, e.pageY).show();
+				}
+		}
+				});
+		    }
+		});
+		
+		$(document).click( function (){$(".ui-selected").removeClass("ui-selected");});
 				fs.starting();
 	
 		$.getJSON("ufs.json", function(data) {
 		    fs.render(data);
-
-			$('.butt2').mousedown(function() {
-				$(this).addClass("hilight2");
-			}).mouseup(function() {
-				$(this).removeClass("hilight2");
-			}).mouseover(function() {
-				$(this).addClass("border2");
-			}).mouseout(function() {
-				$(this).removeClass("border2");
-				$(this).removeClass("hilight2");
-			});
 		});
 	}
 	
-	$('.lst .uf .butt2').live('click', function(e) {
+	$('.butt2').live('click', function(e) {
 		file_title = this.title;
 		file_id = this.id;
 		files_menu.moveTo(e.pageX, e.pageY).show();
-	}).live('mousedown', function(e){
-		$(this).addClass("hilight2");
-	}).live('mouseup', function(){
-		$(this).removeClass("hilight2");
-	}).live('mouseover', function(){
-		$(this).addClass("border2");
-	}).live('mouseout', function(eventObj){
-		$(this).removeClass("border2");
-		$(this).removeClass("hilight2");
 	});
 		
 });

@@ -36,6 +36,9 @@
 		<script type="text/javascript" src="js/jquery-1.7.1.min.js">								
 		</script>
 		
+		<script type="text/javascript" src="js/jquery-ui-1.8.18.custom.min.js">								
+		</script>
+		
 		<script type="text/javascript" src="js/uikit.min.js">								
 		</script>
 		
@@ -104,18 +107,23 @@
 						</p> 
 					</a>
 				</div>
-				<div id="tabs-fun" class="files-box fun">		
+				<div id="tabs-fun" class="files-box fun">	
+					<style>
+					 .ui-selectable-helper { position: absolute; z-index: 100; border:1px dotted white; } 
+					//	#marx-brothers .ui-selecting { background: #FECA40; }
+					//	#marx-brothers .ui-selected { background: #F39814; color: white; }
+						#marx-brothers { list-style-type: none; margin: 0; padding: 0; }
+						#marx-brothers li { margin: 3px; padding: 0.4em; font-size: 1.4em;}
+					</style>	
 					<ol id="marx-brothers">
-						<div data-template>
-							<ul class="lst">
-							<li class="uf file-{{is_public}}">
+						<div  data-template>
+							<li class="uf file-{{is_public}}" style="text-decoration:none; cursor: pointer">
 								<a style="text-decoration:none;">
-									<p id="{{href}}" title="{{title}}" class="butt2" style="color:white;  vertical-align: middle; text-align: center; width:100%">
+									<p id="{{href}}" title="{{title}}" class="butt2" style="color:white;  vertical-align: middle; text-align: center; width:100%; cursor: pointer ">
 										{{title}} | {{modified}} | {{type}} | {{size}} | {{_tempo.index}}
 									</p>
 								</a>
 							</li>
-							</ul>
 						</div>
 						<li data-template-fallback>
 							Sorry, JavaScript required!
