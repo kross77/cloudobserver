@@ -200,17 +200,27 @@ box-shadow:1px 1px 1px 1px rgba(0,0,0,0.2);
 }
 .border2, a.ui-selecting {
 border:1px solid #ddd;
-background:rgba(255,255,255, 0.3);
 -webkit-box-shadow:1px 1px 2px rgba(0,0,0,0.2);
 -moz-box-shadow:1px 1px 2px rgba(0,0,0,0.2);
 box-shadow:1px 1px 2px rgba(0,0,0,0.2);
 }
 .hilight2, a.ui-selected {
 border:1px solid #ddd;
-background:rgba(255,255,255, 0.4);
 -webkit-box-shadow:1px 1px 2px rgba(0,0,0,0.2);
 -moz-box-shadow:1px 1px 2px rgba(0,0,0,0.2);
 box-shadow:1px 1px 2px rgba(0,0,0,0.2);
+}
+.border2 {
+background:#278bff;
+}
+.hilight2 {
+background:#278bff;
+}
+a.ui-selecting {
+background:rgba(255,255,255, 0.3);
+}
+ a.ui-selected {
+background:rgba(255,255,255, 0.4);
 }
 .butt,.butt3 {
 display:inline-block;

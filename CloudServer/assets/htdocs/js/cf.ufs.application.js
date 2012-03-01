@@ -17,6 +17,11 @@ $(document).ready(function() {
 			stop:  function(e, ui) {
 				var selected_array = []
 				$( "div.ui-selected > li > a > p", this ).each(function() {
+				if (! $(this).parent('a').hasClass('ui-selected'))
+				{
+					$(this).parent('a').addClass('ui-selected');
+				}
+				
 				var element = this; //$(this) .closest('a > p');
 				selected_array = selected_array.concat( element );
 
