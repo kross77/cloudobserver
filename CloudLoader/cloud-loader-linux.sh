@@ -330,6 +330,15 @@ PREMAKE_SRCFILE=$PREMAKE_SRCBASE-src.zip
 PREMAKE_SRCPATH=/projects/premake/files/Premake/$PREMAKE_VERSION
 PREMAKE_SRCSITE=sourceforge.net
 
+# Declare variables related to YASM utility.
+YASM_VERSION=1.2.0
+YASM_COMPILE="$WD"/yasm-src
+YASM_INSTALL="$WD"/yasm
+YASM_SRCBASE=yasm-$YASM_VERSION
+YASM_SRCFILE=$YASM_SRCBASE.tar.gz
+YASM_SRCPATH=/projects/yasm/releases
+YASM_SRCSITE=www.tortall.net
+
 # Declare variables related to Boost libraries.
 BOOST_VERSION=1.47.0
 BOOST_COMPILE="$WD"/boost-src
@@ -390,6 +399,7 @@ if $REBUILD_LIBRARIES; then
 	run rm -rf "$BOOST_INSTALL"
 	run rm -rf "$OPENSSL_INSTALL"
 	run rm -rf "$PREMAKE_INSTALL"
+	run rm -rf "$YASM_INSTALL"
 	stageOK
 fi
 
@@ -416,6 +426,18 @@ if [ ! -d "$PREMAKE_INSTALL" ]; then
 	run cp bin/release/premake4 "$PREMAKE_INSTALL"/bin
 	run cd $WD
 	run rm -rf "$PREMAKE_COMPILE"
+	stageOK
+fi
+
+# Build YASM utility if necessary.
+if [ ! -d "$YASM_INSTALL" ]; then
+	nextStage "Building YASM utility"
+	prepare $YASM_SRCFILE "$YASM_COMPILE" $YASM_SRCBASE $YASM_SRCSITE $YASM_SRCPATH
+	run cd "$YASM_COMPILE"
+	run ./configure --prefix="$YASM_INSTALL"
+	run make -j$JOBS install
+	run cd $WD
+	run rm -rf "$YASM_COMPILE"
 	stageOK
 fi
 
