@@ -401,6 +401,14 @@ CLOUD_SRCBASE=CloudServer
 CLOUD_SRCPATH=/svn/trunk/$CLOUD_SRCBASE
 CLOUD_SRCSITE=cloudobserver.googlecode.com
 
+# Declare variables related to Cloud Client application.
+CLOUDCLIENT_COMPILE="$WD"/cloudclient-src
+CLOUDCLIENT_INSTALL="$WD"/install-dir
+CLOUDCLIENT_PREMAKE=build.sh
+CLOUDCLIENT_SRCBASE=CloudClient
+CLOUDCLIENT_SRCPATH=/svn/trunk/$CLOUDCLIENT_SRCBASE
+CLOUDCLIENT_SRCSITE=cloudobserver.googlecode.com
+
 # Declare other variables.
 DOWNLOADS=downloads
 OS=linux
@@ -606,6 +614,38 @@ if [ ! -d "$OPENSSL_INSTALL" ]; then
 	run rm -rf "$OPENSSL_COMPILE"
 	stageOK
 fi
+
+# Checkout Cloud Client application source code if necessary.
+if $CHECKOUT_SOURCE || [ ! -d "$CLOUDCLIENT_COMPILE" ]; then
+	nextStage "Checking out Cloud Client application source code"
+	run rm -rf "$CLOUDCLIENT_COMPILE"
+	run svn checkout https://$CLOUDCLIENT_SRCSITE$CLOUDCLIENT_SRCPATH "$CLOUDCLIENT_COMPILE"
+	stageOK
+fi
+
+# Build Cloud Client application.
+nextStage "Building Cloud Client application"
+run cd "$CLOUDCLIENT_COMPILE"
+if [ ! -e $CLOUDCLIENT_PREMAKE ]; then
+	cat > $CLOUDCLIENT_PREMAKE << EOF
+"$PREMAKE_INSTALL"/bin/premake4 --os=$OS --BoostLibsPath="$BOOST_INSTALL"/lib --FFmpegLibsPath="$FFMPEG_INSTALL"/lib --OpenALLibsPath="$OPENAL_INSTALL"/lib --OpenCVLibsPath="$OPENCV_INSTALL"/lib --BoostIncludesPath="$BOOST_INSTALL"/include --FFmpegIncludesPath="$FFMPEG_INSTALL"/include --OpenALIncludesPath="$OPENAL_INSTALL"/include --OpenCVIncludesPath="$OPENCV_INSTALL"/include --platform=x32 gmake
+EOF
+	run chmod u+x ./$CLOUDCLIENT_PREMAKE
+fi
+run ./$CLOUDCLIENT_PREMAKE
+run cd projects/$OS-gmake
+run make -j$JOBS config=releasestatic
+run cd $WD
+stageOK
+
+# Install Cloud Client application.
+nextStage "Installing Cloud Client application"
+if [ ! -d "$CLOUDCLIENT_INSTALL" ]; then
+	run mkdir "$CLOUDCLIENT_INSTALL"
+fi
+run cp -r "$CLOUDCLIENT_COMPILE"/projects/$OS-gmake/bin/release-static/* "$CLOUDCLIENT_INSTALL"
+run rm -rf "$CLOUDCLIENT_COMPILE"
+stageOK
 
 # Checkout Cloud Server application source code if necessary.
 if $CHECKOUT_SOURCE || [ ! -d "$CLOUD_COMPILE" ]; then
