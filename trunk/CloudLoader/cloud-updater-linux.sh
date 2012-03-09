@@ -15,6 +15,8 @@ COUNTER=0
 export LC_MESSAGES=C
 
 kill `ps aux | grep -F 'CloudServer' | grep -v -F 'grep' | awk '{ print $2 }'` 
+kill `ps aux | grep -F '$ROBOT1_NAME' | grep -v -F 'grep' | awk '{ print $2 }'`
+kill `ps aux | grep -F '$ROBOT2_NAME' | grep -v -F 'grep' | awk '{ print $2 }'`
 
 if [ ! -d "$RUN_DIR" ]; then
 	mkdir $RUN_DIR
@@ -54,6 +56,8 @@ while [  $COUNTER -lt 1 ]; do
 		cd $CD
 		
 		kill `ps aux | grep -F 'CloudServer' | grep -v -F 'grep' | awk '{ print $2 }'` 
+		kill `ps aux | grep -F '$ROBOT1_NAME' | grep -v -F 'grep' | awk '{ print $2 }'`
+		kill `ps aux | grep -F '$ROBOT2_NAME' | grep -v -F 'grep' | awk '{ print $2 }'`
 		cp -r $CF_SERVER_INSTALL_DIR* $RUN_DIR
 		cd $RUN_DIR
 		nohup ./CloudServer >& /dev/null &
