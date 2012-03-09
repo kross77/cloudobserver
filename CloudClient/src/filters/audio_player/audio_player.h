@@ -5,6 +5,8 @@
 
 #include "../../3rdparty/openal/openal.h"
 
+#include <cstdio>
+
 #include <list>
 
 class audio_player
