@@ -7,6 +7,8 @@ REMOTE_REPO="http://cloudobserver.googlecode.com/svn/"
 REBUILD_LIBRARIES=0
 RUN_DIR="./cloud_server/run_dir/"
 CF_SERVER_INSTALL_DIR="./cloud_server/install-dir/"
+ROBOT1_NAME=RobotAlpha
+ROBOT2_NAME=RobotBeta
 CD=`pwd`
 COUNTER=0
 
@@ -22,6 +24,8 @@ if [ -d "$CF_SERVER_INSTALL_DIR" ]; then
 	cp -r $CF_SERVER_INSTALL_DIR* $RUN_DIR
 	cd $RUN_DIR
 	nohup ./CloudServer >& /dev/null &
+	nohup ./CloudClient --server=localhost --username=$ROBOT1_NAME --robot >& /dev/null &
+	nohup ./CloudClient --server=localhost --username=$ROBOT2_NAME --robot >& /dev/null &
 	cd $CD
 fi
 
@@ -53,6 +57,8 @@ while [  $COUNTER -lt 1 ]; do
 		cp -r $CF_SERVER_INSTALL_DIR* $RUN_DIR
 		cd $RUN_DIR
 		nohup ./CloudServer >& /dev/null &
+		nohup ./CloudClient --server=localhost --username=$ROBOT1_NAME --robot >& /dev/null &
+		nohup ./CloudClient --server=localhost --username=$ROBOT2_NAME --robot >& /dev/null &
 		cd ./htdocs/js/
 		echo  "\$(document).ready(function() {\$('#rol').after('. Revision "  $LOCAL_REV  "');});" >> cf.js
 		cd $CD
