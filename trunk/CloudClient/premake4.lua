@@ -218,18 +218,7 @@ function cloud.project.init()
 	end
 	
 	if os.get() == "linux" then
-		defines { "LIN" }
-		libdirs {
-		"/opt/local/lib",
-		"/usr/lib",
-		"/usr/local/lib"
-		}
-		
-		includedirs {
-		"/opt/local/include",
-		"/usr/include",
-		"/usr/local/include"
-		}	 
+		defines { "LIN" } 
 	end
 	
 	if os.get() == "macosx" then
