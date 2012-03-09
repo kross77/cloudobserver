@@ -349,6 +349,15 @@ BOOST_SRCPATH=/projects/boost/files/boost/$BOOST_VERSION
 BOOST_SRCSITE=sourceforge.net
 BOOST_ZLIBSRC="$BOOST_COMPILE"/zlib-src
 
+# Declare variables related to FFmpeg libraries.
+FFMPEG_VERSION=0.10
+FFMPEG_COMPILE="$WD"/ffmpeg-src
+FFMPEG_INSTALL="$WD"/ffmpeg
+FFMPEG_SRCBASE=ffmpeg-$FFMPEG_VERSION
+FFMPEG_SRCFILE=$FFMPEG_SRCBASE.tar.bz2
+FFMPEG_SRCPATH=/releases
+FFMPEG_SRCSITE=ffmpeg.org
+
 # Declare variables related to OpenCV libraries.
 OPENCV_VERSION=2.3.1
 OPENCV_COMPILE="$WD"/opencv-src
@@ -400,6 +409,7 @@ if $REBUILD_LIBRARIES; then
 	run rm -rf "$OPENSSL_INSTALL"
 	run rm -rf "$PREMAKE_INSTALL"
 	run rm -rf "$YASM_INSTALL"
+	run rm -rf "$FFMPEG_INSTALL"
 	stageOK
 fi
 
@@ -451,6 +461,19 @@ if [ ! -d "$BOOST_INSTALL" ]; then
 	run ./b2 -j$JOBS -d0 --with-thread --with-system --with-filesystem --with-serialization --with-program_options --with-regex --with-date_time --with-iostreams -sZLIB_SOURCE="$BOOST_ZLIBSRC" -sNO_BZIP2=1 cflags=-fPIC cxxflags=-fPIC link=static --prefix="$BOOST_INSTALL" release install
 	run cd $WD
 	run rm -rf "$BOOST_COMPILE"
+	stageOK
+fi
+
+# Build FFmpeg libraries if necessary.
+if [ ! -d "$FFMPEG_INSTALL" ]; then
+	nextStage "Building FFmpeg libraries"
+	prepare $FFMPEG_SRCFILE "$FFMPEG_COMPILE" $FFMPEG_SRCBASE $FFMPEG_SRCSITE $FFMPEG_SRCPATH
+	run cd "$FFMPEG_COMPILE"
+	export PATH=$PATH:"$YASM_INSTALL"/bin
+	run ./configure --enable-static --disable-shared --prefix="$FFMPEG_INSTALL"
+	run make -j$JOBS install
+	run cd $WD
+	run rm -rf "$FFMPEG_COMPILE"
 	stageOK
 fi
 
