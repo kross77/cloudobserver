@@ -358,6 +358,15 @@ FFMPEG_SRCFILE=$FFMPEG_SRCBASE.tar.bz2
 FFMPEG_SRCPATH=/releases
 FFMPEG_SRCSITE=ffmpeg.org
 
+# Declare variables related to OpenAL libraries.
+OPENAL_VERSION=1.13
+OPENAL_COMPILE="$WD"/openal-src
+OPENAL_INSTALL="$WD"/openal
+OPENAL_SRCBASE=openal-soft-$OPENAL_VERSION
+OPENAL_SRCFILE=$OPENAL_SRCBASE.tar.bz2
+OPENAL_SRCPATH=/openal-releases
+OPENAL_SRCSITE=kcat.strangesoft.net
+
 # Declare variables related to OpenCV libraries.
 OPENCV_VERSION=2.3.1
 OPENCV_COMPILE="$WD"/opencv-src
@@ -410,6 +419,7 @@ if $REBUILD_LIBRARIES; then
 	run rm -rf "$PREMAKE_INSTALL"
 	run rm -rf "$YASM_INSTALL"
 	run rm -rf "$FFMPEG_INSTALL"
+	run rm -rf "$OPENAL_INSTALL"
 	stageOK
 fi
 
@@ -474,6 +484,37 @@ if [ ! -d "$FFMPEG_INSTALL" ]; then
 	run make -j$JOBS install
 	run cd $WD
 	run rm -rf "$FFMPEG_COMPILE"
+	stageOK
+fi
+
+# Build OpenAL libraries if necessary.
+if [ ! -d "$OPENAL_INSTALL" ]; then
+	nextStage "Building OpenAL libraries"
+	prepare $OPENAL_SRCFILE "$OPENAL_COMPILE" $OPENAL_SRCBASE $OPENAL_SRCSITE $OPENAL_SRCPATH
+	run cd "$OPENAL_COMPILE"
+	run "$CMAKE_INSTALL"/bin/cmake \
+		-DALSA=OFF \
+		-DALSOFT_CONFIG=OFF \
+		-DCMAKE_BACKWARDS_COMPATIBILITY=2.8.2 \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_DEBUG_POSTFIX=d \
+		-DCMAKE_INSTALL_PREFIX="$OPENAL_INSTALL" \
+		-DDLOPEN=OFF \
+		-DDSOUND=OFF \
+		-DEXECUTABLE_OUTPUT_PATH= \
+		-DLIBRARY_OUTPUT_PATH= \
+		-DLIBTYPE=STATIC \
+		-DOSS=OFF \
+		-DPORTAUDIO=OFF \
+		-DPULSEAUDIO=OFF \
+		-DSOLARIS=OFF \
+		-DUTILS=OFF \
+		-DWAVE=OFF \
+		-DWERROR=OFF \
+		-DWINMM=OFF
+	run make -j$JOBS install
+	run cd $WD
+	run rm -rf "$OPENAL_COMPILE"
 	stageOK
 fi
 
