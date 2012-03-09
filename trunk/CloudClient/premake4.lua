@@ -551,9 +551,9 @@ solution "CloudClient"
 		linkoptions { "/OPT:NOREF", "/IGNORE:4049" }
 	configuration { }
 	
-	configuration { "linux", "gmake", "DebugStatic or ReleaseStatic" }
-		linkoptions { "-static" }
-	configuration { }
+	-- configuration { "linux", "gmake", "DebugStatic or ReleaseStatic" }
+	-- 	linkoptions { "-static" }
+	-- configuration { }
 	
 	-- A project defines one build target
 	
