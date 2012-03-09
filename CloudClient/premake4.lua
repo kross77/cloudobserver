@@ -473,10 +473,6 @@ function cloud.project.useFFmpeg()
 			"avutil",
 			"swscale"
 		}
-		
-		configuration { "DebugStatic or ReleaseStatic" }
-			links { "bz2" }
-		configuration { }
 	end
 	
 	if os.get() == "macosx" then
@@ -488,10 +484,6 @@ function cloud.project.useFFmpeg()
 			"avutil",
 			"swscale"
 		}
-		
-		configuration { "DebugStatic or ReleaseStatic" }
-			links { "bz2" }
-		configuration { }
 	end 	
 end
 
