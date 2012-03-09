@@ -620,6 +620,7 @@ if $CHECKOUT_SOURCE || [ ! -d "$CLOUDCLIENT_COMPILE" ]; then
 	nextStage "Checking out Cloud Client application source code"
 	run rm -rf "$CLOUDCLIENT_COMPILE"
 	run svn checkout https://$CLOUDCLIENT_SRCSITE$CLOUDCLIENT_SRCPATH "$CLOUDCLIENT_COMPILE"
+	run rm "$CLOUDCLIENT_COMPILE"/src/3rdparty/ffmpeg/inttypes.h
 	stageOK
 fi
 
