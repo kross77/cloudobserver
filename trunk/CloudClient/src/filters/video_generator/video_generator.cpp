@@ -12,7 +12,7 @@ video_generator::video_generator(int video_width, int video_height, int video_fr
 
 	this->base_frame = cvCreateImage(cvSize(this->width, this->height), 8, 3);
 	this->current_frame = cvCreateImage(cvSize(this->width, this->height), 8, 3);
-	cvRectangle(this->base_frame, cvPoint(0, 0), cvPoint(this->width, this->height), CV_RGB(0, 254, 53), CV_FILLED);
+	cvSet(this->base_frame, CV_RGB(0, 254, 53));
 	cvPutText(this->base_frame, username.c_str(), cvPoint(0, this->height - 10), &font, CV_RGB(1, 1, 1));
 
 	this->frame = avcodec_alloc_frame();
