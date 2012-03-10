@@ -2,12 +2,7 @@
 
 using namespace std;
 
-reader::reader(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, ofstream* dump, unsigned int timestamp_delta)
-{
-	this->socket = socket;
-	this->dump = dump;
-	this->timestamp_delta = timestamp_delta;
-}
+reader::reader(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, ofstream* dump, unsigned int timestamp_delta) : socket(socket), dump(dump), timestamp_delta(timestamp_delta) { }
 
 reader::~reader()
 {
