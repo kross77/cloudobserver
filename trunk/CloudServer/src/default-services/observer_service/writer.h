@@ -37,7 +37,7 @@ private:
 	int width;
 	int height;
 
-	std::list<reader*> readers;
+	std::list<boost::shared_ptr<reader> > readers;
 
 	boost::scoped_array<unsigned char> header;
 	std::vector<flv_tag> script_data, tags_buffer;
