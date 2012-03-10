@@ -32,8 +32,8 @@ private:
 
 	CvFont font;
 
-	IplImage* blank_frame;
-	IplImage* resized_frame;
+	IplImage* base_frame;
+	IplImage* current_frame;
 
 	ffmpeg::AVFrame* frame;
 
