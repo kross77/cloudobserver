@@ -23,7 +23,7 @@
 
 #include <http_service.hpp>
 
-#include "observer_writer.h"
+#include "writer.h"
 
 class observer_service: public http_service
 {
@@ -48,7 +48,7 @@ private:
 	bool dump_writers;
 	bool dump_readers;
 
-	std::map<std::string, observer_writer*> writers;
+	std::map<std::string, writer*> writers;
 };
 
 #endif // OBSERVER_SERVICE_H
