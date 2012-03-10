@@ -9,6 +9,7 @@
 #include <boost/asio.hpp>
 #include <boost/thread.hpp>
 
+#include "flv_tag.h"
 #include "reader.h"
 
 class writer
@@ -37,7 +38,7 @@ private:
 	std::set<reader*> readers;
 
 	char* header;
-	std::vector<std::pair<char*, int> > script_data, tags_buffer;
+	std::vector<flv_tag> script_data, tags_buffer;
 	unsigned int buffered_timestamp;
 	bool key_frames;
 
