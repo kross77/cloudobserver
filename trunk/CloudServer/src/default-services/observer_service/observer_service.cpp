@@ -164,7 +164,7 @@ void observer_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::sock
 
 		break;
 	case READER_CLIENT:
-		this->writers[nickname]->connect_reader(socket, dump);
+		this->writers[nickname]->connect_reader(boost::shared_ptr<reader>(new reader(socket, dump)));
 		break;
 	}
 }

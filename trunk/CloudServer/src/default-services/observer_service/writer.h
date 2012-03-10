@@ -19,7 +19,7 @@ class writer
 public:
 	writer(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<std::ofstream> dump);
 	~writer();
-	void connect_reader(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<std::ofstream> dump);
+	void connect_reader(boost::shared_ptr<reader> new_reader);
 	void process();
 	int get_width();
 	int get_height();
