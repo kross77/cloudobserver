@@ -40,7 +40,7 @@ void video_generator::disconnect()
 
 void video_generator::send()
 {
-	cvResize(this->base_frame, this->current_frame);
+	cvCopy(this->base_frame, this->current_frame);
 	boost::posix_time::ptime now = boost::date_time::second_clock<boost::posix_time::ptime>::local_time();
 	cvPutText(this->current_frame, boost::posix_time::to_simple_string(now.time_of_day()).c_str(),
 		cvPoint(0, this->height / 2 + 10), &font, CV_RGB(1, 1, 1));
