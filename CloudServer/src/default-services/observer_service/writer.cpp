@@ -24,14 +24,12 @@ writer::~writer()
 		delete[] i->header;
 		delete[] i->data;
 	}
-	script_data.clear();
 
 	for (vector<flv_tag>::iterator i = tags_buffer.begin(); i != tags_buffer.end(); ++i)
 	{
 		delete[] i->header;
 		delete[] i->data;
 	}
-	tags_buffer.clear();
 }
 
 void writer::connect_reader(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, ofstream* dump)
