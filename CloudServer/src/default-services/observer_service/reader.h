@@ -4,6 +4,7 @@
 #include <fstream>
 
 #include <boost/asio.hpp>
+#include <boost/scoped_array.hpp>
 
 #include "flv_format.h"
 #include "flv_tag.h"
