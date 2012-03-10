@@ -16,8 +16,8 @@ video_generator::video_generator(int video_width, int video_height, int video_fr
 	cvPutText(this->base_frame, username.c_str(), cvPoint(0, this->height - 10), &font, CV_RGB(1, 1, 1));
 
 	this->frame = avcodec_alloc_frame();
-	uint8_t* frame_buffer = (uint8_t*)av_mallocz(avpicture_get_size(PIX_FMT_BGR24, this->width, this->height));
-	avpicture_fill((AVPicture*)frame, frame_buffer, PIX_FMT_BGR24, this->width, this->height);
+	uint8_t* frame_buffer = (uint8_t*)av_mallocz(avpicture_get_size(PIX_FMT_RGB24, this->width, this->height));
+	avpicture_fill((AVPicture*)frame, frame_buffer, PIX_FMT_RGB24, this->width, this->height);
 
 	this->video_encoder_block = NULL;
 }
