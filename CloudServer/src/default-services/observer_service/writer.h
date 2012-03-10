@@ -21,8 +21,8 @@ public:
 	~writer();
 	void connect_reader(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, std::ofstream* dump);
 	void process();
-	int get_width() { return this->width; }
-	int get_height() { return this->height; }
+	int get_width();
+	int get_height();
 
 	class flv_format_violation_exception: public std::exception { };
 private:
