@@ -6,35 +6,35 @@ writer::writer(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, ofstream*
 
 writer::~writer()
 {
-	this->socket->close();
+	socket->close();
 
-	if (this->dump != NULL)
+	if (dump != NULL)
 	{
-		this->dump->close();
+		dump->close();
 		delete dump;
 	}
 
-	for (set<reader*>::iterator i = this->readers.begin(); i != this->readers.end(); ++i)
+	for (set<reader*>::iterator i = readers.begin(); i != readers.end(); ++i)
 		delete *i;
 
-	delete[] this->header;
+	delete[] header;
 
-	for (vector<pair<char*, int> >::iterator i = this->script_data.begin(); i != this->script_data.end(); ++i)
+	for (vector<pair<char*, int> >::iterator i = script_data.begin(); i != script_data.end(); ++i)
 		delete[] i->first;
-	this->script_data.clear();
+	script_data.clear();
 
-	for (vector<pair<char*, int> >::iterator i = this->tags_buffer.begin(); i != this->tags_buffer.end(); ++i)
+	for (vector<pair<char*, int> >::iterator i = tags_buffer.begin(); i != tags_buffer.end(); ++i)
 		delete[] i->first;
-	this->tags_buffer.clear();
+	tags_buffer.clear();
 }
 
 void writer::connect_reader(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, ofstream* dump)
 {
-	boost::mutex::scoped_lock lock(this->mutex);
-	socket->send(boost::asio::buffer(this->header, HEADER_LENGTH));
+	boost::mutex::scoped_lock lock(mutex);
+	socket->send(boost::asio::buffer(header, HEADER_LENGTH));
 	if (dump != NULL)
-		dump->write(this->header, HEADER_LENGTH);
-	for (vector<pair<char*, int> >::iterator i = this->script_data.begin(); i != this->script_data.end(); ++i)
+		dump->write(header, HEADER_LENGTH);
+	for (vector<pair<char*, int> >::iterator i = script_data.begin(); i != script_data.end(); ++i)
 	{
 		socket->send(boost::asio::buffer(i->first, i->second));
 		if (dump != NULL)
@@ -42,14 +42,14 @@ void writer::connect_reader(boost::shared_ptr<boost::asio::ip::tcp::socket> sock
 	}
 
 	bool tag_header = true;
-	for (vector<pair<char*, int> >::iterator i = this->tags_buffer.begin(); i != this->tags_buffer.end(); ++i)
+	for (vector<pair<char*, int> >::iterator i = tags_buffer.begin(); i != tags_buffer.end(); ++i)
 	{
 		if (tag_header)
 		{
 			// Get timestamp.
 			unsigned int timestamp = to_ui24((unsigned char*)i->first, 4);
 			// Update timestamp.
-			unsigned int modified_timestamp = timestamp - this->buffered_timestamp;
+			unsigned int modified_timestamp = timestamp - buffered_timestamp;
 			char* modified_timestamp_ptr = (char*)(&modified_timestamp);
 
 			char* modified_tag_header = new char[TAG_HEADER_LENGTH];
@@ -73,7 +73,7 @@ void writer::connect_reader(boost::shared_ptr<boost::asio::ip::tcp::socket> sock
 
 		tag_header = !tag_header;
 	}
-	this->readers.insert(new reader(socket, dump, this->buffered_timestamp));
+	readers.insert(new reader(socket, dump, buffered_timestamp));
 }
 
 void writer::process()
@@ -81,37 +81,37 @@ void writer::process()
 	try
 	{
 		// FLV header
-		this->header = new char[HEADER_LENGTH];
-		boost::asio::read(*this->socket, boost::asio::buffer(this->header, HEADER_LENGTH));
-		if (this->dump != NULL)
-			this->dump->write(this->header, HEADER_LENGTH);
+		header = new char[HEADER_LENGTH];
+		boost::asio::read(*socket, boost::asio::buffer(header, HEADER_LENGTH));
+		if (dump != NULL)
+			dump->write(header, HEADER_LENGTH);
 		// Signature
-		if ((SIGNATURE1 != this->header[0]) || (SIGNATURE2 != this->header[1]) || (SIGNATURE3 != this->header[2]))
+		if ((SIGNATURE1 != header[0]) || (SIGNATURE2 != header[1]) || (SIGNATURE3 != header[2]))
 			throw flv_format_violation_exception();
 		// Version
-		if (VERSION != this->header[3])
+		if (VERSION != header[3])
 			throw flv_format_violation_exception();
 		// TypeFlags
-		if (0 != (this->header[4] >> 3))
+		if (0 != (header[4] >> 3))
 			throw flv_format_violation_exception();
-		//bool audio = (((this->header[4] & 0x4) >> 2) == 1);
-		if (0 != ((this->header[4] & 0x2) >> 1))
+		//bool audio = (((header[4] & 0x4) >> 2) == 1);
+		if (0 != ((header[4] & 0x2) >> 1))
 			throw flv_format_violation_exception();
-		//bool video = ((this->header[4] & 0x1) == 1);
+		//bool video = ((header[4] & 0x1) == 1);
 		// DataOffset
-		unsigned int data_offset = to_ui32((unsigned char*)this->header, 5);
+		unsigned int data_offset = to_ui32((unsigned char*)header, 5);
 		// PreviousTagSize0
-		if (0 != to_ui32((unsigned char*)this->header, 9))
+		if (0 != to_ui32((unsigned char*)header, 9))
 			throw flv_format_violation_exception();
 
 		// FLV body
-		while (this->socket->is_open())
+		while (socket->is_open())
 		{
 			// FLV tag header
 			char* tag_header = new char[TAG_HEADER_LENGTH];
-			boost::asio::read(*this->socket, boost::asio::buffer(tag_header, TAG_HEADER_LENGTH));
-			if (this->dump != NULL)
-				this->dump->write(tag_header, TAG_HEADER_LENGTH);
+			boost::asio::read(*socket, boost::asio::buffer(tag_header, TAG_HEADER_LENGTH));
+			if (dump != NULL)
+				dump->write(tag_header, TAG_HEADER_LENGTH);
 			// TagType
 			if ((tag_header[0] != TAGTYPE_AUDIO) && (tag_header[0] != TAGTYPE_VIDEO) && (tag_header[0] != TAGTYPE_DATA))
 				throw flv_format_violation_exception();
@@ -126,39 +126,39 @@ void writer::process()
 				throw flv_format_violation_exception();
 			// Data
 			char* tag_data = new char[data_size];
-			boost::asio::read(*this->socket, boost::asio::buffer(tag_data, data_size));
-			if (this->dump != NULL)
-				this->dump->write(tag_data, data_size);
+			boost::asio::read(*socket, boost::asio::buffer(tag_data, data_size));
+			if (dump != NULL)
+				dump->write(tag_data, data_size);
 
-			boost::mutex::scoped_lock lock(this->mutex);
+			boost::mutex::scoped_lock lock(mutex);
 			if ((tag_header[0] == TAGTYPE_VIDEO) && (1 == (tag_data[0] & 0xF0) >> 4))
 			{
-				this->key_frames = true;
-				for (vector<pair<char*, int> >::iterator i = this->tags_buffer.begin(); i != this->tags_buffer.end(); ++i)
+				key_frames = true;
+				for (vector<pair<char*, int> >::iterator i = tags_buffer.begin(); i != tags_buffer.end(); ++i)
 					delete[] i->first;
-				this->tags_buffer.clear();
-				this->buffered_timestamp = timestamp;
+				tags_buffer.clear();
+				buffered_timestamp = timestamp;
 			}
 
 			if (tag_header[0] == TAGTYPE_DATA)
 			{
-				this->width = (int)get_double_variable_from_flv_script_tag(tag_data, data_size, "width");
-				this->height = (int)get_double_variable_from_flv_script_tag(tag_data, data_size, "height");
+				width = (int)get_double_variable_from_flv_script_tag(tag_data, data_size, "width");
+				height = (int)get_double_variable_from_flv_script_tag(tag_data, data_size, "height");
 
-				this->script_data.push_back(pair<char*, int>(tag_header, TAG_HEADER_LENGTH));
-				this->script_data.push_back(pair<char*, int>(tag_data, data_size));
+				script_data.push_back(pair<char*, int>(tag_header, TAG_HEADER_LENGTH));
+				script_data.push_back(pair<char*, int>(tag_data, data_size));
 			}
 
-			if (this->key_frames)
+			if (key_frames)
 			{
-				this->tags_buffer.push_back(pair<char*, int>(tag_header, TAG_HEADER_LENGTH));
-				this->tags_buffer.push_back(pair<char*, int>(tag_data, data_size));
+				tags_buffer.push_back(pair<char*, int>(tag_header, TAG_HEADER_LENGTH));
+				tags_buffer.push_back(pair<char*, int>(tag_data, data_size));
 			}
 			else
-				this->buffered_timestamp = timestamp;
+				buffered_timestamp = timestamp;
 
 			set<reader*> disconnected_readers;
-			for (set<reader*>::iterator i = this->readers.begin(); i != this->readers.end(); ++i)
+			for (set<reader*>::iterator i = readers.begin(); i != readers.end(); ++i)
 			{
 				// Update timestamp.
 				unsigned int modified_timestamp = timestamp - (*i)->timestamp_delta;
@@ -192,9 +192,9 @@ void writer::process()
 			}
 
 			for (set<reader*>::iterator i = disconnected_readers.begin(); i != disconnected_readers.end(); ++i)
-				this->readers.erase(*i);
+				readers.erase(*i);
 
-			if (!this->key_frames && (tag_header[0] != TAGTYPE_DATA))
+			if (!key_frames && (tag_header[0] != TAGTYPE_DATA))
 			{
 				delete[] tag_header;
 				delete[] tag_data;

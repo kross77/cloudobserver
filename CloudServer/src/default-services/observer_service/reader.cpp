@@ -6,11 +6,11 @@ reader::reader(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, ofstream*
 
 reader::~reader()
 {
-	this->socket->close();
+	socket->close();
 
-	if (this->dump != NULL)
+	if (dump != NULL)
 	{
-		this->dump->close();
+		dump->close();
 		delete dump;
 	}
 }
