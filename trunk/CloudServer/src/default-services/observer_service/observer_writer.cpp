@@ -25,7 +25,7 @@ observer_writer::~observer_writer()
 		delete dump;
 	}
 
-	for (std::vector<observer_reader*>::iterator i = this->readers.begin(); i != this->readers.end(); ++i)
+	for (std::set<observer_reader*>::iterator i = this->readers.begin(); i != this->readers.end(); ++i)
 		delete *i;
 
 	delete[] this->header;
@@ -84,7 +84,7 @@ void observer_writer::connect_reader(boost::shared_ptr<boost::asio::ip::tcp::soc
 
 		tag_header = !tag_header;
 	}
-	this->readers.push_back(new observer_reader(socket, dump, this->buffered_timestamp));
+	this->readers.insert(new observer_reader(socket, dump, this->buffered_timestamp));
 }
 
 void observer_writer::process()
@@ -168,7 +168,7 @@ void observer_writer::process()
 			else
 				this->buffered_timestamp = timestamp;
 
-			for (std::vector<observer_reader*>::iterator i = this->readers.begin(); i != this->readers.end(); ++i)
+			for (std::set<observer_reader*>::iterator i = this->readers.begin(); i != this->readers.end(); ++i)
 			{
 				// Update timestamp.
 				unsigned int modified_timestamp = timestamp - (*i)->timestamp_delta;
@@ -195,13 +195,13 @@ void observer_writer::process()
 				{
 					std::cout << "Cloud Service: Reader connection was closed." << std::endl;
 					delete *i;
-					this->disconnected_readers.push_back(i);
+					this->disconnected_readers.insert(*i);
 				}
 
 				delete[] modified_tag_header;
 			}
 
-			for (std::vector<std::vector<observer_reader*>::iterator>::iterator i = this->disconnected_readers.begin(); i != this->disconnected_readers.end(); ++i)
+			for (std::set<observer_reader*>::iterator i = this->disconnected_readers.begin(); i != this->disconnected_readers.end(); ++i)
 				this->readers.erase(*i);
 			this->disconnected_readers.clear();
 
