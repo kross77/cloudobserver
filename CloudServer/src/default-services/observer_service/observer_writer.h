@@ -34,7 +34,7 @@ private:
 	int width;
 	int height;
 
-	std::set<observer_reader*> readers, disconnected_readers;
+	std::set<observer_reader*> readers;
 
 	char* header;
 	std::vector<std::pair<char*, int> > script_data, tags_buffer;

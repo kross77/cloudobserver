@@ -168,6 +168,7 @@ void observer_writer::process()
 			else
 				this->buffered_timestamp = timestamp;
 
+			std::set<observer_reader*> disconnected_readers;
 			for (std::set<observer_reader*>::iterator i = this->readers.begin(); i != this->readers.end(); ++i)
 			{
 				// Update timestamp.
@@ -195,15 +196,14 @@ void observer_writer::process()
 				{
 					std::cout << "Cloud Service: Reader connection was closed." << std::endl;
 					delete *i;
-					this->disconnected_readers.insert(*i);
+					disconnected_readers.insert(*i);
 				}
 
 				delete[] modified_tag_header;
 			}
 
-			for (std::set<observer_reader*>::iterator i = this->disconnected_readers.begin(); i != this->disconnected_readers.end(); ++i)
+			for (std::set<observer_reader*>::iterator i = disconnected_readers.begin(); i != disconnected_readers.end(); ++i)
 				this->readers.erase(*i);
-			this->disconnected_readers.clear();
 
 			if (!this->key_frames && (tag_header[0] != TAGTYPE_DATA))
 			{
