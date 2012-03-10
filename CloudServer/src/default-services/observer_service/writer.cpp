@@ -1,6 +1,8 @@
 #include "writer.h"
 
-writer::writer(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, std::ofstream* dump)
+using namespace std;
+
+writer::writer(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, ofstream* dump)
 	: HEADER_LENGTH(13), SIGNATURE1(0x46), SIGNATURE2(0x4C), SIGNATURE3(0x56),
 	VERSION(1), TAG_HEADER_LENGTH(11), TAGTYPE_AUDIO(8), TAGTYPE_VIDEO(9), TAGTYPE_DATA(18)
 {
@@ -25,27 +27,27 @@ writer::~writer()
 		delete dump;
 	}
 
-	for (std::set<reader*>::iterator i = this->readers.begin(); i != this->readers.end(); ++i)
+	for (set<reader*>::iterator i = this->readers.begin(); i != this->readers.end(); ++i)
 		delete *i;
 
 	delete[] this->header;
 
-	for (std::vector<std::pair<char*, int> >::iterator i = this->script_data.begin(); i != this->script_data.end(); ++i)
+	for (vector<pair<char*, int> >::iterator i = this->script_data.begin(); i != this->script_data.end(); ++i)
 		delete[] i->first;
 	this->script_data.clear();
 
-	for (std::vector<std::pair<char*, int> >::iterator i = this->tags_buffer.begin(); i != this->tags_buffer.end(); ++i)
+	for (vector<pair<char*, int> >::iterator i = this->tags_buffer.begin(); i != this->tags_buffer.end(); ++i)
 		delete[] i->first;
 	this->tags_buffer.clear();
 }
 
-void writer::connect_reader(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, std::ofstream* dump)
+void writer::connect_reader(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, ofstream* dump)
 {
 	boost::mutex::scoped_lock lock(this->mutex);
 	socket->send(boost::asio::buffer(this->header, HEADER_LENGTH));
 	if (dump != NULL)
 		dump->write(this->header, HEADER_LENGTH);
-	for (std::vector<std::pair<char*, int> >::iterator i = this->script_data.begin(); i != this->script_data.end(); ++i)
+	for (vector<pair<char*, int> >::iterator i = this->script_data.begin(); i != this->script_data.end(); ++i)
 	{
 		socket->send(boost::asio::buffer(i->first, i->second));
 		if (dump != NULL)
@@ -53,7 +55,7 @@ void writer::connect_reader(boost::shared_ptr<boost::asio::ip::tcp::socket> sock
 	}
 
 	bool tag_header = true;
-	for (std::vector<std::pair<char*, int> >::iterator i = this->tags_buffer.begin(); i != this->tags_buffer.end(); ++i)
+	for (vector<pair<char*, int> >::iterator i = this->tags_buffer.begin(); i != this->tags_buffer.end(); ++i)
 	{
 		if (tag_header)
 		{
@@ -145,7 +147,7 @@ void writer::process()
 			if ((tag_header[0] == TAGTYPE_VIDEO) && (1 == (tag_data[0] & 0xF0) >> 4))
 			{
 				this->key_frames = true;
-				for (std::vector<std::pair<char*, int> >::iterator i = this->tags_buffer.begin(); i != this->tags_buffer.end(); ++i)
+				for (vector<pair<char*, int> >::iterator i = this->tags_buffer.begin(); i != this->tags_buffer.end(); ++i)
 					delete[] i->first;
 				this->tags_buffer.clear();
 				this->buffered_timestamp = timestamp;
@@ -156,20 +158,20 @@ void writer::process()
 				this->width = (int)get_double_variable_from_flv_script_tag(tag_data, data_size, "width");
 				this->height = (int)get_double_variable_from_flv_script_tag(tag_data, data_size, "height");
 
-				this->script_data.push_back(std::pair<char*, int>(tag_header, TAG_HEADER_LENGTH));
-				this->script_data.push_back(std::pair<char*, int>(tag_data, data_size));
+				this->script_data.push_back(pair<char*, int>(tag_header, TAG_HEADER_LENGTH));
+				this->script_data.push_back(pair<char*, int>(tag_data, data_size));
 			}
 
 			if (this->key_frames)
 			{
-				this->tags_buffer.push_back(std::pair<char*, int>(tag_header, TAG_HEADER_LENGTH));
-				this->tags_buffer.push_back(std::pair<char*, int>(tag_data, data_size));
+				this->tags_buffer.push_back(pair<char*, int>(tag_header, TAG_HEADER_LENGTH));
+				this->tags_buffer.push_back(pair<char*, int>(tag_data, data_size));
 			}
 			else
 				this->buffered_timestamp = timestamp;
 
-			std::set<reader*> disconnected_readers;
-			for (std::set<reader*>::iterator i = this->readers.begin(); i != this->readers.end(); ++i)
+			set<reader*> disconnected_readers;
+			for (set<reader*>::iterator i = this->readers.begin(); i != this->readers.end(); ++i)
 			{
 				// Update timestamp.
 				unsigned int modified_timestamp = timestamp - (*i)->timestamp_delta;
@@ -194,7 +196,7 @@ void writer::process()
 				}
 				catch (boost::system::system_error &e)
 				{
-					std::cout << "Cloud Service: Reader connection was closed." << std::endl;
+					cout << "Cloud Service: Reader connection was closed." << endl;
 					delete *i;
 					disconnected_readers.insert(*i);
 				}
@@ -202,7 +204,7 @@ void writer::process()
 				delete[] modified_tag_header;
 			}
 
-			for (std::set<reader*>::iterator i = disconnected_readers.begin(); i != disconnected_readers.end(); ++i)
+			for (set<reader*>::iterator i = disconnected_readers.begin(); i != disconnected_readers.end(); ++i)
 				this->readers.erase(*i);
 
 			if (!this->key_frames && (tag_header[0] != TAGTYPE_DATA))
@@ -214,21 +216,21 @@ void writer::process()
 	}
 	catch (boost::system::system_error)
 	{
-		std::cout << "Cloud Service: Writer connection was closed." << std::endl;
+		cout << "Cloud Service: Writer connection was closed." << endl;
 	}
 	catch (flv_format_violation_exception)
 	{
-		std::cout << "Cloud Service: FLV format violation exception was thrown." << std::endl;
+		cout << "Cloud Service: FLV format violation exception was thrown." << endl;
 	}
 }
 
-double writer::get_double_variable_from_flv_script_tag(char* script_tag_data, int data_size, std::string variable_name)
+double writer::get_double_variable_from_flv_script_tag(char* script_tag_data, int data_size, string variable_name)
 {
 	char* script_data = new char[data_size + 1];
 	for (int i = 0; i < data_size; ++i)
 		script_data[i] = script_tag_data[i] == '\0' ? ' ' : script_tag_data[i];
 	script_data[data_size] = '\0';
-	std::string tag_data(script_data);
+	string tag_data(script_data);
 	delete[] script_data;
 
 	int index = tag_data.find(variable_name) + variable_name.length() + 1;
