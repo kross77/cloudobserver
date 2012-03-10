@@ -35,3 +35,14 @@ void reader::send_data_tag(flv_tag tag)
 		dump->write(tag.data, tag.data_size);
 	}
 }
+
+void reader::send_script_tag(flv_tag tag)
+{
+	socket->send(boost::asio::buffer(tag.header, TAG_HEADER_LENGTH));
+	socket->send(boost::asio::buffer(tag.data, tag.data_size));
+	if (dump != NULL)
+	{
+		dump->write(tag.header, TAG_HEADER_LENGTH);
+		dump->write(tag.data, tag.data_size);
+	}
+}

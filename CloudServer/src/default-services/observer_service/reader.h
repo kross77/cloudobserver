@@ -16,6 +16,7 @@ public:
 	~reader();
 
 	void send_data_tag(flv_tag tag);
+	void send_script_tag(flv_tag tag);
 
 	boost::shared_ptr<boost::asio::ip::tcp::socket> socket;
 	std::ofstream* dump;
