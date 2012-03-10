@@ -4,6 +4,7 @@
 #include <exception>
 #include <fstream>
 #include <iostream>
+#include <set>
 
 #include <boost/asio.hpp>
 #include <boost/thread.hpp>
@@ -33,8 +34,7 @@ private:
 	int width;
 	int height;
 
-	std::vector<observer_reader*> readers;
-	std::vector<std::vector<observer_reader*>::iterator> disconnected_readers;
+	std::set<observer_reader*> readers, disconnected_readers;
 
 	char* header;
 	std::vector<std::pair<char*, int> > script_data, tags_buffer;
