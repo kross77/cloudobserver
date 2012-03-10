@@ -7,6 +7,7 @@ public:
 	char *header;
 	char *data;
 	unsigned int data_size;
+	unsigned int timestamp;
 };
 
 #endif // FLV_TAG_H

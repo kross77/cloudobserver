@@ -119,7 +119,7 @@ void writer::process()
 			// DataSize
 			tag.data_size = to_ui24((unsigned char*)tag.header, 1) + 4;
 			// Timestamp
-			unsigned int timestamp = to_ui24((unsigned char*)tag.header, 4);
+			tag.timestamp = to_ui24((unsigned char*)tag.header, 4);
 			// TimestampExtended
 			//unsigned int timestamp_extended = tagHeader[7];
 			// StreamID
@@ -141,7 +141,7 @@ void writer::process()
 					delete[] i->data;
 				}
 				tags_buffer.clear();
-				buffered_timestamp = timestamp;
+				buffered_timestamp = tag.timestamp;
 			}
 
 			if (tag.header[0] == TAGTYPE_DATA)
@@ -155,13 +155,13 @@ void writer::process()
 			if (key_frames)
 				tags_buffer.push_back(tag);
 			else
-				buffered_timestamp = timestamp;
+				buffered_timestamp = tag.timestamp;
 
 			set<reader*> disconnected_readers;
 			for (set<reader*>::iterator i = readers.begin(); i != readers.end(); ++i)
 			{
 				// Update timestamp.
-				unsigned int modified_timestamp = timestamp - (*i)->timestamp_delta;
+				unsigned int modified_timestamp = tag.timestamp - (*i)->timestamp_delta;
 				char* modified_timestamp_ptr = (char*)(&modified_timestamp);
 
 				char* modified_tag_header = new char[TAG_HEADER_LENGTH];
