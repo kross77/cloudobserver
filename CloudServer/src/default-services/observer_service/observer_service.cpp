@@ -44,7 +44,7 @@ void observer_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::sock
 		type = READER_CLIENT;
 
 	std::string nickname = request->url.substr(1);
-	std::ofstream* dump = NULL;
+	boost::shared_ptr<std::ofstream> dump;
 	switch (type)
 	{
 	case GENERAL_CLIENT:
@@ -108,7 +108,7 @@ void observer_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::sock
 			{
 				if (!boost::filesystem::exists(this->dumps_location))
 					boost::filesystem::create_directory(this->dumps_location);
-				dump = new std::ofstream((this->dumps_location.string() + '/' + get_current_date_time() + '-' + nickname + "-writer.flv").c_str(), std::ofstream::binary);
+				dump.reset(new std::ofstream((this->dumps_location.string() + '/' + get_current_date_time() + '-' + nickname + "-writer.flv").c_str(), std::ofstream::binary));
 			}
 		}
 		break;
@@ -134,7 +134,7 @@ void observer_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::sock
 			{
 				if (!boost::filesystem::exists(this->dumps_location))
 					boost::filesystem::create_directory(this->dumps_location);
-				dump = new std::ofstream((this->dumps_location.string() + '/' + get_current_date_time() + '-' + nickname + "-reader.flv").c_str(), std::ofstream::binary);
+				dump.reset(new std::ofstream((this->dumps_location.string() + '/' + get_current_date_time() + '-' + nickname + "-reader.flv").c_str(), std::ofstream::binary));
 			}
 		}
 		break;

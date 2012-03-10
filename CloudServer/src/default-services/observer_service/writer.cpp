@@ -2,27 +2,24 @@
 
 using namespace std;
 
-writer::writer(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, ofstream* dump) : socket(socket), dump(dump), width(320), height(240), header(NULL), buffered_timestamp(0), key_frames(false) { }
+writer::writer(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<ofstream> dump) : socket(socket), dump(dump), width(320), height(240), header(NULL), buffered_timestamp(0), key_frames(false) { }
 
 writer::~writer()
 {
 	socket->close();
 
-	if (dump != NULL)
-	{
+	if (dump)
 		dump->close();
-		delete dump;
-	}
 
 	for (set<reader*>::iterator i = readers.begin(); i != readers.end(); ++i)
 		delete *i;
 }
 
-void writer::connect_reader(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, ofstream* dump)
+void writer::connect_reader(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<ofstream> dump)
 {
 	boost::mutex::scoped_lock lock(mutex);
 	socket->send(boost::asio::buffer(header.get(), HEADER_LENGTH));
-	if (dump != NULL)
+	if (dump)
 		dump->write((char *)header.get(), HEADER_LENGTH);
 	reader *new_reader = new reader(socket, dump, buffered_timestamp);
 	for (vector<flv_tag>::iterator i = script_data.begin(); i != script_data.end(); ++i)
@@ -39,7 +36,7 @@ void writer::process()
 		// FLV header
 		header.reset(new unsigned char[HEADER_LENGTH]);
 		boost::asio::read(*socket, boost::asio::buffer(header.get(), HEADER_LENGTH));
-		if (dump != NULL)
+		if (dump)
 			dump->write((char *)header.get(), HEADER_LENGTH);
 		// Signature
 		if ((SIGNATURE1 != header[0]) || (SIGNATURE2 != header[1]) || (SIGNATURE3 != header[2]))
@@ -67,7 +64,7 @@ void writer::process()
 			// FLV tag header
 			tag.header.reset(new unsigned char[TAG_HEADER_LENGTH]);
 			boost::asio::read(*socket, boost::asio::buffer(tag.header.get(), TAG_HEADER_LENGTH));
-			if (dump != NULL)
+			if (dump)
 				dump->write((char *)tag.header.get(), TAG_HEADER_LENGTH);
 			// TagType
 			if ((tag.header[0] != TAGTYPE_AUDIO) && (tag.header[0] != TAGTYPE_VIDEO) && (tag.header[0] != TAGTYPE_DATA))
@@ -84,7 +81,7 @@ void writer::process()
 			// Data
 			tag.data.reset(new unsigned char[tag.data_size]);
 			boost::asio::read(*socket, boost::asio::buffer(tag.data.get(), tag.data_size));
-			if (dump != NULL)
+			if (dump)
 				dump->write((char *)tag.data.get(), tag.data_size);
 
 			boost::mutex::scoped_lock lock(mutex);

@@ -17,9 +17,9 @@
 class writer
 {
 public:
-	writer(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, std::ofstream* dump);
+	writer(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<std::ofstream> dump);
 	~writer();
-	void connect_reader(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, std::ofstream* dump);
+	void connect_reader(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<std::ofstream> dump);
 	void process();
 	int get_width();
 	int get_height();
@@ -32,7 +32,7 @@ private:
 	unsigned int to_ui32(unsigned char* value, int start_index);
 
 	boost::shared_ptr<boost::asio::ip::tcp::socket> socket;
-	std::ofstream* dump;
+	boost::shared_ptr<std::ofstream> dump;
 
 	int width;
 	int height;
