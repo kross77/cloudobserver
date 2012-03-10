@@ -4,7 +4,7 @@
 #include <exception>
 #include <fstream>
 #include <iostream>
-#include <set>
+#include <list>
 
 #include <boost/asio.hpp>
 #include <boost/scoped_array.hpp>
@@ -37,7 +37,7 @@ private:
 	int width;
 	int height;
 
-	std::set<reader*> readers;
+	std::list<reader*> readers;
 
 	boost::scoped_array<unsigned char> header;
 	std::vector<flv_tag> script_data, tags_buffer;
