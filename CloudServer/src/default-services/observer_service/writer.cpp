@@ -1,6 +1,6 @@
-#include "observer_writer.h"
+#include "writer.h"
 
-observer_writer::observer_writer(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, std::ofstream* dump)
+writer::writer(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, std::ofstream* dump)
 	: HEADER_LENGTH(13), SIGNATURE1(0x46), SIGNATURE2(0x4C), SIGNATURE3(0x56),
 	VERSION(1), TAG_HEADER_LENGTH(11), TAGTYPE_AUDIO(8), TAGTYPE_VIDEO(9), TAGTYPE_DATA(18)
 {
@@ -15,7 +15,7 @@ observer_writer::observer_writer(boost::shared_ptr<boost::asio::ip::tcp::socket>
 	this->key_frames = false;
 }
 
-observer_writer::~observer_writer()
+writer::~writer()
 {
 	this->socket->close();
 
@@ -25,7 +25,7 @@ observer_writer::~observer_writer()
 		delete dump;
 	}
 
-	for (std::set<observer_reader*>::iterator i = this->readers.begin(); i != this->readers.end(); ++i)
+	for (std::set<reader*>::iterator i = this->readers.begin(); i != this->readers.end(); ++i)
 		delete *i;
 
 	delete[] this->header;
@@ -39,7 +39,7 @@ observer_writer::~observer_writer()
 	this->tags_buffer.clear();
 }
 
-void observer_writer::connect_reader(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, std::ofstream* dump)
+void writer::connect_reader(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, std::ofstream* dump)
 {
 	boost::mutex::scoped_lock lock(this->mutex);
 	socket->send(boost::asio::buffer(this->header, HEADER_LENGTH));
@@ -84,10 +84,10 @@ void observer_writer::connect_reader(boost::shared_ptr<boost::asio::ip::tcp::soc
 
 		tag_header = !tag_header;
 	}
-	this->readers.insert(new observer_reader(socket, dump, this->buffered_timestamp));
+	this->readers.insert(new reader(socket, dump, this->buffered_timestamp));
 }
 
-void observer_writer::process()
+void writer::process()
 {
 	try
 	{
@@ -168,8 +168,8 @@ void observer_writer::process()
 			else
 				this->buffered_timestamp = timestamp;
 
-			std::set<observer_reader*> disconnected_readers;
-			for (std::set<observer_reader*>::iterator i = this->readers.begin(); i != this->readers.end(); ++i)
+			std::set<reader*> disconnected_readers;
+			for (std::set<reader*>::iterator i = this->readers.begin(); i != this->readers.end(); ++i)
 			{
 				// Update timestamp.
 				unsigned int modified_timestamp = timestamp - (*i)->timestamp_delta;
@@ -202,7 +202,7 @@ void observer_writer::process()
 				delete[] modified_tag_header;
 			}
 
-			for (std::set<observer_reader*>::iterator i = disconnected_readers.begin(); i != disconnected_readers.end(); ++i)
+			for (std::set<reader*>::iterator i = disconnected_readers.begin(); i != disconnected_readers.end(); ++i)
 				this->readers.erase(*i);
 
 			if (!this->key_frames && (tag_header[0] != TAGTYPE_DATA))
@@ -222,7 +222,7 @@ void observer_writer::process()
 	}
 }
 
-double observer_writer::get_double_variable_from_flv_script_tag(char* script_tag_data, int data_size, std::string variable_name)
+double writer::get_double_variable_from_flv_script_tag(char* script_tag_data, int data_size, std::string variable_name)
 {
 	char* script_data = new char[data_size + 1];
 	for (int i = 0; i < data_size; ++i)
@@ -239,17 +239,17 @@ double observer_writer::get_double_variable_from_flv_script_tag(char* script_tag
 	return result;
 }
 
-unsigned short observer_writer::to_ui16(unsigned char* value, int start_index)
+unsigned short writer::to_ui16(unsigned char* value, int start_index)
 {
 	return (unsigned short)(value[start_index] << 8 | value[start_index + 1]);
 }
 
-unsigned int observer_writer::to_ui24(unsigned char* value, int start_index)
+unsigned int writer::to_ui24(unsigned char* value, int start_index)
 {
 	return (unsigned int)(value[start_index] << 16 | value[start_index + 1] << 8 | value[start_index + 2]);
 }
 
-unsigned int observer_writer::to_ui32(unsigned char* value, int start_index)
+unsigned int writer::to_ui32(unsigned char* value, int start_index)
 {
 	return (unsigned int)(value[start_index] << 24 | value[start_index + 1] << 16 | value[start_index + 2] << 8 | value[start_index + 3]);
 }

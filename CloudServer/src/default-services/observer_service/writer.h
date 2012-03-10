@@ -1,5 +1,5 @@
-#ifndef OBSERVER_WRITER_H
-#define OBSERVER_WRITER_H
+#ifndef WRITER_H
+#define WRITER_H
 
 #include <exception>
 #include <fstream>
@@ -9,13 +9,13 @@
 #include <boost/asio.hpp>
 #include <boost/thread.hpp>
 
-#include "observer_reader.h"
+#include "reader.h"
 
-class observer_writer
+class writer
 {
 public:
-	observer_writer(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, std::ofstream* dump);
-	~observer_writer();
+	writer(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, std::ofstream* dump);
+	~writer();
 	void connect_reader(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, std::ofstream* dump);
 	void process();
 	int get_width() { return this->width; }
@@ -34,7 +34,7 @@ private:
 	int width;
 	int height;
 
-	std::set<observer_reader*> readers;
+	std::set<reader*> readers;
 
 	char* header;
 	std::vector<std::pair<char*, int> > script_data, tags_buffer;
@@ -54,4 +54,4 @@ private:
     const char TAGTYPE_DATA;
 };
 
-#endif // OBSERVER_WRITER_H
+#endif // WRITER_H

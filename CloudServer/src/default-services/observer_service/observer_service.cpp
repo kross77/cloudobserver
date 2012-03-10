@@ -10,7 +10,7 @@ observer_service::observer_service()
 
 observer_service::~observer_service()
 {
-	for (std::map<std::string, observer_writer*>::iterator i = writers.begin(); i != writers.end(); ++i)
+	for (std::map<std::string, writer*>::iterator i = writers.begin(); i != writers.end(); ++i)
 		delete i->second;
 }
 
@@ -22,7 +22,7 @@ void observer_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::sock
 	{
 		std::ostringstream users_stream;
 		users_stream << "[";
-		for (std::map<std::string, observer_writer*>::iterator i = this->writers.begin(); i != this->writers.end(); ++i)
+		for (std::map<std::string, writer*>::iterator i = this->writers.begin(); i != this->writers.end(); ++i)
 			users_stream << "\n\t{\n\t\t\"nickname\": \""
 				<< i->first << "\",\n\t\t\"width\": "
 				<< i->second->get_width() << ",\n\t\t\"height\": "
@@ -150,17 +150,17 @@ void observer_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::sock
 	if (response->status != 200)
 		return;
 
-	observer_writer* writer = NULL;
+	writer* new_writer = NULL;
 	switch (type)
 	{
 	case WRITER_CLIENT:
-		writer = new observer_writer(socket, dump);
-		this->writers[nickname] = writer;
+		new_writer = new writer(socket, dump);
+		this->writers[nickname] = new_writer;
 
-		writer->process();
+		new_writer->process();
 
 		this->writers.erase(nickname);
-		delete writer;
+		delete new_writer;
 
 		break;
 	case READER_CLIENT:
