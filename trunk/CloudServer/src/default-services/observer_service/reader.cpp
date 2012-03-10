@@ -19,12 +19,12 @@ void reader::send_tag(flv_tag tag)
 {
 	if (tag.header[0] == TAGTYPE_DATA)
 	{
-		socket->send(boost::asio::buffer(tag.header, TAG_HEADER_LENGTH));
-		socket->send(boost::asio::buffer(tag.data, tag.data_size));
+		socket->send(boost::asio::buffer(tag.header.get(), TAG_HEADER_LENGTH));
+		socket->send(boost::asio::buffer(tag.data.get(), tag.data_size));
 		if (dump != NULL)
 		{
-			dump->write((char *)tag.header, TAG_HEADER_LENGTH);
-			dump->write((char *)tag.data, tag.data_size);
+			dump->write((char *)tag.header.get(), TAG_HEADER_LENGTH);
+			dump->write((char *)tag.data.get(), tag.data_size);
 		}
 	}
 	else
@@ -34,17 +34,17 @@ void reader::send_tag(flv_tag tag)
 		unsigned char* modified_timestamp_ptr = (unsigned char*)(&modified_timestamp);
 
 		boost::scoped_array<unsigned char> modified_tag_header(new unsigned char[TAG_HEADER_LENGTH]);
-		memcpy(modified_tag_header.get(), tag.header, TAG_HEADER_LENGTH);
+		memcpy(modified_tag_header.get(), tag.header.get(), TAG_HEADER_LENGTH);
 		modified_tag_header[4] = modified_timestamp_ptr[2];
 		modified_tag_header[5] = modified_timestamp_ptr[1];
 		modified_tag_header[6] = modified_timestamp_ptr[0];
 
 		socket->send(boost::asio::buffer(modified_tag_header.get(), TAG_HEADER_LENGTH));
-		socket->send(boost::asio::buffer(tag.data, tag.data_size));
+		socket->send(boost::asio::buffer(tag.data.get(), tag.data_size));
 		if (dump != NULL)
 		{
 			dump->write((char *)modified_tag_header.get(), TAG_HEADER_LENGTH);
-			dump->write((char *)tag.data, tag.data_size);
+			dump->write((char *)tag.data.get(), tag.data_size);
 		}
 	}
 }

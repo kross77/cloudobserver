@@ -7,6 +7,7 @@
 #include <set>
 
 #include <boost/asio.hpp>
+#include <boost/scoped_array.hpp>
 #include <boost/thread.hpp>
 
 #include "flv_format.h"
@@ -38,7 +39,7 @@ private:
 
 	std::set<reader*> readers;
 
-	unsigned char* header;
+	boost::scoped_array<unsigned char> header;
 	std::vector<flv_tag> script_data, tags_buffer;
 	unsigned int buffered_timestamp;
 	bool key_frames;
