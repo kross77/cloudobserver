@@ -37,7 +37,7 @@ void writer::connect_reader(boost::shared_ptr<boost::asio::ip::tcp::socket> sock
 	boost::mutex::scoped_lock lock(mutex);
 	socket->send(boost::asio::buffer(header, HEADER_LENGTH));
 	if (dump != NULL)
-		dump->write(header, HEADER_LENGTH);
+		dump->write((char *)header, HEADER_LENGTH);
 	reader *new_reader = new reader(socket, dump, buffered_timestamp);
 	for (vector<flv_tag>::iterator i = script_data.begin(); i != script_data.end(); ++i)
 		new_reader->send_tag(*i);
@@ -51,10 +51,10 @@ void writer::process()
 	try
 	{
 		// FLV header
-		header = new char[HEADER_LENGTH];
+		header = new unsigned char[HEADER_LENGTH];
 		boost::asio::read(*socket, boost::asio::buffer(header, HEADER_LENGTH));
 		if (dump != NULL)
-			dump->write(header, HEADER_LENGTH);
+			dump->write((char *)header, HEADER_LENGTH);
 		// Signature
 		if ((SIGNATURE1 != header[0]) || (SIGNATURE2 != header[1]) || (SIGNATURE3 != header[2]))
 			throw flv_format_violation_exception();
@@ -69,9 +69,9 @@ void writer::process()
 			throw flv_format_violation_exception();
 		//bool video = ((header[4] & 0x1) == 1);
 		// DataOffset
-		unsigned int data_offset = to_ui32((unsigned char*)header, 5);
+		unsigned int data_offset = to_ui32(header, 5);
 		// PreviousTagSize0
-		if (0 != to_ui32((unsigned char*)header, 9))
+		if (0 != to_ui32(header, 9))
 			throw flv_format_violation_exception();
 
 		// FLV body
@@ -79,27 +79,27 @@ void writer::process()
 		{
 			flv_tag tag;
 			// FLV tag header
-			tag.header = new char[TAG_HEADER_LENGTH];
+			tag.header = new unsigned char[TAG_HEADER_LENGTH];
 			boost::asio::read(*socket, boost::asio::buffer(tag.header, TAG_HEADER_LENGTH));
 			if (dump != NULL)
-				dump->write(tag.header, TAG_HEADER_LENGTH);
+				dump->write((char *)tag.header, TAG_HEADER_LENGTH);
 			// TagType
 			if ((tag.header[0] != TAGTYPE_AUDIO) && (tag.header[0] != TAGTYPE_VIDEO) && (tag.header[0] != TAGTYPE_DATA))
 				throw flv_format_violation_exception();
 			// DataSize
-			tag.data_size = to_ui24((unsigned char*)tag.header, 1) + 4;
+			tag.data_size = to_ui24(tag.header, 1) + 4;
 			// Timestamp
-			tag.timestamp = to_ui24((unsigned char*)tag.header, 4);
+			tag.timestamp = to_ui24(tag.header, 4);
 			// TimestampExtended
 			//unsigned int timestamp_extended = tagHeader[7];
 			// StreamID
-			if (0 != to_ui24((unsigned char*)tag.header, 8))
+			if (0 != to_ui24(tag.header, 8))
 				throw flv_format_violation_exception();
 			// Data
-			tag.data = new char[tag.data_size];
+			tag.data = new unsigned char[tag.data_size];
 			boost::asio::read(*socket, boost::asio::buffer(tag.data, tag.data_size));
 			if (dump != NULL)
-				dump->write(tag.data, tag.data_size);
+				dump->write((char *)tag.data, tag.data_size);
 
 			boost::mutex::scoped_lock lock(mutex);
 			if ((tag.header[0] == TAGTYPE_VIDEO) && (1 == (tag.data[0] & 0xF0) >> 4))
@@ -163,7 +163,7 @@ void writer::process()
 	}
 }
 
-double writer::get_double_variable_from_flv_script_tag(char* script_tag_data, int data_size, string variable_name)
+double writer::get_double_variable_from_flv_script_tag(unsigned char* script_tag_data, int data_size, string variable_name)
 {
 	char* script_data = new char[data_size + 1];
 	for (int i = 0; i < data_size; ++i)
