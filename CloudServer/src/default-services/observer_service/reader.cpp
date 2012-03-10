@@ -14,3 +14,26 @@ reader::~reader()
 		delete dump;
 	}
 }
+
+void reader::send_data_tag(flv_tag tag)
+{
+	// Update timestamp.
+	unsigned int modified_timestamp = tag.timestamp - timestamp_delta;
+	char* modified_timestamp_ptr = (char*)(&modified_timestamp);
+
+	char* modified_tag_header = new char[TAG_HEADER_LENGTH];
+	memcpy(modified_tag_header, tag.header, TAG_HEADER_LENGTH);
+	modified_tag_header[4] = modified_timestamp_ptr[2];
+	modified_tag_header[5] = modified_timestamp_ptr[1];
+	modified_tag_header[6] = modified_timestamp_ptr[0];
+
+	socket->send(boost::asio::buffer(modified_tag_header, TAG_HEADER_LENGTH));
+	socket->send(boost::asio::buffer(tag.data, tag.data_size));
+	if (dump != NULL)
+	{
+		dump->write(modified_tag_header, TAG_HEADER_LENGTH);
+		dump->write(tag.data, tag.data_size);
+	}
+
+	delete[] modified_tag_header;
+}

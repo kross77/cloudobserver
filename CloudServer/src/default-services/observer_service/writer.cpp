@@ -49,31 +49,10 @@ void writer::connect_reader(boost::shared_ptr<boost::asio::ip::tcp::socket> sock
 		}
 	}
 
+	reader *new_reader = new reader(socket, dump, buffered_timestamp);
 	for (vector<flv_tag>::iterator i = tags_buffer.begin(); i != tags_buffer.end(); ++i)
-	{
-		// Get timestamp.
-		unsigned int timestamp = to_ui24((unsigned char*)i->header, 4);
-		// Update timestamp.
-		unsigned int modified_timestamp = timestamp - buffered_timestamp;
-		char* modified_timestamp_ptr = (char*)(&modified_timestamp);
-
-		char* modified_tag_header = new char[TAG_HEADER_LENGTH];
-		memcpy(modified_tag_header, i->header, TAG_HEADER_LENGTH);
-		modified_tag_header[4] = modified_timestamp_ptr[2];
-		modified_tag_header[5] = modified_timestamp_ptr[1];
-		modified_tag_header[6] = modified_timestamp_ptr[0];
-
-		socket->send(boost::asio::buffer(modified_tag_header, TAG_HEADER_LENGTH));
-		socket->send(boost::asio::buffer(i->data, i->data_size));
-		if (dump != NULL)
-		{
-			dump->write(modified_tag_header, TAG_HEADER_LENGTH);
-			dump->write(i->data, i->data_size);
-		}
-
-		delete[] modified_tag_header;
-	}
-	readers.insert(new reader(socket, dump, buffered_timestamp));
+		new_reader->send_data_tag(*i);
+	readers.insert(new_reader);
 }
 
 void writer::process()
@@ -160,26 +139,10 @@ void writer::process()
 			set<reader*> disconnected_readers;
 			for (set<reader*>::iterator i = readers.begin(); i != readers.end(); ++i)
 			{
-				// Update timestamp.
-				unsigned int modified_timestamp = tag.timestamp - (*i)->timestamp_delta;
-				char* modified_timestamp_ptr = (char*)(&modified_timestamp);
-
-				char* modified_tag_header = new char[TAG_HEADER_LENGTH];
-				memcpy(modified_tag_header, tag.header, TAG_HEADER_LENGTH);
-				modified_tag_header[4] = modified_timestamp_ptr[2];
-				modified_tag_header[5] = modified_timestamp_ptr[1];
-				modified_tag_header[6] = modified_timestamp_ptr[0];
-
 				// Write tag.
 				try
 				{
-					(*i)->socket->send(boost::asio::buffer(modified_tag_header, TAG_HEADER_LENGTH));
-					(*i)->socket->send(boost::asio::buffer(tag.data, tag.data_size));
-					if ((*i)->dump != NULL)
-					{
-						(*i)->dump->write(modified_tag_header, TAG_HEADER_LENGTH);
-						(*i)->dump->write(tag.data, tag.data_size);
-					}
+					(*i)->send_data_tag(tag);
 				}
 				catch (boost::system::system_error &e)
 				{
@@ -187,8 +150,6 @@ void writer::process()
 					delete *i;
 					disconnected_readers.insert(*i);
 				}
-
-				delete[] modified_tag_header;
 			}
 
 			for (set<reader*>::iterator i = disconnected_readers.begin(); i != disconnected_readers.end(); ++i)
