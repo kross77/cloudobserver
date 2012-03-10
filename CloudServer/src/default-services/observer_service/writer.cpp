@@ -10,9 +10,6 @@ writer::~writer()
 
 	if (dump)
 		dump->close();
-
-	for (list<reader*>::iterator i = readers.begin(); i != readers.end(); ++i)
-		delete *i;
 }
 
 void writer::connect_reader(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<ofstream> dump)
@@ -21,7 +18,7 @@ void writer::connect_reader(boost::shared_ptr<boost::asio::ip::tcp::socket> sock
 	socket->send(boost::asio::buffer(header.get(), HEADER_LENGTH));
 	if (dump)
 		dump->write((char *)header.get(), HEADER_LENGTH);
-	reader *new_reader = new reader(socket, dump, buffered_timestamp);
+	boost::shared_ptr<reader> new_reader(new reader(socket, dump, buffered_timestamp));
 	for (vector<flv_tag>::iterator i = script_data.begin(); i != script_data.end(); ++i)
 		new_reader->send_tag(*i);
 	for (vector<flv_tag>::iterator i = tags_buffer.begin(); i != tags_buffer.end(); ++i)
@@ -105,7 +102,7 @@ void writer::process()
 			else
 				buffered_timestamp = tag.timestamp;
 
-			list<reader*>::iterator i = readers.begin();
+			list<boost::shared_ptr<reader> >::iterator i = readers.begin();
 			while (i != readers.end())
 			{
 				// Write tag.
@@ -117,7 +114,6 @@ void writer::process()
 				catch (boost::system::system_error &e)
 				{
 					cout << "Cloud Service: Reader connection was closed." << endl;
-					delete *i;
 					i = readers.erase(i);
 				}
 			}
