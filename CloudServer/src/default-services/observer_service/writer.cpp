@@ -40,9 +40,9 @@ void writer::connect_reader(boost::shared_ptr<boost::asio::ip::tcp::socket> sock
 		dump->write(header, HEADER_LENGTH);
 	reader *new_reader = new reader(socket, dump, buffered_timestamp);
 	for (vector<flv_tag>::iterator i = script_data.begin(); i != script_data.end(); ++i)
-		new_reader->send_script_tag(*i);
+		new_reader->send_tag(*i);
 	for (vector<flv_tag>::iterator i = tags_buffer.begin(); i != tags_buffer.end(); ++i)
-		new_reader->send_data_tag(*i);
+		new_reader->send_tag(*i);
 	readers.insert(new_reader);
 }
 
@@ -133,10 +133,7 @@ void writer::process()
 				// Write tag.
 				try
 				{
-					if (tag.header[0] != TAGTYPE_DATA)
-						(*i)->send_data_tag(tag);
-					else
-						(*i)->send_script_tag(tag);
+					(*i)->send_tag(tag);
 				}
 				catch (boost::system::system_error &e)
 				{
