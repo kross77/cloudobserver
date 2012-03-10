@@ -133,7 +133,10 @@ void writer::process()
 				// Write tag.
 				try
 				{
-					(*i)->send_data_tag(tag);
+					if (tag.header[0] != TAGTYPE_DATA)
+						(*i)->send_data_tag(tag);
+					else
+						(*i)->send_script_tag(tag);
 				}
 				catch (boost::system::system_error &e)
 				{
