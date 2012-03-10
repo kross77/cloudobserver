@@ -10,8 +10,8 @@ video_generator::video_generator(int video_width, int video_height, int video_fr
 
 	cvInitFont(&font, CV_FONT_HERSHEY_DUPLEX, 2, 1, 0.0, 3, CV_AA);
 
-	this->blank_frame = cvCreateImage(cvSize(this->width, this->height), 8, 4);
-	this->resized_frame = cvCreateImage(cvSize(this->width, this->height), 8, 4);
+	this->blank_frame = cvCreateImage(cvSize(this->width, this->height), 8, 3);
+	this->resized_frame = cvCreateImage(cvSize(this->width, this->height), 8, 3);
 	cvRectangle(this->blank_frame, cvPoint(0, 0), cvPoint(this->width, this->height), CV_RGB(0, 254, 53), CV_FILLED);
 	cvPutText(this->blank_frame, username.c_str(), cvPoint(0, this->height - 10), &font, CV_RGB(1, 1, 1));
 
@@ -46,7 +46,7 @@ void video_generator::send()
 		cvPoint(0, this->height / 2 + 10), &font, CV_RGB(1, 1, 1));
 
 	char* buffer = (char*)this->frame->data[0];
-	for (int i = 0; i < 4 * this->width * this->height; i += 4)
+	for (int i = 0; i < 3 * this->width * this->height; i += 3)
 	{
 		buffer[0] = this->resized_frame->imageData[i];
 		buffer[1] = this->resized_frame->imageData[i + 1];
