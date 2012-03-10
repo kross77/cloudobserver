@@ -105,13 +105,12 @@ void writer::process()
 			list<boost::shared_ptr<reader> >::iterator i = readers.begin();
 			while (i != readers.end())
 			{
-				// Write tag.
-				try
+				if ((*i)->is_alive())
 				{
 					(*i)->send_tag(tag);
 					++i;
 				}
-				catch (boost::system::system_error &e)
+				else
 				{
 					cout << "Cloud Service: Reader connection was closed." << endl;
 					i = readers.erase(i);
