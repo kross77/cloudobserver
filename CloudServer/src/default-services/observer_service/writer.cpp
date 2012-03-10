@@ -11,7 +11,7 @@ writer::~writer()
 	if (dump)
 		dump->close();
 
-	for (set<reader*>::iterator i = readers.begin(); i != readers.end(); ++i)
+	for (list<reader*>::iterator i = readers.begin(); i != readers.end(); ++i)
 		delete *i;
 }
 
@@ -26,7 +26,7 @@ void writer::connect_reader(boost::shared_ptr<boost::asio::ip::tcp::socket> sock
 		new_reader->send_tag(*i);
 	for (vector<flv_tag>::iterator i = tags_buffer.begin(); i != tags_buffer.end(); ++i)
 		new_reader->send_tag(*i);
-	readers.insert(new_reader);
+	readers.push_back(new_reader);
 }
 
 void writer::process()
@@ -105,7 +105,7 @@ void writer::process()
 			else
 				buffered_timestamp = tag.timestamp;
 
-			set<reader*>::iterator i = readers.begin();
+			list<reader*>::iterator i = readers.begin();
 			while (i != readers.end())
 			{
 				// Write tag.
