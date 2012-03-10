@@ -18,7 +18,8 @@ void writer::connect_reader(boost::shared_ptr<boost::asio::ip::tcp::socket> sock
 	socket->send(boost::asio::buffer(header.get(), HEADER_LENGTH));
 	if (dump)
 		dump->write((char *)header.get(), HEADER_LENGTH);
-	boost::shared_ptr<reader> new_reader(new reader(socket, dump, buffered_timestamp));
+	boost::shared_ptr<reader> new_reader(new reader(socket, dump));
+	new_reader->set_timestamp_delta(buffered_timestamp);
 	for (vector<flv_tag>::iterator i = script_data.begin(); i != script_data.end(); ++i)
 		new_reader->send_tag(*i);
 	for (vector<flv_tag>::iterator i = tags_buffer.begin(); i != tags_buffer.end(); ++i)
