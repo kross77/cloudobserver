@@ -2,7 +2,7 @@
 
 using namespace std;
 
-reader::reader(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<ofstream> dump, unsigned int timestamp_delta) : socket(socket), dump(dump), timestamp_delta(timestamp_delta) { }
+reader::reader(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<ofstream> dump) : socket(socket), dump(dump), timestamp_delta(0) { }
 
 reader::~reader()
 {
@@ -44,4 +44,9 @@ void reader::send_tag(flv_tag tag)
 			dump->write((char *)tag.data.get(), tag.data_size);
 		}
 	}
+}
+
+void reader::set_timestamp_delta(unsigned int timestamp)
+{
+	timestamp_delta = timestamp;
 }
