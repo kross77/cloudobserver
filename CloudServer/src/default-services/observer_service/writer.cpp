@@ -2,20 +2,7 @@
 
 using namespace std;
 
-writer::writer(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, ofstream* dump)
-	: HEADER_LENGTH(13), SIGNATURE1(0x46), SIGNATURE2(0x4C), SIGNATURE3(0x56),
-	VERSION(1), TAG_HEADER_LENGTH(11), TAGTYPE_AUDIO(8), TAGTYPE_VIDEO(9), TAGTYPE_DATA(18)
-{
-	this->socket = socket;
-	this->dump = dump;
-
-	this->width = 320;
-	this->height = 240;
-
-	this->header = NULL;
-	this->buffered_timestamp = 0;
-	this->key_frames = false;
-}
+writer::writer(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, ofstream* dump) : socket(socket), dump(dump), width(320), height(240), header(NULL), buffered_timestamp(0), key_frames(false), HEADER_LENGTH(13), SIGNATURE1(0x46), SIGNATURE2(0x4C), SIGNATURE3(0x56), VERSION(1), TAG_HEADER_LENGTH(11), TAGTYPE_AUDIO(8), TAGTYPE_VIDEO(9), TAGTYPE_DATA(18) { }
 
 writer::~writer()
 {
