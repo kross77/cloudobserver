@@ -23,17 +23,17 @@ void reader::send_tag(flv_tag tag)
 		socket->send(boost::asio::buffer(tag.data, tag.data_size));
 		if (dump != NULL)
 		{
-			dump->write(tag.header, TAG_HEADER_LENGTH);
-			dump->write(tag.data, tag.data_size);
+			dump->write((char *)tag.header, TAG_HEADER_LENGTH);
+			dump->write((char *)tag.data, tag.data_size);
 		}
 	}
 	else
 	{
 		// Update timestamp.
 		unsigned int modified_timestamp = tag.timestamp - timestamp_delta;
-		char* modified_timestamp_ptr = (char*)(&modified_timestamp);
+		unsigned char* modified_timestamp_ptr = (unsigned char*)(&modified_timestamp);
 
-		boost::scoped_array<char> modified_tag_header(new char[TAG_HEADER_LENGTH]);
+		boost::scoped_array<unsigned char> modified_tag_header(new unsigned char[TAG_HEADER_LENGTH]);
 		memcpy(modified_tag_header.get(), tag.header, TAG_HEADER_LENGTH);
 		modified_tag_header[4] = modified_timestamp_ptr[2];
 		modified_tag_header[5] = modified_timestamp_ptr[1];
@@ -43,8 +43,8 @@ void reader::send_tag(flv_tag tag)
 		socket->send(boost::asio::buffer(tag.data, tag.data_size));
 		if (dump != NULL)
 		{
-			dump->write(modified_tag_header.get(), TAG_HEADER_LENGTH);
-			dump->write(tag.data, tag.data_size);
+			dump->write((char *)modified_tag_header.get(), TAG_HEADER_LENGTH);
+			dump->write((char *)tag.data, tag.data_size);
 		}
 	}
 }

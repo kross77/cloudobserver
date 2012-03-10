@@ -25,7 +25,7 @@ public:
 
 	class flv_format_violation_exception: public std::exception { };
 private:
-	double get_double_variable_from_flv_script_tag(char* script_tag_data, int data_size, std::string variable_name);
+	double get_double_variable_from_flv_script_tag(unsigned char* script_tag_data, int data_size, std::string variable_name);
 	unsigned short to_ui16(unsigned char* value, int start_index);
 	unsigned int to_ui24(unsigned char* value, int start_index);
 	unsigned int to_ui32(unsigned char* value, int start_index);
@@ -38,7 +38,7 @@ private:
 
 	std::set<reader*> readers;
 
-	char* header;
+	unsigned char* header;
 	std::vector<flv_tag> script_data, tags_buffer;
 	unsigned int buffered_timestamp;
 	bool key_frames;
