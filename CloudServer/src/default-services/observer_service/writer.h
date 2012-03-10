@@ -12,6 +12,16 @@
 #include "flv_tag.h"
 #include "reader.h"
 
+#define HEADER_LENGTH 13
+#define SIGNATURE1 0x46
+#define SIGNATURE2 0x4C
+#define SIGNATURE3 0x56
+#define VERSION 1
+#define TAG_HEADER_LENGTH 11
+#define TAGTYPE_AUDIO 8
+#define TAGTYPE_VIDEO 9
+#define TAGTYPE_DATA 18
+
 class writer
 {
 public:
@@ -43,16 +53,6 @@ private:
 	bool key_frames;
 
 	boost::mutex mutex;
-
-	const int HEADER_LENGTH;
-    const char SIGNATURE1;
-    const char SIGNATURE2;
-    const char SIGNATURE3;
-    const char VERSION;
-    const int TAG_HEADER_LENGTH;
-    const char TAGTYPE_AUDIO;
-    const char TAGTYPE_VIDEO;
-    const char TAGTYPE_DATA;
 };
 
 #endif // WRITER_H
