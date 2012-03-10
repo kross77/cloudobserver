@@ -37,6 +37,8 @@ private:
 
 	ffmpeg::AVFrame* frame;
 
+	boost::posix_time::ptime start_time;
+
 	video_encoder* video_encoder_block;
 };
 
