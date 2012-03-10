@@ -16,15 +16,13 @@ video_generator::video_generator(int video_width, int video_height, int video_fr
 	cvPutText(this->base_frame, username.c_str(), cvPoint(0, this->height - 10), &font, CV_RGB(1, 1, 1));
 
 	this->frame = avcodec_alloc_frame();
-	uint8_t* frame_buffer = (uint8_t*)av_mallocz(avpicture_get_size(PIX_FMT_RGB24, this->width, this->height));
-	avpicture_fill((AVPicture*)frame, frame_buffer, PIX_FMT_RGB24, this->width, this->height);
+	avpicture_fill((AVPicture*)frame, (uint8_t*)this->current_frame->imageData, PIX_FMT_RGB24, this->width, this->height);
 
 	this->video_encoder_block = NULL;
 }
 
 video_generator::~video_generator()
 {
-	av_free(this->frame->data[0]);
 	av_free(this->frame);
 }
 
@@ -44,15 +42,6 @@ void video_generator::send()
 	boost::posix_time::ptime now = boost::date_time::second_clock<boost::posix_time::ptime>::local_time();
 	cvPutText(this->current_frame, boost::posix_time::to_simple_string(now.time_of_day()).c_str(),
 		cvPoint(0, this->height / 2 + 10), &font, CV_RGB(1, 1, 1));
-
-	char* buffer = (char*)this->frame->data[0];
-	for (int i = 0; i < 3 * this->width * this->height; i += 3)
-	{
-		buffer[0] = this->current_frame->imageData[i];
-		buffer[1] = this->current_frame->imageData[i + 1];
-		buffer[2] = this->current_frame->imageData[i + 2];
-		buffer += 3;
-	}
 
 	this->video_encoder_block->send(this->frame);
 }
