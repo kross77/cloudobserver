@@ -1,6 +1,8 @@
 #include "reader.h"
 
-reader::reader(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, std::ofstream* dump, unsigned int timestamp_delta)
+using namespace std;
+
+reader::reader(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, ofstream* dump, unsigned int timestamp_delta)
 {
 	this->socket = socket;
 	this->dump = dump;
