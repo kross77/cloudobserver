@@ -11,10 +11,10 @@ video_generator::video_generator(int video_width, int video_height, int video_fr
 	cvInitFont(&font, CV_FONT_HERSHEY_DUPLEX, 2, 1, 0.0, 3, CV_AA);
 
 	this->base_frame = cvCreateImage(cvSize(this->width, this->height), 8, 3);
-	this->current_frame = cvCreateImage(cvSize(this->width, this->height), 8, 3);
 	cvSet(this->base_frame, CV_RGB(0, 254, 53));
 	cvPutText(this->base_frame, username.c_str(), cvPoint(0, this->height - 10), &font, CV_RGB(1, 1, 1));
 
+	this->current_frame = cvCreateImage(cvSize(this->width, this->height), 8, 3);
 	this->frame = avcodec_alloc_frame();
 	avpicture_fill((AVPicture*)frame, (uint8_t*)this->current_frame->imageData, PIX_FMT_RGB24, this->width, this->height);
 
