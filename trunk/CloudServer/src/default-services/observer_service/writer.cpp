@@ -105,24 +105,22 @@ void writer::process()
 			else
 				buffered_timestamp = tag.timestamp;
 
-			set<reader*> disconnected_readers;
-			for (set<reader*>::iterator i = readers.begin(); i != readers.end(); ++i)
+			set<reader*>::iterator i = readers.begin();
+			while (i != readers.end())
 			{
 				// Write tag.
 				try
 				{
 					(*i)->send_tag(tag);
+					++i;
 				}
 				catch (boost::system::system_error &e)
 				{
 					cout << "Cloud Service: Reader connection was closed." << endl;
 					delete *i;
-					disconnected_readers.insert(*i);
+					i = readers.erase(i);
 				}
 			}
-
-			for (set<reader*>::iterator i = disconnected_readers.begin(); i != disconnected_readers.end(); ++i)
-				readers.erase(*i);
 		}
 	}
 	catch (boost::system::system_error)
