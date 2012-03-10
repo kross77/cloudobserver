@@ -138,6 +138,16 @@ void writer::process()
 	}
 }
 
+int writer::get_width()
+{
+	return width;
+}
+
+int writer::get_height()
+{
+	return height;
+}
+
 double writer::get_double_variable_from_flv_script_tag(unsigned char* script_tag_data, int data_size, string variable_name)
 {
 	char* script_data = new char[data_size + 1];
