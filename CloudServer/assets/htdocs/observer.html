@@ -90,7 +90,7 @@
 	<body>
 	<div class="pseudo-no-js-heaser"><br/><br/><br/></div>	
 	
-	<div  class="files-box fun not-loged-in-user list" style=" text-align:center; position:fixed; top:0; min-width:500px;">			
+	<div  class="files-box fun not-loged-in-user list" id="vis-box" style=" text-align:center; position:fixed; top:0; min-width:500px;">			
 		<h3 class="live-streams-header" style="text-align:center;">
 			Live Streams
 		</h3>
@@ -208,11 +208,16 @@
 					<ul class="usersList">
 					</ul>
 			<script>
-			function tabs_fun_div_position_update_with_upload_button_height() {
-				$('.usersList').css("margin-top", "" + $('#live-streams-header').height() + "px" );
-				$('.fun').css('z-index', 999);
-			}
-			page_update.add(tabs_fun_div_position_update_with_upload_button_height);
+				function tabs_fun_div_position_update_with_upload_button_height() {	
+					$('.usersList').appendTo('.log-in-buttons-space');
+					$('#vis-box').prepend( $('#not-loged-in-user-box') );
+					$('#not-loged-in-user-box').css("position", "static");
+					$('#not-loged-in-user-box').removeClass("not-loged-in-user");
+				}
+				user = readCookie('session-id');
+				if (user != null) {
+					page_update.add(tabs_fun_div_position_update_with_upload_button_height);
+				}
 			</script>
 		</div>
 			</div>
