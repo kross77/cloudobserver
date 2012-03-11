@@ -58,7 +58,7 @@ while [  $COUNTER -lt 1 ]; do
 		kill `ps aux | grep -F 'CloudServer' | grep -v -F 'grep' | awk '{ print $2 }'` 
 		kill `ps aux | grep -F '$ROBOT1_NAME' | grep -v -F 'grep' | awk '{ print $2 }'`
 		kill `ps aux | grep -F '$ROBOT2_NAME' | grep -v -F 'grep' | awk '{ print $2 }'`
-		cp -r $CF_SERVER_INSTALL_DIR* $RUN_DIR
+		cp -rf $CF_SERVER_INSTALL_DIR* $RUN_DIR
 		cd $RUN_DIR
 		nohup ./CloudServer >& /dev/null &
 		nohup ./CloudClient --server=localhost --username=$ROBOT1_NAME --robot >& /dev/null &
