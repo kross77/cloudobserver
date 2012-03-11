@@ -139,8 +139,10 @@ openInnerWin = function(name, width, height)
 
 openWin= function(name, width, height)
 {
-	openWindowDelayedPool.add(function(){openInnerWin(name, width, height);});
-	openWindowDelayedPool.add(function(){openInnerWin(name, width, height);});
+	openInnerWin(name, width, height);
+	$('.eButton').attr("disabled", true);
+	openWindowDelayedPool.add(function(){$('.eButton').attr("disabled", false);});
+	//openWindowDelayedPool.add(function(){openInnerWin(name, width, height);});
 }
 
 function update()
