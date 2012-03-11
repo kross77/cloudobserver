@@ -48,6 +48,7 @@ var page_update = page_update || {};
 	page_update.functions = [];
 	page_update.add = function(fn){
 				  page_update.functions.push(fn);
+				  page_update.run();
 				};
 	page_update.remove = function(fn){
 					 page_update.functions.splice(page_update.functions.indexOf(fn), 1);
