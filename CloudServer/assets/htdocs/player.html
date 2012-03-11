@@ -2,6 +2,8 @@
 <html>
 	
 	<head>
+		<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+        <META HTTP-EQUIV="Expires" CONTENT="-1">
 		<script src="./js/swfobject.js" language="javascript">
 		</script>
 
@@ -21,7 +23,7 @@
 			}
 			var flashvars = {nick: getNameFromHash()};
 			var params = {allowfullscreen: "true" };
-			swfobject.embedSWF("player.swf?" + Math.floor(Math.random()*100+1), "myContent", "100%", "100%", "11.1.0", "playerProductInstall.swf", flashvars, params);
+			swfobject.embedSWF("player.swf?" + Math.floor(Math.random()*10000+1), "myContent", "100%", "100%", "11.1.0", "playerProductInstall.swf", flashvars, params);
     </script>
 	</head>
 	<body>
@@ -29,8 +31,7 @@
 					<a title="Internet Explorer (6.0), Netscape Navigator (4.8), Mozilla Firefox (1.0), Mozilla Firefox (1.5), Apple Safari (1.0), e.t.c" href="https://www.google.com/adsense/support/bin/answer.py?answer=12654"> Please enable Javascript </a>
 				</bold>
 		</div>
-	</body>
-	
 	<script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
 	<script type='text/javascript' src="js/cf.js"></script>
+	</body>
 </html>

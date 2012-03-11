@@ -1,6 +1,7 @@
 $.wait = function( callback, seconds){
    return window.setTimeout( callback, seconds * 1000 );
 }
+
 var user = null;
 function readCookie(name) {
 	var nameEQ = name + "=";
@@ -25,8 +26,6 @@ function getJSONFromServer(url, func){
 		  func(data);
   }).error(function() { onerror(url, func); });
 }
-
-
 
 (function($) {
 	$.fn.extend({
