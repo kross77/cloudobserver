@@ -488,7 +488,7 @@ if [ ! -d "$FFMPEG_INSTALL" ]; then
 	prepare $FFMPEG_SRCFILE "$FFMPEG_COMPILE" $FFMPEG_SRCBASE $FFMPEG_SRCSITE $FFMPEG_SRCPATH
 	run cd "$FFMPEG_COMPILE"
 	export PATH=$PATH:"$YASM_INSTALL"/bin
-	run ./configure --enable-static --disable-shared --prefix="$FFMPEG_INSTALL"
+	run ./configure --enable-static --disable-shared --disable-bzlib --prefix="$FFMPEG_INSTALL"
 	run make -j$JOBS install
 	run cd $WD
 	run rm -rf "$FFMPEG_COMPILE"
