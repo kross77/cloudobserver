@@ -21,7 +21,7 @@
 			}
 			var flashvars = {nick: getNameFromHash()};
 			var params = {allowfullscreen: "true" };
-			swfobject.embedSWF("player.swf", "myContent", "100%", "100%", "11.1.0", "playerProductInstall.swf", flashvars, params);
+			swfobject.embedSWF("player.swf?" + Math.floor(Math.random()*100+1), "myContent", "100%", "100%", "11.1.0", "playerProductInstall.swf", flashvars, params);
     </script>
 	</head>
 	<body>
