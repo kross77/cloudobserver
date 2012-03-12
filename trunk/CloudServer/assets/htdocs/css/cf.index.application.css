@@ -100,5 +100,5 @@ a {
 }
 .head a:hover{
 	color:white;
-	color:rgba(245,245,255,0.9);
+	color:rgba(0,0,0,0.5);
 }
