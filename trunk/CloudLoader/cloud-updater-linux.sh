@@ -64,7 +64,7 @@ while [  $COUNTER -lt 1 ]; do
 		nohup ./CloudClient --server=localhost --username=$ROBOT1_NAME --robot >& /dev/null &
 		nohup ./CloudClient --server=localhost --username=$ROBOT2_NAME --robot >& /dev/null &
 		cd ./htdocs/js/
-		echo  "\$(document).ready(function() {\$('#rol').after('. Revision "  $LOCAL_REV  "');});" >> cf.js
+		echo  "\$(document).ready(function() {\$('#rol').after('. Revision $LOCAL_REV');});" >> cf.js
 		cd $CD
 		
 	fi
