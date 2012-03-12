@@ -1,6 +1,32 @@
 $.wait = function( callback, seconds){
    return window.setTimeout( callback, seconds * 1000 );
 }
+$(window).load(function() {    
+	$('body').prepend("<div id='bgFix' style='z-index:-1;  pointer-events:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;'><div>")
+	var theWindow        = $(window),
+	    $bg              = $("#bgFix"),
+	    aspectRatio      = $bg.width() / $bg.height();
+
+	function resizeBg() {
+
+		if ( (theWindow.width() / theWindow.height()) < aspectRatio ) {
+		    $bg
+		    	.removeClass()
+		    	.addClass('bgheight');
+		} else {
+		    $bg
+		    	.removeClass()
+		    	.addClass('bgwidth');
+		}
+
+	}
+
+	theWindow.resize(function() {
+		resizeBg();
+	}).trigger("resize");
+
+});
+
 
 var user = null;
 function readCookie(name) {
