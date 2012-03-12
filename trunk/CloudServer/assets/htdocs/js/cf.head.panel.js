@@ -1,5 +1,9 @@
 	function updateMenu(){
 		$('.nav li').each( function(i, e) { $(e).css("opacity", 1);});
+		var listWidth = 0;
+		$('.nav li').each( function(i, e) { listWidth += $(e).width();});
+		if( ($('#pser').width() - listWidth) <=0 ){
+		
 		var lastItemIndex = Number.POSITIVE_INFINITY;
 		var lastItemText = "";
 		var maxWidth = 0;
@@ -40,6 +44,8 @@
 				function(){$(this).height(moreHeight);},
 				function(){$(this).height(40);});
 		}
+		
+	}
 	}
 
 
@@ -53,16 +59,18 @@ $(document).ready(function() {
 
 	$('body').append("<div class=\"hidden-c\" style=\"display: none;\"><!-- --><div id=\"tabs-logout\" class=\"logout\"><fieldset><legend>Logout?</legend><form  action=\"./uac.service\"><input type=\"hidden\" name=\"redirect_to\" value=\""+location.href+"\"><input type=\"hidden\" name=\"user_control\" value=\"logout\"><input type=\"hidden\" name=\"logout\" value=\"true\"><input type=\"submit\" class=\"eButton\" value=\"OK\" /><input type=\"button\" class=\"eButton\" value=\"Cancel\" onClick=\'hideDialog($(\".alert\"));\' /></form></fieldset></div><!-- --></div>");
 
-	$('body').prepend("<div class='header'''><table style='padding:0px; margin: 0px 100px 0px 0px; width:100%' cellpadding='0' cellspacing='0'><tr><td id='plogo' style='width:50px; height:40px;'><div><a href='index.html'><p class='logo' style='background: url(/logo-small.png); width:50px; height:40px; background-repeat: no-repeat;	background-position: center center;'></p></a></div></td><td><div id='marx-services-list'><ul class='nav'><div data-template><li><a href='{{url}}' style='width:100%; height:100%'><p style='min-width:100px;'>{{name}}</p></a></li></div></ul></div></td><td style='white-space:nowrap;text-align:right;'><div id='marx-user-name' ><div data-template><a><p class='header-item' id='user_name' class='hidden-c' style='min-width:100px; z-index=999;'>{{user_name}}</p></a></div></div></td></tr></table></div>");
+	$('body').prepend("<div class='header'''><table style='padding:0px; margin: 0px 100px 0px 0px; width:100%' cellpadding='0' cellspacing='0'><tr><td id='plogo' style='width:50px; height:40px;'><div><a href='index.html'><p class='logo' style='background: url(/logo-small.png); width:50px; height:40px; background-repeat: no-repeat;	background-position: center center;'></p></a></div></td><td  id='pser'><div id='marx-services-list'><ul class='nav'><div data-template><li><a href='{{url}}' style='width:100%; height:100%'><p style='min-width:100px;'>{{name}}</p></a></li></div></ul></div></td><td style='white-space:nowrap;text-align:right;'><div id='marx-user-name' ><div data-template><a><p class='header-item' id='user_name' class='hidden-c' style='min-width:100px; z-index=999;'>{{user_name}}</p></a></div></div></td></tr></table></div>");
+	updateMenu();
 	//$(window).resize(updateMenu);
 	page_update.add(updateMenu);
    var servicesList = Tempo.prepare('marx-services-list').notify( function (event) {
-	if ( event.type === TempoEvent.Types.RENDER_COMPLETE) { page_update.run();}
+	if ( event.type === TempoEvent.Types.RENDER_COMPLETE) { page_update.run(); updateMenu();}
 	});
 			servicesList.starting();
 	
 	getJSONFromServer("server.json", function(data){
 		servicesList.render(data);
+		 updateMenu();
 		});
 	
 	//updateMenu();
