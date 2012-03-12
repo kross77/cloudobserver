@@ -215,7 +215,7 @@
 					$('#not-loged-in-user-box').removeClass("not-loged-in-user");
 				}
 				user = readCookie('session-id');
-				if (user != null) {
+				if (user == null) {
 					page_update.add(tabs_fun_div_position_update_with_upload_button_height);
 				}
 			</script>
