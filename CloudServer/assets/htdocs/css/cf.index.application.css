@@ -56,7 +56,9 @@ a {
 	height:100%;
 	color:#333;
 	position:relative;
+	text-decoration:none;
 }
+
 .ca-content {
 	margin:15px;
 	left:15px;
@@ -85,4 +87,18 @@ a {
 }
 .ca-menu li:hover .ca-sub {
 	color:gray;
+}
+.head a{
+	color:gray;
+	color:rgba(0,0,0,0.4);
+	text-decoration:none;
+	-webkit-transition:all 300ms ease-in-out;
+	-moz-transition:all 300ms ease-in-out;
+	-o-transition:all 300ms ease-in-out;
+	-ms-transition:all 300ms ease-in-out;
+	transition:all 300ms ease-in-out;
+}
+.head a:hover{
+	color:white;
+	color:rgba(245,245,255,0.9);
 }
