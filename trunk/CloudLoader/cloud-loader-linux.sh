@@ -666,6 +666,10 @@ EOF
 	run chmod u+x ./$CLOUD_PREMAKE
 fi
 run ./$CLOUD_PREMAKE
+REVISION_INFORMATION="\$(document).ready(function() {\$('#rol').after('. Revision $(svnversion -n)');});"
+echo $REVISION_INFORMATION >> projects/$OS-gmake/htdocs/js/cf.js
+echo $REVISION_INFORMATION >> projects/$OS-gmake/bin/debug/htdocs/js/cf.js
+echo $REVISION_INFORMATION >> projects/$OS-gmake/bin/release/htdocs/js/cf.js
 run cd projects/$OS-gmake
 run make -j$JOBS config=release
 run cd $WD
