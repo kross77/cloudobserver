@@ -10,7 +10,7 @@
 		var overflowCount=0;
 		var navHeight = $('#pser').height() ;
 		$('#nav-bar li').each(function(i,e){
-		console.log( "$(e).position().top " +  $(e).position().top);
+		//console.log( "$(e).position().top " +  $(e).position().top);
 			if($(e).position().top>=navHeight){
 				if(i<=lastItemIndex) lastItemIndex=i-1;
 				if($(e).width()>maxWidth) maxWidth = $(e).width();
@@ -21,34 +21,40 @@
 
 				var moreHeight =  (overflowCount+2)*(navHeight);
 		$('#moreMenu').remove();
-		//if( ($('#pser').width() - listWidth) <=0 ){
 		if(overflowCount>0){
-			console.log( "overflowCount " +  overflowCount);
+			//console.log( "overflowCount " +  overflowCount);
 			$('#nav-bar li:eq('+(lastItemIndex)+')').css("opacity", 0);
 			$('#nav-bar li:gt('+(lastItemIndex)+')').css("opacity", 0);
-			//alert(overflowCount);
 			$('<ul id="moreMenu"/>').appendTo('body').width(maxWidth+40).height(navHeight);
-			$('#moreMenu').offset($('#nav-bar li:eq('+(lastItemIndex)+')').offset());
+			var offset = $('#nav-bar li:eq('+(lastItemIndex)+')').offset();
+			$('#moreMenu').offset(offset);	
+			//console.log( "lastItemIndex " + lastItemIndex);
+			//console.log( "$('#nav-bar li:eq('+(lastItemIndex)+')').offset(): left==" +  offset.left + " top==" + offset.top);
+			$('#moreMenu').css("top", offset.top + "px"); 
+			$('#moreMenu').css("left", offset.left + "px");
+			$('#moreMenu').css("position", "absolute" );
 			if( (lastItemIndex - 1) >= 0 ){
 				$('#moreMenu').append('<li>More... <span class="profile-triangle">▾</span></li>');
 		        $('#nav-bar li:gt(' + (lastItemIndex - 1) + ')').each(function(i, e) {
 		            $('#moreMenu').append('<li>' + $(e).html() + '</li>');
 		        });
+		        //console.log( "Some items appended" );
 		    }else{	
 		    	$('#moreMenu').append('<li>Services <span class="profile-triangle">▾</span></li>');
 		        $('#nav-bar li').each(function(i, e) {
-		            $('#moreMenu').append('<li>' + $(e).html() + '</li>');
+		            $('#moreMenu').append('<li>' + $(e).html() + '</li>'); 
 		        });
+		        //console.log( "All items appended" );
 		    }
 			moreHeight = 0;
 			$('#moreMenu li').each(function(i, e) {
 				moreHeight += $(e).innerHeight();
 			});
+			//console.log( "Max pop up menu Height: " + moreHeight );
 			$('#moreMenu').hover(
 				function(){$(this).height(moreHeight);},
 				function(){$(this).height(40);});
 		}	
-	//	}
 	}
 
 
