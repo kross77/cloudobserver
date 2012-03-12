@@ -1,1 +1,68 @@
-.header {top:0px;left:0px;position:absolute;width:100%;font-size:12px;font-family:Consolas,"Lucida Console",monospace;font-style:normal;color: white;text-align:left;background-color:#3f3b8d;background-color:rgba(0,0,0,0.6);padding:0px;margin:0px;position:fixed;min-height:40px;height:auto !important;height:40px;}.header div{display:inline-block;}.header a{ text-decoration:none;}#marx-user-name div,#marx-services-list div,.header-item{ min-height:40px;height:auto !important;height:40px;text-align:center;vertical-align:middle; line-height:3em; }.header-item{display:inline-block; padding-left:10px;padding-right:10px; margin-left:0px; margin-right:0px;}.header .hidden-c{display: none;}
+//html, body, {margin:0px;padding:0px; width:100%}
+.nav{
+	margin:0px;
+	padding:0px;
+	display:block;
+	overflow:hidden;
+	height:40px;
+	width:100%;
+}
+.nav li, #moreMenu li{
+	list-style-type: none;
+	float:left;
+	padding:6px;
+	height:40px;
+	padding-right:16px;
+	text-align:left;
+}
+.nav a, #moreMenu a{
+	text-decoration:none;
+}
+.nav a:hover, #moreMenu a:hover{
+	text-decoration:none;
+	color:#edfdff;
+}
+
+ #moreMenu li{
+ 	width:100%
+ 	}
+.nav li:hover, #moreMenu li:hover, #plogo:hover{background-color:grey; background-color:#5b5598}
+#moreMenu{
+	overflow:hidden;
+	margin:0px;
+	padding:0px;
+	display:block;
+	//background-color:black;
+	//background-color:#372D41;
+	height:100%
+	
+}
+a {
+	color:inherit;
+	text-decoration:none;
+	 height:40px;
+}
+
+.header, #moreMenu li {
+	background-color:black;
+	background-color:#372D41;
+	background-color:#3f3b8d;
+	background-color:rgba(4,4,0,0.9);
+}
+ 
+ 
+ .header div{display:inline-block;}
+ .header a
+	{
+text-decoration:none;
+	}
+ #marx-user-name div, .header-item
+	{
+	min-height:40px;height:auto !important;height:40px;text-align:center;vertical-align:middle; line-height:3em; 
+	}
+	.header-item{
+	display:inline-block; padding-left:10px;padding-right:10px; margin-left:0px; margin-right:0px;	
+	}
+	.header .hidden-c{
+	display: none;
+	}
