@@ -1,7 +1,7 @@
 	function updateMenu(){
-		$('.nav li').each( function(i, e) { $(e).css("opacity", 1);});
+		$('#nav-bar li').each( function(i, e) { $(e).css("opacity", 1);});
 		var listWidth = 0;
-		$('.nav li').each( function(i, e) { listWidth += $(e).width();});
+		$('#nav-bar li').each( function(i, e) { listWidth += $(e).width();});
 		
 		
 		var lastItemIndex = Number.POSITIVE_INFINITY;
@@ -9,7 +9,7 @@
 		var maxWidth = 0;
 		var overflowCount=0;
 		var navHeight = $('#pser').height() ;
-		$('.nav li').each(function(i,e){
+		$('#nav-bar li').each(function(i,e){
 		console.log( "$(e).position().top " +  $(e).position().top);
 			if($(e).position().top>=navHeight){
 				if(i<=lastItemIndex) lastItemIndex=i-1;
@@ -17,26 +17,26 @@
 				overflowCount++;
 			}
 		});
-		maxWidth = Math.max(maxWidth,$('.nav li:eq('+(lastItemIndex)+')').width());
+		maxWidth = Math.max(maxWidth,$('#nav-bar li:eq('+(lastItemIndex)+')').width());
 
 				var moreHeight =  (overflowCount+2)*(navHeight);
 		$('#moreMenu').remove();
 		//if( ($('#pser').width() - listWidth) <=0 ){
 		if(overflowCount>0){
 			console.log( "overflowCount " +  overflowCount);
-			$('.nav li:eq('+(lastItemIndex)+')').css("opacity", 0);
-			$('.nav li:gt('+(lastItemIndex)+')').css("opacity", 0);
+			$('#nav-bar li:eq('+(lastItemIndex)+')').css("opacity", 0);
+			$('#nav-bar li:gt('+(lastItemIndex)+')').css("opacity", 0);
 			//alert(overflowCount);
 			$('<ul id="moreMenu"/>').appendTo('body').width(maxWidth+40).height(navHeight);
-			$('#moreMenu').offset($('.nav li:eq('+(lastItemIndex)+')').offset());
+			$('#moreMenu').offset($('#nav-bar li:eq('+(lastItemIndex)+')').offset());
 			if( (lastItemIndex - 1) >= 0 ){
 				$('#moreMenu').append('<li>More... <span class="profile-triangle">▾</span></li>');
-		        $('.nav li:gt(' + (lastItemIndex - 1) + ')').each(function(i, e) {
+		        $('#nav-bar li:gt(' + (lastItemIndex - 1) + ')').each(function(i, e) {
 		            $('#moreMenu').append('<li>' + $(e).html() + '</li>');
 		        });
 		    }else{	
 		    	$('#moreMenu').append('<li>Services <span class="profile-triangle">▾</span></li>');
-		        $('.nav li').each(function(i, e) {
+		        $('#nav-bar li').each(function(i, e) {
 		            $('#moreMenu').append('<li>' + $(e).html() + '</li>');
 		        });
 		    }
@@ -62,7 +62,7 @@ $(document).ready(function() {
 
 	$('body').append("<div class=\"hidden-c\" style=\"display: none;\"><!-- --><div id=\"tabs-logout\" class=\"logout\"><fieldset><legend>Logout?</legend><form  action=\"./uac.service\"><input type=\"hidden\" name=\"redirect_to\" value=\""+location.href+"\"><input type=\"hidden\" name=\"user_control\" value=\"logout\"><input type=\"hidden\" name=\"logout\" value=\"true\"><input type=\"submit\" class=\"eButton\" value=\"OK\" /><input type=\"button\" class=\"eButton\" value=\"Cancel\" onClick=\'hideDialog($(\".alert\"));\' /></form></fieldset></div><!-- --></div>");
 
-	$('body').prepend("<div class='header'><table style='color:white; padding:0px; margin: 0px 100px 0px 0px; width:100%' cellpadding='0' cellspacing='0'><tr><td id='plogo' style='width:50px; height:40px;'><div><a href='index.html'><p class='logo' style='background: url(/logo-small.png); width:50px; height:40px; background-repeat: no-repeat;	background-position: center center;'></p></a></div></td><td  id='pser' style='text-align: left;'><div id='marx-services-list'><ul class='nav'><div data-template><li><a href='{{url}}' style='width:100%; height:100%'><p style='min-width:100px;'>{{name}}</p></a></li></div></ul></div></td><td style='white-space:nowrap;text-align:right;'><div id='marx-user-name' ><div data-template><a><p class='header-item' id='user_name' class='hidden-c' style='min-width:100px; z-index=999;'>{{user_name}}</p></a></div></div></td></tr></table></div><script>$(document).ready(function() {page_update.run();});</script>");
+	$('body').prepend("<div class='header'><table style='color:white; padding:0px; margin: 0px 100px 0px 0px; width:100%' cellpadding='0' cellspacing='0'><tr><td id='plogo' style='width:50px; height:40px;'><div><a href='index.html'><p class='logo' style='background: url(/logo-small.png); width:50px; height:40px; background-repeat: no-repeat;	background-position: center center;'></p></a></div></td><td  id='pser' style='text-align: left;'><div id='marx-services-list'><ul class='nav' id='nav-bar'><div data-template><li><a href='{{url}}' style='width:100%; height:100%'><p style='min-width:100px;'>{{name}}</p></a></li></div></ul></div></td><td style='white-space:nowrap;text-align:right;'><div id='marx-user-name' ><div data-template><ul class='nav' style='text-align:right;'><li style='float:right;'><a><p class='header-item' id='user_name' class='hidden-c' style='min-width:100px; z-index=999;'>{{user_name}}</p></a></li></ul></div></div></td></tr></table></div><script>$(document).ready(function() {page_update.run();});</script>");
 	updateMenu();
 	//$(window).resize(updateMenu);
 	page_update.add(updateMenu);
