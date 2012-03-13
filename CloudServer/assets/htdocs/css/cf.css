@@ -250,6 +250,7 @@ min-height:20px;
 height:auto !important;
 height:20px;
 }
+.butt {vertical-align: top;}
 .butt2 {
 display:inline-block;
 font-size:75%;

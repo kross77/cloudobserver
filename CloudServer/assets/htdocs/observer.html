@@ -211,8 +211,10 @@
 				function tabs_fun_div_position_update_with_upload_button_height() {	
 					$('.usersList').appendTo('.log-in-buttons-space');
 					$('#vis-box').prepend( $('#not-loged-in-user-box') );
+					$('#vis-box').prepend( $('.live-streams-header') );
 					$('#not-loged-in-user-box').css("position", "static");
 					$('#not-loged-in-user-box').removeClass("not-loged-in-user");
+					
 				}
 				user = readCookie('session-id');
 				if (user == null) {
