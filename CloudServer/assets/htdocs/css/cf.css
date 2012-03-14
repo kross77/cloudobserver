@@ -74,7 +74,6 @@ a:link {
 }
 a:hover {
 	text-decoration:none;
-	cursor:hand;
 }
 div {
 	display:block;
@@ -242,6 +241,9 @@ background:rgba(255,255,255, 0.3);
 }
  a.ui-selected {
 background:rgba(255,255,255, 0.4);
+}
+.butt, .butt2,.butt3, .border2, .border, li.file-1, li.file-0, a {
+	cursor:hand;	
 }
 .butt,.butt3 {
 display:inline-block;
