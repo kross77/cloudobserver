@@ -73,7 +73,7 @@ a:link {
 	text-decoration:none;
 }
 a:hover {
-	text-decoration:underline;
+	text-decoration:none;
 	cursor:hand;
 }
 div {
