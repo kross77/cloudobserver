@@ -63,6 +63,15 @@ while [  $COUNTER -lt 1 ]; do
 		cd $RUN_DIR
 		nohup ./CloudServer >& /dev/null &
 		sleep 5
+		
+		PID=`ps aux |grep CloudServer|grep -v grep| head -n 1 |awk '{print $2}'`
+
+		while [ `top -n 1 -b -p $PID | grep $PID |awk '{print $9"/1"}' |bc` -gt 1 ]
+		do
+			echo Server still starting up ...
+			sleep 5
+		done
+		
 		nohup ./CloudClient --server=localhost --username=$ROBOT1_NAME --robot >& /dev/null &
 		nohup ./CloudClient --server=localhost --username=$ROBOT2_NAME --robot >& /dev/null &
 		cd $CD
