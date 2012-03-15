@@ -87,8 +87,8 @@ ins, mark {text-decoration: none}
 mark {background: #c47529}
 ins {background: #d49855}
 del {text-decoration: line-through}
-::-moz-selection {background: #c47529;text-shadow: none} /* selected text */
-::selection {background: #c47529; text-shadow: none} /* selected text */
+::-moz-selection {background: white;text-shadow: none} /* selected text */
+::selection {background: white; text-shadow: none} /* selected text */
 
 /* OTHERS */
 strong, b, dt { font-weight: bold}
