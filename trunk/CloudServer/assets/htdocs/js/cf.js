@@ -108,10 +108,9 @@ $(document).ready(function() {
 	
 	page_update.add(updateBodyWidth);
 	
+
 	var _gaq = _gaq || [];
 	_gaq.push(['_setAccount', 'UA-21524436-1']);
-	_gaq.push(['_setDomainName', 'apmath.spbu.ru']);
-	_gaq.push(['_setAllowLinker', true]);
 	_gaq.push(['_trackPageview']);
 	
 	(function() {
