@@ -88,14 +88,14 @@
 							break;
 					}
 				}
-				var url:String = ExternalInterface.call("window.location.host.toString");
+				var url:String = ExternalInterface.call("window.location.href.folderOf");
 				if (nickName.length >= 1) {
-					uri = "http://" + url +"/" + nickName  + "?action=read";
+					uri = url + nickName  + "?action=read";
 					onRequest(uri, "{''}", "");
 				} 
 			}
 			
-			protected function recon( e:Event){
+			protected function recon( e:Event):void{
 				onRequest(uri, "{''}", "");
 			}
 			
