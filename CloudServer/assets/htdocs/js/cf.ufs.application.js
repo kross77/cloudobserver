@@ -3,7 +3,7 @@ var file_title;
 $(document).ready(function() {
 	user = readCookie('session-id');
 	var files_menu = ui.menu()
-	.add('Download item' , function(){ window.open('/'+file_id, '_blank'); })
+	.add('Download item' , function(){ window.open(""+file_id, '_blank'); })
 	.add('Get link' , function(){ showAlert( 600, 100 , ('link to ' + file_title + ' file.') , '<input type="text" style="width:590px" class="text" value=\"' + location.host + ('/'+file_id ) + '\">'); });
 	
 	if (user != null) {	
