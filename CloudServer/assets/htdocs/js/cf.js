@@ -26,7 +26,9 @@ $(window).load(function() {
 	}).trigger("resize");
 
 });
-
+String.prototype.folderOf=function(no_slash){ 
+	return this.slice(0,this.lastIndexOf('/',this.length-(/\/$/.test(this)?2:0))+(no_slash?0:1)) 
+}; 
 
 var user = null;
 function readCookie(name) {
