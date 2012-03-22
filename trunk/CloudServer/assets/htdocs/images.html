@@ -83,9 +83,8 @@
 		<!-- End Of CF JS-->
 		
 	<script>
-		
-		//var page_url = "http://" + location.host + "/";
-		
+
+		var page_url = unescape(location.href.folderOf());
 		function showBox(images, ind)
 		{
 				$.fancybox(images
@@ -127,7 +126,7 @@
 				if(value.is_public == 1)
 				{
 					//value.href = ;
-					value.real_href =  "image_renderer.service?action=resize&from_format=" + value.type + "&from_url=" +page_url + value.href + "&to_format=jpg&w="+ screen.width 	+"&h=" + screen.height;
+					value.real_href =  "./image_renderer.service?action=resize&from_format=" + value.type + "&from_url=" +page_url + value.href + "&to_format=jpg&w="+ screen.width 	+"&h=" + screen.height;
 					
 				}
 				else
@@ -142,7 +141,7 @@
 		if (location.hash.toString()){
 			var file_url = location.hash.substring(1);
 			if(file_url){
-				$.getJSON("ufs.json?action=file_info&url=" + file_url, function(images) {
+				$.getJSON("./ufs.json?action=file_info&url=" + file_url, function(images) {
 					if(!(images.error)){
 						var JSON = [];
 						JSON = JSON.concat(images);
@@ -224,15 +223,15 @@
 			is.starting();
 			var joinedJSON = [];
 			var user_images = [];
-			$.getJSON("ufs.json?action=type&type=image", function(json_image) {
+			$.getJSON("./ufs.json?action=type&type=image", function(json_image) {
 				joinedJSON = joinedJSON.concat(json_image);
-					$.getJSON("ufs.json?action=type&type=png", function(json_png) {
+					$.getJSON("./ufs.json?action=type&type=png", function(json_png) {
 						joinedJSON = joinedJSON.concat(json_png);
-							$.getJSON("ufs.json?action=type&type=jpg", function(json_jpg) {
+							$.getJSON("./ufs.json?action=type&type=jpg", function(json_jpg) {
 								joinedJSON = joinedJSON.concat(json_jpg);
-									$.getJSON("ufs.json?action=type&type=jpeg", function(json_jpeg) {
+									$.getJSON("./ufs.json?action=type&type=jpeg", function(json_jpeg) {
 										joinedJSON = joinedJSON.concat(json_jpeg);
-											$.getJSON("ufs.json?action=type&type=svg", function(json_svg) {
+											$.getJSON("./ufs.json?action=type&type=svg", function(json_svg) {
 												joinedJSON = joinedJSON.concat(json_svg);
 												joinedJSON = shuffle(joinedJSON);
 												parseArrayForBox(joinedJSON, user_images);
