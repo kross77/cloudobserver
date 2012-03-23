@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
-			   xmlns:s="library://ns.adobe.com/flex/spark"
-			   creationComplete="creationCompleteHandler(event)" xmlns:mx="library://ns.adobe.com/flex/mx" alignmentBaseline="roman">
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   creationComplete="application1_creationCompleteHandler(event)" xmlns:mx="library://ns.adobe.com/flex/mx" alignmentBaseline="roman">
+	
 	<s:states>
 		<s:State name="default"/>
 		<s:State name="One"/>
@@ -26,7 +27,9 @@
 			
 			import flash.events.*;
 			import flash.system.*;
+			import flash.system.Security;
 			
+			import mx.collections.ArrayCollection;
 			import mx.containers.*;
 			import mx.controls.*;
 			import mx.core.FlexGlobals;
@@ -46,32 +49,31 @@
 			private var netstream:NetStream;
 			private var client:HttpClient;
 			private var timer:Timer;
-			private var uri:String;
-			private var videoAddr:String = new String();
-			private var nickName:String = new String();
 			
-			protected function creationCompleteHandler(event:FlexEvent):void
+			public var videoAddr:String = new String();
+			public var nickName:String = new String();
+			
+			protected function application1_creationCompleteHandler(event:FlexEvent):void
 			{
+				Security.allowDomain("*");
+				Security.allowInsecureDomain("*");
+				Security.loadPolicyFile("http://"+ ExternalInterface.call("window.location.host") +"/crossdomain.xml");
+				
 				st = new SoundTransform();
 				timer = new Timer(5000);
 				nc = new NetConnection();
 				nc.connect(null);
 				ns = new NetStream(nc);
 				ns.client = this;
-				
 				video = new Video;
 				video.attachNetStream(ns);
 				video.smoothing = true;
 				video.width = UIC.width;
 				video.height = UIC.height;
-				
 				UIC.addChild(video);
-				UIC.addEventListener(ResizeEvent.RESIZE, UIC_resizeHandler);
-				
 				ns.play(null);
 				ns.appendBytesAction(NetStreamAppendBytesAction.RESET_BEGIN);
-				
-				this.addEventListener(ResizeEvent.RESIZE, resizeHandler);
+				this.addEventListener(ResizeEvent.RESIZE, application1_resizeHandler);
 				
 				for (var s:String in FlexGlobals.topLevelApplication.parameters)
 				{
@@ -87,37 +89,49 @@
 				}
 				var url:String = ExternalInterface.call("window.location.href.folderOf");
 				if (nickName.length >= 1) {
-					uri = url + nickName  + "?action=read";
-					onRequest(uri, "{''}", "");
+					nickName = url + nickName  + "?action=read";
+					onRequest(nickName, "GET", "{''}", "");
 				} 
 			}
 			
-			protected function onRequest(urlToPlay:String, HeaderText:String,BodyText:String):void {
-				ns.appendBytesAction(NetStreamAppendBytesAction.RESET_BEGIN);	
+			public function onRequest(urlToPlay:String, verb:String, HeaderText:String,BodyText:String):void {
+				
+				ns.appendBytesAction(NetStreamAppendBytesAction.RESET_BEGIN);
+				
 				var listeners:Object = { 
 					onConnect: function(e:HttpRequestEvent):void {},
 					onRequest: function(e:HttpRequestEvent):void {},
 					onStatus: function(e:HttpStatusEvent):void {},
-					onData: function(e:HttpDataEvent):void
-					{           
+					onData: function(e:HttpDataEvent):void {           
 						ns.appendBytes(e.bytes);
 						videoResize();
 					},        
-					onClose: function():void {},
+					onClose: function():void {
+						ns.play(urlToPlay); 
+					},
 					onComplete: function(e:HttpResponseEvent):void {},
 					onError: function(event:ErrorEvent):void {}
 				};
 				
 				var client:HttpClient = new HttpClient();
+				client.timeout = 2000;
 				client.listener = new HttpListener(listeners);
 				
 				var request:HttpRequest = null;  
-				request = new Get();        
+				if (verb == "GET") request = new Get();        
+				else if (verb == "HEAD") request = new Head();
+				else if (verb == "DELETE") request = new Delete();
+				else if (verb == "PUT") request = new Put();
+				else if (verb == "POST") request = new Post();
+				else throw new ArgumentError("Invalid verb: " + verb);
+				
 				addCustomHeaders(request, HeaderText);
+				if (verb == "PUT" || verb == "POST") addBody(request, BodyText);
+				
 				client.request(new URI(urlToPlay), request);
 			}
 			
-			protected function addCustomHeaders(request:HttpRequest, HeaderText:String):void {
+			public function addCustomHeaders(request:HttpRequest, HeaderText:String):void {
 				var headerToAdd:Array = [];
 				var headerLines:Array = HeaderText.split(/\r+/);
 				for each(var headerLine:String in headerLines) {
@@ -130,7 +144,15 @@
 				}      
 			}
 			
-			protected function onMetaData(p:Object) : void
+			public function addBody(request:HttpRequest, BodyText:String):void {
+				var data:ByteArray = new ByteArray();
+				data.writeUTFBytes(BodyText);
+				data.position = 0;  
+				
+				request.body = data;
+			}
+			
+			public function onMetaData(p:Object) : void
 			{
 				videoResize();
 				return;
@@ -140,14 +162,12 @@
 			protected function onTextData(p:Object) : void{}
 			protected function onXMPData(p:Object) : void{}
 			protected function onCuePoint(p:Object) : void{}
-			protected function onComplete(e:Event) : void
+			
+			private function onComplete(e:Event) : void
 			{	
 				ns.appendBytesAction(NetStreamAppendBytesAction.RESET_BEGIN);
-				onRequest(uri, "{''}", "");
-				return;
+				return; 
 			}
-			
-			protected function UIC_resizeHandler(event:ResizeEvent):void{}
 			
 			protected function videoResize():void
 			{
@@ -171,7 +191,6 @@
 			
 			protected function button1_clickHandler(event:Event=null):void
 			{
-				sOne();
 				if( this.stage.displayState == StageDisplayState.NORMAL )
 				{
 					this.stage.displayState = StageDisplayState.FULL_SCREEN;
@@ -187,18 +206,18 @@
 				if((currentState == 'Two')||(currentState == 'default'))
 				{
 					currentState='One';
-				}	
-				if(timer.running)
-				{
-					timer.reset();
-				}
-				else
-				{
+					
+					if(timer.running)
+					{
+						timer.reset();
+					}
+					else
+					{
+						timer.start();
+					}
+					timer.addEventListener(TimerEvent.TIMER, timer_timer);
 					timer.start();
 				}
-				timer.addEventListener(TimerEvent.TIMER, timer_timer);
-				timer.start();
-				
 			}
 			
 			private function timer_timer(evt:TimerEvent):void {
@@ -214,8 +233,7 @@
 			}
 			
 			protected function button2_clickHandler(event:MouseEvent):void
-			{	
-				sOne();
+			{
 				if(ns.soundTransform.volume !=0 )
 				{
 					st.volume=0;
@@ -228,7 +246,8 @@
 				}
 			}
 			
-			protected function resizeHandler(event:ResizeEvent):void
+			
+			protected function application1_resizeHandler(event:ResizeEvent):void
 			{
 				videoResize();
 				video.smoothing = true;
