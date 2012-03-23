@@ -58,9 +58,6 @@
 				nc.connect(null);
 				ns = new NetStream(nc);
 				ns.client = this;
-				ns.addEventListener(IOErrorEvent.IO_ERROR, recon);
-				ns.addEventListener(AsyncErrorEvent.ASYNC_ERROR, recon);
-				ns.addEventListener(Event.DEACTIVATE, recon);
 				
 				video = new Video;
 				video.attachNetStream(ns);
@@ -93,10 +90,6 @@
 					uri = url + nickName  + "?action=read";
 					onRequest(uri, "{''}", "");
 				} 
-			}
-			
-			protected function recon( e:Event):void{
-				onRequest(uri, "{''}", "");
 			}
 			
 			protected function onRequest(urlToPlay:String, HeaderText:String,BodyText:String):void {
