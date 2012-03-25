@@ -58,6 +58,17 @@ function prepareLogInAndRegisterWindows()
 
 }
 
+
+function center_by_width(item, parent)
+{
+	var item_ = $(item);
+	var parent_ = $(parent);
+	var parent_width = parent_.width(); 
+	var image_width = item_.width(); 
+	var left_margin = (parent_width - image_width)/2;
+	item_.css( 'margin-left' , left_margin + "px");  
+}
+
 function showRegisterForm()
 {
 	if(register_Window_Created == 0)
@@ -66,6 +77,9 @@ function showRegisterForm()
 	}
 	
 	showStaticForm(register_Window_ID,430, 390);
+	
+	//centering recaptcha image	
+	center_by_width('#recaptcha_image', '#recaptcha_widget');
 }
 
 function showLogInForm()
