@@ -42,38 +42,36 @@ void users_files_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::s
 	boost::shared_ptr<http_response> response(new http_response(), boost::bind(&pointer_utils::delete_ptr<http_response>, _1));
 
 	std::string user_name = fs_utils::get_user_name(shared_data);
-	if(user_name != "guest")
+	if( (user_name != "guest") && (user_name != ""))
 	{
 		if(request->body.length() > 0)
 		{
-			try
-			{
-				std::map<std::string, std::string> save_file; 
-				save_file = http_utils::parse_multipart_form_data(request->body);
+			//parse POST request data
+			std::map<std::string, std::string> save_file; 			save_file = http_utils::parse_multipart_form_data(request->body);			//search for file			std::string file_data;			std::map<std::string, std::string>::iterator file_it;			file_it = save_file.find("datafile");			if (file_it != save_file.end())			{
+				//set file contents
+				file_data = file_it->second;
 
-				std::string file_name =save_file.find("file_name")->second;
-				std::string redirect_location =save_file.find("redirect_location")->second;
-				std::string f_type = save_file.find("type")->second;
-				bool is_public = save_file.find("is_public")->second == "true" ? true : false ;
+				//set file size
+				//int f_size = save_file.find("datafile")->second.length();
+				int f_size = file_data.length();
 
-				std::string encoded_url = "";
-				encoded_url = user_name + file_name + general_utils::get_utc_now_time();
-				encoded_url = general_utils::get_sha256(encoded_url);
-				encoded_url = encoded_url + "." + this->default_ufs_extension;
-				encoded_url = http_utils::url_encode( encoded_url );
-				int f_size = save_file.find("datafile")->second.length();
-				fs_utils::save_string_into_file(save_file.find("datafile")->second, encoded_url,  this->root_path);
-				this->create_file_table_entry(encoded_url, file_name, user_name, f_type, f_size, is_public);
+				//set virtual file name				std::string file_name = "Untitled";				{					std::map<std::string, std::string>::iterator it;					it = save_file.find("file_name");					if (it != save_file.end())					{						file_name = it->second;					}				}				//set fiscal file name				std::string encoded_url = "";
+				{
+					encoded_url = user_name + file_name + general_utils::get_utc_now_time();
+					encoded_url = general_utils::get_sha256(encoded_url);
+					encoded_url = encoded_url + "." + this->default_ufs_extension;
+					encoded_url = http_utils::url_encode( encoded_url );
+				}
 
-				http_utils::send_found_302(redirect_location, socket, response, request);
-
-				return;
+				//set file policy
+				bool is_public = false;				{					std::map<std::string, std::string>::iterator it;					it = save_file.find("is_public");					if (it != save_file.end())					{						is_public = it->second == "true" ? true : false ;					}				}
+				//set file type
+				std::string f_type = "";
+				{
+					std::map<std::string, std::string>::iterator it;					it = save_file.find("type");					if (it != save_file.end())					{						f_type = it->second;					}				}				//save file				fs_utils::save_string_into_file(file_data, encoded_url,  this->root_path);				this->create_file_table_entry(encoded_url, file_name, user_name, f_type, f_size, is_public);								//redirect user				{					std::map<std::string, std::string>::iterator it;					it =save_file.find("redirect_location");					if (it != save_file.end())					{						http_utils::send_found_302(it->second, socket, response, request);					}					else					{						http_utils::send_json(std::pair<std::string, std::string>("success","true"),  socket, response, request);						}				}			}else			{
+				http_utils::send_json(std::pair<std::string, std::string>("success","false"),  socket, response, request);	
 			}
-			catch(std::exception &e)
-			{
-				*lu << e.what() << log_util::endl;
-			}
-		}
+				return;					}
 
 		if (request->url == "/ufs.json")
 		{
