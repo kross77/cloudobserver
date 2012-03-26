@@ -551,6 +551,9 @@ solution "CloudClient"
 		linkoptions { "/OPT:NOREF", "/IGNORE:4049" }
 	configuration { }
 	
+	configuration { "gmake" }
+		buildoptions { "-fPIC" }
+	
 	-- configuration { "linux", "gmake", "DebugStatic or ReleaseStatic" }
 	-- 	linkoptions { "-static" }
 	-- configuration { }
