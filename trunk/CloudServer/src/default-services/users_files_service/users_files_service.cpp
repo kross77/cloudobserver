@@ -77,13 +77,9 @@ void users_files_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::s
 					{
 						f_type = http_utils::url_decode(request->arguments["type"]);
 					}
-					if(!boost::iequals(request->headers["X-File-Name"], ""))
+					if(!boost::iequals(request->arguments["name"], ""))
 					{
-						file_name = request->headers["X-File-Name"];
-					}
-					if(!boost::iequals(request->arguments["qqfile"], ""))
-					{
-						file_name = http_utils::url_decode(request->arguments["qqfile"]);
+						file_name = http_utils::url_decode(request->arguments["name"]);
 					}
 				}
 			}else{
@@ -148,8 +144,6 @@ void users_files_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::s
 				}
 			}
 			return;
-
-
 		}
 
 		if (request->url == "/ufs.json")
@@ -162,15 +156,6 @@ void users_files_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::s
 
 			if(is_request_to_file_info(user_name, socket, request, response))
 				return;
-
-			if (boost::iequals(request->arguments["action"], "delete"))
-			{
-				if(request->arguments.find("files") != request->arguments.end())
-				{
-					std::cout << "hello delete world" << std::endl;
-					return;
-				}
-			}
 
 			list_user_files(user_name, socket, response, request);
 			return;
