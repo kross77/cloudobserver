@@ -30,6 +30,9 @@ project "UsersFilesService"
 	
 	files { "src/default-services/users_files_service/**"}
 
+	configuration "gmake"
+		buildoptions { "-fPIC" }
+	
 	configuration "Debug"
 		defines { "DEBUG" }
 		flags { "Symbols" , "Unicode"}

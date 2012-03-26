@@ -27,6 +27,9 @@ project "FileService"
 	
 	files { "src/default-services/file_service/**"}
 
+	configuration "gmake"
+		buildoptions { "-fPIC" }
+	
 	configuration "Debug"
 		defines { "DEBUG" }
 		flags { "Symbols" , "Unicode"}

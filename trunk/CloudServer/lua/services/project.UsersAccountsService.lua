@@ -25,6 +25,9 @@ project "UsersAccountsService"
 	files { "src/default-services/users_accounts_service/**"}
 	includedirs { "service-interface/" }
 
+	configuration "gmake"
+		buildoptions { "-fPIC" }
+	
 	configuration "Debug"
 		defines { "DEBUG" }
 		flags { "Symbols" , "Unicode"}

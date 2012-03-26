@@ -21,6 +21,9 @@ project "ObserverService"
 	files { "src/default-services/observer_service/**"}
 	includedirs { "service-interface/" }
 
+	configuration "gmake"
+		buildoptions { "-fPIC" }
+	
 	configuration "Debug"
 		defines { "DEBUG" }
 		flags { "Symbols" , "Unicode"}
