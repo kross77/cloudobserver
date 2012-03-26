@@ -166,6 +166,12 @@ void users_files_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::s
 			http_utils::send_json( std::pair<std::string, std::string>("user_name", user_name), socket, response, request);
 			return;
 		}
+
+		if(request->arguments["action"] == "delete")
+		{
+			delete_file(request->arguments["url"], user_name, socket, request, response);
+			return;
+		}
 	}
 
 	std::map<std::string, std::string>::iterator redirect_iterator= request->arguments.find("redirect_to");
@@ -286,6 +292,37 @@ bool users_files_service::send_file_info( std::string href, std::string user_nam
 	}
 	return false;
 }
+
+bool users_files_service::delete_file( std::string href, std::string user_name, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response )
+{
+	sqlite3pp::transaction xct(*db, true);
+	{
+		sqlite3pp::query qry(*db, this->command_find_file.c_str());
+		qry.bind(":encoded_url", href);
+		//file_name, user_name, is_public, modifie
+		for (sqlite3pp::query::iterator i = qry.begin(); i != qry.end(); ++i) {
+			bool is_public=false;
+			std::string  file_name, f_user_name, modified, f_type;
+			(*i).getter() >> file_name >> f_user_name >>  is_public >> modified >> f_type;
+
+			if (f_user_name == user_name)
+			{
+				sqlite3pp::command cmd(*db, this->command_delete_file.c_str());
+				cmd.bind(":encoded_url", href);
+				if(cmd.execute() == 0)
+				{
+					boost::filesystem::remove(boost::filesystem::path(this->root_path / href));
+					http_utils::send_json(std::pair<std::string, std::string>("success","true"),  socket, response, request); 
+					return true;
+				}
+			}
+		}
+	}
+	http_utils::send_json(std::pair<std::string, std::string>("success","false"),  socket, response, request); 
+	return false;
+}
+
+
 
 void users_files_service::list_user_files( std::string user_name, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response, boost::shared_ptr<http_request> request )
 {
