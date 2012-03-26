@@ -39,6 +39,7 @@ project "CloudServer"
 	excludes { "src/default-services/**" , "src/cf-util/**", "src/cf-server/**" }
 	
 	configuration "gmake"
+		buildoptions { "-fPIC" }
 		linkoptions { "-Wl,-rpath,./" }
 
 	configuration "Debug"
