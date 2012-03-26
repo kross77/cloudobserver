@@ -31,6 +31,9 @@ project "ImageRendererService"
 	
 	files { "src/default-services/image_renderer_service/**"}
 
+	configuration "gmake"
+		buildoptions { "-fPIC" }
+	
 	configuration "Debug"
 		defines { "DEBUG" }
 		flags { "Symbols" , "Unicode"}
