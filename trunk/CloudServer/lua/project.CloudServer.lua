@@ -40,7 +40,7 @@ project "CloudServer"
 	
 	configuration "gmake"
 		buildoptions { "-fPIC" }
-		linkoptions { "-Wl,-rpath,./" }
+		linkoptions { "-Wl,-rpath,./", "-Wl,-E" }
 
 	configuration "Debug"
 		defines { "DEBUG" }
