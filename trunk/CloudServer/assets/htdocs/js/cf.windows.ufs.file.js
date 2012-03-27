@@ -15,7 +15,7 @@ $(document).ready(function() {
 	
 	$('.f_f').live('change', function(e){
 		var file = $(this).val().toLowerCase();
-		if(file.indexOf(".") != -1)){
+		if(file.indexOf(".") != -1){
 			var ext = file.split('.').pop();
 			$('.f_type').val(ext);   
 		}
