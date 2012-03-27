@@ -4,10 +4,6 @@ function showUpdate(fileEU, name) {
 	showForm($("#tabs-ufs-update"), "Files update form", 350, 295);
 }
 
-function showEdit(ue, name) {
-	showUpdate("eu", "name");
-}
-
 $(document).ready(function() {
 
 	var local_url =  location.href;
@@ -19,10 +15,6 @@ $(document).ready(function() {
 			var ext = file.split('.').pop();
 			$('.f_type').val(ext);   
 		}
-	});
-	
-	$('#alert_button').mouseup(function() {
-		showUpdate("eu", "name");
 	});
 	
 	$('#upload_button').mouseup(function() {
