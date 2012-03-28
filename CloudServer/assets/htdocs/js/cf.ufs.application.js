@@ -1,5 +1,37 @@
 var file_id;
 var file_title;
+var mfu_uploader_created = 0;
+var mfu_html = "";
+var fs;
+function createUploaders(){
+	prepareWindowWithStaticObject("mfu_tab", mfu_uploader_created, mfu_html, "Multiple Files upload form");
+	var publicUploader = new qq.FileUploader({
+			element: document.getElementById('fileUploader'),
+			listElement: document.getElementById('separate-list'),
+			action: './ufs.service',
+			params: {
+				action: 'upload'
+		},
+	onSubmit: function(id, fileName){
+			this.params['is_public'] = $('#fuCheckbox').is(':checked');  
+			if(fileName.indexOf(".") != -1){
+				var uri = fileName.split('.');
+				this.params['type'] = uri.pop().toLowerCase();  
+				this.params['name'] = uri.pop();  
+			}else{
+				this.params['name'] = fileName;
+			}
+		},
+	onComplete: function(id, fileName, responseJSON){
+		ui.dialog("Uploaded "+ fileName +" !")
+			.effect('slide')
+			.show()
+			.hide(1500);
+		$.getJSON("ufs.json", function(data) {fs.render(data);});
+	}
+	});
+}  
+
 $(document).ready(function() {
 
 	var files_menu = ui.menu()
@@ -21,7 +53,7 @@ $(document).ready(function() {
 	if (user != null) {	
 		$('.loged-in-user').show();
 		$('.not-loged-in-user').remove();
-		var fs = Tempo.prepare('marx-brothers')
+		fs = Tempo.prepare('marx-brothers')
 			.notify( function (event) {
 				if (event.type === TempoEvent.Types.RENDER_COMPLETE) {
 					$( "#marx-brothers" ).selectable({
@@ -63,5 +95,14 @@ $(document).ready(function() {
 		file_id = this.id;
 		files_menu.moveTo(e.pageX, e.pageY).show();
 	});
-		
+	
+	mfu_html = "<div id=\"tabs-ufs-mfu\"><div id=\"fuForm\"><div id=\"fileUploader\"></div><form><input id=\"fuCheckbox\" type=\"checkbox\" name=\"mfucheckbox\" value=\"true\"/>Public<br /></form></div><ul id=\"separate-list\" ></ul><input type=\"button\" class=\"eButton\" value=\"Cancel\" onclick=\'hideDialog($(\".alertmfu_tab\"));$.getJSON(\"ufs.json\", function(data) {fs.render(data);});\'></div>";
+	
+	$('#upload_multiple_btton').mouseup(function() {
+		if(mfu_uploader_created == 0){
+			createUploaders();
+		}
+		showStaticForm("mfu_tab",200,150);
+		center_by_width(".qq-upload-button", "#demo_boxmfu_tab"); 
+	});
 });

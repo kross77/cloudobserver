@@ -180,7 +180,7 @@ fieldset {
 border:1px solid #FFF;
 margin:5px
 }
-.hilight {
+.hilight, .qq-upload-button-hover {
 border:1px solid #ddd;
 background-color:#fc2f4d;
 background:url(data:image/svg+xml;
@@ -205,7 +205,7 @@ border:1px solid #ddd;
 -moz-box-shadow:1px 1px 1px 1px rgba(0,0,0,0.2);
 box-shadow:1px 1px 1px 1px rgba(0,0,0,0.2);
 }
-.border {
+.border, .qq-upload-button  {
 border:1px solid #ddd;
 background:rgba(0,0,0,0.2);
 -webkit-box-shadow:1px 1px 1px 1px rgba(0,0,0,0.2);
@@ -218,14 +218,14 @@ border:1px solid #ddd;
 -moz-box-shadow:1px 1px 2px rgba(0,0,0,0.2);
 box-shadow:1px 1px 2px rgba(0,0,0,0.2);
 }
-.hilight2, a.ui-selected {
+.hilight2, a.ui-selected, .qq-upload-button-hover{
 border:1px solid #ddd;
 -webkit-box-shadow:1px 1px 2px rgba(0,0,0,0.2);
 -moz-box-shadow:1px 1px 2px rgba(0,0,0,0.2);
 box-shadow:1px 1px 2px rgba(0,0,0,0.2);
 }
 
-.border2 {
+.border2, .qq-upload-button {
 background:#278bff;
 background: rgba(245, 245, 255, 0.6);
 border:1px solid white;
@@ -233,7 +233,7 @@ border:1px solid white;
 -moz-box-shadow:1px 1px 2px rgba(0,0,0,0.2);
 box-shadow:1px 1px 2px rgba(0,0,0,0.2);
 }
-.hilight2 {
+.hilight2, .qq-upload-button-hover{
 background:#278bff;
 }
 a.ui-selecting {
@@ -242,10 +242,10 @@ background:rgba(255,255,255, 0.3);
  a.ui-selected {
 background:rgba(255,255,255, 0.4);
 }
-.butt, .butt2,.butt3, .border2, .border, li.file-1, li.file-0, a {
+.butt, .butt2,.butt3, .border2, .border, li.file-1, li.file-0, a, .qq-upload-button {
 	cursor:hand;	
 }
-.butt,.butt3 {
+.butt,.butt3{
 display:inline-block;
 width:150px;
 min-height:20px;
