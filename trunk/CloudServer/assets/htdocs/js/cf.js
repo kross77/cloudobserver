@@ -1,6 +1,17 @@
 $.wait = function( callback, seconds){
    return window.setTimeout( callback, seconds * 1000 );
 }
+
+function center_by_width(item, parent)
+{
+	var item_ = $(item);
+	var parent_ = $(parent);
+	var parent_width = parent_.width(); 
+	var image_width = item_.width(); 
+	var left_margin = (parent_width - image_width)/2;
+	item_.css( 'margin-left' , left_margin + "px");  
+}
+
 $(window).load(function() {    
 	$('body').prepend("<div id='bgFix' style='z-index:-1;  pointer-events:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;'><div>")
 	var theWindow        = $(window),
