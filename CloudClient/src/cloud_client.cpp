@@ -1,6 +1,7 @@
 // Boost
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include "filters/audio_capturer/audio_capturer.h"
 #include "filters/audio_encoder/audio_encoder.h"
@@ -138,28 +139,28 @@ int main(int argc, char* argv[])
 	if (!flag_disable_video && !flag_generate_video && (video_capture_device == -1))
 		video_capture_device = selector::simple_select(video_capturer::get_capture_devices(), "Please, select the video capture device:");
 
-	synchronizer* synchronizer_block = NULL;
+	boost::shared_ptr<synchronizer> synchronizer_block;
 
-	audio_capturer* audio_capturer_block = NULL;
-	audio_encoder* audio_encoder_block = NULL;
-	audio_generator* audio_generator_block = NULL;
-	audio_player* audio_player_block = NULL;
-	line_segment_detector* line_segment_detector_block = NULL;
-	multiplexer* multiplexer_block = NULL;
-	simple_synchronizer* simple_synchronizer_block = NULL;
-	transmitter* transmitter_block = NULL;
-	video_capturer* video_capturer_block = NULL;
-	video_encoder* video_encoder_block = NULL;
-	video_generator* video_generator_block = NULL;
-	video_generator_rainbow* video_generator_rainbow_block = NULL;
-	video_player* video_player_block = NULL;
+	boost::shared_ptr<audio_capturer> audio_capturer_block;
+	boost::shared_ptr<audio_encoder> audio_encoder_block;
+	boost::shared_ptr<audio_generator> audio_generator_block;
+	boost::shared_ptr<audio_player> audio_player_block;
+	boost::shared_ptr<line_segment_detector> line_segment_detector_block;
+	boost::shared_ptr<multiplexer> multiplexer_block;
+	boost::shared_ptr<simple_synchronizer> simple_synchronizer_block;
+	boost::shared_ptr<transmitter> transmitter_block;
+	boost::shared_ptr<video_capturer> video_capturer_block;
+	boost::shared_ptr<video_encoder> video_encoder_block;
+	boost::shared_ptr<video_generator> video_generator_block;
+	boost::shared_ptr<video_generator_rainbow> video_generator_rainbow_block;
+	boost::shared_ptr<video_player> video_player_block;
 
 	// Use the 'simple_synchronizer' by default.
-	simple_synchronizer_block = new simple_synchronizer();
+	simple_synchronizer_block = boost::shared_ptr<simple_synchronizer>(new simple_synchronizer());
 	synchronizer_block = simple_synchronizer_block;
 
 	// Initialize the transmitter block.
-	transmitter_block = new transmitter();
+	transmitter_block = boost::shared_ptr<transmitter>(new transmitter());
 
 	// Repeat asking for the username and the server URL until connection is successfully established.
 	bool succeed = false;
@@ -186,91 +187,91 @@ int main(int argc, char* argv[])
 		}
 	}
 
-	multiplexer_block = new multiplexer(container);
+	multiplexer_block = boost::shared_ptr<multiplexer>(new multiplexer(container));
 
 	if (!flag_disable_audio)
 	{
-		audio_encoder_block = new audio_encoder(audio_sample_rate);
-		audio_encoder_block->connect(multiplexer_block);
+		audio_encoder_block = boost::shared_ptr<audio_encoder>(new audio_encoder(audio_sample_rate));
+		audio_encoder_block->connect(multiplexer_block.get());
 
 		if (flag_generate_audio)
 		{
-			audio_generator_block = new audio_generator(audio_sample_rate, AL_FORMAT_MONO16, audio_sample_rate / video_frame_rate);
-			audio_generator_block->connect(audio_encoder_block);
+			audio_generator_block = boost::shared_ptr<audio_generator>(new audio_generator(audio_sample_rate, AL_FORMAT_MONO16, audio_sample_rate / video_frame_rate));
+			audio_generator_block->connect(audio_encoder_block.get());
 		}
 		else
 		{
-			audio_capturer_block = new audio_capturer(audio_sample_rate, AL_FORMAT_MONO16, audio_sample_rate / video_frame_rate);
+			audio_capturer_block = boost::shared_ptr<audio_capturer>(new audio_capturer(audio_sample_rate, AL_FORMAT_MONO16, audio_sample_rate / video_frame_rate));
 			audio_capturer_block->set_capture_device(audio_capture_device);
-			audio_capturer_block->connect(audio_encoder_block);
+			audio_capturer_block->connect(audio_encoder_block.get());
 			synchronizer_block = audio_capturer_block;
 		}
 
 		if (flag_echo)
 		{
-			audio_player_block = new audio_player(audio_sample_rate, AL_FORMAT_MONO16);
+			audio_player_block = boost::shared_ptr<audio_player>(new audio_player(audio_sample_rate, AL_FORMAT_MONO16));
 			if (flag_generate_audio)
-				audio_generator_block->connect(audio_player_block);
+				audio_generator_block->connect(audio_player_block.get());
 			else
-				audio_capturer_block->connect(audio_player_block);
+				audio_capturer_block->connect(audio_player_block.get());
 		}
 	}
 	
 	if (!flag_disable_video)
 	{
-		video_encoder_block = new video_encoder(stream_bitrate, video_frame_rate, video_width, video_height);
-		video_encoder_block->connect(multiplexer_block);
+		video_encoder_block = boost::shared_ptr<video_encoder>(new video_encoder(stream_bitrate, video_frame_rate, video_width, video_height));
+		video_encoder_block->connect(multiplexer_block.get());
 
 		if (flag_generate_video)
 		{
 			if (flag_rainbow)
 			{
-				video_generator_rainbow_block = new video_generator_rainbow(video_width, video_height, video_frame_rate);
-				video_generator_rainbow_block->connect(video_encoder_block);
+				video_generator_rainbow_block = boost::shared_ptr<video_generator_rainbow>(new video_generator_rainbow(video_width, video_height, video_frame_rate));
+				video_generator_rainbow_block->connect(video_encoder_block.get());
 			}
 			else
 			{
-				video_generator_block = new video_generator(video_width, video_height, video_frame_rate, username);
-				video_generator_block->connect(video_encoder_block);
+				video_generator_block = boost::shared_ptr<video_generator>(new video_generator(video_width, video_height, video_frame_rate, username));
+				video_generator_block->connect(video_encoder_block.get());
 			}
 		}
 		else
 		{
-			video_capturer_block = new video_capturer(video_width, video_height, video_frame_rate);
+			video_capturer_block = boost::shared_ptr<video_capturer>(new video_capturer(video_width, video_height, video_frame_rate));
 			video_capturer_block->set_capture_device(video_capture_device);
 			if (flag_lsd)
 			{
-				line_segment_detector_block = new line_segment_detector(video_width, video_height);
-				line_segment_detector_block->connect(video_encoder_block);
+				line_segment_detector_block = boost::shared_ptr<line_segment_detector>(new line_segment_detector(video_width, video_height));
+				line_segment_detector_block->connect(video_encoder_block.get());
 
-				video_capturer_block->connect(line_segment_detector_block);
+				video_capturer_block->connect(line_segment_detector_block.get());
 			}
 			else
 			{
-				video_capturer_block->connect(video_encoder_block);
+				video_capturer_block->connect(video_encoder_block.get());
 
 				if (flag_preview)
 				{
-					video_player_block = new video_player("Cloud Client Preview - " + username,
+					video_player_block = boost::shared_ptr<video_player>(new video_player("Cloud Client Preview - " + username,
 						preview_width > 0 ? preview_width : video_width,
-						preview_height > 0 ? preview_height : video_height);
-					video_capturer_block->connect(video_player_block);
+						preview_height > 0 ? preview_height : video_height));
+					video_capturer_block->connect(video_player_block.get());
 				}
 			}
 		}
 	}
 
-	multiplexer_block->connect(transmitter_block);
+	multiplexer_block->connect(transmitter_block.get());
 
 	synchronizer_block->set_synchronization_period(1000 / video_frame_rate);
-	graph_runner* graph_runner_block = new graph_runner(synchronizer_block);
+	boost::shared_ptr<graph_runner> graph_runner_block(new graph_runner(synchronizer_block.get()));
 
 	if (!flag_disable_audio)
 	{
 		if (flag_generate_audio)
-			graph_runner_block->connect(audio_generator_block);
+			graph_runner_block->connect(audio_generator_block.get());
 		else
-			graph_runner_block->connect(audio_capturer_block);
+			graph_runner_block->connect(audio_capturer_block.get());
 	}
 
 	if (!flag_disable_video)
@@ -278,12 +279,12 @@ int main(int argc, char* argv[])
 		if (flag_generate_video)
 		{
 			if (flag_rainbow)
-				graph_runner_block->connect(video_generator_rainbow_block);
+				graph_runner_block->connect(video_generator_rainbow_block.get());
 			else
-				graph_runner_block->connect(video_generator_block);
+				graph_runner_block->connect(video_generator_block.get());
 		}
 		else
-			graph_runner_block->connect(video_capturer_block);
+			graph_runner_block->connect(video_capturer_block.get());
 	}
 
 	graph_runner_block->start();
@@ -297,70 +298,6 @@ int main(int argc, char* argv[])
 	} while (exit != "exit");
 
 	graph_runner_block->stop();
-	graph_runner_block->disconnect();
-	delete graph_runner_block;
-
-	if (!flag_disable_audio)
-	{
-		audio_encoder_block->disconnect();
-		delete audio_encoder_block;
-
-		if (flag_generate_audio)
-		{
-			audio_generator_block->disconnect();
-			delete audio_generator_block;
-		}
-		else
-		{
-			audio_capturer_block->disconnect();
-			delete audio_capturer_block;
-		}
-
-		if (flag_echo)
-			delete audio_player_block;
-	}
-
-	if (!flag_disable_video)
-	{
-		video_encoder_block->disconnect();
-		delete video_encoder_block;
-
-		if (flag_lsd)
-		{
-			line_segment_detector_block->disconnect();
-			delete line_segment_detector_block;
-		}
-
-		if (flag_generate_video)
-		{
-			if (flag_rainbow)
-			{
-				video_generator_rainbow_block->disconnect();
-				delete video_generator_rainbow_block;
-			}
-			else
-			{
-				video_generator_block->disconnect();
-				delete video_generator_block;
-			}
-		}
-		else
-		{
-			video_capturer_block->disconnect();
-			delete video_capturer_block;
-
-			if (flag_preview)
-				delete video_player_block;
-		}
-	}
-
-	multiplexer_block->disconnect();
-	delete multiplexer_block;
-
-	transmitter_block->disconnect();
-	delete transmitter_block;
-
-	delete simple_synchronizer_block;
 
 	return 0;
 }
