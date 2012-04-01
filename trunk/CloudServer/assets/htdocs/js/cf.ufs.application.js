@@ -13,19 +13,32 @@ function updateFilesList() {
 		}
 
 function deleteMultipleFiles(){ 
-	$.ajax({
-		type: "POST",
-		url: "ufs.service?action=delete", 
-		data: selected_array.join(", "),
-		success: updateFilesList
+	var local_selected_array = selected_array.slice(0);
+	$('body').append($('<div class=\"overlay\"></div>'))
+	ui.confirm('are you sure you want to remove ' + local_selected_array.length +' files?')
+	.closable()
+	.show(function(ok){
+		$('.overlay').remove();
+		if (ok) $.ajax({
+			type: "POST",
+			url: "ufs.service?action=delete", 
+			data: local_selected_array.join(", "),
+			success: updateFilesList
+		});
 	});
 }
 	
 function deleteFile(){ 
-	$.ajax({
-		type: "GET",
-		url:"ufs.service?action=delete&url="+file_id,
-		success: updateFilesList
+	$('body').append($('<div class=\"overlay\"></div>'))
+	ui.confirm('are you sure you want to remove ' + file_title +' file?')
+	.closable()
+	.show(function(ok){
+		$('.overlay').remove();
+		if (ok) $.ajax({
+			type: "GET",
+			url:"ufs.service?action=delete&url="+file_id,
+			success: updateFilesList
+		});
 	});
 }
 
@@ -34,7 +47,7 @@ function showFileUrlAlert(){
  }
  
  function downloadAFile(){
- 	 window.open(""+file_id, '_blank'); 
+	 window.open(""+file_id, '_blank'); 
  }
 
 function createUploaders(){
@@ -92,14 +105,15 @@ $(document).ready(function() {
 								$(this).parent('a').addClass('ui-selected');
 							}
 
-							var element = this; //$(this) .closest('a > p');
-							selected_array = selected_array.concat( element.id );
-							titles_array =  selected_array.concat( element.title );
+							var element = $(this);// .closest('a > p');
+							selected_array = selected_array.concat( element.attr("id") );
+							titles_array =  titles_array.concat( element.attr("title") );
 							});
 							if(selected_array.length == 1)
 							{
-								file_title = selected_array[0];
+								file_title = titles_array[0];
 								file_id = selected_array[0];
+								
 								if(files_menu.items['Delete items'] != null)
 									files_menu.remove('Delete items');
 								
