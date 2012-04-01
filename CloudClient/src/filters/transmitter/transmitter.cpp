@@ -30,7 +30,7 @@ void transmitter::connect(std::string username, std::string url)
 
 	// Use the default port if no port is specified.
 	if (port.empty())
-		port = DEFAULT_PORT;
+		port = "4773";
 
 	// Resolve the hostname.
 	boost::asio::ip::tcp::resolver::query query(boost::asio::ip::tcp::v4(), host, port);
