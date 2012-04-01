@@ -99,6 +99,7 @@ void audio_encoder::send(const char* data, int size)
 			packet->data = this->encode_buffer;
 			this->multiplexer_block->send(packet);
 			av_free_packet(packet);
+			delete packet;
 
 			position += packet_size;
 			bytes_available -= packet_size;

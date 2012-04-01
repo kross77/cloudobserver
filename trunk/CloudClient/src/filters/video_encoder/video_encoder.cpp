@@ -126,6 +126,7 @@ void video_encoder::send(AVFrame* frame)
 			packet->size = sizeof(AVPicture);
 			this->multiplexer_block->send(packet);
 			av_free_packet(packet);
+			delete packet;
 		}
 		else
 		{
@@ -146,6 +147,7 @@ void video_encoder::send(AVFrame* frame)
 				packet->size = output_size;
 				this->multiplexer_block->send(packet);
 				av_free_packet(packet);
+				delete packet;
 			}
 		}
 
