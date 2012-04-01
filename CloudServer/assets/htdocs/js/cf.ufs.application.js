@@ -3,6 +3,32 @@ var file_title;
 var mfu_uploader_created = 0;
 var mfu_html = "";
 var fs;
+var files_menu;
+var selected_array = [];
+
+function updateFilesList() {
+			$.getJSON("./ufs.json", function(data) {
+				fs.render(data);
+			});
+		}
+
+function deleteMultipleFiles(){ 
+	$.ajax({
+		type: "POST",
+		url: "ufs.service?action=delete", 
+		data: selected_array.join(", "),
+		success: updateFilesList
+	});
+}
+	
+function deleteFile(){ 
+	$.ajax({
+		type: "GET",
+		url:"ufs.service?action=delete&url="+file_id,
+		success: updateFilesList
+	});
+}
+
 function createUploaders(){
 	prepareWindowWithStaticObject("mfu_tab", mfu_uploader_created, mfu_html, "Multiple Files upload form");
 	var publicUploader = new qq.FileUploader({
@@ -34,20 +60,11 @@ function createUploaders(){
 
 $(document).ready(function() {
 
-	var files_menu = ui.menu()
+	files_menu = ui.menu()
 	.add('Download item' , function(){ window.open(""+file_id, '_blank'); })
 	.add('Get link' , function(){ showAlert( 600, 100 , ('link to ' + file_title + ' file.') , '<input type="text" style="width:590px" class="text" value=\"' + location.host + ('/'+file_id ) + '\">'); })
-	.add('Delete item' , function(){ $.ajax({
-		type: "GET",
-		url:"ufs.service", 
-		data: "action=delete&url="+file_id,
-		success: function(data) {
-			$.getJSON("ufs.json", function(data) {
-				fs.render(data);
-			});
-		}
-	});
-});
+	//.add('Delete item' , deleteFile)
+	//.add('Delete items' , deleteMultipleFiles);
 
 	user = readCookie('session-id');
 	if (user != null) {	
@@ -59,23 +76,38 @@ $(document).ready(function() {
 					$( "#marx-brothers" ).selectable({
 						start: function(e, ui) { files_menu.hide(); },
 						stop:  function(e, ui) {
-							var selected_array = []
+							selected_array = [];
+							var titles_array = [];
 							$( "div.ui-selected > li > a > p", this ).each(function() {
 							if (! $(this).parent('a').hasClass('ui-selected'))
 							{
 								$(this).parent('a').addClass('ui-selected');
 							}
-							
+
 							var element = this; //$(this) .closest('a > p');
-							selected_array = selected_array.concat( element );
-			
+							selected_array = selected_array.concat( element.id );
+							titles_array =  selected_array.concat( element.title );
 							});
 							if(selected_array.length == 1)
 							{
-								file_title = selected_array[0].title;
-								file_id = selected_array[0].id;
-								files_menu.moveTo(e.pageX, e.pageY).show();
+								file_title = selected_array[0];
+								file_id = selected_array[0];
+								if(files_menu.items['Delete items'] != null)
+									files_menu.remove('Delete items');
+								
+								if(files_menu.items['Delete item'] == null)
+									files_menu.add('Delete item' , deleteFile);
+
+							}else{
+								if(files_menu.items['Delete items'] == null)
+									files_menu.add('Delete items' , deleteMultipleFiles);
+								
+								if(files_menu.items['Delete item'] != null)
+									files_menu.remove('Delete item');
+
 							}
+							
+							files_menu.moveTo(e.pageX, e.pageY).show();
 					}
 				});
 			}
