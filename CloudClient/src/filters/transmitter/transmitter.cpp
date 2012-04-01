@@ -25,30 +25,12 @@ void transmitter::connect(std::string username, std::string url)
 		"(/\?(\?:[^\?#/]*/)*)\?([^\?#]*)\?(\\\?(.*))\?"
 		);
 	boost::regex_split(std::back_inserter(url_parts), url, url_expression);
-	std::string protocol = url_parts[0];
 	std::string host = url_parts[1];
 	std::string port = url_parts[2];
-
-	// Use the default protocol if no protocol is specified.
-	if (protocol.empty())
-		protocol = DEFAULT_PROTOCOL;
 
 	// Use the default port if no port is specified.
 	if (port.empty())
 		port = DEFAULT_PORT;
-
-	// Get the list of all supported protocols.
-	std::vector<std::string> protocols;
-	boost::split(protocols, SUPPORTED_PROTOCOLS, boost::is_any_of(", "));
-
-	// Check if the given protocol is supported.
-	boost::to_upper(protocol);
-	if (std::find(protocols.begin(), protocols.end(), protocol) == protocols.end())
-	{
-		// The protocol is not supported. Report a failure.
-		std::cout << protocol << " protocol is not valid. Use one of the following protocols: " << SUPPORTED_PROTOCOLS << "." << std::endl;
-		throw transmitter::server_connection_exception();
-	}
 
 	// Resolve the hostname.
 	boost::asio::ip::tcp::resolver::query query(boost::asio::ip::tcp::v4(), host, port);
