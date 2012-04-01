@@ -66,7 +66,10 @@ void audio_encoder::connect(multiplexer* multiplexer_block)
 void audio_encoder::disconnect()
 {
 	if (this->stream)
+	{
 		avcodec_close(this->stream->codec);
+		this->stream = NULL;
+	}
 }
 
 void audio_encoder::send(const char* data, int size)
