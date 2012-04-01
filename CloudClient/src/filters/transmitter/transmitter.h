@@ -2,9 +2,7 @@
 #define TRANSMITTER_H
 
 // Boost
-#include <boost/algorithm/string.hpp>
 #include <boost/asio.hpp>
-#include <boost/regex.hpp>
 
 #include "../../utils/http/http.h"
 
@@ -21,7 +19,6 @@ public:
 	class server_connection_exception: public std::exception { };
 private:
 	boost::asio::io_service* io_service;
-	boost::asio::ip::tcp::resolver* resolver;
 	boost::asio::ip::tcp::socket* socket;
 };
 
