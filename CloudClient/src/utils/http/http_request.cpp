@@ -334,6 +334,7 @@ boost::asio::ip::tcp::socket& http_request::send(std::string absolute_url, boost
 		{
 			socket.connect(endpoint);
 			connected = true;
+			break;
 		}
 		catch (boost::system::system_error&)
 		{
