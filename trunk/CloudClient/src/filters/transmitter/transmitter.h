@@ -1,9 +1,6 @@
 #ifndef TRANSMITTER_H
 #define TRANSMITTER_H
 
-// The default port number.
-#define DEFAULT_PORT "4773"
-
 // Boost
 #include <boost/algorithm/string.hpp>
 #include <boost/asio.hpp>
