@@ -29,6 +29,14 @@ function deleteFile(){
 	});
 }
 
+function showFileUrlAlert(){
+	showAlert( 600, 100 , ('link to ' + file_title + ' file.') , '<input type="text" style="width:590px" class="text" value=\"' + location.host + ('/'+file_id ) + '\">');
+ }
+ 
+ function downloadAFile(){
+ 	 window.open(""+file_id, '_blank'); 
+ }
+
 function createUploaders(){
 	prepareWindowWithStaticObject("mfu_tab", mfu_uploader_created, mfu_html, "Multiple Files upload form");
 	var publicUploader = new qq.FileUploader({
@@ -60,9 +68,9 @@ function createUploaders(){
 
 $(document).ready(function() {
 
-	files_menu = ui.menu()
-	.add('Download item' , function(){ window.open(""+file_id, '_blank'); })
-	.add('Get link' , function(){ showAlert( 600, 100 , ('link to ' + file_title + ' file.') , '<input type="text" style="width:590px" class="text" value=\"' + location.host + ('/'+file_id ) + '\">'); })
+	files_menu = ui.menu();
+	//.add('Download item' , downloadAFile)
+	//.add('Get link' , showFileUrlAlert)
 	//.add('Delete item' , deleteFile)
 	//.add('Delete items' , deleteMultipleFiles);
 
@@ -97,6 +105,13 @@ $(document).ready(function() {
 								
 								if(files_menu.items['Delete item'] == null)
 									files_menu.add('Delete item' , deleteFile);
+									
+								if(files_menu.items['Get link'] == null)
+									files_menu.add('Get link' , showFileUrlAlert);
+									
+								if(files_menu.items['Download item'] == null)
+									files_menu.add('Download item' , downloadAFile);
+									
 
 							}else{
 								if(files_menu.items['Delete items'] == null)
@@ -104,6 +119,12 @@ $(document).ready(function() {
 								
 								if(files_menu.items['Delete item'] != null)
 									files_menu.remove('Delete item');
+									
+								if(files_menu.items['Get link'] != null)
+									files_menu.remove('Get link');
+									
+								if(files_menu.items['Download item'] != null)
+									files_menu.remove('Download item');
 
 							}
 							
