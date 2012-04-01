@@ -1,13 +1,6 @@
 #ifndef TRANSMITTER_H
 #define TRANSMITTER_H
 
-// The default network protocol.
-#define DEFAULT_PROTOCOL "HTTP"
-
-// The list of all supported network protocols.
-// Use ', ' (a comma followed by a space) as a delimiter.
-#define SUPPORTED_PROTOCOLS "HTTP"
-
 // The default port number.
 #define DEFAULT_PORT "4773"
 
