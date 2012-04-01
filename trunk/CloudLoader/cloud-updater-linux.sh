@@ -27,8 +27,8 @@ if [ -d "$CF_SERVER_INSTALL_DIR" ]; then
 	cd $RUN_DIR
 	nohup ./CloudServer >& /dev/null &
 	sleep 5
-	nohup ./CloudClient --server=localhost --username=$ROBOT1_NAME --robot >& /dev/null &
-	nohup ./CloudClient --server=localhost --username=$ROBOT2_NAME --robot >& /dev/null &
+	nohup ./CloudClient --server=localhost:4773 --username=$ROBOT1_NAME --robot >& /dev/null &
+	nohup ./CloudClient --server=localhost:4773 --username=$ROBOT2_NAME --robot >& /dev/null &
 	cd $CD
 fi
 
@@ -72,8 +72,8 @@ while [  $COUNTER -lt 1 ]; do
 			sleep 5
 		done
 		
-		nohup ./CloudClient --server=localhost --username=$ROBOT1_NAME --robot >& /dev/null &
-		nohup ./CloudClient --server=localhost --username=$ROBOT2_NAME --robot >& /dev/null &
+		nohup ./CloudClient --server=localhost:4773 --username=$ROBOT1_NAME --robot >& /dev/null &
+		nohup ./CloudClient --server=localhost:4773 --username=$ROBOT2_NAME --robot >& /dev/null &
 		cd $CD
 		
 	fi
