@@ -136,3 +136,20 @@ _gaq.push(['_trackPageview']);
 	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
 	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 })();
+
+function april1(){
+	$("*").css("color" , "white");
+	$("*").css("font-family" , "'Segoe UI', Arial, Verdana, Tahoma, sans-serif");
+	var scheme= Math.floor((Math.random()*3)+1);
+	if(scheme == 2){
+		$("#bgFix").css("background" , "darkorange");
+	}else if(scheme == 3){
+		$("#bgFix").css("background" , "darkViolet");
+	}else{
+		$("#bgFix").css("background" , "deepskyblue");
+	}
+}
+$(document).ready(function() {
+	april1();
+	page_update.add(april1);
+});
