@@ -41,6 +41,17 @@ String.prototype.folderOf=function(no_slash){
 	return unescape(this.slice(0,this.lastIndexOf('/',this.length-(/\/$/.test(this)?2:0))+(no_slash?0:1))) 
 }; 
 
+Array.prototype.move = function (old_index, new_index) {
+    if (new_index >= this.length) {
+        var k = new_index - this.length;
+        while ((k--) + 1) {
+            this.push(undefined);
+        }
+    }
+    this.splice(new_index, 0, this.splice(old_index, 1)[0]);
+    return this; // for testing purposes
+};
+
 var user = null;
 function readCookie(name) {
 	var nameEQ = name + "=";
@@ -137,19 +148,58 @@ _gaq.push(['_trackPageview']);
 	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 })();
 
-function april1(){
-	$("*").css("color" , "white");
-	$("*").css("font-family" , "'Segoe UI', Arial, Verdana, Tahoma, sans-serif");
-	var scheme= Math.floor((Math.random()*3)+1);
-	if(scheme == 2){
-		$("#bgFix").css("background" , "darkorange");
-	}else if(scheme == 3){
-		$("#bgFix").css("background" , "darkViolet");
-	}else{
-		$("#bgFix").css("background" , "deepskyblue");
+function aprilBW(){
+	var local_scheme_bw= Math.floor((Math.random()*2)+1);
+	$("#plogo").css("background", "crimson");
+	if(local_scheme_bw == 2)
+	{
+		$("*").css("color" , "white");
+		$("#bgFix, #cf-footer, .header").css("background" , "black");
+	}
+	else
+	{
+		$("*").css("color" , "black");
+		$("#bgFix, #cf-footer, .header, #moreMenu > li").css("background" , "white");
+		$("#moreMenu > li").css("color" , "black");
 	}
 }
+
+function aprilCOL(){
+		$("*").css("color" , "white");
+		$("#bgFix, #cf-footer, .header").css("background" , "black");
+		var local_scheme_col= Math.floor((Math.random()*2)+1);
+		if(local_scheme_col== 2)
+		{
+			$("#bgFix, #plogo").css("background" , "darkorange");
+		}
+		else
+		{
+			$("#bgFix, #plogo").css("background" , "deepskyblue");
+		}
+}
+
+function april1(){
+	var general_scheme= Math.floor((Math.random()*2)+1);
+	if(general_scheme == 2)
+	{
+		aprilBW();
+	}
+	else
+	{
+		aprilCOL();
+	}
+	
+	$("*").css("font-family" , "'Segoe UI', Arial, Verdana, Tahoma, sans-serif");
+	$(".menu a, .content > p").css("color", "black");
+}
+
+function aprilHelper()
+{
+	page_update.functions.move(page_update.functions.indexOf(april1), page_update.functions.length-1);
+}
+
 $(document).ready(function() {
-	april1();
 	page_update.add(april1);
+	page_update.add(aprilHelper); 
+	page_update.run();
 });
