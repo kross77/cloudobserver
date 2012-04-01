@@ -13,7 +13,7 @@ void transmitter::connect(std::string username, std::string url)
 {
 	// Send the HTTP request and receive the response.
 	http_request request;
-	request.arguments.insert(std::pair<std::string, std::string>("action", "write"));
+	request.arguments["action"] = "write";
 	http_response response(request.send(url + '/' + username, this->socket));
 
 	// Check for the response status.
