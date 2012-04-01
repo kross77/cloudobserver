@@ -9,8 +9,6 @@
 #include <boost/asio.hpp>
 #include <boost/regex.hpp>
 
-#include <iostream>
-
 #include "../../utils/http/http.h"
 
 class transmitter
