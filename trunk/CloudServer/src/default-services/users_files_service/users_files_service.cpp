@@ -71,7 +71,7 @@ void users_files_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::s
 						if (boost::iequals(request->arguments["action"], "delete"))
 						{
 							boost::char_separator<char> sep(", ");
-							boost::tokenizer<boost::char_separator<char>> tokens(request->body, sep);
+							boost::tokenizer<boost::char_separator<char> > tokens(request->body, sep);
 							BOOST_FOREACH(std::string t, tokens)
 							{
 								delete_file( t, user_name);
