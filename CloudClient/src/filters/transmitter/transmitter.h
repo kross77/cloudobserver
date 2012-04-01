@@ -18,8 +18,8 @@ public:
 	class invalid_username_exception: public std::exception { };
 	class server_connection_exception: public std::exception { };
 private:
-	boost::asio::io_service* io_service;
-	boost::asio::ip::tcp::socket* socket;
+	boost::asio::io_service io_service;
+	boost::asio::ip::tcp::socket socket;
 };
 
 #endif // TRANSMITTER_H
