@@ -19,6 +19,7 @@
 #include <boost/shared_array.hpp>
 #include <boost/foreach.hpp>
 #include <boost/algorithm/string.hpp>
+#include <boost/tokenizer.hpp>
 // Boost Extension
 #include <boost/extension/extension.hpp>
 #include <boost/extension/factory.hpp>
@@ -81,23 +82,28 @@ public:
 	 *		- \c user_name : \c string;\n
 	 *  - or redirect to any location with request argument:\n
 	 *		- \c redirect_to : \c string;\n
-	 *  - or get a personal file info with request arguments submited to next url `/ufs.json`:\n
+	 *  - or get a personal file info with request arguments submited to url `/ufs.json`:\n
 	 *		- \c action = \c file_info,\n
 	 *		- \c url : \c string;\n
-	 *  - even delete personal file with request arguments:\n
+	 *  - even delete personal file with request arguments submited to url `/ufs.service`:\n
 	 * 		- \c action = \c delete,\n
 	 * 		- \c url : \c string;\n		
 	 * 		
-	 * also you can upload a file via \b AJAX \b request:\n
-	 *  - with arguments:\n
-	 *		- \c action = \c upload,\n
-	 *		- \c is_public : \c bool (\c true/false ),\n
-	 *		- \c type: \c string,\n
-	 *		- \c name : \c string\n
-	 *  - and with file contents (!only) inside request body;\n
-	 *  
-	 *  only \c action argument and body contents are required.
-	 *  
+	 * \b AJAX \b requests to url `/ufs.service`:\n
+	 *	- via method keyword : \c POST \n
+	 *		- you can upload a file: \n
+	 *			- with arguments:\n
+	 *				- \c action = \c upload,\n
+	 *				- \c is_public : \c bool (\c true/false ),\n
+	 *				- \c type: \c string,\n
+	 *				- \c name : \c string\n
+	 *			- and with file contents (!only) inside request body;\n
+	 *			only \c action argument and body contents are required.\n
+	 *		- you can delete multiple files: \n
+	 *			- with arguments:\n
+	 *				- \c action = \c delete;\n
+	 *			- and with array of file uri's in request body separated via  {", "};\n
+	 *			
 	 * All user pure \b POST requests to UFS shall be for file upload. \n
 	 * To upload a file all required is to send its contents. \n
 	 * Also we can save provided file \c name, \c policy and \c type. \n
@@ -162,7 +168,7 @@ private:
 	
 	bool is_request_to_file_info(std::string user_name, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response );
 	bool delete_file( std::string href, std::string user_name, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response );
-
+	bool delete_file( std::string href, std::string user_name);
 	boost::filesystem::path root_path;
 	boost::shared_ptr<sqlite3pp::database> db;
 	bool is_db_set;

@@ -44,106 +44,128 @@ void users_files_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::s
 	std::string user_name = fs_utils::get_user_name(shared_data);
 	if( (user_name != "guest") && (user_name != ""))
 	{
-		if(request->body.length() > 0)
-		{
-
-			std::map<std::string, std::string> save_file; 
-			save_file = http_utils::parse_multipart_form_data(request->body);
-			bool save = false;
-			//search for file
-			std::string file_data;
-			//with size
-			int f_size;
-			//set file policy
-			bool is_public = false;
-			//set virtual file name
-			std::string file_name = "Untitled";
-			//set fiscal file name
-			std::string encoded_url = "";
-			//set file type
-			std::string f_type = "";
-
-			if (save_file.empty())
+		if(request->url == "/ufs.service"){
+			if (boost::iequals(request->method, "POST"))
 			{
-				if (boost::iequals(request->arguments["action"], "upload"))
+				if(request->body.length() > 0)
 				{
-					save = true;
-					file_data= request->body;
-					if(!boost::iequals(request->arguments["is_public"], ""))
-					{
-						is_public = request->arguments["is_public"] == "true" ? true : false ;
-					}
-					if(!boost::iequals(request->arguments["type"], ""))
-					{
-						f_type = http_utils::url_decode(request->arguments["type"]);
-					}
-					if(!boost::iequals(request->arguments["name"], ""))
-					{
-						file_name = http_utils::url_decode(request->arguments["name"]);
-					}
-				}
-			}else{
-				//parse POST request data
-				std::map<std::string, std::string>::iterator it;
-				it = save_file.find("datafile");
-				if (it != save_file.end())
-				{
-					save = true;
-					//set file contents
-					file_data = it->second;
 
-					//set file size
-					//f_size = save_file.find("datafile")->second.length();
+					std::map<std::string, std::string> save_file; 
+					save_file = http_utils::parse_multipart_form_data(request->body);
+					bool save = false;
+					//search for file
+					std::string file_data;
+					//with size
+					int f_size;
+					//set file policy
+					bool is_public = false;
+					//set virtual file name
+					std::string file_name = "Untitled";
+					//set fiscal file name
+					std::string encoded_url = "";
+					//set file type
+					std::string f_type = "";
 
-					it = save_file.find("file_name");
+					if (save_file.empty())
+					{
+						if (boost::iequals(request->arguments["action"], "delete"))
+						{
+							boost::char_separator<char> sep(", ");
+							boost::tokenizer<boost::char_separator<char>> tokens(request->body, sep);
+							BOOST_FOREACH(std::string t, tokens)
+							{
+								delete_file( t, user_name);
+							}
+							http_utils::send_json(std::pair<std::string, std::string>("success","true"),  socket, response, request); 
+							return;
+						}
+						else if(boost::iequals(request->arguments["action"], "upload"))
+						{
+							save = true;
+							file_data= request->body;
+							if(!boost::iequals(request->arguments["is_public"], ""))
+							{
+								is_public = request->arguments["is_public"] == "true" ? true : false ;
+							}
+							if(!boost::iequals(request->arguments["type"], ""))
+							{
+								f_type = http_utils::url_decode(request->arguments["type"]);
+							}
+							if(!boost::iequals(request->arguments["name"], ""))
+							{
+								file_name = http_utils::url_decode(request->arguments["name"]);
+							}
+						}
+
+					}else{
+						//parse POST request data
+						std::map<std::string, std::string>::iterator it;
+						it = save_file.find("datafile");
+						if (it != save_file.end())
+						{
+							save = true;
+							//set file contents
+							file_data = it->second;
+
+							//set file size
+							//f_size = save_file.find("datafile")->second.length();
+
+							it = save_file.find("file_name");
+							if (it != save_file.end())
+							{
+								file_name = it->second;
+							}
+
+							it = save_file.find("is_public");
+							if (it != save_file.end())
+							{
+								is_public = it->second == "true" ? true : false ;
+							}
+
+							it = save_file.find("type");
+							if (it != save_file.end())
+							{
+								f_type = it->second;
+							}
+						}
+					}
+			
+
+					if(save){
+						f_size = file_data.length();
+
+						encoded_url = user_name + file_name + general_utils::get_utc_now_time();
+						encoded_url = general_utils::get_sha256(encoded_url);
+						encoded_url = encoded_url + "." + this->default_ufs_extension;
+						encoded_url = http_utils::url_encode( encoded_url );
+
+						//save file
+						fs_utils::save_string_into_file(file_data, encoded_url,  this->root_path);
+						this->create_file_table_entry(encoded_url, file_name, user_name, f_type, f_size, is_public);
+					}else{
+						http_utils::send_json(std::pair<std::string, std::string>("success","false"),  socket, response, request); 
+					}
+
+					//redirect user
+					std::map<std::string, std::string>::iterator it;
+					it =save_file.find("redirect_location");
 					if (it != save_file.end())
 					{
-						file_name = it->second;
+						http_utils::send_found_302(it->second, socket, response, request);
+					}else{
+						http_utils::send_json(std::pair<std::string, std::string>("success","true"),  socket, response, request); 
 					}
-
-					it = save_file.find("is_public");
-					if (it != save_file.end())
-					{
-						is_public = it->second == "true" ? true : false ;
-					}
-
-					it = save_file.find("type");
-					if (it != save_file.end())
-					{
-						f_type = it->second;
-					}
-				}
-			}
-
-			if(save){
-
-				f_size = file_data.length();
-
-				encoded_url = user_name + file_name + general_utils::get_utc_now_time();
-				encoded_url = general_utils::get_sha256(encoded_url);
-				encoded_url = encoded_url + "." + this->default_ufs_extension;
-				encoded_url = http_utils::url_encode( encoded_url );
-
-				//save file
-				fs_utils::save_string_into_file(file_data, encoded_url,  this->root_path);
-				this->create_file_table_entry(encoded_url, file_name, user_name, f_type, f_size, is_public);
-			}else
-			{
-				http_utils::send_json(std::pair<std::string, std::string>("success","false"),  socket, response, request); 
-			}
-
-			//redirect user
-			{
-				std::map<std::string, std::string>::iterator it;
-				it =save_file.find("redirect_location");
-				if (it != save_file.end())
-				{
-					http_utils::send_found_302(it->second, socket, response, request);
+					return;
 				}else{
-					http_utils::send_json(std::pair<std::string, std::string>("success","true"),  socket, response, request); 
+					http_utils::send_json(std::pair<std::string, std::string>("success","false"),  socket, response, request);
 				}
 			}
-			return;
+
+			if(request->arguments["action"] == "delete")
+			{
+				delete_file(request->arguments["url"], user_name, socket, request, response);
+				return;
+			}
 		}
 
 		if (request->url == "/ufs.json")
@@ -164,12 +186,6 @@ void users_files_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::s
 		if(request->arguments["user_name"] == "true")
 		{
 			http_utils::send_json( std::pair<std::string, std::string>("user_name", user_name), socket, response, request);
-			return;
-		}
-
-		if(request->arguments["action"] == "delete")
-		{
-			delete_file(request->arguments["url"], user_name, socket, request, response);
 			return;
 		}
 	}
@@ -295,6 +311,17 @@ bool users_files_service::send_file_info( std::string href, std::string user_nam
 
 bool users_files_service::delete_file( std::string href, std::string user_name, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response )
 {
+				bool deleted = delete_file(href,user_name);
+				if(deleted == true)
+					http_utils::send_json(std::pair<std::string, std::string>("success","true"),  socket, response, request); 
+				else
+					http_utils::send_json(std::pair<std::string, std::string>("success","false"),  socket, response, request); 
+
+				return deleted;
+}
+
+bool users_files_service::delete_file( std::string href, std::string user_name)
+{
 	sqlite3pp::transaction xct(*db, true);
 	{
 		sqlite3pp::query qry(*db, this->command_find_file.c_str());
@@ -312,13 +339,11 @@ bool users_files_service::delete_file( std::string href, std::string user_name, 
 				if(cmd.execute() == 0)
 				{
 					boost::filesystem::remove(boost::filesystem::path(this->root_path / href));
-					http_utils::send_json(std::pair<std::string, std::string>("success","true"),  socket, response, request); 
 					return true;
 				}
 			}
 		}
 	}
-	http_utils::send_json(std::pair<std::string, std::string>("success","false"),  socket, response, request); 
 	return false;
 }
 
