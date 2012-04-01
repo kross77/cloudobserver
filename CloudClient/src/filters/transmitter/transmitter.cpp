@@ -64,10 +64,7 @@ void transmitter::connect(std::string username, std::string url)
 
 	// Check if the connection is successful.
 	if (!connected)
-	{
-		this->disconnect();
 		throw server_connection_exception();
-	}
 
 	// Send the HTTP request.
 	http_request request;
