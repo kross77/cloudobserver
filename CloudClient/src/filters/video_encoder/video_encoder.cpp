@@ -86,7 +86,10 @@ void video_encoder::connect(multiplexer* multiplexer_block)
 void video_encoder::disconnect()
 {
 	if (this->stream)
+	{
 		avcodec_close(this->stream->codec);
+		this->stream = NULL;
+	}
 }
 
 void video_encoder::send(AVFrame* frame)
