@@ -17,7 +17,7 @@ kill `ps aux | grep -F '$ROBOT1_NAME' | grep -v -F 'grep' | awk '{ print $2 }'`
 kill `ps aux | grep -F '$ROBOT2_NAME' | grep -v -F 'grep' | awk '{ print $2 }'`
 
 if [ ! -d "$RUN_DIR" ]; then
-	mkdir $RUN_DIR
+	mkdir -p $RUN_DIR
 fi
 
 if [ -d "$CF_SERVER_INSTALL_DIR" ]; then
