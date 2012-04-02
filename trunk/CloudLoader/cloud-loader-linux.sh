@@ -209,111 +209,6 @@ prepare() # 1=SRCFILE 2=COMPILE 3=SRCBASE 4=SRCSITE 5=SRCPATH
 
 build()
 {
-	# Remember the workspace directory path.
-	WD=$(pwd)
-
-	# Declare variables related to CMake utility.
-	CMAKE_VERSION=2.8.6
-	CMAKE_COMPILE="$WD"/cmake-src
-	CMAKE_INSTALL="$WD"/cmake
-	CMAKE_SRCBASE=cmake-$CMAKE_VERSION
-	CMAKE_SRCFILE=$CMAKE_SRCBASE.tar.gz
-	CMAKE_SRCPATH=/files/v${CMAKE_VERSION%.*}
-	CMAKE_SRCSITE=www.cmake.org
-
-	# Declare variables related to Premake utility.
-	PREMAKE_VERSION=4.3
-	PREMAKE_COMPILE="$WD"/premake-src
-	PREMAKE_INSTALL="$WD"/premake
-	PREMAKE_SRCBASE=premake-$PREMAKE_VERSION
-	PREMAKE_SRCFILE=$PREMAKE_SRCBASE-src.zip
-	PREMAKE_SRCPATH=/projects/premake/files/Premake/$PREMAKE_VERSION
-	PREMAKE_SRCSITE=sourceforge.net
-
-	# Declare variables related to YASM utility.
-	YASM_VERSION=1.2.0
-	YASM_COMPILE="$WD"/yasm-src
-	YASM_INSTALL="$WD"/yasm
-	YASM_SRCBASE=yasm-$YASM_VERSION
-	YASM_SRCFILE=$YASM_SRCBASE.tar.gz
-	YASM_SRCPATH=/projects/yasm/releases
-	YASM_SRCSITE=www.tortall.net
-
-	# Declare variables related to Boost libraries.
-	BOOST_VERSION=1.47.0
-	BOOST_COMPILE="$WD"/boost-src
-	BOOST_INSTALL="$WD"/boost
-	BOOST_SRCBASE=boost_${BOOST_VERSION//./_}
-	BOOST_SRCFILE=$BOOST_SRCBASE.tar.bz2
-	BOOST_SRCPATH=/projects/boost/files/boost/$BOOST_VERSION
-	BOOST_SRCSITE=sourceforge.net
-	BOOST_ZLIBSRC="$BOOST_COMPILE"/zlib-src
-
-	# Declare variables related to FFmpeg libraries.
-	FFMPEG_VERSION=0.10
-	FFMPEG_COMPILE="$WD"/ffmpeg-src
-	FFMPEG_INSTALL="$WD"/ffmpeg
-	FFMPEG_SRCBASE=ffmpeg-$FFMPEG_VERSION
-	FFMPEG_SRCFILE=$FFMPEG_SRCBASE.tar.bz2
-	FFMPEG_SRCPATH=/releases
-	FFMPEG_SRCSITE=ffmpeg.org
-
-	# Declare variables related to OpenAL libraries.
-	OPENAL_VERSION=1.13
-	OPENAL_COMPILE="$WD"/openal-src
-	OPENAL_INSTALL="$WD"/openal
-	OPENAL_SRCBASE=openal-soft-$OPENAL_VERSION
-	OPENAL_SRCFILE=$OPENAL_SRCBASE.tar.bz2
-	OPENAL_SRCPATH=/openal-releases
-	OPENAL_SRCSITE=kcat.strangesoft.net
-
-	# Declare variables related to OpenCV libraries.
-	OPENCV_VERSION=2.3.1
-	OPENCV_COMPILE="$WD"/opencv-src
-	OPENCV_INSTALL="$WD"/opencv
-	OPENCV_SRCBASE=OpenCV-$OPENCV_VERSION
-	OPENCV_SRCFILE="$OPENCV_SRCBASE"a.tar.bz2 # note the 'a' character (it's 2.3.1a)
-	OPENCV_SRCPATH=/projects/opencvlibrary/files/opencv-unix/$OPENCV_VERSION
-	OPENCV_SRCSITE=sourceforge.net
-	OPENCV_ZLIBSRC="$OPENCV_COMPILE"/zlib-src
-
-	# Declare variables related to OpenSSL libraries.
-	OPENSSL_VERSION=1.0.0d
-	OPENSSL_COMPILE="$WD"/openssl-src
-	OPENSSL_INSTALL="$WD"/openssl
-	OPENSSL_SRCBASE=openssl-$OPENSSL_VERSION
-	OPENSSL_SRCFILE=$OPENSSL_SRCBASE.tar.gz
-	OPENSSL_SRCPATH=/source
-	OPENSSL_SRCSITE=www.openssl.org
-
-	# Declare variables related to zlib library.
-	ZLIB_VERSION=1.2.6
-	ZLIB_SRCBASE=zlib-$ZLIB_VERSION
-	ZLIB_SRCFILE=$ZLIB_SRCBASE.tar.bz2
-	ZLIB_SRCPATH=/projects/libpng/files/zlib/$ZLIB_VERSION
-	ZLIB_SRCSITE=sourceforge.net
-
-	# Declare variables related to Cloud Server application.
-	CLOUD_COMPILE="$WD"/cloudserver-src
-	CLOUD_INSTALL="$WD"/install-dir
-	CLOUD_PREMAKE=build.sh
-	CLOUD_SRCBASE=CloudServer
-	CLOUD_SRCPATH=/svn/trunk/$CLOUD_SRCBASE
-	CLOUD_SRCSITE=cloudobserver.googlecode.com
-
-	# Declare variables related to Cloud Client application.
-	CLOUDCLIENT_COMPILE="$WD"/cloudclient-src
-	CLOUDCLIENT_INSTALL="$WD"/install-dir
-	CLOUDCLIENT_PREMAKE=build.sh
-	CLOUDCLIENT_SRCBASE=CloudClient
-	CLOUDCLIENT_SRCPATH=/svn/trunk/$CLOUDCLIENT_SRCBASE
-	CLOUDCLIENT_SRCSITE=cloudobserver.googlecode.com
-
-	# Declare other variables.
-	DOWNLOADS=downloads
-	OS=linux
-	JOBS=$(grep ^processor /proc/cpuinfo | wc -l)
-
 	# The number of stages is unknown.
 	setNumberOfStages ?
 
@@ -690,6 +585,111 @@ done
 SOURCE="${BASH_SOURCE[0]}"
 while [ -h "$SOURCE" ]; do SOURCE="$(readlink "$SOURCE")"; done
 run cd "$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+
+# Remember the workspace directory path.
+WD=$(pwd)
+
+# Declare variables related to CMake utility.
+CMAKE_VERSION=2.8.6
+CMAKE_COMPILE="$WD"/cmake-src
+CMAKE_INSTALL="$WD"/cmake
+CMAKE_SRCBASE=cmake-$CMAKE_VERSION
+CMAKE_SRCFILE=$CMAKE_SRCBASE.tar.gz
+CMAKE_SRCPATH=/files/v${CMAKE_VERSION%.*}
+CMAKE_SRCSITE=www.cmake.org
+
+# Declare variables related to Premake utility.
+PREMAKE_VERSION=4.3
+PREMAKE_COMPILE="$WD"/premake-src
+PREMAKE_INSTALL="$WD"/premake
+PREMAKE_SRCBASE=premake-$PREMAKE_VERSION
+PREMAKE_SRCFILE=$PREMAKE_SRCBASE-src.zip
+PREMAKE_SRCPATH=/projects/premake/files/Premake/$PREMAKE_VERSION
+PREMAKE_SRCSITE=sourceforge.net
+
+# Declare variables related to YASM utility.
+YASM_VERSION=1.2.0
+YASM_COMPILE="$WD"/yasm-src
+YASM_INSTALL="$WD"/yasm
+YASM_SRCBASE=yasm-$YASM_VERSION
+YASM_SRCFILE=$YASM_SRCBASE.tar.gz
+YASM_SRCPATH=/projects/yasm/releases
+YASM_SRCSITE=www.tortall.net
+
+# Declare variables related to Boost libraries.
+BOOST_VERSION=1.47.0
+BOOST_COMPILE="$WD"/boost-src
+BOOST_INSTALL="$WD"/boost
+BOOST_SRCBASE=boost_${BOOST_VERSION//./_}
+BOOST_SRCFILE=$BOOST_SRCBASE.tar.bz2
+BOOST_SRCPATH=/projects/boost/files/boost/$BOOST_VERSION
+BOOST_SRCSITE=sourceforge.net
+BOOST_ZLIBSRC="$BOOST_COMPILE"/zlib-src
+
+# Declare variables related to FFmpeg libraries.
+FFMPEG_VERSION=0.10
+FFMPEG_COMPILE="$WD"/ffmpeg-src
+FFMPEG_INSTALL="$WD"/ffmpeg
+FFMPEG_SRCBASE=ffmpeg-$FFMPEG_VERSION
+FFMPEG_SRCFILE=$FFMPEG_SRCBASE.tar.bz2
+FFMPEG_SRCPATH=/releases
+FFMPEG_SRCSITE=ffmpeg.org
+
+# Declare variables related to OpenAL libraries.
+OPENAL_VERSION=1.13
+OPENAL_COMPILE="$WD"/openal-src
+OPENAL_INSTALL="$WD"/openal
+OPENAL_SRCBASE=openal-soft-$OPENAL_VERSION
+OPENAL_SRCFILE=$OPENAL_SRCBASE.tar.bz2
+OPENAL_SRCPATH=/openal-releases
+OPENAL_SRCSITE=kcat.strangesoft.net
+
+# Declare variables related to OpenCV libraries.
+OPENCV_VERSION=2.3.1
+OPENCV_COMPILE="$WD"/opencv-src
+OPENCV_INSTALL="$WD"/opencv
+OPENCV_SRCBASE=OpenCV-$OPENCV_VERSION
+OPENCV_SRCFILE="$OPENCV_SRCBASE"a.tar.bz2 # note the 'a' character (it's 2.3.1a)
+OPENCV_SRCPATH=/projects/opencvlibrary/files/opencv-unix/$OPENCV_VERSION
+OPENCV_SRCSITE=sourceforge.net
+OPENCV_ZLIBSRC="$OPENCV_COMPILE"/zlib-src
+
+# Declare variables related to OpenSSL libraries.
+OPENSSL_VERSION=1.0.0d
+OPENSSL_COMPILE="$WD"/openssl-src
+OPENSSL_INSTALL="$WD"/openssl
+OPENSSL_SRCBASE=openssl-$OPENSSL_VERSION
+OPENSSL_SRCFILE=$OPENSSL_SRCBASE.tar.gz
+OPENSSL_SRCPATH=/source
+OPENSSL_SRCSITE=www.openssl.org
+
+# Declare variables related to zlib library.
+ZLIB_VERSION=1.2.6
+ZLIB_SRCBASE=zlib-$ZLIB_VERSION
+ZLIB_SRCFILE=$ZLIB_SRCBASE.tar.bz2
+ZLIB_SRCPATH=/projects/libpng/files/zlib/$ZLIB_VERSION
+ZLIB_SRCSITE=sourceforge.net
+
+# Declare variables related to Cloud Server application.
+CLOUD_COMPILE="$WD"/cloudserver-src
+CLOUD_INSTALL="$WD"/install-dir
+CLOUD_PREMAKE=build.sh
+CLOUD_SRCBASE=CloudServer
+CLOUD_SRCPATH=/svn/trunk/$CLOUD_SRCBASE
+CLOUD_SRCSITE=cloudobserver.googlecode.com
+
+# Declare variables related to Cloud Client application.
+CLOUDCLIENT_COMPILE="$WD"/cloudclient-src
+CLOUDCLIENT_INSTALL="$WD"/install-dir
+CLOUDCLIENT_PREMAKE=build.sh
+CLOUDCLIENT_SRCBASE=CloudClient
+CLOUDCLIENT_SRCPATH=/svn/trunk/$CLOUDCLIENT_SRCBASE
+CLOUDCLIENT_SRCSITE=cloudobserver.googlecode.com
+
+# Declare other variables.
+DOWNLOADS=downloads
+OS=linux
+JOBS=$(grep ^processor /proc/cpuinfo | wc -l)
 
 if $BUILD; then
 	build
