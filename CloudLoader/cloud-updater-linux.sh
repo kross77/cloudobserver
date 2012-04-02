@@ -9,7 +9,6 @@ CF_SERVER_INSTALL_DIR="./cloud_server/install-dir/"
 ROBOT1_NAME=RobotAlpha
 ROBOT2_NAME=RobotBeta
 CD=`pwd`
-COUNTER=0
 
 export LC_MESSAGES=C
 
@@ -31,7 +30,7 @@ if [ -d "$CF_SERVER_INSTALL_DIR" ]; then
 	cd $CD
 fi
 
-while [  $COUNTER -lt 1 ]; do
+while true; do
 
 	REMOTE_REV=`svn info $REMOTE_REPO | grep '^Revision:' | awk '{print $2}'`
 	if [[ $REMOTE_REV != $LOCAL_REV ]] ; then
