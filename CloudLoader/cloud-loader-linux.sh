@@ -6,6 +6,7 @@ usage()
 	cat << EOF
 ${CYAN}Usage: $(basename $0) [options]${NORMAL}
 ${MAGENTA}Options:${NORMAL}
+  ${YELLOW}--build               ${BLUE}${BOLD}Build Cloud Client and Cloud Server applications${NORMAL}
   ${YELLOW}--check-for-updates   ${BLUE}${BOLD}Check if a new version of this script is available${NORMAL}
   ${YELLOW}--checkout-source     ${BLUE}${BOLD}Checkout latest source from version control system${NORMAL}
   ${YELLOW}--help                ${BLUE}${BOLD}Display this information${NORMAL}
@@ -622,6 +623,7 @@ export CYAN=$(tput setaf 6)
 export WHITE=$(tput setaf 7)
 
 # Declare option variables.
+BUILD=false
 CHECKOUT_SOURCE=false
 REBUILD_LIBRARIES=false
 VERBOSE=false
@@ -630,6 +632,9 @@ VERBOSE=false
 for i in $*
 do
 	case $i in
+		--build             )
+			BUILD=true
+			;;
 		--check-for-updates )
 			checkForUpdates
 			if [ $LATEST_REVISION -gt $REVISION ]; then
@@ -691,7 +696,11 @@ SOURCE="${BASH_SOURCE[0]}"
 while [ -h "$SOURCE" ]; do SOURCE="$(readlink "$SOURCE")"; done
 run cd "$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
-build
+if $BUILD; then
+	build
+	exit 0
+fi
 
+echo "${CYAN}Type '$0 --help' to display usage information.${NORMAL}"
 exit 0
 
