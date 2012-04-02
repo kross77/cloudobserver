@@ -3,7 +3,7 @@ LOCAL_REV=0
 LOADER="cloud-loader-linux.sh"
 LOADER_URL="http://cloudobserver.googlecode.com/svn/trunk/CloudLoader/$LOADER"
 REMOTE_REPO="http://cloudobserver.googlecode.com/svn/"
-REBUILD_LIBRARIES=0
+REBUILD_LIBRARIES=false
 RUN_DIR="./cloud_server/run_dir/"
 CF_SERVER_INSTALL_DIR="./cloud_server/install-dir/"
 ROBOT1_NAME=RobotAlpha
@@ -43,13 +43,13 @@ while true; do
 		./$LOADER "--check-for-updates"
 		if [ $? -eq 1 ]; then
 			./$LOADER "--self-update"
-			REBUILD_LIBRARIES=1
+			REBUILD_LIBRARIES=true
 		fi
 		LOCAL_REV=$REMOTE_REV
 		
-		if [ "$REBUILD_LIBRARIES" == "1" ]; then
+		if $REBUILD_LIBRARIES; then
 			./$LOADER --checkout-source --rebuild-libraries
-			REBUILD_LIBRARIES=0
+			REBUILD_LIBRARIES=false
 		else
 			./$LOADER --checkout-source
 		fi
