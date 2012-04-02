@@ -28,6 +28,12 @@ fi
 if [ -d "$CF_SERVER_INSTALL_DIR" ]; then
 	cp -r $CF_SERVER_INSTALL_DIR* $RUN_DIR
 	cd $RUN_DIR
+	
+	LOCAL_REV=$(cat htdocs/js/cf.js | grep 'Revision')
+	LOCAL_REV=${LOCAL_REV#"\$(document).ready(function() {\$('#rol').after('. Revision "}
+	LOCAL_REV=${LOCAL_REV%$(echo "');});")}
+	echo $LOCAL_REV
+	
 	nohup ./CloudServer >& /dev/null &
 	sleep 5
 	nohup ./CloudClient --server=localhost:4773 --robot --username=$ROBOT1_NAME >& /dev/null &
