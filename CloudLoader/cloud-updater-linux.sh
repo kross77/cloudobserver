@@ -16,6 +16,11 @@ kill `ps aux | grep -F 'CloudServer' | grep -v -F 'grep' | awk '{ print $2 }'`
 kill `ps aux | grep -F '$ROBOT1_NAME' | grep -v -F 'grep' | awk '{ print $2 }'`
 kill `ps aux | grep -F '$ROBOT2_NAME' | grep -v -F 'grep' | awk '{ print $2 }'`
 
+if [ ! -e ./$LOADER ]; then
+	wget $LOADER_URL
+	chmod u+x $LOADER
+fi
+
 if [ ! -d "$RUN_DIR" ]; then
 	mkdir -p $RUN_DIR
 fi
