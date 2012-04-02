@@ -69,7 +69,7 @@ selfUpdate()
 	echo "${CYAN}Updating the script...${NORMAL}"
 	
 	SELF=$(basename "$0")
-	UPDATER=cloud-updater-linux.sh
+	UPDATER=cloud-loader-linux-updater.sh
 	
 	setNumberOfStages 7
 	nextStage "Downloading the latest version"
