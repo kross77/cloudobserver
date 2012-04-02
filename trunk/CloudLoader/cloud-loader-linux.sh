@@ -249,10 +249,11 @@ do
 			if [ $LATEST_REVISION -gt $REVISION ]; then
 				echo "${RED}New version of this script is available.${NORMAL}"
 				echo "${CYAN}Type '$0 --self-update' to update it.${NORMAL}"
+				exit 1
 			else
 				echo "${GREEN}You are using the most recent version of this script.${NORMAL}"
+				exit 0
 			fi
-			exit 0
 			;;
 		--checkout-source   )
 			CHECKOUT_SOURCE=true
