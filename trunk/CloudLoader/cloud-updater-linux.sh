@@ -2,7 +2,6 @@
 LOCAL_REV=0
 LOADER="cloud-loader-linux.sh"
 LOADER_URL="http://cloudobserver.googlecode.com/svn/trunk/CloudLoader/$LOADER"
-LOADER_REV=0
 REMOTE_REPO="http://cloudobserver.googlecode.com/svn/"
 REBUILD_LIBRARIES=0
 RUN_DIR="./cloud_server/run_dir/"
@@ -37,13 +36,10 @@ while [  $COUNTER -lt 1 ]; do
 	REMOTE_REV=`svn info $REMOTE_REPO | grep '^Revision:' | awk '{print $2}'`
 	if [[ $REMOTE_REV != $LOCAL_REV ]] ; then
 		echo $REMOTE_REV
-		REMOTE_LOADER_REV=`svn info $LOADER_URL | grep '^Last Changed Rev:' | awk '{print $4}'`
-		if [[ $REMOTE_LOADER_REV != $LOADER_REV ]] ; then			
+		./$LOADER "--check-for-updates"
+		if [ $? -eq 1 ]; then
+			./$LOADER "--self-update"
 			REBUILD_LIBRARIES=1
-			echo $REMOTE_LOADER_REV
-			LOADER_REV=$REMOTE_LOADER_REV
-			wget -q $LOADER_URL -O $LOADER
-			chmod u+x $LOADER
 		fi
 		LOCAL_REV=$REMOTE_REV
 		
