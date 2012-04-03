@@ -558,7 +558,18 @@ do
 			REBUILD_LIBRARIES=true
 			;;
 		--self-update       )
-			checkForUpdates
+			echo "${CYAN}Checking for updates...${NORMAL}"
+			echo -n "${YELLOW}Current version: ${BLUE}${BOLD}$LOADER_VERSION"
+			if $REVISION_DEFINED; then
+				echo -n "-$REVISION"
+			else
+				echo -n " [unknown revision]"
+			fi
+			echo "${NORMAL}"
+	
+			queryLatestRevision
+	
+			echo "${YELLOW}Latest version: ${BLUE}${BOLD}$LOADER_VERSION-$LATEST_REVISION${NORMAL}"
 			if [ $LATEST_REVISION -eq $REVISION ]; then
 				echo "${GREEN}You already use the most recent version of this script.${NORMAL}"
 				exit 0
