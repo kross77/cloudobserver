@@ -8,9 +8,9 @@ ${CYAN}Usage: $(basename $0) [options] command${NORMAL}
 
 ${MAGENTA}Commands:${NORMAL}
    ${YELLOW}build                ${BLUE}${BOLD}Build Cloud Client and Cloud Server applications${NORMAL}
+   ${YELLOW}check-for-updates    ${BLUE}${BOLD}Check if a new version of this script is available${NORMAL}
 
 ${MAGENTA}Options:${NORMAL}
-  ${YELLOW}--check-for-updates   ${BLUE}${BOLD}Check if a new version of this script is available${NORMAL}
   ${YELLOW}--checkout-source     ${BLUE}${BOLD}Checkout latest source from version control system${NORMAL}
   ${YELLOW}--help                ${BLUE}${BOLD}Display this information${NORMAL}
   ${YELLOW}--rebuild-libraries   ${BLUE}${BOLD}Rebuild all libraries and utilities${NORMAL}
@@ -545,8 +545,8 @@ do
 		build               )
 			COMMAND=build
 			;;
-		--check-for-updates )
-			checkForUpdates
+		check-for-updates )
+			COMMAND=checkForUpdates
 			;;
 		--checkout-source   )
 			CHECKOUT_SOURCE=true
@@ -715,8 +715,12 @@ OS=linux
 JOBS=$(grep ^processor /proc/cpuinfo | wc -l)
 
 case $COMMAND in
-	build )
+	build           )
 		build
+		exit 0
+		;;
+	checkForUpdates )
+		checkForUpdates
 		exit 0
 		;;
 esac
