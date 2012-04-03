@@ -71,6 +71,15 @@ checkForUpdates()
 	queryLatestRevision
 	
 	echo "${YELLOW}Latest version: ${BLUE}${BOLD}$LOADER_VERSION-$LATEST_REVISION${NORMAL}"
+	
+	if [ $LATEST_REVISION -gt $REVISION ]; then
+		echo "${RED}New version of this script is available.${NORMAL}"
+		echo "${CYAN}Type '$0 --self-update' to update it.${NORMAL}"
+		exit 1
+	else
+		echo "${GREEN}You are using the most recent version of this script.${NORMAL}"
+		exit 0
+	fi
 }
 
 # Update the script to the latest available version.
@@ -538,14 +547,6 @@ do
 			;;
 		--check-for-updates )
 			checkForUpdates
-			if [ $LATEST_REVISION -gt $REVISION ]; then
-				echo "${RED}New version of this script is available.${NORMAL}"
-				echo "${CYAN}Type '$0 --self-update' to update it.${NORMAL}"
-				exit 1
-			else
-				echo "${GREEN}You are using the most recent version of this script.${NORMAL}"
-				exit 0
-			fi
 			;;
 		--checkout-source   )
 			CHECKOUT_SOURCE=true
