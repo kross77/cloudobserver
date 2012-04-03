@@ -46,6 +46,16 @@ stageFailed()
 	printf "%${STAGE_COL}s\n" "${RED}[FAILED]${NORMAL}"
 }
 
+# Perform a check that there is no command already encountered.
+checkForACommand()
+{
+	if [ "$COMMAND" != "" ]; then
+		echo "${RED}Several commands specified!${NORMAL}"
+		echo "${CYAN}Type '$0 --help' to display usage information.${NORMAL}"
+		exit 1
+	fi
+}
+
 # Query the number of the latest available revision of this script.
 queryLatestRevision()
 {
@@ -543,9 +553,11 @@ for i in $*
 do
 	case $i in
 		build               )
+			checkForACommand
 			COMMAND=build
 			;;
 		check-for-updates )
+			checkForACommand
 			COMMAND=checkForUpdates
 			;;
 		--checkout-source   )
