@@ -46,13 +46,18 @@ stageFailed()
 	printf "%${STAGE_COL}s\n" "${RED}[FAILED]${NORMAL}"
 }
 
+usage()
+{
+	echo "${CYAN}Type '$0 --help' to display usage information.${NORMAL}"
+	exit 1
+}
+
 # Perform a check that there is no command already encountered.
 checkForACommand()
 {
 	if [ "$COMMAND" != "" ]; then
 		echo "${RED}Several commands specified!${NORMAL}"
-		echo "${CYAN}Type '$0 --help' to display usage information.${NORMAL}"
-		exit 1
+		usage
 	fi
 }
 
@@ -610,13 +615,11 @@ do
 			;;
 		-*                   )
 			echo "${RED}Invalid option: $i${NORMAL}"
-			echo "${CYAN}Type '$0 --help' to display usage information.${NORMAL}"
-			exit 1
+			usage
 			;;
 		*                   )
 			echo "${RED}Unknown command: '$i'${NORMAL}"
-			echo "${CYAN}Type '$0 --help' to display usage information.${NORMAL}"
-			exit 1
+			usage
 			;;
 	esac
 done
@@ -732,8 +735,7 @@ OS=linux
 JOBS=$(grep ^processor /proc/cpuinfo | wc -l)
 
 if [ "$COMMAND" == "" ]; then
-	echo "${CYAN}Type '$0 --help' to display usage information.${NORMAL}"
-	exit 1
+	usage
 fi
 
 $COMMAND
