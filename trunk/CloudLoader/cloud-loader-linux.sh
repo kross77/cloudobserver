@@ -9,10 +9,10 @@ ${CYAN}Usage: $(basename $0) [options] command${NORMAL}
 ${MAGENTA}Commands:${NORMAL}
    ${YELLOW}build                ${BLUE}${BOLD}Build Cloud Client and Cloud Server applications${NORMAL}
    ${YELLOW}check-for-updates    ${BLUE}${BOLD}Check if a new version of this script is available${NORMAL}
+   ${YELLOW}help                 ${BLUE}${BOLD}Display this information${NORMAL}
 
 ${MAGENTA}Options:${NORMAL}
   ${YELLOW}--checkout-source     ${BLUE}${BOLD}Checkout latest source from version control system${NORMAL}
-  ${YELLOW}--help                ${BLUE}${BOLD}Display this information${NORMAL}
   ${YELLOW}--rebuild-libraries   ${BLUE}${BOLD}Rebuild all libraries and utilities${NORMAL}
   ${YELLOW}--self-update         ${BLUE}${BOLD}Update this script to the latest available version${NORMAL}
   ${YELLOW}--verbose             ${BLUE}${BOLD}Echo all executed commands${NORMAL}
@@ -48,7 +48,7 @@ stageFailed()
 
 usage()
 {
-	echo "${CYAN}Type '$0 --help' to display usage information.${NORMAL}"
+	echo "${CYAN}Type '$0 help' to display usage information.${NORMAL}"
 	exit 1
 }
 
@@ -568,9 +568,9 @@ do
 		--checkout-source   )
 			CHECKOUT_SOURCE=true
 			;;
-		--help              )
-			help
-			exit 0
+		help              )
+			checkForACommand
+			COMMAND=help
 			;;
 		--rebuild-libraries )
 			REBUILD_LIBRARIES=true
