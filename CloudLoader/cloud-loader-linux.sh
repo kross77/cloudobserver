@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Display usage information.
-usage()
+help()
 {
 	cat << EOF
 ${CYAN}Usage: $(basename $0) [options] command${NORMAL}
@@ -564,7 +564,7 @@ do
 			CHECKOUT_SOURCE=true
 			;;
 		--help              )
-			usage
+			help
 			exit 0
 			;;
 		--rebuild-libraries )
