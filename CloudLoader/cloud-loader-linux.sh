@@ -186,11 +186,6 @@ EOF
 	nextStage "Running update script"
 	export STAGE STAGE_COL STAGES
 	exec /bin/bash $UPDATER
-	if [ $? -ne 0 ]; then
-		stageFailed
-	fi
-	
-	return 0
 }
 
 # Print the command and run it. Exit the script on failure.
