@@ -719,14 +719,6 @@ if [ "$COMMAND" == "" ]; then
 	exit 0
 fi
 
-case $COMMAND in
-	build           )
-		build
-		exit 0
-		;;
-	checkForUpdates )
-		checkForUpdates
-		exit 0
-		;;
-esac
+$COMMAND
+exit 0
 
