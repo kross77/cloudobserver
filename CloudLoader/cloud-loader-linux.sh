@@ -733,7 +733,7 @@ JOBS=$(grep ^processor /proc/cpuinfo | wc -l)
 
 if [ "$COMMAND" == "" ]; then
 	echo "${CYAN}Type '$0 --help' to display usage information.${NORMAL}"
-	exit 0
+	exit 1
 fi
 
 $COMMAND
