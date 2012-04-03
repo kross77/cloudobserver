@@ -608,8 +608,13 @@ do
 			echo "${CYAN}Copyright (C) 2012 Cloud Forever. All rights reserved.${NORMAL}"
 			exit 0
 			;;
+		-*                   )
+			echo "${RED}Invalid option: $i${NORMAL}"
+			echo "${CYAN}Type '$0 --help' to display usage information.${NORMAL}"
+			exit 1
+			;;
 		*                   )
-			echo "${RED}Unknown option: '$i'${NORMAL}"
+			echo "${RED}Unknown command: '$i'${NORMAL}"
 			echo "${CYAN}Type '$0 --help' to display usage information.${NORMAL}"
 			exit 1
 			;;
