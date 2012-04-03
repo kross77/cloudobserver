@@ -46,7 +46,7 @@ while true; do
 	REMOTE_REV=`svn info $REMOTE_REPO | grep '^Revision:' | awk '{print $2}'`
 	if [[ $REMOTE_REV != $LOCAL_REV ]] ; then
 		echo $REMOTE_REV
-		./$LOADER "--check-for-updates"
+		./$LOADER "check-for-updates"
 		if [ $? -eq 1 ]; then
 			./$LOADER "--self-update"
 			REBUILD_LIBRARIES=true
