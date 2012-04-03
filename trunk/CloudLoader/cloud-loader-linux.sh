@@ -4,7 +4,10 @@
 usage()
 {
 	cat << EOF
-${CYAN}Usage: $(basename $0) [options]${NORMAL}
+${CYAN}Usage: $(basename $0) [options] command${NORMAL}
+
+${MAGENTA}Commands:${NORMAL}
+
 ${MAGENTA}Options:${NORMAL}
   ${YELLOW}--build               ${BLUE}${BOLD}Build Cloud Client and Cloud Server applications${NORMAL}
   ${YELLOW}--check-for-updates   ${BLUE}${BOLD}Check if a new version of this script is available${NORMAL}
@@ -512,6 +515,9 @@ export MAGENTA=$(tput setaf 5)
 export CYAN=$(tput setaf 6)
 export WHITE=$(tput setaf 7)
 
+# Declare command variable.
+COMMAND=
+
 # Declare option variables.
 BUILD=false
 CHECKOUT_SOURCE=false
@@ -690,6 +696,9 @@ CLOUDCLIENT_SRCSITE=cloudobserver.googlecode.com
 DOWNLOADS=downloads
 OS=linux
 JOBS=$(grep ^processor /proc/cpuinfo | wc -l)
+
+case $COMMAND in
+esac
 
 if $BUILD; then
 	build
