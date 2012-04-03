@@ -46,6 +46,16 @@ stageFailed()
 	printf "%${STAGE_COL}s\n" "${RED}[FAILED]${NORMAL}"
 }
 
+# Query the number of the latest available revision of this script.
+queryLatestRevision()
+{
+	export LC_MESSAGES=C
+	LOADER_URL=http://$LOADER_SRCSITE$LOADER_SRCPATH/$LOADER_SRCFILE
+	LATEST_REVISION=$(svn info $LOADER_URL | grep '^Last Changed Rev:')
+	LATEST_REVISION=${LATEST_REVISION#'Last Changed Rev: '}
+	export -n LC_MESSAGES
+}
+
 # Perform a check for a new version of this script.
 checkForUpdates()
 {
@@ -58,11 +68,7 @@ checkForUpdates()
 	fi
 	echo "${NORMAL}"
 	
-	export LC_MESSAGES=C
-	LOADER_URL=http://$LOADER_SRCSITE$LOADER_SRCPATH/$LOADER_SRCFILE
-	LATEST_REVISION=$(svn info $LOADER_URL | grep '^Last Changed Rev:')
-	LATEST_REVISION=${LATEST_REVISION#'Last Changed Rev: '}
-	export -n LC_MESSAGES
+	queryLatestRevision
 	
 	echo "${YELLOW}Latest version: ${BLUE}${BOLD}$LOADER_VERSION-$LATEST_REVISION${NORMAL}"
 }
