@@ -48,7 +48,7 @@ while true; do
 		echo $REMOTE_REV
 		./$LOADER "check-for-updates"
 		if [ $? -eq 1 ]; then
-			./$LOADER "--self-update"
+			./$LOADER "self-update"
 			REBUILD_LIBRARIES=true
 		fi
 		LOCAL_REV=$REMOTE_REV
