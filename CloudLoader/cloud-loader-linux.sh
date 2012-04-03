@@ -7,9 +7,9 @@ usage()
 ${CYAN}Usage: $(basename $0) [options] command${NORMAL}
 
 ${MAGENTA}Commands:${NORMAL}
+   ${YELLOW}build                ${BLUE}${BOLD}Build Cloud Client and Cloud Server applications${NORMAL}
 
 ${MAGENTA}Options:${NORMAL}
-  ${YELLOW}--build               ${BLUE}${BOLD}Build Cloud Client and Cloud Server applications${NORMAL}
   ${YELLOW}--check-for-updates   ${BLUE}${BOLD}Check if a new version of this script is available${NORMAL}
   ${YELLOW}--checkout-source     ${BLUE}${BOLD}Checkout latest source from version control system${NORMAL}
   ${YELLOW}--help                ${BLUE}${BOLD}Display this information${NORMAL}
@@ -519,7 +519,6 @@ export WHITE=$(tput setaf 7)
 COMMAND=
 
 # Declare option variables.
-BUILD=false
 CHECKOUT_SOURCE=false
 REBUILD_LIBRARIES=false
 VERBOSE=false
@@ -528,8 +527,8 @@ VERBOSE=false
 for i in $*
 do
 	case $i in
-		--build             )
-			BUILD=true
+		build               )
+			COMMAND=build
 			;;
 		--check-for-updates )
 			checkForUpdates
@@ -698,12 +697,11 @@ OS=linux
 JOBS=$(grep ^processor /proc/cpuinfo | wc -l)
 
 case $COMMAND in
+	build )
+		build
+		exit 0
+		;;
 esac
-
-if $BUILD; then
-	build
-	exit 0
-fi
 
 echo "${CYAN}Type '$0 --help' to display usage information.${NORMAL}"
 exit 0

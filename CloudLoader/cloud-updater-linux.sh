@@ -54,10 +54,10 @@ while true; do
 		LOCAL_REV=$REMOTE_REV
 		
 		if $REBUILD_LIBRARIES; then
-			./$LOADER --build --checkout-source --rebuild-libraries
+			./$LOADER --checkout-source --rebuild-libraries build
 			REBUILD_LIBRARIES=false
 		else
-			./$LOADER --build --checkout-source
+			./$LOADER --checkout-source build
 		fi
 		
 		cd $CD
