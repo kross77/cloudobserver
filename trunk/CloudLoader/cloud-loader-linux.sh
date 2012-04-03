@@ -100,6 +100,22 @@ checkForUpdates()
 # Update the script to the latest available version.
 selfUpdate()
 {
+	echo "${CYAN}Checking for updates...${NORMAL}"
+	echo -n "${YELLOW}Current version: ${BLUE}${BOLD}$LOADER_VERSION"
+	if $REVISION_DEFINED; then
+		echo -n "-$REVISION"
+	else
+		echo -n " [unknown revision]"
+	fi
+	echo "${NORMAL}"
+	
+	queryLatestRevision
+	
+	echo "${YELLOW}Latest version: ${BLUE}${BOLD}$LOADER_VERSION-$LATEST_REVISION${NORMAL}"
+	if [ $LATEST_REVISION -eq $REVISION ]; then
+		echo "${GREEN}You already use the most recent version of this script.${NORMAL}"
+		exit 0
+	fi
 	echo "${CYAN}Updating the script...${NORMAL}"
 	
 	SELF=$(basename "$0")
@@ -110,7 +126,8 @@ selfUpdate()
 	svn export $LOADER_URL $SELF.new >& /dev/null
 	if [ $? -ne 0 ]; then
 		stageFailed
-		return 1
+		echo "${RED}Update failed.${NORMAL}"
+		exit 1
 	fi
 	stageOK
 	
@@ -118,7 +135,8 @@ selfUpdate()
 	OCTAL_MODE=$(stat -c '%a' $SELF)
 	if [ $? -ne 0 ]; then
 		stageFailed
-		return 1
+		echo "${RED}Update failed.${NORMAL}"
+		exit 1
 	fi
 	stageOK
 	
@@ -126,7 +144,8 @@ selfUpdate()
 	chmod $OCTAL_MODE $SELF.new
 	if [ $? -ne 0 ]; then
 		stageFailed
-		return 1
+		echo "${RED}Update failed.${NORMAL}"
+		exit 1
 	fi
 	stageOK
 	
@@ -179,7 +198,8 @@ exit 0
 EOF
 	if [ $? -ne 0 ]; then
 		stageFailed
-		return 1
+		echo "${RED}Update failed.${NORMAL}"
+		exit 1
 	fi
 	stageOK
 	
@@ -571,28 +591,7 @@ do
 			REBUILD_LIBRARIES=true
 			;;
 		--self-update       )
-			echo "${CYAN}Checking for updates...${NORMAL}"
-			echo -n "${YELLOW}Current version: ${BLUE}${BOLD}$LOADER_VERSION"
-			if $REVISION_DEFINED; then
-				echo -n "-$REVISION"
-			else
-				echo -n " [unknown revision]"
-			fi
-			echo "${NORMAL}"
-	
-			queryLatestRevision
-	
-			echo "${YELLOW}Latest version: ${BLUE}${BOLD}$LOADER_VERSION-$LATEST_REVISION${NORMAL}"
-			if [ $LATEST_REVISION -eq $REVISION ]; then
-				echo "${GREEN}You already use the most recent version of this script.${NORMAL}"
-				exit 0
-			fi
 			selfUpdate
-			if [ $? -ne 0 ]; then
-				echo "${RED}Update failed.${NORMAL}"
-				exit 1
-			fi
-			exit 0
 			;;
 		--verbose           )
 			VERBOSE=true
