@@ -714,6 +714,11 @@ DOWNLOADS=downloads
 OS=linux
 JOBS=$(grep ^processor /proc/cpuinfo | wc -l)
 
+if [ "$COMMAND" == "" ]; then
+	echo "${CYAN}Type '$0 --help' to display usage information.${NORMAL}"
+	exit 0
+fi
+
 case $COMMAND in
 	build           )
 		build
@@ -724,7 +729,4 @@ case $COMMAND in
 		exit 0
 		;;
 esac
-
-echo "${CYAN}Type '$0 --help' to display usage information.${NORMAL}"
-exit 0
 
