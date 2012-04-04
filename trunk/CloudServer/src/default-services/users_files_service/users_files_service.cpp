@@ -19,6 +19,7 @@ users_files_service::users_files_service()
 	this->command_create_files_table = "CREATE TABLE IF NOT EXISTS files (encoded_url varchar(300) UNIQUE NOT NULL primary key, file_name varchar(150) NOT NULL, user_name varchar(65) NOT NULL, is_public BOOLEAN NOT NULL, modified DATETIME NOT NULL default CURRENT_TIMESTAMP, type varchar(20), size INTEGER(8) )";
 	this->command_create_file =  "INSERT INTO files (encoded_url, file_name, user_name, is_public, type, size ) VALUES (:encoded_url, :file_name, :user_name, :is_public, :type, :size)";
 	this->command_update_file = " UPDATE files SET encoded_url=:new_encoded_url, file_name=:new_file_name, is_public=:is_public, modified=CURRENT_TIMESTAMP, type=:type, size=:size  WHERE encoded_url=:encoded_url";
+	this->command_rename_file = " UPDATE files SET file_name=:new_file_name, modified=CURRENT_TIMESTAMP WHERE ( user_name=:user_name and encoded_url=:encoded_url )";
 	this->command_delete_file = "DELETE FROM files WHERE encoded_url=:encoded_url";
 	this->command_find_file = "SELECT file_name, user_name, is_public, modified, type FROM files WHERE encoded_url=:encoded_url";
 	this->command_find_all_user_files = "SELECT encoded_url, file_name, user_name, modified, type, size, is_public FROM files WHERE user_name=:user_name";
@@ -164,6 +165,11 @@ void users_files_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::s
 			if(request->arguments["action"] == "delete")
 			{
 				delete_file(request->arguments["url"], user_name, socket, request, response);
+				return;
+			}
+			if(request->arguments["action"] == "rename")
+			{
+				rename_file(request->arguments["url"], request->arguments["name"], user_name, socket, request, response);
 				return;
 			}
 		}
@@ -465,6 +471,34 @@ std::string users_files_service::service_check( boost::shared_ptr<http_request> 
 	}
 	return "not for me";
 }
+
+bool users_files_service::rename_file( std::string href, std::string new_file_name, std::string user_name)
+{
+	sqlite3pp::transaction xct(*db, true);
+	{
+		sqlite3pp::command cmd(*db, this->command_rename_file.c_str());
+		cmd.bind(":new_file_name", http_utils::url_decode(new_file_name));
+		cmd.bind(":user_name", user_name);
+		cmd.bind(":encoded_url", href);
+		if(cmd.execute() == 0)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+bool users_files_service::rename_file( std::string href, std::string new_file_name, std::string user_name, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response )
+{
+	bool renamed = rename_file(href, new_file_name, user_name);
+	if(renamed == true)
+		http_utils::send_json(std::pair<std::string, std::string>("success","true"),  socket, response, request); 
+	else
+		http_utils::send_json(std::pair<std::string, std::string>("success","false"),  socket, response, request); 
+
+	return renamed;
+}
+
 BOOST_EXTENSION_TYPE_MAP_FUNCTION
 {
 	std::map<std::string, boost::extensions::factory<base_service> > &factories(types.get());

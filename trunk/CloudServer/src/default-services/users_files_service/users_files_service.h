@@ -169,6 +169,9 @@ private:
 	bool is_request_to_file_info(std::string user_name, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response );
 	bool delete_file( std::string href, std::string user_name, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response );
 	bool delete_file( std::string href, std::string user_name);
+	bool rename_file( std::string href, std::string new_file_name, std::string user_name, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response );
+	bool rename_file( std::string href, std::string new_file_name, std::string user_name);
+
 	boost::filesystem::path root_path;
 	boost::shared_ptr<sqlite3pp::database> db;
 	bool is_db_set;
@@ -185,6 +188,7 @@ private:
 
 	std::string command_create_files_table;
 	std::string command_update_file;
+	std::string command_rename_file;
 	std::string command_delete_file;
 	std::string command_create_file;
 	std::string command_find_file;
