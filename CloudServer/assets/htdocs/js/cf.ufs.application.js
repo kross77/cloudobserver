@@ -42,6 +42,17 @@ function deleteFile(){
 	});
 }
 
+function renameFile(){ 
+	showAlertWithCallback( 600, 100 , ('New name for to ' + file_title + ' file.') , '<input type=\"text\" id=\"rename_text\" style=\"width:590px\" class=\"text\" value=\"' + file_title + '\">', function(){
+		$.ajax({
+			type: "GET",
+			url:"ufs.service?action=rename&url="+file_id + "&name=" + $("#rename_text").attr("value") ,
+			success: updateFilesList
+		});
+	});
+}
+
+
 function showFileUrlAlert(){
 	showAlert( 600, 100 , ('link to ' + file_title + ' file.') , '<input type="text" style="width:590px" class="text" value=\"' + location.host + ('/'+file_id ) + '\">');
  }
@@ -86,6 +97,7 @@ $(document).ready(function() {
 	//.add('Get link' , showFileUrlAlert)
 	//.add('Delete item' , deleteFile)
 	//.add('Delete items' , deleteMultipleFiles);
+	//.add('Rename item' , renameFile);
 
 	user = readCookie('session-id');
 	if (user != null) {	
@@ -126,6 +138,9 @@ $(document).ready(function() {
 								if(files_menu.items['Download item'] == null)
 									files_menu.add('Download item' , downloadAFile);
 									
+								if(files_menu.items['Rename item'] == null)
+									files_menu.add('Rename item' , renameFile);
+									
 
 							}else{
 								if(files_menu.items['Delete items'] == null)
@@ -139,6 +154,9 @@ $(document).ready(function() {
 									
 								if(files_menu.items['Download item'] != null)
 									files_menu.remove('Download item');
+									
+								if(files_menu.items['Rename item'] != null)
+									files_menu.remove('Rename item');
 
 							}
 							
