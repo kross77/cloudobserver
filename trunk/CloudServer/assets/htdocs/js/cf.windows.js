@@ -44,6 +44,11 @@ function windowsBase(id)
 	});
 }
 
+function hideDialog(dialog)
+{
+	dialog.hide();
+}
+
 function prepareWindow()
 {
 	if(prepareWindow_called == 0)
@@ -53,15 +58,10 @@ function prepareWindow()
 	}
 }
 
-function hideDialog(dialog)
+function showAlertBase(w, h, name)
 {
-	dialog.hide();
-}
-
-function showAlert(w, h, name, body_text) {
 	prepareWindow();
 	$("#alert_name").html(name);
-	$("#alert_content").html(body_text + '<br/>' + '<input type=\"button\" class=\"eButton\" value=\"OK\" onClick=$(\".alert\").hide() />');
 	$(".alert").show();
 	$("#demo_box").width(w);
 	$("#demo_box").height(h);
@@ -69,6 +69,21 @@ function showAlert(w, h, name, body_text) {
 	$(window).bind('resize', function() {
 		$('#demo_box').center();
 	});
+}
+
+function showAlert(w, h, name, body_text)
+{
+	prepareWindow();
+	$("#alert_content").html(body_text + '<br/>' + '<input type=\"button\" class=\"eButton\" value=\"OK\" onClick=$(\".alert\").hide() />');
+	showAlertBase(w, h, name);
+}
+
+function showAlertWithCallback(w, h, name, body_text, functionToCallOnOk) {
+	prepareWindow();
+	var ran_alert_number=Math.floor(Math.random()*50000);
+	$("#alert_content").html(body_text + '<br/>' + '<input type=\"button\" class=\"eButton\" value=\"Cancel\" onClick=$(\".alert\").hide() />' + '<input id=\"general-alert-'+ ran_alert_number +'\" type=\"button\" class=\"eButton\" value=\"OK\" onClick=\"$(\'.alert\').hide();\"/>');
+	$('#general-alert-' + ran_alert_number).click(function(){functionToCallOnOk();});
+	showAlertBase(w, h, name);
 }
 
 function showForm(sourceElement, PopupName, w, h) {
