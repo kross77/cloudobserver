@@ -9,6 +9,7 @@ ${CYAN}Usage: $(basename $0) [options] command${NORMAL}
 ${MAGENTA}Commands:${NORMAL}
    ${YELLOW}build                ${BLUE}${BOLD}Build Cloud Client and Cloud Server applications${NORMAL}
    ${YELLOW}check-for-updates    ${BLUE}${BOLD}Check if a new version of this script is available${NORMAL}
+   ${YELLOW}deploy               ${BLUE}${BOLD}Deploy Cloud Client and Cloud Server applications${NORMAL}
    ${YELLOW}help                 ${BLUE}${BOLD}Display this information${NORMAL}
    ${YELLOW}self-update          ${BLUE}${BOLD}Update this script to the latest available version${NORMAL}
 
@@ -95,6 +96,29 @@ checkForUpdates()
 		echo "${GREEN}You are using the most recent version of this script.${NORMAL}"
 		exit 0
 	fi
+}
+
+deploy()
+{
+	echo "${CYAN}Deploying...${NORMAL}"
+
+	if [ ! -d $DEPLOY ]; then
+		mkdir $DEPLOY
+	fi
+	
+	if [ ! -d "$CLOUD_INSTALL" ]; then
+		echo "${RED}Applications were not built!${NORMAL}"
+		echo "${CYAN}Type '$0 build' to build them.${NORMAL}"
+		exit 1
+	fi
+	
+	cp -r "$CLOUD_INSTALL"/* $DEPLOY
+	if [ $? -ne 0 ]; then
+		echo "${RED}Deploy failed.${NORMAL}"
+		exit 1
+	fi
+	echo "${GREEN}Deploy succeeded.${NORMAL}"
+	exit 0
 }
 
 # Update the script to the latest available version.
@@ -583,6 +607,10 @@ do
 		--checkout-source   )
 			CHECKOUT_SOURCE=true
 			;;
+		deploy            )
+			checkForACommand
+			COMMAND=deploy
+			;;
 		help              )
 			checkForACommand
 			COMMAND=help
@@ -726,6 +754,7 @@ CLOUDCLIENT_SRCSITE=cloudobserver.googlecode.com
 
 # Declare other variables.
 DOWNLOADS=downloads
+DEPLOY=run_dir
 OS=linux
 JOBS=$(grep ^processor /proc/cpuinfo | wc -l)
 
