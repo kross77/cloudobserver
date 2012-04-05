@@ -12,6 +12,7 @@ ${MAGENTA}Commands:${NORMAL}
    ${YELLOW}deploy               ${BLUE}${BOLD}Deploy Cloud Client and Cloud Server applications${NORMAL}
    ${YELLOW}help                 ${BLUE}${BOLD}Display this information${NORMAL}
    ${YELLOW}self-update          ${BLUE}${BOLD}Update this script to the latest available version${NORMAL}
+   ${YELLOW}start                ${BLUE}${BOLD}Start Cloud Server and demonstration robots${NORMAL}
 
 ${MAGENTA}Options:${NORMAL}
   ${YELLOW}--checkout-source     ${BLUE}${BOLD}Checkout latest source from version control system${NORMAL}
@@ -230,6 +231,47 @@ EOF
 	nextStage "Running update script"
 	export STAGE STAGE_COL STAGES
 	exec /bin/bash $UPDATER
+}
+
+start()
+{
+	if [ ! -d $DEPLOY ]; then
+		echo "${RED}Applications were not deployed!${NORMAL}"
+		echo "${CYAN}Type '$0 deploy' to deploy them.${NORMAL}"
+		exit 1
+	fi
+	cd $DEPLOY
+	
+	setNumberOfStages 3
+	
+	echo "${CYAN}Starting the server...${NORMAL}"
+	
+	nextStage "Starting Cloud Server"
+	nohup ./CloudServer >& /dev/null &
+	if [ $? -ne 0 ]; then
+		stageFailed
+		exit 1
+	fi
+	sleep 5
+	stageOK
+	
+	echo "${CYAN}Starting demonstration robots...${NORMAL}"
+	
+	nextStage "Starting RobotAlpha"
+	nohup ./CloudClient --server=localhost:4773 --robot --username=RobotAlpha >& /dev/null &
+	if [ $? -ne 0 ]; then
+		stageFailed
+		exit 1
+	fi
+	stageOK
+	
+	nextStage "Starting RobotBeta"
+	nohup ./CloudClient --server=localhost:4773 --robot --username=RobotBeta >& /dev/null &
+	if [ $? -ne 0 ]; then
+		stageFailed
+		exit 1
+	fi
+	stageOK
 }
 
 # Print the command and run it. Exit the script on failure.
@@ -621,6 +663,10 @@ do
 		self-update       )
 			checkForACommand
 			COMMAND=selfUpdate
+			;;
+		start             )
+			checkForACommand
+			COMMAND=start
 			;;
 		--verbose           )
 			VERBOSE=true
