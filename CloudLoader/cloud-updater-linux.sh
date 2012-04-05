@@ -6,39 +6,25 @@ REMOTE_REPO="http://cloudobserver.googlecode.com/svn/"
 REBUILD_LIBRARIES=false
 RUN_DIR="./run_dir/"
 CF_SERVER_INSTALL_DIR="./install-dir/"
-ROBOT1_NAME=RobotAlpha
-ROBOT2_NAME=RobotBeta
-CD=`pwd`
 
 export LC_MESSAGES=C
-
-kill `ps aux | grep -F 'CloudServer' | grep -v -F 'grep' | awk '{ print $2 }'` 
-kill `ps aux | grep -F '$ROBOT1_NAME' | grep -v -F 'grep' | awk '{ print $2 }'`
-kill `ps aux | grep -F '$ROBOT2_NAME' | grep -v -F 'grep' | awk '{ print $2 }'`
 
 if [ ! -e ./$LOADER ]; then
 	wget $LOADER_URL
 	chmod u+x $LOADER
 fi
 
-if [ ! -d "$RUN_DIR" ]; then
-	mkdir -p $RUN_DIR
-fi
+./$LOADER stop
 
 if [ -d "$CF_SERVER_INSTALL_DIR" ]; then
-	cp -r $CF_SERVER_INSTALL_DIR* $RUN_DIR
-	cd $RUN_DIR
+	./$LOADER deploy
 	
-	LOCAL_REV=$(cat htdocs/js/cf.js | grep 'Revision')
+	LOCAL_REV=$(cat $RUN_DIR/htdocs/js/cf.js | grep 'Revision')
 	LOCAL_REV=${LOCAL_REV#"\$(document).ready(function() {\$('#rol').after('. Revision "}
 	LOCAL_REV=${LOCAL_REV%$(echo "');});")}
 	echo $LOCAL_REV
 	
-	nohup ./CloudServer >& /dev/null &
-	sleep 5
-	nohup ./CloudClient --server=localhost:4773 --robot --username=$ROBOT1_NAME >& /dev/null &
-	nohup ./CloudClient --server=localhost:4773 --robot --username=$ROBOT2_NAME >& /dev/null &
-	cd $CD
+	./$LOADER start
 fi
 
 while true; do
@@ -60,18 +46,9 @@ while true; do
 			./$LOADER --checkout-source build
 		fi
 		
-		cd $CD
-		
-		kill `ps aux | grep -F 'CloudServer' | grep -v -F 'grep' | awk '{ print $2 }'` 
-		kill `ps aux | grep -F '$ROBOT1_NAME' | grep -v -F 'grep' | awk '{ print $2 }'`
-		kill `ps aux | grep -F '$ROBOT2_NAME' | grep -v -F 'grep' | awk '{ print $2 }'`
-		cp -rf $CF_SERVER_INSTALL_DIR* $RUN_DIR
-		cd $RUN_DIR
-		nohup ./CloudServer >& /dev/null &
-		sleep 5
-		nohup ./CloudClient --server=localhost:4773 --robot --username=$ROBOT1_NAME >& /dev/null &
-		nohup ./CloudClient --server=localhost:4773 --robot --username=$ROBOT2_NAME >& /dev/null &
-		cd $CD
+		./$LOADER stop
+		./$LOADER deploy
+		./$LOADER start
 		
 	fi
 	sleep  250
