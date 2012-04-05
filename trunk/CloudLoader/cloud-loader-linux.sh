@@ -13,6 +13,7 @@ ${MAGENTA}Commands:${NORMAL}
    ${YELLOW}help                 ${BLUE}${BOLD}Display this information${NORMAL}
    ${YELLOW}self-update          ${BLUE}${BOLD}Update this script to the latest available version${NORMAL}
    ${YELLOW}start                ${BLUE}${BOLD}Start Cloud Server and demonstration robots${NORMAL}
+   ${YELLOW}stop                 ${BLUE}${BOLD}Stop Cloud Server and demonstration robots${NORMAL}
 
 ${MAGENTA}Options:${NORMAL}
   ${YELLOW}--checkout-source     ${BLUE}${BOLD}Checkout latest source from version control system${NORMAL}
@@ -271,6 +272,27 @@ start()
 		stageFailed
 		exit 1
 	fi
+	stageOK
+}
+
+stop()
+{
+	setNumberOfStages 3
+	
+	echo "${CYAN}Stopping demonstration robots...${NORMAL}"
+	
+	nextStage "Stopping RobotAlpha"
+	kill $(ps aux | grep -F 'RobotAlpha' | grep -v -F 'grep' | awk '{ print $2 }')
+	stageOK
+	
+	nextStage "Stopping RobotBeta"
+	kill $(ps aux | grep -F 'RobotBeta' | grep -v -F 'grep' | awk '{ print $2 }')
+	stageOK
+	
+	echo "${CYAN}Stopping the server...${NORMAL}"
+	
+	nextStage "Stopping Cloud Server"
+	kill $(ps aux | grep -F 'CloudServer' | grep -v -F 'grep' | awk '{ print $2 }')
 	stageOK
 }
 
@@ -667,6 +689,10 @@ do
 		start             )
 			checkForACommand
 			COMMAND=start
+			;;
+		stop              )
+			checkForACommand
+			COMMAND=stop
 			;;
 		--verbose           )
 			VERBOSE=true
