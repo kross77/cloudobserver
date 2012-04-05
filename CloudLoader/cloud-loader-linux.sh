@@ -124,7 +124,7 @@ deploy()
 }
 
 # Update the script to the latest available version.
-selfUpdate()
+selfUpdate() # 1 - restart after the update, 2 - arguments to be passed on restart
 {
 	echo "${CYAN}Checking for updates...${NORMAL}"
 	echo -n "${YELLOW}Current version: ${BLUE}${BOLD}$LOADER_VERSION"
@@ -220,6 +220,12 @@ fi
 stageOK
 
 echo "${GREEN}Update succeeded.${NORMAL}"
+
+if $1; then
+	echo "${CYAN}Running the updated version...${NORMAL}"
+	exec /bin/bash $SELF $2
+fi
+
 exit 0
 EOF
 	if [ $? -ne 0 ]; then
@@ -684,7 +690,7 @@ do
 			;;
 		self-update       )
 			checkForACommand
-			COMMAND=selfUpdate
+			COMMAND='selfUpdate false'
 			;;
 		start             )
 			checkForACommand
