@@ -360,6 +360,18 @@ stop()
 	stageOK
 }
 
+version()
+{
+	echo -n "${CYAN}Cloud Loader $LOADER_VERSION"
+	if $REVISION_DEFINED; then
+		echo -n "-$REVISION"
+	else
+		echo -n " [unknown revision]"
+	fi
+	echo "${NORMAL}"
+	echo "${CYAN}Copyright (C) 2012 Cloud Forever. All rights reserved.${NORMAL}"
+}
+
 # Print the command and run it. Exit the script on failure.
 run()
 {
@@ -766,14 +778,7 @@ do
 			VERBOSE=true
 			;;
 		--version           )
-			echo -n "${CYAN}Cloud Loader $LOADER_VERSION"
-			if $REVISION_DEFINED; then
-				echo -n "-$REVISION"
-			else
-				echo -n " [unknown revision]"
-			fi
-			echo "${NORMAL}"
-			echo "${CYAN}Copyright (C) 2012 Cloud Forever. All rights reserved.${NORMAL}"
+			version
 			exit 0
 			;;
 		-*                   )
