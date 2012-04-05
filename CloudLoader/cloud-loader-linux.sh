@@ -15,12 +15,12 @@ ${MAGENTA}Commands:${NORMAL}
    ${YELLOW}self-update          ${BLUE}${BOLD}Update this script to the latest available version${NORMAL}
    ${YELLOW}start                ${BLUE}${BOLD}Start Cloud Server and demonstration robots${NORMAL}
    ${YELLOW}stop                 ${BLUE}${BOLD}Stop Cloud Server and demonstration robots${NORMAL}
+   ${YELLOW}version              ${BLUE}${BOLD}Display version information${NORMAL}
 
 ${MAGENTA}Options:${NORMAL}
   ${YELLOW}--checkout-source     ${BLUE}${BOLD}Checkout latest source from version control system${NORMAL}
   ${YELLOW}--rebuild-libraries   ${BLUE}${BOLD}Rebuild all libraries and utilities${NORMAL}
   ${YELLOW}--verbose             ${BLUE}${BOLD}Echo all executed commands${NORMAL}
-  ${YELLOW}--version             ${BLUE}${BOLD}Display version information${NORMAL}
 EOF
 }
 
@@ -777,9 +777,9 @@ do
 		--verbose           )
 			VERBOSE=true
 			;;
-		--version           )
-			version
-			exit 0
+		version           )
+			checkForACommand
+			COMMAND=version
 			;;
 		-*                   )
 			echo "${RED}Invalid option: $i${NORMAL}"
