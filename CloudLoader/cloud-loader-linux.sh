@@ -11,6 +11,7 @@ ${MAGENTA}Commands:${NORMAL}
    ${YELLOW}check-for-updates    ${BLUE}${BOLD}Check if a new version of this script is available${NORMAL}
    ${YELLOW}deploy               ${BLUE}${BOLD}Deploy Cloud Client and Cloud Server applications${NORMAL}
    ${YELLOW}help                 ${BLUE}${BOLD}Display this information${NORMAL}
+   ${YELLOW}maintain             ${BLUE}${BOLD}Maintain everything up-to-date and running${NORMAL}
    ${YELLOW}self-update          ${BLUE}${BOLD}Update this script to the latest available version${NORMAL}
    ${YELLOW}start                ${BLUE}${BOLD}Start Cloud Server and demonstration robots${NORMAL}
    ${YELLOW}stop                 ${BLUE}${BOLD}Stop Cloud Server and demonstration robots${NORMAL}
@@ -121,6 +122,51 @@ deploy()
 	fi
 	echo "${GREEN}Deploy succeeded.${NORMAL}"
 	exit 0
+}
+
+maintain()
+{
+	LOCAL_REV=0
+	LOADER=$(basename "$0")
+	REMOTE_REPO="http://cloudobserver.googlecode.com/svn/"
+	
+	export LC_MESSAGES=C
+	
+	./$LOADER stop
+	
+	if [ -d "$CLOUD_INSTALL" ]; then
+		./$LOADER deploy
+		
+		LOCAL_REV=$(cat $DEPLOY/htdocs/js/cf.js | grep 'Revision')
+		LOCAL_REV=${LOCAL_REV#"\$(document).ready(function() {\$('#rol').after('. Revision "}
+		LOCAL_REV=${LOCAL_REV%$(echo "');});")}
+		echo $LOCAL_REV
+		
+		./$LOADER start
+	fi
+	
+	while true; do
+		REMOTE_REV=$(svn info $REMOTE_REPO | grep '^Revision:' | awk '{ print $2 }')
+		if [[ $REMOTE_REV -ne $LOCAL_REV ]]; then
+			./$LOADER "check-for-updates"
+			if [ $? -eq 1 ]; then
+				selfUpdate true "--rebuild-libraries maintain"
+			fi
+			LOCAL_REV=$REMOTE_REV
+			
+			if $REBUILD_LIBRARIES; then
+				./$LOADER --checkout-source --rebuild-libraries build
+				REBUILD_LIBRARIES=false
+			else
+				./$LOADER --checkout-source build
+			fi
+			
+			./$LOADER stop
+			./$LOADER deploy
+			./$LOADER start
+		fi
+		sleep 250
+	done
 }
 
 # Update the script to the latest available version.
@@ -684,6 +730,10 @@ do
 		help              )
 			checkForACommand
 			COMMAND=help
+			;;
+		maintain          )
+			checkForACommand
+			COMMAND=maintain
 			;;
 		--rebuild-libraries )
 			REBUILD_LIBRARIES=true
