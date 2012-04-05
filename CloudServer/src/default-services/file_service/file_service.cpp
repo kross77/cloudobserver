@@ -235,7 +235,7 @@ void file_service::process_request( std::string encoded_url,boost::shared_ptr<bo
 			if(try_send_info(f, socket, request, response))
 				return;
 			
-			if(fs_utils::if_is_modified(f,socket,response,request))
+			if(fs_utils::was_modified(f,socket,request, response))
 				return;
 			
 
@@ -267,7 +267,7 @@ void file_service::process_request( std::string encoded_url,boost::shared_ptr<bo
 			if(try_send_info(f, socket, request, response))
 				return;
 
-			if(fs_utils::if_is_modified(f,socket,response,request))
+			if(fs_utils::was_modified(f,socket,request, response))
 				return;
 
 			fs_utils::insert_file_headers(f, socket, response);
