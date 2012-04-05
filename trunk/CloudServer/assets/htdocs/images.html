@@ -223,25 +223,28 @@
 			is.starting();
 			var joinedJSON = [];
 			var user_images = [];
-			$.getJSON("./ufs.json?action=type&type=image", function(json_image) {
-				joinedJSON = joinedJSON.concat(json_image);
-					$.getJSON("./ufs.json?action=type&type=png", function(json_png) {
-						joinedJSON = joinedJSON.concat(json_png);
-							$.getJSON("./ufs.json?action=type&type=jpg", function(json_jpg) {
-								joinedJSON = joinedJSON.concat(json_jpg);
-									$.getJSON("./ufs.json?action=type&type=jpeg", function(json_jpeg) {
-										joinedJSON = joinedJSON.concat(json_jpeg);
-											$.getJSON("./ufs.json?action=type&type=svg", function(json_svg) {
-												joinedJSON = joinedJSON.concat(json_svg);
-												joinedJSON = shuffle(joinedJSON);
-												parseArrayForBox(joinedJSON, user_images);
-												is.render(joinedJSON);
-
-											}); // SVG	
-									}); // jpeg
-							}); // jpg
-					}); // png
-				}); // image
+			$.getJSON("./ufs.json?action=type&type=mask", function(json_mask) {
+				joinedJSON = joinedJSON.concat(json_mask);
+				$.getJSON("./ufs.json?action=type&type=image", function(json_image) {
+					joinedJSON = joinedJSON.concat(json_image);
+						$.getJSON("./ufs.json?action=type&type=png", function(json_png) {
+							joinedJSON = joinedJSON.concat(json_png);
+								$.getJSON("./ufs.json?action=type&type=jpg", function(json_jpg) {
+									joinedJSON = joinedJSON.concat(json_jpg);
+										$.getJSON("./ufs.json?action=type&type=jpeg", function(json_jpeg) {
+											joinedJSON = joinedJSON.concat(json_jpeg);
+												$.getJSON("./ufs.json?action=type&type=svg", function(json_svg) {
+													joinedJSON = joinedJSON.concat(json_svg);
+													joinedJSON = shuffle(joinedJSON);
+													parseArrayForBox(joinedJSON, user_images);
+													is.render(joinedJSON);
+	
+												}); // SVG	
+										}); // jpeg
+								}); // jpg
+						}); // png
+					}); // image
+			}); //mask
 				
 			$('.image_service_url').live('click', function( e ) {
 				var temp_h =   $( e.target ).closest("a").attr('real_href');
