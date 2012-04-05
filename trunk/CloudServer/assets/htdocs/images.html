@@ -126,8 +126,7 @@
 				if(value.is_public == 1)
 				{
 					//value.href = ;
-					value.real_href =  "./image_renderer.service?action=resize&from_format=" + value.type + "&from_url=" +page_url + value.href + "&to_format=jpg&w="+ screen.width 	+"&h=" + screen.height;
-					
+					value.real_href =  "./image_renderer.service?action=resize&from_format=" + value.type + "&from_url=" +page_url + value.href + "&to_format=jpg&w="+ $('html').width() 	+"&h="  +   $('html').height();
 				}
 				else
 				{
