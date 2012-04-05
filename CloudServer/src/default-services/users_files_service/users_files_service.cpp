@@ -260,8 +260,11 @@ bool users_files_service::is_request_to_file_info(std::string user_name, boost::
 }
 
 bool users_files_service::send_file(std::string file_name, boost::filesystem::path path, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response )
-{
+{	
 	boost::shared_ptr<fs_file> f = fs_utils::create_file(path);
+	if(fs_utils::was_modified(f,socket,request, response))
+		return true;
+
 	response->headers.insert(std::pair<std::string, std::string>("Content-Disposition", std::string("attachment; filename=" + file_name)));
 
 	fs_utils::send_uncachable_file(f, socket,request, response);
