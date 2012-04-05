@@ -47,9 +47,11 @@
 #include <general_utils.h>
 #include <http_utils.h>
 #include <timer.h>
+#include <fs_utils.h>
 
 //SERVICE INTERFACE
 #include <http_service.hpp>
+
 
 namespace util
 {

@@ -303,7 +303,9 @@ void image_renderer_service::service_call(boost::shared_ptr<boost::asio::ip::tcp
 			if((from_format != request->arguments.end())&&(from_url != request->arguments.end())&&(to_format != request->arguments.end())&&(to_w != request->arguments.end())&&(to_h != request->arguments.end()))
 			{
 				http_request request_to_external_server;
-				request_to_external_server.headers.insert(pair_ss("Connection","close"));
+				request_to_external_server.headers.insert(request->headers.begin(), request->headers.end());
+				request_to_external_server.headers["Connection"] = "close";
+				request_to_external_server.headers["Accept-Encoding"] = "none";
 				request_to_external_server.method = "GET";
 
 				http_response external_server_response;
@@ -312,6 +314,11 @@ void image_renderer_service::service_call(boost::shared_ptr<boost::asio::ip::tcp
 					boost::asio::io_service io_service_;
 					boost::asio::ip::tcp::socket socket_(io_service_);
 					external_server_response.receive(request_to_external_server.send(from_url->second, socket_));
+					if (external_server_response.status == 304)
+					{
+						return fs_utils::send_not_modified_304(socket, response);
+					}
+					response->headers.insert(external_server_response.headers.begin(), external_server_response.headers.end());
 					cv::Mat original;
 					cv::Mat result;
 					int sx, sy;
