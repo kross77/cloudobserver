@@ -235,7 +235,7 @@ void file_service::process_request( std::string encoded_url,boost::shared_ptr<bo
 			if(try_send_info(f, socket, request, response))
 				return;
 			
-			if(if_is_modified(f,socket,response,request))
+			if(fs_utils::if_is_modified(f,socket,response,request))
 				return;
 			
 
@@ -267,7 +267,7 @@ void file_service::process_request( std::string encoded_url,boost::shared_ptr<bo
 			if(try_send_info(f, socket, request, response))
 				return;
 
-			if(if_is_modified(f,socket,response,request))
+			if(fs_utils::if_is_modified(f,socket,response,request))
 				return;
 
 			fs_utils::insert_file_headers(f, socket, response);
@@ -405,20 +405,6 @@ void file_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> 
 	}
 
 	process_request(request->url, socket, request, response, shared_data);
-}
-
-bool file_service::if_is_modified(boost::shared_ptr<fs_file> f, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response, boost::shared_ptr<http_request> request)
-{
-	std::map<std::string, std::string>::iterator it= request->headers.find("If-Modified-Since");
-	if (it != request->headers.end() )
-	{
-		if (f->modified == it->second)
-		{
-			fs_utils::send_not_modified_304(socket, response);
-			return true;
-		}
-	}
-	return false;
 }
 
 bool file_service::try_send_info( boost::shared_ptr<fs_file> f,boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response )
