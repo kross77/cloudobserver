@@ -109,17 +109,3 @@ void fs_utils::send_info( boost::shared_ptr<fs_file> f,boost::shared_ptr<boost::
 		<< "<br/><a href=\"" << http_utils::url_encode(request->url) << "\">download</a>";
 	http_utils::send( std::string("<head></head><body><h1>" + body.str() + "</h1></body>" ), socket, response, request);
 }
-
-bool fs_utils::if_is_modified( boost::shared_ptr<fs_file> f, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response, boost::shared_ptr<http_request> request )
-{
-	std::map<std::string, std::string>::iterator it= request->headers.find("If-Modified-Since");
-	if (it != request->headers.end() )
-	{
-		if (f->modified == it->second)
-		{
-			send_not_modified_304(socket, response);
-			return true;
-		}
-	}
-	return false;
-}
