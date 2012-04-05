@@ -1,5 +1,6 @@
 var file_id;
 var file_title;
+var current_selection_selected_policy;
 var mfu_uploader_created = 0;
 var mfu_html = "";
 var fs;
@@ -40,6 +41,45 @@ function deleteFile(){
 			success: updateFilesList
 		});
 	});
+}
+
+function changeFilePolicyBase( word){
+	$.ajax({
+			type: "GET",
+			url:"ufs.service?action=set_policy&url="+file_id + "&is_public=" + word ,
+			success: updateFilesList
+		});
+}
+
+function changeFilePolicy()
+{
+	if(current_selection_selected_policy == true){
+		changeFilePolicyBase("false");
+	}
+	else{
+		changeFilePolicyBase("true");
+	}
+	
+	
+}
+
+function makeFilesPrivate(){
+	var local_selected_array = selected_array.slice(0);
+	$.ajax({
+			type: "POST",
+			url: "ufs.service?action=set_policy&is_public=false", 
+			data: local_selected_array.join(", "),
+			success: updateFilesList
+		});
+}
+function makeFilesPublic(){
+	var local_selected_array = selected_array.slice(0);
+	$.ajax({
+			type: "POST",
+			url: "ufs.service?action=set_policy&is_public=true", 
+			data: local_selected_array.join(", "),
+			success: updateFilesList
+		});
 }
 
 function renameFile(){ 
@@ -109,8 +149,10 @@ $(document).ready(function() {
 					$( "#marx-brothers" ).selectable({
 						start: function(e, ui) { files_menu.hide(); },
 						stop:  function(e, ui) {
+							current_selection_selected_policy = false;
 							selected_array = [];
 							var titles_array = [];
+							var policies_array = [];
 							$( "div.ui-selected > li > a > p", this ).each(function() {
 							if (! $(this).parent('a').hasClass('ui-selected'))
 							{
@@ -120,12 +162,26 @@ $(document).ready(function() {
 							var element = $(this);// .closest('a > p');
 							selected_array = selected_array.concat( element.attr("id") );
 							titles_array =  titles_array.concat( element.attr("title") );
+							if($(this).parent('a').parent('li').hasClass("file-0"))
+							{
+								policies_array =  policies_array.concat( false );
+							}
+							else{
+								policies_array =  policies_array.concat( true );
+							}
 							});
 							if(selected_array.length == 1)
 							{
 								file_title = titles_array[0];
 								file_id = selected_array[0];
+								current_selection_selected_policy = policies_array[0];
 								
+								if(files_menu.items['Make private'] != null)
+									files_menu.remove('Make private');
+									
+								if(files_menu.items['Make public'] != null)
+									files_menu.remove('Make public');
+									
 								if(files_menu.items['Delete items'] != null)
 									files_menu.remove('Delete items');
 								
@@ -141,8 +197,24 @@ $(document).ready(function() {
 								if(files_menu.items['Rename item'] == null)
 									files_menu.add('Rename item' , renameFile);
 									
+								if(current_selection_selected_policy == true){
+									files_menu.add('Make private' , changeFilePolicy);
+								}
+								else{
+									files_menu.add('Make public' , changeFilePolicy);
+								}
+									
+									
+									
 
 							}else{
+								if(files_menu.items['Make private'] != null)
+									files_menu.remove('Make private');
+									
+								if(files_menu.items['Make public'] != null)
+									files_menu.remove('Make public');
+								
+								
 								if(files_menu.items['Delete items'] == null)
 									files_menu.add('Delete items' , deleteMultipleFiles);
 								
@@ -157,6 +229,31 @@ $(document).ready(function() {
 									
 								if(files_menu.items['Rename item'] != null)
 									files_menu.remove('Rename item');
+								
+								$(policies_array).each( function(index, Element){
+									if(index != 0)
+									{
+										if(Element == policies_array[index - 1]){
+											if(current_selection_selected_policy != "mixed"){
+												current_selection_selected_policy = Element;
+												}
+											}
+											else{
+												current_selection_selected_policy = "mixed";
+											}
+									}
+								});
+								
+								if(current_selection_selected_policy == "mixed"){
+									files_menu.add('Make private' , makeFilesPrivate);
+									files_menu.add('Make public' , makeFilesPublic);
+								}
+								else if(current_selection_selected_policy == true){
+									files_menu.add('Make private' , makeFilesPrivate);
+								}
+								else{
+									files_menu.add('Make public' , makeFilesPublic);
+								}
 
 							}
 							
