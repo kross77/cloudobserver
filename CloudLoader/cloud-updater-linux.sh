@@ -10,7 +10,7 @@ CF_SERVER_INSTALL_DIR="./install-dir/"
 export LC_MESSAGES=C
 
 if [ ! -e ./$LOADER ]; then
-	wget $LOADER_URL
+	svn export $LOADER_URL
 	chmod u+x $LOADER
 fi
 
