@@ -126,6 +126,8 @@ deploy()
 
 maintain()
 {
+	echo "${CYAN}Entering the maintenance mode...${NORMAL}"
+	
 	LOCAL_REV=0
 	LOADER=$(basename "$0")
 	REMOTE_REPO="http://cloudobserver.googlecode.com/svn/"
@@ -140,19 +142,22 @@ maintain()
 		LOCAL_REV=$(cat $DEPLOY/htdocs/js/cf.js | grep 'Revision')
 		LOCAL_REV=${LOCAL_REV#"\$(document).ready(function() {\$('#rol').after('. Revision "}
 		LOCAL_REV=${LOCAL_REV%$(echo "');});")}
-		echo $LOCAL_REV
+		if [[ "$LOCAL_REV" -ne "" ]]; then
+			echo "${YELLOW}Current revision: ${BLUE}${BOLD}$LOCAL_REV${NORMAL}"
+		fi
 		
 		./$LOADER start
 	fi
 	
 	while true; do
+		echo "${CYAN}Checking for new revision...${NORMAL}"
 		REMOTE_REV=$(svn info $REMOTE_REPO | grep '^Revision:' | awk '{ print $2 }')
 		if [[ $REMOTE_REV -ne $LOCAL_REV ]]; then
+			echo "${RED}Latest revision: ${BLUE}${BOLD}$REMOTE_REV${NORMAL}"
 			./$LOADER "check-for-updates"
 			if [ $? -eq 1 ]; then
 				selfUpdate true "--rebuild-libraries maintain"
 			fi
-			LOCAL_REV=$REMOTE_REV
 			
 			if $REBUILD_LIBRARIES; then
 				./$LOADER --checkout-source --rebuild-libraries build
@@ -164,9 +169,16 @@ maintain()
 			./$LOADER stop
 			./$LOADER deploy
 			./$LOADER start
+			
+			LOCAL_REV=$REMOTE_REV
+			echo "${YELLOW}Current revision: ${BLUE}${BOLD}$LOCAL_REV${NORMAL}"
+		else
+			echo "${CYAN}No new revisions found.${NORMAL}"
 		fi
 		sleep 250
 	done
+	
+	echo "${CYAN}Leaving the maintenance mode...${NORMAL}"
 }
 
 # Update the script to the latest available version.
