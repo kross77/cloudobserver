@@ -18,6 +18,7 @@ users_files_service::users_files_service()
 
 	this->command_create_files_table = "CREATE TABLE IF NOT EXISTS files (encoded_url varchar(300) UNIQUE NOT NULL primary key, file_name varchar(150) NOT NULL, user_name varchar(65) NOT NULL, is_public BOOLEAN NOT NULL, modified DATETIME NOT NULL default CURRENT_TIMESTAMP, type varchar(20), size INTEGER(8) )";
 	this->command_create_file =  "INSERT INTO files (encoded_url, file_name, user_name, is_public, type, size ) VALUES (:encoded_url, :file_name, :user_name, :is_public, :type, :size)";
+	this->command_set_file_policy = " UPDATE files SET is_public=:is_public, modified=CURRENT_TIMESTAMP WHERE ( user_name=:user_name and encoded_url=:encoded_url )";
 	this->command_update_file = " UPDATE files SET encoded_url=:new_encoded_url, file_name=:new_file_name, is_public=:is_public, modified=CURRENT_TIMESTAMP, type=:type, size=:size  WHERE encoded_url=:encoded_url";
 	this->command_rename_file = " UPDATE files SET file_name=:new_file_name, modified=CURRENT_TIMESTAMP WHERE ( user_name=:user_name and encoded_url=:encoded_url )";
 	this->command_delete_file = "DELETE FROM files WHERE encoded_url=:encoded_url";
@@ -76,6 +77,18 @@ void users_files_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::s
 							BOOST_FOREACH(std::string t, tokens)
 							{
 								delete_file( t, user_name);
+							}
+							http_utils::send_json(std::pair<std::string, std::string>("success","true"),  socket, response, request); 
+							return;
+						}
+						else if (boost::iequals(request->arguments["action"], "set_policy"))
+						{
+							bool is_public = boost::iequals( request->arguments["is_public"], "true" );
+							boost::char_separator<char> sep(", ");
+							boost::tokenizer<boost::char_separator<char> > tokens(request->body, sep);
+							BOOST_FOREACH(std::string t, tokens)
+							{
+								set_file_policy(t, user_name, is_public);
 							}
 							http_utils::send_json(std::pair<std::string, std::string>("success","true"),  socket, response, request); 
 							return;
@@ -162,14 +175,20 @@ void users_files_service::service_call(boost::shared_ptr<boost::asio::ip::tcp::s
 				}
 			}
 
-			if(request->arguments["action"] == "delete")
+			if(boost::iequals(request->arguments["action"], "delete"))
 			{
 				delete_file(request->arguments["url"], user_name, socket, request, response);
 				return;
 			}
-			if(request->arguments["action"] == "rename")
+			else if(boost::iequals(request->arguments["action"], "rename"))
 			{
 				rename_file(request->arguments["url"], request->arguments["name"], user_name, socket, request, response);
+				return;
+			}
+			else if(boost::iequals(request->arguments["action"], "set_policy"))
+			{
+				bool is_public = boost::iequals( request->arguments["is_public"], "true" );
+				set_file_policy(request->arguments["url"], user_name, is_public, socket, request, response);
 				return;
 			}
 		}
@@ -499,6 +518,32 @@ bool users_files_service::rename_file( std::string href, std::string new_file_na
 	return renamed;
 }
 
+bool users_files_service::set_file_policy( std::string href, std::string user_name, bool is_public )
+{
+	sqlite3pp::transaction xct(*db, true);
+	{
+		sqlite3pp::command cmd(*db, this->command_set_file_policy.c_str());
+		cmd.bind(":is_public", is_public);
+		cmd.bind(":user_name", user_name);
+		cmd.bind(":encoded_url", href);
+		if(cmd.execute() == 0)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+bool users_files_service::set_file_policy( std::string href, std::string user_name, bool is_public, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response )
+{
+	bool file_policy_set = set_file_policy(href, user_name, is_public);
+	if(file_policy_set == true)
+		http_utils::send_json(std::pair<std::string, std::string>("success","true"),  socket, response, request); 
+	else
+		http_utils::send_json(std::pair<std::string, std::string>("success","false"),  socket, response, request); 
+
+	return file_policy_set;
+}
 BOOST_EXTENSION_TYPE_MAP_FUNCTION
 {
 	std::map<std::string, boost::extensions::factory<base_service> > &factories(types.get());
