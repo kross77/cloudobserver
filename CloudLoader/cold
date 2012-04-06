@@ -13,6 +13,7 @@ ${MAGENTA}Commands:${NORMAL}
    ${YELLOW}deploy               ${BLUE}${BOLD}Deploy Cloud Client and Cloud Server applications${NORMAL}
    ${YELLOW}help                 ${BLUE}${BOLD}Display this information${NORMAL}
    ${YELLOW}maintain             ${BLUE}${BOLD}Maintain everything up-to-date and running${NORMAL}
+   ${YELLOW}restart              ${BLUE}${BOLD}Restart Cloud Server and demonstration robots${NORMAL}
    ${YELLOW}self-install         ${BLUE}${BOLD}Install this script in the system ${RED}[require administer]${NORMAL}
    ${YELLOW}self-uninstall       ${BLUE}${BOLD}Remove this script from the system ${RED}[require administer]${NORMAL}
    ${YELLOW}self-update          ${BLUE}${BOLD}Update this script to the latest available version${NORMAL}
@@ -188,6 +189,13 @@ maintain()
 	done
 	
 	echo "${CYAN}Leaving the maintenance mode...${NORMAL}"
+}
+
+restart()
+{
+	LOADER=$(basename "$0")
+	./$LOADER stop
+	./$LOADER start
 }
 
 selfInstall()
@@ -818,6 +826,10 @@ do
 			;;
 		--rebuild-libraries )
 			REBUILD_LIBRARIES=true
+			;;
+		restart           )
+			checkForACommand
+			COMMAND=restart
 			;;
 		self-install      )
 			checkForACommand
