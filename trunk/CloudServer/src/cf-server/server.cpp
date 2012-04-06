@@ -173,6 +173,8 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 	{
 		*(error) << e.what() << log_util::endl; //"The parameter is incorrect" exception
 	}
+	socket->shutdown(boost::asio::ip::tcp::socket::shutdown_both);
+	socket->close();
 	*(info) << "connection closed, socket disconnected" <<  log_util::endl;
 }
 
