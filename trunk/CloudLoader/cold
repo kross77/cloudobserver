@@ -209,7 +209,7 @@ selfUpdate() # 1 - restart after the update, 2 - arguments to be passed on resta
 	echo "${CYAN}Updating the script...${NORMAL}"
 	
 	SELF=$(basename "$0")
-	UPDATER=cloud-loader-linux-updater.sh
+	UPDATER=cold-updater.sh
 	
 	setNumberOfStages 7
 	nextStage "Downloading the latest version"
@@ -703,7 +703,7 @@ EOF
 
 # Declare variables related to this loader script.
 LOADER_VERSION=0.5.0
-LOADER_SRCFILE=cloud-loader-linux.sh
+LOADER_SRCFILE=cold
 LOADER_SRCPATH=/svn/trunk/CloudLoader
 LOADER_SRCSITE=cloudobserver.googlecode.com
 
