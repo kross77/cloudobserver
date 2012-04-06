@@ -14,6 +14,7 @@ ${MAGENTA}Commands:${NORMAL}
    ${YELLOW}help                 ${BLUE}${BOLD}Display this information${NORMAL}
    ${YELLOW}maintain             ${BLUE}${BOLD}Maintain everything up-to-date and running${NORMAL}
    ${YELLOW}self-install         ${BLUE}${BOLD}Install this script in the system [require administer]${NORMAL}
+   ${YELLOW}self-uninstall       ${BLUE}${BOLD}Remove this script from the system [require administer]${NORMAL}
    ${YELLOW}self-update          ${BLUE}${BOLD}Update this script to the latest available version${NORMAL}
    ${YELLOW}start                ${BLUE}${BOLD}Start Cloud Server and demonstration robots${NORMAL}
    ${YELLOW}status               ${BLUE}${BOLD}Display state of the server, robots and maintenance mode${NORMAL}
@@ -192,6 +193,11 @@ maintain()
 selfInstall()
 {
 	ln -s "$WD"/$LOADER_SRCFILE /bin/$LOADER_SRCFILE
+}
+
+selfUninstall()
+{
+	rm /bin/$LOADER_SRCFILE
 }
 
 # Update the script to the latest available version.
@@ -816,6 +822,10 @@ do
 		self-install      )
 			checkForACommand
 			COMMAND='selfInstall'
+			;;
+		self-uninstall    )
+			checkForACommand
+			COMMAND='selfUninstall'
 			;;
 		self-update       )
 			checkForACommand
