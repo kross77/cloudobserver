@@ -55,7 +55,7 @@ stageFailed()
 
 usage()
 {
-	echo "${CYAN}Type '$0 help' to display usage information.${NORMAL}"
+	echo "${CYAN}Type '$(basename $0) help' to display usage information.${NORMAL}"
 	exit 1
 }
 
@@ -101,7 +101,7 @@ checkForUpdates()
 	
 	if [ $LATEST_REVISION -gt $REVISION ]; then
 		echo "${RED}New version of this script is available.${NORMAL}"
-		echo "${CYAN}Type '$0 self-update' to update it.${NORMAL}"
+		echo "${CYAN}Type '$(basename $0) self-update' to update it.${NORMAL}"
 		exit 1
 	else
 		echo "${GREEN}You are using the most recent version of this script.${NORMAL}"
@@ -119,7 +119,7 @@ deploy()
 	
 	if [ ! -d "$CLOUD_INSTALL" ]; then
 		echo "${RED}Applications were not built!${NORMAL}"
-		echo "${CYAN}Type '$0 build' to build them.${NORMAL}"
+		echo "${CYAN}Type '$(basename $0) build' to build them.${NORMAL}"
 		exit 1
 	fi
 	
@@ -315,7 +315,7 @@ start()
 {
 	if [ ! -d $DEPLOY ]; then
 		echo "${RED}Applications were not deployed!${NORMAL}"
-		echo "${CYAN}Type '$0 deploy' to deploy them.${NORMAL}"
+		echo "${CYAN}Type '$(basename $0) deploy' to deploy them.${NORMAL}"
 		exit 1
 	fi
 	cd $DEPLOY
