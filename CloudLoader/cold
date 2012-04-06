@@ -402,23 +402,47 @@ status()
 
 stop()
 {
-	setNumberOfStages 3
+	COUNTER=0
+	CLOUD_PID=$(ps aux | grep -F 'CloudServer' | grep -v -F 'grep' | awk '{ print $2 }')
+	if [[ "$CLOUD_PID" -ne "" ]]; then
+		COUNTER=$[COUNTER+1]
+	fi
 	
-	echo "${CYAN}Stopping demonstration robots...${NORMAL}"
+	ROBOTALPHA_PID=$(ps aux | grep -F 'RobotAlpha' | grep -v -F 'grep' | awk '{ print $2 }')
+	if [[ "$ROBOTALPHA_PID" -ne "" ]]; then
+		COUNTER=$[COUNTER+1]
+	fi
 	
-	nextStage "Stopping RobotAlpha"
-	kill $(ps aux | grep -F 'RobotAlpha' | grep -v -F 'grep' | awk '{ print $2 }')
-	stageOK
+	ROBOTBETA_PID=$(ps aux | grep -F 'RobotBeta' | grep -v -F 'grep' | awk '{ print $2 }')
+	if [[ "$ROBOTBETA_PID" -ne "" ]]; then
+		COUNTER=$[COUNTER+1]
+	fi
 	
-	nextStage "Stopping RobotBeta"
-	kill $(ps aux | grep -F 'RobotBeta' | grep -v -F 'grep' | awk '{ print $2 }')
-	stageOK
+	setNumberOfStages $COUNTER
 	
-	echo "${CYAN}Stopping the server...${NORMAL}"
+	if [[ "$ROBOTALPHA_PID" -ne "" || "$ROBOTBETA_PID" -ne "" ]]; then
+		echo "${CYAN}Stopping demonstration robots...${NORMAL}"
+	fi
 	
-	nextStage "Stopping Cloud Server"
-	kill $(ps aux | grep -F 'CloudServer' | grep -v -F 'grep' | awk '{ print $2 }')
-	stageOK
+	if [[ "$ROBOTALPHA_PID" -ne "" ]]; then
+		nextStage "Stopping RobotAlpha"
+		kill $ROBOTALPHA_PID
+		stageOK
+	fi
+	
+	if [[ "$ROBOTBETA_PID" -ne "" ]]; then
+		nextStage "Stopping RobotBeta"
+		kill $ROBOTBETA_PID
+		stageOK
+	fi
+	
+	if [[ "$CLOUD_PID" -ne "" ]]; then
+		echo "${CYAN}Stopping the server...${NORMAL}"
+	
+		nextStage "Stopping Cloud Server"
+		kill $CLOUD_PID
+		stageOK
+	fi
 }
 
 version()
