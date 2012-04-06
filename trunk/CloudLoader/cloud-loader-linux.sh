@@ -7,6 +7,7 @@ help()
 ${CYAN}Usage: $(basename $0) [options] command${NORMAL}
 
 ${MAGENTA}Commands:${NORMAL}
+   ${YELLOW}auto                 ${BLUE}${BOLD}Run maintenance mode in the background${NORMAL}
    ${YELLOW}build                ${BLUE}${BOLD}Build Cloud Client and Cloud Server applications${NORMAL}
    ${YELLOW}check-for-updates    ${BLUE}${BOLD}Check if a new version of this script is available${NORMAL}
    ${YELLOW}deploy               ${BLUE}${BOLD}Deploy Cloud Client and Cloud Server applications${NORMAL}
@@ -73,6 +74,11 @@ queryLatestRevision()
 	LATEST_REVISION=$(svn info $LOADER_URL | grep '^Last Changed Rev:')
 	LATEST_REVISION=${LATEST_REVISION#'Last Changed Rev: '}
 	export -n LC_MESSAGES
+}
+
+auto()
+{
+	nohup ./$(basename "$0") maintain >& /dev/null &
 }
 
 # Perform a check for a new version of this script.
@@ -736,6 +742,10 @@ VERBOSE=false
 for i in $*
 do
 	case $i in
+		auto                )
+			checkForACommand
+			COMMAND=auto
+			;;
 		build               )
 			checkForACommand
 			COMMAND=build
