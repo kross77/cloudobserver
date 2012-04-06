@@ -83,6 +83,19 @@ function getJSONFromServer(url, func){
 	});
 })(jQuery);
 
+var waitForFinalEvent = (function () {
+  var timers = {};
+  return function (callback, ms, uniqueId) {
+    if (!uniqueId) {
+      uniqueId = "Don't call this twice without a uniqueId";
+    }
+    if (timers[uniqueId]) {
+      clearTimeout (timers[uniqueId]);
+    }
+    timers[uniqueId] = setTimeout(callback, ms);
+  };
+})();
+
 var page_update = page_update || {};
 	page_update.functions = [];
 	page_update.add = function(fn){
