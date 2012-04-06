@@ -13,6 +13,7 @@ ${MAGENTA}Commands:${NORMAL}
    ${YELLOW}deploy               ${BLUE}${BOLD}Deploy Cloud Client and Cloud Server applications${NORMAL}
    ${YELLOW}help                 ${BLUE}${BOLD}Display this information${NORMAL}
    ${YELLOW}maintain             ${BLUE}${BOLD}Maintain everything up-to-date and running${NORMAL}
+   ${YELLOW}self-install         ${BLUE}${BOLD}Install this script in the system [require administer]${NORMAL}
    ${YELLOW}self-update          ${BLUE}${BOLD}Update this script to the latest available version${NORMAL}
    ${YELLOW}start                ${BLUE}${BOLD}Start Cloud Server and demonstration robots${NORMAL}
    ${YELLOW}status               ${BLUE}${BOLD}Display state of the server, robots and maintenance mode${NORMAL}
@@ -186,6 +187,11 @@ maintain()
 	done
 	
 	echo "${CYAN}Leaving the maintenance mode...${NORMAL}"
+}
+
+selfInstall()
+{
+	ln -s "$WD"/$LOADER_SRCFILE /bin/$LOADER_SRCFILE
 }
 
 # Update the script to the latest available version.
@@ -806,6 +812,10 @@ do
 			;;
 		--rebuild-libraries )
 			REBUILD_LIBRARIES=true
+			;;
+		self-install      )
+			checkForACommand
+			COMMAND='selfInstall'
 			;;
 		self-update       )
 			checkForACommand
