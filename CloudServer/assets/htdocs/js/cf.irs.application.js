@@ -36,7 +36,7 @@ function parseArrayForBox(JSON, images) {
 
         if (value.is_public == 1) {
             //value.href = ;
-            value.real_href = "./image_renderer.service?action=resize&from_format=" + value.type + "&from_url=" + page_url + value.href + "&to_format=jpg&w=" + $('html').width() + "&h=" + $('html').height();
+            value.real_href = "./image_renderer.service?action=resize&from_format=" + value.type + "&from_url=" + page_url + value.href + "&to_format=jpg&w=" + $(window).width() + "&h=" + $(window).height();
         } else {
             value.real_href = value.href;
         }
