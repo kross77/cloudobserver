@@ -2,6 +2,7 @@ var page_url = unescape(location.href.folderOf());
 var currentFBIndex = 0;
 var joinedJSON = [];
 var user_images = [];
+var currentJSON = [];
 var boxStatus = false;
 function showBox(images, ind) {
 	$.fancybox(images, {
@@ -66,6 +67,7 @@ if (location.hash.toString()) {
 				JSON = JSON.concat(images);
 				var user_image = [];
 				parseArrayForBox(JSON, user_image);
+				currentJSON = JSON;
 				jQuery(document).ready(function () {
 					showBox(user_image, 0);
 				});
@@ -119,6 +121,7 @@ $(document).ready(function () {
 			var temp_h = $(e.target).closest("a").attr('href');
 			user_images = [];
 			parseArrayForBox(joinedJSON, user_images);
+			currentJSON = joinedJSON;
 			var ind = 0;
 			$(user_images).each(function (index, value) {
 				if ( ('#' + value.extra_href) === temp_h) {			
@@ -131,7 +134,7 @@ $(document).ready(function () {
 		$(window).resize(function () {
 			waitForFinalEvent(function(){
 				user_images = [];
-				parseArrayForBox(joinedJSON, user_images);
+				parseArrayForBox(currentJSON, user_images);
 				if(boxStatus == true){
 					var cidc = currentFBIndex;
 					showBox(user_images, cidc);
