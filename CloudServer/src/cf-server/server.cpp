@@ -83,6 +83,10 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 			try
 			{ 
 				alive =	request->timed_receive(*socket, request_max_time);
+				if (boost::iequals(request->headers["Connection"], "close"))
+				{
+					connection_close = true;
+				}
 			}
 			catch (http_request::policy_file_request_exception)
 			{

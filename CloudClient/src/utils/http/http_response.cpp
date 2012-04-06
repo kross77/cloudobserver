@@ -86,7 +86,7 @@ void http_response::receive(boost::asio::ip::tcp::socket& socket)
 					{
 						position++;
 						key = "";
-						parser_state = HEADER_KEY;
+ 						parser_state = HEADER_KEY;
 					}
 					break;
 				case HEADER_KEY:
@@ -145,6 +145,7 @@ void http_response::receive(boost::asio::ip::tcp::socket& socket)
 	}
 	catch (boost::system::system_error& e)
 	{
+		std::cout << e.what() << std::endl;
 		if (e.code() == boost::asio::error::eof)
 			this->body_size = body.length();
 		else
