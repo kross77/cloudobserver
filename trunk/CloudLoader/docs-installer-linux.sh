@@ -1,4 +1,4 @@
-#!/bin/bash
+﻿#!/bin/bash
 
 #use script_name.sh /absolute/or/relative/folder/to/install/docs/into/
 LOCAL_REV=0
