@@ -1,3 +1,50 @@
+/*!  @mainpage CF Cloud Observer Server
+	\dot
+		digraph cloudobserver {
+			node [shape=record, fontname=Helvetica, fontsize=10];
+			c [ label="Project home page" URL="http://www.cloudobserver.googlecode.com/"];
+			d [ label="Demo Servers" URL="http://ant.apmath.spbu.ru:4773/"];
+			dant [ label="ANT" URL="http://ant.apmath.spbu.ru:4773/"];
+			ddsp [ label="DSPProc" URL="http://195.19.243.13:4773/" ];
+			docs [ label="Documentation On-line" URL="http://195.19.243.13/documentation/html/" ];
+			d -> dant [ arrowhead="open", style="dashed" ];
+			d -> ddsp [ arrowhead="open", style="dashed" ]; 
+		}
+	\enddot 
+	
+  This software product is going to be a cross-platform distributed server for various manipulations over large amounts of multimedia data, such as a real-time audio/video transcoding and streaming. Demos of independent fully functional automatically updated with latest code base Cloud Servers can be found <a href="http://ant.apmath.spbu.ru:4773/">here</a>  and <a href="http://195.19.243.13:4773/">here</a>. Demos are build automatically and update with each SVN revision. Also we provide doxygen generated documentation pages on-line, <a href="http://195.19.243.13/documentation/html/">on-line, here</a>.
+  
+  Currently we provide C++ service-oriented server platform with plug-in-based architecture. \n
+  
+  Server ships with next demo services for:
+  	- Public File Sharing \c \ref file_service
+  	- Public Live Video Streaming \c \ref observer_service
+		 - featuring FFmpeg live video streams trans coding, video generation and capturing clients
+  	- Users Accounts Management Service \c \ref users_accounts_service
+  	- Users Files Sharing \c \ref users_files_service 
+  		- featuring files protection from any one on the web as well as public access provision
+  	- Users Image Share and Manipulation \c \ref image_renderer_service  
+  		- featuring OpenCV C++ Picture Resizer and .mask  vector files renderer
+  		
+  Server ships with \ref Utilities such as:
+	- Classes for:
+		- logging: \ref log_util
+		- thread pooling: \ref thread_pool
+		- safe multi-threaded data manipulations: \ref threading_utils
+		- time observations: \ref timer
+	- Namespaces for:
+		- HTTP related stuff like cookie parsing, string transcoding manipulations, responding to clients, etc: \ref http_utils
+		- general purposes: directory, time, checksum manipulation, etc: \ref general_utils
+		- plug-in (shared libraries like \c .dll and \c .so) loading, and manipulation: \ref extension_utils
+		- ease of files creation and transition: \ref fs_utils  	
+	
+  Server core depends on  <a href="http://www.boost.org/">Boost</a> and  <a href="http://www.openssl.org/">OpenSSL</a>
+  
+  Server is tested with:
+	  	- GCC 4.1.2 and up
+	  	- MSVC 9 and up
+ */
+
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
