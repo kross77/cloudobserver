@@ -40,15 +40,21 @@ while [  $COUNTER -lt 1 ]; do
                 cd $CLOUD_COMPONENT_NAME/documentation/
 
                 doxygen
+                cd release/latex/
                 
+				pdflatex refman.tex
+				makeindex refman.idx
+				pdflatex refman.tex
+				mv -f refman.pdf cloud_observer_cpp_docs.pdf
                 
                 cd $WD
                 
                 if [ ! -d $1 ]; then
-				        run mkdir -p $1
+				        mkdir -p $1
 				fi
                 
                 cp -rf $CLOUD_ROOT_DIR/$CLOUD_COMPONENT_NAME/documentation/release/html/ $1
+                cp -f $CLOUD_ROOT_DIR/$CLOUD_COMPONENT_NAME/documentation/release/latex/cloud_observer_cpp_docs.pdf $1
                 
         fi
         sleep  300
