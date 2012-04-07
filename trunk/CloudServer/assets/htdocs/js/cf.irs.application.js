@@ -4,6 +4,7 @@ var joinedJSON = [];
 var user_images = [];
 var currentJSON = [];
 var boxStatus = false;
+var shrink = "true";
 function showBox(images, ind) {
 	$.fancybox(images, {
 		'index': ind,
@@ -41,7 +42,7 @@ function parseArrayForBox(JSON, images) {
 
 		if (value.is_public == 1) {
 			//value.href = ;
-			value.real_href = "./image_renderer.service?action=resize&from_format=" + value.type + "&from_url=" + page_url + value.href + "&to_format=jpg&w=" + $(window).width() + "&h=" + $(window).height();
+			value.real_href = "./image_renderer.service?action=resize&from_format=" + value.type + "&from_url=" + page_url + value.href + "&to_format=jpg&w=" + $(window).width() + "&h=" + $(window).height() + "&shrink=" + shrink.toString();
 		} else {
 			value.real_href = value.href;
 		}
@@ -142,5 +143,13 @@ $(document).ready(function () {
 			}, 500, "irs box uid");
 		});
 	}
+	
+	 $('#radioset').buttonset();
+	$("#radioset").click( function(){
+	 	shrink = $('#radioset :radio:checked').attr("value");
+	 	user_images = [];
+	 	parseArrayForBox(currentJSON, user_images);
+ 	});
+	 
+	 
 });
-

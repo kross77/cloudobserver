@@ -61,7 +61,7 @@ namespace util
 		std::copy( v.begin(), v.end(), std::ostream_iterator<uchar>(o) );
 	}
 
-	void resize_coefs(const int original_w, const int original_h, int & new_w, int & new_h);
+	void resize_coefs(const int original_w, const int original_h, int & new_w, int & new_h, bool shrink);
 }
 
 
@@ -118,7 +118,7 @@ namespace filter_utils
 	{
 	public:
 		template < class T>
-		std::vector<cv::Mat> load_source( T & in, int & w, int & h, const int & X, const int & Y, const int & Z)
+		std::vector<cv::Mat> load_source( T & in, int & w, int & h, const int & X, const int & Y, const int & Z, bool shrink)
 		{
 			timer local_sub_timer;
 			local_sub_timer.restart();
@@ -163,7 +163,7 @@ namespace filter_utils
 			local_sub_timer.restart();
 			std::vector<cv::Mat> result;
 			std::cout << "\t Desired image" << std::endl << "\t\t width: " << w << std::endl << "\t\t height: " << h << std::endl << std::endl;
-			util::resize_coefs(sx, sy, w, h);
+			util::resize_coefs(sx, sy, w, h, shrink);
 			std::cout << "\t Image original" << std::endl << "\t\t width: " << sx << std::endl << "\t\t height: " << sy << std::endl  <<  "\t Image that will be returned:" << std::endl  << "\t\t width: " << w << std::endl << "\t\t height: " << h << std::endl << std::endl;
 			for( std::map<unsigned char , cv::Mat*>::iterator it = clusters.begin(); it != clusters.end(); ++it )
 			{

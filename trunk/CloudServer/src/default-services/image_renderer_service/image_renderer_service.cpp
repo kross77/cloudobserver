@@ -1,8 +1,16 @@
 #include "image_renderer_service.h"
 
-void util::resize_coefs(const int original_w, const int original_h, int & new_w, int & new_h)
+void util::resize_coefs(const int original_w, const int original_h, int & new_w, int & new_h, bool shrink)
 {
 	int num, den;
+
+	if (shrink)
+	{
+		new_w = (new_w > original_w) ? original_w : new_w;
+		new_w = (new_h > original_h) ? original_h : new_h;
+	}
+
+
 	if (new_w * original_h < new_h * original_w) {
 		num = new_w;
 		den = original_w;
@@ -302,6 +310,11 @@ void image_renderer_service::service_call(boost::shared_ptr<boost::asio::ip::tcp
 			map_ss::iterator to_h = request->arguments.find("h");
 			if((from_format != request->arguments.end())&&(from_url != request->arguments.end())&&(to_format != request->arguments.end())&&(to_w != request->arguments.end())&&(to_h != request->arguments.end()))
 			{
+				bool shrink = false;
+				if (boost::iequals(request->arguments["shrink"], "true"))
+				{
+					shrink = true;
+				}
 				http_request request_to_external_server;
 				request_to_external_server.headers.insert(request->headers.begin(), request->headers.end());
 				request_to_external_server.headers["Connection"] = "close";
@@ -332,7 +345,7 @@ void image_renderer_service::service_call(boost::shared_ptr<boost::asio::ip::tcp
 						in << external_server_response.body;
 						filter_utils::mask_utils mask_util(fill_util);
 						std::vector<cv::Mat> image;
-						image = mask_util.load_source(in, desired_w, desired_h, 1, 2, 3);
+						image = mask_util.load_source(in, desired_w, desired_h, 1, 2, 3, shrink);
 						std::vector< filter_utils::opencv_vector_object > opencv_countors  = mask_util.find_countors(image);
 
 
@@ -361,7 +374,7 @@ void image_renderer_service::service_call(boost::shared_ptr<boost::asio::ip::tcp
 							original = cv::imdecode(data, 1);
 							sy = original.rows;
 							sx = original.cols;
-							util::resize_coefs(sx, sy,desired_w, desired_h);
+							util::resize_coefs(sx, sy,desired_w, desired_h, shrink);
 							result.create(cv::Size(desired_w, desired_h), original.type());
 							cv::resize(original, result, result.size()  , 0,0 , CV_INTER_CUBIC );
 
