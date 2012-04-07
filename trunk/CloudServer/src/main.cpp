@@ -2,7 +2,7 @@
 	\dot
 		digraph cloudobserver {
 			node [shape=record, fontname=Helvetica, fontsize=10];
-			c [ label="Project home page" URL="http://www.cloudobserver.googlecode.com/"];
+			c [ label="Project home page" URL="http://cloudobserver.googlecode.com/"];
 			d [ label="Demo Servers" URL="http://ant.apmath.spbu.ru:4773/"];
 			dant [ label="ANT" URL="http://ant.apmath.spbu.ru:4773/"];
 			ddsp [ label="DSPProc" URL="http://195.19.243.13:4773/" ];
