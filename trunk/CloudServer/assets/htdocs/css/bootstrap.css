@@ -387,19 +387,7 @@ fieldset {
   margin-bottom: 18px;
   padding-top: 18px;
 }
-fieldset legend {
-  display: block;
-  padding-left: 150px;
-  font-size: 19.5px;
-  line-height: 1;
-  color: #404040;
-  *padding: 0 0 5px 145px;
-  /* IE6-7 */
 
-  *line-height: 1.5;
-  /* IE6-7 */
-
-}
 form .clearfix {
   margin-bottom: 18px;
   zoom: 1;
