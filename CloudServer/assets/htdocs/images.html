@@ -18,6 +18,8 @@
 		
 		<!-- Public CSS-->
 		<link rel="stylesheet" href="css/grumble.min.css">
+		<link type="text/css" href="css/custom-theme/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
+		<link href="css/bootstrap.css" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
 		<!-- End Of CSS-->
 				
@@ -35,35 +37,28 @@
 		<!-- End of CF CSS-->
 		
 		<!-- Public JS-->
-		<script type="text/javascript" src="js/jquery-1.7.1.min.js">								
-		</script>
+		<script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
 		
-		<script type="text/javascript" src="js/jquery.sha256.min.js">								
-		</script>
+		<script type="text/javascript" src="js/jquery-ui-1.8.18.custom.min.js"></script>
 		
-		<script type="text/javascript" src="js/jquery.validate.min.js">								
-		</script>
+		<script type="text/javascript" src="js/jquery.sha256.min.js"></script>
 		
-		<script type="text/javascript" src="js/tempo.min.js">									
-		</script>
+		<script type="text/javascript" src="js/jquery.validate.min.js">	</script>
 		
-		<script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js">
-		</script>
+		<script type="text/javascript" src="js/tempo.min.js"></script>
 		
-		<script type = 'text/javascript'src = "js/jquery.grumble.min.js" >
-		</script>
+		<script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
 		
-		<script type='text/javascript' src="js/jquery.event.drag-1.5.min.js">
-		</script>
+		<script type = 'text/javascript'src = "js/jquery.grumble.min.js" ></script>
+		
+		<script type='text/javascript' src="js/jquery.event.drag-1.5.min.js"></script>
 
-		<script src="js/jquery.grumble.min.js">
-		</script>
+		<script src="js/jquery.grumble.min.js"></script>
 		
 		<script type="text/javascript" src="js/fancybox/jquery.mousewheel-3.0.6.pack.js"></script>
 		<script type="text/javascript" src="js/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
 		
-		<script type="text/javascript" src="js/respond.min.js">								
-		</script>
+		<script type="text/javascript" src="js/respond.min.js">	</script>
 	
 		<!-- End Of Public JS-->
 		
@@ -85,6 +80,7 @@
 		<!-- End Of CF JS-->
 </head>
 <body>
+
 	<div class="pseudo-no-js-heaser"><br/><br/><br/></div>
 			<div class="loged-in-user" >
 				<div class="g2">		
@@ -100,13 +96,17 @@
 					</div>
 				</div>
 				<div class="g1">
+		
 					<div>
-						<a style="text-decoration:none;">
-							<p id="upload_button" class="butt">
-							Upload A File Now! 
-							</p> 
-						</a>
+						<p>Display Options</p>
+						<form style="margin-top: 1em;">
+							<div id="radioset">
+								<input type="radio" id="radio1" name="radio" value="false"/><label for="radio1">Resize</label>
+								<input type="radio" id="radio2" name="radio" value="true" checked="checked" /><label for="radio2">Only Shrink</label>
+							</div>
+						</form>
 					</div>
+					
 					<div id="tabs-fun" class="files-box fun" style="margin-top:24px;">
 						<ol id="marx-images">
 							<div data-template>
