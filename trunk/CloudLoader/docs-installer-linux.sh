@@ -1,4 +1,4 @@
-﻿#!/bin/bash
+#!/bin/bash
 
 LOCAL_REV=0
 LOADER_REV=0
