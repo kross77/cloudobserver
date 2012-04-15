@@ -1005,8 +1005,17 @@ CLOUDCLIENT_SRCSITE=cloudobserver.googlecode.com
 # Declare other variables.
 DOWNLOADS=downloads
 DEPLOY=run_dir
-OS=linux
 JOBS=$(grep ^processor /proc/cpuinfo | wc -l)
+
+# Declare platform-specific variables.
+case $OSTYPE in
+	darwin* )
+		OS=macosx
+		;;
+	*       )
+		OS=linux
+		;;
+esac
 
 if [ "$COMMAND" == "" ]; then
 	usage
