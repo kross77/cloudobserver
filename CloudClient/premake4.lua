@@ -304,8 +304,7 @@ function cloud.project.useCV()
 		links {
 			"opencv_imgproc",
 			"opencv_core",
-			"opencv_highgui",
-			"QuickTime.framework"
+			"opencv_highgui"
 		}
 		
 		configuration { "DebugStatic or ReleaseStatic" }

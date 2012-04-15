@@ -193,7 +193,9 @@ std::vector<std::string> video_capturer::get_capture_devices()
 #endif
 
 #ifdef MAC
-	ComponentResult result;
+	// TODO: Rewrite using QTKit framework instead of QuickTime framework.
+	// The latter is not available on 64-bit Mac OS X systems.
+	/*ComponentResult result;
 
 	// Find the sequence grabber.
 	ComponentDescription sequence_grabber_description;
@@ -258,7 +260,7 @@ std::vector<std::string> video_capturer::get_capture_devices()
 	}
 
 	SGDisposeDeviceList(sequence_grabber, device_list);
-	SGRelease(sequence_grabber);
+	SGRelease(sequence_grabber);*/
 #endif
 
 	return capture_devices;
