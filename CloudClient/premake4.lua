@@ -223,19 +223,6 @@ function cloud.project.init()
 	
 	if os.get() == "macosx" then
 		defines { "MAC" }
-		links {
-		"Carbon.framework"
-		}
-		
-		libdirs {
-		"/usr/lib",
-		"/usr/local/lib"
-		}
-		
-		includedirs {
-		"/usr/include",
-		"/usr/local/include"
-		}
 	end 
 end
 
