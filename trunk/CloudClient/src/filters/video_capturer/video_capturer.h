@@ -37,10 +37,6 @@
 #include <linux/videodev2.h>
 #endif
 
-#ifdef MAC
-#include <QuickTime/QuickTime.h>
-#endif
-
 class video_capturer
 {
 public:
