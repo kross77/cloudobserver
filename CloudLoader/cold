@@ -243,7 +243,7 @@ selfUpdate() # 1 - restart after the update, 2 - arguments to be passed on resta
 	stageOK
 	
 	nextStage "Reading file modes"
-	OCTAL_MODE=$(stat -c '%a' $SELF)
+	OCTAL_MODE=$($STAT_PERMISSIONS $SELF)
 	if [ $? -ne 0 ]; then
 		stageFailed
 		echo "${RED}Update failed.${NORMAL}"
@@ -1015,10 +1015,12 @@ case $OSTYPE in
 	darwin* )
 		OS=macosx
 		JOBS=$(sysctl -n hw.logicalcpu)
+		STAT_PERMISSIONS="stat -f %A"
 		;;
 	*       )
 		OS=linux
 		JOBS=$(grep ^processor /proc/cpuinfo | wc -l)
+		STAT_PERMISSIONS="stat -c %a"
 		;;
 esac
 
