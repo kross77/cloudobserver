@@ -506,6 +506,10 @@ prepare() # 1=SRCFILE 2=COMPILE 3=SRCBASE 4=SRCSITE 5=SRCPATH
 
 build()
 {
+	# Force using GCC.
+	export CC=$(which gcc)
+	export CXX=$(which g++)
+	
 	# The number of stages is unknown.
 	setNumberOfStages ?
 
