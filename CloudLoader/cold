@@ -790,17 +790,6 @@ LOADER_SRCFILE=cold
 LOADER_SRCPATH=/svn/trunk/CloudLoader
 LOADER_SRCSITE=cloudobserver.googlecode.com
 
-# Remember the revision of the script.
-REVISION='$Revision$'
-if [ "$REVISION" != "\$Revision\$" ]; then
-	REVISION=${REVISION#'$Revision: '}
-	REVISION=${REVISION%' $'}
-	REVISION_DEFINED=true
-else
-	REVISION=0
-	REVISION_DEFINED=false
-fi
-
 # Declare style variables.
 export NORMAL=$(tput sgr0)
 export BOLD=$(tput bold)
@@ -1023,6 +1012,17 @@ case $OSTYPE in
 		STAT_PERMISSIONS="stat -c %a"
 		;;
 esac
+
+# Remember the revision of the script.
+REVISION='$Revision$'
+if [ "$REVISION" != "\$Revision\$" ]; then
+	REVISION=${REVISION#'$Revision: '}
+	REVISION=${REVISION%' $'}
+	REVISION_DEFINED=true
+else
+	REVISION=0
+	REVISION_DEFINED=false
+fi
 
 if [ "$COMMAND" == "" ]; then
 	usage
