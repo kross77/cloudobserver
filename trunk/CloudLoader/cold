@@ -1005,15 +1005,16 @@ CLOUDCLIENT_SRCSITE=cloudobserver.googlecode.com
 # Declare other variables.
 DOWNLOADS=downloads
 DEPLOY=run_dir
-JOBS=$(grep ^processor /proc/cpuinfo | wc -l)
 
 # Declare platform-specific variables.
 case $OSTYPE in
 	darwin* )
 		OS=macosx
+		JOBS=$(sysctl -n hw.logicalcpu)
 		;;
 	*       )
 		OS=linux
+		JOBS=$(grep ^processor /proc/cpuinfo | wc -l)
 		;;
 esac
 
