@@ -459,6 +459,12 @@ function cloud.project.useFFmpeg()
 			"avutil",
 			"swscale"
 		}
+		
+		configuration { "DebugStatic or ReleaseStatic" }
+			links {
+				"VideoDecodeAcceleration.framework"
+			}
+		configuration { }
 	end 	
 end
 
