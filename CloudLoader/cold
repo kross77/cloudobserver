@@ -891,7 +891,7 @@ done
 # Move to the directory containing the script.
 SOURCE="${BASH_SOURCE[0]}"
 while [ -h "$SOURCE" ]; do SOURCE="$(readlink "$SOURCE")"; done
-run cd "$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+cd "$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
 # Remember the workspace directory path.
 WD=$(pwd)
