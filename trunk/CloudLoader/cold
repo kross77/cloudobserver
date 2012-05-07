@@ -460,9 +460,9 @@ run()
 {
 	if $VERBOSE; then
 		echo "$@"
-		"$@"
+		"$@" >> "$WD"/cold.log 2>&1
 	else
-		"$@" >& /dev/null
+		"$@" >> "$WD"/cold.log 2>&1
 	fi
 	result=$?
 	if [ $result -ne 0 ]; then
