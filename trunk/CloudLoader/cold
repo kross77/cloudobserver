@@ -1004,6 +1004,11 @@ case $OSTYPE in
 		JOBS=$(sysctl -n hw.logicalcpu)
 		STAT_PERMISSIONS="stat -f %A"
 		;;
+	msys    )
+		OS=windows
+		JOBS=1
+		STAT_PERMISSIONS="stat -c %a"
+		;;
 	*       )
 		OS=linux
 		JOBS=$(grep ^processor /proc/cpuinfo | wc -l)
