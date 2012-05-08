@@ -43,6 +43,7 @@ del mingw-get.vbs
 copy mingw\var\lib\mingw-get\data\defaults.xml mingw\var\lib\mingw-get\data\profile.xml >nul
 cd mingw\bin
 mingw-get install mingw-get pkginfo base gcc-core gcc-g++ mingw-dtk
+mingw-get install msys-bsdtar msys-unzip msys-wget
 cd ..\..
 goto COLD
 
