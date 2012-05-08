@@ -3,7 +3,7 @@
 # Display usage information.
 help()
 {
-	echo -n "\
+	echo -ne "\
 ${CYAN}Usage: $(basename $0) [options] command${NORMAL}
 
 ${MAGENTA}Commands:${NORMAL}
@@ -40,7 +40,7 @@ nextStage() # 1 - stage message
 	STAGE=$[STAGE+1]
 	STAGE_MSG="${YELLOW}[$STAGE/$STAGES] ${BLUE}${BOLD}$1...${NORMAL}"
 	let STAGE_COL=$(tput cols)-${#STAGE_MSG}+${#YELLOW}+${#BLUE}+${#BOLD}+${#NORMAL}
-	echo -n "$STAGE_MSG"
+	echo -ne "$STAGE_MSG"
 }
 
 stageOK()
@@ -57,7 +57,7 @@ stageFailed()
 
 usage()
 {
-	echo "${CYAN}Type '$(basename $0) help' to display usage information.${NORMAL}"
+	echo -e "${CYAN}Type '$(basename $0) help' to display usage information.${NORMAL}"
 	exit 1
 }
 
@@ -65,7 +65,7 @@ usage()
 checkForACommand()
 {
 	if [ "$COMMAND" != "" ]; then
-		echo "${RED}Several commands specified!${NORMAL}"
+		echo -e "${RED}Several commands specified!${NORMAL}"
 		usage
 	fi
 }
@@ -88,55 +88,55 @@ auto()
 # Perform a check for a new version of this script.
 checkForUpdates()
 {
-	echo "${CYAN}Checking for updates...${NORMAL}"
-	echo -n "${YELLOW}Current version: ${BLUE}${BOLD}$LOADER_VERSION"
+	echo -e "${CYAN}Checking for updates...${NORMAL}"
+	echo -ne "${YELLOW}Current version: ${BLUE}${BOLD}$LOADER_VERSION"
 	if $REVISION_DEFINED; then
 		echo -n "-$REVISION"
 	else
 		echo -n " [unknown revision]"
 	fi
-	echo "${NORMAL}"
+	echo -e "${NORMAL}"
 	
 	queryLatestRevision
 	
-	echo "${YELLOW}Latest version: ${BLUE}${BOLD}$LOADER_VERSION-$LATEST_REVISION${NORMAL}"
+	echo -e "${YELLOW}Latest version: ${BLUE}${BOLD}$LOADER_VERSION-$LATEST_REVISION${NORMAL}"
 	
 	if [ $LATEST_REVISION -gt $REVISION ]; then
-		echo "${RED}New version of this script is available.${NORMAL}"
-		echo "${CYAN}Type '$(basename $0) self-update' to update it.${NORMAL}"
+		echo -e "${RED}New version of this script is available.${NORMAL}"
+		echo -e "${CYAN}Type '$(basename $0) self-update' to update it.${NORMAL}"
 		exit 1
 	else
-		echo "${GREEN}You are using the most recent version of this script.${NORMAL}"
+		echo -e "${GREEN}You are using the most recent version of this script.${NORMAL}"
 		exit 0
 	fi
 }
 
 deploy()
 {
-	echo "${CYAN}Deploying...${NORMAL}"
+	echo -e "${CYAN}Deploying...${NORMAL}"
 
 	if [ ! -d $DEPLOY ]; then
 		mkdir $DEPLOY
 	fi
 	
 	if [ ! -d "$CLOUD_INSTALL" ]; then
-		echo "${RED}Applications were not built!${NORMAL}"
-		echo "${CYAN}Type '$(basename $0) build' to build them.${NORMAL}"
+		echo -e "${RED}Applications were not built!${NORMAL}"
+		echo -e "${CYAN}Type '$(basename $0) build' to build them.${NORMAL}"
 		exit 1
 	fi
 	
 	cp -r "$CLOUD_INSTALL"/* $DEPLOY
 	if [ $? -ne 0 ]; then
-		echo "${RED}Deploy failed.${NORMAL}"
+		echo -e "${RED}Deploy failed.${NORMAL}"
 		exit 1
 	fi
-	echo "${GREEN}Deploy succeeded.${NORMAL}"
+	echo -e "${GREEN}Deploy succeeded.${NORMAL}"
 	exit 0
 }
 
 maintain()
 {
-	echo "${CYAN}Entering the maintenance mode...${NORMAL}"
+	echo -e "${CYAN}Entering the maintenance mode...${NORMAL}"
 	
 	LOCAL_REV=0
 	LOADER=$(basename "$0")
@@ -151,17 +151,17 @@ maintain()
 		
 		LOCAL_REV=$(cat $DEPLOY/htdocs/js/cf.js | grep 'Revision' | tr -cd '[[:digit:]]')
 		if [[ "$LOCAL_REV" -ne "" ]]; then
-			echo "${YELLOW}Current revision: ${BLUE}${BOLD}$LOCAL_REV${NORMAL}"
+			echo -e "${YELLOW}Current revision: ${BLUE}${BOLD}$LOCAL_REV${NORMAL}"
 		fi
 		
 		./$LOADER start
 	fi
 	
 	while true; do
-		echo "${CYAN}Checking for new revision...${NORMAL}"
+		echo -e "${CYAN}Checking for new revision...${NORMAL}"
 		REMOTE_REV=$(svn info $REMOTE_REPO | grep '^Revision:' | awk '{ print $2 }')
 		if [[ $REMOTE_REV -ne $LOCAL_REV ]]; then
-			echo "${RED}Latest revision: ${BLUE}${BOLD}$REMOTE_REV${NORMAL}"
+			echo -e "${RED}Latest revision: ${BLUE}${BOLD}$REMOTE_REV${NORMAL}"
 			./$LOADER "check-for-updates"
 			if [ $? -eq 1 ]; then
 				selfUpdate true "--rebuild-libraries maintain"
@@ -179,14 +179,14 @@ maintain()
 			./$LOADER start
 			
 			LOCAL_REV=$REMOTE_REV
-			echo "${YELLOW}Current revision: ${BLUE}${BOLD}$LOCAL_REV${NORMAL}"
+			echo -e "${YELLOW}Current revision: ${BLUE}${BOLD}$LOCAL_REV${NORMAL}"
 		else
-			echo "${CYAN}No new revisions found.${NORMAL}"
+			echo -e "${CYAN}No new revisions found.${NORMAL}"
 		fi
 		sleep 250
 	done
 	
-	echo "${CYAN}Leaving the maintenance mode...${NORMAL}"
+	echo -e "${CYAN}Leaving the maintenance mode...${NORMAL}"
 }
 
 restart()
@@ -209,23 +209,23 @@ selfUninstall()
 # Update the script to the latest available version.
 selfUpdate() # 1 - restart after the update, 2 - arguments to be passed on restart
 {
-	echo "${CYAN}Checking for updates...${NORMAL}"
-	echo -n "${YELLOW}Current version: ${BLUE}${BOLD}$LOADER_VERSION"
+	echo -e"${CYAN}Checking for updates...${NORMAL}"
+	echo -ne "${YELLOW}Current version: ${BLUE}${BOLD}$LOADER_VERSION"
 	if $REVISION_DEFINED; then
 		echo -n "-$REVISION"
 	else
 		echo -n " [unknown revision]"
 	fi
-	echo "${NORMAL}"
+	echo -e "${NORMAL}"
 	
 	queryLatestRevision
 	
-	echo "${YELLOW}Latest version: ${BLUE}${BOLD}$LOADER_VERSION-$LATEST_REVISION${NORMAL}"
+	echo -e "${YELLOW}Latest version: ${BLUE}${BOLD}$LOADER_VERSION-$LATEST_REVISION${NORMAL}"
 	if [ $LATEST_REVISION -eq $REVISION ]; then
-		echo "${GREEN}You already use the most recent version of this script.${NORMAL}"
+		echo -e "${GREEN}You already use the most recent version of this script.${NORMAL}"
 		exit 0
 	fi
-	echo "${CYAN}Updating the script...${NORMAL}"
+	echo -e "${CYAN}Updating the script...${NORMAL}"
 	
 	SELF=$(basename "$0")
 	UPDATER=cold-updater.sh
@@ -235,7 +235,7 @@ selfUpdate() # 1 - restart after the update, 2 - arguments to be passed on resta
 	svn export $LOADER_URL $SELF.new >& /dev/null
 	if [ $? -ne 0 ]; then
 		stageFailed
-		echo "${RED}Update failed.${NORMAL}"
+		echo -e "${RED}Update failed.${NORMAL}"
 		exit 1
 	fi
 	stageOK
@@ -244,7 +244,7 @@ selfUpdate() # 1 - restart after the update, 2 - arguments to be passed on resta
 	OCTAL_MODE=$($STAT_PERMISSIONS $SELF)
 	if [ $? -ne 0 ]; then
 		stageFailed
-		echo "${RED}Update failed.${NORMAL}"
+		echo -e "${RED}Update failed.${NORMAL}"
 		exit 1
 	fi
 	stageOK
@@ -253,7 +253,7 @@ selfUpdate() # 1 - restart after the update, 2 - arguments to be passed on resta
 	chmod $OCTAL_MODE $SELF.new
 	if [ $? -ne 0 ]; then
 		stageFailed
-		echo "${RED}Update failed.${NORMAL}"
+		echo -e "${RED}Update failed.${NORMAL}"
 		exit 1
 	fi
 	stageOK
@@ -267,7 +267,7 @@ nextStage() # 1 - stage message
 	STAGE=\$[STAGE+1]
 	STAGE_MSG="\${YELLOW}[\$STAGE/\$STAGES] \${BLUE}\${BOLD}\$1...\${NORMAL}"
 	let STAGE_COL=\$(tput cols)-\${#STAGE_MSG}+\${#YELLOW}+\${#BLUE}+\${#BOLD}+\${#NORMAL}
-	echo -n "\$STAGE_MSG"
+	echo -ne "\$STAGE_MSG"
 }
 
 stageOK()
@@ -288,7 +288,7 @@ nextStage "Replacing old version with the new one"
 mv $SELF.new $SELF
 if [ $? -ne 0 ]; then
 	stageFailed
-	echo "${RED}Update failed.${NORMAL}"
+	echo -e "${RED}Update failed.${NORMAL}"
 	exit 1
 fi
 stageOK
@@ -297,15 +297,15 @@ nextStage "Deleting update script"
 rm \$0
 if [ $? -ne 0 ]; then
 	stageFailed
-	echo "${RED}Update failed.${NORMAL}"
+	echo -e "${RED}Update failed.${NORMAL}"
 	exit 1
 fi
 stageOK
 
-echo "${GREEN}Update succeeded.${NORMAL}"
+echo -e "${GREEN}Update succeeded.${NORMAL}"
 
 if $1; then
-	echo "${CYAN}Running the updated version...${NORMAL}"
+	echo -e "${CYAN}Running the updated version...${NORMAL}"
 	exec /bin/bash $SELF $2
 fi
 
@@ -313,7 +313,7 @@ exit 0
 EOF
 	if [ $? -ne 0 ]; then
 		stageFailed
-		echo "${RED}Update failed.${NORMAL}"
+		echo -e "${RED}Update failed.${NORMAL}"
 		exit 1
 	fi
 	stageOK
@@ -326,15 +326,15 @@ EOF
 start()
 {
 	if [ ! -d $DEPLOY ]; then
-		echo "${RED}Applications were not deployed!${NORMAL}"
-		echo "${CYAN}Type '$(basename $0) deploy' to deploy them.${NORMAL}"
+		echo -e "${RED}Applications were not deployed!${NORMAL}"
+		echo -e "${CYAN}Type '$(basename $0) deploy' to deploy them.${NORMAL}"
 		exit 1
 	fi
 	cd $DEPLOY
 	
 	setNumberOfStages 3
 	
-	echo "${CYAN}Starting the server...${NORMAL}"
+	echo -e "${CYAN}Starting the server...${NORMAL}"
 	
 	nextStage "Starting Cloud Server"
 	nohup ./CloudServer >& /dev/null &
@@ -345,7 +345,7 @@ start()
 	sleep 5
 	stageOK
 	
-	echo "${CYAN}Starting demonstration robots...${NORMAL}"
+	echo -e "${CYAN}Starting demonstration robots...${NORMAL}"
 	
 	nextStage "Starting RobotAlpha"
 	nohup ./CloudClient --server=localhost:4773 --robot --username=RobotAlpha >& /dev/null &
@@ -368,34 +368,34 @@ status()
 {
 	CLOUD_PID=$(ps -fe | grep -F 'CloudServer' | grep -v -F 'grep' | awk '{ print $2 }')
 	if [[ "$CLOUD_PID" -ne "" ]]; then
-		echo "${CYAN}Cloud Server is up and running:${GREEN}"
+		echo -e "${CYAN}Cloud Server is up and running:${GREEN}"
 		ps -fe | grep -F 'CloudServer' | grep -v -F 'grep'
 	else
-		echo "${CYAN}Cloud Server is ${RED}not running${CYAN}."
+		echo -e "${CYAN}Cloud Server is ${RED}not running${CYAN}."
 	fi
-	echo ${NORMAL}
+	echo -e ${NORMAL}
 	
 	ROBOTALPHA_PID=$(ps -fe | grep -F 'RobotAlpha' | grep -v -F 'grep' | awk '{ print $2 }')
 	ROBOTBETA_PID=$(ps -fe | grep -F 'RobotBeta' | grep -v -F 'grep' | awk '{ print $2 }')
 	if [[ "$ROBOTALPHA_PID" -ne "" && "$ROBOTBETA_PID" -ne "" ]]; then
-		echo "${CYAN}Both demonstration robots are running:${GREEN}"
+		echo -e "${CYAN}Both demonstration robots are running:${GREEN}"
 		ps -fe | grep -F 'CloudClient' | grep -v -F 'grep'
 	elif [[ "$ROBOTALPHA_PID" -ne "" || "$ROBOTBETA_PID" -ne "" ]]; then
-		echo "${CYAN}One of two demonstration robots is running:${YELLOW}"
+		echo -e "${CYAN}One of two demonstration robots is running:${YELLOW}"
 		ps -fe | grep -F 'CloudClient' | grep -v -F 'grep'
 	else
-		echo "${CYAN}Demonstration robots are ${RED}not running${CYAN}."
+		echo -e "${CYAN}Demonstration robots are ${RED}not running${CYAN}."
 	fi
-	echo ${NORMAL}
+	echo -e ${NORMAL}
 	
 	COLD_PID=$(ps -fe | grep -F 'cold' | grep -v -F 'grep' | grep -v -F 'status')
 	if [[ "$COLD_PID" != "" ]]; then
-		echo "${CYAN}Maintenance mode is enabled:${GREEN}"
+		echo -e "${CYAN}Maintenance mode is enabled:${GREEN}"
 		ps -fe | grep -F 'cold' | grep -v -F 'grep' | grep -v -F 'status'
 	else
-		echo "${CYAN}Maintenance mode is ${RED}disabled${CYAN}.${NORMAL}"
+		echo -e "${CYAN}Maintenance mode is ${RED}disabled${CYAN}.${NORMAL}"
 	fi
-	echo -n ${NORMAL}
+	echo -ne ${NORMAL}
 }
 
 stop()
@@ -419,7 +419,7 @@ stop()
 	setNumberOfStages $COUNTER
 	
 	if [[ "$ROBOTALPHA_PID" -ne "" || "$ROBOTBETA_PID" -ne "" ]]; then
-		echo "${CYAN}Stopping demonstration robots...${NORMAL}"
+		echo -e "${CYAN}Stopping demonstration robots...${NORMAL}"
 	fi
 	
 	if [[ "$ROBOTALPHA_PID" -ne "" ]]; then
@@ -435,7 +435,7 @@ stop()
 	fi
 	
 	if [[ "$CLOUD_PID" -ne "" ]]; then
-		echo "${CYAN}Stopping the server...${NORMAL}"
+		echo -e "${CYAN}Stopping the server...${NORMAL}"
 	
 		nextStage "Stopping Cloud Server"
 		kill $CLOUD_PID
@@ -445,14 +445,14 @@ stop()
 
 version()
 {
-	echo -n "${CYAN}Cloud Loader $LOADER_VERSION"
+	echo -ne "${CYAN}Cloud Loader $LOADER_VERSION"
 	if $REVISION_DEFINED; then
 		echo -n "-$REVISION"
 	else
 		echo -n " [unknown revision]"
 	fi
-	echo "${NORMAL}"
-	echo "${CYAN}Copyright (C) 2012 Cloud Forever. All rights reserved.${NORMAL}"
+	echo -e "${NORMAL}"
+	echo -e "${CYAN}Copyright (C) 2012 Cloud Forever. All rights reserved.${NORMAL}"
 }
 
 # Print the command and run it. Exit the script on failure.
@@ -878,11 +878,11 @@ do
 			COMMAND=version
 			;;
 		-*                   )
-			echo "${RED}Invalid option: $i${NORMAL}"
+			echo -e "${RED}Invalid option: $i${NORMAL}"
 			usage
 			;;
 		*                   )
-			echo "${RED}Unknown command: '$i'${NORMAL}"
+			echo -e "${RED}Unknown command: '$i'${NORMAL}"
 			usage
 			;;
 	esac
