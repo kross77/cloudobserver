@@ -541,13 +541,13 @@ build()
 	if $REBUILD_LIBRARIES; then
 		nextStage "Deleting existing libraries and utilities"
 		run rm -rf "$CMAKE_INSTALL"
-		run rm -rf "$OPENCV_INSTALL"
-		run rm -rf "$BOOST_INSTALL"
-		run rm -rf "$OPENSSL_INSTALL"
 		run rm -rf "$PREMAKE_INSTALL"
 		run rm -rf "$YASM_INSTALL"
+		run rm -rf "$BOOST_INSTALL"
 		run rm -rf "$FFMPEG_INSTALL"
 		run rm -rf "$OPENAL_INSTALL"
+		run rm -rf "$OPENCV_INSTALL"
+		run rm -rf "$OPENSSL_INSTALL"
 		stageOK
 	fi
 
