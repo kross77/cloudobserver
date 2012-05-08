@@ -49,6 +49,7 @@ goto COLD
 :COLD
 set PATH=%~dp0mingw\bin;%~dp0mingw\msys\1.0\bin;%PATH%
 if not exist cold wget -q http://cloudobserver.googlecode.com/svn/trunk/CloudLoader/cold
+for /f "usebackq delims== tokens=2" %%x in (`wmic cpu get NumberOfLogicalProcessors /format:value`) do set JOBS=%%x
 bash cold %*
 goto END
 
