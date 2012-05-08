@@ -540,11 +540,12 @@ build()
 	COUNTER=4
 	if $REBUILD_LIBRARIES; then
 		COUNTER=$[COUNTER+9]
-		if [ "$OS" == "windows" ]; then COUNTER=$[COUNTER+1]; fi
+		if [ "$OS" == "windows" ]; then COUNTER=$[COUNTER+2]; fi
 	else
 		if [ ! -d "$CMAKE_INSTALL" ]; then COUNTER=$[COUNTER+1]; fi
 		if [ ! -d "$NASM_INSTALL" -a "$OS" == "windows" ]; then COUNTER=$[COUNTER+1]; fi
 		if [ ! -d "$PREMAKE_INSTALL" ]; then COUNTER=$[COUNTER+1]; fi
+		if [ ! -d "$SUBVERSION_INSTALL" -a "$OS" == "windows" ]; then COUNTER=$[COUNTER+1]; fi
 		if [ ! -d "$YASM_INSTALL" ]; then COUNTER=$[COUNTER+1]; fi
 		if [ ! -d "$BOOST_INSTALL" ]; then COUNTER=$[COUNTER+1]; fi
 		if [ ! -d "$FFMPEG_INSTALL" ]; then COUNTER=$[COUNTER+1]; fi
@@ -618,6 +619,13 @@ build()
 		run cp bin/release/premake4 "$PREMAKE_INSTALL"/bin
 		run cd $WD
 		run rm -rf "$PREMAKE_COMPILE"
+		stageOK
+	fi
+
+	# Download Subversion utility if necessary.
+	if [ ! -d "$SUBVERSION_INSTALL" -a "$OS" == "windows" ]; then
+		nextStage "Downloading Subversion utility"
+		prepare $SUBVERSION_BINFILE "$SUBVERSION_INSTALL" $SUBVERSION_BINBASE $SUBVERSION_BINSITE $SUBVERSION_BINPATH
 		stageOK
 	fi
 
@@ -990,6 +998,14 @@ PREMAKE_SRCBASE=premake-$PREMAKE_VERSION
 PREMAKE_SRCFILE=$PREMAKE_SRCBASE-src.zip
 PREMAKE_SRCPATH=/projects/premake/files/Premake/$PREMAKE_VERSION
 PREMAKE_SRCSITE=sourceforge.net
+
+# Declare variables related to Subversion utility.
+SUBVERSION_VERSION=1.7.2
+SUBVERSION_INSTALL="$WD"/subversion
+SUBVERSION_BINBASE=svn-win32-$SUBVERSION_VERSION
+SUBVERSION_BINFILE=$SUBVERSION_BINBASE.zip
+SUBVERSION_BINPATH=/projects/win32svn/files/$SUBVERSION_VERSION
+SUBVERSION_BINSITE=sourceforge.net
 
 # Declare variables related to YASM utility.
 YASM_VERSION=1.2.0
