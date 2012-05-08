@@ -536,9 +536,28 @@ build()
 		export CXX=$(which g++)
 	fi
 	
-	# The number of stages is unknown.
-	setNumberOfStages ?
-
+	# Detect the number of stages.
+	COUNTER=4
+	if $REBUILD_LIBRARIES; then
+		COUNTER=$[COUNTER+9]
+	else
+		if [ ! -d "$CMAKE_INSTALL" ]; then COUNTER=$[COUNTER+1]; fi
+		if [ ! -d "$PREMAKE_INSTALL" ]; then COUNTER=$[COUNTER+1]; fi
+		if [ ! -d "$YASM_INSTALL" ]; then COUNTER=$[COUNTER+1]; fi
+		if [ ! -d "$BOOST_INSTALL" ]; then COUNTER=$[COUNTER+1]; fi
+		if [ ! -d "$FFMPEG_INSTALL" ]; then COUNTER=$[COUNTER+1]; fi
+		if [ ! -d "$OPENAL_INSTALL" ]; then COUNTER=$[COUNTER+1]; fi
+		if [ ! -d "$OPENCV_INSTALL" ]; then COUNTER=$[COUNTER+1]; fi
+		if [ ! -d "$OPENSSL_INSTALL" ]; then COUNTER=$[COUNTER+1]; fi
+	fi
+	if $CHECKOUT_SOURCE; then
+		COUNTER=$[COUNTER+3]
+	else
+		if [ ! -d "$CLOUDCLIENT_COMPILE" ]; then COUNTER=$[COUNTER+1]; fi
+		if [ ! -d "$CLOUD_COMPILE" ]; then COUNTER=$[COUNTER+1]; fi
+	fi
+	setNumberOfStages $COUNTER
+	
 	# Delete existing libraries and utilities if they should be rebuilt.
 	if $REBUILD_LIBRARIES; then
 		nextStage "Deleting existing libraries and utilities"
