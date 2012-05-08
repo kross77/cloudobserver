@@ -47,7 +47,19 @@ cd ..\..
 goto COLD
 
 :COLD
+set BaseRegistryPath=HKLM\Software\Microsoft
+for /f "tokens=2,*" %%a in ('reg query %BaseRegistryPath%\VisualStudio\9.0\Setup\VS /v "ProductDir" 2^>nul ^| findstr ProductDir') do (
+	set VisualStudioPath=%%b
+)
+for /f "tokens=2,*" %%a in ('reg query %BaseRegistryPath%\VisualStudio\10.0\Setup\VS /v "ProductDir" 2^>nul ^| findstr ProductDir') do (
+	set VisualStudioPath=%%b
+)
+if "%VisualStudioPath%" == "" (
+	echo Visual Studio is not found. Please install it.
+	goto END
+)
 set PATH=%~dp0mingw\bin;%~dp0mingw\msys\1.0\bin;%PATH%
+call "%VisualStudioPath%VC\vcvarsall.bat" x86 >nul
 if not exist cold wget -q http://cloudobserver.googlecode.com/svn/trunk/CloudLoader/cold
 for /f "usebackq delims== tokens=2" %%x in (`wmic cpu get NumberOfLogicalProcessors /format:value`) do set JOBS=%%x
 bash cold %*
