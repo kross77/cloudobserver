@@ -590,7 +590,11 @@ build()
 		nextStage "Building CMake utility"
 		prepare $CMAKE_SRCFILE "$CMAKE_COMPILE" $CMAKE_SRCBASE $CMAKE_SRCSITE $CMAKE_SRCPATH
 		run cd "$CMAKE_COMPILE"
-		run ./bootstrap --parallel=$JOBS --prefix="$CMAKE_INSTALL"
+		if [ "$OS" == "windows" ]; then
+			run ./bootstrap --parallel=$JOBS --prefix=../cmake
+		else
+			run ./bootstrap --parallel=$JOBS --prefix="$CMAKE_INSTALL"
+		fi
 		run make -j$JOBS install
 		run cd $WD
 		run rm -rf "$CMAKE_COMPILE"
