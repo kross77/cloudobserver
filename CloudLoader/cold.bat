@@ -47,7 +47,11 @@ cd ..\..
 goto COLD
 
 :COLD
-set BaseRegistryPath=HKLM\Software\Microsoft
+if defined ProgramFiles(x86) (
+	set BaseRegistryPath=HKLM\Software\Wow6432Node\Microsoft
+) else (
+	set BaseRegistryPath=HKLM\Software\Microsoft
+)
 for /f "tokens=2,*" %%a in ('reg query %BaseRegistryPath%\VisualStudio\9.0\Setup\VS /v "ProductDir" 2^>nul ^| findstr ProductDir') do (
 	set VisualStudioPath=%%b
 )
