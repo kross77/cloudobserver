@@ -592,10 +592,13 @@ build()
 		run cd "$CMAKE_COMPILE"
 		if [ "$OS" == "windows" ]; then
 			run ./bootstrap --parallel=$JOBS --prefix=../cmake
+			# Building CMake in several concurrent jobs on Windows
+			# sometimes results in a deadlock.
+			run make install
 		else
 			run ./bootstrap --parallel=$JOBS --prefix="$CMAKE_INSTALL"
+			run make -j$JOBS install
 		fi
-		run make -j$JOBS install
 		run cd $WD
 		run rm -rf "$CMAKE_COMPILE"
 		stageOK
