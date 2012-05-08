@@ -45,14 +45,18 @@ nextStage() # 1 - stage message
 
 stageOK()
 {
-	let STAGE_COL=$STAGE_COL+${#GREEN}+${#NORMAL}
-	printf "%${STAGE_COL}s\n" "${GREEN}[OK]${NORMAL}"
+	RESULT_MSG="${GREEN}[OK]${NORMAL}"
+	let STAGE_COL=$STAGE_COL+${#GREEN}+${#NORMAL}-${#RESULT_MSG}
+	printf "%${STAGE_COL}s"
+	echo -ne "$RESULT_MSG"
 }
 
 stageFailed()
 {
-	let STAGE_COL=$STAGE_COL+${#RED}+${#NORMAL}
-	printf "%${STAGE_COL}s\n" "${RED}[FAILED]${NORMAL}"
+	RESULT_MSG="${RED}[FAILED]${NORMAL}"
+	let STAGE_COL=$STAGE_COL+${#RED}+${#NORMAL}-${#RESULT_MSG}
+	printf "%${STAGE_COL}s"
+	echo -ne "$RESULT_MSG"
 }
 
 usage()
@@ -272,14 +276,18 @@ nextStage() # 1 - stage message
 
 stageOK()
 {
-	let STAGE_COL=\$STAGE_COL+\${#GREEN}+\${#NORMAL}
-	printf "%\${STAGE_COL}s\n" "\${GREEN}[OK]\${NORMAL}"
+	RESULT_MSG="\${GREEN}[OK]\${NORMAL}"
+	let STAGE_COL=\$STAGE_COL+\${#GREEN}+\${#NORMAL}-${#RESULT_MSG}
+	printf "%\${STAGE_COL}s"
+	echo -ne "\$RESULT_MSG"
 }
 
 stageFailed()
 {
-	let STAGE_COL=\$STAGE_COL+\${#RED}+\${#NORMAL}
-	printf "%\${STAGE_COL}s\n" "\${RED}[FAILED]\${NORMAL}"
+	RESULT_MSG="\${RED}[FAILED]\${NORMAL}"
+	let STAGE_COL=\$STAGE_COL+\${#RED}+\${#NORMAL}-${#RESULT_MSG}
+	printf "%\${STAGE_COL}s"
+	echo -ne "\$RESULT_MSG"
 }
 
 stageOK
