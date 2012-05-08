@@ -620,7 +620,11 @@ build()
 	if [ ! -d "$PREMAKE_INSTALL" ]; then
 		nextStage "Building Premake utility"
 		prepare $PREMAKE_SRCFILE "$PREMAKE_COMPILE" $PREMAKE_SRCBASE $PREMAKE_SRCSITE $PREMAKE_SRCPATH
-		run cd "$PREMAKE_COMPILE"/build/gmake.unix
+		if [ "$OS" == "windows" ]; then
+			run cd "$PREMAKE_COMPILE"/build/gmake.windows
+		else
+			run cd "$PREMAKE_COMPILE"/build/gmake.unix
+		fi
 		run make -j$JOBS config=release
 		run cd ../..
 		run mkdir -p "$PREMAKE_INSTALL"/bin
