@@ -37,9 +37,14 @@ setNumberOfStages() # 1 - number of stages
 
 nextStage() # 1 - stage message
 {
+	if [ "$OS" == "windows" ]; then
+		COLS=80
+	else
+		COLS=$(tput cols)
+	fi
 	STAGE=$[STAGE+1]
 	STAGE_MSG="${YELLOW}[$STAGE/$STAGES] ${BLUE}${BOLD}$1...${NORMAL}"
-	let STAGE_COL=$(tput cols)-${#STAGE_MSG}+${#YELLOW}+${#BLUE}+${#BOLD}+${#NORMAL}
+	let STAGE_COL=$COLS-${#STAGE_MSG}+${#YELLOW}+${#BLUE}+${#BOLD}+${#NORMAL}
 	echo -ne "$STAGE_MSG"
 }
 
@@ -268,9 +273,14 @@ selfUpdate() # 1 - restart after the update, 2 - arguments to be passed on resta
 
 nextStage() # 1 - stage message
 {
+	if [ "$OS" == "windows" ]; then
+		COLS=80
+	else
+		COLS=\$(tput cols)
+	fi
 	STAGE=\$[STAGE+1]
 	STAGE_MSG="\${YELLOW}[\$STAGE/\$STAGES] \${BLUE}\${BOLD}\$1...\${NORMAL}"
-	let STAGE_COL=\$(tput cols)-\${#STAGE_MSG}+\${#YELLOW}+\${#BLUE}+\${#BOLD}+\${#NORMAL}
+	let STAGE_COL=\$COLS-\${#STAGE_MSG}+\${#YELLOW}+\${#BLUE}+\${#BOLD}+\${#NORMAL}
 	echo -ne "\$STAGE_MSG"
 }
 
