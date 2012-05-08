@@ -1006,7 +1006,6 @@ case $OSTYPE in
 		;;
 	msys    )
 		OS=windows
-		JOBS=1
 		STAT_PERMISSIONS="stat -c %a"
 		;;
 	*       )
