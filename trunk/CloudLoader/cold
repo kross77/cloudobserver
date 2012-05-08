@@ -497,7 +497,11 @@ prepare() # 1=SRCFILE 2=COMPILE 3=SRCBASE 4=SRCSITE 5=SRCPATH
 	fi
 	
 	if [ ! -e $DOWNLOADS/$1 ]; then
-		run curl -L http://$4$5/$1 -o $DOWNLOADS/$1
+		if [ "$OS" == "macosx" ]; then
+			run curl -L http://$4$5/$1 -o $DOWNLOADS/$1
+		else
+			run wget http://$4$5/$1 -O $DOWNLOADS/$1
+		fi
 	fi
 	
 	case ${1##*.} in
