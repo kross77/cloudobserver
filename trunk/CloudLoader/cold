@@ -506,7 +506,11 @@ prepare() # 1=SRCFILE 2=COMPILE 3=SRCBASE 4=SRCSITE 5=SRCPATH
 	
 	case ${1##*.} in
 		bz2 )
-			run tar -xjf $DOWNLOADS/$1
+			if [ "$OS" == "windows" ]; then
+				run bsdtar -xjf $DOWNLOADS/$1
+			else
+				run tar -xjf $DOWNLOADS/$1
+			fi
 			;;
 		gz  )
 			run tar -xzf $DOWNLOADS/$1
