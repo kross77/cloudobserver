@@ -540,8 +540,10 @@ build()
 	COUNTER=4
 	if $REBUILD_LIBRARIES; then
 		COUNTER=$[COUNTER+9]
+		if [ "$OS" == "windows" ]; then COUNTER=$[COUNTER+1]; fi
 	else
 		if [ ! -d "$CMAKE_INSTALL" ]; then COUNTER=$[COUNTER+1]; fi
+		if [ ! -d "$NASM_INSTALL" -a "$OS" == "windows" ]; then COUNTER=$[COUNTER+1]; fi
 		if [ ! -d "$PREMAKE_INSTALL" ]; then COUNTER=$[COUNTER+1]; fi
 		if [ ! -d "$YASM_INSTALL" ]; then COUNTER=$[COUNTER+1]; fi
 		if [ ! -d "$BOOST_INSTALL" ]; then COUNTER=$[COUNTER+1]; fi
@@ -562,6 +564,7 @@ build()
 	if $REBUILD_LIBRARIES; then
 		nextStage "Deleting existing libraries and utilities"
 		run rm -rf "$CMAKE_INSTALL"
+		if [ "$OS" == "windows" ]; then run rm -rf "$NASM_INSTALL"; fi
 		run rm -rf "$PREMAKE_INSTALL"
 		run rm -rf "$YASM_INSTALL"
 		run rm -rf "$BOOST_INSTALL"
@@ -589,6 +592,18 @@ build()
 		run make -j$JOBS install
 		run cd $WD
 		run rm -rf "$CMAKE_COMPILE"
+		stageOK
+	fi
+
+	# Build NASM utility if necessary.
+	if [ ! -d "$NASM_INSTALL" -a "$OS" == "windows" ]; then
+		nextStage "Building NASM utility"
+		prepare $NASM_SRCFILE "$NASM_COMPILE" $NASM_SRCBASE $NASM_SRCSITE $NASM_SRCPATH
+		run cd "$NASM_COMPILE"
+		run ./configure --prefix="$NASM_INSTALL"
+		run make -j$JOBS install
+		run cd $WD
+		run rm -rf "$NASM_COMPILE"
 		stageOK
 	fi
 
@@ -957,6 +972,15 @@ CMAKE_SRCBASE=cmake-$CMAKE_VERSION
 CMAKE_SRCFILE=$CMAKE_SRCBASE.tar.gz
 CMAKE_SRCPATH=/files/v${CMAKE_VERSION%.*}
 CMAKE_SRCSITE=www.cmake.org
+
+# Declare variables related to NASM utility.
+NASM_VERSION=2.09.10
+NASM_COMPILE="$WD"/nasm-src
+NASM_INSTALL="$WD"/nasm
+NASM_SRCBASE=nasm-$NASM_VERSION
+NASM_SRCFILE=$NASM_SRCBASE.tar.bz2
+NASM_SRCPATH=/pub/nasm/releasebuilds/$NASM_VERSION
+NASM_SRCSITE=www.nasm.us
 
 # Declare variables related to Premake utility.
 PREMAKE_VERSION=4.3
