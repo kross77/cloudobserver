@@ -512,7 +512,7 @@ prepare() # 1=SRCFILE 2=COMPILE 3=SRCBASE 4=SRCSITE 5=SRCPATH
 			run tar -xzf $DOWNLOADS/$1
 			;;
 		zip )
-			run unzip $DOWNLOADS/$1
+			run -q unzip $DOWNLOADS/$1
 			;;
 		*   )
 			echo "Error: unknown archive type."
