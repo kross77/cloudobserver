@@ -213,7 +213,7 @@ selfUninstall()
 # Update the script to the latest available version.
 selfUpdate() # 1 - restart after the update, 2 - arguments to be passed on restart
 {
-	echo -e"${CYAN}Checking for updates...${NORMAL}"
+	echo -e "${CYAN}Checking for updates...${NORMAL}"
 	echo -ne "${YELLOW}Current version: ${BLUE}${BOLD}$LOADER_VERSION"
 	if $REVISION_DEFINED; then
 		echo -n "-$REVISION"
