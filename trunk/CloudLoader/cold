@@ -567,6 +567,7 @@ build()
 		run rm -rf "$CMAKE_INSTALL"
 		if [ "$OS" == "windows" ]; then run rm -rf "$NASM_INSTALL"; fi
 		run rm -rf "$PREMAKE_INSTALL"
+		if [ "$OS" == "windows" ]; then run rm -rf "$SUBVERSION_INSTALL"; fi
 		run rm -rf "$YASM_INSTALL"
 		run rm -rf "$BOOST_INSTALL"
 		run rm -rf "$FFMPEG_INSTALL"
