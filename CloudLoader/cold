@@ -553,6 +553,14 @@ build()
 		stageOK
 	fi
 
+	# Delete existing application sources if they should be checked out.
+	if $CHECKOUT_SOURCE; then
+		nextStage "Deleting existing application sources"
+		run rm -rf "$CLOUDCLIENT_COMPILE"
+		run rm -rf "$CLOUD_COMPILE"
+		stageOK
+	fi
+
 	# Build CMake utility if necessary.
 	if [ ! -d "$CMAKE_INSTALL" ]; then
 		nextStage "Building CMake utility"
@@ -738,9 +746,8 @@ build()
 	fi
 
 	# Checkout Cloud Client application source code if necessary.
-	if $CHECKOUT_SOURCE || [ ! -d "$CLOUDCLIENT_COMPILE" ]; then
+	if [ ! -d "$CLOUDCLIENT_COMPILE" ]; then
 		nextStage "Checking out Cloud Client application source code"
-		run rm -rf "$CLOUDCLIENT_COMPILE"
 		run svn checkout https://$CLOUDCLIENT_SRCSITE$CLOUDCLIENT_SRCPATH "$CLOUDCLIENT_COMPILE"
 		run rm "$CLOUDCLIENT_COMPILE"/src/3rdparty/ffmpeg/inttypes.h
 		stageOK
@@ -771,9 +778,8 @@ EOF
 	stageOK
 
 	# Checkout Cloud Server application source code if necessary.
-	if $CHECKOUT_SOURCE || [ ! -d "$CLOUD_COMPILE" ]; then
+	if [ ! -d "$CLOUD_COMPILE" ]; then
 		nextStage "Checking out Cloud Server application source code"
-		run rm -rf "$CLOUD_COMPILE"
 		run svn checkout https://$CLOUD_SRCSITE$CLOUD_SRCPATH "$CLOUD_COMPILE"
 		stageOK
 	fi
