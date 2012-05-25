@@ -969,9 +969,9 @@ EOF
 	if [ ! -d "$CLOUDCLIENT_COMPILE" ]; then
 		nextStage "Downloading Cloud Client application source code"
 		if [ "$OS" == "windows" ]; then
-			run "$SUBVERSION_INSTALL"/bin/svn export https://$CLOUDCLIENT_SRCSITE$CLOUDCLIENT_SRCPATH "$CLOUDCLIENT_COMPILE"
+			run "$SUBVERSION_INSTALL"/bin/svn export http://$CLOUDCLIENT_SRCSITE$CLOUDCLIENT_SRCPATH "$CLOUDCLIENT_COMPILE"
 		else
-			run svn export https://$CLOUDCLIENT_SRCSITE$CLOUDCLIENT_SRCPATH "$CLOUDCLIENT_COMPILE"
+			run svn export http://$CLOUDCLIENT_SRCSITE$CLOUDCLIENT_SRCPATH "$CLOUDCLIENT_COMPILE"
 			run rm "$CLOUDCLIENT_COMPILE"/src/3rdparty/ffmpeg/inttypes.h
 		fi
 		stageOK
@@ -1020,9 +1020,9 @@ EOF
 	if [ ! -d "$CLOUD_COMPILE" ]; then
 		nextStage "Downloading Cloud Server application source code"
 		if [ "$OS" == "windows" ]; then
-			run "$SUBVERSION_INSTALL"/bin/svn export https://$CLOUD_SRCSITE$CLOUD_SRCPATH "$CLOUD_COMPILE"
+			run "$SUBVERSION_INSTALL"/bin/svn export http://$CLOUD_SRCSITE$CLOUD_SRCPATH "$CLOUD_COMPILE"
 		else
-			run svn export https://$CLOUD_SRCSITE$CLOUD_SRCPATH "$CLOUD_COMPILE"
+			run svn export http://$CLOUD_SRCSITE$CLOUD_SRCPATH "$CLOUD_COMPILE"
 		fi
 		stageOK
 	fi
