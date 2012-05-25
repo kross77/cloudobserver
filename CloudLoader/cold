@@ -1019,7 +1019,11 @@ EOF
 	# Download Cloud Server application source code if necessary.
 	if [ ! -d "$CLOUD_COMPILE" ]; then
 		nextStage "Downloading Cloud Server application source code"
-		run svn export https://$CLOUD_SRCSITE$CLOUD_SRCPATH "$CLOUD_COMPILE"
+		if [ "$OS" == "windows" ]; then
+			run "$SUBVERSION_INSTALL"/bin/svn export https://$CLOUD_SRCSITE$CLOUD_SRCPATH "$CLOUD_COMPILE"
+		else
+			run svn export https://$CLOUD_SRCSITE$CLOUD_SRCPATH "$CLOUD_COMPILE"
+		fi
 		stageOK
 	fi
 
