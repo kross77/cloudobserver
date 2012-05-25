@@ -57,21 +57,25 @@ for /f "tokens=2,*" %%a in ('reg query %BaseRegistryPath%\VCExpress\9.0\Setup\VS
 	set VisualStudioPath=%%b
 	set VSVERSION=9
 	set VSCMAKE=Visual Studio 9 2008
+	set VSPREMAKE=vs2008
 )
 for /f "tokens=2,*" %%a in ('reg query %BaseRegistryPath%\VisualStudio\9.0\Setup\VS /v "ProductDir" 2^>nul ^| findstr ProductDir') do (
 	set VisualStudioPath=%%b
 	set VSVERSION=9
 	set VSCMAKE=Visual Studio 9 2008
+	set VSPREMAKE=vs2008
 )
 for /f "tokens=2,*" %%a in ('reg query %BaseRegistryPath%\VCExpress\10.0\Setup\VS /v "ProductDir" 2^>nul ^| findstr ProductDir') do (
 	set VisualStudioPath=%%b
 	set VSVERSION=10
 	set VSCMAKE=Visual Studio 10
+	set VSPREMAKE=vs2010
 )
 for /f "tokens=2,*" %%a in ('reg query %BaseRegistryPath%\VisualStudio\10.0\Setup\VS /v "ProductDir" 2^>nul ^| findstr ProductDir') do (
 	set VisualStudioPath=%%b
 	set VSVERSION=10
 	set VSCMAKE=Visual Studio 10
+	set VSPREMAKE=vs2010
 )
 if "%VisualStudioPath%" == "" (
 	echo Visual Studio is not found. Please install it.
