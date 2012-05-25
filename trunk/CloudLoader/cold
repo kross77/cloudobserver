@@ -972,8 +972,8 @@ EOF
 			run "$SUBVERSION_INSTALL"/bin/svn checkout https://$CLOUDCLIENT_SRCSITE$CLOUDCLIENT_SRCPATH "$CLOUDCLIENT_COMPILE"
 		else
 			run svn checkout https://$CLOUDCLIENT_SRCSITE$CLOUDCLIENT_SRCPATH "$CLOUDCLIENT_COMPILE"
+			run rm "$CLOUDCLIENT_COMPILE"/src/3rdparty/ffmpeg/inttypes.h
 		fi
-		run rm "$CLOUDCLIENT_COMPILE"/src/3rdparty/ffmpeg/inttypes.h
 		stageOK
 	fi
 
