@@ -917,7 +917,8 @@ EOF
 				-DWITH_XINE=OFF
 			run make -j$JOBS install
 		fi
-		run cp "$OPENCV_INSTALL"/share/OpenCV/3rdparty/lib/* "$OPENCV_INSTALL"/lib
+		run mv "$OPENCV_INSTALL"/share/OpenCV/3rdparty/lib/* "$OPENCV_INSTALL"/lib
+		run rm -rf "$OPENCV_INSTALL"/share
 		run cd $WD
 		run rm -rf "$OPENCV_COMPILE"
 		stageOK
