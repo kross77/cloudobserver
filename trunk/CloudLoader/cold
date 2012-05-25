@@ -1008,7 +1008,11 @@ EOF
 	if [ ! -d "$CLOUDCLIENT_INSTALL" ]; then
 		run mkdir "$CLOUDCLIENT_INSTALL"
 	fi
-	run cp -r "$CLOUDCLIENT_COMPILE"/projects/$OS-gmake/bin/release-static/* "$CLOUDCLIENT_INSTALL"
+	if [ "$OS" == "windows" ]; then
+		run cp -r "$CLOUDCLIENT_COMPILE"/projects/$OS-$VSPREMAKE/bin/release-static/* "$CLOUDCLIENT_INSTALL"
+	else
+		run cp -r "$CLOUDCLIENT_COMPILE"/projects/$OS-gmake/bin/release-static/* "$CLOUDCLIENT_INSTALL"
+	fi
 	run rm -rf "$CLOUDCLIENT_COMPILE"
 	stageOK
 
