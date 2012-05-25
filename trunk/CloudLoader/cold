@@ -677,8 +677,19 @@ build()
 		prepare $FFMPEG_SRCFILE "$FFMPEG_COMPILE" $FFMPEG_SRCBASE $FFMPEG_SRCSITE $FFMPEG_SRCPATH
 		run cd "$FFMPEG_COMPILE"
 		export PATH=$PATH:"$YASM_INSTALL"/bin
-		run ./configure --enable-static --disable-shared --disable-bzlib --prefix="$FFMPEG_INSTALL"
+		if [ "$OS" == "windows" ]; then
+			run ./configure --enable-static --disable-shared --enable-memalign-hack --enable-w32threads --disable-bzlib --disable-pthreads --prefix="$FFMPEG_INSTALL"
+		else
+			run ./configure --enable-static --disable-shared --disable-bzlib --prefix="$FFMPEG_INSTALL"
+		fi
 		run make -j$JOBS install
+		if [ "$OS" == "windows" ]; then
+			run cd "$FFMPEG_INSTALL/lib"
+			run cp "$WD/mingw/lib/gcc/mingw32/$(gcc -v 2>&1 | tail -1 | awk '{print $3}')/libgcc.a" ./
+			run cp "$WD/mingw/lib/libmingwex.a" ./
+			for f in *.a; do mv "$f" "`basename "$f" .a`.lib"; done;
+			run lib //nologo -remove:sqrtf.o libmingwex.lib
+		fi
 		run cd $WD
 		run rm -rf "$FFMPEG_COMPILE"
 		stageOK
