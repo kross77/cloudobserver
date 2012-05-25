@@ -701,6 +701,8 @@ build()
 		prepare $OPENAL_SRCFILE "$OPENAL_COMPILE" $OPENAL_SRCBASE $OPENAL_SRCSITE $OPENAL_SRCPATH
 		run cd "$OPENAL_COMPILE"
 		if [ "$OS" == "windows" ]; then
+			run wget http://$LOADER_SRCSITE$LOADER_SRCPATH/patches/openal-soft-1.13-windows-static.patch
+			run patch -p1 -i openal-soft-1.13-windows-static.patch
 			run "$CMAKE_INSTALL"/bin/cmake \
 				-DCMAKE_BUILD_TYPE=Release \
 				-DCMAKE_DEBUG_POSTFIX=d \
