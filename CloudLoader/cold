@@ -700,27 +700,43 @@ build()
 		nextStage "Building OpenAL libraries"
 		prepare $OPENAL_SRCFILE "$OPENAL_COMPILE" $OPENAL_SRCBASE $OPENAL_SRCSITE $OPENAL_SRCPATH
 		run cd "$OPENAL_COMPILE"
-		run "$CMAKE_INSTALL"/bin/cmake \
-			-DALSA=OFF \
-			-DALSOFT_CONFIG=OFF \
-			-DCMAKE_BACKWARDS_COMPATIBILITY=2.8.2 \
-			-DCMAKE_BUILD_TYPE=Release \
-			-DCMAKE_DEBUG_POSTFIX=d \
-			-DCMAKE_INSTALL_PREFIX="$OPENAL_INSTALL" \
-			-DDLOPEN=OFF \
-			-DDSOUND=OFF \
-			-DEXECUTABLE_OUTPUT_PATH= \
-			-DLIBRARY_OUTPUT_PATH= \
-			-DLIBTYPE=STATIC \
-			-DOSS=OFF \
-			-DPORTAUDIO=OFF \
-			-DPULSEAUDIO=OFF \
-			-DSOLARIS=OFF \
-			-DUTILS=OFF \
-			-DWAVE=OFF \
-			-DWERROR=OFF \
-			-DWINMM=OFF
-		run make -j$JOBS install
+		if [ "$OS" == "windows" ]; then
+			run "$CMAKE_INSTALL"/bin/cmake \
+				-DCMAKE_BUILD_TYPE=Release \
+				-DCMAKE_DEBUG_POSTFIX=d \
+				-DCMAKE_INSTALL_PREFIX="$OPENAL_INSTALL" \
+				-DFORCE_STATIC_VCRT=ON \
+				-DLIBTYPE=STATIC \
+				-G "$VSCMAKE"
+			run msbuild.exe /maxcpucount:$JOBS OpenAL.sln //p:Configuration=Release
+			if [ $VSVERSION -eq 9 ]; then
+				run msbuild.exe /maxcpucount:$JOBS INSTALL.vcproj //p:Configuration=Release
+			elif [ $VSVERSION -eq 10 ]; then
+				run msbuild.exe /maxcpucount:$JOBS INSTALL.vcxproj //p:Configuration=Release
+			fi
+		else
+			run "$CMAKE_INSTALL"/bin/cmake \
+				-DALSA=OFF \
+				-DALSOFT_CONFIG=OFF \
+				-DCMAKE_BACKWARDS_COMPATIBILITY=2.8.2 \
+				-DCMAKE_BUILD_TYPE=Release \
+				-DCMAKE_DEBUG_POSTFIX=d \
+				-DCMAKE_INSTALL_PREFIX="$OPENAL_INSTALL" \
+				-DDLOPEN=OFF \
+				-DDSOUND=OFF \
+				-DEXECUTABLE_OUTPUT_PATH= \
+				-DLIBRARY_OUTPUT_PATH= \
+				-DLIBTYPE=STATIC \
+				-DOSS=OFF \
+				-DPORTAUDIO=OFF \
+				-DPULSEAUDIO=OFF \
+				-DSOLARIS=OFF \
+				-DUTILS=OFF \
+				-DWAVE=OFF \
+				-DWERROR=OFF \
+				-DWINMM=OFF
+			run make -j$JOBS install
+		fi
 		run cd $WD
 		run rm -rf "$OPENAL_COMPILE"
 		stageOK
