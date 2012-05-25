@@ -929,8 +929,15 @@ EOF
 		nextStage "Building OpenSSL libraries"
 		prepare $OPENSSL_SRCFILE "$OPENSSL_COMPILE" $OPENSSL_SRCBASE $OPENSSL_SRCSITE $OPENSSL_SRCPATH
 		run cd "$OPENSSL_COMPILE"
-		run ./config shared no-asm --prefix="$OPENSSL_INSTALL" --openssldir="$OPENSSL_INSTALL"/share
-		run make install
+		if [ "$OS" == "windows" ]; then
+			export PATH=$PATH:"$WD/nasm/bin"
+			run perl Configure VC-WIN32 --prefix="$OPENSSL_INSTALL" --openssldir="$OPENSSL_INSTALL"/share
+			run cmd /c "ms\do_nasm.bat"
+			run nmake -f ms/nt.mak install
+		else
+			run ./config shared no-asm --prefix="$OPENSSL_INSTALL" --openssldir="$OPENSSL_INSTALL"/share
+			run make install
+		fi
 		run cd $WD
 		run rm -rf "$OPENSSL_COMPILE"
 		stageOK
