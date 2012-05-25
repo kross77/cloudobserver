@@ -968,7 +968,11 @@ EOF
 	# Checkout Cloud Client application source code if necessary.
 	if [ ! -d "$CLOUDCLIENT_COMPILE" ]; then
 		nextStage "Checking out Cloud Client application source code"
-		run svn checkout https://$CLOUDCLIENT_SRCSITE$CLOUDCLIENT_SRCPATH "$CLOUDCLIENT_COMPILE"
+		if [ "$OS" == "windows" ]; then
+			run "$SUBVERSION_INSTALL"/bin/svn checkout https://$CLOUDCLIENT_SRCSITE$CLOUDCLIENT_SRCPATH "$CLOUDCLIENT_COMPILE"
+		else
+			run svn checkout https://$CLOUDCLIENT_SRCSITE$CLOUDCLIENT_SRCPATH "$CLOUDCLIENT_COMPILE"
+		fi
 		run rm "$CLOUDCLIENT_COMPILE"/src/3rdparty/ffmpeg/inttypes.h
 		stageOK
 	fi
