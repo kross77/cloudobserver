@@ -832,70 +832,91 @@ EOF
 		prepare $ZLIB_SRCFILE "$OPENCV_ZLIBSRC" $ZLIB_SRCBASE $ZLIB_SRCSITE $ZLIB_SRCPATH
 		run cd "$OPENCV_COMPILE"
 		run cp $(echo "$OPENCV_ZLIBSRC"/*.[ch]) ./3rdparty/zlib
-		# Adding the following option:
-		#   -DEXECUTABLE_OUTPUT_PATH="$OPENCV_INSTALL"/bin
-		# to the CMake call leads to an error during the build
-		# with 'opencv_traincascade' executable not being created.
-		# It seems like a bug in OpenCV CMake script.
-		run "$CMAKE_INSTALL"/bin/cmake \
-			-DBUILD_DOCS=OFF \
-			-DBUILD_EXAMPLES=OFF \
-			-DBUILD_NEW_PYTHON_SUPPORT=OFF \
-			-DBUILD_PACKAGE=OFF \
-			-DBUILD_SHARED_LIBS=OFF \
-			-DBUILD_TESTS=OFF \
-			-DBUILD_WITH_DEBUG_INFO=OFF \
-			-DCMAKE_BACKWARDS_COMPATIBILITY=2.8.2 \
-			-DCMAKE_BUILD_TYPE=Release \
-			-DCMAKE_CONFIGURATION_TYPES=Release \
-			-DCMAKE_INSTALL_PREFIX="$OPENCV_INSTALL" \
-			-DCMAKE_VERBOSE=OFF \
-			-DENABLE_PROFILING=OFF \
-			-DENABLE_SOLUTION_FOLDERS=OFF \
-			-DENABLE_SSE=OFF \
-			-DENABLE_SSE2=OFF \
-			-DENABLE_SSE3=OFF \
-			-DENABLE_SSE41=OFF \
-			-DENABLE_SSE42=OFF \
-			-DENABLE_SSSE3=OFF \
-			-DINSTALL_C_EXAMPLES=OFF \
-			-DINSTALL_PYTHON_EXAMPLES=OFF \
-			-DLIBRARY_OUTPUT_PATH="$OPENCV_INSTALL"/lib \
-			-DOPENCV_BUILD_3RDPARTY_LIBS=TRUE \
-			-DOPENCV_CONFIG_FILE_INCLUDE_DIR=./ \
-			-DOPENCV_EXTRA_C_FLAGS=-fPIC \
-			-DOPENCV_EXTRA_C_FLAGS_DEBUG= \
-			-DOPENCV_EXTRA_C_FLAGS_RELEASE= \
-			-DOPENCV_EXTRA_EXE_LINKER_FLAGS= \
-			-DOPENCV_EXTRA_EXE_LINKER_FLAGS_DEBUG= \
-			-DOPENCV_EXTRA_EXE_LINKER_FLAGS_RELEASE= \
-			-DOPENCV_WARNINGS_ARE_ERRORS=OFF \
-			-DPYTHON_PACKAGES_PATH= \
-			-DUSE_FAST_MATH=OFF \
-			-DUSE_OMIT_FRAME_POINTER=OFF \
-			-DUSE_PRECOMPILED_HEADERS=OFF \
-			-DWITH_1394=OFF \
-			-DWITH_CUDA=OFF \
-			-DWITH_EIGEN=OFF \
-			-DWITH_FFMPEG=OFF \
-			-DWITH_GSTREAMER=OFF \
-			-DWITH_GTK=OFF \
-			-DWITH_IPP=OFF \
-			-DWITH_JASPER=ON \
-			-DWITH_JPEG=ON \
-			-DWITH_OPENEXR=OFF \
-			-DWITH_OPENNI=OFF \
-			-DWITH_PNG=ON \
-			-DWITH_PVAPI=OFF \
-			-DWITH_QT=OFF \
-			-DWITH_QT_OPENGL=OFF \
-			-DWITH_TBB=OFF \
-			-DWITH_TIFF=ON \
-			-DWITH_UNICAP=OFF \
-			-DWITH_V4L=OFF \
-			-DWITH_XIMEA=OFF \
-			-DWITH_XINE=OFF
-		run make -j$JOBS install
+		if [ "$OS" == "windows" ]; then
+			run touch 3rdparty/ffmpeg/opencv_ffmpeg.dll
+			run "$CMAKE_INSTALL"/bin/cmake \
+				-DBUILD_DOCS=OFF \
+				-DBUILD_EXAMPLES=OFF \
+				-DBUILD_SHARED_LIBS=OFF \
+				-DBUILD_TESTS=OFF \
+				-DBUILD_WITH_STATIC_CRT=ON \
+				-DCMAKE_BUILD_TYPE=Release \
+				-DCMAKE_INSTALL_PREFIX="$WD/opencv" \
+				-DWITH_CUDA=OFF \
+				-G "$VSCMAKE"
+			run msbuild.exe /maxcpucount:$JOBS OpenCV.sln //p:Configuration=Release
+			if [ $VSVERSION -eq 9 ]; then
+				run msbuild.exe /maxcpucount:$JOBS INSTALL.vcproj //p:Configuration=Release
+			elif [ $VSVERSION -eq 10 ]; then
+				run msbuild.exe /maxcpucount:$JOBS INSTALL.vcxproj //p:Configuration=Release
+			fi
+			run rm "$OPENCV_INSTALL"/bin/opencv_ffmpeg.dll
+		else
+			# Adding the following option:
+			#   -DEXECUTABLE_OUTPUT_PATH="$OPENCV_INSTALL"/bin
+			# to the CMake call leads to an error during the build
+			# with 'opencv_traincascade' executable not being created.
+			# It seems like a bug in OpenCV CMake script.
+			run "$CMAKE_INSTALL"/bin/cmake \
+				-DBUILD_DOCS=OFF \
+				-DBUILD_EXAMPLES=OFF \
+				-DBUILD_NEW_PYTHON_SUPPORT=OFF \
+				-DBUILD_PACKAGE=OFF \
+				-DBUILD_SHARED_LIBS=OFF \
+				-DBUILD_TESTS=OFF \
+				-DBUILD_WITH_DEBUG_INFO=OFF \
+				-DCMAKE_BACKWARDS_COMPATIBILITY=2.8.2 \
+				-DCMAKE_BUILD_TYPE=Release \
+				-DCMAKE_CONFIGURATION_TYPES=Release \
+				-DCMAKE_INSTALL_PREFIX="$OPENCV_INSTALL" \
+				-DCMAKE_VERBOSE=OFF \
+				-DENABLE_PROFILING=OFF \
+				-DENABLE_SOLUTION_FOLDERS=OFF \
+				-DENABLE_SSE=OFF \
+				-DENABLE_SSE2=OFF \
+				-DENABLE_SSE3=OFF \
+				-DENABLE_SSE41=OFF \
+				-DENABLE_SSE42=OFF \
+				-DENABLE_SSSE3=OFF \
+				-DINSTALL_C_EXAMPLES=OFF \
+				-DINSTALL_PYTHON_EXAMPLES=OFF \
+				-DLIBRARY_OUTPUT_PATH="$OPENCV_INSTALL"/lib \
+				-DOPENCV_BUILD_3RDPARTY_LIBS=TRUE \
+				-DOPENCV_CONFIG_FILE_INCLUDE_DIR=./ \
+				-DOPENCV_EXTRA_C_FLAGS=-fPIC \
+				-DOPENCV_EXTRA_C_FLAGS_DEBUG= \
+				-DOPENCV_EXTRA_C_FLAGS_RELEASE= \
+				-DOPENCV_EXTRA_EXE_LINKER_FLAGS= \
+				-DOPENCV_EXTRA_EXE_LINKER_FLAGS_DEBUG= \
+				-DOPENCV_EXTRA_EXE_LINKER_FLAGS_RELEASE= \
+				-DOPENCV_WARNINGS_ARE_ERRORS=OFF \
+				-DPYTHON_PACKAGES_PATH= \
+				-DUSE_FAST_MATH=OFF \
+				-DUSE_OMIT_FRAME_POINTER=OFF \
+				-DUSE_PRECOMPILED_HEADERS=OFF \
+				-DWITH_1394=OFF \
+				-DWITH_CUDA=OFF \
+				-DWITH_EIGEN=OFF \
+				-DWITH_FFMPEG=OFF \
+				-DWITH_GSTREAMER=OFF \
+				-DWITH_GTK=OFF \
+				-DWITH_IPP=OFF \
+				-DWITH_JASPER=ON \
+				-DWITH_JPEG=ON \
+				-DWITH_OPENEXR=OFF \
+				-DWITH_OPENNI=OFF \
+				-DWITH_PNG=ON \
+				-DWITH_PVAPI=OFF \
+				-DWITH_QT=OFF \
+				-DWITH_QT_OPENGL=OFF \
+				-DWITH_TBB=OFF \
+				-DWITH_TIFF=ON \
+				-DWITH_UNICAP=OFF \
+				-DWITH_V4L=OFF \
+				-DWITH_XIMEA=OFF \
+				-DWITH_XINE=OFF
+			run make -j$JOBS install
+		fi
 		run cp "$OPENCV_INSTALL"/share/OpenCV/3rdparty/lib/* "$OPENCV_INSTALL"/lib
 		run cd $WD
 		run rm -rf "$OPENCV_COMPILE"
