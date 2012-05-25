@@ -930,6 +930,8 @@ EOF
 		prepare $OPENSSL_SRCFILE "$OPENSSL_COMPILE" $OPENSSL_SRCBASE $OPENSSL_SRCSITE $OPENSSL_SRCPATH
 		run cd "$OPENSSL_COMPILE"
 		if [ "$OS" == "windows" ]; then
+			run wget http://$LOADER_SRCSITE$LOADER_SRCPATH/patches/openssl-1.0.0f-windows.patch
+			run patch -p1 -i openssl-1.0.0f-windows.patch
 			export PATH=$PATH:"$WD/nasm/bin"
 			run perl Configure VC-WIN32 --prefix="$OPENSSL_INSTALL" --openssldir="$OPENSSL_INSTALL"/share
 			run cmd /c "ms\do_nasm.bat"
