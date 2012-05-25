@@ -1201,6 +1201,8 @@ YASM_SRCSITE=www.tortall.net
 # Declare variables related to Boost libraries.
 BOOST_VERSION=1.47.0
 BOOST_COMPILE="$WD"/boost-src
+BOOST_INCLUDE=boost-${BOOST_VERSION//./_}
+BOOST_INCLUDE=${BOOST_INCLUDE%_*}
 BOOST_INSTALL="$WD"/boost
 BOOST_SRCBASE=boost_${BOOST_VERSION//./_}
 BOOST_SRCFILE=$BOOST_SRCBASE.tar.bz2
