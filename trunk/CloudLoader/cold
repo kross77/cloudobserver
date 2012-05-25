@@ -981,14 +981,25 @@ EOF
 	nextStage "Building Cloud Client application"
 	run cd "$CLOUDCLIENT_COMPILE"
 	if [ ! -e $CLOUDCLIENT_PREMAKE ]; then
-		cat > $CLOUDCLIENT_PREMAKE << EOF
+		if [ "$OS" == "windows" ]; then
+			cat > $CLOUDCLIENT_PREMAKE << EOF
+"$PREMAKE_INSTALL"/bin/premake4 --os=$OS --BoostLibsPath="$BOOST_INSTALL"/lib --FFmpegLibsPath="$FFMPEG_INSTALL"/lib --OpenALLibsPath="$OPENAL_INSTALL"/lib --OpenCVLibsPath="$OPENCV_INSTALL"/lib --BoostIncludesPath="$BOOST_INSTALL"/include/$BOOST_INCLUDE --FFmpegIncludesPath="$FFMPEG_INSTALL"/include --OpenALIncludesPath="$OPENAL_INSTALL"/include --OpenCVIncludesPath="$OPENCV_INSTALL"/include --platform=x32 $VSPREMAKE
+EOF
+		else
+			cat > $CLOUDCLIENT_PREMAKE << EOF
 "$PREMAKE_INSTALL"/bin/premake4 --os=$OS --BoostLibsPath="$BOOST_INSTALL"/lib --FFmpegLibsPath="$FFMPEG_INSTALL"/lib --OpenALLibsPath="$OPENAL_INSTALL"/lib --OpenCVLibsPath="$OPENCV_INSTALL"/lib --BoostIncludesPath="$BOOST_INSTALL"/include --FFmpegIncludesPath="$FFMPEG_INSTALL"/include --OpenALIncludesPath="$OPENAL_INSTALL"/include --OpenCVIncludesPath="$OPENCV_INSTALL"/include --platform=x32 gmake
 EOF
+		fi
 		run chmod u+x ./$CLOUDCLIENT_PREMAKE
 	fi
 	run ./$CLOUDCLIENT_PREMAKE
-	run cd projects/$OS-gmake
-	run make -j$JOBS config=releasestatic
+	if [ "$OS" == "windows" ]; then
+		run cd projects/$OS-$VSPREMAKE
+		run msbuild.exe /maxcpucount:$JOBS CloudClient.sln //p:Configuration=ReleaseStatic
+	else
+		run cd projects/$OS-gmake
+		run make -j$JOBS config=releasestatic
+	fi
 	run cd $WD
 	stageOK
 
