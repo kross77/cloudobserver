@@ -965,13 +965,13 @@ EOF
 		stageOK
 	fi
 
-	# Checkout Cloud Client application source code if necessary.
+	# Download Cloud Client application source code if necessary.
 	if [ ! -d "$CLOUDCLIENT_COMPILE" ]; then
-		nextStage "Checking out Cloud Client application source code"
+		nextStage "Downloading Cloud Client application source code"
 		if [ "$OS" == "windows" ]; then
-			run "$SUBVERSION_INSTALL"/bin/svn checkout https://$CLOUDCLIENT_SRCSITE$CLOUDCLIENT_SRCPATH "$CLOUDCLIENT_COMPILE"
+			run "$SUBVERSION_INSTALL"/bin/svn export https://$CLOUDCLIENT_SRCSITE$CLOUDCLIENT_SRCPATH "$CLOUDCLIENT_COMPILE"
 		else
-			run svn checkout https://$CLOUDCLIENT_SRCSITE$CLOUDCLIENT_SRCPATH "$CLOUDCLIENT_COMPILE"
+			run svn export https://$CLOUDCLIENT_SRCSITE$CLOUDCLIENT_SRCPATH "$CLOUDCLIENT_COMPILE"
 			run rm "$CLOUDCLIENT_COMPILE"/src/3rdparty/ffmpeg/inttypes.h
 		fi
 		stageOK
@@ -1016,10 +1016,10 @@ EOF
 	run rm -rf "$CLOUDCLIENT_COMPILE"
 	stageOK
 
-	# Checkout Cloud Server application source code if necessary.
+	# Download Cloud Server application source code if necessary.
 	if [ ! -d "$CLOUD_COMPILE" ]; then
-		nextStage "Checking out Cloud Server application source code"
-		run svn checkout https://$CLOUD_SRCSITE$CLOUD_SRCPATH "$CLOUD_COMPILE"
+		nextStage "Downloading Cloud Server application source code"
+		run svn export https://$CLOUD_SRCSITE$CLOUD_SRCPATH "$CLOUD_COMPILE"
 		stageOK
 	fi
 
