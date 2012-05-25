@@ -701,7 +701,7 @@ build()
 		prepare $OPENAL_SRCFILE "$OPENAL_COMPILE" $OPENAL_SRCBASE $OPENAL_SRCSITE $OPENAL_SRCPATH
 		run cd "$OPENAL_COMPILE"
 		if [ "$OS" == "windows" ]; then
-			run patch -p1 << EOF
+			run patch -p1 << "EOF"
 diff -cr original/Alc/ALc.c modified/Alc/ALc.c
 *** original/Alc/ALc.c	Wed Feb  9 19:52:20 2011
 --- modified/Alc/ALc.c	Sat Aug  6 15:28:10 2011
