@@ -19,6 +19,8 @@ public:
 
 	virtual void service_call(boost::shared_ptr<boost::asio::ip::tcp::socket>, boost::shared_ptr<http_request>, boost::shared_ptr<shared>) = 0;
 
+	virtual void serialize(boost::shared_ptr<boost::asio::ip::tcp::socket>, boost::shared_ptr<http_request> old_http_request, boost::shared_ptr<shared>, boost::shared_ptr<http_request> new_http_request){};
+
 	virtual service_check_output make_service_check( service_check_input serialized_data)
 	{
 		boost::shared_ptr<shared> shared_data (new shared(), boost::bind(&pointer_utils::delete_ptr<shared>, _1));
@@ -74,5 +76,62 @@ public:
 		out.shared_data = shared_data->serialize();
 		return out;
 	}
+
+	virtual service_call_input do_serialize( service_call_input serialized_data) {
+
+		boost::shared_ptr<boost::asio::ip::tcp::socket> socket = serialized_data.socket;
+
+		boost::shared_ptr<shared> shared_data (new shared(), boost::bind(&pointer_utils::delete_ptr<shared>, _1));
+		shared_data->deserialize(serialized_data.shared_data);
+
+		boost::shared_ptr<http_request> request (new http_request(),  boost::bind(&pointer_utils::delete_ptr<http_request>, _1));
+		
+		std::string http_request_str = shared_data->get("http_request");
+
+		if(!http_request_str.empty())
+			request->deserialize_base(shared_data->get("http_request"));
+		else
+			shared_data->post("http_request", request->serialize_base(), true);
+
+		boost::shared_ptr<http_request> new_request (new http_request(),  boost::bind(&pointer_utils::delete_ptr<http_request>, _1));
+		
+		std::string new_http_request_str = shared_data->get("new_http_request");
+
+		if(!new_http_request_str.empty())
+			new_request->deserialize_base(new_http_request_str);
+		else
+			shared_data->post("new_http_request", new_request->serialize_base(), true);
+
+		try
+		{
+			serialize(socket, request, shared_data, new_request);
+		}
+		catch(std::exception &e)
+		{
+			boost::shared_ptr<std::string> err(new std::string(""), boost::bind(&pointer_utils::delete_ptr<std::string>, _1));
+			*err = std::string( e.what());
+			service_call_input out;
+			out.error_data = err;
+			return out;
+		}
+		service_call_input out;
+		shared_data->update("http_request", request->serialize_base());
+		shared_data->update("new_http_request", new_request->serialize_base());
+		out.shared_data = shared_data->serialize();
+		return out;
+	}
+
+	void set_network(boost::shared_ptr<network_interface> network){	this->network = network; }
+	void network_serialise( boost::shared_ptr<boost::asio::ip::tcp::socket> socket,  boost::shared_ptr<shared> shared_data)
+	{
+		 boost::shared_ptr<std::string> shared_data_str(new std::string(""), boost::bind(&base_service_utils::delete_ptr<std::string>, _1));
+		 shared_data_str = shared_data->serialize();
+		 boost::shared_ptr<std::string> shared_data_result_str(new std::string(""), boost::bind(&base_service_utils::delete_ptr<std::string>, _1));
+		 shared_data_result_str = network->serialise(socket, shared_data_str);
+		 shared_data->deserialize(shared_data_result_str);
+	}
+
+	private:
+	boost::shared_ptr<network_interface> network;
 };
 #endif // HTTP_SERVICE_HPP

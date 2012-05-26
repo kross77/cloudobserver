@@ -2,6 +2,8 @@
 
 server::server(boost::property_tree::ptree config) 
 {
+	this->description = boost::shared_ptr<server_utils::server_description>(new server_utils::server_description());
+
 	#ifdef DEBUG
 		warning = new log_util(1, true, true, "log.txt");
 		info = new log_util(1, true, true, "log.txt");
@@ -19,14 +21,18 @@ server::server(boost::property_tree::ptree config)
 	warning->use_time();
 
 	tread_util = new threading_utils();
-	this->description.server_root_path = boost::filesystem::current_path();
+	this->description->server_root_path = boost::filesystem::current_path();
 
+	*description = server_utils::parse_config(config, start_up_info, start_up_info, start_up_info);
 
-	description = server_utils::parse_config(config, start_up_info, start_up_info, start_up_info);
+	server_net = boost::shared_ptr<server_network>(new server_network(description) );
+	BOOST_FOREACH(int i, this->description->services_ids){
+		this->description->service_map[i]->service_ptr->set_network(server_net);
+	}
 
 	this->acceptor_thread = new boost::thread(&server::acceptor_loop, this);
 
-	*(info) << "server created on port: " << description.port << log_util::endl;
+	*(info) << "server created on port: " << description->port << log_util::endl;
 }
 
 server::~server()
@@ -47,7 +53,7 @@ void server::acceptor_loop(){
 	//Move UAC into default services
 
 	boost::asio::io_service io_service;
-	int m_nPort = description.port;
+	int m_nPort = description->port;
 	boost::asio::ip::tcp::acceptor acceptor(io_service, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), m_nPort));
 	*(info) << "Waiting for connection..." << std::endl << log_util::endl;
 	while(true)
@@ -112,7 +118,7 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 			shared_data->post("http_request", request->serialize_base(), true);
 
 			boost::shared_ptr<http_response> response = boost::make_shared<http_response>();
-			if (request->url == description.server_service_url)
+			if (request->url == description->server_service_url)
 			{
 				server_service_call(socket, request, response);
 				continue;
@@ -121,9 +127,9 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 			std::list<int>::iterator order_it;
 			boost::shared_ptr<server_utils::service_container> service_cont;
 
-			for (order_it=description.services_ids.begin(); order_it!=description.services_ids.end(); ++order_it)
+			for (order_it=description->services_ids.begin(); order_it!=description->services_ids.end(); ++order_it)
 			{
-				service_cont = description.service_map[*order_it];
+				service_cont = description->service_map[*order_it];
 				boost::shared_ptr<base_service> requested_service = service_cont->service_ptr;
 
 				service_check_input check_data;
@@ -160,7 +166,7 @@ void server::request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socke
 					}
 					if (*(check_data_out.call_me_as) == "assistant")
 					{
-						order_it=description.services_ids.begin();
+						order_it=description->services_ids.begin();
 					}
 					if (*(check_data_out.call_me_as) == "executor")
 					{
@@ -193,7 +199,7 @@ void server::server_services_list(boost::shared_ptr<boost::asio::ip::tcp::socket
 	std::ostringstream user_files_stream;
 	user_files_stream << "[";
 	typedef std::map<int, boost::shared_ptr<server_utils::service_container> >  int_map;
-	BOOST_FOREACH( int_map::value_type p, description.service_map )
+	BOOST_FOREACH( int_map::value_type p, description->service_map )
 	{
 		boost::shared_lock<boost::shared_mutex> lock_r(p.second->edit_mutex_);
 
