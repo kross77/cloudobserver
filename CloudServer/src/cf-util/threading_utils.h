@@ -7,6 +7,7 @@
 #include <set>
 #include <vector>
 #include <boost/thread.hpp>
+#include <boost/unordered_map.hpp>
 
 /*!
  *  \addtogroup Utilities
@@ -68,7 +69,7 @@ public:
 
 	/*!
 	 * \brief returns value for given key
-	 * strictly std::map oriented
+	 * strictly std::map and boost::unordered_map  oriented
 	 * uses threading_utils class mutex fro thread safety \n
 	 * uses [] to return variable
 	 *
@@ -82,6 +83,27 @@ public:
 	 */
 	template <class first_variable_T,class second_variable_T, class iterator_T>
 	second_variable_T safe_search_in_map(first_variable_T variable, std::map<first_variable_T, second_variable_T> &into)
+	{
+		boost::mutex::scoped_lock lock(mut);
+		return into[variable];
+	}
+
+	/*!
+	 * \brief returns value for given key
+	 * strictly std::map and boost::unordered_map oriented
+	 * uses threading_utils class mutex fro thread safety \n
+	 * uses [] to return variable
+	 *
+	 * \n FullName:  threading_utils<first_variable_T, second_variable_T, iterator_T>::safe_search_in_map
+	 * \n Access:    public  
+	 *
+	 * \param variable first_variable_T
+	 * \param  into std::map<first_variable_T , second_variable_T> & 
+	 * \return second_variable_T 
+	 *
+	 */
+	template <class first_variable_T,class second_variable_T, class iterator_T>
+	second_variable_T safe_search_in_map(first_variable_T variable, boost::unordered_map<first_variable_T, second_variable_T> &into)
 	{
 		boost::mutex::scoped_lock lock(mut);
 		return into[variable];
