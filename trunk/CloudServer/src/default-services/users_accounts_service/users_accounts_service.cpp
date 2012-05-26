@@ -3,7 +3,7 @@
 users_accounts_service::users_accounts_service()
 {
 	threading_util = new threading_utils();
-
+	sid_map_threading_util = boost::shared_ptr<threading_utils>(new threading_utils());
 	is_db_set = false;
 	is_lu_set = false;
 	//Grammar
@@ -36,6 +36,8 @@ users_accounts_service::users_accounts_service()
 	command_create_users_table = "CREATE TABLE IF NOT EXISTS users (email varchar(100) UNIQUE NOT NULL primary key, pass varchar(100))";
 	command_create_user =  "INSERT INTO users (email, pass) VALUES (:user_name, :pass)";
 	command_find_user = "SELECT email, pass FROM users WHERE email=:email";
+	
+	service_session_id ="service_session_id";
 
 }
 
@@ -60,7 +62,7 @@ void users_accounts_service::service_call(boost::shared_ptr<boost::asio::ip::tcp
 	boost::shared_ptr<http_response> service_response(new http_response(), boost::bind(&pointer_utils::delete_ptr<http_response>, _1));
 
 	map_ss::iterator has_email = user_request->headers.find(tag_header_email);
-
+	
 	if (has_email != headers_end)
 	{
 		user_request->headers.erase(has_email);
@@ -86,7 +88,6 @@ void users_accounts_service::service_call(boost::shared_ptr<boost::asio::ip::tcp
 			std::map<std::string, std::string>::iterator it =  user_request->cookies.find(tag_cookie_name);	
 			if (it != user_request->cookies.end())
 				user_request->cookies.erase(it);
-
 
 			map_ss::iterator has_update = user_request->arguments.find(tag_update);
 			if ( has_update != arguments_end)
@@ -497,6 +498,22 @@ std::string users_accounts_service::service_check( boost::shared_ptr<http_reques
 	typedef std::map<std::string, std::string> map_ss;
 	map_ss::iterator it;
 
+	it = request->headers.find(service_session_id);
+
+	if (it != request->headers.end())
+	{
+		std::string user_name = sid_map_threading_util->safe_search_in_map<std::string, std::string, boost::unordered_map<std::string, std::string>::iterator >(request->headers[service_session_id], service_calls_map);
+		if(user_name.empty())
+		{
+			sid_map_threading_util->safe_erase_in_map<std::string, boost::unordered_map<std::string,std::string> >(request->headers[service_session_id], service_calls_map);
+			return "executor";
+		}
+
+		shared_data->post("user_name", http_utils::url_decode(user_name));
+		sid_map_threading_util->safe_erase_in_map<std::string, boost::unordered_map<std::string,std::string> >(request->headers[service_session_id], service_calls_map);
+		return "assistant";
+	}
+
 	it = request->cookies.find(tag_cookie_name);
 	if (it != request->cookies.end())
 	{
@@ -517,6 +534,17 @@ std::string users_accounts_service::service_check( boost::shared_ptr<http_reques
 	}
 
 	return "not for me";
+}
+
+void users_accounts_service::serialize(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> old_http_request, boost::shared_ptr<shared> shared_data, boost::shared_ptr<http_request> new_http_request)
+{
+	std::string user_name = (*shared_data).get("user_name");
+	if( !user_name.empty()){
+		std::string request_id = general_utils::get_sha256(http_utils::url_encode(user_name + boost::posix_time::to_iso_extended_string(boost::posix_time::second_clock::local_time())));
+		sid_map_threading_util->safe_insert<std::pair<std::string,std::string>, boost::unordered_map<std::string,std::string> >(std::make_pair(request_id, user_name), service_calls_map);
+		new_http_request->headers[service_session_id] = request_id;
+	}
+
 }
 
 BOOST_EXTENSION_TYPE_MAP_FUNCTION

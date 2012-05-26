@@ -17,7 +17,7 @@
 #include <boost/date_time.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/algorithm/string.hpp>    
-
+#include <boost/unordered_map.hpp>
 // Boost Extension
 #include <boost/extension/extension.hpp>
 #include <boost/extension/factory.hpp>
@@ -44,6 +44,7 @@ public:
 	virtual void apply_config(boost::shared_ptr<boost::property_tree::ptree> config);
 	virtual void service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request,  boost::shared_ptr<shared> shared_data);
 	virtual std::string service_check( boost::shared_ptr<http_request> request, boost::shared_ptr<shared> shared_data );
+	virtual void serialize(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> old_http_request, boost::shared_ptr<shared> shared_data, boost::shared_ptr<http_request> new_http_request);
 
 	virtual void start(){}
 	virtual void stop(){}
@@ -68,13 +69,14 @@ private:
 	void start_work_with_lu( std::string lu_path );
 	//User_control variables
 	std::map<std::string,std::string> sessions_map; // session_id to name
+	boost::unordered_map<std::string,std::string> service_calls_map; // service_calls_id to name
 	boost::shared_ptr<sqlite3pp::database> db;
 
 	threading_utils *threading_util;
+	boost::shared_ptr<threading_utils> sid_map_threading_util;
 
 	log_util *lu;
 	
-
 	//Grammar
 	std::string default_db_name;
 	std::string default_lu_path;
@@ -104,6 +106,8 @@ private:
 	std::string tag_recaptcha_remoteip_for_post;
 	std::string tag_recaptcha_privatekey_for_post;
 	std::string tag_recaptcha_response_for_post;
+
+	std::string service_session_id;
 	
 	bool use_recapcha;
 	std::string tag_user_control;
