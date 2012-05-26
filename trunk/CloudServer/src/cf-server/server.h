@@ -25,6 +25,7 @@
 #include <thread_pool.h>
 
 #include "server_utils.h"
+#include "network_impl.h"
 
 class server
 {
@@ -32,7 +33,7 @@ public:
 	server(boost::property_tree::ptree config);
 	~server();
 	void acceptor_loop();
-	server_utils::server_description description;
+	boost::shared_ptr<server_utils::server_description> description;
 private:
 	void request_response_loop(boost::shared_ptr<boost::asio::ip::tcp::socket> socket); //Each request received by server will be sent to a new thread and processed by request_response_loop
 	void user_info(boost::asio::ip::tcp::socket &socket);
@@ -40,6 +41,7 @@ private:
 	void server_service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request, boost::shared_ptr<http_response> response);
 	boost::thread *acceptor_thread;
 	boost::shared_ptr<thread_pool> threads_pool;
+	boost::shared_ptr<network_interface> server_net;
 	int request_max_time;
 
 	threading_utils *tread_util; 

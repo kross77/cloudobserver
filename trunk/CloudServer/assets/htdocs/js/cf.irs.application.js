@@ -39,13 +39,8 @@ function showBox(images, ind) {
 
 function parseArrayForBox(JSON, images) {
 	$.each(JSON, function (index, value) {
-
-		if (value.is_public == 1) {
-			//value.href = ;
-			value.real_href = "./image_renderer.service?action=resize&from_format=" + value.type + "&from_url=" + page_url + value.href + "&to_format=jpg&w=" + $(window).width() + "&h=" + $(window).height() + "&shrink=" + shrink.toString();
-		} else {
-			value.real_href = value.href;
-		}
+		value.real_href = "./image_renderer.service?action=resize&from_format=" + value.type + "&from_url=" + page_url + value.href + "&to_format=jpg&w=" + $(window).width() + "&h=" + $(window).height() + "&shrink=" + shrink.toString();
+		
 		images.push({
 			'href': value.real_href,
 			'title': value.title,

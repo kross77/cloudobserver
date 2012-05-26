@@ -161,7 +161,7 @@ bool config(std::string config_file_path)
 
 void print_services()
 {
-	BOOST_FOREACH(std::string const si, server_utils::get_services_names(s->description))
+	BOOST_FOREACH(std::string const si, server_utils::get_services_names(*(s->description)))
 	{
 		std::cout << si << std::endl;
 	}
@@ -230,7 +230,7 @@ void service_commandor(std::string name)
 {
 	try
 	{
-		boost::shared_ptr<base_service> one_service = server_utils::get_service_by_name(name, s->description);
+		boost::shared_ptr<base_service> one_service = server_utils::get_service_by_name(name, *(s->description));
 		//std::cout << "service options are: `get state`, `restart`, `stop`, `start`" << std::endl;
 		std::cout << "You can change service configuration. to get into service configuration menu enter `config`" << std::endl;
 		std::string var;
