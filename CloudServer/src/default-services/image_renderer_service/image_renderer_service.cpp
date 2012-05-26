@@ -315,7 +315,17 @@ void image_renderer_service::service_call(boost::shared_ptr<boost::asio::ip::tcp
 				{
 					shrink = true;
 				}
+
+				//todo: shrink into one http_util function
+				//boost::shared_ptr<boost::asio::ip::tcp::socket> s (socket, boost::bind(&base_service_utils::delete_ptr<boost::asio::ip::tcp::socket>, _1));
+				
+				network_serialise(socket, shared_data);
+				
 				http_request request_to_external_server;
+
+				std::string req = shared_data->get("new_http_request");
+				request_to_external_server.deserialize_base(req);
+
 				request_to_external_server.headers.insert(request->headers.begin(), request->headers.end());
 				request_to_external_server.headers["Connection"] = "close";
 				request_to_external_server.headers["Accept-Encoding"] = "none";
