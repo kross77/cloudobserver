@@ -441,41 +441,33 @@ status()
 
 stop()
 {
-	COUNTER=0
 	CLOUD_PID=$(ps -fe | grep -F 'CloudServer' | grep -v -F 'grep' | awk '{ print $2 }')
-	if [[ "$CLOUD_PID" -ne "" ]]; then
-		COUNTER=$[COUNTER+1]
-	fi
-	
 	ROBOTALPHA_PID=$(ps -fe | grep -F 'RobotAlpha' | grep -v -F 'grep' | awk '{ print $2 }')
-	if [[ "$ROBOTALPHA_PID" -ne "" ]]; then
-		COUNTER=$[COUNTER+1]
-	fi
-	
 	ROBOTBETA_PID=$(ps -fe | grep -F 'RobotBeta' | grep -v -F 'grep' | awk '{ print $2 }')
-	if [[ "$ROBOTBETA_PID" -ne "" ]]; then
-		COUNTER=$[COUNTER+1]
-	fi
 	
+	COUNTER=0
+	if [ "$CLOUD_PID" -eq "$CLOUD_PID" ] 2>/dev/null; then COUNTER=$[COUNTER+1]; fi
+	if [ "$ROBOTALPHA_PID" -eq "$ROBOTALPHA_PID" ] 2>/dev/null; then COUNTER=$[COUNTER+1]; fi
+	if [ "$ROBOTBETA_PID" -eq "$ROBOTBETA_PID" ] 2>/dev/null; then COUNTER=$[COUNTER+1]; fi
 	setNumberOfStages $COUNTER
 	
-	if [[ "$ROBOTALPHA_PID" -ne "" || "$ROBOTBETA_PID" -ne "" ]]; then
+	if [ "$ROBOTALPHA_PID" -eq "$ROBOTALPHA_PID" -o "$ROBOTBETA_PID" -eq "$ROBOTBETA_PID" ] 2>/dev/null; then
 		echo -e "${CYAN}Stopping demonstration robots...${NORMAL}"
 	fi
 	
-	if [[ "$ROBOTALPHA_PID" -ne "" ]]; then
+	if [ "$ROBOTALPHA_PID" -eq "$ROBOTALPHA_PID" ] 2>/dev/null; then
 		nextStage "Stopping RobotAlpha"
 		kill $ROBOTALPHA_PID
 		stageOK
 	fi
 	
-	if [[ "$ROBOTBETA_PID" -ne "" ]]; then
+	if [ "$ROBOTBETA_PID" -eq "$ROBOTBETA_PID" ] 2>/dev/null; then
 		nextStage "Stopping RobotBeta"
 		kill $ROBOTBETA_PID
 		stageOK
 	fi
 	
-	if [[ "$CLOUD_PID" -ne "" ]]; then
+	if [ "$CLOUD_PID" -eq "$CLOUD_PID" ] 2>/dev/null; then
 		echo -e "${CYAN}Stopping the server...${NORMAL}"
 	
 		nextStage "Stopping Cloud Server"
