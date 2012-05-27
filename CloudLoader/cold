@@ -149,6 +149,9 @@ deploy()
 
 maintain()
 {
+	if [ "$OS" == "windows" ]; then
+		cmd /c 'title Cloud Observer Maintenance Mode'
+	fi
 	echo -e "${CYAN}Entering the maintenance mode...${NORMAL}"
 	
 	LOCAL_REV=0
