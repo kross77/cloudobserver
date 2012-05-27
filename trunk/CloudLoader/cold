@@ -43,8 +43,8 @@ nextStage() # 1 - stage message
 		COLS=$(tput cols)
 	fi
 	STAGE=$[STAGE+1]
-	STAGE_MSG="${YELLOW}[$STAGE/$STAGES] ${BLUE}${BOLD}$1...${NORMAL}"
-	let STAGE_COL=$COLS-${#STAGE_MSG}+${#YELLOW}+${#BLUE}+${#BOLD}+${#NORMAL}
+	STAGE_MSG="${YELLOW}[$STAGE/$STAGES] ${NORMAL}${BOLD}$1...${NORMAL}"
+	let STAGE_COL=$COLS-${#STAGE_MSG}+${#YELLOW}+${#NORMAL}+${#BOLD}+${#NORMAL}
 	echo -ne "$STAGE_MSG"
 }
 
