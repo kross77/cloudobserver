@@ -95,7 +95,11 @@ queryLatestRevision()
 
 auto()
 {
-	nohup ./$(basename "$0") maintain >& /dev/null &
+	if [ "$OS" == "windows" ]; then
+		maintain
+	else
+		nohup ./$(basename "$0") maintain >& /dev/null &
+	fi
 }
 
 # Perform a check for a new version of this script.
