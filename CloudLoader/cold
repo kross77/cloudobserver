@@ -84,7 +84,11 @@ queryLatestRevision()
 {
 	export LC_MESSAGES=C
 	LOADER_URL=http://$LOADER_SRCSITE$LOADER_SRCPATH/$LOADER_SRCFILE
-	LATEST_REVISION=$(svn info $LOADER_URL | grep '^Last Changed Rev:')
+	if [ "$OS" == "windows" ]; then
+		LATEST_REVISION=$("$SUBVERSION_INSTALL"/bin/svn info $LOADER_URL | grep '^Last Changed Rev:')
+	else
+		LATEST_REVISION=$(svn info $LOADER_URL | grep '^Last Changed Rev:')
+	fi
 	LATEST_REVISION=${LATEST_REVISION#'Last Changed Rev: '}
 	export -n LC_MESSAGES
 }
@@ -168,7 +172,11 @@ maintain()
 	
 	while true; do
 		echo -e "${CYAN}Checking for new revision...${NORMAL}"
-		REMOTE_REV=$(svn info $REMOTE_REPO | grep '^Revision:' | awk '{ print $2 }')
+		if [ "$OS" == "windows" ]; then
+			REMOTE_REV=$("$SUBVERSION_INSTALL"/bin/svn info $REMOTE_REPO | grep '^Revision:' | awk '{ print $2 }')
+		else
+			REMOTE_REV=$(svn info $REMOTE_REPO | grep '^Revision:' | awk '{ print $2 }')
+		fi
 		if [[ $REMOTE_REV -ne $LOCAL_REV ]]; then
 			echo -e "${RED}Latest revision: ${BLUE}${BOLD}$REMOTE_REV${NORMAL}"
 			./$LOADER "check-for-updates"
@@ -252,7 +260,11 @@ selfUpdate() # 1 - restart after the update, 2 - arguments to be passed on resta
 	
 	setNumberOfStages 7
 	nextStage "Downloading the latest version"
-	svn export $LOADER_URL $SELF.new >& /dev/null
+	if [ "$OS" == "windows" ]; then
+		"$SUBVERSION_INSTALL"/bin/svn export $LOADER_URL $SELF.new >& /dev/null
+	else
+		svn export $LOADER_URL $SELF.new >& /dev/null
+	fi
 	if [ $? -ne 0 ]; then
 		stageFailed
 		echo -e "${RED}Update failed.${NORMAL}"
