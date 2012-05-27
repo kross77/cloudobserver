@@ -419,14 +419,25 @@ start()
 
 status()
 {
-	CLOUD_PID=$(ps -fe | grep -F 'CloudServer' | grep -v -F 'grep' | awk '{ print $2 }')
-	ROBOTALPHA_PID=$(ps -fe | grep -F 'RobotAlpha' | grep -v -F 'grep' | awk '{ print $2 }')
-	ROBOTBETA_PID=$(ps -fe | grep -F 'RobotBeta' | grep -v -F 'grep' | awk '{ print $2 }')
-	COLD_PID=$(ps -fe | grep -F 'cold' | grep -v -F 'grep' | grep -v -F 'status')
+	if [ "$OS" == "windows" ]; then
+		CLOUD_PID=$(tasklist //FI "WINDOWTITLE eq Cloud Server" //NH | awk '{ print $2 }' 2>/dev/null)
+		ROBOTALPHA_PID=$(tasklist //FI "WINDOWTITLE eq Cloud Client - RobotAlpha" //NH | awk '{ print $2 }' 2>/dev/null)
+		ROBOTBETA_PID=$(tasklist //FI "WINDOWTITLE eq Cloud Client - RobotBeta" //NH | awk '{ print $2 }' 2>/dev/null)
+		COLD_PID=$(tasklist //FI "WINDOWTITLE eq Cloud Observer Maintenance Mode*" //NH | awk '{ print $2 }' 2>/dev/null)
+	else
+		CLOUD_PID=$(ps -fe | grep -F 'CloudServer' | grep -v -F 'grep' | awk '{ print $2 }')
+		ROBOTALPHA_PID=$(ps -fe | grep -F 'RobotAlpha' | grep -v -F 'grep' | awk '{ print $2 }')
+		ROBOTBETA_PID=$(ps -fe | grep -F 'RobotBeta' | grep -v -F 'grep' | awk '{ print $2 }')
+		COLD_PID=$(ps -fe | grep -F 'cold' | grep -v -F 'grep' | grep -v -F 'status')
+	fi
 	
 	if [ "$CLOUD_PID" -eq "$CLOUD_PID" ] 2>/dev/null; then
 		echo -e "${CYAN}Cloud Server is up and running:${GREEN}"
-		ps -fe | grep -F 'CloudServer' | grep -v -F 'grep'
+		if [ "$OS" == "windows" ]; then
+			tasklist //FI "WINDOWTITLE eq Cloud Server"
+		else
+			ps -fe | grep -F 'CloudServer' | grep -v -F 'grep'
+		fi
 	else
 		echo -e "${CYAN}Cloud Server is ${RED}not running${CYAN}."
 	fi
@@ -434,7 +445,11 @@ status()
 	
 	if [ "$ROBOTALPHA_PID" -eq "$ROBOTALPHA_PID" ] 2>/dev/null; then
 		echo -e "${CYAN}First demonstration robot (RobotAlpha) is running:${GREEN}"
-		ps -fe | grep -F 'RobotAlpha' | grep -v -F 'grep'
+		if [ "$OS" == "windows" ]; then
+			tasklist //FI "WINDOWTITLE eq Cloud Client - RobotAlpha"
+		else
+			ps -fe | grep -F 'RobotAlpha' | grep -v -F 'grep'
+		fi
 	else
 		echo -e "${CYAN}First demonstration robot (RobotAlpha) is ${RED}not running${CYAN}."
 	fi
@@ -442,7 +457,11 @@ status()
 	
 	if [ "$ROBOTBETA_PID" -eq "$ROBOTBETA_PID" ] 2>/dev/null; then
 		echo -e "${CYAN}Second demonstration robot (RobotBeta) is running:${GREEN}"
-		ps -fe | grep -F 'RobotBeta' | grep -v -F 'grep'
+		if [ "$OS" == "windows" ]; then
+			tasklist //FI "WINDOWTITLE eq Cloud Client - RobotBeta"
+		else
+			ps -fe | grep -F 'RobotBeta' | grep -v -F 'grep'
+		fi
 	else
 		echo -e "${CYAN}Second demonstration robot (RobotBeta) is ${RED}not running${CYAN}."
 	fi
@@ -450,7 +469,11 @@ status()
 	
 	if [ "$COLD_PID" -eq "$COLD_PID" ] 2>/dev/null; then
 		echo -e "${CYAN}Maintenance mode is enabled:${GREEN}"
-		ps -fe | grep -F 'cold' | grep -v -F 'grep' | grep -v -F 'status'
+		if [ "$OS" == "windows" ]; then
+			tasklist //FI "WINDOWTITLE eq Cloud Observer Maintenance Mode*"
+		else
+			ps -fe | grep -F 'cold' | grep -v -F 'grep' | grep -v -F 'status'
+		fi
 	else
 		echo -e "${CYAN}Maintenance mode is ${RED}disabled${CYAN}.${NORMAL}"
 	fi
