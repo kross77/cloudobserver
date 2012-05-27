@@ -10,6 +10,7 @@ ${MAGENTA}Commands:${NORMAL}
    ${YELLOW}auto                 ${BLUE}${BOLD}Run maintenance mode in the background${NORMAL}
    ${YELLOW}build                ${BLUE}${BOLD}Build Cloud Client and Cloud Server applications${NORMAL}
    ${YELLOW}check-for-updates    ${BLUE}${BOLD}Check if a new version of this script is available${NORMAL}
+   ${YELLOW}devbuild             ${BLUE}${BOLD}Same as '--development build'${NORMAL}
    ${YELLOW}deploy               ${BLUE}${BOLD}Deploy Cloud Client and Cloud Server applications${NORMAL}
    ${YELLOW}help                 ${BLUE}${BOLD}Display this information${NORMAL}
    ${YELLOW}maintain             ${BLUE}${BOLD}Maintain everything up-to-date and running${NORMAL}
@@ -1259,6 +1260,11 @@ do
 			CHECKOUT_SOURCE=true
 			;;
 		--development       )
+			DEVELOPMENT=true
+			;;
+		devbuild          )
+			checkForACommand
+			COMMAND=build
 			DEVELOPMENT=true
 			;;
 		deploy            )
