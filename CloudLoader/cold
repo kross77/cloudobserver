@@ -575,9 +575,10 @@ build()
 		run rm -rf "$CLOUD_COMPILE"
 	fi
 
+	echo -e "${CYAN}Please wait until all components are ready.${NORMAL}"
 	# Build CMake utility if necessary.
 	if [ ! -d "$CMAKE_INSTALL" ]; then
-		nextStage "Building CMake utility"
+		nextStage "CMake utility"
 		prepare $CMAKE_SRCFILE "$CMAKE_COMPILE" $CMAKE_SRCBASE $CMAKE_SRCSITE $CMAKE_SRCPATH
 		run cd "$CMAKE_COMPILE"
 		if [ "$OS" == "windows" ]; then
@@ -596,7 +597,7 @@ build()
 
 	# Build NASM utility if necessary.
 	if [ ! -d "$NASM_INSTALL" -a "$OS" == "windows" ]; then
-		nextStage "Building NASM utility"
+		nextStage "NASM utility"
 		prepare $NASM_SRCFILE "$NASM_COMPILE" $NASM_SRCBASE $NASM_SRCSITE $NASM_SRCPATH
 		run cd "$NASM_COMPILE"
 		run ./configure --prefix="$NASM_INSTALL"
@@ -608,7 +609,7 @@ build()
 
 	# Build Premake utility if necessary.
 	if [ ! -d "$PREMAKE_INSTALL" ]; then
-		nextStage "Building Premake utility"
+		nextStage "Premake utility"
 		prepare $PREMAKE_SRCFILE "$PREMAKE_COMPILE" $PREMAKE_SRCBASE $PREMAKE_SRCSITE $PREMAKE_SRCPATH
 		if [ "$OS" == "windows" ]; then
 			run cd "$PREMAKE_COMPILE"/build/gmake.windows
@@ -626,14 +627,14 @@ build()
 
 	# Download Subversion utility if necessary.
 	if [ ! -d "$SUBVERSION_INSTALL" -a "$OS" == "windows" ]; then
-		nextStage "Downloading Subversion utility"
+		nextStage "Subversion utility"
 		prepare $SUBVERSION_BINFILE "$SUBVERSION_INSTALL" $SUBVERSION_BINBASE $SUBVERSION_BINSITE $SUBVERSION_BINPATH
 		stageOK
 	fi
 
 	# Build YASM utility if necessary.
 	if [ ! -d "$YASM_INSTALL" ]; then
-		nextStage "Building YASM utility"
+		nextStage "YASM utility"
 		prepare $YASM_SRCFILE "$YASM_COMPILE" $YASM_SRCBASE $YASM_SRCSITE $YASM_SRCPATH
 		run cd "$YASM_COMPILE"
 		run ./configure --prefix="$YASM_INSTALL"
@@ -645,7 +646,7 @@ build()
 
 	# Build Boost libraries if necessary.
 	if [ ! -d "$BOOST_INSTALL" ]; then
-		nextStage "Building Boost libraries"
+		nextStage "Boost libraries"
 		prepare $BOOST_SRCFILE "$BOOST_COMPILE" $BOOST_SRCBASE $BOOST_SRCSITE $BOOST_SRCPATH
 		prepare $ZLIB_SRCFILE "$BOOST_ZLIBSRC" $ZLIB_SRCBASE $ZLIB_SRCSITE $ZLIB_SRCPATH
 		run cd "$BOOST_COMPILE"
@@ -663,7 +664,7 @@ build()
 
 	# Build FFmpeg libraries if necessary.
 	if [ ! -d "$FFMPEG_INSTALL" ]; then
-		nextStage "Building FFmpeg libraries"
+		nextStage "FFmpeg libraries"
 		prepare $FFMPEG_SRCFILE "$FFMPEG_COMPILE" $FFMPEG_SRCBASE $FFMPEG_SRCSITE $FFMPEG_SRCPATH
 		run cd "$FFMPEG_COMPILE"
 		export PATH=$PATH:"$YASM_INSTALL"/bin
@@ -687,7 +688,7 @@ build()
 
 	# Build OpenAL libraries if necessary.
 	if [ ! -d "$OPENAL_INSTALL" ]; then
-		nextStage "Building OpenAL libraries"
+		nextStage "OpenAL libraries"
 		prepare $OPENAL_SRCFILE "$OPENAL_COMPILE" $OPENAL_SRCBASE $OPENAL_SRCSITE $OPENAL_SRCPATH
 		run cd "$OPENAL_COMPILE"
 		if [ "$OS" == "windows" ]; then
@@ -817,7 +818,7 @@ EOF
 
 	# Build OpenCV libraries if necessary.
 	if [ ! -d "$OPENCV_INSTALL" ]; then
-		nextStage "Building OpenCV libraries"
+		nextStage "OpenCV libraries"
 		prepare $OPENCV_SRCFILE "$OPENCV_COMPILE" $OPENCV_SRCBASE $OPENCV_SRCSITE $OPENCV_SRCPATH
 		prepare $ZLIB_SRCFILE "$OPENCV_ZLIBSRC" $ZLIB_SRCBASE $ZLIB_SRCSITE $ZLIB_SRCPATH
 		run cd "$OPENCV_COMPILE"
@@ -916,7 +917,7 @@ EOF
 
 	# Build OpenSSL libraries if necessary.
 	if [ ! -d "$OPENSSL_INSTALL" ]; then
-		nextStage "Building OpenSSL libraries"
+		nextStage "OpenSSL libraries"
 		prepare $OPENSSL_SRCFILE "$OPENSSL_COMPILE" $OPENSSL_SRCBASE $OPENSSL_SRCSITE $OPENSSL_SRCPATH
 		run cd "$OPENSSL_COMPILE"
 		if [ "$OS" == "windows" ]; then
@@ -956,7 +957,7 @@ EOF
 	fi
 
 	# Build Cloud Client application.
-	nextStage "Building Cloud Client application"
+	nextStage "Cloud Client application"
 	if [ ! -d "$CLOUDCLIENT_COMPILE" ]; then
 		if [ "$OS" == "windows" ]; then
 			run "$SUBVERSION_INSTALL"/bin/svn checkout http://$CLOUDCLIENT_SRCSITE$CLOUDCLIENT_SRCPATH "$CLOUDCLIENT_COMPILE"
@@ -999,7 +1000,7 @@ EOF
 	stageOK
 
 	# Build Cloud Server application.
-	nextStage "Building Cloud Server application"
+	nextStage "Cloud Server application"
 	if [ ! -d "$CLOUD_COMPILE" ]; then
 		if [ "$OS" == "windows" ]; then
 			run "$SUBVERSION_INSTALL"/bin/svn checkout http://$CLOUD_SRCSITE$CLOUD_SRCPATH "$CLOUD_COMPILE"
