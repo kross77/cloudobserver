@@ -537,7 +537,7 @@ build()
 	fi
 	
 	# Detect the number of stages.
-	COUNTER=4
+	COUNTER=2
 	if $REBUILD_LIBRARIES; then
 		COUNTER=$[COUNTER+9]
 		if [ "$OS" == "windows" ]; then COUNTER=$[COUNTER+2]; fi
@@ -554,10 +554,7 @@ build()
 		if [ ! -d "$OPENSSL_INSTALL" ]; then COUNTER=$[COUNTER+1]; fi
 	fi
 	if $CHECKOUT_SOURCE; then
-		COUNTER=$[COUNTER+3]
-	else
-		if [ ! -d "$CLOUDCLIENT_COMPILE" ]; then COUNTER=$[COUNTER+1]; fi
-		if [ ! -d "$CLOUD_COMPILE" ]; then COUNTER=$[COUNTER+1]; fi
+		COUNTER=$[COUNTER+1]
 	fi
 	setNumberOfStages $COUNTER
 	
@@ -965,20 +962,16 @@ EOF
 		stageOK
 	fi
 
-	# Download Cloud Client application source code if necessary.
+	# Build Cloud Client application.
+	nextStage "Building Cloud Client application"
 	if [ ! -d "$CLOUDCLIENT_COMPILE" ]; then
-		nextStage "Downloading Cloud Client application source code"
 		if [ "$OS" == "windows" ]; then
 			run "$SUBVERSION_INSTALL"/bin/svn export http://$CLOUDCLIENT_SRCSITE$CLOUDCLIENT_SRCPATH "$CLOUDCLIENT_COMPILE"
 		else
 			run svn export http://$CLOUDCLIENT_SRCSITE$CLOUDCLIENT_SRCPATH "$CLOUDCLIENT_COMPILE"
 			run rm "$CLOUDCLIENT_COMPILE"/src/3rdparty/ffmpeg/inttypes.h
 		fi
-		stageOK
 	fi
-
-	# Build Cloud Client application.
-	nextStage "Building Cloud Client application"
 	run cd "$CLOUDCLIENT_COMPILE"
 	if [ ! -e $CLOUDCLIENT_PREMAKE ]; then
 		if [ "$OS" == "windows" ]; then
@@ -1001,10 +994,6 @@ EOF
 		run make -j$JOBS config=releasestatic
 	fi
 	run cd $WD
-	stageOK
-
-	# Install Cloud Client application.
-	nextStage "Installing Cloud Client application"
 	if [ ! -d "$CLOUDCLIENT_INSTALL" ]; then
 		run mkdir "$CLOUDCLIENT_INSTALL"
 	fi
@@ -1016,19 +1005,15 @@ EOF
 	run rm -rf "$CLOUDCLIENT_COMPILE"
 	stageOK
 
-	# Download Cloud Server application source code if necessary.
+	# Build Cloud Server application.
+	nextStage "Building Cloud Server application"
 	if [ ! -d "$CLOUD_COMPILE" ]; then
-		nextStage "Downloading Cloud Server application source code"
 		if [ "$OS" == "windows" ]; then
 			run "$SUBVERSION_INSTALL"/bin/svn export http://$CLOUD_SRCSITE$CLOUD_SRCPATH "$CLOUD_COMPILE"
 		else
 			run svn export http://$CLOUD_SRCSITE$CLOUD_SRCPATH "$CLOUD_COMPILE"
 		fi
-		stageOK
 	fi
-
-	# Build Cloud Server application.
-	nextStage "Building Cloud Server application"
 	run cd "$CLOUD_COMPILE"
 	if [ ! -e $CLOUD_PREMAKE ]; then
 		if [ "$OS" == "windows" ]; then
@@ -1058,10 +1043,6 @@ EOF
 		run make -j$JOBS config=release
 	fi
 	run cd $WD
-	stageOK
-
-	# Install Cloud Server application.
-	nextStage "Installing Cloud Server application"
 	if [ ! -d "$CLOUD_INSTALL" ]; then
 		run mkdir "$CLOUD_INSTALL"
 	else
