@@ -378,7 +378,11 @@ start()
 	echo -e "${CYAN}Starting the server...${NORMAL}"
 	
 	nextStage "Starting Cloud Server"
-	nohup ./CloudServer >& /dev/null &
+	if [ "$OS" == "windows" ]; then
+		cmd /c 'start /min "Cloud Server" CloudServer.exe'
+	else
+		nohup ./CloudServer >& /dev/null &
+	fi
 	if [ $? -ne 0 ]; then
 		stageFailed
 		exit 1
@@ -389,7 +393,11 @@ start()
 	echo -e "${CYAN}Starting demonstration robots...${NORMAL}"
 	
 	nextStage "Starting RobotAlpha"
-	nohup ./CloudClient --server=localhost:4773 --robot --username=RobotAlpha >& /dev/null &
+	if [ "$OS" == "windows" ]; then
+		cmd /c 'start /min "Cloud Client - RobotAlpha" CloudClient.exe --server=localhost:4773 --robot --username=RobotAlpha'
+	else
+		nohup ./CloudClient --server=localhost:4773 --robot --username=RobotAlpha >& /dev/null &
+	fi
 	if [ $? -ne 0 ]; then
 		stageFailed
 		exit 1
@@ -397,7 +405,11 @@ start()
 	stageOK
 	
 	nextStage "Starting RobotBeta"
-	nohup ./CloudClient --server=localhost:4773 --robot --username=RobotBeta >& /dev/null &
+	if [ "$OS" == "windows" ]; then
+		cmd /c 'start /min "Cloud Client - RobotBeta" CloudClient.exe --server=localhost:4773 --robot --username=RobotBeta'
+	else
+		nohup ./CloudClient --server=localhost:4773 --robot --username=RobotBeta >& /dev/null &
+	fi
 	if [ $? -ne 0 ]; then
 		stageFailed
 		exit 1
@@ -441,9 +453,15 @@ status()
 
 stop()
 {
-	CLOUD_PID=$(ps -fe | grep -F 'CloudServer' | grep -v -F 'grep' | awk '{ print $2 }')
-	ROBOTALPHA_PID=$(ps -fe | grep -F 'RobotAlpha' | grep -v -F 'grep' | awk '{ print $2 }')
-	ROBOTBETA_PID=$(ps -fe | grep -F 'RobotBeta' | grep -v -F 'grep' | awk '{ print $2 }')
+	if [ "$OS" == "windows" ]; then
+		CLOUD_PID=$(tasklist //FI "WINDOWTITLE eq Cloud Server" //NH 2>/dev/null | awk '{ print $2 }')
+		ROBOTALPHA_PID=$(tasklist //FI "WINDOWTITLE eq Cloud Client - RobotAlpha" //NH 2>/dev/null | awk '{ print $2 }')
+		ROBOTBETA_PID=$(tasklist //FI "WINDOWTITLE eq Cloud Client - RobotBeta" //NH 2>/dev/null | awk '{ print $2 }')
+	else
+		CLOUD_PID=$(ps -fe | grep -F 'CloudServer' | grep -v -F 'grep' | awk '{ print $2 }')
+		ROBOTALPHA_PID=$(ps -fe | grep -F 'RobotAlpha' | grep -v -F 'grep' | awk '{ print $2 }')
+		ROBOTBETA_PID=$(ps -fe | grep -F 'RobotBeta' | grep -v -F 'grep' | awk '{ print $2 }')
+	fi
 	
 	COUNTER=0
 	if [ "$CLOUD_PID" -eq "$CLOUD_PID" ] 2>/dev/null; then COUNTER=$[COUNTER+1]; fi
@@ -457,13 +475,21 @@ stop()
 	
 	if [ "$ROBOTALPHA_PID" -eq "$ROBOTALPHA_PID" ] 2>/dev/null; then
 		nextStage "Stopping RobotAlpha"
-		kill $ROBOTALPHA_PID
+		if [ "$OS" == "windows" ]; then
+			taskkill //F //PID $ROBOTALPHA_PID >& /dev/null
+		else
+			kill $ROBOTALPHA_PID
+		fi
 		stageOK
 	fi
 	
 	if [ "$ROBOTBETA_PID" -eq "$ROBOTBETA_PID" ] 2>/dev/null; then
 		nextStage "Stopping RobotBeta"
-		kill $ROBOTBETA_PID
+		if [ "$OS" == "windows" ]; then
+			taskkill //F //PID $ROBOTBETA_PID >& /dev/null
+		else
+			kill $ROBOTBETA_PID
+		fi
 		stageOK
 	fi
 	
@@ -471,7 +497,11 @@ stop()
 		echo -e "${CYAN}Stopping the server...${NORMAL}"
 	
 		nextStage "Stopping Cloud Server"
-		kill $CLOUD_PID
+		if [ "$OS" == "windows" ]; then
+			taskkill //F //PID $CLOUD_PID >& /dev/null
+		else
+			kill $CLOUD_PID
+		fi
 		stageOK
 	fi
 }
