@@ -426,7 +426,7 @@ status()
 	else
 		echo -e "${CYAN}Cloud Server is ${RED}not running${CYAN}."
 	fi
-	echo -e ${NORMAL}
+	echo -e "${NORMAL}"
 	
 	ROBOTALPHA_PID=$(ps -fe | grep -F 'RobotAlpha' | grep -v -F 'grep' | awk '{ print $2 }')
 	if [ "$ROBOTALPHA_PID" -eq "$ROBOTALPHA_PID" ] 2>/dev/null; then
@@ -453,7 +453,7 @@ status()
 	else
 		echo -e "${CYAN}Maintenance mode is ${RED}disabled${CYAN}.${NORMAL}"
 	fi
-	echo -ne ${NORMAL}
+	echo -ne "${NORMAL}"
 }
 
 stop()
