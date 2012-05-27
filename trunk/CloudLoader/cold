@@ -430,10 +430,10 @@ status()
 	
 	ROBOTALPHA_PID=$(ps -fe | grep -F 'RobotAlpha' | grep -v -F 'grep' | awk '{ print $2 }')
 	ROBOTBETA_PID=$(ps -fe | grep -F 'RobotBeta' | grep -v -F 'grep' | awk '{ print $2 }')
-	if [ "$ROBOTALPHA_PID" -eq "$ROBOTALPHA_PID" -a "$ROBOTBETA_PID" -eq "$ROBOTBETA_PID" ] 2>/dev/null; then
+	if [ "$ROBOTALPHA_PID" -eq "$ROBOTALPHA_PID" ] 2>/dev/null && [ "$ROBOTBETA_PID" -eq "$ROBOTBETA_PID" ] 2>/dev/null; then
 		echo -e "${CYAN}Both demonstration robots are running:${GREEN}"
 		ps -fe | grep -F 'CloudClient' | grep -v -F 'grep'
-	elif [ "$ROBOTALPHA_PID" -eq "$ROBOTALPHA_PID" -o "$ROBOTBETA_PID" -eq "$ROBOTBETA_PID" ] 2>/dev/null; then
+	elif [ "$ROBOTALPHA_PID" -eq "$ROBOTALPHA_PID" ] 2>/dev/null || [ "$ROBOTBETA_PID" -eq "$ROBOTBETA_PID" ] 2>/dev/null; then
 		echo -e "${CYAN}One of two demonstration robots is running:${YELLOW}"
 		ps -fe | grep -F 'CloudClient' | grep -v -F 'grep'
 	else
@@ -469,7 +469,7 @@ stop()
 	if [ "$ROBOTBETA_PID" -eq "$ROBOTBETA_PID" ] 2>/dev/null; then COUNTER=$[COUNTER+1]; fi
 	setNumberOfStages $COUNTER
 	
-	if [ "$ROBOTALPHA_PID" -eq "$ROBOTALPHA_PID" -o "$ROBOTBETA_PID" -eq "$ROBOTBETA_PID" ] 2>/dev/null; then
+	if [ "$ROBOTALPHA_PID" -eq "$ROBOTALPHA_PID" ] 2>/dev/null || [ "$ROBOTBETA_PID" -eq "$ROBOTBETA_PID" ] 2>/dev/null; then
 		echo -e "${CYAN}Stopping demonstration robots...${NORMAL}"
 	fi
 	
