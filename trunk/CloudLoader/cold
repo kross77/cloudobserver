@@ -207,12 +207,23 @@ restart()
 
 selfInstall()
 {
-	ln -s "$WD"/$LOADER_SRCFILE /bin/$LOADER_SRCFILE
+	if [ "$OS" == "windows" ]; then
+		cat > $WINDIR/cold.bat << EOF
+@echo off
+cmd /c "$(cmd /c 'echo %CD%')\\cold.bat %*"
+EOF
+	else
+		ln -s "$WD"/$LOADER_SRCFILE /bin/$LOADER_SRCFILE
+	fi
 }
 
 selfUninstall()
 {
-	rm /bin/$LOADER_SRCFILE
+	if [ "$OS" == "windows" ]; then
+		rm $WINDIR/cold.bat
+	else
+		rm /bin/$LOADER_SRCFILE
+	fi
 }
 
 # Update the script to the latest available version.
