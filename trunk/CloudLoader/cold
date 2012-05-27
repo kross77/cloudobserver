@@ -154,6 +154,10 @@ maintain()
 	fi
 	echo -e "${CYAN}Entering the maintenance mode...${NORMAL}"
 	
+	if [ ! -d "$SUBVERSION_INSTALL" -a "$OS" == "windows" ]; then
+		prepare $SUBVERSION_BINFILE "$SUBVERSION_INSTALL" $SUBVERSION_BINBASE $SUBVERSION_BINSITE $SUBVERSION_BINPATH
+	fi
+	
 	LOCAL_REV=0
 	LOADER=$(basename "$0")
 	REMOTE_REPO="http://cloudobserver.googlecode.com/svn/"
