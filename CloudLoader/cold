@@ -431,6 +431,8 @@ start()
 status()
 {
 	if [ "$OS" == "windows" ]; then
+		cmd /c 'title Cloud Observer Status'
+		
 		CLOUD_PID=$(tasklist //FI "WINDOWTITLE eq Cloud Server" //NH | awk '{ print $2 }' 2>/dev/null)
 		ROBOTALPHA_PID=$(tasklist //FI "WINDOWTITLE eq Cloud Client - RobotAlpha" //NH | awk '{ print $2 }' 2>/dev/null)
 		ROBOTBETA_PID=$(tasklist //FI "WINDOWTITLE eq Cloud Client - RobotBeta" //NH | awk '{ print $2 }' 2>/dev/null)
