@@ -539,7 +539,7 @@ build()
 	# Detect the number of stages.
 	COUNTER=2
 	if $REBUILD_LIBRARIES; then
-		COUNTER=$[COUNTER+9]
+		COUNTER=$[COUNTER+8]
 		if [ "$OS" == "windows" ]; then COUNTER=$[COUNTER+2]; fi
 	else
 		if [ ! -d "$CMAKE_INSTALL" ]; then COUNTER=$[COUNTER+1]; fi
@@ -553,14 +553,10 @@ build()
 		if [ ! -d "$OPENCV_INSTALL" ]; then COUNTER=$[COUNTER+1]; fi
 		if [ ! -d "$OPENSSL_INSTALL" ]; then COUNTER=$[COUNTER+1]; fi
 	fi
-	if $CHECKOUT_SOURCE; then
-		COUNTER=$[COUNTER+1]
-	fi
 	setNumberOfStages $COUNTER
 	
 	# Delete existing libraries and utilities if they should be rebuilt.
 	if $REBUILD_LIBRARIES; then
-		nextStage "Deleting existing libraries and utilities"
 		run rm -rf "$CMAKE_INSTALL"
 		if [ "$OS" == "windows" ]; then run rm -rf "$NASM_INSTALL"; fi
 		run rm -rf "$PREMAKE_INSTALL"
@@ -571,15 +567,12 @@ build()
 		run rm -rf "$OPENAL_INSTALL"
 		run rm -rf "$OPENCV_INSTALL"
 		run rm -rf "$OPENSSL_INSTALL"
-		stageOK
 	fi
 
 	# Delete existing application sources if they should be checked out.
 	if $CHECKOUT_SOURCE; then
-		nextStage "Deleting existing application sources"
 		run rm -rf "$CLOUDCLIENT_COMPILE"
 		run rm -rf "$CLOUD_COMPILE"
-		stageOK
 	fi
 
 	# Build CMake utility if necessary.
