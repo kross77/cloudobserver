@@ -24,6 +24,7 @@ ${MAGENTA}Commands:${NORMAL}
 
 ${MAGENTA}Options:${NORMAL}
   ${YELLOW}--checkout-source     ${BLUE}${BOLD}Checkout latest source from version control system${NORMAL}
+  ${YELLOW}--development         ${BLUE}${BOLD}Deploy development environment${NORMAL}
   ${YELLOW}--rebuild-libraries   ${BLUE}${BOLD}Rebuild all libraries and utilities${NORMAL}
   ${YELLOW}--verbose             ${BLUE}${BOLD}Echo all executed commands${NORMAL}
 "
@@ -750,7 +751,11 @@ build()
 		run cd "$BOOST_COMPILE"
 		if [ "$OS" == "windows" ]; then
 			run cmd /c bootstrap.bat
-			run ./b2 -j$JOBS -d0 --with-thread --with-system --with-filesystem --with-serialization --with-program_options --with-regex --with-date_time --with-iostreams -sZLIB_SOURCE="$BOOST_ZLIBSRC" -sNO_BZIP2=1 link=static runtime-link=static --prefix="$BOOST_INSTALL" release install
+			if $DEVELOPMENT; then
+				run ./b2 -j$JOBS -d0 --with-thread --with-system --with-filesystem --with-serialization --with-program_options --with-regex --with-date_time --with-iostreams -sZLIB_SOURCE="$BOOST_ZLIBSRC" -sNO_BZIP2=1 link=static runtime-link=static --prefix="$BOOST_INSTALL" debug release install
+			else
+				run ./b2 -j$JOBS -d0 --with-thread --with-system --with-filesystem --with-serialization --with-program_options --with-regex --with-date_time --with-iostreams -sZLIB_SOURCE="$BOOST_ZLIBSRC" -sNO_BZIP2=1 link=static runtime-link=static --prefix="$BOOST_INSTALL" release install
+			fi
 		else
 			run ./bootstrap.sh
 			run ./b2 -j$JOBS -d0 --with-thread --with-system --with-filesystem --with-serialization --with-program_options --with-regex --with-date_time --with-iostreams -sZLIB_SOURCE="$BOOST_ZLIBSRC" -sNO_BZIP2=1 cflags=-fPIC cxxflags=-fPIC link=static --prefix="$BOOST_INSTALL" release install
@@ -880,6 +885,15 @@ EOF
 				-DFORCE_STATIC_VCRT=ON \
 				-DLIBTYPE=STATIC \
 				-G "$VSCMAKE"
+			if $DEVELOPMENT; then
+				run msbuild.exe /maxcpucount:$JOBS OpenAL.sln //p:Configuration=Debug
+				if [ $VSVERSION -eq 9 ]; then
+					run msbuild.exe /maxcpucount:$JOBS INSTALL.vcproj //p:Configuration=Debug
+				elif [ $VSVERSION -eq 10 ]; then
+					run msbuild.exe /maxcpucount:$JOBS INSTALL.vcxproj //p:Configuration=Debug
+				fi
+				cp Debug/openal32d.pdb "$OPENAL_INSTALL"/lib
+			fi
 			run msbuild.exe /maxcpucount:$JOBS OpenAL.sln //p:Configuration=Release
 			if [ $VSVERSION -eq 9 ]; then
 				run msbuild.exe /maxcpucount:$JOBS INSTALL.vcproj //p:Configuration=Release
@@ -933,6 +947,16 @@ EOF
 				-DCMAKE_INSTALL_PREFIX="$WD/opencv" \
 				-DWITH_CUDA=OFF \
 				-G "$VSCMAKE"
+			if $DEVELOPMENT; then
+				run msbuild.exe /maxcpucount:$JOBS OpenCV.sln //p:Configuration=Debug
+				if [ $VSVERSION -eq 9 ]; then
+					run msbuild.exe /maxcpucount:$JOBS INSTALL.vcproj //p:Configuration=Debug
+				elif [ $VSVERSION -eq 10 ]; then
+					run msbuild.exe /maxcpucount:$JOBS INSTALL.vcxproj //p:Configuration=Debug
+				fi
+				cp lib/Debug/*.pdb "$OPENCV_INSTALL"/lib
+				cp 3rdparty/lib/Debug/*.pdb "$OPENCV_INSTALL"/lib
+			fi
 			run msbuild.exe /maxcpucount:$JOBS OpenCV.sln //p:Configuration=Release
 			if [ $VSVERSION -eq 9 ]; then
 				run msbuild.exe /maxcpucount:$JOBS INSTALL.vcproj //p:Configuration=Release
@@ -1045,6 +1069,9 @@ EOF
 			run perl Configure VC-WIN32 --prefix="$OPENSSL_INSTALL" --openssldir="$OPENSSL_INSTALL"/share
 			run cmd /c "ms\do_nasm.bat"
 			run nmake -f ms/nt.mak install
+			if $DEVELOPMENT; then
+				cp out32/*.pdb "$OPENSSL_INSTALL"/lib
+			fi
 		else
 			run ./config shared no-asm --prefix="$OPENSSL_INSTALL" --openssldir="$OPENSSL_INSTALL"/share
 			run make install
@@ -1080,21 +1107,38 @@ EOF
 	run ./$CLOUDCLIENT_PREMAKE
 	if [ "$OS" == "windows" ]; then
 		run cd projects/$OS-$VSPREMAKE
-		run msbuild.exe /maxcpucount:$JOBS CloudClient.sln //p:Configuration=ReleaseStatic
+		if $DEVELOPMENT; then
+			run msbuild.exe /maxcpucount:$JOBS CloudClient.sln //p:Configuration=DebugStatic
+		else
+			run msbuild.exe /maxcpucount:$JOBS CloudClient.sln //p:Configuration=ReleaseStatic
+		fi
 	else
 		run cd projects/$OS-gmake
-		run make -j$JOBS config=releasestatic
+		if $DEVELOPMENT; then
+			run make -j$JOBS config=debugstatic
+		else
+			run make -j$JOBS config=releasestatic
+		fi
 	fi
 	run cd $WD
 	if [ ! -d "$CLOUDCLIENT_INSTALL" ]; then
 		run mkdir "$CLOUDCLIENT_INSTALL"
 	fi
 	if [ "$OS" == "windows" ]; then
-		run cp -r "$CLOUDCLIENT_COMPILE"/projects/$OS-$VSPREMAKE/bin/release-static/* "$CLOUDCLIENT_INSTALL"
+		if $DEVELOPMENT; then
+			run cp -r "$CLOUDCLIENT_COMPILE"/projects/$OS-$VSPREMAKE/bin/debug-static/* "$CLOUDCLIENT_INSTALL"
+		else
+			run cp -r "$CLOUDCLIENT_COMPILE"/projects/$OS-$VSPREMAKE/bin/release-static/* "$CLOUDCLIENT_INSTALL"
+			run rm -rf "$CLOUDCLIENT_COMPILE"
+		fi
 	else
-		run cp -r "$CLOUDCLIENT_COMPILE"/projects/$OS-gmake/bin/release-static/* "$CLOUDCLIENT_INSTALL"
+		if $DEVELOPMENT; then
+			run cp -r "$CLOUDCLIENT_COMPILE"/projects/$OS-gmake/bin/debug-static/* "$CLOUDCLIENT_INSTALL"
+		else
+			run cp -r "$CLOUDCLIENT_COMPILE"/projects/$OS-gmake/bin/release-static/* "$CLOUDCLIENT_INSTALL"
+			run rm -rf "$CLOUDCLIENT_COMPILE"
+		fi
 	fi
-	run rm -rf "$CLOUDCLIENT_COMPILE"
 	stageOK
 
 	# Build Cloud Server application.
@@ -1126,14 +1170,22 @@ EOF
 		echo $REVISION_INFORMATION >> projects/$OS-$VSPREMAKE/bin/debug/htdocs/js/cf.js
 		echo $REVISION_INFORMATION >> projects/$OS-$VSPREMAKE/bin/release/htdocs/js/cf.js
 		run cd projects/$OS-$VSPREMAKE
-		run msbuild.exe /maxcpucount:$JOBS CloudServer.sln //p:Configuration=Release
+		if $DEVELOPMENT; then
+			run msbuild.exe /maxcpucount:$JOBS CloudServer.sln //p:Configuration=Debug
+		else
+			run msbuild.exe /maxcpucount:$JOBS CloudServer.sln //p:Configuration=Release
+		fi
 	else
 		REVISION_INFORMATION="\$(document).ready(function() {\$('#rol').after('. Revision $(svnversion -n)');});"
 		echo $REVISION_INFORMATION >> projects/$OS-gmake/htdocs/js/cf.js
 		echo $REVISION_INFORMATION >> projects/$OS-gmake/bin/debug/htdocs/js/cf.js
 		echo $REVISION_INFORMATION >> projects/$OS-gmake/bin/release/htdocs/js/cf.js
 		run cd projects/$OS-gmake
-		run make -j$JOBS config=release
+		if $DEVELOPMENT; then
+			run make -j$JOBS config=debug
+		else
+			run make -j$JOBS config=release
+		fi
 	fi
 	run cd $WD
 	if [ ! -d "$CLOUD_INSTALL" ]; then
@@ -1143,11 +1195,20 @@ EOF
 		run rm -rf "$CLOUD_INSTALL"/config.xml
 	fi
 	if [ "$OS" == "windows" ]; then
-		run cp -r "$CLOUD_COMPILE"/projects/$OS-$VSPREMAKE/bin/release/* "$CLOUD_INSTALL"
+		if $DEVELOPMENT; then
+			run cp -r "$CLOUD_COMPILE"/projects/$OS-$VSPREMAKE/bin/debug/* "$CLOUD_INSTALL"
+		else
+			run cp -r "$CLOUD_COMPILE"/projects/$OS-$VSPREMAKE/bin/release/* "$CLOUD_INSTALL"
+			run rm -rf "$CLOUD_COMPILE"
+		fi
 	else
-		run cp -r "$CLOUD_COMPILE"/projects/$OS-gmake/bin/release/* "$CLOUD_INSTALL"
+		if $DEVELOPMENT; then
+			run cp -r "$CLOUD_COMPILE"/projects/$OS-gmake/bin/debug/* "$CLOUD_INSTALL"
+		else
+			run cp -r "$CLOUD_COMPILE"/projects/$OS-gmake/bin/release/* "$CLOUD_INSTALL"
+			run rm -rf "$CLOUD_COMPILE"
+		fi
 	fi
-	run rm -rf "$CLOUD_COMPILE"
 	stageOK
 }
 
@@ -1174,6 +1235,7 @@ COMMAND=
 
 # Declare option variables.
 CHECKOUT_SOURCE=false
+DEVELOPMENT=false
 REBUILD_LIBRARIES=false
 VERBOSE=false
 
@@ -1195,6 +1257,9 @@ do
 			;;
 		--checkout-source   )
 			CHECKOUT_SOURCE=true
+			;;
+		--development       )
+			DEVELOPMENT=true
 			;;
 		deploy            )
 			checkForACommand
