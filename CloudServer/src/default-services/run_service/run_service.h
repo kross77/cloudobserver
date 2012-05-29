@@ -162,6 +162,7 @@ public:
 	}
 	void ThreadFunction(const std::string & pid, utils::task t)
 	{
+		try{
 		boost::shared_ptr<utils::app> a = apps[pid];
 
 		typedef std::pair<std::string, std::string > ss_pair;
@@ -192,6 +193,11 @@ public:
 					break;
 				}
 			}
+		}catch(std::exception &e)
+		{
+			*lu << "error!" << log_util::endl; 
+			*lu << e.what() << log_util::endl; 
+		}
 	}
 
 	void call_app(const std::string & user_name, const std::string & pid, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response, boost::shared_ptr<http_request> request)
@@ -344,7 +350,7 @@ private:
 		static bool is_lu_set = false;
 		if (!is_lu_set)
 		{
-			this->lu = boost::shared_ptr<log_util>(new log_util(50, false, true, true, lu_path));
+			this->lu = boost::shared_ptr<log_util>(new log_util(1, false, true, true, lu_path));
 			is_lu_set = true;
 		}
 
