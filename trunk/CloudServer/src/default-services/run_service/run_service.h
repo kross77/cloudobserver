@@ -178,9 +178,9 @@ public:
 			boost::process::pistream &os = c.get_stdout();
 
 			std::string line; 
-			std::cout << "out stream:" << std::endl; 
+			*lu << "out stream:" << log_util::endl; 
 			while (std::getline(os, line)) 
-				std::cout << line << std::endl; 
+				*lu << line << log_util::endl; 
 
 			while(!c.wait(1000)){
 				try
