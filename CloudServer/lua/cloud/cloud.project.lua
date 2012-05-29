@@ -167,7 +167,7 @@ function cloud.project.useBoost()
 	cloud.addIncludeDir( _OPTIONS["BoostIncludesPath"] )
 	cloud.addLibDir( _OPTIONS["BoostLibsPath"])
 		includedirs {"3rdparty/header-only"}
-		defines{ "BOOST_ASIO_DISABLE_IOCP" }
+		--defines{ "BOOST_ASIO_DISABLE_IOCP" }
 	if os.get() == "windows" then
 		defines { "WIN" } 
 		cloud.win.addIncludeDirFromProgrammFiles("Boost/include/boost-1_48")
