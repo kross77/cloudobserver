@@ -1,131 +1,209 @@
-//
-// Boost.Process
-// ~~~~~~~~~~~~~
-//
-// Copyright (c) 2006, 2007 Julio M. Merino Vidal
-// Copyright (c) 2008 Ilya Sokolov, Boris Schaeling
-// Copyright (c) 2009 Boris Schaeling
-// Copyright (c) 2010 Felipe Tanus, Boris Schaeling
-//
-// Distributed under the Boost Software License, Version 1.0. (See accompanying
-// file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-//
+// 
+// Boost.Process 
+// ~~~~~~~~~~~~~ 
+// 
+// Copyright (c) 2006, 2007 Julio M. Merino Vidal 
+// Copyright (c) 2008, 2009 Boris Schaeling 
+// 
+// Distributed under the Boost Software License, Version 1.0. (See accompanying 
+// file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) 
+// 
 
-/**
- * \file boost/process/context.hpp
- *
- * Includes the declaration of the context class.
- */
+/** 
+ * \file boost/process/context.hpp 
+ * 
+ * Includes the declaration of the context class and several accessory 
+ * base classes. 
+ */ 
 
-#ifndef BOOST_PROCESS_CONTEXT_HPP
-#define BOOST_PROCESS_CONTEXT_HPP
+#ifndef BOOST_PROCESS_CONTEXT_HPP 
+#define BOOST_PROCESS_CONTEXT_HPP 
 
-#include <boost/process/config.hpp>
+#include <boost/process/config.hpp> 
 
-#if defined(BOOST_POSIX_API)
-#   include <unistd.h>
-#elif defined(BOOST_WINDOWS_API)
-#   include <windows.h>
-#endif
+#if defined(BOOST_POSIX_API) 
+#  include <boost/scoped_array.hpp> 
+#  include <cerrno> 
+#  include <unistd.h> 
+#elif defined(BOOST_WINDOWS_API) 
+#  include <windows.h> 
+#else 
+#  error "Unsupported platform." 
+#endif 
 
-#include <boost/process/stream_id.hpp>
-#include <boost/process/stream_ends.hpp>
-#include <boost/process/stream_type.hpp>
-#include <boost/process/environment.hpp>
-#include <boost/process/self.hpp>
-#include <boost/process/stream_behavior.hpp>
-#include <boost/function.hpp>
-#include <string>
-#include <map>
+#include <boost/process/environment.hpp> 
+#include <boost/process/stream_behavior.hpp> 
+#include <boost/system/system_error.hpp> 
+#include <boost/throw_exception.hpp> 
+#include <boost/assert.hpp> 
+#include <string> 
+#include <vector> 
 
-namespace boost {
-namespace process {
+namespace boost { 
+namespace process { 
 
-/**
- * Context class to define how a child process is created.
- *
- * The context class is used to configure streams, to set the work directory
- * and define environment variables. It is also used to change a process
- * name (the variable commonly known as argv[0]).
- */
-struct context
-{
-    typedef std::map<stream_id, boost::function<stream_ends (stream_type)> >
-        streams_t;
+/** 
+ * Base context class that defines the child's work directory. 
+ * 
+ * Base context class that defines the necessary fields to configure a 
+ * child's work directory. This class is useless on its own because no 
+ * function in the library will accept it as a valid Context 
+ * implementation. 
+ */ 
+template <class Path> 
+class basic_work_directory_context 
+{ 
+public: 
+    /** 
+     * Constructs a new work directory context. 
+     * 
+     * Constructs a new work directory context making the work directory 
+     * described by the new object point to the caller's current working 
+     * directory. 
+     */ 
+    basic_work_directory_context() 
+    { 
+#if defined(BOOST_POSIX_API) 
+        errno = 0; 
+        long size = ::pathconf(".", _PC_PATH_MAX); 
+        if (size == -1 && errno) 
+            boost::throw_exception(boost::system::system_error(boost::system::error_code(errno, boost::system::get_system_category()), "boost::process::basic_work_directory_context::basic_work_directory_context: pathconf(2) failed")); 
+        else if (size == -1) 
+            size = BOOST_PROCESS_POSIX_PATH_MAX; 
+        boost::scoped_array<char> cwd(new char[size]); 
+        if (!::getcwd(cwd.get(), size)) 
+            boost::throw_exception(boost::system::system_error(boost::system::error_code(errno, boost::system::get_system_category()), "boost::process::basic_work_directory_context::basic_work_directory_context: getcwd(2) failed")); 
+        work_directory = cwd.get(); 
+#elif defined(BOOST_WINDOWS_API) 
+        char cwd[MAX_PATH]; 
+        if (!::GetCurrentDirectoryA(sizeof(cwd), cwd)) 
+            boost::throw_exception(boost::system::system_error(boost::system::error_code(::GetLastError(), boost::system::get_system_category()), "boost::process::basic_work_directory_context::basic_work_directory_context: GetCurrentDirectory failed")); 
+        work_directory = cwd; 
+#endif 
+        BOOST_ASSERT(!work_directory.empty()); 
+    } 
 
-    /**
-     * Streams.
-     *
-     * Streams of a child process can be configured through factory functions
-     * which return a pair of handles - one handle to use as a stream end
-     * in the child process and possibly another handle to use as a stream end
-     * in the parent process (if a pipe is setup both processes can communicate
-     * with each other).
-     */
-    streams_t streams;
+    /** 
+     * The process' initial work directory. 
+     * 
+     * The work directory is the directory in which the process starts 
+     * execution. 
+     */ 
+    Path work_directory; 
+}; 
 
-    /**
-     * Process name.
-     *
-     * The child process can access the process name via a variable
-     * commonly known as argv[0].
-     */
-    std::string process_name;
+/** 
+ * Base context class that defines the child's environment. 
+ * 
+ * Base context class that defines the necessary fields to configure a 
+ * child's environment variables. This class is useless on its own 
+ * because no function in the library will accept it as a valid Context 
+ * implementation. 
+ */ 
+class environment_context 
+{ 
+public: 
+    /** 
+     * The process' environment. 
+     * 
+     * Contains the list of environment variables, alongside with their 
+     * values, that will be passed to the spawned child process. 
+     */ 
+    boost::process::environment environment; 
+}; 
 
-    /**
-     * Work directory.
-     */
-    std::string work_dir;
+/** 
+ * Process startup execution context. 
+ * 
+ * The context class groups all the parameters needed to configure a 
+ * process' environment during its creation. 
+ */ 
+template <class Path> 
+class basic_context : public basic_work_directory_context<Path>, public environment_context 
+{ 
+public: 
+    /** 
+     * Child's stdin behavior. 
+     */ 
+    stream_behavior stdin_behavior; 
 
-    /**
-     * Environment variables.
-     */
-    environment env;
+    /** 
+     * Child's stdout behavior. 
+     */ 
+    stream_behavior stdout_behavior; 
 
-    /**
-     * Constructs a process context.
-     *
-     * The default behavior of standard streams is to inherit them. The current
-     * work directory is also the work directory of the child process. The child
-     * process also inherits all environment variables.
-     */
-    context()
-        : work_dir(self::get_work_dir()),
-        env(self::get_environment())
-    {
-#if defined(BOOST_POSIX_API)
-        streams[stdin_id] = behavior::inherit(STDIN_FILENO);
-        streams[stdout_id] = behavior::inherit(STDOUT_FILENO);
-        streams[stderr_id] = behavior::inherit(STDERR_FILENO);
-#elif defined(BOOST_WINDOWS_API)
-        streams[stdin_id] = behavior::inherit(GetStdHandle(STD_INPUT_HANDLE));
-        streams[stdout_id] = behavior::inherit(GetStdHandle(STD_OUTPUT_HANDLE));
-        streams[stderr_id] = behavior::inherit(GetStdHandle(STD_ERROR_HANDLE));
-#endif
-    }
+    /** 
+     * Child's stderr behavior. 
+     */ 
+    stream_behavior stderr_behavior; 
+}; 
 
-#if defined(BOOST_POSIX_API) || defined(BOOST_PROCESS_DOXYGEN)
-    /**
-     * Setups a child process.
-     *
-     * This is an extension point to support more configuration options for
-     * child processes. You can initialize \a setup with a user-defined function
-     * which is called when a child process is created.
-     *
-     * On POSIX platforms setup() is called in the child process. That's why in
-     * a multithreaded application only async-signal-safe functions must be
-     * called in the function \a setup is bound to.
-     *
-     * On Windows platforms setup() is called in the parent process. A
-     * reference to a STARTUPINFOA structure is passed as parameter.
-     */
-    boost::function<void ()> setup;
-#elif defined(BOOST_WINDOWS_API)
-    boost::function<void (STARTUPINFOA&)> setup;
-#endif
-};
+typedef basic_context<std::string> context; 
 
-}
-}
+/** 
+ * Represents a child process in a pipeline. 
+ * 
+ * This convenience class is a triplet that holds all the data required 
+ * to spawn a new child process in a pipeline. 
+ */ 
+template <class Executable, class Arguments, class Context> 
+class basic_pipeline_entry 
+{ 
+public: 
+    /** 
+     * The executable to launch. 
+     */ 
+    Executable executable; 
 
-#endif
+    /** 
+     * The set of arguments to pass to the executable. 
+     */ 
+    Arguments arguments; 
+
+    /** 
+     * The child's execution context. 
+     */ 
+    Context context; 
+
+    /** 
+     * The type of the Executable concept used in this template 
+     * instantiation. 
+     */ 
+    typedef Executable executable_type; 
+
+    /** 
+     * The type of the Arguments concept used in this template 
+     * instantiation. 
+     */ 
+    typedef Arguments arguments_type; 
+
+    /** 
+     * The type of the Context concept used in this template 
+     * instantiation. 
+     */ 
+    typedef Context context_type; 
+
+    /** 
+     * Constructs a new pipeline_entry object. 
+     * 
+     * Given the executable, set of arguments and execution triplet, 
+     * constructs a new pipeline_entry object that holds the three 
+     * values. 
+     */ 
+    basic_pipeline_entry(const Executable &exe, const Arguments &args, const Context &ctx) 
+        : executable(exe), 
+        arguments(args), 
+        context(ctx) 
+    { 
+    } 
+}; 
+
+/** 
+ * Default instantiation of basic_pipeline_entry. 
+ */ 
+typedef basic_pipeline_entry<std::string, std::vector<std::string>, context> pipeline_entry; 
+
+} 
+} 
+
+#endif 
