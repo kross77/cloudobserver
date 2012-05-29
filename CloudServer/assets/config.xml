@@ -77,6 +77,40 @@
 			</description>
 			<call>3</call>	
 		</service>
+		
+		<service>
+			<name>Run Service</name>
+			<class_name>run_service</class_name>
+			<library_name>RunService</library_name>
+			<settings>
+				<database>rs.db</database>
+				<threading peruser="3" total="55"/>
+				<applications>
+					
+					<application id="1" useShell="true" processName="echo">
+						<description appName="echo 1" icon="/echo-icon-32.png">echoes inputed text</description>
+						<arguments base="first argument: :echotext; second argument (int): :arg2">
+							<arg type="string" name="echotext" label="first argument"/>
+							<arg type="int" name="arg2" label="second argument"/>
+						</arguments>
+					</application>
+					
+					<application id="2" useShell="true" processName="echo">
+						<description appName="echo 2" icon="/echo-icon-32.png">echoes inputed text 2</description>
+						<arguments base="first argument: :echotext;">
+							<arg type="string" name="echotext" label="first argument"/>
+						</arguments>
+					</application>
+				</applications>
+
+			</settings>
+			<description>
+				<type>public</type>
+				<text>Run service provides remote access to applications</text>
+				<default_url>run.html</default_url>
+			</description>
+			<call>4</call>
+		</service>
 
 		<service>
 			<name>File Service</name>
@@ -90,7 +124,7 @@
 				<root_file_system_directory>htdocs</root_file_system_directory>
 				<show_directory_contents>true</show_directory_contents>
 			</settings>		
-			<call>4</call>
+			<call>5</call>
 		</service>
 		
 	</services>
