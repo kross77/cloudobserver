@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<html>
+	
+	<head>
+		<!-- Info-->
+		<title>	Cloud Server Developers Run Service Page </title>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+		<meta name="description" content="Services List" />
+		<meta name="keywords" content="map, navigation, C++, services, web, transcoding, images" />
+		<meta name="author" content="CF2011" />
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<!--<meta http-equiv="imagetoolbar" content="no" /> -->
+		
+		<!-- End Of Info-->
+		
+		<!-- Public CSS-->
+		<link rel="stylesheet" href="css/grumble.min.css">
+		<link type="text/css" href="css/custom-theme/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
+		<link href="css/bootstrap.css" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+		<!-- End Of CSS-->
+				
+		<!-- CF CSS -->
+		<!--[if gte IE 9]>
+			  <style type="text/css">
+				.gradient {
+					filter: none;
+				}
+			  </style>
+		<![endif]-->
+		<link rel="stylesheet" href="css/grid.css">
+		<link rel="stylesheet" href="css/cf.css">
+		<link rel="stylesheet" href="css/cf.head.panel.css">
+		<!-- End of CF CSS-->
+		
+		<!-- Public JS-->
+		<script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
+		
+		<script type="text/javascript" src="js/jquery-ui-1.8.18.custom.min.js"></script>
+		
+		<script type="text/javascript" src="js/jquery.sha256.min.js"></script>
+		
+		<script type="text/javascript" src="js/jquery.validate.min.js">	</script>
+		
+		<script type="text/javascript" src="js/tempo.min.js"></script>
+		
+		<script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
+		
+		<script type = 'text/javascript' src = "js/jquery.grumble.min.js" ></script>
+		
+		<script type='text/javascript' src="js/jquery.event.drag-1.5.min.js"></script>
+
+		<script src="js/jquery.grumble.min.js"></script>
+		
+		<script type="text/javascript" src="js/fancybox/jquery.mousewheel-3.0.6.pack.js"></script>
+		<script type="text/javascript" src="js/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+		
+		<script type="text/javascript" src="js/respond.min.js">	</script>
+	
+		<script type="text/javascript" src="js/jquery.ddslick.min.js"></script>
+		<!-- End Of Public JS-->
+		
+		<!-- CF JS -->
+		<script type='text/javascript' src="js/cf.js"></script>
+		
+		<script type="text/javascript" src="js/cf.windows.js"></script>
+		
+		<script type="text/javascript" src="js/cf.head.panel.js"></script>
+		
+		<script type="text/javascript" src="js/cf.windows.login_and_register.js"></script>
+		
+		<script type="text/javascript" src="js/cf.user.js"></script>
+		
+		<script type="text/javascript" src="js/cf.windows.ufs.file.js"></script>
+		
+		<!-- End Of CF JS-->
+</head>
+<body>
+
+	<div class="pseudo-no-js-heaser"><br/><br/><br/></div>
+			<div class="loged-in-user" >
+				<div class="g2">		
+					<div class="description-box">
+						<h3 class="fun">
+							Image Renderer Service Welcomes You.
+						</h3>
+						<br/>
+						<p style="text-align:left;">
+							runs applications
+						</p>
+					
+					</div>
+				</div>
+				<div class="g1">
+		
+					<div>
+						<div id="apps_list"></div>
+					</div>
+					
+					<ol id="args" style="visibility:hidden;">
+						
+					</ol>
+					<script>
+
+
+
+						$.getJSON("./run.service?action=list_apps", function(ddata) {
+							$('#apps_list').ddslick({
+							    data: ddata,
+							    width: 300,
+							    imagePosition: "left",
+							    selectText: "Select an app you want to use",
+							    onSelected: function (data) {
+							        var html_str = "<form id=\"args_form\" name=\"input\"><li data-template>{{description}} <input class=\"argument\" type='text' name={{name}} /><br/></li></form>";
+							        $('#args').html(html_str);
+							        var rs = Tempo.prepare('args').notify( function (event) { if (event.type === TempoEvent.Types.RENDER_COMPLETE) 
+							        	{
+							        		
+							        		$("#args_form").html($("#args_form").html() + "<input type=\"submit\" value=\"Submit\" />");
+							        		    $("#args_form").submit(function() {
+							        		    	var get_request = "./run.service?action=call&pid=" + data.selectedData.pid;
+												     $(".argument").each(function(index) {
+												     	get_request += "&"  + $(this).attr("name") + "=" + $(this).val();
+	    											});
+    												
+	    											$.getJSON(get_request, function (json_resp) {
+													});
+	    											
+											        return false;
+											      });
+							        		$( "#args" ).css("visibility", "visible" );
+						        		}
+									});
+					
+									rs.starting();
+									$.getJSON("./run.service?action=list_args&pid="+ data.selectedData.pid, function (json) {
+										rs.render(json);
+									});
+							    }
+							});
+						});
+						
+					</script>
+					
+
+					
+					
+				</div>	
+			</div>
+</html>
