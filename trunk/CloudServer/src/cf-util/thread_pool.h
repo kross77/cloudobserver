@@ -164,7 +164,6 @@ private:
 		}		
 		catch(std::exception &e)
 		{
-			std::cout << e.what() << std::endl;
 			boost::shared_ptr<boost::thread> thread;
 			thread = boost::shared_ptr<boost::thread>(new boost::thread(boost::bind(&thread_pool::run, this, thread)));
 			threads.add(thread);
@@ -186,7 +185,10 @@ private:
 		}
 		catch(std::exception &e)
 		{
-			std::cout << e.what() << std::endl;
+			boost::shared_ptr<boost::thread> internal_thread;
+			internal_thread = boost::shared_ptr<boost::thread>( new boost::thread(boost::bind(&thread_pool::internal_run, this, internal_thread)));
+			internal_threads.add(internal_thread);
+			internal_threads.remove(internal_thread_ptr);
 			return;
 		}
 	}
