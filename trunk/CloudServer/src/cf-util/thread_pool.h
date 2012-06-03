@@ -197,8 +197,13 @@ private:
 		boost::shared_ptr < boost::packaged_task<void> > task (  new boost::packaged_task<void> ( boost::bind(&thread_pool::run_item<task_return_t>, this, pt)));
 		boost::unique_future<void> fi= task->get_future();
 
-		internal_tasks.post(boost::bind(&thread_pool::run_item<task_return_t>, this, task));
+		boost::shared_ptr<boost::promise<bool> > started(new boost::promise<bool>());
+		boost::unique_future<bool> has_started = started->get_future();
 
+		internal_tasks.post(boost::bind(&thread_pool::run_item<task_return_t>, this, task, started));
+
+		has_started.wait();
+	
 		if(fi.timed_wait(boost::posix_time::milliseconds(time_limit)))
 		{
 			return;
@@ -209,6 +214,14 @@ private:
 			thread = boost::shared_ptr<boost::thread>(new boost::thread(boost::bind(&thread_pool::internal_run, this, thread)));
 			internal_threads.add(thread);
 		}
+	}
+
+	template <class task_return_t>
+	void run_item( boost::shared_ptr< boost::packaged_task<task_return_t> > pt, boost::shared_ptr<boost::promise<bool> > started)
+	{
+		started->set_value(true);
+
+		run_item<task_return_t>(pt);
 	}
 
 	template <class task_return_t>
