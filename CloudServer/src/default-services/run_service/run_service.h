@@ -559,7 +559,7 @@ private:
 		std::string result = "";
 		sqlite3pp::transaction xct(*db, true);
 		{
-			sqlite3pp::query qry(*db, this->command_find_all_user_tasks.c_str());
+			sqlite3pp::query qry(*db, this->command_get_output.c_str());
 			qry.bind(":user_name", user_name);
 			qry.bind(":encoded_url", encoded_url);
 			for (sqlite3pp::query::iterator i = qry.begin(); i != qry.end(); ++i) {
