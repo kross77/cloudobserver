@@ -126,7 +126,7 @@ class run_service: public http_service
 { 
 public:
 	run_service(){
-		this->root_path = boost::filesystem::current_path().string();
+		this->root_path = boost::filesystem::current_path() / "run";
 		this->command_create_tasks_table = "CREATE TABLE IF NOT EXISTS tasks (encoded_url varchar(300) UNIQUE NOT NULL primary key, output TEXT, task TEXT NOT NULL, status varchar(65) NOT NULL, pid varchar(100) NOT NULL, user_name varchar(65) NOT NULL, started DATETIME, finished DATETIME, modified DATETIME NOT NULL default CURRENT_TIMESTAMP, canceled BOOLEAN  NOT NULL default 0)";
 		this->command_post_task =  "INSERT INTO tasks (user_name, encoded_url, task, status, pid ) VALUES (:user_name, :encoded_url, :task, :status, :pid)";
 		this->command_cancel_task = "UPDATE tasks SET canceled=1, modified=CURRENT_TIMESTAMP WHERE ( user_name=:user_name and encoded_url=:encoded_url )";
@@ -186,7 +186,6 @@ public:
 		start_work_with_lu(log_name);
 		start_work_with_db(db_name);
 
-
 		BOOST_FOREACH(boost::property_tree::ptree::value_type &v,
 			config->get_child("applications", utils::empty_class<boost::property_tree::ptree>()))
 		{
@@ -217,17 +216,16 @@ public:
 			a->process_id = individual_application_tree.get<std::string>("<xmlattr>.id");
 			apps[a->process_id] = a;
 		}
+
+		boost::filesystem::remove_all(boost::filesystem::path(this->root_path));
+		threads_pool_generator();
 	}
-
-
 
 	virtual void start(){}
 
 	virtual void stop(){}
 
 private:
-
-	std::map<std::string, boost::shared_ptr<boost::thread> > uname_therad;
 
 	std::map<std::string, boost::shared_ptr<utils::app> > apps;
 	boost::shared_ptr<log_util> lu;
@@ -236,17 +234,16 @@ private:
 	std::string post_task;
 
 
-
-
-
-
 	class user_task_pool{
 	public:
+		std::string user_name;
 		boost::asio::io_service tasks;
 		boost::asio::io_service::work *work;
 		thread_group threads;
+		run_service * parent;
 
-		user_task_pool(int create_threads){
+		user_task_pool(int create_threads, run_service * parent, std::string user_name): user_name(user_name), parent(parent)
+		{
 			work = new boost::asio::io_service::work(tasks);
 			for (std::size_t i = 0; i < create_threads; ++i)
 			{
@@ -254,6 +251,11 @@ private:
 				thread = boost::shared_ptr<boost::thread>( new boost::thread(boost::bind(&user_task_pool::run, this, thread)));
 				threads.add(thread);
 			}
+		}
+
+		void post(boost::shared_ptr<boost::packaged_task<void> > pt, std::string tid)
+		{
+			tasks.post(boost::bind(&user_task_pool::pool_item<void>, this, pt, tid, user_name));
 		}
 
 	private:
@@ -271,6 +273,41 @@ private:
 				threads.add(thread);
 				threads.remove(thread_ptr);
 				return;
+			}
+		}
+
+		template <class task_return_t>
+		void pool_item( boost::shared_ptr< boost::packaged_task<task_return_t> > pt, std::string tid, std::string user_name)
+		{
+			boost::shared_ptr < boost::packaged_task<void> > task (  new boost::packaged_task<void> ( boost::bind(&run_service::run_item<task_return_t>, parent, pt)));
+			boost::unique_future<void> fi= task->get_future();
+
+			boost::shared_ptr<boost::promise<boost::thread::id> > started(new boost::promise<boost::thread::id>());
+			boost::unique_future<boost::thread::id> has_started = started->get_future();
+
+			if(parent->db_get_if_is_canceled(user_name, tid)){
+				parent->db_delete_task(tid,user_name);	
+				return;
+			}
+
+			parent->internal_tasks.post(boost::bind(&run_service::run_item<task_return_t>, parent, task, started));
+
+			has_started.wait();
+			if(has_started.has_exception())
+				return;
+
+			boost::thread::id id = has_started.get();
+
+			while(true){
+				fi.timed_wait(boost::posix_time::milliseconds(100));
+				if(parent->db_get_if_is_canceled(user_name, tid))
+				{
+					boost::shared_ptr<boost::thread> internal_thread;
+					internal_thread = boost::shared_ptr<boost::thread>( new boost::thread(boost::bind(&run_service::internal_run, parent, internal_thread)));
+					parent->internal_threads.add(internal_thread);
+					parent->internal_threads.remove(id)->interrupt();
+					parent->db_delete_task(tid,user_name);
+				}
 			}
 		}
 	};
@@ -326,34 +363,9 @@ private:
 	}
 
 	template <class task_return_t>
-	void pool_item( boost::shared_ptr< boost::packaged_task<task_return_t> > pt)
+	void run_item( boost::shared_ptr< boost::packaged_task<task_return_t> > pt, boost::shared_ptr<boost::promise<boost::thread::id> > started)
 	{
-		boost::shared_ptr < boost::packaged_task<void> > task (  new boost::packaged_task<void> ( boost::bind(&thread_pool::run_item<task_return_t>, this, pt)));
-		boost::unique_future<void> fi= task->get_future();
-
-		boost::shared_ptr<boost::promise<bool> > started(new boost::promise<bool>());
-		boost::unique_future<bool> has_started = started->get_future();
-
-		internal_tasks.post(boost::bind(&thread_pool::run_item<task_return_t>, this, task, started));
-
-		has_started.wait();
-
-		if(fi.wait(boost::posix_time::milliseconds(time_limit)))
-		{
-			return;
-		}
-		else
-		{
-			boost::shared_ptr<boost::thread> thread;
-			thread = boost::shared_ptr<boost::thread>(new boost::thread(boost::bind(&thread_pool::internal_run, this, thread)));
-			internal_threads.add(thread);
-		}
-	}
-
-	template <class task_return_t>
-	void run_item( boost::shared_ptr< boost::packaged_task<task_return_t> > pt, boost::shared_ptr<boost::promise<bool> > started)
-	{
-		started->set_value(true);
+		started->set_value(boost::this_thread::get_id());
 
 		run_item<task_return_t>(pt);
 	}
@@ -361,15 +373,7 @@ private:
 	template <class task_return_t>
 	void run_item( boost::shared_ptr< boost::packaged_task<task_return_t> > pt)
 	{
-		timer t;
-		t.restart();
-
 		(*pt)();
-
-		if (t.elapsed().total_milliseconds() > time_limit)
-		{
-			throw not_finished_on_time_exception(); //self kill
-		}
 	}
 
 	void start_work_with_db(const std::string& db_name)
@@ -662,7 +666,7 @@ private:
 	{
 		if (!user_threads[user_name])
 		{
-			user_threads[user_name] = boost::shared_ptr<user_task_pool>(new user_task_pool(this->threads_per_user));
+			user_threads[user_name] = boost::shared_ptr<user_task_pool>(new user_task_pool(this->threads_per_user, this, user_name));
 		}
 
 		try{
@@ -683,7 +687,8 @@ private:
 
 			db_create_task_table_entry(tid, user_name, t.serialize_base(), pid);
 
-			uname_therad[user_name] = boost::shared_ptr<boost::thread>(new boost::thread(boost::bind(&run_service::ThreadFunction, this, tid, user_name,pid, t)));
+			boost::shared_ptr< boost::packaged_task<void> > pt(new boost::packaged_task<void>(boost::bind(&run_service::ThreadFunction, this, tid, user_name,pid, t)));
+			user_threads[user_name]->post(pt, tid);
 
 			http_utils::set_json_content_type(response);
 			http_utils::send_json(std::make_pair("request", "accepted"), socket, response, request);
