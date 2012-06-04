@@ -298,7 +298,7 @@ private:
 
 			boost::thread::id id = has_started.get();
 
-			while(true){
+			while( (!(fi.has_value())) && (!(fi.has_exception())) ){
 				fi.timed_wait(boost::posix_time::milliseconds(100));
 				if(parent->db_get_if_is_canceled(user_name, tid))
 				{
