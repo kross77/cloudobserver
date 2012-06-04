@@ -83,6 +83,7 @@
 			<class_name>run_service</class_name>
 			<library_name>RunService</library_name>
 			<settings>
+				<run_service_files_directory>run</run_service_files_directory>
 				<database>rs.db</database>
 				<threading peruser="3" total="55"/>
 				<applications>

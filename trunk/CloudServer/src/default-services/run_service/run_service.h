@@ -15,6 +15,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/thread.hpp>
 #include <boost/thread/locks.hpp>
+#include <boost/bind.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/regex.hpp>
 #include <boost/regex.hpp>
@@ -45,6 +46,7 @@
 #include <timer.h>
 #include <fs_utils.h>
 #include <log_util.h>
+#include <thread_group.h>
 
 //SERVICE INTERFACE
 #include <http_service.hpp>
@@ -124,9 +126,19 @@ class run_service: public http_service
 { 
 public:
 	run_service(){
-		this-> command_create_users_table = "CREATE TABLE IF NOT EXISTS files (errorcode int(10), output TEXT, task TEXT NOT NULL, status varchar(65) NOT NULL, pid varchar(100) NOT NULL, started DATETIME NOT NULL default CURRENT_TIMESTAMP, finished DATETIME, modified DATETIME NOT NULL default CURRENT_TIMESTAMP )";
-		this-> post_task = "CREATE TABLE IF NOT EXISTS files (errorcode int(10), output TEXT, task TEXT NOT NULL, status varchar(65) NOT NULL, pid varchar(100) NOT NULL, started DATETIME NOT NULL default CURRENT_TIMESTAMP, finished DATETIME, modified DATETIME NOT NULL default CURRENT_TIMESTAMP )";
-
+		this->root_path = boost::filesystem::current_path().string();
+		this->command_create_tasks_table = "CREATE TABLE IF NOT EXISTS tasks (encoded_url varchar(300) UNIQUE NOT NULL primary key, output TEXT, task TEXT NOT NULL, status varchar(65) NOT NULL, pid varchar(100) NOT NULL, user_name varchar(65) NOT NULL, started DATETIME, finished DATETIME, modified DATETIME NOT NULL default CURRENT_TIMESTAMP, canceled BOOLEAN  NOT NULL default 0)";
+		this->command_post_task =  "INSERT INTO tasks (user_name, encoded_url, task, status, pid ) VALUES (:user_name, :encoded_url, :task, :status, :pid)";
+		this->command_cancel_task = "UPDATE tasks SET canceled=1, modified=CURRENT_TIMESTAMP WHERE ( user_name=:user_name and encoded_url=:encoded_url )";
+		this->command_start_task = "UPDATE tasks SET status=:status, modified=CURRENT_TIMESTAMP, started=CURRENT_TIMESTAMP  WHERE ( user_name=:user_name and encoded_url=:encoded_url )";
+		this->command_finish_task = "UPDATE tasks SET status=:status, finished=CURRENT_TIMESTAMP, modified=CURRENT_TIMESTAMP  WHERE ( user_name=:user_name and encoded_url=:encoded_url )";
+		this->command_status_task = "UPDATE tasks SET status=:status, modified=CURRENT_TIMESTAMP WHERE ( user_name=:user_name and encoded_url=:encoded_url )";
+		this->command_change_task_output = "UPDATE tasks SET output=:output, modified=CURRENT_TIMESTAMP WHERE ( user_name=:user_name and encoded_url=:encoded_url )";
+		this->command_find_all_user_tasks = "SELECT encoded_url, status, pid, modified FROM tasks WHERE user_name=:user_name AND canceled=0 ";
+		this->command_is_canceled = "SELECT canceled FROM tasks WHERE user_name=:user_name AND encoded_url=:encoded_url ";
+		this->command_get_output = "SELECT output FROM tasks WHERE user_name=:user_name AND encoded_url=:encoded_url ";
+		this->command_delete_task = "DELETE FROM tasks WHERE encoded_url=:encoded_url";
+		this->command_find_task = "SELECT user_name, pid, modified, canceled FROM tasks WHERE encoded_url=:encoded_url";
 	}
 
 	virtual std::string service_check(boost::shared_ptr<http_request> request, boost::shared_ptr<shared> shared_data){
@@ -136,118 +148,6 @@ public:
 			return "executor";
 		}
 		return "not for me";
-	}
-
-	void list_app_args(const std::string & pid, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response, boost::shared_ptr<http_request> request)
-	{
-		std::ostringstream apps_stream;
-		apps_stream << "[";
-		boost::shared_ptr<utils::app> a= apps[pid];
-		typedef std::pair<std::string, std::string > name_label_pair;
-		BOOST_FOREACH(name_label_pair v, a->task_base.name_label){
-			if(!v.first.empty())
-				apps_stream << "\n\t{\n\t\t\"name\": \""
-					<< v.first << "\",\n\t\t\"description\": \""
-					<< v.second << "\",\n\t\t\"type\": \""
-					<< a->task_base.name_type[v.first] << "\"\n\t},";
-			
-		}
-		
-		std::string files_ = apps_stream.str();
-		if (files_.length() > 5)
-			files_ = files_.substr(0, files_.length() - 1);
-		http_utils::set_json_content_type(response);
-		http_utils::send(files_.append("\n]"), socket, response, request);
-		return;
-	}
-	void ThreadFunction(const std::string & pid, utils::task t)
-	{
-		try{
-		boost::shared_ptr<utils::app> a = apps[pid];
-
-		typedef std::pair<std::string, std::string > ss_pair;
-		std::string args = t.base;
-		BOOST_FOREACH(ss_pair p, t.name_type ){
-			if((boost::iequals(p.second, "int")) && (t.int_args[p.first] != 0))
-				boost::algorithm::replace_all(args, ":" +  p.first, boost::lexical_cast<std::string>(t.int_args[p.first]));
-			else if((boost::iequals(p.second, "string")) && (!t.string_args[p.first].empty()))
-				boost::algorithm::replace_all(args, ":" + p.first, t.string_args[p.first]);
-		}
-
-			boost::process::child c = this->start_child(pid, args, a->use_shell); 
-
-			boost::process::pistream &os = c.get_stdout();
-
-			std::string line; 
-			*lu << "out stream:" << log_util::endl; 
-			while (std::getline(os, line)) 
-				*lu << line << log_util::endl; 
-
-			while(!c.wait(1000)){
-				try
-				{ 
-					boost::this_thread::interruption_point();
-				}
-				catch(const boost::thread_interrupted&)
-				{
-					break;
-				}
-			}
-		}catch(std::exception &e)
-		{
-			*lu << "error!" << log_util::endl; 
-			*lu << e.what() << log_util::endl; 
-		}
-	}
-
-	void call_app(const std::string & user_name, const std::string & pid, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response, boost::shared_ptr<http_request> request)
-	{
-		try{
-		boost::shared_ptr<utils::app> a= apps[pid];
-		typedef std::pair<std::string, std::string > name_type_pair;
-		utils::task t;
-		t = a->task_base;
-		BOOST_FOREACH(name_type_pair v, a->task_base.name_type){
-			if((!v.first.empty()) && (!request->arguments[v.first].empty())){
-				if(boost::iequals(v.second, "int" ))
-					t.int_args[v.first]=	boost::lexical_cast<int>(request->arguments[v.first]);
-				else if(boost::iequals(v.second, "string" ))
-					t.string_args[v.first]=	request->arguments[v.first];
-			}
-		}
-		uname_therad[user_name] = boost::shared_ptr<boost::thread>(new boost::thread(boost::bind(&run_service::ThreadFunction, this, pid, t)));
-		
-		http_utils::set_json_content_type(response);
-		http_utils::send_json(std::make_pair("request", "accepted"), socket, response, request);
-		return;
-		}catch(...)
-		{
-		http_utils::send_json(std::make_pair("request", "declined"), socket, response, request);
-		}
-	}
-
-	void list_apps(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response, boost::shared_ptr<http_request> request )
-	{
-		std::ostringstream apps_stream;
-		apps_stream << "[";
-
-		typedef std::pair<std::string, boost::shared_ptr<utils::app> > pid_app;
-		BOOST_FOREACH(pid_app v, apps){
-			boost::shared_ptr<utils::app> a= v.second;
-			apps_stream << "\n\t{\n\t\t\"text\": \""
-				<< a->description.name << "\",\n\t\t\"description\": \""
-				<< a->description.text << "\",\n\t\t\"imageSrc\": \""
-				<< a->description.icon << "\",\n\t\t\"pid\": \""
-				<< a->process_id << "\"\n\t},";
-
-		}
-
-		std::string files_ = apps_stream.str();
-		if (files_.length() > 5)
-			files_ = files_.substr(0, files_.length() - 1);
-		http_utils::set_json_content_type(response);
-		http_utils::send(files_.append("\n]"), socket, response, request);
-		return;
 	}
 
 	virtual void service_call(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_request> request,  boost::shared_ptr<shared> shared_data){
@@ -277,14 +177,15 @@ public:
 	}
 
 	virtual void apply_config(boost::shared_ptr<boost::property_tree::ptree> config){
+		this->root_path = config->get<std::string>("run_service_files_directory", this->root_path.string());
 		std::string db_name = config->get<std::string>("database",  "rs.db");
 		std::string log_name = config->get<std::string>("log",  "rs.log");
-		int threads_per_user = config->get<int>("threading.<xmlattr>.peruser",  2);
-		int threads_totall = config->get<int>("threading.<xmlattr>.total",  10);
+		this->threads_per_user = config->get<int>("threading.<xmlattr>.peruser",  2);
+		this->threads_totall = config->get<int>("threading.<xmlattr>.total",  10);
 
 		start_work_with_lu(log_name);
 		start_work_with_db(db_name);
-		
+
 
 		BOOST_FOREACH(boost::property_tree::ptree::value_type &v,
 			config->get_child("applications", utils::empty_class<boost::property_tree::ptree>()))
@@ -325,13 +226,151 @@ public:
 	virtual void stop(){}
 
 private:
+
 	std::map<std::string, boost::shared_ptr<boost::thread> > uname_therad;
 
 	std::map<std::string, boost::shared_ptr<utils::app> > apps;
 	boost::shared_ptr<log_util> lu;
 	boost::shared_ptr<sqlite3pp::database> db;
-	std::string command_create_users_table;
+	std::string command_create_tasks_table;
 	std::string post_task;
+
+
+
+
+
+
+	class user_task_pool{
+	public:
+		boost::asio::io_service tasks;
+		boost::asio::io_service::work *work;
+		thread_group threads;
+
+		user_task_pool(int create_threads){
+			work = new boost::asio::io_service::work(tasks);
+			for (std::size_t i = 0; i < create_threads; ++i)
+			{
+				boost::shared_ptr<boost::thread> thread;
+				thread = boost::shared_ptr<boost::thread>( new boost::thread(boost::bind(&user_task_pool::run, this, thread)));
+				threads.add(thread);
+			}
+		}
+
+	private:
+		void run(boost::shared_ptr<boost::thread> thread_ptr)
+		{
+			try
+			{
+				tasks.run();
+			}		
+			catch(std::exception &e)
+			{
+				std::cout << e.what() << std::endl;
+				boost::shared_ptr<boost::thread> thread;
+				thread = boost::shared_ptr<boost::thread>(new boost::thread(boost::bind(&user_task_pool::run, this, thread)));
+				threads.add(thread);
+				threads.remove(thread_ptr);
+				return;
+			}
+		}
+	};
+
+	std::map<std::string, boost::shared_ptr<user_task_pool> > user_threads;
+	thread_group internal_threads;
+	boost::asio::io_service internal_tasks;
+	boost::asio::io_service::work *internal_work;
+
+	int time_limit;
+	std::string command_post_task;
+	std::string command_cancel_task;
+	std::string command_start_task;
+	std::string command_finish_task;
+	std::string command_change_task_output;
+	std::string command_find_all_user_tasks;
+	std::string command_is_canceled;
+	std::string command_get_output;
+	std::string command_delete_task;
+	std::string command_find_task;
+	boost::filesystem::path root_path;
+	std::string command_status_task;
+	int threads_totall;
+	int threads_per_user;
+
+	void threads_pool_generator()
+	{
+		internal_work = new boost::asio::io_service::work(internal_tasks);
+
+		for (std::size_t i = 0; i < this->threads_totall; ++i)
+		{
+			boost::shared_ptr<boost::thread> internal_thread;
+			internal_thread = boost::shared_ptr<boost::thread>( new boost::thread(boost::bind(&run_service::internal_run, this, internal_thread)));
+			internal_threads.add(internal_thread);
+		}
+
+	}
+
+	void internal_run(boost::shared_ptr<boost::thread> internal_thread_ptr)
+	{
+		try
+		{
+			internal_tasks.run();
+		}		
+		catch(std::exception &e)
+		{
+			boost::shared_ptr<boost::thread> internal_thread;
+			internal_thread = boost::shared_ptr<boost::thread>( new boost::thread(boost::bind(&run_service::internal_run, this, internal_thread)));
+			internal_threads.add(internal_thread);
+			internal_threads.remove(internal_thread_ptr);
+			return;
+		}
+	}
+
+	template <class task_return_t>
+	void pool_item( boost::shared_ptr< boost::packaged_task<task_return_t> > pt)
+	{
+		boost::shared_ptr < boost::packaged_task<void> > task (  new boost::packaged_task<void> ( boost::bind(&thread_pool::run_item<task_return_t>, this, pt)));
+		boost::unique_future<void> fi= task->get_future();
+
+		boost::shared_ptr<boost::promise<bool> > started(new boost::promise<bool>());
+		boost::unique_future<bool> has_started = started->get_future();
+
+		internal_tasks.post(boost::bind(&thread_pool::run_item<task_return_t>, this, task, started));
+
+		has_started.wait();
+
+		if(fi.wait(boost::posix_time::milliseconds(time_limit)))
+		{
+			return;
+		}
+		else
+		{
+			boost::shared_ptr<boost::thread> thread;
+			thread = boost::shared_ptr<boost::thread>(new boost::thread(boost::bind(&thread_pool::internal_run, this, thread)));
+			internal_threads.add(thread);
+		}
+	}
+
+	template <class task_return_t>
+	void run_item( boost::shared_ptr< boost::packaged_task<task_return_t> > pt, boost::shared_ptr<boost::promise<bool> > started)
+	{
+		started->set_value(true);
+
+		run_item<task_return_t>(pt);
+	}
+
+	template <class task_return_t>
+	void run_item( boost::shared_ptr< boost::packaged_task<task_return_t> > pt)
+	{
+		timer t;
+		t.restart();
+
+		(*pt)();
+
+		if (t.elapsed().total_milliseconds() > time_limit)
+		{
+			throw not_finished_on_time_exception(); //self kill
+		}
+	}
 
 	void start_work_with_db(const std::string& db_name)
 	{
@@ -341,7 +380,7 @@ private:
 			boost::shared_ptr<sqlite3pp::database> db_( new sqlite3pp::database(db_name.c_str()));
 			this->db = db_;
 
-			*lu << "Connected to "<< db_name << " database and created a table with SQLite return code: " << db->execute(command_create_users_table.c_str()) << log_util::endl;
+			*lu << "Connected to "<< db_name << " database and created a table with SQLite return code: " << db->execute(command_create_tasks_table.c_str()) << log_util::endl;
 		}
 	}
 
@@ -382,13 +421,13 @@ private:
 		return boost::erase_all_regex_copy(args, boost::regex("[^a-zA-Z0-9=\"/.: -]+"));
 	}
 
-	boost::process::child start_child(std::string pid, std::string arguments, bool use_shall = false) 
+	boost::process::child start_child(std::string tid, std::string pid, std::string arguments, bool use_shall = false) 
 	{ 
 		boost::filesystem::path path_to_exec (apps[pid]->process_name);
 		std::string exec = path_to_exec.string();
 		boost::process::context ctx; 
 		ctx.environment = boost::process::self::get_environment();
-		//	ctx.work_directory = app_wd;
+		ctx.work_directory = (root_path / tid).normalize().string();
 		ctx.stdout_behavior =  boost::process::capture_stream(); 
 
 		if(use_shall) 
@@ -398,6 +437,310 @@ private:
 	} 
 
 
+	void db_set_task_output( std::string encoded_url, std::string user_name, std::string output )
+	{
+		sqlite3pp::transaction xct(*db);
+		sqlite3pp::command cmd(*db, command_finish_task.c_str());
+		cmd.bind(":encoded_url", encoded_url) ;
+		cmd.bind(":output", output) ;
+		cmd.bind(":user_name", user_name) ;
+		cmd.execute() ;
+		xct.commit();
+	}
+
+	void db_set_finish_task( std::string encoded_url, std::string user_name )
+	{
+		sqlite3pp::transaction xct(*db);
+		sqlite3pp::command cmd(*db, command_finish_task.c_str());
+		cmd.bind(":encoded_url", encoded_url) ;
+		cmd.bind(":status", "finished") ;
+		cmd.bind(":user_name", user_name) ;
+		cmd.execute() ;
+		xct.commit();
+	}
+
+	void db_set_status_on_task( std::string encoded_url, std::string user_name, std::string status )
+	{
+		sqlite3pp::transaction xct(*db);
+		sqlite3pp::command cmd(*db, command_status_task.c_str());
+		cmd.bind(":encoded_url", encoded_url) ;
+		cmd.bind(":status", status) ;
+		cmd.bind(":user_name", user_name) ;
+		cmd.execute() ;
+		xct.commit();
+	}
+
+	void db_set_started_task( std::string encoded_url, std::string user_name )
+	{
+		sqlite3pp::transaction xct(*db);
+		sqlite3pp::command cmd(*db, command_start_task.c_str());
+		cmd.bind(":encoded_url", encoded_url) ;
+		cmd.bind(":status", "started") ;
+		cmd.bind(":user_name", user_name) ;
+		cmd.execute() ;
+		xct.commit();
+	}
+
+	void db_set_canceled_task( std::string encoded_url, std::string user_name )
+	{
+		sqlite3pp::transaction xct(*db);
+		sqlite3pp::command cmd(*db, command_cancel_task.c_str());
+		cmd.bind(":encoded_url", encoded_url) ;
+		cmd.bind(":user_name", user_name) ;
+		cmd.execute() ;
+		xct.commit();
+	}
+
+	void db_create_task_table_entry( std::string encoded_url, std::string user_name, std::string task_string, std::string pid )
+	{
+		sqlite3pp::transaction xct(*db);
+		sqlite3pp::command cmd(*db, command_post_task.c_str());
+		cmd.bind(":encoded_url", encoded_url) ;
+		cmd.bind(":status", "waiting") ;
+		cmd.bind(":user_name", user_name) ;
+		cmd.bind(":pid", pid);
+		cmd.bind(":task", task_string);
+		cmd.execute() ;
+		xct.commit();
+	}
+
+	bool db_get_if_is_canceled( std::string user_name, std::string encoded_url)
+	{
+		bool response = false;
+		sqlite3pp::transaction xct(*db, true);
+		{
+			sqlite3pp::query qry(*db, this->command_is_canceled.c_str());
+			qry.bind(":user_name", user_name);
+			qry.bind(":encoded_url", encoded_url);
+
+			for (sqlite3pp::query::iterator i = qry.begin(); i != qry.end(); ++i) {
+				int canceled;
+				(*i).getter() >> canceled;
+				if(canceled == 1)
+					response = true;
+			}
+		}
+		return response;
+	}
+
+	bool db_delete_task( std::string encoded_url, std::string user_name)
+	{
+		sqlite3pp::transaction xct(*db, true);
+		{
+			sqlite3pp::query qry(*db, this->command_find_task.c_str());
+			qry.bind(":encoded_url", encoded_url);
+			//file_name, user_name, is_public, modifie
+			for (sqlite3pp::query::iterator i = qry.begin(); i != qry.end(); ++i) {
+				int canceled;
+				std::string  t_user_name, pid, modified;
+				(*i).getter() >> t_user_name >> pid >>  modified >> canceled;
+
+				if((t_user_name == user_name) && (canceled == 1))
+				{
+					sqlite3pp::command cmd(*db, this->command_delete_task.c_str());
+					cmd.bind(":encoded_url", encoded_url);
+					if(cmd.execute() == 0)
+					{
+						boost::filesystem::remove_all(boost::filesystem::path(this->root_path / encoded_url));
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	std::string db_get_task_output( std::string user_name,  std::string encoded_url)
+	{
+		std::string result = "";
+		sqlite3pp::transaction xct(*db, true);
+		{
+			sqlite3pp::query qry(*db, this->command_find_all_user_tasks.c_str());
+			qry.bind(":user_name", user_name);
+			qry.bind(":encoded_url", encoded_url);
+			for (sqlite3pp::query::iterator i = qry.begin(); i != qry.end(); ++i) {
+				(*i).getter() >>  result;
+			}
+		}
+		return result;
+	}
+
+	void list_task_output( std::string user_name,  std::string encoded_url, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response, boost::shared_ptr<http_request> request )
+	{
+		std::ostringstream user_tasks_stream;
+		user_tasks_stream << "[";
+		user_tasks_stream << "\n\t{\n\t\t\"href\": \""
+			<< encoded_url << "\",\n\t\t\"output\": \""
+			<< http_utils::escape(db_get_task_output(user_name, encoded_url))  << "\"\n\t}";
+
+		std::string files_ = user_tasks_stream.str();
+
+		http_utils::set_json_content_type(response);
+		http_utils::send(files_.append("\n]"), socket, response, request);
+		return;
+	}
+
+	void list_user_tasks( std::string user_name, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response, boost::shared_ptr<http_request> request )
+	{
+		std::ostringstream user_tasks_stream;
+		user_tasks_stream << "[";
+
+		sqlite3pp::transaction xct(*db, true);
+		{
+			sqlite3pp::query qry(*db, this->command_find_all_user_tasks.c_str());
+			qry.bind(":user_name", user_name);
+
+			for (sqlite3pp::query::iterator i = qry.begin(); i != qry.end(); ++i) {
+				std::string encoded_url, status, pid, modified;
+				(*i).getter() >>  encoded_url >> status >> pid >> modified ;
+
+				user_tasks_stream << "\n\t{\n\t\t\"encoded_url\": \""
+					<< encoded_url << "\",\n\t\t\"status\": \""
+					<< status << "\",\n\t\t\"pid\": \""
+					<< pid << "\",\n\t\t\"modified\": \""
+					<< modified << "\"\n\t},";
+			}
+
+		}
+		std::string files_ = user_tasks_stream.str();
+		if (files_.length() > 5)
+			files_ = files_.substr(0, files_.length() - 1);
+		http_utils::set_json_content_type(response);
+		http_utils::send(files_.append("\n]"), socket, response, request);
+		return;
+	}
+
+	void ThreadFunction(std::string tid, std::string user_name,std::string pid, utils::task t)
+	{
+		try{
+			boost::shared_ptr<utils::app> a = apps[pid];
+
+			typedef std::pair<std::string, std::string > ss_pair;
+			std::string args = t.base;
+			BOOST_FOREACH(ss_pair p, t.name_type ){
+				if((boost::iequals(p.second, "int")) && (t.int_args[p.first] != 0))
+					boost::algorithm::replace_all(args, ":" +  p.first, boost::lexical_cast<std::string>(t.int_args[p.first]));
+				else if((boost::iequals(p.second, "string")) && (!t.string_args[p.first].empty()))
+					boost::algorithm::replace_all(args, ":" + p.first, t.string_args[p.first]);
+			}
+
+			if(db_get_if_is_canceled(user_name, tid))
+				db_delete_task(tid, user_name);
+
+			db_set_started_task(tid, user_name);
+			general_utils::create_directory(root_path / tid);
+			boost::process::child c = this->start_child(tid, pid, args, a->use_shell); 
+
+			boost::process::pistream &os = c.get_stdout();
+
+			std::string line; 
+			*lu << "out stream:" << log_util::endl; 
+			while (std::getline(os, line)) {
+
+				*lu << line << log_util::endl; 
+				line = db_get_task_output(user_name, tid) + line; 
+				db_set_task_output(tid, user_name, line );
+			}
+
+			c.wait();
+
+			db_set_finish_task(tid, user_name);
+
+		}catch(std::exception &e)
+		{
+			*lu << "error!" << log_util::endl; 
+			*lu << e.what() << log_util::endl; 
+
+			std::string output_line = db_get_task_output(user_name, tid) + e.what(); 
+			db_set_task_output(tid, user_name, output_line );
+
+			db_set_status_on_task(tid, user_name, "error");
+		}
+	}
+
+	void call_app(const std::string & user_name, const std::string & pid, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response, boost::shared_ptr<http_request> request)
+	{
+		if (!user_threads[user_name])
+		{
+			user_threads[user_name] = boost::shared_ptr<user_task_pool>(new user_task_pool(this->threads_per_user));
+		}
+
+		try{
+			boost::shared_ptr<utils::app> a= apps[pid];
+			typedef std::pair<std::string, std::string > name_type_pair;
+			utils::task t;
+			t = a->task_base;
+			BOOST_FOREACH(name_type_pair v, a->task_base.name_type){
+				if((!v.first.empty()) && (!request->arguments[v.first].empty())){
+					if(boost::iequals(v.second, "int" ))
+						t.int_args[v.first]=	boost::lexical_cast<int>(request->arguments[v.first]);
+					else if(boost::iequals(v.second, "string" ))
+						t.string_args[v.first]=	request->arguments[v.first];
+				}
+			}
+			std::string tid = user_name + t.serialize_base() + general_utils::get_utc_now_time();
+			tid = general_utils::get_sha256(tid);
+
+			db_create_task_table_entry(tid, user_name, t.serialize_base(), pid);
+
+			uname_therad[user_name] = boost::shared_ptr<boost::thread>(new boost::thread(boost::bind(&run_service::ThreadFunction, this, tid, user_name,pid, t)));
+
+			http_utils::set_json_content_type(response);
+			http_utils::send_json(std::make_pair("request", "accepted"), socket, response, request);
+			return;
+		}catch(std::exception &e)
+		{
+			*lu << e.what() <<log_util::endl;
+			http_utils::send_json(std::make_pair("request", "declined"), socket, response, request);
+		}
+	}
+
+	void list_apps(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response, boost::shared_ptr<http_request> request )
+	{
+		std::ostringstream apps_stream;
+		apps_stream << "[";
+
+		typedef std::pair<std::string, boost::shared_ptr<utils::app> > pid_app;
+		BOOST_FOREACH(pid_app v, apps){
+			boost::shared_ptr<utils::app> a= v.second;
+			apps_stream << "\n\t{\n\t\t\"text\": \""
+				<< a->description.name << "\",\n\t\t\"description\": \""
+				<< a->description.text << "\",\n\t\t\"imageSrc\": \""
+				<< a->description.icon << "\",\n\t\t\"pid\": \""
+				<< a->process_id << "\"\n\t},";
+
+		}
+
+		std::string files_ = apps_stream.str();
+		if (files_.length() > 5)
+			files_ = files_.substr(0, files_.length() - 1);
+		http_utils::set_json_content_type(response);
+		http_utils::send(files_.append("\n]"), socket, response, request);
+		return;
+	}
+
+	void list_app_args(const std::string & pid, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response, boost::shared_ptr<http_request> request)
+	{
+		std::ostringstream apps_stream;
+		apps_stream << "[";
+		boost::shared_ptr<utils::app> a= apps[pid];
+		typedef std::pair<std::string, std::string > name_label_pair;
+		BOOST_FOREACH(name_label_pair v, a->task_base.name_label){
+			if(!v.first.empty())
+				apps_stream << "\n\t{\n\t\t\"name\": \""
+				<< v.first << "\",\n\t\t\"description\": \""
+				<< v.second << "\",\n\t\t\"type\": \""
+				<< a->task_base.name_type[v.first] << "\"\n\t},";
+
+		}
+
+		std::string files_ = apps_stream.str();
+		if (files_.length() > 5)
+			files_ = files_.substr(0, files_.length() - 1);
+		http_utils::set_json_content_type(response);
+		http_utils::send(files_.append("\n]"), socket, response, request);
+		return;
+	}
 };
 
 #endif // RUN_SERVICE_H
