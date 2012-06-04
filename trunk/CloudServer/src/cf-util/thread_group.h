@@ -1,7 +1,7 @@
 #ifndef THREAD_GROUP_H
 #define THREAD_GROUP_H
 
-#include <set>
+#include <map>
 
 #include <boost/thread.hpp>
 #include <boost/thread/locks.hpp>
@@ -29,7 +29,7 @@ public:
 	void add( boost::shared_ptr<boost::thread> to_add)
 	{
 		boost::mutex::scoped_lock lock(m);
-		ds_.insert(to_add);
+		ds_.insert(std::make_pair(to_add->get_id(), to_add));
 	}
 	/*!
 	 * \brief removes thread from thread group
@@ -38,13 +38,32 @@ public:
 	 * \n Access:    public  
 	 *
 	 * \param to_remove boost::shared_ptr<boost::thread> 
-	 * \return void
+	 * \return boost::shared_ptr<boost::thread> thread removed from container
 	 *
 	 */
 	void remove( boost::shared_ptr<boost::thread> to_remove)
 	{
 		boost::mutex::scoped_lock lock(m);
+		if(to_remove)
+			ds_.erase(to_remove->get_id());
+	}
+
+	/*!
+	 * \brief removes thread from thread group by its id (safly)
+	 *
+	 * \n FullName:  thread_group::remove
+	 * \n Access:    public  
+	 *
+	 * \param to_remove boost::thread::id 
+	 * \return boost::shared_ptr<boost::thread> thread removed from container
+	 *
+	 */
+	boost::shared_ptr<boost::thread> remove( boost::thread::id to_remove)
+	{
+		boost::mutex::scoped_lock lock(m);
+		boost::shared_ptr<boost::thread> result = ds_[to_remove];
 		ds_.erase(to_remove);
+		return result;
 	}
 
 	/*!
@@ -75,16 +94,17 @@ public:
 	void join_all(boost::posix_time::milliseconds interuption_time=boost::posix_time::milliseconds(1000))
 	{
 		boost::mutex::scoped_lock lock(m);
-		BOOST_FOREACH(boost::shared_ptr<boost::thread> t, ds_)
+		typedef std::pair<boost::thread::id, boost::shared_ptr<boost::thread> > it_pair;
+		BOOST_FOREACH(it_pair t, ds_)
 		{
-			boost::thread interrupter(boost::bind(&thread_group::interupt_thread, this, t, interuption_time));
+			boost::thread interrupter(boost::bind(&thread_group::interupt_thread, this, t.second, interuption_time));
 		}
 		boost::upgrade_lock<boost::shared_mutex> lock_k(killer);
 		boost::upgrade_to_unique_lock<boost::shared_mutex> uniqueLock(lock_k);
 	}
 
 private:
-	std::set< boost::shared_ptr<boost::thread> > ds_;
+	std::map<boost::thread::id, boost::shared_ptr<boost::thread> > ds_;
 	mutable boost::mutex m;
 	boost::shared_mutex  killer;
 	void interupt_thread(boost::shared_ptr<boost::thread> t, boost::posix_time::milliseconds interuption_time)
