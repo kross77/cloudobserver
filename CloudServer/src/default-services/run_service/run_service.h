@@ -133,7 +133,7 @@ public:
 		this->command_start_task = "UPDATE tasks SET status=:status, modified=CURRENT_TIMESTAMP, started=CURRENT_TIMESTAMP  WHERE ( user_name=:user_name and encoded_url=:encoded_url )";
 		this->command_finish_task = "UPDATE tasks SET status=:status, finished=CURRENT_TIMESTAMP, modified=CURRENT_TIMESTAMP  WHERE ( user_name=:user_name and encoded_url=:encoded_url )";
 		this->command_status_task = "UPDATE tasks SET status=:status, modified=CURRENT_TIMESTAMP WHERE ( user_name=:user_name and encoded_url=:encoded_url )";
-		this->command_change_task_output = "UPDATE tasks SET output=:output, modified=CURRENT_TIMESTAMP WHERE ( user_name=:user_name and encoded_url=:encoded_url )";
+		this->command_set_task_output = "UPDATE tasks SET output=:output, modified=CURRENT_TIMESTAMP WHERE ( user_name=:user_name and encoded_url=:encoded_url )";
 		this->command_find_all_user_tasks = "SELECT encoded_url, status, pid, modified FROM tasks WHERE user_name=:user_name AND canceled=0 ";
 		this->command_is_canceled = "SELECT canceled FROM tasks WHERE user_name=:user_name AND encoded_url=:encoded_url ";
 		this->command_get_output = "SELECT output FROM tasks WHERE user_name=:user_name AND encoded_url=:encoded_url ";
@@ -168,6 +168,14 @@ public:
 				else if (boost::iequals(request->arguments["action"], "call") && !request->arguments["pid"].empty())
 				{
 					call_app(user_name, request->arguments["pid"], socket, response, request);
+				}
+			}else if(request->url == "/run.json"){
+				if (boost::iequals(request->arguments["action"], "list_tasks"))
+				{
+					list_user_tasks(user_name, socket, response, request );
+				}else if (boost::iequals(request->arguments["action"], "list_output") && !request->arguments["pid"].empty())
+				{
+					list_task_output( user_name,  request->arguments["pid"], socket, response, request );
 				}
 			}
 			return;
@@ -322,7 +330,7 @@ private:
 	std::string command_cancel_task;
 	std::string command_start_task;
 	std::string command_finish_task;
-	std::string command_change_task_output;
+	std::string command_set_task_output;
 	std::string command_find_all_user_tasks;
 	std::string command_is_canceled;
 	std::string command_get_output;
@@ -444,86 +452,97 @@ private:
 	void db_set_task_output( std::string encoded_url, std::string user_name, std::string output )
 	{
 		sqlite3pp::transaction xct(*db);
-		sqlite3pp::command cmd(*db, command_finish_task.c_str());
-		cmd.bind(":encoded_url", encoded_url) ;
-		cmd.bind(":output", output) ;
-		cmd.bind(":user_name", user_name) ;
-		cmd.execute() ;
+		{
+			sqlite3pp::command cmd(*db, command_set_task_output.c_str());
+			cmd.bind(":encoded_url", encoded_url);
+			cmd.bind(":output", output);
+			cmd.bind(":user_name", user_name);
+			cmd.execute();
+		}
 		xct.commit();
 	}
 
 	void db_set_finish_task( std::string encoded_url, std::string user_name )
 	{
 		sqlite3pp::transaction xct(*db);
-		sqlite3pp::command cmd(*db, command_finish_task.c_str());
-		cmd.bind(":encoded_url", encoded_url) ;
-		cmd.bind(":status", "finished") ;
-		cmd.bind(":user_name", user_name) ;
-		cmd.execute() ;
+		{
+			sqlite3pp::command cmd(*db, command_finish_task.c_str());
+			cmd.bind(":encoded_url", encoded_url) ;
+			cmd.bind(":status", "finished") ;
+			cmd.bind(":user_name", user_name) ;
+			cmd.execute() ;
+		}
 		xct.commit();
 	}
 
 	void db_set_status_on_task( std::string encoded_url, std::string user_name, std::string status )
 	{
 		sqlite3pp::transaction xct(*db);
-		sqlite3pp::command cmd(*db, command_status_task.c_str());
-		cmd.bind(":encoded_url", encoded_url) ;
-		cmd.bind(":status", status) ;
-		cmd.bind(":user_name", user_name) ;
-		cmd.execute() ;
+		{
+			sqlite3pp::command cmd(*db, command_status_task.c_str());
+			cmd.bind(":encoded_url", encoded_url) ;
+			cmd.bind(":status", status) ;
+			cmd.bind(":user_name", user_name) ;
+			cmd.execute() ;
+		}
 		xct.commit();
 	}
 
 	void db_set_started_task( std::string encoded_url, std::string user_name )
 	{
 		sqlite3pp::transaction xct(*db);
-		sqlite3pp::command cmd(*db, command_start_task.c_str());
-		cmd.bind(":encoded_url", encoded_url) ;
-		cmd.bind(":status", "started") ;
-		cmd.bind(":user_name", user_name) ;
-		cmd.execute() ;
+		{
+			sqlite3pp::command cmd(*db, command_start_task.c_str());
+			cmd.bind(":encoded_url", encoded_url) ;
+			cmd.bind(":status", "started") ;
+			cmd.bind(":user_name", user_name) ;
+			cmd.execute() ;
+		}
 		xct.commit();
 	}
 
 	void db_set_canceled_task( std::string encoded_url, std::string user_name )
 	{
 		sqlite3pp::transaction xct(*db);
-		sqlite3pp::command cmd(*db, command_cancel_task.c_str());
-		cmd.bind(":encoded_url", encoded_url) ;
-		cmd.bind(":user_name", user_name) ;
-		cmd.execute() ;
+		{
+			sqlite3pp::command cmd(*db, command_cancel_task.c_str());
+			cmd.bind(":encoded_url", encoded_url) ;
+			cmd.bind(":user_name", user_name) ;
+			cmd.execute() ;
+		}
 		xct.commit();
 	}
 
 	void db_create_task_table_entry( std::string encoded_url, std::string user_name, std::string task_string, std::string pid )
 	{
 		sqlite3pp::transaction xct(*db);
-		sqlite3pp::command cmd(*db, command_post_task.c_str());
-		cmd.bind(":encoded_url", encoded_url) ;
-		cmd.bind(":status", "waiting") ;
-		cmd.bind(":user_name", user_name) ;
-		cmd.bind(":pid", pid);
-		cmd.bind(":task", task_string);
-		cmd.execute() ;
+		{
+			sqlite3pp::command cmd(*db, command_post_task.c_str());
+			cmd.bind(":encoded_url", encoded_url) ;
+			cmd.bind(":status", "waiting") ;
+			cmd.bind(":user_name", user_name) ;
+			cmd.bind(":pid", pid);
+			cmd.bind(":task", task_string);
+			cmd.execute() ;
+		}
 		xct.commit();
 	}
 
 	bool db_get_if_is_canceled( std::string user_name, std::string encoded_url)
 	{
 		bool response = false;
-		sqlite3pp::transaction xct(*db, true);
-		{
-			sqlite3pp::query qry(*db, this->command_is_canceled.c_str());
-			qry.bind(":user_name", user_name);
-			qry.bind(":encoded_url", encoded_url);
 
-			for (sqlite3pp::query::iterator i = qry.begin(); i != qry.end(); ++i) {
-				int canceled;
-				(*i).getter() >> canceled;
-				if(canceled == 1)
-					response = true;
-			}
+		sqlite3pp::query qry(*db, this->command_is_canceled.c_str());
+		qry.bind(":user_name", user_name);
+		qry.bind(":encoded_url", encoded_url);
+
+		for (sqlite3pp::query::iterator i = qry.begin(); i != qry.end(); ++i) {
+			int canceled;
+			(*i).getter() >> canceled;
+			if(canceled == 1)
+				response = true;
 		}
+
 		return response;
 	}
 
@@ -557,14 +576,11 @@ private:
 	std::string db_get_task_output( std::string user_name,  std::string encoded_url)
 	{
 		std::string result = "";
-		sqlite3pp::transaction xct(*db, true);
-		{
-			sqlite3pp::query qry(*db, this->command_get_output.c_str());
-			qry.bind(":user_name", user_name);
-			qry.bind(":encoded_url", encoded_url);
-			for (sqlite3pp::query::iterator i = qry.begin(); i != qry.end(); ++i) {
-				(*i).getter() >>  result;
-			}
+		sqlite3pp::query qry(*db, this->command_get_output.c_str());
+		qry.bind(":user_name", user_name);
+		qry.bind(":encoded_url", encoded_url);
+		for (sqlite3pp::query::iterator i = qry.begin(); i != qry.end(); ++i) {
+			(*i).getter() >>  result;
 		}
 		return result;
 	}
@@ -589,23 +605,20 @@ private:
 		std::ostringstream user_tasks_stream;
 		user_tasks_stream << "[";
 
-		sqlite3pp::transaction xct(*db, true);
-		{
-			sqlite3pp::query qry(*db, this->command_find_all_user_tasks.c_str());
-			qry.bind(":user_name", user_name);
+		sqlite3pp::query qry(*db, this->command_find_all_user_tasks.c_str());
+		qry.bind(":user_name", user_name);
 
-			for (sqlite3pp::query::iterator i = qry.begin(); i != qry.end(); ++i) {
-				std::string encoded_url, status, pid, modified;
-				(*i).getter() >>  encoded_url >> status >> pid >> modified ;
+		for (sqlite3pp::query::iterator i = qry.begin(); i != qry.end(); ++i) {
+			std::string encoded_url, status, pid, modified;
+			(*i).getter() >>  encoded_url >> status >> pid >> modified ;
 
-				user_tasks_stream << "\n\t{\n\t\t\"encoded_url\": \""
-					<< encoded_url << "\",\n\t\t\"status\": \""
-					<< status << "\",\n\t\t\"pid\": \""
-					<< pid << "\",\n\t\t\"modified\": \""
-					<< modified << "\"\n\t},";
-			}
-
+			user_tasks_stream << "\n\t{\n\t\t\"encoded_url\": \""
+				<< encoded_url << "\",\n\t\t\"status\": \""
+				<< status << "\",\n\t\t\"pid\": \""
+				<< pid << "\",\n\t\t\"modified\": \""
+				<< modified << "\"\n\t},";
 		}
+
 		std::string files_ = user_tasks_stream.str();
 		if (files_.length() > 5)
 			files_ = files_.substr(0, files_.length() - 1);
@@ -637,7 +650,7 @@ private:
 
 			boost::process::pistream &os = c.get_stdout();
 
-			std::string line; 
+			std::string line = ""; 
 			*lu << "out stream:" << log_util::endl; 
 			while (std::getline(os, line)) {
 
