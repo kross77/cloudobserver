@@ -1109,9 +1109,9 @@ EOF
 	if [ "$OS" == "windows" ]; then
 		run cd projects/$OS-$VSPREMAKE
 		if $DEVELOPMENT; then
-			run msbuild.exe /maxcpucount:$JOBS CloudClient.sln //p:Configuration=DebugStatic
+			run msbuild.exe /maxcpucount:$JOBS CloudClient.sln //p:Configuration=DebugStatic //p:Platform=Win32
 		else
-			run msbuild.exe /maxcpucount:$JOBS CloudClient.sln //p:Configuration=ReleaseStatic
+			run msbuild.exe /maxcpucount:$JOBS CloudClient.sln //p:Configuration=ReleaseStatic //p:Platform=Win32
 		fi
 	else
 		run cd projects/$OS-gmake
@@ -1172,9 +1172,9 @@ EOF
 		echo $REVISION_INFORMATION >> projects/$OS-$VSPREMAKE/bin/release/htdocs/js/cf.js
 		run cd projects/$OS-$VSPREMAKE
 		if $DEVELOPMENT; then
-			run msbuild.exe /maxcpucount:$JOBS CloudServer.sln //p:Configuration=Debug
+			run msbuild.exe /maxcpucount:$JOBS CloudServer.sln //p:Configuration=Debug //p:Platform=Win32
 		else
-			run msbuild.exe /maxcpucount:$JOBS CloudServer.sln //p:Configuration=Release
+			run msbuild.exe /maxcpucount:$JOBS CloudServer.sln //p:Configuration=Release //p:Platform=Win32
 		fi
 	else
 		REVISION_INFORMATION="\$(document).ready(function() {\$('#rol').after('. Revision $(svnversion -n)');});"
