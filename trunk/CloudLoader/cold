@@ -887,19 +887,19 @@ EOF
 				-DLIBTYPE=STATIC \
 				-G "$VSCMAKE"
 			if $DEVELOPMENT; then
-				run msbuild.exe /maxcpucount:$JOBS OpenAL.sln //p:Configuration=Debug
+				run msbuild.exe /maxcpucount:$JOBS OpenAL.sln //p:Configuration=Debug //p:Platform=Win32
 				if [ $VSVERSION -eq 9 ]; then
-					run msbuild.exe /maxcpucount:$JOBS INSTALL.vcproj //p:Configuration=Debug
+					run msbuild.exe /maxcpucount:$JOBS INSTALL.vcproj //p:Configuration=Debug //p:Platform=Win32
 				elif [ $VSVERSION -eq 10 ]; then
-					run msbuild.exe /maxcpucount:$JOBS INSTALL.vcxproj //p:Configuration=Debug
+					run msbuild.exe /maxcpucount:$JOBS INSTALL.vcxproj //p:Configuration=Debug //p:Platform=Win32
 				fi
 				cp Debug/openal32d.pdb "$OPENAL_INSTALL"/lib
 			fi
-			run msbuild.exe /maxcpucount:$JOBS OpenAL.sln //p:Configuration=Release
+			run msbuild.exe /maxcpucount:$JOBS OpenAL.sln //p:Configuration=Release //p:Platform=Win32
 			if [ $VSVERSION -eq 9 ]; then
-				run msbuild.exe /maxcpucount:$JOBS INSTALL.vcproj //p:Configuration=Release
+				run msbuild.exe /maxcpucount:$JOBS INSTALL.vcproj //p:Configuration=Release //p:Platform=Win32
 			elif [ $VSVERSION -eq 10 ]; then
-				run msbuild.exe /maxcpucount:$JOBS INSTALL.vcxproj //p:Configuration=Release
+				run msbuild.exe /maxcpucount:$JOBS INSTALL.vcxproj //p:Configuration=Release //p:Platform=Win32
 			fi
 		else
 			run "$CMAKE_INSTALL"/bin/cmake \
