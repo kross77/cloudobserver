@@ -34,6 +34,15 @@ goto COLD
 >> mingw-get.vbs echo.
 >> mingw-get.vbs echo.With CreateObject("Shell.Application")
 >> mingw-get.vbs echo.	.NameSpace("%~dp0mingw").Copyhere .NameSpace("%~dp0downloads\mingw-get-0.4-mingw32-alpha-1-bin.zip").Items
+>> mingw-get.vbs echo.	If fileSystemObject.FolderExists("%~dp0downloads\mingw-data") Then
+>> mingw-get.vbs echo.		.NameSpace("%~dp0mingw\var\lib\mingw-get\data").Copyhere .Namespace("%~dp0downloads\mingw-data").Items
+>> mingw-get.vbs echo.	End If
+>> mingw-get.vbs echo.	If fileSystemObject.FolderExists("%~dp0downloads\mingw-packages") Then
+>> mingw-get.vbs echo.		fileSystemObject.CreateFolder("%~dp0mingw\var\cache")
+>> mingw-get.vbs echo.		fileSystemObject.CreateFolder("%~dp0mingw\var\cache\mingw-get")
+>> mingw-get.vbs echo.		fileSystemObject.CreateFolder("%~dp0mingw\var\cache\mingw-get\packages")
+>> mingw-get.vbs echo.		.NameSpace("%~dp0mingw\var\cache\mingw-get\packages").Copyhere .Namespace("%~dp0downloads\mingw-packages").Items
+>> mingw-get.vbs echo.	End If
 >> mingw-get.vbs echo.End With
 >> mingw-get.vbs echo.
 >> mingw-get.vbs echo.Set fileSystemObject = Nothing
@@ -45,6 +54,15 @@ cd mingw\bin
 mingw-get install mingw-get pkginfo base gcc-core gcc-g++ mingw-dtk
 mingw-get install msys-bsdtar msys-unzip msys-wget
 cd ..\..
+if exist downloads\mingw-data rd /s /q downloads\mingw-data
+mkdir downloads\mingw-data
+copy mingw\var\lib\mingw-get\data\* downloads\mingw-data >nul
+del downloads\mingw-data\defaults.xml
+del downloads\mingw-data\profile.xml
+del downloads\mingw-data\sysroot-*.xml
+if exist downloads\mingw-packages rd /s /q downloads\mingw-packages
+mkdir downloads\mingw-packages
+copy mingw\var\cache\mingw-get\packages\* downloads\mingw-packages >nul
 goto COLD
 
 :COLD
