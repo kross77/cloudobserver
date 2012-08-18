@@ -95,54 +95,86 @@
 					</div>
 				</div>
 				<div class="g1">
-		
+							<ol id="tasks-list">
+						<div  data-template>
+							<li class="uf file-1" style="text-decoration:none; cursor: pointer">
+								<a style="text-decoration:none;">
+									<p id="{{encoded_url}}" title="{{pid}}" class="butt2" style="color:white;  vertical-align: middle; text-align: center; width:100%; cursor: pointer ">
+										{{encoded_url}} | {{status}} | {{pid}} | {{modified}}
+									</p>
+								</a>
+							</li>
+						</div>
+						<li data-template-fallback>
+							Sorry, JavaScript required!
+						</li>
+					</ol>
+					
+					</br>
+					
 					<div>
 						<div id="apps_list"></div>
 					</div>
+					
+					</br>
 					
 					<ol id="args" style="visibility:hidden;">
 						
 					</ol>
 					<script>
-
-
-
-						$.getJSON("./run.service?action=list_apps", function(ddata) {
-							$('#apps_list').ddslick({
-							    data: ddata,
-							    width: 300,
-							    imagePosition: "left",
-							    selectText: "Select an app you want to use",
-							    onSelected: function (data) {
-							        var html_str = "<form id=\"args_form\" name=\"input\"><li data-template>{{description}} <input class=\"argument\" type='text' name={{name}} /><br/></li></form>";
-							        $('#args').html(html_str);
-							        var rs = Tempo.prepare('args').notify( function (event) { if (event.type === TempoEvent.Types.RENDER_COMPLETE) 
-							        	{
-							        		
-							        		$("#args_form").html($("#args_form").html() + "<input type=\"submit\" value=\"Submit\" />");
-							        		    $("#args_form").submit(function() {
-							        		    	var get_request = "./run.service?action=call&pid=" + data.selectedData.pid;
-												     $(".argument").each(function(index) {
-												     	get_request += "&"  + $(this).attr("name") + "=" + $(this).val();
-	    											});
-    												
-	    											$.getJSON(get_request, function (json_resp) {
-													});
-	    											
-											        return false;
-											      });
-							        		$( "#args" ).css("visibility", "visible" );
-						        		}
-									});
-					
-									rs.starting();
-									$.getJSON("./run.service?action=list_args&pid="+ data.selectedData.pid, function (json) {
-										rs.render(json);
-									});
-							    }
+						function tasks_list_update(){
+							$.getJSON("run.json?action=list_tasks", function(data) {
+								tasks_list.render(data);
 							});
-						});
+						}
+					
+						user = readCookie('session-id');
+						if (user != null) {	
+							$('.loged-in-user').show();
+							$('.not-loged-in-user').remove();	
+										
+							tasks_list = Tempo.prepare('tasks-list')
+							tasks_list.starting();
+							
+							tasks_list_update();
+							setInterval(tasks_list_update, 1000);
+	
+							$.getJSON("./run.service?action=list_apps", function(ddata) {
+								$('#apps_list').ddslick({
+								    data: ddata,
+								    width: 300,
+								    imagePosition: "left",
+								    selectText: "Select an app you want to use",
+								    onSelected: function (data) {
+								        var html_str = "<form id=\"args_form\" name=\"input\"><li data-template>{{description}} <input class=\"argument\" type='text' name={{name}} /><br/></li></form>";
+								        $('#args').html(html_str);
+								        var rs = Tempo.prepare('args').notify( function (event) { if (event.type === TempoEvent.Types.RENDER_COMPLETE) 
+								        	{
+								        		
+								        		$("#args_form").html($("#args_form").html() + "<input type=\"submit\" value=\"Submit\" />");
+								        		    $("#args_form").submit(function() {
+								        		    	var get_request = "./run.service?action=call&pid=" + data.selectedData.pid;
+													     $(".argument").each(function(index) {
+													     	get_request += "&"  + $(this).attr("name") + "=" + $(this).val();
+		    											});
+	    												
+		    											$.getJSON(get_request, function (json_resp) {
+														});
+		    											
+												        return false;
+												      });
+								        		$( "#args" ).css("visibility", "visible" );
+							        		}
+										});
 						
+										rs.starting();
+										$.getJSON("./run.service?action=list_args&pid="+ data.selectedData.pid, function (json) {
+											rs.render(json);
+										});
+								    }
+								});
+							});
+						}
 					</script>
 					
 
