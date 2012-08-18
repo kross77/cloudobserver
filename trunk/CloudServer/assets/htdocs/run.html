@@ -95,7 +95,21 @@
 					</div>
 				</div>
 				<div class="g1">
-							<ol id="tasks-list">
+					<br/>
+					
+					<div>
+						<div id="apps_list"/>
+					</div>
+					
+					<br/>
+					
+					<div>
+					<ol id="args" style="visibility:hidden;"/>
+					</div>
+										
+					<br/>
+					
+					<ol id="tasks-list">
 						<div  data-template>
 							<li class="uf file-1" style="text-decoration:none; cursor: pointer">
 								<a style="text-decoration:none;">
@@ -109,18 +123,6 @@
 							Sorry, JavaScript required!
 						</li>
 					</ol>
-					
-					<br/>
-					
-					<div>
-						<div id="apps_list"/>
-					</div>
-					
-					<br/>
-					
-					<div>
-					<ol id="args" style="visibility:hidden;"/>
-					</div>
 					
 					<br/>
 					
@@ -144,37 +146,37 @@
 	
 							$.getJSON("./run.service?action=list_apps", function(ddata) {
 								$('#apps_list').ddslick({
-								    data: ddata,
-								    width: 300,
-								    imagePosition: "left",
-								    selectText: "Select an app you want to use",
-								    onSelected: function (data) {
-								        var html_str = "<form id=\"args_form\" name=\"input\"><li data-template>{{description}} <input class=\"argument\" type='text' name={{name}} /><br/></li></form>";
-								        $('#args').html(html_str);
-								        var rs = Tempo.prepare('args').notify( function (event) { if (event.type === TempoEvent.Types.RENDER_COMPLETE) 
-								        	{
-								        		
-								        		$("#args_form").html($("#args_form").html() + "<input type=\"submit\" value=\"Submit\" />");
-								        		    $("#args_form").submit(function() {
-								        		    	var get_request = "./run.service?action=call&pid=" + data.selectedData.pid;
-													     $(".argument").each(function(index) {
-													     	get_request += "&"  + $(this).attr("name") + "=" + $(this).val();
-		    											});
-	    												
-		    											$.getJSON(get_request, function (json_resp) {
+									data: ddata,
+									width: 300,
+									imagePosition: "left",
+									selectText: "Select an app you want to use",
+									onSelected: function (data) {
+										var html_str = "<form id=\"args_form\" name=\"input\"><li data-template>{{description}} <input class=\"argument\" type='text' name={{name}} /><br/></li></form>";
+										$('#args').html(html_str);
+										var rs = Tempo.prepare('args').notify( function (event) { if (event.type === TempoEvent.Types.RENDER_COMPLETE) 
+											{
+												
+												$("#args_form").html($("#args_form").html() + "<input type=\"submit\" value=\"Submit\" />");
+													$("#args_form").submit(function() {
+														var get_request = "./run.service?action=call&pid=" + data.selectedData.pid;
+														 $(".argument").each(function(index) {
+															get_request += "&"  + $(this).attr("name") + "=" + $(this).val();
 														});
-		    											
-												        return false;
-												      });
-								        		$( "#args" ).css("visibility", "visible" );
-							        		}
+														
+														$.getJSON(get_request, function (json_resp) {
+														});
+														
+														return false;
+													  });
+												$( "#args" ).css("visibility", "visible" );
+											}
 										});
 						
 										rs.starting();
 										$.getJSON("./run.service?action=list_args&pid="+ data.selectedData.pid, function (json) {
 											rs.render(json);
 										});
-								    }
+									}
 								});
 							});
 						}
