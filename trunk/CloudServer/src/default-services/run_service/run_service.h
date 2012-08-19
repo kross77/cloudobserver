@@ -178,12 +178,12 @@ public:
 				if (boost::iequals(request->arguments["action"], "list_tasks"))
 				{
 					list_user_tasks(user_name, socket, response, request );
-				}else if (boost::iequals(request->arguments["action"], "list_output") && !request->arguments["pid"].empty())
+				}else if (boost::iequals(request->arguments["action"], "list_output") && !request->arguments["encoded_url"].empty())
 				{
-					list_task_output( user_name,  request->arguments["pid"], socket, response, request );
-				}else if (boost::iequals(request->arguments["action"], "remove_task") && !request->arguments["pid"].empty())
+					list_task_output( user_name,  request->arguments["encoded_url"], socket, response, request );
+				}else if (boost::iequals(request->arguments["action"], "remove_task") && !request->arguments["encoded_url"].empty())
 				{
-					cancel_task( user_name,  request->arguments["pid"], socket, response, request );
+					cancel_task( user_name,  request->arguments["encoded_url"], socket, response, request );
 				}
 			}
 			return;
