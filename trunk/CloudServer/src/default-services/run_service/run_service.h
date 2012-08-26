@@ -163,6 +163,39 @@ public:
 					call_app(user_name, request->arguments["pid"], socket, response, request);
 				}
 			}else if(request->url == "/run.json"){
+
+				if (boost::iequals(request->method, "POST"))
+				{
+					if(request->body.length() > 0)
+					{
+
+						std::map<std::string, std::string> save_file; 
+						save_file = http_utils::parse_multipart_form_data(request->body);
+						if (!save_file.empty())
+						{
+							if (boost::iequals(request->arguments["action"], "remove_tasks"))
+							{
+								boost::char_separator<char> sep(", ");
+								boost::tokenizer<boost::char_separator<char> > tokens(request->body, sep);
+								bool good;
+								BOOST_FOREACH(std::string t, tokens)
+								{
+
+									good = cancel_task( user_name,  t );
+									if(!good)
+										break;
+
+								}
+								if(good)
+									return http_utils::send_json(std::pair<std::string, std::string>("success","true"),  socket, response, request); 
+
+								http_utils::send_json(std::pair<std::string, std::string>("success","false"),  socket, response, request); 
+								return;
+							}
+						}
+					}
+				}
+
 				if (boost::iequals(request->arguments["action"], "list_tasks"))
 				{
 					list_user_tasks(user_name, socket, response, request );
@@ -603,18 +636,18 @@ private:
 	//remove by encoded_url
 	bool remove_task(const std::string & encoded_url )
 	{	bool result = false;	
-		sqlite3pp::transaction xct(*(db->get_db()), true);
+	sqlite3pp::transaction xct(*(db->get_db()), true);
+	{
+		sqlite3pp::command cmd(*(db->get_db()), db->command_delete_task.c_str());
+		cmd.bind(":encoded_url", encoded_url);
+		if(cmd.execute() == 0)
 		{
-			sqlite3pp::command cmd(*(db->get_db()), db->command_delete_task.c_str());
-			cmd.bind(":encoded_url", encoded_url);
-			if(cmd.execute() == 0)
-			{
-				boost::filesystem::remove_all(boost::filesystem::path(this->root_path / encoded_url));
-				result = true;
-			}
+			boost::filesystem::remove_all(boost::filesystem::path(this->root_path / encoded_url));
+			result = true;
 		}
-		xct.commit();
-		return result;
+	}
+	xct.commit();
+	return result;
 	}
 
 	//remove if canceled or finished; cancel in other case
@@ -632,14 +665,20 @@ private:
 		return false;
 	}
 
+	bool cancel_task(const std::string & user_name, const std::string & pid)
+	{
+		if(db->get_if_users_task(pid, user_name))
+			return remove_task(pid, user_name);
+		return false;
+	}
+
 	void cancel_task(const std::string & user_name, const std::string & pid, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response, boost::shared_ptr<http_request> request)
 	{
 		http_utils::set_json_content_type(response);
-		if(!db->get_if_users_task(pid, user_name))
-			return http_utils::send_json(std::make_pair("request", "declined"), socket, response, request);
+		if(cancel_task(user_name, pid))
+			return http_utils::send_json(std::make_pair("request", "accepted"), socket, response, request);
 
-		remove_task(pid, user_name);
-		http_utils::send_json(std::make_pair("request", "accepted"), socket, response, request);
+		return http_utils::send_json(std::make_pair("request", "declined"), socket, response, request);
 	}
 
 	void list_task_output( const std::string & user_name,  const std::string & encoded_url, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response, boost::shared_ptr<http_request> request )
