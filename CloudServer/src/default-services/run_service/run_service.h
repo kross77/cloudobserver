@@ -523,10 +523,10 @@ private:
 			return result;
 		}
 	};
+
 	boost::shared_ptr<db_commander> db;
 	std::map<std::string, boost::shared_ptr<utils::app> > apps;
 	boost::shared_ptr<log_util> lu;
-	std::string post_task;
 
 
 	std::map<std::string, boost::shared_ptr<user_task_pool> > user_threads;
@@ -534,7 +534,6 @@ private:
 	boost::asio::io_service internal_tasks;
 	boost::asio::io_service::work *internal_work;
 
-	int time_limit;
 	boost::filesystem::path root_path;
 	int threads_totall;
 	int threads_per_user;
