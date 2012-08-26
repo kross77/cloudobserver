@@ -132,18 +132,6 @@ class run_service: public http_service
 public:
 	run_service(){
 		this->root_path = boost::filesystem::current_path() / "run";
-		this->command_create_tasks_table = "CREATE TABLE IF NOT EXISTS tasks (encoded_url varchar(300) UNIQUE NOT NULL primary key, output BLOB default \"starting:\n\", task TEXT NOT NULL, status varchar(65) default \"not ready\", pid varchar(100) NOT NULL, user_name varchar(65) NOT NULL, started DATETIME, finished DATETIME, modified DATETIME NOT NULL default CURRENT_TIMESTAMP, canceled BOOLEAN  NOT NULL default 0)";
-		this->command_post_task =  "INSERT INTO tasks (user_name, encoded_url, task, status, pid ) VALUES (:user_name, :encoded_url, :task, :status, :pid)";
-		this->command_cancel_task = "UPDATE tasks SET canceled=1, modified=CURRENT_TIMESTAMP WHERE ( user_name=:user_name and encoded_url=:encoded_url )";
-		this->command_start_task = "UPDATE tasks SET status=:status, modified=CURRENT_TIMESTAMP, started=CURRENT_TIMESTAMP  WHERE ( user_name=:user_name and encoded_url=:encoded_url )";
-		this->command_finish_task = "UPDATE tasks SET status=:status, finished=CURRENT_TIMESTAMP, modified=CURRENT_TIMESTAMP  WHERE ( user_name=:user_name and encoded_url=:encoded_url )";
-		this->command_status_task = "UPDATE tasks SET status=:status, modified=CURRENT_TIMESTAMP WHERE ( user_name=:user_name and encoded_url=:encoded_url )";
-		this->command_set_task_output = "UPDATE tasks SET output=:output, modified=CURRENT_TIMESTAMP WHERE ( user_name=:user_name and encoded_url=:encoded_url )";
-		this->command_find_all_user_tasks = "SELECT encoded_url, status, pid, modified FROM tasks WHERE user_name=:user_name AND canceled=0 ";
-		this->command_is_canceled = "SELECT canceled FROM tasks WHERE user_name=:user_name AND encoded_url=:encoded_url ";
-		this->command_get_output = "SELECT output FROM tasks WHERE user_name=:user_name AND encoded_url=:encoded_url ";
-		this->command_delete_task = "DELETE FROM tasks WHERE encoded_url=:encoded_url";
-		this->command_find_task = "SELECT user_name, pid, modified, status, canceled FROM tasks WHERE encoded_url=:encoded_url";
 	}
 
 	virtual std::string service_check(boost::shared_ptr<http_request> request, boost::shared_ptr<shared> shared_data){
@@ -200,7 +188,10 @@ public:
 		this->threads_totall = config->get<int>("threading.<xmlattr>.total",  10);
 
 		start_work_with_lu(log_name);
-		start_work_with_db(db_name);
+
+		if(!db){
+			db = boost::shared_ptr<db_commander> (new db_commander(db_name, lu));
+		}
 
 		BOOST_FOREACH(boost::property_tree::ptree::value_type &v,
 			config->get_child("applications", utils::empty_class<boost::property_tree::ptree>()))
@@ -293,7 +284,7 @@ private:
 			boost::shared_ptr<boost::promise<boost::thread::id> > started(new boost::promise<boost::thread::id>());
 			boost::unique_future<boost::thread::id> has_started = started->get_future();
 
-			if(parent->db_get_if_is_canceled(user_name, tid)){
+			if(parent->db->get_if_is_canceled(user_name, tid)){
 				parent->remove_task(tid);	
 				return;
 			}
@@ -308,7 +299,7 @@ private:
 
 			while( (!(fi.has_value())) && (!(fi.has_exception())) ){
 				fi.timed_wait(boost::posix_time::milliseconds(100));
-				if(parent->db_get_if_is_canceled(user_name, tid))
+				if(parent->db->get_if_is_canceled(user_name, tid))
 				{
 					boost::shared_ptr<boost::thread> internal_thread;
 					internal_thread = boost::shared_ptr<boost::thread>( new boost::thread(boost::bind(&run_service::internal_run, parent, internal_thread)));
@@ -319,11 +310,189 @@ private:
 			}
 		}
 	};
+	class db_commander
+	{
+	private:
+		friend class run_service;
 
+		boost::shared_ptr<log_util> lu;
+		boost::shared_ptr<sqlite3pp::database> db;
+
+		std::string command_create_tasks_table;
+		std::string command_post_task;
+		std::string command_cancel_task;
+		std::string command_start_task;
+		std::string command_finish_task;
+		std::string command_set_task_output;
+		std::string command_find_all_user_tasks;
+		std::string command_is_canceled;
+		std::string command_get_output;
+		std::string command_delete_task;
+		std::string command_find_task;
+		std::string command_status_task;
+
+		boost::shared_ptr<sqlite3pp::database> get_db()
+		{
+			return db;
+		}
+
+		db_commander(const std::string& db_name, boost::shared_ptr<log_util> lu)
+		{
+			this->lu = lu;
+
+			this->command_create_tasks_table = "CREATE TABLE IF NOT EXISTS tasks (encoded_url varchar(300) UNIQUE NOT NULL primary key, output BLOB default \"starting:\n\", task TEXT NOT NULL, status varchar(65) default \"not ready\", pid varchar(100) NOT NULL, user_name varchar(65) NOT NULL, started DATETIME, finished DATETIME, modified DATETIME NOT NULL default CURRENT_TIMESTAMP, canceled BOOLEAN  NOT NULL default 0)";
+			this->command_post_task =  "INSERT INTO tasks (user_name, encoded_url, task, status, pid ) VALUES (:user_name, :encoded_url, :task, :status, :pid)";
+			this->command_cancel_task = "UPDATE tasks SET canceled=1, modified=CURRENT_TIMESTAMP WHERE ( user_name=:user_name and encoded_url=:encoded_url )";
+			this->command_start_task = "UPDATE tasks SET status=:status, modified=CURRENT_TIMESTAMP, started=CURRENT_TIMESTAMP  WHERE ( user_name=:user_name and encoded_url=:encoded_url )";
+			this->command_finish_task = "UPDATE tasks SET status=:status, finished=CURRENT_TIMESTAMP, modified=CURRENT_TIMESTAMP  WHERE ( user_name=:user_name and encoded_url=:encoded_url )";
+			this->command_status_task = "UPDATE tasks SET status=:status, modified=CURRENT_TIMESTAMP WHERE ( user_name=:user_name and encoded_url=:encoded_url )";
+			this->command_set_task_output = "UPDATE tasks SET output=:output, modified=CURRENT_TIMESTAMP WHERE ( user_name=:user_name and encoded_url=:encoded_url )";
+			this->command_find_all_user_tasks = "SELECT encoded_url, status, pid, modified FROM tasks WHERE user_name=:user_name AND canceled=0 ";
+			this->command_is_canceled = "SELECT canceled FROM tasks WHERE user_name=:user_name AND encoded_url=:encoded_url ";
+			this->command_get_output = "SELECT output FROM tasks WHERE user_name=:user_name AND encoded_url=:encoded_url ";
+			this->command_delete_task = "DELETE FROM tasks WHERE encoded_url=:encoded_url";
+			this->command_find_task = "SELECT user_name, pid, modified, status, canceled FROM tasks WHERE encoded_url=:encoded_url";
+
+			boost::shared_ptr<sqlite3pp::database> db_( new sqlite3pp::database(db_name.c_str()));
+			this->db = db_;
+
+		}
+
+		void set_task_output( const std::string & encoded_url, const std::string & user_name, const std::string & output )
+		{
+			sqlite3pp::transaction xct(*db);
+			{
+				sqlite3pp::command cmd(*db, command_set_task_output.c_str());
+				cmd.bind(":encoded_url", encoded_url);
+				cmd.bind(":output", output);
+				cmd.bind(":user_name", user_name);
+				cmd.execute();
+			}
+			xct.commit();
+		}
+
+		void set_finish_task( const std::string & encoded_url, const std::string & user_name )
+		{
+			sqlite3pp::transaction xct(*db);
+			{
+				sqlite3pp::command cmd(*db, command_finish_task.c_str());
+				cmd.bind(":encoded_url", encoded_url) ;
+				cmd.bind(":status", "finished") ;
+				cmd.bind(":user_name", user_name) ;
+				cmd.execute() ;
+			}
+			xct.commit();
+		}
+
+		void set_status_on_task( const std::string & encoded_url, const std::string & user_name, const std::string & status )
+		{
+			sqlite3pp::transaction xct(*db);
+			{
+				sqlite3pp::command cmd(*db, command_status_task.c_str());
+				cmd.bind(":encoded_url", encoded_url) ;
+				cmd.bind(":status", status) ;
+				cmd.bind(":user_name", user_name) ;
+				cmd.execute() ;
+			}
+			xct.commit();
+		}
+
+		void set_started_task( const std::string & encoded_url, const std::string & user_name )
+		{
+			sqlite3pp::transaction xct(*db);
+			{
+				sqlite3pp::command cmd(*db, command_start_task.c_str());
+				cmd.bind(":encoded_url", encoded_url) ;
+				cmd.bind(":status", "started") ;
+				cmd.bind(":user_name", user_name) ;
+				cmd.execute() ;
+			}
+			xct.commit();
+		}
+
+		void set_canceled_task( const std::string & encoded_url, const std::string & user_name )
+		{
+			sqlite3pp::transaction xct(*db);
+			{
+				sqlite3pp::command cmd(*db, command_cancel_task.c_str());
+				cmd.bind(":encoded_url", encoded_url) ;
+				cmd.bind(":user_name", user_name) ;
+				cmd.execute() ;
+			}
+			xct.commit();
+		}
+
+		void create_task_table_entry( const std::string & encoded_url, const std::string & user_name, const std::string & task_string, const std::string & pid )
+		{
+			sqlite3pp::transaction xct(*db);
+			{
+				sqlite3pp::command cmd(*db, command_post_task.c_str());
+				cmd.bind(":encoded_url", encoded_url) ;
+				cmd.bind(":status", "waiting") ;
+				cmd.bind(":user_name", user_name) ;
+				cmd.bind(":pid", pid);
+				cmd.bind(":task", task_string);
+				cmd.execute() ;
+			}
+			xct.commit();
+		}
+
+		bool get_if_is_canceled(const std::string & user_name, const std::string & encoded_url)
+		{
+			bool response = false;
+
+			sqlite3pp::query qry(*db, this->command_is_canceled.c_str());
+			qry.bind(":user_name", user_name);
+			qry.bind(":encoded_url", encoded_url);
+
+			for (sqlite3pp::query::iterator i = qry.begin(); i != qry.end(); ++i) {
+				int canceled;
+				(*i).getter() >> canceled;
+				if(canceled == 1)
+					response = true;
+			}
+
+			return response;
+		}
+
+		bool get_if_users_task( const std::string & encoded_url, const std::string & user_name, std::string & status, int & canceled)
+		{
+			sqlite3pp::query qry(*db, this->command_find_task.c_str());
+			qry.bind(":encoded_url", encoded_url);
+			for (sqlite3pp::query::iterator i = qry.begin(); i != qry.end(); ++i) {
+				std::string  t_user_name, pid, modified;
+				(*i).getter() >> t_user_name >> pid >>  modified >> status >>  canceled;
+
+				if(t_user_name == user_name)
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		bool get_if_users_task(const std::string & encoded_url,const std::string & user_name)
+		{
+			int canceled = 0;
+			std::string status = "";
+			return this->get_if_users_task(encoded_url, user_name, status, canceled);
+		}
+		std::string get_task_output(const std::string & user_name, const std::string & encoded_url)
+		{
+			std::string result = "";
+			sqlite3pp::query qry(*db, this->command_get_output.c_str());
+			qry.bind(":user_name", user_name);
+			qry.bind(":encoded_url", encoded_url);
+			for (sqlite3pp::query::iterator i = qry.begin(); i != qry.end(); ++i) {
+				(*i).getter() >>  result;
+			}
+			return result;
+		}
+	};
+	boost::shared_ptr<db_commander> db;
 	std::map<std::string, boost::shared_ptr<utils::app> > apps;
 	boost::shared_ptr<log_util> lu;
-	boost::shared_ptr<sqlite3pp::database> db;
-	std::string command_create_tasks_table;
 	std::string post_task;
 
 
@@ -333,18 +502,7 @@ private:
 	boost::asio::io_service::work *internal_work;
 
 	int time_limit;
-	std::string command_post_task;
-	std::string command_cancel_task;
-	std::string command_start_task;
-	std::string command_finish_task;
-	std::string command_set_task_output;
-	std::string command_find_all_user_tasks;
-	std::string command_is_canceled;
-	std::string command_get_output;
-	std::string command_delete_task;
-	std::string command_find_task;
 	boost::filesystem::path root_path;
-	std::string command_status_task;
 	int threads_totall;
 	int threads_per_user;
 
@@ -389,18 +547,6 @@ private:
 	void run_item( boost::shared_ptr< boost::packaged_task<task_return_t> > pt)
 	{
 		(*pt)();
-	}
-
-	void start_work_with_db(const std::string& db_name)
-	{
-		static bool is_db_set = false;
-		if (!is_db_set)
-		{
-			boost::shared_ptr<sqlite3pp::database> db_( new sqlite3pp::database(db_name.c_str()));
-			this->db = db_;
-
-			*lu << "Connected to "<< db_name << " database and created a table with SQLite return code: " << db->execute(command_create_tasks_table.c_str()) << log_util::endl;
-		}
 	}
 
 	void start_work_with_lu( std::string lu_path )
@@ -454,135 +600,12 @@ private:
 
 		return  boost::process::launch(exec, split(std::string(path_to_exec.string() + " " + filter_args(arguments)), " "), ctx); 
 	} 
-
-
-	void db_set_task_output( const std::string & encoded_url, const std::string & user_name, const std::string & output )
-	{
-		sqlite3pp::transaction xct(*db);
-		{
-			sqlite3pp::command cmd(*db, command_set_task_output.c_str());
-			cmd.bind(":encoded_url", encoded_url);
-			cmd.bind(":output", output);
-			cmd.bind(":user_name", user_name);
-			cmd.execute();
-		}
-		xct.commit();
-	}
-
-	void db_set_finish_task( const std::string & encoded_url, const std::string & user_name )
-	{
-		sqlite3pp::transaction xct(*db);
-		{
-			sqlite3pp::command cmd(*db, command_finish_task.c_str());
-			cmd.bind(":encoded_url", encoded_url) ;
-			cmd.bind(":status", "finished") ;
-			cmd.bind(":user_name", user_name) ;
-			cmd.execute() ;
-		}
-		xct.commit();
-	}
-
-	void db_set_status_on_task( const std::string & encoded_url, const std::string & user_name, const std::string & status )
-	{
-		sqlite3pp::transaction xct(*db);
-		{
-			sqlite3pp::command cmd(*db, command_status_task.c_str());
-			cmd.bind(":encoded_url", encoded_url) ;
-			cmd.bind(":status", status) ;
-			cmd.bind(":user_name", user_name) ;
-			cmd.execute() ;
-		}
-		xct.commit();
-	}
-
-	void db_set_started_task( const std::string & encoded_url, const std::string & user_name )
-	{
-		sqlite3pp::transaction xct(*db);
-		{
-			sqlite3pp::command cmd(*db, command_start_task.c_str());
-			cmd.bind(":encoded_url", encoded_url) ;
-			cmd.bind(":status", "started") ;
-			cmd.bind(":user_name", user_name) ;
-			cmd.execute() ;
-		}
-		xct.commit();
-	}
-
-	void db_set_canceled_task( const std::string & encoded_url, const std::string & user_name )
-	{
-		sqlite3pp::transaction xct(*db);
-		{
-			sqlite3pp::command cmd(*db, command_cancel_task.c_str());
-			cmd.bind(":encoded_url", encoded_url) ;
-			cmd.bind(":user_name", user_name) ;
-			cmd.execute() ;
-		}
-		xct.commit();
-	}
-
-	void db_create_task_table_entry( const std::string & encoded_url, const std::string & user_name, const std::string & task_string, const std::string & pid )
-	{
-		sqlite3pp::transaction xct(*db);
-		{
-			sqlite3pp::command cmd(*db, command_post_task.c_str());
-			cmd.bind(":encoded_url", encoded_url) ;
-			cmd.bind(":status", "waiting") ;
-			cmd.bind(":user_name", user_name) ;
-			cmd.bind(":pid", pid);
-			cmd.bind(":task", task_string);
-			cmd.execute() ;
-		}
-		xct.commit();
-	}
-
-	bool db_get_if_is_canceled(const std::string & user_name, const std::string & encoded_url)
-	{
-		bool response = false;
-
-		sqlite3pp::query qry(*db, this->command_is_canceled.c_str());
-		qry.bind(":user_name", user_name);
-		qry.bind(":encoded_url", encoded_url);
-
-		for (sqlite3pp::query::iterator i = qry.begin(); i != qry.end(); ++i) {
-			int canceled;
-			(*i).getter() >> canceled;
-			if(canceled == 1)
-				response = true;
-		}
-
-		return response;
-	}
-
-	bool db_get_if_users_task( const std::string & encoded_url, const std::string & user_name, std::string & status, int & canceled)
-	{
-		sqlite3pp::query qry(*db, this->command_find_task.c_str());
-		qry.bind(":encoded_url", encoded_url);
-		for (sqlite3pp::query::iterator i = qry.begin(); i != qry.end(); ++i) {
-			std::string  t_user_name, pid, modified;
-			(*i).getter() >> t_user_name >> pid >>  modified >> status >>  canceled;
-
-			if(t_user_name == user_name)
-			{
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	bool db_get_if_users_task(const std::string & encoded_url,const std::string & user_name)
-	{
-		int canceled = 0;
-		std::string status = "";
-		return db_get_if_users_task(encoded_url, user_name, status, canceled);
-	}
-
 	//remove by encoded_url
 	bool remove_task(const std::string & encoded_url )
 	{	bool result = false;	
-		sqlite3pp::transaction xct(*db, true);
+		sqlite3pp::transaction xct(*(db->get_db()), true);
 		{
-			sqlite3pp::command cmd(*db, this->command_delete_task.c_str());
+			sqlite3pp::command cmd(*(db->get_db()), db->command_delete_task.c_str());
 			cmd.bind(":encoded_url", encoded_url);
 			if(cmd.execute() == 0)
 			{
@@ -599,11 +622,11 @@ private:
 	{
 		int canceled=0;
 		std::string status = "";
-		if(db_get_if_users_task(encoded_url, user_name, status, canceled)){
+		if(db->get_if_users_task(encoded_url, user_name, status, canceled)){
 			if( (canceled == 1) || boost::iequals(status, "finished"))
 				return remove_task(encoded_url);
 
-			db_set_canceled_task(encoded_url, user_name);
+			db->set_canceled_task(encoded_url, user_name);
 			return true;
 		}
 		return false;
@@ -612,23 +635,11 @@ private:
 	void cancel_task(const std::string & user_name, const std::string & pid, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response, boost::shared_ptr<http_request> request)
 	{
 		http_utils::set_json_content_type(response);
-		if(!db_get_if_users_task(pid, user_name))
+		if(!db->get_if_users_task(pid, user_name))
 			return http_utils::send_json(std::make_pair("request", "declined"), socket, response, request);
 
 		remove_task(pid, user_name);
 		http_utils::send_json(std::make_pair("request", "accepted"), socket, response, request);
-	}
-
-	std::string db_get_task_output(const std::string & user_name, const std::string & encoded_url)
-	{
-		std::string result = "";
-		sqlite3pp::query qry(*db, this->command_get_output.c_str());
-		qry.bind(":user_name", user_name);
-		qry.bind(":encoded_url", encoded_url);
-		for (sqlite3pp::query::iterator i = qry.begin(); i != qry.end(); ++i) {
-			(*i).getter() >>  result;
-		}
-		return result;
 	}
 
 	void list_task_output( const std::string & user_name,  const std::string & encoded_url, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response, boost::shared_ptr<http_request> request )
@@ -637,7 +648,7 @@ private:
 		user_tasks_stream << "[";
 		user_tasks_stream << "\n\t{\n\t\t\"href\": \""
 			<< encoded_url << "\",\n\t\t\"output\": \""
-			<< http_utils::escape(db_get_task_output(user_name, encoded_url))  << "\"\n\t}";
+			<< http_utils::escape(db->get_task_output(user_name, encoded_url))  << "\"\n\t}";
 
 		std::string files_ = user_tasks_stream.str();
 
@@ -651,7 +662,7 @@ private:
 		std::ostringstream user_tasks_stream;
 		user_tasks_stream << "[";
 
-		sqlite3pp::query qry(*db, this->command_find_all_user_tasks.c_str());
+		sqlite3pp::query qry(*(db->get_db()), db->command_find_all_user_tasks.c_str());
 		qry.bind(":user_name", user_name);
 
 		for (sqlite3pp::query::iterator i = qry.begin(); i != qry.end(); ++i) {
@@ -687,10 +698,10 @@ private:
 					boost::algorithm::replace_all(args, ":" + p.first, t.string_args[p.first]);
 			}
 
-			if(db_get_if_is_canceled(user_name, tid))
+			if(db->get_if_is_canceled(user_name, tid))
 				remove_task(tid);
 
-			db_set_started_task(tid, user_name);
+			db->set_started_task(tid, user_name);
 			general_utils::create_directory(root_path / tid);
 			boost::process::child c = this->start_child(tid, pid, args, a->use_shell); 
 
@@ -701,23 +712,23 @@ private:
 			while (std::getline(os, line)) {
 
 				*lu << line << log_util::endl; 
-				line = db_get_task_output(user_name, tid) + line + "\n"; 			
-				db_set_task_output(tid, user_name, line );
+				line = db->get_task_output(user_name, tid) + line + "\n"; 			
+				db->set_task_output(tid, user_name, line );
 			}
 
 			c.wait();
 
-			db_set_finish_task(tid, user_name);
+			db->set_finish_task(tid, user_name);
 
 		}catch(std::exception &e)
 		{
 			*lu << "error!" << log_util::endl; 
 			*lu << e.what() << log_util::endl; 
 
-			std::string output_line = db_get_task_output(user_name, tid) + e.what(); 
-			db_set_task_output(tid, user_name, output_line );
+			std::string output_line = db->get_task_output(user_name, tid) + e.what(); 
+			db->set_task_output(tid, user_name, output_line );
 
-			db_set_status_on_task(tid, user_name, "error");
+			db->set_status_on_task(tid, user_name, "error");
 		}
 	}
 
@@ -744,7 +755,7 @@ private:
 			std::string tid = user_name + t.serialize_base() + general_utils::get_utc_now_time();
 			tid = general_utils::get_sha256(tid);
 
-			db_create_task_table_entry(tid, user_name, t.serialize_base(), pid);
+			db->create_task_table_entry(tid, user_name, t.serialize_base(), pid);
 
 			boost::shared_ptr< boost::packaged_task<void> > pt(new boost::packaged_task<void>(boost::bind(&run_service::execute_task, this, tid, user_name,pid, t)));
 			user_threads[user_name]->post(pt, tid);
