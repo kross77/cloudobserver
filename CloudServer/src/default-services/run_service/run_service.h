@@ -388,6 +388,7 @@ private:
 
 			boost::shared_ptr<sqlite3pp::database> db_( new sqlite3pp::database(db_name.c_str()));
 			this->db = db_;
+			db->execute(command_create_tasks_table.c_str());
 
 		}
 
