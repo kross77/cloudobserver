@@ -167,7 +167,12 @@
 						
 						function showOutput()
 						{
-							
+							$.getJSON("run.json?action=list_output&encoded_url="+ task_id, function(data) {
+								new ui.Dialog({ title: 'Task Output', message:  decodeURIComponent(data.output) })
+									.closable()
+									.show();
+							});
+							tasks_list_update();
 						}
 						
 						function tasks_list_update(){
