@@ -684,15 +684,14 @@ private:
 	void list_task_output( const std::string & user_name,  const std::string & encoded_url, boost::shared_ptr<boost::asio::ip::tcp::socket> socket, boost::shared_ptr<http_response> response, boost::shared_ptr<http_request> request )
 	{
 		std::ostringstream user_tasks_stream;
-		user_tasks_stream << "[";
 		user_tasks_stream << "\n\t{\n\t\t\"href\": \""
 			<< encoded_url << "\",\n\t\t\"output\": \""
-			<< http_utils::escape(db->get_task_output(user_name, encoded_url))  << "\"\n\t}";
+			<< http_utils::url_encode(http_utils::escape(db->get_task_output(user_name, encoded_url)))  << "\"\n\t}";
 
 		std::string files_ = user_tasks_stream.str();
 
 		http_utils::set_json_content_type(response);
-		http_utils::send(files_.append("\n]"), socket, response, request);
+		http_utils::send(files_, socket, response, request);
 		return;
 	}
 
