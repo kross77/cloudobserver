@@ -171,7 +171,7 @@ public:
 
 						std::map<std::string, std::string> save_file; 
 						save_file = http_utils::parse_multipart_form_data(request->body);
-						if (!save_file.empty())
+						if (save_file.empty())
 						{
 							if (boost::iequals(request->arguments["action"], "remove_tasks"))
 							{

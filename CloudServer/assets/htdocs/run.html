@@ -19,6 +19,7 @@
 		<!-- Public CSS-->
 		<link rel="stylesheet" href="css/grumble.min.css">
 		<link type="text/css" href="css/custom-theme/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
+		<link rel="stylesheet" href="css/uikit.css">
 		<link href="css/bootstrap.css" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
 		<!-- End Of CSS-->
@@ -40,6 +41,8 @@
 		<script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
 		
 		<script type="text/javascript" src="js/jquery-ui-1.8.18.custom.min.js"></script>
+		
+		<script type="text/javascript" src="js/uikit.min.js"></script>
 		
 		<script type="text/javascript" src="js/jquery.sha256.min.js"></script>
 		
@@ -85,7 +88,7 @@
 				<div class="g2">		
 					<div class="description-box">
 						<h3 class="fun">
-							Image Renderer Service Welcomes You.
+							Run Service Welcomes You.
 						</h3>
 						<br/>
 						<p style="text-align:left;">
@@ -127,22 +130,122 @@
 					<br/>
 					
 					<script>
+						var task_id;
+						var task_title;
+						var selected_array;
+						var rmbMenu = false;
+						
+						function deleteTask(){ 
+							$('body').append($('<div class=\"overlay\"></div>'))
+							ui.confirm('are you sure you want to remove ' + task_title +' task?')
+							.closable()
+							.show(function(ok){
+								$('.overlay').remove();
+								if (ok) $.ajax({
+									type: "GET",
+									url:"run.json?action=remove_task&encoded_url="+task_id,
+									success: tasks_list_update
+								});
+							});
+						}
+						
+						function deleteTasks(){ 
+							var local_selected_array = selected_array.slice(0);
+							$('body').append($('<div class=\"overlay\"></div>'))
+							ui.confirm('are you sure you want to remove ' + local_selected_array.length +' tasks?')
+							.closable()
+							.show(function(ok){
+								$('.overlay').remove();
+								if (ok) $.ajax({
+									type: "POST",
+									url: "run.json?action=remove_tasks", 
+									data: local_selected_array.join(", "),
+									success: tasks_list_update
+								});
+							});
+						}
+						
+						function showOutput()
+						{
+							
+						}
+						
 						function tasks_list_update(){
+							$( "#tasks-list" ).removeClass('ui-selected')
+							rmbMenu = false; 
+							tasks_list_tick();
+						}
+						
+					
+						function tasks_list_tick(){
+							if(rmbMenu === false)
 							$.getJSON("run.json?action=list_tasks", function(data) {
 								tasks_list.render(data);
 							});
 						}
-					
+						
+						files_menu = ui.menu();
 						user = readCookie('session-id');
 						if (user != null) {	
 							$('.loged-in-user').show();
 							$('.not-loged-in-user').remove();	
 										
-							tasks_list = Tempo.prepare('tasks-list')
+							tasks_list = Tempo.prepare('tasks-list').notify( function (event) {
+							if (event.type === TempoEvent.Types.RENDER_COMPLETE) {
+								$( "#tasks-list" ).selectable({
+								start: function(e, ui) {
+									 files_menu.hide();
+									 rmbMenu = true; 
+								 },
+								unselected:  function(e, ui) { rmbMenu = false; },
+								selected:  function(e, ui) {
+									selected_array = [];
+									var titles_array = [];
+									$( "div.ui-selected > li > a > p", this ).each(function() {
+									if (! $(this).parent('a').hasClass('ui-selected'))
+									{
+										$(this).parent('a').addClass('ui-selected');
+									}
+		
+									var element = $(this);// .closest('a > p');
+									selected_array = selected_array.concat( element.attr("id") );
+									titles_array =  titles_array.concat( element.attr("title") );
+									});
+									if(selected_array.length == 1)
+									{
+										task_title = titles_array[0];
+										task_id = selected_array[0];
+										
+										if(files_menu.items['Remove tasks'] != null)
+											files_menu.remove('Remove tasks');
+
+										if(files_menu.items['Remove task'] == null)
+											files_menu.add('Remove task' , deleteTask);
+											
+										if(files_menu.items['List Output'] == null)
+											files_menu.add('List Output' , showOutput);
+										
+									}else{
+										if(files_menu.items['List Output'] != null)
+											files_menu.remove('List Output');							
+										
+										if(files_menu.items['Remove task'] != null)
+											files_menu.remove('Remove task');
+											
+										if(files_menu.items['Remove tasks'] == null)
+											files_menu.add('Remove tasks' , deleteTasks);
+										
+									}
+									files_menu.moveTo(e.pageX, e.pageY).show();
+							}
+						});
+					}
+				});
+		
 							tasks_list.starting();
 							
 							tasks_list_update();
-							setInterval(tasks_list_update, 1000);
+							setInterval(tasks_list_tick, 1000);
 	
 							$.getJSON("./run.service?action=list_apps", function(ddata) {
 								$('#apps_list').ddslick({
@@ -165,7 +268,7 @@
 														
 														$.getJSON(get_request, function (json_resp) {
 														});
-														
+														tasks_list_update();
 														return false;
 													  });
 												$( "#args" ).css("visibility", "visible" );
