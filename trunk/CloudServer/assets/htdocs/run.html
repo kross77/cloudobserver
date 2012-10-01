@@ -259,7 +259,7 @@
 									imagePosition: "left",
 									selectText: "Select an app you want to use",
 									onSelected: function (data) {
-										var html_str = "<form id=\"args_form\" name=\"input\"><li data-template>{{description}} <input class=\"argument\" type='text' name={{name}} /><br/></li></form>";
+										var html_str = "<form id=\"args_form\" name=\"input\"><li data-template>{{description}} <input class=\"argument\" type='text' name={{name}} /><br/><br/></li></form>";
 										$('#args').html(html_str);
 										var rs = Tempo.prepare('args').notify( function (event) { if (event.type === TempoEvent.Types.RENDER_COMPLETE) 
 											{
