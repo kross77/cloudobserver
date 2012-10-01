@@ -90,16 +90,17 @@
 					
 					<application id="1" useShell="true" processName="echo">
 						<description appName="echo 1" icon="/echo-icon-32.png">echoes inputed text</description>
-						<arguments base="first argument: :echotext; second argument (int): :arg2">
-							<arg type="string" name="echotext" label="first argument"/>
-							<arg type="int" name="arg2" label="second argument"/>
+						<arguments base="first argument (string): :echotext; second argument (int): :arg2">
+							<arg type="string" name="echotext" label="first argument (string)"/>
+							<arg type="int" name="arg2" label="second argument (int)"/>
 						</arguments>
 					</application>
 					
-					<application id="2" useShell="true" processName="echo">
-						<description appName="echo 2" icon="/echo-icon-32.png">echoes inputed text 2</description>
-						<arguments base="first argument: :echotext;">
-							<arg type="string" name="echotext" label="first argument"/>
+					<application id="3" useShell="true" processName="ping">
+						<description appName="ping" icon="/echo-icon-32.png">echoes inputed text 2</description>
+						<arguments base="-n :tries :url">
+							<arg type="int" name="tries" label="number of tries"/>
+							<arg type="string" name="url" label="IP *.*.*.*"/>
 						</arguments>
 					</application>
 				</applications>
