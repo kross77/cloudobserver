@@ -89,18 +89,31 @@
 				<applications>
 					
 					<application id="1" useShell="true" processName="echo">
-						<description appName="echo 1" icon="/echo-icon-32.png">echoes inputed text</description>
-						<arguments base="first argument (string): :echotext; second argument (int): :arg2">
-							<arg type="string" name="echotext" label="first argument (string)"/>
-							<arg type="int" name="arg2" label="second argument (int)"/>
+						<description appName="Echo" icon="/echo-icon-32.png">Echoes inputed text</description>
+						<arguments base=":echotext">
+							<arg type="string" name="echotext" label="Text to echo"/>
 						</arguments>
 					</application>
 					
 					<application id="3" useShell="true" processName="ping">
-						<description appName="ping" icon="/echo-icon-32.png">echoes inputed text 2</description>
+						<description appName="Ping" icon="/ping-icon-32.png">Tests the reachability of a host on an Internet Protocol</description>
 						<arguments base="-n :tries :url">
 							<arg type="int" name="tries" label="number of tries"/>
-							<arg type="string" name="url" label="IP *.*.*.*"/>
+							<arg type="string" name="url" label="IP adress *.*.*.*"/>
+						</arguments>
+					</application>
+					
+					<application id="4" useShell="true" processName="type">
+						<description platform="Windows" appName="Type" icon="/type-icon-32.png">Echoes file contents</description>
+						<arguments base=" :url">
+							<arg type="string" name="url" label="File name"/>
+						</arguments>
+					</application>
+					
+					<application id="4" useShell="true" processName="cat">
+						<description platform="Linux" appName="Type" icon="/type-icon-32.png">Echoes file contents</description>
+						<arguments base=" :url">
+							<arg type="string" name="url" label="File name"/>
 						</arguments>
 					</application>
 				</applications>

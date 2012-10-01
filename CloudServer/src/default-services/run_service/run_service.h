@@ -32,6 +32,7 @@
 #include <boost/iostreams/filter/gzip.hpp>
 #include <boost/iostreams/stream.hpp>
 
+
 // Boost Extension
 #include <boost/extension/extension.hpp>
 #include <boost/extension/factory.hpp>
@@ -39,6 +40,9 @@
 
 //SQLite
 #include <sqlite3pp.h>
+
+//Boollinq
+#include <boolinq/boolinq.h>
 
 //CF-UTIL
 #include <general_utils.h>
@@ -57,6 +61,15 @@
 #ifndef RUN_UTILS
 #define RUN_UTILS
 namespace utils{
+
+#ifdef WIN 
+	static const std::string platform = "Windows";
+#elif LIN
+	static const std::string platform = "Linux";
+#elif MAC
+	static const std::string platform = "Mac";
+#endif
+
 	template<class T>
 	inline T &empty_class()
 	{
@@ -123,9 +136,7 @@ namespace utils{
 	};
 };
 
-
 #endif // RUN_UTILS
-
 
 class run_service: public http_service
 {
@@ -230,9 +241,16 @@ public:
 			config->get_child("applications", utils::empty_class<boost::property_tree::ptree>()))
 		{
 			boost::property_tree::ptree individual_application_tree = (boost::property_tree::ptree) v.second ;
+			std::string platform = individual_application_tree.get<std::string>("description.<xmlattr>.platform",  "");	
+
+			if (platform != utils::platform && !platform.empty())
+			{
+				continue;
+			}
+
 			boost::shared_ptr<utils::app> a(new utils::app());
 			a->use_shell = individual_application_tree.get<bool>("<xmlattr>.useShell",  false);
-			a->process_name = individual_application_tree.get<std::string>("<xmlattr>.processName");	
+			a->process_name = individual_application_tree.get<std::string>("<xmlattr>.processName");
 
 			a->description.name = individual_application_tree.get<std::string>("description.<xmlattr>.appName",  "default name");	
 			a->description.text = individual_application_tree.get<std::string>("description",  "default descroiption");
@@ -240,9 +258,12 @@ public:
 
 			a->task_base.base = individual_application_tree.get<std::string>("arguments.<xmlattr>.base",  "");	
 
+
+
 			BOOST_FOREACH(boost::property_tree::ptree::value_type &v,
 				individual_application_tree.get_child("arguments", utils::empty_class<boost::property_tree::ptree>()))
 			{
+
 				boost::property_tree::ptree individual_argument = (boost::property_tree::ptree) v.second ;
 				std::string arg_type = individual_argument.get<std::string>("<xmlattr>.type",  "");
 				std::string arg_name = individual_argument.get<std::string>("<xmlattr>.name",  "");
@@ -364,11 +385,6 @@ private:
 		std::string command_find_task;
 		std::string command_status_task;
 
-		boost::shared_ptr<sqlite3pp::database> get_db()
-		{
-			return db;
-		}
-
 		db_commander(const std::string& db_name, boost::shared_ptr<log_util> lu)
 		{
 			this->lu = lu;
@@ -388,8 +404,59 @@ private:
 
 			boost::shared_ptr<sqlite3pp::database> db_( new sqlite3pp::database(db_name.c_str()));
 			this->db = db_;
+
 			db->execute(command_create_tasks_table.c_str());
 
+
+
+			std::string table_name = "tasks";
+			std::map<std::string, std::string> feilds;
+			feilds["encoded_url"] = "varchar(300) UNIQUE NOT NULL primary key";
+			feilds["output"] = "BLOB default \"starting:\n\"";
+			feilds["task"] = "TEXT NOT NULL, status varchar(65) default \"not ready\"";
+			feilds["pid"] = "varchar(100) NOT NULL";
+			feilds["user_name"] = "varchar(65) NOT NULL";
+			feilds["started"] = "DATETIME";
+			feilds["finished"] = "DATETIME";
+			feilds["modified"] = "DATETIME NOT NULL default CURRENT_TIMESTAMP";
+			feilds["canceled"] = "BOOLEAN  NOT NULL default 0";
+
+			boost::shared_ptr<std::set<std::string> > current_fields = show_feilds("tasks");
+
+			boost::shared_ptr<std::set<std::string> > result(new std::set<std::string>());
+
+			bool all = boolinq::from(feilds).all([=](
+				const std::pair<std::string, std::string> & k_v){
+					return (current_fields->find(k_v.first) != current_fields->end());
+			}); 
+
+			std::cout << all << " yyy" << std::endl;
+		}
+
+		boost::shared_ptr<std::set<std::string> > show_feilds(std::string table_name)
+		{
+			boost::shared_ptr<std::set<std::string> > result(new std::set<std::string>());
+			sqlite3pp::transaction xct(*db);
+			{
+				sqlite3pp::query qry(*db, ("pragma table_info(" + table_name + ")").c_str());;
+
+				for (sqlite3pp::query::iterator i = qry.begin(); i != qry.end(); ++i) {
+					int number;
+					std::string feild, type;
+
+					(*i).getter() >> number >> feild >> type;
+					result->insert(feild);
+					std::cout << number << " "<< feild << " " << type  << std::endl;
+				}
+
+			}
+			xct.rollback();
+			return result;
+		}
+
+		boost::shared_ptr<sqlite3pp::database> get_db()
+		{
+			return db;
 		}
 
 		void set_task_output( const std::string & encoded_url, const std::string & user_name, const std::string & output )
