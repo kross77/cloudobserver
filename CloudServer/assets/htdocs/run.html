@@ -80,6 +80,43 @@
 		<script type="text/javascript" src="js/cf.windows.ufs.file.js"></script>
 		
 		<!-- End Of CF JS-->
+	<style>
+		li.task-finished > a > p,
+		li.task-started > a > p,
+		li.task-waiting > a > p{
+			color: white;
+		}
+
+		li.task-finished {
+			background-color:rgb(27, 156, 22);
+			background-color:rgba(0, 145, 0, 0.6);
+		}
+		
+		li.task-started {
+			background-color:rgb(156, 146, 22);
+			background-color:rgba(156, 146, 22, 0.6);
+		}
+		
+		li.task-waiting {
+			background-color:rgba(128, 10, 10);
+			background-color:rgba(128, 10, 10, 0.6);
+		}
+		
+		
+		
+		li.task-waiting:hover,
+		li.task-started:hover,
+		li.task-finished:hover {
+			background-color:rgb(229, 245, 238);
+			background-color:rgba(229, 245, 238, 0.6);
+		}
+		
+		li.task-waiting:hover > a > p,
+		li.task-started:hover > a > p,
+		li.task-finished:hover > a > p{
+			color: #474646;
+		}
+	</style>
 </head>
 <body>
 
@@ -100,7 +137,7 @@
 				<div class="g1">
 					<br/>
 					
-					<div>
+					<div id="apps_list_container">
 						<div id="apps_list"/>
 					</div>
 					
@@ -114,9 +151,9 @@
 					
 					<ol id="tasks-list">
 						<div  data-template>
-							<li class="uf file-1" style="text-decoration:none; cursor: pointer">
+							<li class="uf task-{{status}}" style="text-decoration:none; cursor: pointer">
 								<a style="text-decoration:none;">
-									<p id="{{encoded_url}}" title="{{pid}}" class="butt2" style="color:white;  vertical-align: middle; text-align: center; width:100%; cursor: pointer ">
+									<p id="{{encoded_url}}" title="{{pid}}" class="butt2" style="vertical-align: middle; text-align: center; width:100%; cursor: pointer ">
 										{{encoded_url}} | {{status}} | {{pid}} | {{modified}}
 									</p>
 								</a>
@@ -252,10 +289,10 @@
 							tasks_list_update();
 							setInterval(tasks_list_tick, 1000);
 	
-							$.getJSON("./run.service?action=list_apps", function(ddata) {
+							var dds = $.getJSON("./run.service?action=list_apps", function(ddata) {
 								$('#apps_list').ddslick({
 									data: ddata,
-									width: 300,
+									width: 350,
 									imagePosition: "left",
 									selectText: "Select an app you want to use",
 									onSelected: function (data) {
@@ -286,7 +323,10 @@
 										});
 									}
 								});
+								
+								
 							});
+						page_update.add(function(){center_by_width("#apps_list","#apps_list_container")})
 						}
 					</script>
 					
