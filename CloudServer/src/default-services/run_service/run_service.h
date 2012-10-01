@@ -64,9 +64,9 @@ namespace utils{
 
 #ifdef WIN 
 	static const std::string platform = "Windows";
-#elif LIN
+#else if LIN
 	static const std::string platform = "Linux";
-#elif MAC
+#else if MAC
 	static const std::string platform = "Mac";
 #endif
 
