@@ -81,6 +81,21 @@
 		
 		<!-- End Of CF JS-->
 	<style>
+
+		
+		.item-box {
+			border:1px solid #ddd;
+			-webkit-box-shadow:1px 1px 1px 1px rgba(0,0,0,0.2);
+			-moz-box-shadow:1px 1px 1px 1px rgba(0,0,0,0.2);
+			box-shadow:1px 1px 1px 1px rgba(0,0,0,0.2);
+		}
+		
+		.item-box li {
+			margin: 3px;
+			padding: 0.4em;
+			font-size: 1.4em;
+		}
+	
 		li.task-finished > a > p,
 		li.task-started > a > p,
 		li.task-waiting > a > p{
@@ -149,7 +164,7 @@
 										
 					<br/>
 					
-					<ol id="tasks-list">
+					<ol id="tasks-list" class="item-box">
 						<div  data-template>
 							<li class="uf task-{{status}}" style="text-decoration:none; cursor: pointer">
 								<a style="text-decoration:none;">
