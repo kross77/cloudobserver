@@ -64,10 +64,14 @@ namespace utils{
 
 #ifdef WIN 
 	static const std::string platform = "Windows";
-#else if LIN
+#else
+	#ifdef LIN
 	static const std::string platform = "Linux";
-#else if MAC
-	static const std::string platform = "Mac";
+	#else
+		#ifdef MAC
+		static const std::string platform = "Mac";
+		#endif
+	#endif
 #endif
 
 	template<class T>
