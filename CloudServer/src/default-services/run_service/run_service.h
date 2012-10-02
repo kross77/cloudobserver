@@ -42,7 +42,7 @@
 #include <sqlite3pp.h>
 
 //Boollinq
-#include <boolinq/boolinq.h>
+//#include <boolinq/boolinq.h>
 
 //CF-UTIL
 #include <general_utils.h>
