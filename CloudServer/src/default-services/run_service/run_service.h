@@ -409,6 +409,10 @@ private:
 
 		}
 
+		boost::shared_ptr<sqlite3pp::database> get_db()
+		{
+			return db;
+		}
 		void set_task_output( const std::string & encoded_url, const std::string & user_name, const std::string & output )
 		{
 			sqlite3pp::transaction xct(*db);
