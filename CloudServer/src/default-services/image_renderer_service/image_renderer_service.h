@@ -39,6 +39,7 @@
 
 //This file is stored in 3rdparty folder, it differs from original Boost.Trunk
 #include <boost/geometry/extensions/io/svg/svg_mapper.hpp>
+#include <boost/geometry/geometries/point_xy.hpp>
 
 //OpenCV
 #include <opencv2/opencv.hpp>
