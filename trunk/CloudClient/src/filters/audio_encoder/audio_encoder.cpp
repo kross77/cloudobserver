@@ -41,7 +41,7 @@ void audio_encoder::connect(multiplexer* multiplexer_block)
 	this->stream->codec->bit_rate = MAX_AUDIO_PACKET_SIZE;
 	this->stream->codec->sample_rate = this->samplerate;
 	this->stream->codec->channels = 1;
-	this->stream->codec->sample_fmt = SAMPLE_FMT_S16;
+	this->stream->codec->sample_fmt = AV_SAMPLE_FMT_S16;
 
 	// Some formats want stream headers to be separate.
 	if (format_context->oformat->flags & AVFMT_GLOBALHEADER)
