@@ -383,6 +383,7 @@ function cloud.project.useBoost()
 		defines { "LIN" }
 		links {
 			"boost_regex",
+			"boost_chrono",
 			"boost_system",
 			"boost_serialization",
 			"boost_thread"
@@ -392,6 +393,7 @@ function cloud.project.useBoost()
 		defines { "MAC" }
 		links {
 			"boost_regex",
+			"boost_chrono",
 			"boost_system",
 			"boost_serialization",
 			"boost_thread"

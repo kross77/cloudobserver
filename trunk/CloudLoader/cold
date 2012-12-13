@@ -753,13 +753,13 @@ build()
 		if [ "$OS" == "windows" ]; then
 			run cmd /c bootstrap.bat
 			if $DEVELOPMENT; then
-				run ./b2 -j$JOBS -d0 --with-thread --with-system --with-filesystem --with-serialization --with-program_options --with-regex --with-date_time --with-iostreams -sZLIB_SOURCE="$BOOST_ZLIBSRC" -sNO_BZIP2=1 link=static runtime-link=static --prefix="$BOOST_INSTALL" debug release install
+				run ./b2 -j$JOBS -d0 --with-chrono --with-thread --with-system --with-filesystem --with-serialization --with-program_options --with-regex --with-date_time --with-iostreams -sZLIB_SOURCE="$BOOST_ZLIBSRC" -sNO_BZIP2=1 link=static runtime-link=static --prefix="$BOOST_INSTALL" debug release install
 			else
-				run ./b2 -j$JOBS -d0 --with-thread --with-system --with-filesystem --with-serialization --with-program_options --with-regex --with-date_time --with-iostreams -sZLIB_SOURCE="$BOOST_ZLIBSRC" -sNO_BZIP2=1 link=static runtime-link=static --prefix="$BOOST_INSTALL" release install
+				run ./b2 -j$JOBS -d0 --with-chrono --with-thread --with-system --with-filesystem --with-serialization --with-program_options --with-regex --with-date_time --with-iostreams -sZLIB_SOURCE="$BOOST_ZLIBSRC" -sNO_BZIP2=1 link=static runtime-link=static --prefix="$BOOST_INSTALL" release install
 			fi
 		else
 			run ./bootstrap.sh
-			run ./b2 -j$JOBS -d0 --with-thread --with-system --with-filesystem --with-serialization --with-program_options --with-regex --with-date_time --with-iostreams -sZLIB_SOURCE="$BOOST_ZLIBSRC" -sNO_BZIP2=1 cflags=-fPIC cxxflags=-fPIC link=static --prefix="$BOOST_INSTALL" release install
+			run ./b2 -j$JOBS -d0 --with-chrono --with-thread --with-system --with-filesystem --with-serialization --with-program_options --with-regex --with-date_time --with-iostreams -sZLIB_SOURCE="$BOOST_ZLIBSRC" -sNO_BZIP2=1 cflags=-fPIC cxxflags=-fPIC link=static --prefix="$BOOST_INSTALL" release install
 		fi
 		run cd $WD
 		run rm -rf "$BOOST_COMPILE"
@@ -1142,6 +1142,7 @@ EOF
 	fi
 	stageOK
 
+
 	# Build Cloud Server application.
 	nextStage "Cloud Server application"
 	if [ ! -d "$CLOUD_COMPILE" ]; then
@@ -1381,7 +1382,7 @@ YASM_SRCPATH=/projects/yasm/releases
 YASM_SRCSITE=www.tortall.net
 
 # Declare variables related to Boost libraries.
-BOOST_VERSION=1.47.0
+BOOST_VERSION=1.52.0
 BOOST_COMPILE="$WD"/boost-src
 BOOST_INCLUDE=boost-${BOOST_VERSION//./_}
 BOOST_INCLUDE=${BOOST_INCLUDE%_*}
