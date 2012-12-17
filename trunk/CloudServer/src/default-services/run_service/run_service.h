@@ -57,7 +57,6 @@
 #include <boost/iostreams/device/file_descriptor.hpp>
 
 #include "db_commander.h"
-#include "user_task_pool.h"
 
 #ifndef RUN_UTILS
 #define RUN_UTILS
@@ -314,7 +313,83 @@ public:
 	virtual void stop(){}
 
 private:
-	friend class user_task_pool;
+	class user_task_pool{
+	public:
+		std::string user_name;
+		boost::asio::io_service tasks;
+		boost::asio::io_service::work *work;
+		thread_group threads;
+		run_service * parent;
+
+		user_task_pool(int create_threads, run_service * parent, std::string user_name): user_name(user_name), parent(parent)
+		{
+			work = new boost::asio::io_service::work(tasks);
+			for (std::size_t i = 0; i < create_threads; ++i)
+			{
+				boost::shared_ptr<boost::thread> thread;
+				thread = boost::shared_ptr<boost::thread>( new boost::thread(boost::bind(&user_task_pool::run, this, thread)));
+				threads.add(thread);
+			}
+		}
+
+		void post(boost::shared_ptr<boost::packaged_task<void> > pt, std::string tid)
+		{
+			tasks.post(boost::bind(&user_task_pool::pool_item<void>, this, pt, tid, user_name));
+		}
+
+	private:
+		void run(boost::shared_ptr<boost::thread> thread_ptr)
+		{
+			try
+			{
+				tasks.run();
+			}		
+			catch(std::exception &e)
+			{
+				std::cout << e.what() << std::endl;
+				boost::shared_ptr<boost::thread> thread;
+				thread = boost::shared_ptr<boost::thread>(new boost::thread(boost::bind(&user_task_pool::run, this, thread)));
+				threads.add(thread);
+				threads.remove(thread_ptr);
+				return;
+			}
+		}
+
+		template <class task_return_t>
+		void pool_item( boost::shared_ptr< boost::packaged_task<task_return_t> > pt, std::string tid, std::string user_name)
+		{
+			boost::shared_ptr < boost::packaged_task<void> > task (  new boost::packaged_task<void> ( boost::bind(&run_service::run_item<task_return_t>, parent, pt)));
+			boost::unique_future<void> fi= task->get_future();
+
+			boost::shared_ptr<boost::promise<boost::thread::id> > started(new boost::promise<boost::thread::id>());
+			boost::unique_future<boost::thread::id> has_started = started->get_future();
+
+			if(parent->db->get_if_is_canceled(user_name, tid)){
+				parent->remove_task(tid);	
+				return;
+			}
+
+			parent->internal_tasks.post(boost::bind(&run_service::run_item<task_return_t>, parent, task, started));
+
+			has_started.wait();
+			if(has_started.has_exception())
+				return;
+
+			boost::thread::id id = has_started.get();
+
+			while( (!(fi.has_value())) && (!(fi.has_exception())) ){
+				fi.timed_wait(boost::posix_time::milliseconds(100));
+				if(parent->db->get_if_is_canceled(user_name, tid))
+				{
+					boost::shared_ptr<boost::thread> internal_thread;
+					internal_thread = boost::shared_ptr<boost::thread>( new boost::thread(boost::bind(&run_service::internal_run, parent, internal_thread)));
+					parent->internal_threads.add(internal_thread);
+					parent->internal_threads.remove(id)->interrupt();
+					parent->remove_task(tid);
+				}
+			}
+		}
+	};
 	friend class db_commander;
 
 	boost::shared_ptr<db_commander> db;
@@ -698,6 +773,7 @@ private:
 		http_utils::send(files_.append("\n]"), socket, response, request);
 		return;
 	}
+
 };
 
 #endif // RUN_SERVICE_H
