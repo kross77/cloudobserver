@@ -57,9 +57,7 @@
 
 class db_commander
 {
-private:
-	friend class run_service;
-
+public:
 	boost::shared_ptr<log_util> lu;
 	boost::shared_ptr<sqlite3pp::database> db;
 
