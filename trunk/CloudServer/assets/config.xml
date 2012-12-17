@@ -96,8 +96,15 @@
 					</application>
 					
 					<application id="3" useShell="true" processName="ping">
-						<description appName="Ping" icon="/ping-icon-32.png">Tests the reachability of a host on an Internet Protocol</description>
+						<description platform="Windows" appName="Ping" icon="/ping-icon-32.png">Tests the reachability of a host on an Internet Protocol</description>
 						<arguments base="-n :tries :url">
+							<arg type="int" name="tries" label="number of tries"/>
+							<arg type="string" name="url" label="IP adress *.*.*.*"/>
+						</arguments>
+					</application>
+					<application id="3" useShell="true" processName="ping">
+						<description platform="Linux" appName="Ping" icon="/ping-icon-32.png">Tests the reachability of a host on an Internet Protocol</description>
+						<arguments base="-c :tries :url">
 							<arg type="int" name="tries" label="number of tries"/>
 							<arg type="string" name="url" label="IP adress *.*.*.*"/>
 						</arguments>
