@@ -504,7 +504,7 @@ private:
 			return execute(
 				run_exe(path_to_exec),
 				set_cmd_line(utils::cmd(apps[pid]->process_name + " " + filter_args(arguments))), //set_cmd_line(L"cmd /c echo %CD%"),
-				start_in_dir(work_directory),
+				start_in_dir(work_directory.normalize().string()),
 				inherit_env(),
 				bind_stdout(sink),
 				bind_stderr(sinkerr)
@@ -516,7 +516,7 @@ private:
 			return execute(
 				run_exe(path_to_exec),
 				set_cmd_line(utils::str(path_to_exec.string()) + utils::str(" ") + utils::str(filter_args(arguments))), //set_cmd_line(L"cmd /c echo %CD%"),
-				start_in_dir(work_directory),
+				start_in_dir(work_directory.normalize().string()),
 				inherit_env(),
 				bind_stdout(sink),
 				bind_stderr(sinkerr)
