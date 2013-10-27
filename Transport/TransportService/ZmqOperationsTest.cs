@@ -8,12 +8,8 @@ namespace TransportService
 {
     internal class ZmqOperationsTest
     {
-        private static int _sentCounter;
-
         public static void TestZmqOperations()
         {
-            _sentCounter = 0;
-
             var context = ZmqContext.Create();
 
             var serverA = context.CreateSocket(SocketType.ROUTER);
