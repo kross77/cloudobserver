@@ -30,6 +30,8 @@ namespace TransportService
 
         private static void TestZmq()
         {
+            _sentCounter = 0;
+
             var context = ZmqContext.Create();
             var publisher = context.CreateSocket(SocketType.XPUB);
             publisher.Bind("tcp://*:4780");
@@ -59,11 +61,7 @@ namespace TransportService
         private static void OnMessageToA(object sender, SocketEventArgs e)
         {
             var result = e.Socket.ReceiveMessage();
-            if (result.FrameCount > 1)
-            {
-                Console.WriteLine("A said: {0}", Encoding.UTF8.GetString(result[1].Buffer));
-            }
-            else
+            if (result.FrameCount < 2 || !Encoding.UTF8.GetString(result[0].Buffer).Equals("A"))
             {
                 Console.WriteLine("error on A");
             }
@@ -72,15 +70,13 @@ namespace TransportService
         private static void OnMessageToB(object sender, SocketEventArgs e)
         {
             var result = e.Socket.ReceiveMessage();
-            if (result.FrameCount > 1)
-            {
-                Console.WriteLine("B said: {0}", Encoding.UTF8.GetString(result[1].Buffer));
-            }
-            else
+            if (result.FrameCount < 2 || !Encoding.UTF8.GetString(result[0].Buffer).Equals("B"))
             {
                 Console.WriteLine("error on B");
             }
         }
+
+        private static int _sentCounter;
 
         private static void OnSender(object sender, SocketEventArgs e)
         {
@@ -93,6 +89,12 @@ namespace TransportService
             m2B.Append("B".ToByteArray());
             m2B.Append("data 2".ToByteArray());
             e.Socket.SendMessage(m2B);
+
+            if((++_sentCounter % 10000) == 0)
+            {
+                Console.WriteLine("sent {0}", _sentCounter);
+            }
+
         }
 
         private static void Main()
