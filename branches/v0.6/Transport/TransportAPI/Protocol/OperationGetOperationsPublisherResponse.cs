@@ -6,6 +6,6 @@ namespace Transport.Protocol
     internal class OperationGetOperationsPublisherResponse : OperationResponse
     {
         [ProtoMember(1)]
-        public string Adress { get; set; }
+        public string Address { get; set; }
     }
 }
