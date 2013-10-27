@@ -1,7 +1,7 @@
 using System;
 using Transport.Interface;
 
-namespace Transport
+namespace Transport.Implementation
 {
     internal class OperationsPublisher :IOperationsPublisher
     {
