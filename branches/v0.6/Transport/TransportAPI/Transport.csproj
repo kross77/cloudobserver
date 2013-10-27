@@ -11,6 +11,8 @@
     <AssemblyName>Transport</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <ProductVersion>12.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,14 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Connection.cs" />
     <Compile Include="ConnectionFactory.cs" />
-    <Compile Include="EventsPublisher.cs" />
     <Compile Include="Interface\IConnection.cs" />
     <Compile Include="Interface\IConnectionFactory.cs" />
     <Compile Include="Interface\IEventsPublisher.cs" />
     <Compile Include="Interface\IOperationsPublisher.cs" />
-    <Compile Include="OperationsPublisher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Protocol\Event.cs" />
     <Compile Include="Protocol\EventPingRequest.cs" />
@@ -67,6 +66,9 @@
     <Compile Include="Protocol\OperationStatusCode.cs" />
     <Compile Include="Protocol\OperationTypeCode.cs" />
     <Compile Include="Protocol\Utilities\SchemaPrinter.cs" />
+    <Compile Include="Implementation\Connection.cs" />
+    <Compile Include="Implementation\EventsPublisher.cs" />
+    <Compile Include="Implementation\OperationsPublisher.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -76,4 +78,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <Folder Include="Implementation\" />
+  </ItemGroup>
 </Project>
