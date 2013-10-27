@@ -1,18 +1,14 @@
-using System;
-
 namespace Transport.Interface
 {
-    public delegate void Response(byte[] data);
+    public delegate void Response(byte[] response);
 
-    public interface IConnectionFactory
-    {
-        IConnection GetConnection(string address);
-    }
+    public delegate void OperationCallback(byte[] request, Response callback);
+    public delegate void EventCallback(byte[] data);
 
     public interface IConnection
     {
-        void SubscribeToOperations(string topic, Action<byte[], Response> callback);    
-        void SubscribeToEvents(string topic, Action<byte[]> callback);
+        void SubscribeToOperations(string topic, OperationCallback callback);
+        void SubscribeToEvents(string topic, EventCallback callback);
 
         void UnSubscribeToOperations(string topic);
         void UnSubscribeToEvents(string topic);
