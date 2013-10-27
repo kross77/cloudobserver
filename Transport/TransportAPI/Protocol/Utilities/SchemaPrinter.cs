@@ -13,7 +13,7 @@ namespace Transport.Protocol.Utilities
 
        private static List<Type> GetTypes()
         {
-            List<Type> result = new List<Type>();
+            var result = new List<Type>();
             var assembly = Assembly.GetAssembly(typeof(Message));
             var types = assembly.GetTypes();
             foreach (var t in types)
