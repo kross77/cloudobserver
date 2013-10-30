@@ -1,10 +1,8 @@
 using ProtoBuf;
 
-namespace Transport.Protocol
-{
+namespace MQCloud.Transport.Protocol {
     [ProtoContract]
-    internal class OperationGetEventsPublisherResponse : OperationResponse
-    {
+    internal class OperationGetEventsPublisherResponse : OperationResponse {
         [ProtoMember(1)]
         public string Address { get; set; }
     }

@@ -1,7 +1,6 @@
 using ProtoBuf;
 
-namespace Transport.Protocol
-{
+namespace MQCloud.Transport.Protocol {
     [ProtoContract]
     internal class OperationPongRequest : OperationRequest<OperationResponse> { }
 }

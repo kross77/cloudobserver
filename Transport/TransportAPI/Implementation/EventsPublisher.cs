@@ -1,12 +1,9 @@
 using System;
-using Transport.Interface;
+using MQCloud.Transport.Interface;
 
-namespace Transport.Implementation
-{
-    internal class EventsPublisher : IEventsPublisher
-    {
-        public void Send(byte[] data)
-        {
+namespace MQCloud.Transport.Implementation {
+    internal class EventsPublisher : IEventsPublisher {
+        public void Send(byte[] data) {
             throw new NotImplementedException();
         }
     }
