@@ -1,11 +1,9 @@
 using ProtoBuf;
 
-namespace Transport.Protocol
-{
+namespace MQCloud.Transport.Protocol {
     [ProtoContract]
-    internal enum OperationStatusCode
-    {
-        OperationStatusCodeOk = 0,
-        OperationStatusCodeError = 1
+    internal enum OperationStatusCode {
+        OperationStatusCodeOk=0,
+        OperationStatusCodeError=1
     }
 }

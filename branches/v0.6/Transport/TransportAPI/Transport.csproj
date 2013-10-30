@@ -7,7 +7,7 @@
     <ProjectGuid>{44075FB7-1D14-4C3A-91B2-742FE8B46658}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Transport</RootNamespace>
+    <RootNamespace>MQCloud.Transport</RootNamespace>
     <AssemblyName>Transport</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="clrzmq">
+      <HintPath>..\lib\windows\clrzmq.dll</HintPath>
+    </Reference>
     <Reference Include="protobuf-net">
       <HintPath>..\lib\protobuf-net.dll</HintPath>
     </Reference>
@@ -45,6 +48,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConnectionFactory.cs" />
+    <Compile Include="Exceptions\IpNotFound.cs" />
+    <Compile Include="Exceptions\TransportException.cs" />
+    <Compile Include="Implementation\NetworkManager.cs" />
     <Compile Include="Interface\IConnection.cs" />
     <Compile Include="Interface\IConnectionFactory.cs" />
     <Compile Include="Interface\IEventsPublisher.cs" />
@@ -78,7 +84,5 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <ItemGroup>
-    <Folder Include="Implementation\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

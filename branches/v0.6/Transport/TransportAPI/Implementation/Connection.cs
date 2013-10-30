@@ -1,37 +1,39 @@
+#region
+
 using System;
-using Transport.Interface;
+using MQCloud.Transport.Interface;
 
-namespace Transport.Implementation
-{
-    internal class Connection : IConnection
-    {
-        public void SubscribeToOperations(string topic, OperationCallback callback)
-        {
+#endregion
+
+namespace MQCloud.Transport.Implementation {
+    internal class Connection : IConnection {
+        private NetworkManager Manager { get; set; }
+
+        public Connection(NetworkManager manager) {
+            Manager=manager;
+        }
+
+        public void SubscribeToOperations(string topic, OperationCallback callback) {
             throw new NotImplementedException();
         }
 
-        public void SubscribeToEvents(string topic, EventCallback callback)
-        {
+        public void SubscribeToEvents(string topic, EventCallback callback) {
             throw new NotImplementedException();
         }
 
-        public void UnSubscribeToOperations(string topic)
-        {
+        public void UnSubscribeToOperations(string topic) {
             throw new NotImplementedException();
         }
 
-        public void UnSubscribeToEvents(string topic)
-        {
+        public void UnSubscribeToEvents(string topic) {
             throw new NotImplementedException();
         }
 
-        public IOperationsPublisher GetOperationsPublisher(string topic)
-        {
+        public IOperationsPublisher GetOperationsPublisher(string topic) {
             return new OperationsPublisher();
         }
 
-        public IEventsPublisher GetEventsPublisher(string topic)
-        {
+        public IEventsPublisher GetEventsPublisher(string topic) {
             return new EventsPublisher();
         }
     }

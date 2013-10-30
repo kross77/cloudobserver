@@ -1,7 +1,6 @@
 using ProtoBuf;
 
-namespace Transport.Protocol
-{
+namespace MQCloud.Transport.Protocol {
     [ProtoContract]
     [ProtoInclude((int)OperationTypeCode.Pong, typeof(OperationPongRequest))]
 
@@ -10,12 +9,10 @@ namespace Transport.Protocol
 
     [ProtoInclude((int)OperationTypeCode.SetEventsPublisher, typeof(OperationSetEventsPublisherRequest))]
     [ProtoInclude((int)OperationTypeCode.SetOperationsPublisher, typeof(OperationSetOperationsPublisherRequest))]
-    internal class OperationRequest : Operation {}
+    internal class OperationRequest : Operation { }
 
-    internal class OperationRequest<TOperationResponse> : OperationRequest where TOperationResponse : OperationResponse, new()
-    {
-        public TOperationResponse GetResponse()
-        {
+    internal class OperationRequest<TOperationResponse> : OperationRequest where TOperationResponse : OperationResponse, new() {
+        public TOperationResponse GetResponse() {
             return new TOperationResponse();
         }
     }

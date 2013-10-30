@@ -1,13 +1,11 @@
 using ProtoBuf;
 
-namespace Transport.Protocol
-{
+namespace MQCloud.Transport.Protocol {
 
     [ProtoContract]
     [ProtoInclude((int)OperationTypeCode.GetEventsPublisher, typeof(OperationGetEventsPublisherResponse))]
     [ProtoInclude((int)OperationTypeCode.GetOperationsPublisher, typeof(OperationGetOperationsPublisherResponse))]
-    internal class OperationResponse : Operation
-    {
+    internal class OperationResponse : Operation {
         [ProtoMember(1)]
         public OperationStatusCode State { get; set; }
         [ProtoMember(2)]

@@ -1,7 +1,5 @@
-namespace Transport.Interface
-{
-    public interface IEventsPublisher
-    {
+namespace MQCloud.Transport.Interface {
+    public interface IEventsPublisher {
         void Send(byte[] data);
     }
 }
