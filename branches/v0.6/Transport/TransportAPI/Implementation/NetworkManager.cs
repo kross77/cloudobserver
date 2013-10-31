@@ -44,10 +44,27 @@ namespace MQCloud.Transport.Implementation {
             return result;
         }
 
-        public string OpenSocket() {
-            var result=string.Format("{0}:{1}", address, GetFreePort());
-            result.Bind(result); // TODO: add check on port availability 
+        public string OpenSocket(ZmqSocket socket) {
+            var result="";
+            var connected=false;
+            while (!connected) {
+                try {
+                    result=string.Format("{0}:{1}", Address, GetFreePort());
+                    socket.Bind(result);
+                    connected=true;
+                } catch (ZmqSocketException) {
+                    //TODO: log exception!
+                }
+            }
+
             return result;
+        }
+
+        public void FreeSocket(ZmqSocket socket) {
+            socket.Close();
+            lock (_openedSockets) {
+                _openedSockets.Remove(socket);
+            }
         }
     }
 }
