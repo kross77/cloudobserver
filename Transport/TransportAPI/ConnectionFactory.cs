@@ -14,7 +14,7 @@ namespace MQCloud.Transport {
 
             } else
             {
-                if (String.IsEmpty(address)) {
+                if (String.IsNullOrEmpty(address) && address  != null) {
                     var destination=IPAddress.Parse(address);
                     networkManager=new NetworkManager(destination);
                 } else {
